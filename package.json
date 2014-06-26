@@ -1,10 +1,10 @@
 {
   "name": "timezonecomplete",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": ["Date", "time zone", "period", "duration", "timezonejs", "date math"],
-  "homepage": "http://https://github.com/spiritit/timezonecomplete",
-  "bugs": "http://https://github.com/spiritit/timezonecomplete/issues",
+  "homepage": "https://github.com/spiritit/timezonecomplete",
+  "bugs": "https://github.com/spiritit/timezonecomplete/issues",
   "license" : "MIT",  
   "author": {
     "name": "Software Development",
