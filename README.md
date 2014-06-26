@@ -50,8 +50,10 @@ The DateTime class is a replacement (although not drop-in) for the Date class. I
 
 The JavaScript Date class contains a value, which is converted from local time to UTC. But what if the value you entered was in a different time zone? Then the UTC value of the JavaScript date is some offset from your timezone time. Date arithmetic becomes impossible because the UTC value depends on what your local Daylight Saving Time happens to be. The DateTime class fixes this.
 
-The DateTime class also fixes various annoyances. All methods are in singular form: "year()" not "years()" and "hour()" not "hours()". The JavaScript Date class mixes these forms. Also, the JavaScript day-of-month is called "date()" instead of "day()". We fixed that.
-
+The DateTime class also fixes various annoyances. 
+- All methods are in singular form: "year()" not "years()" and "hour()" not "hours()". The JavaScript Date class mixes these forms. 
+- The JavaScript day-of-month is called "date()" instead of "day()". We fixed that.
+- We count months from 1 to 12 inclusive like normal human beings, not from 0 to 11 as JavaScript does.
 
 ```javascript
 var tc = require("timezonecomplete");
