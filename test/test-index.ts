@@ -215,6 +215,42 @@ describe("Duration()", (): void => {
 		});
 	});
 
+	describe("add()", (): void => {
+		it("should add positive number", (): void => {
+			expect(Duration.milliseconds(2).add(Duration.milliseconds(3)).milliseconds()).to.equal(5);
+		});
+		it("should add 0", (): void => {
+			expect(Duration.milliseconds(2).add(Duration.milliseconds(0)).milliseconds()).to.equal(2);
+		});
+		it("should add negative number", (): void => {
+			expect(Duration.milliseconds(2).add(Duration.milliseconds(-3)).milliseconds()).to.equal(-1);
+		});
+		it("should return a new object always", (): void => {
+			var d: Duration = Duration.milliseconds(2);
+			var e: Duration = Duration.milliseconds(0);
+			expect(d.add(e) === d).to.be.false;
+			expect(d.add(e) === e).to.be.false;
+		});
+	});
+
+	describe("sub()", (): void => {
+		it("should sub positive number", (): void => {
+			expect(Duration.milliseconds(2).sub(Duration.milliseconds(3)).milliseconds()).to.equal(-1);
+		});
+		it("should sub 0", (): void => {
+			expect(Duration.milliseconds(2).sub(Duration.milliseconds(0)).milliseconds()).to.equal(2);
+		});
+		it("should sub negative number", (): void => {
+			expect(Duration.milliseconds(2).sub(Duration.milliseconds(-3)).milliseconds()).to.equal(5);
+		});
+		it("should return a new object always", (): void => {
+			var d: Duration = Duration.milliseconds(2);
+			var e: Duration = Duration.milliseconds(0);
+			expect(d.sub(e) === d).to.be.false;
+			expect(d.sub(e) === e).to.be.false;
+		});
+	});
+
 	describe("toFullString()", (): void => {
 		it("toFullString", (): void => {
 			expect((new Duration("-30:02:03.004")).toFullString()).to.equal("-30:02:03.004");

@@ -58,14 +58,150 @@
 <div class="container container-main">
     <div class="row">
         <div class="col-8">
-            <p>﻿## Synopsis</p>
-<p>Everything common to Poller and ETL subsystems</p>
+            <p>﻿# TimezoneComplete</p>
+<h2 id="synopsis">Synopsis</h2>
+<p>TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone&#39;s time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.</p>
+<h2 id="difference-with-timezone-js-moment-js-and-other-date-libraries">Difference with timezone-js, Moment.js and other Date libraries</h2>
+<p>Other libraries are great. In fact, we use timezone-js in our implementation and it works fantastically. We had a different set of requirements, that&#39;s all.</p>
+<ol>
+<li>This library does not emulate the Date class. Its DateTime class does not have the same interface as Date, because the Date interface is broken and inconsistent. It is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project. </li>
+<li>This library aims to be &quot;complete&quot;, whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:<ul>
+<li>Naive dates (which know they have NO timezone information)</li>
+<li>Aware dates (which have timezone information)</li>
+<li>Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with &quot;number&quot; type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.</li>
+<li>Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.</li>
+</ul>
+</li>
+<li>This is not meant to be light-weight. </li>
+<li>This is currently not meant to run in a browser, though we suspect it would not take much effort and we&#39;d appreciate a pull request.</li>
+</ol>
 <h2 id="usage">Usage</h2>
+<p>See also ./doc/modules/index.html.</p>
+<h3 id="duration">Duration</h3>
+<p>The Duration class is a unit-aware representation of a duration in wall clock time.
+You can create a Duration in milliseconds, seconds, minutes or hours and then query the value in another unit.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+
+<span class="hljs-comment">// a duration of 2 seconds</span>
+<span class="hljs-keyword">var</span> duration = tc.Duration.seconds(<span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// duration to string</span>
+console.log(duration.toString()); <span class="hljs-comment">// 00:00:02</span>
+
+<span class="hljs-comment">// convert to different unit</span>
+console.log(duration.milliseconds()); <span class="hljs-comment">// 2000</span>
+
+<span class="hljs-comment">// arithmetic</span>
+<span class="hljs-keyword">var</span> duration2 = duration.multiply(<span class="hljs-number">3</span>); <span class="hljs-comment">// 6 seconds</span>
+
+<span class="hljs-comment">// min and max functions</span>
+<span class="hljs-keyword">var</span> duration3 = duration2.max(duration); <span class="hljs-comment">// 6 seconds</span>
+</code></pre>
+<h3 id="datetime">DateTime</h3>
+<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. </p>
+<p>The JavaScript Date class contains a value, which is converted from local time to UTC. But what if the value you entered was in a different time zone? Then the UTC value of the JavaScript date is some offset from your timezone time. Date arithmetic becomes impossible because the UTC value depends on what your local Daylight Saving Time happens to be. The DateTime class fixes this.</p>
+<p>The DateTime class also fixes various annoyances. </p>
+<ul>
+<li>All methods are in singular form: &quot;year()&quot; not &quot;years()&quot; and &quot;hour()&quot; not &quot;hours()&quot;. The JavaScript Date class mixes these forms. </li>
+<li>The JavaScript day-of-month is called &quot;date()&quot; instead of &quot;day()&quot;. We fixed that.</li>
+<li>We count months from 1 to 12 inclusive like normal human beings, not from 0 to 11 as JavaScript does.</li>
+</ul>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+
+<span class="hljs-comment">// a naive timestamp: 2014-01-01 13:59:59</span>
+<span class="hljs-keyword">var</span> naiveDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>);
+
+<span class="hljs-comment">// a local time in the time zone of your computer</span>
+<span class="hljs-keyword">var</span> localdate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T12:00:00.001"</span>, tc.TimeZone.local());
+
+<span class="hljs-comment">// a fully aware time</span>
+<span class="hljs-keyword">var</span> utcDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.TimeZone.utc());
+<span class="hljs-keyword">var</span> amsterdamDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
+<span class="hljs-keyword">var</span> amsterdamDateFromString = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000 Europe/Amsterdam"</span>);
+
+<span class="hljs-comment">// a fully aware time without Daylight Saving Time: a fixed offset from UTC of 2 hours</span>
+<span class="hljs-keyword">var</span> fixedOffset = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000+02:00"</span>);
+
+console.log(amsterdamDate.toUtcString()); <span class="hljs-comment">// 2014-01-01T12:59:59.000</span>
+console.log(amsterdamDate.toString()); <span class="hljs-comment">// 2014-01-01T13:59:59.000 Europe/Amsterdam</span>
+
+<span class="hljs-comment">// time zone conversions</span>
+<span class="hljs-keyword">var</span> africaDoualaDate = amsterdamDate.toZone(<span class="hljs-string">"Africa/Douala"</span>);
+
+<span class="hljs-comment">// Protection against creating aware dates from naive ones</span>
+<span class="hljs-keyword">var</span> error = naiveDate.toZone(<span class="hljs-string">"Europe/Amsterdam"</span>); <span class="hljs-comment">// throws</span>
+
+<span class="hljs-comment">// Other way around is ok</span>
+<span class="hljs-keyword">var</span> ok = amsterdamDate.toZone(<span class="hljs-literal">null</span>); <span class="hljs-comment">// returns naive date</span>
+</code></pre>
+<h3 id="date-arithmetic">Date Arithmetic</h3>
+<p>The DateTime class allows advanced date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST and leap seconds: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
+<pre><code class="lang-javascript"><span class="hljs-comment">// CONTINUATION FROM PREVIOUS EXAMPLE</span>
+
+<span class="hljs-comment">// difference between dates in different zones</span>
+<span class="hljs-comment">// returns a Duration</span>
+<span class="hljs-keyword">var</span> difference = utcDate.diff(amsterdamDate);
+
+console.log(difference.hours()); <span class="hljs-comment">// 1</span>
+
+<span class="hljs-comment">// Add a real hour (3600 seconds) to a time</span>
+<span class="hljs-comment">// Note this does NOT account for leap seconds</span>
+<span class="hljs-keyword">var</span> added = localdate.add(tc.Duration.hours(<span class="hljs-number">1</span>));
+
+<span class="hljs-comment">// Add a LOCAL hour to a time (ensure the hour() field increments by 1)</span>
+<span class="hljs-comment">// Note this DOES account for leap seconds and DST</span>
+<span class="hljs-keyword">var</span> added = localdate.addLocal(<span class="hljs-number">1</span>, tc.TimeUnit.Hour);
+
+<span class="hljs-comment">// Add a UTC hour to a time (ensure the utcHour() increments by 1,</span>
+<span class="hljs-comment">// due to DST changes the local hour might not change or change 2 hours)</span>
+<span class="hljs-comment">// Note this DOES account for leap seconds and DST</span>
+<span class="hljs-keyword">var</span> added = localdate.add(<span class="hljs-number">1</span>, tc.TimeUnit.Hour);
+</code></pre>
+<h3 id="periods">Periods</h3>
+<p>We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at noon every day? Or does it shift with DST?  We needed to be able to specify both.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+
+<span class="hljs-comment">// Repeating daily period at 8:05 local Amsterdam time (moves with Daylight Saving Time so it is always at 8:05 locally)</span>
+<span class="hljs-keyword">var</span> period = <span class="hljs-keyword">new</span> tc.Period(<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T08:05:00 Europe/Amsterdam"</span>), <span class="hljs-number">1</span>, tc.TimeUnit.Day, tc.PeriodDst.RegularLocalTime);
+
+<span class="hljs-comment">// Repeating daily period at 8:05 local Amsterdam time WITHOUT DST</span>
+<span class="hljs-keyword">var</span> period2 = <span class="hljs-keyword">new</span> tc.Period(<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T08:05:00+01:00"</span>), <span class="hljs-number">1</span>, tc.TimeUnit.Day, tc.PeriodDst.RegularLocalTime);
+
+<span class="hljs-comment">// You can calculate the first occurrence after a given date (in any time zone)</span>
+<span class="hljs-comment">// "2014-05-01T08:05:00.000 Europe/Amsterdam" </span>
+<span class="hljs-keyword">var</span> occurrence = period.findFirst(<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-04-30T12:00:00 Europe/Amsterdam"</span>));
+
+<span class="hljs-comment">// findNext works much faster, assuming that its parameter is on a period boundary</span>
+<span class="hljs-comment">// "2014-05-02T08:05:00.000 Europe/Amsterdam" </span>
+<span class="hljs-keyword">var</span> occurrence2 = period.findNext(occurrence);
+</code></pre>
+<h2 id="faq">FAQ</h2>
+<h3 id="what-time-zone-names-can-i-use-">What time zone names can I use?</h3>
+<p>See <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></p>
+<h3 id="how-do-i-convert-a-javascript-date-object-to-a-datetime-object-">How do I convert a JavaScript Date object to a DateTime object?</h3>
+<p>The DateTime class has a constructor that takes a date. It may seem rather complex because the constructor has three parameters. But that was necessary:</p>
+<ol>
+<li>The first parameter is the Date object.</li>
+<li>The second parameter indicates which of the two values you want to use: a Date object has a UTC value (getUtcYear()) and a Local value (getYear()). You typically use the local functions, but e.g. if you created your date from a unix timestamp then the UTC date is most accurate.</li>
+<li>The third parameter gives us the missing info: the time zone the the given value is in. </li>
+</ol>
+<pre><code class="lang-javascript">
+<span class="hljs-comment">// construct date from separate year, month, day etc.</span>
+<span class="hljs-keyword">var</span> jsDate1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2014</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+
+<span class="hljs-comment">// construct date from unix milliseconds</span>
+<span class="hljs-keyword">var</span> jsDate2 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(jsDate1.valueOf());
+
+<span class="hljs-comment">// now the jsDate.getYear(), jsDate.getMonth() etc are assumed to be in America/Boise zone.</span>
+<span class="hljs-keyword">var</span> datetime = <span class="hljs-keyword">new</span> tc.DateTime(jsDate, tc.DateFunctions.Get, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
+
+<span class="hljs-comment">// now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.</span>
+<span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
+</code></pre>
 <h2 id="contributors">Contributors</h2>
-<p>Software Development</p>
+<p>Rogier Schouten <a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#114;&#x2e;&#x73;&#x63;&#104;&#x6f;&#117;&#116;&#101;&#x6e;&#x40;&#x73;&#112;&#x69;&#114;&#105;&#x74;&#105;&#116;&#46;&#x63;&#x6f;&#x6d;">&#114;&#x2e;&#x73;&#x63;&#104;&#x6f;&#117;&#116;&#101;&#x6e;&#x40;&#x73;&#112;&#x69;&#114;&#105;&#x74;&#105;&#116;&#46;&#x63;&#x6f;&#x6d;</a></p>
 <h2 id="license">License</h2>
-<p>(c) 2014 Spirit IT B.V., The Netherlands
-Private.</p>
+<p>MIT</p>
 
         </div>
         <div class="offset-1 col-3">

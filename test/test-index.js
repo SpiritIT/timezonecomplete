@@ -228,6 +228,42 @@ describe("Duration()", function () {
         });
     });
 
+    describe("add()", function () {
+        it("should add positive number", function () {
+            expect(Duration.milliseconds(2).add(Duration.milliseconds(3)).milliseconds()).to.equal(5);
+        });
+        it("should add 0", function () {
+            expect(Duration.milliseconds(2).add(Duration.milliseconds(0)).milliseconds()).to.equal(2);
+        });
+        it("should add negative number", function () {
+            expect(Duration.milliseconds(2).add(Duration.milliseconds(-3)).milliseconds()).to.equal(-1);
+        });
+        it("should return a new object always", function () {
+            var d = Duration.milliseconds(2);
+            var e = Duration.milliseconds(0);
+            expect(d.add(e) === d).to.be.false;
+            expect(d.add(e) === e).to.be.false;
+        });
+    });
+
+    describe("sub()", function () {
+        it("should sub positive number", function () {
+            expect(Duration.milliseconds(2).sub(Duration.milliseconds(3)).milliseconds()).to.equal(-1);
+        });
+        it("should sub 0", function () {
+            expect(Duration.milliseconds(2).sub(Duration.milliseconds(0)).milliseconds()).to.equal(2);
+        });
+        it("should sub negative number", function () {
+            expect(Duration.milliseconds(2).sub(Duration.milliseconds(-3)).milliseconds()).to.equal(5);
+        });
+        it("should return a new object always", function () {
+            var d = Duration.milliseconds(2);
+            var e = Duration.milliseconds(0);
+            expect(d.sub(e) === d).to.be.false;
+            expect(d.sub(e) === e).to.be.false;
+        });
+    });
+
     describe("toFullString()", function () {
         it("toFullString", function () {
             expect((new Duration("-30:02:03.004")).toFullString()).to.equal("-30:02:03.004");

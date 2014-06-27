@@ -339,10 +339,27 @@ export class Duration {
 	}
 
 	/**
+	 * Multiply with a fixed number.
 	 * @return a new Duration of (this * value)
 	 */
 	multiply(value: number): Duration {
 		return new Duration(this.milliseconds() * value);
+	}
+
+	/**
+	 * Add a duration.
+	 * @return a new Duration of (this + value)
+	 */
+	add(value: Duration): Duration {
+		return new Duration(this.milliseconds() + value.milliseconds());
+	}
+
+	/**
+	 * Subtract a duration.
+	 * @return a new Duration of (this - value)
+	 */
+	sub(value: Duration): Duration {
+		return new Duration(this.milliseconds() - value.milliseconds());
 	}
 
 	/**
