@@ -228,6 +228,20 @@ describe("Duration()", function () {
         });
     });
 
+    describe("divide()", function () {
+        it("should divide by positive number", function () {
+            expect(Duration.milliseconds(6).divide(3).milliseconds()).to.equal(2);
+        });
+        it("should throw on divide by 0", function () {
+            assert.throws(function () {
+                Duration.milliseconds(6).divide(0);
+            });
+        });
+        it("should divide by negative number", function () {
+            expect(Duration.milliseconds(6).divide(-3).milliseconds()).to.equal(-2);
+        });
+    });
+
     describe("add()", function () {
         it("should add positive number", function () {
             expect(Duration.milliseconds(2).add(Duration.milliseconds(3)).milliseconds()).to.equal(5);

@@ -6,6 +6,8 @@
 
 /// <reference path="../typings/lib.d.ts"/>
 
+"use strict";
+
 import assert = require("assert");
 import path = require("path");
 import timezoneJS = require("timezone-js");
@@ -344,6 +346,17 @@ export class Duration {
 	 */
 	multiply(value: number): Duration {
 		return new Duration(this.milliseconds() * value);
+	}
+
+	/**
+	 * Divide by a fixed number.
+	 * @return a new Duration of (this / value)
+	 */
+	divide(value: number): Duration {
+		if (value === 0) {
+			throw new Error("Duration.divide(): Divide by zero");
+		}
+		return new Duration(this.milliseconds() / value);
 	}
 
 	/**
@@ -705,7 +718,7 @@ export class TimeZone {
 		hour: number = 0, minute: number = 0, second: number = 0,
 		millisecond: number = 0): number {
 
-		assert(month > 0 && month < 13, "TimeZone.offsetForZone():  month out of range.");
+		assert(month > 0 && month < 13, "TimeZone.offsetForZone():  month out of range: " + month);
 		assert(day > 0 && day < 32, "TimeZone.offsetForZone():  day out of range.");
 		assert(hour >= 0 && hour < 24, "TimeZone.offsetForZone():  hour out of range.");
 		assert(minute >= 0 && minute < 60, "TimeZone.offsetForZone():  minute out of range.");

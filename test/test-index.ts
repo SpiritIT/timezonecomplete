@@ -215,6 +215,20 @@ describe("Duration()", (): void => {
 		});
 	});
 
+	describe("divide()", (): void => {
+		it("should divide by positive number", (): void => {
+			expect(Duration.milliseconds(6).divide(3).milliseconds()).to.equal(2);
+		});
+		it("should throw on divide by 0", (): void => {
+			assert.throws((): void => {
+				Duration.milliseconds(6).divide(0);
+			});
+		});
+		it("should divide by negative number", (): void => {
+			expect(Duration.milliseconds(6).divide(-3).milliseconds()).to.equal(-2);
+		});
+	});
+
 	describe("add()", (): void => {
 		it("should add positive number", (): void => {
 			expect(Duration.milliseconds(2).add(Duration.milliseconds(3)).milliseconds()).to.equal(5);
