@@ -28,6 +28,9 @@
     "lib": "lib/",
     "doc": "doc/"
   },
+  "typescript": {
+    "definition": "lib/timezonecomplete.d.ts"
+  },
   "repository": {
     "type": "git",
     "url": "http://github.com/spiritit/timezonecomplete.git"
