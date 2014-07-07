@@ -14,6 +14,7 @@ import PeriodDst = datetimeFuncs.PeriodDst;
 import TimeSource = datetimeFuncs.TimeSource;
 import TimeUnit = datetimeFuncs.TimeUnit;
 import TimeZone = datetimeFuncs.TimeZone;
+import WeekDay = datetimeFuncs.WeekDay;
 
 // Fake time source
 class TestTimeSource implements TimeSource {
@@ -1366,6 +1367,18 @@ describe("DateTime", (): void => {
 			expect(new DateTime("2014-02-02T02:02:02.003").greaterEqual(new DateTime("2014-02-02T02:02:02.002"))).to.be.true;
 			expect(new DateTime("2014-02-02T02:02:03.002+01").greaterEqual(new DateTime("2014-02-02T02:02:02.002+01"))).to.be.true;
 			expect(new DateTime("2014-02-02T02:02:02.002+00").greaterEqual(new DateTime("2014-02-02T02:02:02.002+01"))).to.be.true;
+		});
+	});
+	
+	describe("weekDay()", (): void => {
+		it("should return a local week day", (): void => {
+			expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
+		});
+	});
+
+	describe("utcWeekDay()", (): void => {
+		it("should return a UTC week day", (): void => {
+			expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").utcWeekDay()).to.equal(WeekDay.Sunday);
 		});
 	});
 

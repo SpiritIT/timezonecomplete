@@ -1,27 +1,36 @@
 {
   "name": "timezonecomplete",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
-  "keywords": ["Date", "time zone", "period", "duration", "timezonejs", "date math"],
+  "keywords": [
+    "Date",
+    "time zone",
+    "period",
+    "duration",
+    "timezonejs",
+    "date math"
+  ],
   "homepage": "https://github.com/spiritit/timezonecomplete",
   "bugs": "https://github.com/spiritit/timezonecomplete/issues",
-  "license" : "MIT",  
+  "license": "MIT",
   "author": {
     "name": "Software Development",
     "email": "Software-Development@SpiritIT.com",
-	"url": "http://www.spiritit.com"
+    "url": "http://www.spiritit.com"
   },
-  "contributors": [{
-    "name": "Rogier Schouten",
-    "email": "R.Schouten@SpiritIT.com"
-  }],
+  "contributors": [
+    {
+      "name": "Rogier Schouten",
+      "email": "R.Schouten@SpiritIT.com"
+    }
+  ],
   "directories": {
-	"lib": "lib/",
-	"doc": "doc/"
+    "lib": "lib/",
+    "doc": "doc/"
   },
-  "repository": { 
-	"type" : "git", 
-	"url" : "http://github.com/spiritit/timezonecomplete.git"
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/spiritit/timezonecomplete.git"
   },
   "main": "lib/index.js",
   "scripts": {
@@ -32,6 +41,7 @@
   },
   "devDependencies": {
     "chai": "^1.9.1",
+    "dts-bundle": "^0.2.0",
     "mocha": "^1.18.2",
     "typedoc": "0.0.7",
     "typescript": "1.0.1"

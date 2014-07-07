@@ -133,6 +133,12 @@ console.log(amsterdamDate.toString()); <span class="hljs-comment">// 2014-01-01T
 
 <span class="hljs-comment">// Other way around is ok</span>
 <span class="hljs-keyword">var</span> ok = amsterdamDate.toZone(<span class="hljs-literal">null</span>); <span class="hljs-comment">// returns naive date</span>
+
+<span class="hljs-comment">// Week days</span>
+<span class="hljs-keyword">var</span> weekDay1 = (<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-07-07T00:00:00 Europe/Amsterdam"</span>)).weekDay(); <span class="hljs-comment">// Monday = 1</span>
+
+<span class="hljs-comment">// UTC week day from zone datetime</span>
+<span class="hljs-keyword">var</span> weekDay2 = (<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-07-07T00:00:00 Europe/Amsterdam"</span>)).utCWeekDay(); <span class="hljs-comment">// Sunday = 0</span>
 </code></pre>
 <h3 id="date-arithmetic">Date Arithmetic</h3>
 <p>The DateTime class allows advanced date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST and leap seconds: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
@@ -199,7 +205,7 @@ console.log(difference.hours()); <span class="hljs-comment">// 1</span>
 <span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
 </code></pre>
 <h2 id="contributors">Contributors</h2>
-<p>Rogier Schouten <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#114;&#46;&#x73;&#99;&#x68;&#x6f;&#117;&#116;&#101;&#x6e;&#64;&#x73;&#112;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#x6d;">&#114;&#46;&#x73;&#99;&#x68;&#x6f;&#117;&#116;&#101;&#x6e;&#64;&#x73;&#112;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#x6d;</a></p>
+<p>Rogier Schouten <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#114;&#x2e;&#x73;&#99;&#104;&#111;&#117;&#116;&#x65;&#110;&#64;&#115;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#x74;&#46;&#x63;&#111;&#109;">&#114;&#x2e;&#x73;&#99;&#104;&#111;&#117;&#116;&#x65;&#110;&#64;&#115;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#x74;&#46;&#x63;&#111;&#109;</a></p>
 <h2 id="license">License</h2>
 <p>MIT</p>
 

@@ -986,6 +986,20 @@ export enum DateFunctions {
 }
 
 /**
+ * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
+ * Sunday = 0, Monday = 1 etc
+ */
+export enum WeekDay {
+	Sunday,
+	Monday,
+	Tuesday,
+	Wednesday,
+	Thursday,
+	Friday,
+	Saturday
+}
+
+/**
  * Our very own DateTime class which is time zone-aware
  * and which can be mocked for testing purposes
  */
@@ -1259,6 +1273,14 @@ export class DateTime {
 	public millisecond(): number {
 		return this._zoneDate.getUTCMilliseconds();
 	}
+	
+	/**
+	 * @return the day-of-week (the enum values correspond to JavaScript
+	 * week day numbers)
+	 */
+	 public weekDay(): WeekDay {
+		return <WeekDay>this._zoneDate.getDay();
+	 }
 
 	/**
 	 * @return Milliseconds since 1970-01-01T00:00:00.000Z
@@ -1315,6 +1337,15 @@ export class DateTime {
 	public utcMillisecond(): number {
 		return this._utcDate.getUTCMilliseconds();
 	}
+
+	/**
+	 * @return the UTC day-of-week (the enum values correspond to JavaScript
+	 * week day numbers)
+	 */
+	 public utcWeekDay(): WeekDay {
+		return <WeekDay>this._utcDate.getUTCDay();
+	 }
+
 
 	/**
 	 * Convert this date to the given time zone (in-place).

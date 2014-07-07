@@ -13,6 +13,7 @@ var PeriodDst = datetimeFuncs.PeriodDst;
 
 var TimeUnit = datetimeFuncs.TimeUnit;
 var TimeZone = datetimeFuncs.TimeZone;
+var WeekDay = datetimeFuncs.WeekDay;
 
 // Fake time source
 var TestTimeSource = (function () {
@@ -1422,6 +1423,18 @@ describe("DateTime", function () {
             expect(new DateTime("2014-02-02T02:02:02.003").greaterEqual(new DateTime("2014-02-02T02:02:02.002"))).to.be.true;
             expect(new DateTime("2014-02-02T02:02:03.002+01").greaterEqual(new DateTime("2014-02-02T02:02:02.002+01"))).to.be.true;
             expect(new DateTime("2014-02-02T02:02:02.002+00").greaterEqual(new DateTime("2014-02-02T02:02:02.002+01"))).to.be.true;
+        });
+    });
+
+    describe("weekDay()", function () {
+        it("should return a local week day", function () {
+            expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(1 /* Monday */);
+        });
+    });
+
+    describe("utcWeekDay()", function () {
+        it("should return a UTC week day", function () {
+            expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").utcWeekDay()).to.equal(0 /* Sunday */);
         });
     });
 });

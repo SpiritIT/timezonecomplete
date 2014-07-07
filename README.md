@@ -84,6 +84,12 @@ var error = naiveDate.toZone("Europe/Amsterdam"); // throws
 // Other way around is ok
 var ok = amsterdamDate.toZone(null); // returns naive date
 
+// Week days
+var weekDay1 = (new tc.DateTime("2014-07-07T00:00:00 Europe/Amsterdam")).weekDay(); // Monday = 1
+
+// UTC week day from zone datetime
+var weekDay2 = (new tc.DateTime("2014-07-07T00:00:00 Europe/Amsterdam")).utCWeekDay(); // Sunday = 0
+
 ```
 
 ### Date Arithmetic
