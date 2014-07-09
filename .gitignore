@@ -65,3 +65,4 @@ $RECYCLE.BIN/
 *.msp
 /lib/index.d.ts
 /test/test-index.d.ts
+/examples/example.d.ts

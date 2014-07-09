@@ -390,6 +390,13 @@ export class Duration {
 	toString(): string {
 		return this._toString(false);
 	}
+	
+	/**
+	 * Used by util.inspect()
+	 */
+	inspect(): string {
+		return "[Duration: " + this.toString() + "]";
+	}
 
 	private _toString(full: boolean): string {
 		var result: string = "";
@@ -828,6 +835,13 @@ export class TimeZone {
 	 */
 	public toString(): string {
 		return this._name;
+	}
+
+	/**
+	 * Used by util.inspect()
+	 */
+	inspect(): string {
+		return "[TimeZone: " + this.toString() + "]";
 	}
 
 	/**
@@ -1606,8 +1620,8 @@ export class DateTime {
 	public toString(): string {
 		var s: string = isoString(this.year(), this.month(), this.day(), this.hour(), this.minute(), this.second(), this.millisecond());
 		if (this._zone) {
-			if (this._zone.kind() === TimeZoneKind.Proper) {
-				return s + " " + this._zone.toString(); // separate IANA name with a space
+			if (this._zone.kind() !== TimeZoneKind.Offset) {
+				return s + " " + this._zone.toString(); // separate IANA name or "localtime" with a space
 			} else {
 				return s + this._zone.toString(); // do not separate ISO zone
 			}
@@ -1616,6 +1630,13 @@ export class DateTime {
 		}
 	}
 
+	/**
+	 * Used by util.inspect()
+	 */
+	inspect(): string {
+		return "[DateTime: " + this.toString() + "]";
+	}
+	
 	/**
 	 * Modified ISO 8601 format string in UTC without time zone info
 	 */
@@ -2158,6 +2179,13 @@ export class Period {
 			result += " keeping " + periodDstToString(this._dst);
 		}
 		return result;
+	}
+
+	/**
+	 * Used by util.inspect()
+	 */
+	inspect(): string {
+		return "[Period: " + this.toString() + "]";
 	}
 
 	/**

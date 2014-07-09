@@ -170,6 +170,10 @@ declare module 'timezonecomplete' {
          * added as necessary
          */
         toString(): string;
+        /**
+         * Used by util.inspect()
+         */
+        inspect(): string;
     }
     /**
      * The type of time zone
@@ -290,6 +294,10 @@ declare module 'timezonecomplete' {
          * Either "localtime", IANA name, or "+hh:mm" offset.
          */
         toString(): string;
+        /**
+         * Used by util.inspect()
+         */
+        inspect(): string;
         /**
          * Convert an offset number into an offset string
          * @param offset The offset in minutes from UTC e.g. 90 minutes
@@ -600,6 +608,10 @@ declare module 'timezonecomplete' {
          */
         toString(): string;
         /**
+         * Used by util.inspect()
+         */
+        inspect(): string;
+        /**
          * Modified ISO 8601 format string in UTC without time zone info
          */
         toUtcString(): string;
@@ -699,6 +711,10 @@ declare module 'timezonecomplete' {
          * "10 years, starting at 2014-03-01T12:00:00 Europe/Amsterdam keeping regular intervals".
          */
         toString(): string;
+        /**
+         * Used by util.inspect()
+         */
+        inspect(): string;
     }
 }
 

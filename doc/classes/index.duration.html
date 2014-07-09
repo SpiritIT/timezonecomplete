@@ -129,6 +129,8 @@ one hour is simply represented as 3600000 milliseconds.</p>
                 
                     <li class="tsd-kind-method tsd-parent-kind-class"><a href="index.duration.html#hours" class="tsd-kind-icon">hours</a></li>
                 
+                    <li class="tsd-kind-method tsd-parent-kind-class"><a href="index.duration.html#inspect" class="tsd-kind-icon">inspect</a></li>
+                
                     <li class="tsd-kind-method tsd-parent-kind-class"><a href="index.duration.html#lessthan" class="tsd-kind-icon">lessThan</a></li>
                 
                     <li class="tsd-kind-method tsd-parent-kind-class"><a href="index.duration.html#max" class="tsd-kind-icon">max</a></li>
@@ -151,9 +153,9 @@ one hour is simply represented as 3600000 milliseconds.</p>
                 
                     <li class="tsd-kind-method tsd-parent-kind-class"><a href="index.duration.html#second" class="tsd-kind-icon">second</a></li>
                 
-                    <li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="index.duration.html#static-seconds" class="tsd-kind-icon">seconds</a></li>
-                
                     <li class="tsd-kind-method tsd-parent-kind-class"><a href="index.duration.html#seconds" class="tsd-kind-icon">seconds</a></li>
+                
+                    <li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="index.duration.html#static-seconds" class="tsd-kind-icon">seconds</a></li>
                 
                     <li class="tsd-kind-method tsd-parent-kind-class"><a href="index.duration.html#sign" class="tsd-kind-icon">sign</a></li>
                 
@@ -410,7 +412,7 @@ between Math.floor() and Math.ceil()</p>
     
         <ul>
             
-                <li>Defined in index.ts:407</li>
+                <li>Defined in index.ts:414</li>
             
         </ul>
     
@@ -459,7 +461,7 @@ between Math.floor() and Math.ceil()</p>
     
         <ul>
             
-                <li>Defined in index.ts:393</li>
+                <li>Defined in index.ts:400</li>
             
         </ul>
     
@@ -900,6 +902,52 @@ between Math.floor() and Math.ceil()</p>
     
         <p>e.g. 1.5 for a 5400000 milliseconds duration</p>
 
+    
+
+
+        
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+    <a name="inspect" class="anchor"></a>
+    
+        
+            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> inspect<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in index.ts:396</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>Used by util.inspect()</p>
+
+
+
+
+
+
+
+
+
+
+    <h4>Returns</h4>
+    <p>
+    
+        <span class="tsd-signature-type">string</span>
+    
+</p>
     
 
 
@@ -1528,6 +1576,55 @@ between Math.floor() and Math.ceil()</p>
         
     
         
+            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+    <a name="seconds" class="anchor"></a>
+    
+        
+            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> seconds<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in index.ts:244</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>The entire duration in seconds (negative or positive, fractional)</p>
+
+
+
+
+
+
+
+
+
+
+    <h4>Returns</h4>
+    <p>
+    
+        <span class="tsd-signature-type">number</span>
+    
+</p>
+    
+        <p>e.g. 1.5 for a 1500 milliseconds duration</p>
+
+    
+
+
+        
+    
+
+    
+</section>
+        
+    
+        
             <section class="tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
     <a name="static-seconds" class="anchor"></a>
     
@@ -1582,55 +1679,6 @@ between Math.floor() and Math.ceil()</p>
 </p>
     
         <p>A duration of n seconds</p>
-
-    
-
-
-        
-    
-
-    
-</section>
-        
-    
-        
-            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
-    <a name="seconds" class="anchor"></a>
-    
-        
-            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> seconds<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></h3>
-
-<aside class="tsd-sources">
-    
-    
-    
-        <ul>
-            
-                <li>Defined in index.ts:244</li>
-            
-        </ul>
-    
-</aside>
-
-    <p>The entire duration in seconds (negative or positive, fractional)</p>
-
-
-
-
-
-
-
-
-
-
-    <h4>Returns</h4>
-    <p>
-    
-        <span class="tsd-signature-type">number</span>
-    
-</p>
-    
-        <p>e.g. 1.5 for a 1500 milliseconds duration</p>
 
     
 
@@ -2109,6 +2157,13 @@ now, we do not have a days() function</p>
         
             
                 <li class=" tsd-kind-method tsd-parent-kind-class">
+                    <a href="index.duration.html#inspect" class="tsd-kind-icon">inspect</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-method tsd-parent-kind-class">
                     <a href="index.duration.html#lessthan" class="tsd-kind-icon">lessThan</a>
                     
                 </li>
@@ -2185,15 +2240,15 @@ now, we do not have a days() function</p>
             
         
             
-                <li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-                    <a href="index.duration.html#static-seconds" class="tsd-kind-icon">seconds</a>
+                <li class=" tsd-kind-method tsd-parent-kind-class">
+                    <a href="index.duration.html#seconds" class="tsd-kind-icon">seconds</a>
                     
                 </li>
             
         
             
-                <li class=" tsd-kind-method tsd-parent-kind-class">
-                    <a href="index.duration.html#seconds" class="tsd-kind-icon">seconds</a>
+                <li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+                    <a href="index.duration.html#static-seconds" class="tsd-kind-icon">seconds</a>
                     
                 </li>
             

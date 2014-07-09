@@ -175,6 +175,28 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 
 ```
 
+## Changelog
+
+### 1.3.1 (2014-07-09)
+* Add inspect() methods so that console.log(myDateTime) works.
+* Bugfix in DateTime.toString(): missing space for datetime in local time.
+
+### 1.3.0 (2014-07-07)
+* Add day-of-week methods to DateTime:  weekDay() and utcWeekDay()
+* Add .d.ts file for timezonecomplete inside the package as well as on DefinitelyTyped
+
+### 1.2.0 (2014-06-30)
+* Add Duration.divide() method
+
+### 1.1.0 (2014-06-27)
+* Update Time Zone Database to 2014-06-16
+* Add Duration.add() and Duration.sub() methods
+
+### 1.0.1 (2014-06-26)
+* Bugfixes in package.json
+
+### 1.0.0 (2014-06-26)
+* First released version.
 
 ## Contributors
 
@@ -183,3 +205,4 @@ Rogier Schouten <r.schouten@spiritit.com>
 ## License
 
 MIT
+

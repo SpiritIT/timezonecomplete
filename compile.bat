@@ -1,5 +1,5 @@
 
-tsc --module commonjs --target es5 --declaration ./lib/index.ts ./test/test-index.ts
+tsc --module commonjs --target es5 --declaration ./lib/index.ts ./test/test-index.ts ./examples/example.ts
 echo "typescript compiled."
 node ./dts.js
 echo "declarations bundled."
