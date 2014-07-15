@@ -95,7 +95,7 @@ function browserifyTask(packageName) {
 			exports: packageName,
 			template: template
 		}))
-		.pipe(rename("bundle.js"))
+		.pipe(rename("timezonecomplete.js"))
 		.pipe(gulp.dest("dist/"))
 		.on("error", trapError); // make exit code non-zero
 }

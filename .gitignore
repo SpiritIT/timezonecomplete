@@ -66,6 +66,4 @@ $RECYCLE.BIN/
 /test/test-index.d.ts
 /examples/example.d.ts
 *.js.map
-
-#distribution dir
-dist
+bower_components
