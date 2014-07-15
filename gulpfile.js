@@ -6,6 +6,7 @@ var rename = require("gulp-rename");
 var typescript = require("gulp-tsc");
 var wrapUmd = require("gulp-wrap-umd");
 var clean = require("gulp-clean");
+var fs = require("fs");
 
 ///////////////////////////////////////////////////////////////////////////////
 // Overall tasks
@@ -74,6 +75,7 @@ gulp.task("browser_package", ["build"], function() {
 })
 
 function browserifyTask(packageName) {
+	var template = fs.readFileSync("./umd-template/umd-require.jst");
 	return gulp.src("lib/index.js", {base: "."})
 		.pipe(browserify({
 			exclude: "timezone-js",
@@ -90,7 +92,8 @@ function browserifyTask(packageName) {
 				amdName: "timezone-js",
 				cjsName: "timezone-js"
 			}],
-			exports: packageName
+			exports: packageName,
+			template: template
 		}))
 		.pipe(rename("bundle.js"))
 		.pipe(gulp.dest("dist/"))
