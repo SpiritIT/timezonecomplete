@@ -36,8 +36,7 @@ node_modules
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
-
+Icon
 # Thumbnails
 ._*
 
@@ -66,3 +65,5 @@ $RECYCLE.BIN/
 /lib/index.d.ts
 /test/test-index.d.ts
 /examples/example.d.ts
+*.js.map
+bower_components
