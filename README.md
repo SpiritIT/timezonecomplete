@@ -157,7 +157,7 @@ Some efford has been made to make TimezoneComplete usable in the browser, by pac
 	Hello world
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="bower_components/timezone-js/src/date.js"></script> <!-- External library timezone-js is also needed -->
-<script src="bundle.js"></script> <!-- This is the bundle from ./dist/ -->
+<script src="timezonecomplete.js"></script> <!-- This is the javascript bundle from ./dist/ -->
 	<script>
 	    alert(timezonecomplete.isLeapYear(2012));
 	</script>
