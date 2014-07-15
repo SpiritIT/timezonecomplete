@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) 2014 Spirit IT BV
  * 
  * Date and Time utility functions
