@@ -34,6 +34,8 @@ gulp.task("help", function(cb) {
 // Default task: this is called when just typing "gulp" on command line
 gulp.task("default", ["build"]);
 
+gulp.task("rebuild", ["clean", "build"]);
+
 gulp.task("clean", function() {
 	gulp
 		.src([
@@ -43,6 +45,7 @@ gulp.task("clean", function() {
 			"lib/**/*.js",
 			"lib/**/*.map"
 		], { read: false, base: "." })
+		.pipe(gulpFilter("!lib/timezonecomplete.d.ts"))
 		.pipe(clean({force: true}))
 		.on("error", trapError) // make exit code non-zero
 
