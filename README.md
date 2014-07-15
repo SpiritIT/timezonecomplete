@@ -46,14 +46,16 @@ var duration3 = duration2.max(duration); // 6 seconds
 ```
 
 ### DateTime
-The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. 
-
-The JavaScript Date class contains a value, which is converted from local time to UTC. But what if the value you entered was in a different time zone? Then the UTC value of the JavaScript date is some offset from your timezone time. Date arithmetic becomes impossible because the UTC value depends on what your local Daylight Saving Time happens to be. The DateTime class fixes this.
+The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
+It is smart enough to be able to represent different dates which map to the same UTC date around DST. Therefore you could increment the local time by an hour and be sure
+that the local time is incremented by one hour even if the UTC date does not change.
 
 The DateTime class also fixes various annoyances. 
 - All methods are in singular form: "year()" not "years()" and "hour()" not "hours()". The JavaScript Date class mixes these forms. 
 - The JavaScript day-of-month is called "date()" instead of "day()". We fixed that.
 - We count months from 1 to 12 inclusive like normal human beings, not from 0 to 11 as JavaScript does.
+- With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
+  is always UTC for dates that have a time zone, and it is equal to the "local" date value for naive dates.
 
 ```javascript
 var tc = require("timezonecomplete");
@@ -94,7 +96,7 @@ var weekDay2 = (new tc.DateTime("2014-07-07T00:00:00 Europe/Amsterdam")).utcWeek
 
 ### Date Arithmetic
 
-The DateTime class allows advanced date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST and leap seconds: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.
+The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST and leap seconds: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.
 
 
 ```javascript
@@ -123,17 +125,27 @@ var added = localdate.add(1, tc.TimeUnit.Hour);
 
 ### Periods
 
-We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at noon every day? Or does it shift with DST?  We needed to be able to specify both.
+We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it shift with DST?  
+The former means that the intervals are not always 12 hours. The latter means that it doesn't occur at the same time always.
+We needed to be able to specify both.
 
 
 
 ```javascript
 var tc = require("timezonecomplete");
 
+// Timezone with DST specified (Europe/Amsterdam)
+// Last argument is "RegularLocalTime"
 // Repeating daily period at 8:05 local Amsterdam time (moves with Daylight Saving Time so it is always at 8:05 locally)
 var period = new tc.Period(new tc.DateTime("2014-01-01T08:05:00 Europe/Amsterdam"), 1, tc.TimeUnit.Day, tc.PeriodDst.RegularLocalTime);
 
-// Repeating daily period at 8:05 local Amsterdam time WITHOUT DST
+// Timezone with DST specified (Europe/Amsterdam)
+// Last argument is "RegularIntervals"
+// Repeating daily period at 8:05 OR 9:05 local Amsterdam time (which is always 7:05 UTC)
+var period = new tc.Period(new tc.DateTime("2014-01-01T08:05:00 Europe/Amsterdam"), 1, tc.TimeUnit.Day, tc.PeriodDst.RegularIntervals);
+
+// Timezone without DST specified (+01:00)
+// Repeating daily period at 7:05 UTC
 var period2 = new tc.Period(new tc.DateTime("2014-01-01T08:05:00+01:00"), 1, tc.TimeUnit.Day, tc.PeriodDst.RegularLocalTime);
 
 // You can calculate the first occurrence after a given date (in any time zone)
@@ -147,7 +159,7 @@ var occurrence2 = period.findNext(occurrence);
 ```
 
 ## On a web page
-Some efford has been made to make TimezoneComplete usable in the browser, by packaging it in a [UMD](https://github.com/umdjs/umd). This way, it can be used for example in plain html/javascript:
+Some effort has been made to make TimezoneComplete usable in the browser, by packaging it in a [UMD](https://github.com/umdjs/umd). This way, it can be used for example in plain html/javascript:
 
 ```html
 
@@ -165,7 +177,7 @@ Some efford has been made to make TimezoneComplete usable in the browser, by pac
 </html>
 ```
 
-In theory this bundle is also usable using module loaders like [RequireJS](http://requirejs.org/). However, this has not been thouroughly tested yet, so help on this part is welcome.
+In theory this bundle is also usable using module loaders like [RequireJS](http://requirejs.org/). However, this has not been thoroughly tested yet, so help on this part is welcome.
 
 ## FAQ
 
