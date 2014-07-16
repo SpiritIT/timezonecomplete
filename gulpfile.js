@@ -5,7 +5,9 @@ var debug = require("gulp-debug");
 var rename = require("gulp-rename");
 var typescript = require("gulp-tsc");
 var wrapUmd = require("gulp-wrap-umd");
+var typedoc = require("gulp-typedoc");
 var clean = require("gulp-clean");
+var dtsBundle = require("dts-bundle");
 var fs = require("fs");
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,14 +22,15 @@ gulp.task("help", function(cb) {
 	console.log("");
 	console.log("BUILD COMMANDS:");
 	console.log("");
-	console.log("gulp               Build all");
-	console.log("gulp clean         Clean build output");
-	console.log("gulp build         Build");
-	console.log("gulp rebuild       Clean and Build");
-	console.log("gulp test          Run unit tests");
-	console.log("gulp release       \"dist/\" build");
-	console.log("gulp rerelease     Clean and Release");
-	console.log("gulp help          This help message");
+	console.log("gulp                 Build all");
+	console.log("gulp clean           Clean build output");
+	console.log("gulp build           Build");
+	console.log("gulp rebuild         Clean and Build");
+	console.log("gulp doc             Create documentation");
+	console.log("gulp test            Run unit tests");
+	console.log("gulp help            This help message");
+	console.log("gulp browser_package Create browser package");
+	console.log("gulp bundle          Make a bundled timezonecomplete.d.ts file");
 	console.log("");
 	cb(); // signal end-of-task
 });
@@ -44,29 +47,55 @@ gulp.task("clean", function() {
 			"gulp-tsc*/",
 			"lib/**/*.d.ts",
 			"lib/**/*.js",
-			"lib/**/*.map"
+			"lib/**/*.map",
+			"test/**/*.d.ts",
+			"test/**/*.js",
+			"test/**/*.map",
+			"examples/**/*.d.ts",
+			"examples/**/*.js",
+			"examples/**/*.map",
 		], { read: false, base: "." })
 		.pipe(gulpFilter("!lib/timezonecomplete.d.ts"))
 		.pipe(clean({force: true}))
 		.on("error", trapError) // make exit code non-zero
-
-
 })
 
+gulp.task("bundle", ["build"], function() {
+	dtsBundle.bundle({
+		name: 'timezonecomplete',
+	    main: 'lib/index.d.ts',
+		baseDir: './lib',
+		externals: false,
+	});
+})
+
+gulp.task("doc", function() {
+	return gulp.src(["lib/**.ts"], {base: "."})
+		.pipe(gulpFilter("!**/*.d.ts"))
+		.pipe(typedoc({
+			module: "commonjs",
+			out: "./doc",
+			name: "timezonecomplete",
+			target: "es5",
+			excludeExternals: "",
+		}))
+		.on("error", trapError);
+});
+
 gulp.task("build", function() {
-	return gulp.src([
-			"lib/*.ts",
-			"test/*.ts",
-			"example/*.ts"
+	 return gulp.src([
+			"**/*.ts",
 		], {base: "."})
 		.pipe(gulpFilter("!**/*.d.ts"))
 		.pipe(typescript({
 			module: "commonjs",
-			declaration: true
+			declaration: true,
+			target: "es5",
 		}))
 		.pipe(gulp.dest("."))
-		.on("error", trapError) // make exit code non-zero
-})
+		.on("error", trapError); // make exit code non-zero
+	});
+
 
 gulp.task("release", ["build", "browser_package"]);
 

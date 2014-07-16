@@ -52,9 +52,8 @@
     "gulp-filter": "^0.4.1",
     "gulp-rename": "^1.2.0",
     "gulp-tsc": "^0.9.1",
+    "gulp-typedoc": "^1.0.3",
     "gulp-wrap-umd": "^0.2.1",
-    "mocha": "^1.18.2",
-    "typedoc": "0.0.7",
-    "typescript": "1.0.1"
+    "mocha": "^1.18.2"
   }
 }
