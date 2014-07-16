@@ -9,6 +9,8 @@ var typedoc = require("gulp-typedoc");
 var clean = require("gulp-clean");
 var dtsBundle = require("dts-bundle");
 var fs = require("fs");
+var runSequence = require("run-sequence");
+var replace = require("gulp-replace");
 
 ///////////////////////////////////////////////////////////////////////////////
 // Overall tasks
@@ -27,10 +29,12 @@ gulp.task("help", function(cb) {
 	console.log("gulp build           Build");
 	console.log("gulp rebuild         Clean and Build");
 	console.log("gulp doc             Create documentation");
-	console.log("gulp test            Run unit tests");
 	console.log("gulp help            This help message");
 	console.log("gulp browser_package Create browser package");
 	console.log("gulp bundle          Make a bundled timezonecomplete.d.ts file");
+	console.log("gulp release         All of the above");
+	console.log("gulp rerelease       Clean and All of the above");
+  
 	console.log("");
 	cb(); // signal end-of-task
 });
@@ -38,7 +42,13 @@ gulp.task("help", function(cb) {
 // Default task: this is called when just typing "gulp" on command line
 gulp.task("default", ["build"]);
 
-gulp.task("rebuild", ["clean", "build"]);
+gulp.task("rebuild", function(cb) {
+  runSequence("clean", "build", cb);
+});
+
+gulp.task("rerelease", function(cb) {
+  runSequence("clean", "release", cb);
+});
 
 gulp.task("clean", function() {
 	gulp
@@ -54,13 +64,21 @@ gulp.task("clean", function() {
 			"examples/**/*.d.ts",
 			"examples/**/*.js",
 			"examples/**/*.map",
+      "doc/"
 		], { read: false, base: "." })
-		.pipe(gulpFilter("!lib/timezonecomplete.d.ts"))
 		.pipe(clean({force: true}))
 		.on("error", trapError) // make exit code non-zero
 })
 
-gulp.task("bundle", ["build"], function() {
+// workaround for gulp-tsc creating faulty references in .d.ts files
+gulp.task("fix_refs", ["build"], function() {
+  return gulp
+    .src("lib/index.d.ts", { base: "." })
+    .pipe(replace("/// <reference path=\"../../typings/lib.d.ts\" />", "/// <reference path=\"../typings/lib.d.ts\" />"))
+    .pipe(gulp.dest("."));
+});
+
+gulp.task("bundle", ["build", "fix_refs"], function() {
 	dtsBundle.bundle({
 		name: 'timezonecomplete',
 	    main: 'lib/index.d.ts',
@@ -97,7 +115,7 @@ gulp.task("build", function() {
 	});
 
 
-gulp.task("release", ["build", "browser_package"]);
+gulp.task("release", ["build", "browser_package", "doc", "bundle"]);
 
 gulp.task("browser_package", ["build"], function() {
 	return browserifyTask("timezonecomplete");
