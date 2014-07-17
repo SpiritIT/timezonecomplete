@@ -6,10 +6,9 @@ var rename = require("gulp-rename");
 var typescript = require("gulp-tsc");
 var wrapUmd = require("gulp-wrap-umd");
 var typedoc = require("gulp-typedoc");
-var clean = require("gulp-clean");
+var rimraf = require("gulp-rimraf");
 var dtsBundle = require("dts-bundle");
 var fs = require("fs");
-var runSequence = require("run-sequence");
 
 ///////////////////////////////////////////////////////////////////////////////
 // Overall tasks
@@ -26,28 +25,18 @@ gulp.task("help", function(cb) {
 	console.log("gulp                 Build all");
 	console.log("gulp clean           Clean build output");
 	console.log("gulp build           Build");
-	console.log("gulp rebuild         Clean and Build");
 	console.log("gulp doc             Create documentation");
 	console.log("gulp help            This help message");
 	console.log("gulp browser_package Create browser package");
 	console.log("gulp bundle          Make a bundled timezonecomplete.d.ts file");
-	console.log("gulp release         All of the above");
-	console.log("gulp rerelease       Clean and All of the above");
+	console.log("gulp release         All of the above except clean");
 
 	console.log("");
 	cb(); // signal end-of-task
 });
 
 // Default task: this is called when just typing "gulp" on command line
-gulp.task("default", ["build"]);
-
-gulp.task("rebuild", function(cb) {
-  runSequence("clean", "build", cb);
-});
-
-gulp.task("rerelease", function(cb) {
-  runSequence("clean", "release", cb);
-});
+gulp.task("default", ["release"]);
 
 gulp.task("clean", function() {
 	gulp
@@ -65,7 +54,7 @@ gulp.task("clean", function() {
 			"examples/**/*.map",
       "doc/"
 		], { read: false, base: "." })
-		.pipe(clean({force: true}))
+		.pipe(rimraf({force: true}))
 		.on("error", trapError) // make exit code non-zero
 })
 
