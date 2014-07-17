@@ -10,7 +10,6 @@ var clean = require("gulp-clean");
 var dtsBundle = require("dts-bundle");
 var fs = require("fs");
 var runSequence = require("run-sequence");
-var replace = require("gulp-replace");
 
 ///////////////////////////////////////////////////////////////////////////////
 // Overall tasks
@@ -34,7 +33,7 @@ gulp.task("help", function(cb) {
 	console.log("gulp bundle          Make a bundled timezonecomplete.d.ts file");
 	console.log("gulp release         All of the above");
 	console.log("gulp rerelease       Clean and All of the above");
-  
+
 	console.log("");
 	cb(); // signal end-of-task
 });
@@ -70,15 +69,7 @@ gulp.task("clean", function() {
 		.on("error", trapError) // make exit code non-zero
 })
 
-// workaround for gulp-tsc creating faulty references in .d.ts files
-gulp.task("fix_refs", ["build"], function() {
-  return gulp
-    .src("lib/index.d.ts", { base: "." })
-    .pipe(replace("/// <reference path=\"../../typings/lib.d.ts\" />", "/// <reference path=\"../typings/lib.d.ts\" />"))
-    .pipe(gulp.dest("."));
-});
-
-gulp.task("bundle", ["build", "fix_refs"], function() {
+gulp.task("bundle", ["build"], function() {
 	dtsBundle.bundle({
 		name: 'timezonecomplete',
 	    main: 'lib/index.d.ts',
@@ -109,6 +100,7 @@ gulp.task("build", function() {
 			module: "commonjs",
 			declaration: true,
 			target: "es5",
+			outDir: "."
 		}))
 		.pipe(gulp.dest("."))
 		.on("error", trapError); // make exit code non-zero
