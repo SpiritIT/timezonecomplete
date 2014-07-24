@@ -2,5 +2,5 @@
  node_js:
    - "0.10"
 before_install:
-  - "npm i -g gulp istanbul typedoc"   
+  - "npm install -g gulp istanbul typedoc"   
 after_script: 'cat "./coverage/lcov.info" | coveralls'
