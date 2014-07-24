@@ -41,6 +41,7 @@ gulp.task("default", ["release"]);
 gulp.task("clean", function() {
 	gulp
 		.src([
+			"coverage/",
 			"dist/",
 			"gulp-tsc*/",
 			"lib/**/*.d.ts",

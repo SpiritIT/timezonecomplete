@@ -96,6 +96,7 @@ export function daysInMonth(year: number, month: number): number {
 			return 30;
 		default:
 			assert(false, "Invalid month: " + month);
+			/* istanbul ignore next */
 			return 0;
 	}
 }
@@ -557,10 +558,12 @@ export class TimeZone {
 				assert(offset > -24 * 60 && offset < 24 * 60, "TimeZone.zone(): offset out of range");
 				name = TimeZone.offsetToString(offset);
 			} break;
-			default: {
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore next */
 				assert(false, "TimeZone.zone(): Unexpected argument type \"" + typeof (a) + "\"");
+				/* istanbul ignore next */
 				break;
-			}
 		}
 		return TimeZone._findOrCreate(name);
 	}
@@ -612,8 +615,11 @@ export class TimeZone {
 			case TimeZoneKind.Local: return (other.kind() === TimeZoneKind.Local);
 			case TimeZoneKind.Offset: return (other.kind() === TimeZoneKind.Offset && this._offset === other._offset);
 			case TimeZoneKind.Proper: return (other.kind() === TimeZoneKind.Proper && this._name === other._name);
+			/* istanbul ignore next */
 			default:
+				/* istanbul ignore next */
 				assert(false, "Unknown time zone kind.");
+				/* istanbul ignore next */
 				return false;
 		}
 	}
@@ -641,7 +647,10 @@ export class TimeZone {
 				|| this._name === "UTC"
 				|| this._name === "Zulu"
 				);
-			default: return false;
+			/* istanbul ignore next */
+			default: 
+				/* istanbul ignore next */
+				return false;
 		}
 
 	}
@@ -678,10 +687,10 @@ export class TimeZone {
 				this._date.setUTCSeconds(second);
 				this._date.setUTCMilliseconds(millisecond);
 				return -1 * this._date.getTimezoneOffset();
-			} break;
+			} 
 			case TimeZoneKind.Offset: {
 				return this._offset;
-			} break;
+			} 
 			case TimeZoneKind.Proper: {
 				if (this.isUtc()) {
 					// due to a bug in TimezoneJS a UTC time entered into the 
@@ -702,10 +711,13 @@ export class TimeZone {
 						this._tjs.getMilliseconds(),
 						year, month, day, hour, minute, second, millisecond);
 				}
-			} break;
-			default: {
+			} 
+			/* istanbul ignore next */
+			default: 
+				/* istanbul ignore next */
 				assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
-			} break;
+				/* istanbul ignore next */
+				break;
 		}
 	}
 
@@ -741,10 +753,10 @@ export class TimeZone {
 				this._date.setSeconds(second);
 				this._date.setMilliseconds(millisecond);
 				return -1 * this._date.getTimezoneOffset();
-			} break;
+			} 
 			case TimeZoneKind.Offset: {
 				return this._offset;
-			} break;
+			} 
 			case TimeZoneKind.Proper: {
 				this._tjs.setFullYear(year);
 				this._tjs.setMonth(month - 1);
@@ -754,10 +766,13 @@ export class TimeZone {
 				this._tjs.setSeconds(second);
 				this._tjs.setMilliseconds(millisecond);
 				return -1 * this._tjs.getTimezoneOffset();
-			} break;
-			default: {
+			} 
+			/* istanbul ignore next */
+			default: 
+				/* istanbul ignore next */
 				assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
-			} break;
+				/* istanbul ignore next */
+				break;
 		}
 	}
 
@@ -778,7 +793,7 @@ export class TimeZone {
 					date.getMinutes(),
 					date.getSeconds(),
 					date.getMilliseconds());
-			} break;
+			} 
 			case DateFunctions.GetUTC: {
 				return this.offsetForUtc(
 					date.getUTCFullYear(),
@@ -788,9 +803,12 @@ export class TimeZone {
 					date.getUTCMinutes(),
 					date.getUTCSeconds(),
 					date.getUTCMilliseconds());
-			} break;
+			} 
+			/* istanbul ignore next */
 			default:
+				/* istanbul ignore next */
 				assert(false, "Unknown DateFunctions value");
+				/* istanbul ignore next */
 				break;
 		}
 	}
@@ -812,7 +830,7 @@ export class TimeZone {
 					date.getMinutes(),
 					date.getSeconds(),
 					date.getMilliseconds());
-			} break;
+			} 
 			case DateFunctions.GetUTC: {
 				return this.offsetForZone(
 					date.getUTCFullYear(),
@@ -822,9 +840,12 @@ export class TimeZone {
 					date.getUTCMinutes(),
 					date.getUTCSeconds(),
 					date.getUTCMilliseconds());
-			} break;
+			} 
+			/* istanbul ignore next */
 			default:
+				/* istanbul ignore next */
 				assert(false, "Unknown DateFunctions value");
+				/* istanbul ignore next */
 				break;
 		}
 	}
@@ -979,6 +1000,7 @@ export interface TimeSource {
  */
 export class RealTimeSource implements TimeSource {
 	now(): Date {
+		/* istanbul ignore next */
 		return new Date();
 	}
 }
@@ -1208,9 +1230,12 @@ export class DateTime {
 				this._zone = TimeZone.local();
 				this._utcDateToZoneDate();
 			} break;
-			default: {
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore next */
 				assert(false, "DateTime.DateTime(): unexpected first argument type.");
-			} break;
+				/* istanbul ignore next */
+				break;
 		}
 	}
 
@@ -1475,9 +1500,12 @@ export class DateTime {
 				case TimeUnit.Year: {
 					utcDate.setUTCFullYear(utcDate.getUTCFullYear() + amount);
 				} break;
-				default: {
+				/* istanbul ignore next */
+				default:
+					/* istanbul ignore next */
 					assert(false, "Unknown period unit.");
-				} break;
+					/* istanbul ignore next */
+					break;
 			}
 			return new DateTime(utcDate, DateFunctions.GetUTC, TimeZone.utc()).toZone(this._zone);
 		}
@@ -1603,11 +1631,7 @@ export class DateTime {
 	public toIsoString(): string {
 		var s: string = isoString(this.year(), this.month(), this.day(), this.hour(), this.minute(), this.second(), this.millisecond());
 		if (this._zone) {
-			if (this._zone.kind() === TimeZoneKind.Proper) {
-				return s + TimeZone.offsetToString(this.offset()); // convert IANA name to offset
-			} else {
-				return s + this._zone.toString(); // do not separate ISO zone
-			}
+			return s + TimeZone.offsetToString(this.offset()); // convert IANA name to offset
 		} else {
 			return s; // no zone present
 		}
@@ -1741,8 +1765,11 @@ export function periodDstToString(p: PeriodDst): string {
 	switch (p) {
 		case PeriodDst.RegularIntervals: return "regular intervals";
 		case PeriodDst.RegularLocalTime: return "regular local time";
+		/* istanbul ignore next */
 		default:
+			/* istanbul ignore next */
 			assert(false, "Unknown PeriodDst");
+			/* istanbul ignore next */
 			return "";
 	}
 }
@@ -1895,6 +1922,7 @@ export class Period {
 		var diff: number;
 		var newYear: number;
 		var newMonth: number;
+		var remainder: number;
 
 		var normalFrom = this._normalizeDay(fromDate.toZone(this._intStart.zone()));
 
@@ -1933,8 +1961,11 @@ export class Period {
 						approx = new DateTime(normalFrom.utcYear(), this._intStart.utcMonth(), this._intStart.utcDay(),
 							this._intStart.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
 						break;
+					/* istanbul ignore next */
 					default:
+						/* istanbul ignore next */
 						assert(false, "Unknown TimeUnit");
+						/* istanbul ignore next */
 						break;
 				}
 				while (!approx.greaterThan(fromDate)) {
@@ -1967,8 +1998,11 @@ export class Period {
 						approx = new DateTime(normalFrom.year(), this._intStart.month(), this._intStart.day(),
 							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
 						break;
+					/* istanbul ignore next */
 					default:
+						/* istanbul ignore next */
 						assert(false, "Unknown TimeUnit");
+						/* istanbul ignore next */
 						break;
 				}
 				while (!approx.greaterThan(normalFrom)) {
@@ -2012,8 +2046,11 @@ export class Period {
 						periods = Math.floor(Math.max(0, diff) / this._intAmount); // max needed due to -1 above
 						approx = this._intStart.add(periods * this._intAmount, TimeUnit.Year);
 						break;
+					/* istanbul ignore next */
 					default:
+						/* istanbul ignore next */
 						assert(false, "Unknown TimeUnit");
+						/* istanbul ignore next */
 						break;
 				}
 				while (!approx.greaterThan(fromDate)) {
@@ -2024,7 +2061,7 @@ export class Period {
 				switch (this._intUnit) {
 					case TimeUnit.Second:
 						if (this._intAmount < 60 && (60 % this._intAmount) === 0) {
-							// optimization: same minute this._intStartary each time, so just take the fromDate minus one minute with the this._intStart seconds
+							// optimization: same second each minute, so just take the fromDate minus one minute with the this._intStart seconds
 							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
 								normalFrom.hour(), normalFrom.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone())
 								.subLocal(1, TimeUnit.Minute);
@@ -2032,14 +2069,40 @@ export class Period {
 							// per constructor assert, the seconds are less than a day, so just go the fromDate start-of-day
 							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
 								this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
-							// since we reset, we have to take care of the shorter areas around the start time. We need to skip them.
-							temp = approx.subLocal(this._intAmount, this._intUnit);
-							if (normalFrom.lessThan(temp)) {
-								approx = approx.subLocal(1, TimeUnit.Day);
-							} else if (normalFrom.greaterThan(temp.add(1, TimeUnit.Day))) {
-								approx = approx.addLocal(1, TimeUnit.Day);
+								
+							// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
+							remainder = Math.floor((24 * 3600) % this._intAmount);
+							if (approx.greaterThan(normalFrom)) {
+								if (approx.subLocal(remainder, TimeUnit.Second).greaterThan(normalFrom)) {
+									// normalFrom lies outside the boundary period before the start date
+									approx = approx.subLocal(1, TimeUnit.Day);
+								}
+							} else {
+								if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Second).lessEqual(normalFrom)) {
+									// normalFrom lies in the boundary period, move to the next day
+									approx = approx.addLocal(1, TimeUnit.Day);
+								}								
 							}
-							// TODO OPTIMIZE. COUNTING SECONDS IN A DAY IS INEFFICIENT, BUT NEEDS TO TAKE DST AND LEAPSEC INTO ACCOUNT
+							
+							// optimization: binary search
+							var imax: number = Math.floor((24 * 3600) / this._intAmount);
+							var imin: number = 0;
+							while (imax >= imin) {
+								// calculate the midpoint for roughly equal partition
+								var imid = Math.floor((imin + imax) / 2);
+								var approx2 = approx.addLocal(imid * this._intAmount, TimeUnit.Second);
+								var approxMin = approx2.subLocal(this._intAmount, TimeUnit.Second);
+								if (approx2.greaterThan(normalFrom) && approxMin.lessEqual(normalFrom)) {
+									approx = approx2;
+									break;
+								} else if (approx2.lessEqual(normalFrom)) {
+									// change min index to search upper subarray
+									imin = imid + 1;
+								} else {
+									// change max index to search lower subarray
+									imax = imid - 1;
+								}
+							}
 						}
 						break;
 					case TimeUnit.Minute:
@@ -2053,22 +2116,38 @@ export class Period {
 							// per constructor assert, the seconds fit in a day, so just go the fromDate previous day
 							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
 								this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
-							temp = approx.subLocal(this._intAmount, this._intUnit);
-							if (normalFrom.lessThan(temp)) {
-								approx = approx.subLocal(1, TimeUnit.Day);
-							} else if (normalFrom.greaterThan(temp.add(1, TimeUnit.Day))) {
-								approx = approx.addLocal(1, TimeUnit.Day);
+
+							// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
+							remainder = Math.floor((24 * 60) % this._intAmount);
+							if (approx.greaterThan(normalFrom)) {
+								if (approx.subLocal(remainder, TimeUnit.Minute).greaterThan(normalFrom)) {
+									// normalFrom lies outside the boundary period before the start date
+									approx = approx.subLocal(1, TimeUnit.Day);
+								}
+							} else {
+								if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Minute).lessEqual(normalFrom)) {
+									// normalFrom lies in the boundary period, move to the next day
+									approx = approx.addLocal(1, TimeUnit.Day);
+								}								
 							}
 						}
 						break;
 					case TimeUnit.Hour:
 						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
 							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
-						temp = approx.subLocal(this._intAmount, this._intUnit);
-						if (normalFrom.lessThan(temp)) {
-							approx = approx.subLocal(1, TimeUnit.Day);
-						} else if (normalFrom.greaterThan(temp.add(1, TimeUnit.Day))) {
-							approx = approx.addLocal(1, TimeUnit.Day);
+
+						// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
+						remainder = Math.floor(24 % this._intAmount);
+						if (approx.greaterThan(normalFrom)) {
+							if (approx.subLocal(remainder, TimeUnit.Hour).greaterThan(normalFrom)) {
+								// normalFrom lies outside the boundary period before the start date
+								approx = approx.subLocal(1, TimeUnit.Day);
+							}
+						} else {
+							if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Hour).lessEqual(normalFrom)) {
+								// normalFrom lies in the boundary period, move to the next day
+								approx = approx.addLocal(1, TimeUnit.Day);
+							}								
 						}
 						break;
 					case TimeUnit.Day:
@@ -2096,8 +2175,11 @@ export class Period {
 						approx = new DateTime(newYear, this._intStart.month(), this._intStart.day(),
 							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
 						break;
+					/* istanbul ignore next */
 					default:
+						/* istanbul ignore next */
 						assert(false, "Unknown TimeUnit");
+						/* istanbul ignore next */
 						break;
 				}
 				while (!approx.greaterThan(normalFrom)) {
@@ -2132,51 +2214,59 @@ export class Period {
 		}
 	}
 
-	/**
-	 * Returns an ISO duration string 
-	 * P[n]Y[n]M[n]DT[n]H[n]M[n][.n]S or P[n]W
-	 */
-	public toIsoString(): string {
+	private _periodIsoString(): string {
 		switch (this._unit) {
 			case TimeUnit.Second: {
 				return "P" + this._amount.toString(10) + "S";
-			} break;
+			}
 			case TimeUnit.Minute: {
 				return "PT" + this._amount.toString(10) + "M"; // note the "T" to disambiguate the "M"
-			} break;
+			}
 			case TimeUnit.Hour: {
 				return "P" + this._amount.toString(10) + "H";
-			} break;
+			}
 			case TimeUnit.Day: {
 				return "P" + this._amount.toString(10) + "D";
-			} break;
+			}
 			case TimeUnit.Week: {
 				return "P" + this._amount.toString(10) + "W";
-			} break;
+			}
 			case TimeUnit.Month: {
 				return "P" + this._amount.toString(10) + "M";
-			} break;
+			}
 			case TimeUnit.Year: {
 				return "P" + this._amount.toString(10) + "Y";
-			} break;
-			default: {
+			}
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore next */
 				assert(false, "Unknown period unit.");
-				return "";
-			} break;
+				/* istanbul ignore next */
+				return "";			
 		}
+	}
+	
+	/**
+	 * Returns an ISO duration string e.g.
+	 * 2014-01-01T12:00:00.000+01:00/P1H
+	 * 2014-01-01T12:00:00.000+01:00/PT1M   (one minute)
+	 * 2014-01-01T12:00:00.000+01:00/P1M   (one month)
+	 */
+	public toIsoString(): string {
+		return this.start().toIsoString() + "/" + this._periodIsoString();
 	}
 
 	/**
 	 * A string representation e.g. 
-	 * "10 years, starting at 2014-03-01T12:00:00 Europe/Amsterdam keeping regular intervals".
+	 * "10 years, starting at 2014-03-01T12:00:00 Europe/Amsterdam, keeping regular intervals".
 	 */
 	public toString(): string {
 		var result: string =
 			this._amount.toString(10) + " " + TimeUnit[this._unit].toLowerCase() + (this._amount > 1 ? "s" : "")
-			+ " starting at " + this._start.toString();
+			+ ", starting at " + this._start.toString();
 		// only add the DST handling if it is relevant
 		if (this._dstRelevant()) {
-			result += " keeping " + periodDstToString(this._dst);
+			result += ", keeping " + periodDstToString(this._dst);
 		}
 		return result;
 	}
