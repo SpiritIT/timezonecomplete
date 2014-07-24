@@ -37,7 +37,7 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "test": "istanbul cover node_modules/mocha/bin/_mocha -- ./test/*.js"
+    "test": "./node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- ./test/*.js"
   },
   "dependencies": {
     "timezone-js": "~0.4.11"
