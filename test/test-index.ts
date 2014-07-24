@@ -1,5 +1,8 @@
 ﻿/// <reference path="../typings/test.d.ts" />
 
+// needed to make the tests work, so we know what local time is
+process.env.TZ = "Europe/Amsterdam";
+
 import assert = require("assert");
 import chai = require("chai");
 import expect = chai.expect;
