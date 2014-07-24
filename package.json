@@ -1,6 +1,6 @@
 {
   "name": "timezonecomplete",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": [
     "Date",
@@ -37,13 +37,14 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "istanbul cover node_modules/mocha/bin/_mocha -- ./test/*.js"
   },
   "dependencies": {
     "timezone-js": "~0.4.11"
   },
   "devDependencies": {
     "chai": "^1.9.1",
+    "coveralls": "^2.11.1",
     "dts-bundle": "^0.2.0",
     "gulp": "^3.8.6",
     "gulp-browserify": "^0.5.0",

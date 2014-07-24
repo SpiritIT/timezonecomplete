@@ -1,5 +1,7 @@
 ﻿# TimezoneComplete
 
+[![Coverage Status](https://img.shields.io/coveralls/SpiritIT/timezonecomplete.svg)](https://coveralls.io/r/SpiritIT/timezonecomplete)
+
 ## Synopsis
 
 TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone's time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.
@@ -208,6 +210,14 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 ```
 
 ## Changelog
+
+### 1.4.1
+* Ensured all code is covered with tests using istanbul
+* Bufgix in DateTime.toIsoString(): missing space
+* Bufgix in DateTime.toIsoString(): local time zone not handled correctly
+* Bugfix in Period.findFirst() regarding regular local time periods of less than one hour
+* Bugfix in Period.toIsoString() which did not include the start date
+* Performance improvement for Period.findFirst()
 
 ### 1.4.0
 * Enable use of timezonecomplete in browser
