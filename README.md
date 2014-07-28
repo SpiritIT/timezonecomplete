@@ -18,7 +18,8 @@ Other libraries are great. In fact, we use timezone-js in our implementation and
   * Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with "number" type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.
   * Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
   * Ability to use with NodeJS as well as in a browser
-3. This is not meant to be light-weight. 
+  * Complete test coverage
+  * Under active development
 
 ## Usage
 
