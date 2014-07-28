@@ -1,7 +1,7 @@
 ﻿# TimezoneComplete
 
 [![Build Status](https://travis-ci.org/SpiritIT/timezonecomplete.svg?branch=master)](https://travis-ci.org/SpiritIT/timezonecomplete)
-[![Coverage Status](https://img.shields.io/coveralls/SpiritIT/timezonecomplete.svg)](https://coveralls.io/r/SpiritIT/timezonecomplete)
+[![Coverage Status](https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master)](https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master)
 
 ## Synopsis
 
