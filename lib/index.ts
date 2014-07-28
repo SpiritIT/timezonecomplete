@@ -1306,7 +1306,7 @@ export class DateTime {
 	 * week day numbers)
 	 */
 	 public weekDay(): WeekDay {
-		return <WeekDay>this._zoneDate.getDay();
+		return <WeekDay>this._zoneDate.getUTCDay();
 	 }
 
 	/**

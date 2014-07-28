@@ -228,7 +228,20 @@
 <span class="hljs-comment">// now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.</span>
 <span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
 </code></pre>
+			<h2 id="known-issues">Known Issues</h2>
+			<ul>
+				<li><p>There are differences in behaviour between setting the TZ environment variable to a time zone or setting your PC to the same time zone. This is due to a bug in the V8 engine. This is most notably in the normalization of non-existing dates during DST changes. Stay away from those dates.</p>
+				</li>
+				<li><p>Adding a month to the END of January in a leap year produces a date with a different time. This is due to a bug in timezone-js. Presumably this also has an effect on Period.findFirst/Period.findNext.  </p>
+				</li>
+			</ul>
 			<h2 id="changelog">Changelog</h2>
+			<h3 id="1-4-2">1.4.2</h3>
+			<ul>
+				<li>Ensured tests run with different TZ environment variable settings</li>
+				<li>Ensured build runs on Travis CI and the coverage is picked up by Coveralls.io</li>
+				<li>Bugfix in weekDay() for times near 00:00:00 with certain machine time zones</li>
+			</ul>
 			<h3 id="1-4-1">1.4.1</h3>
 			<ul>
 				<li>Ensured all code is covered with tests using istanbul</li>
@@ -236,7 +249,7 @@
 				<li>Bufgix in DateTime.toIsoString(): local time zone not handled correctly</li>
 				<li>Bugfix in Period.findFirst() regarding regular local time periods of less than one hour</li>
 				<li>Bugfix in Period.toIsoString() which did not include the start date</li>
-				<li>Performance improvement for Period.findFirst()</li>
+				<li>Performance improvement for Period.findFirst() regarding Second periods.</li>
 			</ul>
 			<h3 id="1-4-0">1.4.0</h3>
 			<ul>
@@ -270,8 +283,8 @@
 				<li>First released version.</li>
 			</ul>
 			<h2 id="contributors">Contributors</h2>
-			<p>Rogier Schouten <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#114;&#46;&#115;&#x63;&#x68;&#111;&#117;&#x74;&#x65;&#x6e;&#64;&#115;&#112;&#x69;&#x72;&#105;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#x6d;">&#114;&#46;&#115;&#x63;&#x68;&#111;&#117;&#x74;&#x65;&#x6e;&#64;&#115;&#112;&#x69;&#x72;&#105;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#x6d;</a>
-			Daan Wissing <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x64;&#46;&#119;&#105;&#x73;&#x73;&#x69;&#x6e;&#103;&#x40;&#x73;&#x70;&#105;&#x72;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;">&#x64;&#46;&#119;&#105;&#x73;&#x73;&#x69;&#x6e;&#103;&#x40;&#x73;&#x70;&#105;&#x72;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;</a></p>
+			<p>Rogier Schouten <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#114;&#46;&#115;&#99;&#x68;&#111;&#117;&#x74;&#x65;&#110;&#64;&#x73;&#112;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#x6d;">&#114;&#46;&#115;&#99;&#x68;&#111;&#117;&#x74;&#x65;&#110;&#64;&#x73;&#112;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#x6d;</a>
+			Daan Wissing <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#100;&#x2e;&#x77;&#x69;&#115;&#115;&#x69;&#x6e;&#x67;&#x40;&#115;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;">&#100;&#x2e;&#x77;&#x69;&#115;&#115;&#x69;&#x6e;&#x67;&#x40;&#115;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;</a></p>
 			<h2 id="license">License</h2>
 			<p>MIT</p>
 		</div>

@@ -1640,6 +1640,7 @@ describe("DateTime", (): void => {
 	describe("weekDay()", (): void => {
 		it("should return a local week day", (): void => {
 			expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
+			expect(new DateTime("2014-07-07T23:59:59.999 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
 		});
 	});
 

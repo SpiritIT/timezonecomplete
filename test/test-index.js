@@ -1687,6 +1687,7 @@ describe("DateTime", function () {
     describe("weekDay()", function () {
         it("should return a local week day", function () {
             expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(1 /* Monday */);
+            expect(new DateTime("2014-07-07T23:59:59.999 Europe/Amsterdam").weekDay()).to.equal(1 /* Monday */);
         });
     });
 

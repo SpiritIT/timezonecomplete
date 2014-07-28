@@ -1104,7 +1104,7 @@ var DateTime = (function () {
     * week day numbers)
     */
     DateTime.prototype.weekDay = function () {
-        return this._zoneDate.getDay();
+        return this._zoneDate.getUTCDay();
     };
 
     /**

@@ -222,6 +222,7 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 ### 1.4.2
 * Ensured tests run with different TZ environment variable settings
 * Ensured build runs on Travis CI and the coverage is picked up by Coveralls.io
+* Bugfix in weekDay() for times near 00:00:00 with certain machine time zones
 
 ### 1.4.1
 * Ensured all code is covered with tests using istanbul
