@@ -211,21 +211,14 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 
 ```
 
-## Known Issues
-
-* There are differences in behaviour between setting the TZ environment variable to a time zone or setting your PC to the same time zone. This is due to a bug in the V8 engine. This is most notably in the normalization of non-existing dates during DST changes. Stay away from those dates.
-
-* Adding a month to the END of January in a leap year produces a date with a different time. This is due to a bug in timezone-js. Presumably this also has an effect on Period.findFirst/Period.findNext.  
-
-
 ## Changelog
 
-### 1.4.2
+### 1.4.2 (2014-07-28)
 * Ensured tests run with different TZ environment variable settings
 * Ensured build runs on Travis CI and the coverage is picked up by Coveralls.io
 * Bugfix in weekDay() for times near 00:00:00 with certain machine time zones
 
-### 1.4.1
+### 1.4.1 (2014-07-24)
 * Ensured all code is covered with tests using istanbul
 * Bufgix in DateTime.toIsoString(): missing space
 * Bufgix in DateTime.toIsoString(): local time zone not handled correctly
@@ -233,7 +226,7 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 * Bugfix in Period.toIsoString() which did not include the start date
 * Performance improvement for Period.findFirst() regarding Second periods.
 
-### 1.4.0
+### 1.4.0 (2014-07-24)
 * Enable use of timezonecomplete in browser
 
 ### 1.3.1 (2014-07-09)

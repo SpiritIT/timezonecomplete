@@ -68,3 +68,4 @@ $RECYCLE.BIN/
 *.js.map
 bower_components
 /lib/test.js
+/lib/test.html
