@@ -37,7 +37,7 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "test": "runtests"
+    "test": "node runtests.js"
   },
   "dependencies": {
     "timezone-js": "~0.4.11"
