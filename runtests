@@ -1,0 +1,8 @@
+#!/bin/sh
+
+TZ="" mocha ./test/*.js
+TZ="America/Anchorage" mocha ./test/*.js
+TZ="Europe/Amsterdam" mocha ./test/*.js
+
+# coverage
+TZ="" ./node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- ./test/*.js

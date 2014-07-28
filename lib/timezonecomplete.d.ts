@@ -552,7 +552,11 @@ declare module 'timezonecomplete' {
          * date by one. In case of DST changes, the utcHour() field may
          * increase by 1 or increase by 2. Adding a day will leave the time portion
          * intact. However, adding an hour around a forward DST change adds two hours,
-         * since there is a zone time (2AM in Holland) that does not exist.
+         * since there is a zone time (e.g. 2AM in Amsterdam) that does not exist.
+         *
+         * Note adding Months or Years will clamp the date to the end-of-month if
+         * the start date was at the end of a month, i.e. contrary to JavaScript
+         * Date#setUTCMonth() it will not overflow into the next month
          */
         addLocal(amount: number, unit: TimeUnit): DateTime;
         /**

@@ -679,13 +679,7 @@ export class TimeZone {
 		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
-				this._date.setUTCFullYear(year);
-				this._date.setUTCMonth(month - 1);
-				this._date.setUTCDate(day);
-				this._date.setUTCHours(hour);
-				this._date.setUTCMinutes(minute);
-				this._date.setUTCSeconds(second);
-				this._date.setUTCMilliseconds(millisecond);
+				this._date = new Date(Date.UTC(year, month-1, day, hour, minute, second, millisecond));
 				return -1 * this._date.getTimezoneOffset();
 			} 
 			case TimeZoneKind.Offset: {
@@ -745,13 +739,7 @@ export class TimeZone {
 		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForZone():  millisecond out of range.");
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
-				this._date.setFullYear(year);
-				this._date.setMonth(month - 1);
-				this._date.setDate(day);
-				this._date.setHours(hour);
-				this._date.setMinutes(minute);
-				this._date.setSeconds(second);
-				this._date.setMilliseconds(millisecond);
+				this._date = new Date(year, month - 1, day, hour, minute, second, millisecond);
 				return -1 * this._date.getTimezoneOffset();
 			} 
 			case TimeZoneKind.Offset: {
@@ -1471,74 +1459,107 @@ export class DateTime {
 			assert(typeof (unit) === "number", "expect number as second argument");
 			var amount: number = <number>(a1);
 			var utcDate: Date = new Date(this._utcDate.valueOf());
-			switch (unit) {
-				case TimeUnit.Second: {
-					utcDate.setUTCSeconds(utcDate.getUTCSeconds() + amount);
-				} break;
-				case TimeUnit.Minute: {
-					utcDate.setUTCMinutes(utcDate.getUTCMinutes() + amount);
-				} break;
-				case TimeUnit.Hour: {
-					utcDate.setUTCHours(utcDate.getUTCHours() + amount);
-				} break;
-				case TimeUnit.Day: {
-					utcDate.setUTCDate(utcDate.getUTCDate() + amount);
-				} break;
-				case TimeUnit.Week: {
-					utcDate.setUTCDate(utcDate.getUTCDate() + amount * 7);
-				} break;
-				case TimeUnit.Month: {
-					// setUTCMonth has a bug that changes day-of-month, so keep it the same
-					// however, now we have to compensate for the local PC time zone
-					var offset1 = TimeZone.local().offsetForUtcDate(utcDate, DateFunctions.GetUTC);
-					utcDate.setMonth(utcDate.getMonth() + amount);
-					var offset2 = TimeZone.local().offsetForUtcDate(utcDate, DateFunctions.GetUTC);
-					if (offset1 !== offset2) {
-						utcDate = new Date(utcDate.valueOf() + (offset2 - offset1) * 60000);
-					}
-				} break;
-				case TimeUnit.Year: {
-					utcDate.setUTCFullYear(utcDate.getUTCFullYear() + amount);
-				} break;
-				/* istanbul ignore next */
-				default:
-					/* istanbul ignore next */
-					assert(false, "Unknown period unit.");
-					/* istanbul ignore next */
-					break;
+			utcDate = this._addToDate(utcDate, amount, unit);
+			assert(this._utcDate.valueOf() !== utcDate.valueOf() || amount === 0);
+			var result = new DateTime(utcDate, DateFunctions.GetUTC, TimeZone.utc()).toZone(this._zone);
+			// TODO remove this once bug in V8 engine solved
+			if (amount !== 0 && result.equals(this)) {
+				// workaround for bug in javascript, at least prevent endless loops due to
+				// date not changing
+				result = this.add(amount * 2, unit);				
 			}
-			return new DateTime(utcDate, DateFunctions.GetUTC, TimeZone.utc()).toZone(this._zone);
+			return result;
 		}
 	}
-
+	
 	/**
 	 * Add an amount of time to the zone time, as regularly as possible.
 	 * Adding e.g. 1 hour will increment the hour() field of the zone
 	 * date by one. In case of DST changes, the utcHour() field may 
 	 * increase by 1 or increase by 2. Adding a day will leave the time portion
 	 * intact. However, adding an hour around a forward DST change adds two hours,
-	 * since there is a zone time (2AM in Holland) that does not exist.
+	 * since there is a zone time (e.g. 2AM in Amsterdam) that does not exist.
+	 *
+	 * Note adding Months or Years will clamp the date to the end-of-month if 
+	 * the start date was at the end of a month, i.e. contrary to JavaScript 
+	 * Date#setUTCMonth() it will not overflow into the next month
 	 */
 	public addLocal(amount: number, unit: TimeUnit): DateTime {
-		var offset1 = this.offset();
-		var result = this.add(amount, unit);
-		var offset2 = result.offset();
-		if ((amount > 0 && offset1 > offset2) || (amount < 0 && offset1 < offset2)) {
-			// backward DST change, compensate
-			result = result.add((offset1 - offset2) / 60, TimeUnit.Hour);
-		} else if ((amount < 0 && offset1 > offset2) || (amount > 0 && offset1 < offset2)) {
-			// For forward DST changes, there is nothing we can do for hour units or less
-			// because there is a time (2AM) that does not exist locally. We choose to
-			// let the hour skip the 2AM
-			// For days, months and years, we can assure that the time of day stays the
-			// same after the addition.
-			if (unit > TimeUnit.Hour) {
-				result = result.add((offset1 - offset2) / 60, TimeUnit.Hour);
-			}
+		var zoneDate = new Date(this._zoneDate.valueOf());
+		zoneDate = this._addToDate(zoneDate, amount, unit);
+		var result = new DateTime(zoneDate, DateFunctions.GetUTC, this.zone());
+		// TODO remove this once bug in V8 engine solved
+		if (amount !== 0 && result.equals(this)) {
+			// workaround for bug in javascript, at least prevent endless loops due to
+			// date not changing
+			result = this.addLocal(amount * 2, unit);				
 		}
 		return result;
 	}
 
+	private _addToDate(date: Date, amount: number, unit: TimeUnit): Date {
+		var targetYear: number;
+		var targetMonth: number;
+		var targetDate: number;
+		var targetHours: number;
+		var targetMinutes: number;
+		var targetSeconds: number;
+		var targetMilliseconds: number;
+
+		switch (unit) {
+			case TimeUnit.Second: {
+				date.setUTCSeconds(date.getUTCSeconds() + amount);
+			} break;
+			case TimeUnit.Minute: {
+				date.setUTCMinutes(date.getUTCMinutes() + amount);
+			} break;
+			case TimeUnit.Hour: {
+				date.setUTCHours(date.getUTCHours() + amount);
+			} break;
+			case TimeUnit.Day: {
+				date.setUTCDate(date.getUTCDate() + amount);
+			} break;
+			case TimeUnit.Week: {
+				date.setUTCDate(date.getUTCDate() + amount * 7);
+			} break;
+			case TimeUnit.Month: {
+				targetYear = amount >= 0 ? (date.getUTCFullYear() + Math.floor((date.getUTCMonth() + amount) / 12)) 
+					: (date.getUTCFullYear() + Math.ceil((date.getUTCMonth() + amount) / 12));
+				targetMonth = amount >= 0 ? Math.floor((date.getUTCMonth() + amount) % 12) 
+					: Math.ceil((date.getUTCMonth() + amount) % 12);
+				targetDate = Math.min(date.getUTCDate(), daysInMonth(targetYear, targetMonth + 1));
+				targetHours = date.getUTCHours();
+				targetMinutes = date.getUTCMinutes();
+				targetSeconds = date.getUTCSeconds();
+				targetMilliseconds = date.getUTCMilliseconds();
+				// setUTCYears can lead to an overflow in days if the current date is
+				// at the end of a month
+				date = new Date(Date.UTC(targetYear, targetMonth, targetDate, 
+					targetHours, targetMinutes, targetSeconds, targetMilliseconds)); 					
+			} break;
+			case TimeUnit.Year: {
+				targetYear = date.getUTCFullYear() + amount;
+				targetMonth = date.getUTCMonth();
+				targetDate = Math.min(date.getUTCDate(), daysInMonth(targetYear, targetMonth + 1)); // +1 because we don't count from 0
+				targetHours = date.getUTCHours();
+				targetMinutes = date.getUTCMinutes();
+				targetSeconds = date.getUTCSeconds();
+				targetMilliseconds = date.getUTCMilliseconds();
+				// setUTCYears can lead to an overflow in days if the current date is
+				// at the end of a month
+				date = new Date(Date.UTC(targetYear, targetMonth, targetDate, 
+					targetHours, targetMinutes, targetSeconds, targetMilliseconds)); 					
+			} break;
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore next */
+				assert(false, "Unknown period unit.");
+				/* istanbul ignore next */
+				break;
+		}
+		return date;
+	}
+	
 	/**
 	 * Same as add(-1*duration);
 	 */

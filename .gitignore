@@ -67,3 +67,4 @@ $RECYCLE.BIN/
 /examples/example.d.ts
 *.js.map
 bower_components
+/lib/test.js
