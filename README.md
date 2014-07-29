@@ -163,10 +163,9 @@ var occurrence2 = period.findNext(occurrence);
 ```
 
 ## On a web page
-Some effort has been made to make TimezoneComplete usable in the browser, by packaging it in a [UMD](https://github.com/umdjs/umd). This way, it can be used for example in plain html/javascript:
+We spent some effort making TimezoneComplete usable in the browser, by packaging it in a [UMD](https://github.com/umdjs/umd). This way, it can be used for example in plain html/javascript:
 
 ```html
-
 <html>
 <head><title>Timezone Complete test</title></head>
 <body>
@@ -181,7 +180,7 @@ Some effort has been made to make TimezoneComplete usable in the browser, by pac
 </html>
 ```
 
-In theory this bundle is also usable using module loaders like [RequireJS](http://requirejs.org/). However, this has not been thoroughly tested yet, so help on this part is welcome.
+In theory this bundle is also usable using module loaders like [RequireJS](http://requirejs.org/). However, this has not been thoroughly tested yet, this will happen in the near future.
 
 ## FAQ
 
@@ -191,9 +190,10 @@ See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 ### How do I convert a JavaScript Date object to a DateTime object?
 
 The DateTime class has a constructor that takes a date. It may seem rather complex because the constructor has three parameters. But that was necessary:
+
 1. The first parameter is the Date object.
-2. The second parameter indicates which of the two values you want to use: a Date object has a UTC value (getUtcYear()) and a Local value (getYear()). You typically use the local functions, but e.g. if you created your date from a unix timestamp then the UTC date is most accurate.
-3. The third parameter gives us the missing info: the time zone the the given value is in. 
+2. The second parameter indicates which of the two values in the Date object you want to use: a Date object has a UTC value (getUtcFullYear()) and a Local value (getFullYear()). You typically use the local functions, but if you created your date from a unix timestamp then the UTC date is most accurate.
+3. The third parameter gives us the missing info: the time zone that the given value is in. 
 
 ```javascript
 
