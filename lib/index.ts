@@ -13,10 +13,10 @@ import path = require("path");
 import timezoneJS = require("timezone-js");
 
 // timezone-js initialization
-timezoneJS.timezone.zoneFileBasePath = path.join(__dirname, "tz");
+var timezoneData : Object = require("./timezone-data.json");
 // need to preload all names in order to validate them
-timezoneJS.timezone.loadingScheme = timezoneJS.timezone.loadingSchemes.PRELOAD_ALL;
-timezoneJS.timezone.init({ async: false });
+timezoneJS.timezone.loadingScheme = timezoneJS.timezone.loadingSchemes.MANUAL_LOAD;
+timezoneJS.timezone.loadZoneDataFromObject(timezoneData);
 
 /**
  * Pad a string by adding characters to the beginning.
