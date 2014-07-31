@@ -213,6 +213,9 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 
 ## Changelog
 
+### 1.4.3 (2014-07-31)
+* Improved timezonecomplete behaviour when using browserify
+
 ### 1.4.2 (2014-07-28)
 * Ensured tests run with different TZ environment variable settings
 * Ensured build runs on Travis CI and the coverage is picked up by Coveralls.io
@@ -252,8 +255,9 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 
 ## Contributors
 
-Rogier Schouten <r.schouten@spiritit.com>
-Daan Wissing <d.wissing@spiritit.com>
+* Rogier Schouten <r.schouten@spiritit.com>
+* Daan Wissing <d.wissing@spiritit.com>
+* Peter Kooijmans <p.kooijmans@spiritit.com>
 
 ## License
 
