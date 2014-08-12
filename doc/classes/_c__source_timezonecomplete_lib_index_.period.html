@@ -106,12 +106,12 @@
 					<a name="constructor" class="anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbols">(</span>start<span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_index_.datetime.html" class="tsd-signature-type">DateTime</a>, amount<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, unit<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_index_.timeunit.html" class="tsd-signature-type">TimeUnit</a>, dst<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_index_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_index_.period.html" class="tsd-signature-type">Period</a></li>
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbols">(</span>start<span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_index_.datetime.html" class="tsd-signature-type">DateTime</a>, amount<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, unit<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a>, dst<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_index_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_index_.period.html" class="tsd-signature-type">Period</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1861</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1492</li>
 								</ul>
 							</aside>
 							<p>Constructor
@@ -131,7 +131,7 @@
 									<p>The amount of units.</p>
 								</li>
 								<li>
-									<h5>unit: <a href="../enums/_c__source_timezonecomplete_lib_index_.timeunit.html" class="tsd-signature-type">TimeUnit</a></h5>
+									<h5>unit: <a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></h5>
 									<p>The unit.</p>
 								</li>
 								<li>
@@ -155,7 +155,7 @@
 					<div class="tsd-signature tsd-kind-icon">_amount<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1811</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1442</li>
 						</ul>
 					</aside>
 					<p>Amount of units as given in constructor</p>
@@ -166,7 +166,7 @@
 					<div class="tsd-signature tsd-kind-icon">_dst<span class="tsd-signature-symbols">:</span> <a href="../enums/_c__source_timezonecomplete_lib_index_.perioddst.html" class="tsd-signature-type">PeriodDst</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1821</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1452</li>
 						</ul>
 					</aside>
 					<p>DST handling</p>
@@ -177,7 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">_int<wbr>Amount<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1833</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1464</li>
 						</ul>
 					</aside>
 					<p>Normalized amount: excludes weeks (converted to days) and
@@ -189,7 +189,7 @@
 					<div class="tsd-signature tsd-kind-icon">_int<wbr>Dst<span class="tsd-signature-symbols">:</span> <a href="../enums/_c__source_timezonecomplete_lib_index_.perioddst.html" class="tsd-signature-type">PeriodDst</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1845</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1476</li>
 						</ul>
 					</aside>
 					<p>Normalized internal DST handling. If DST handling is irrelevant
@@ -202,7 +202,7 @@
 					<div class="tsd-signature tsd-kind-icon">_int<wbr>Start<span class="tsd-signature-symbols">:</span> <a href="_c__source_timezonecomplete_lib_index_.datetime.html" class="tsd-signature-type">DateTime</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1827</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1458</li>
 						</ul>
 					</aside>
 					<p>Normalized start date, has day-of-month &lt;= 28 for Monthly
@@ -211,10 +211,10 @@
 				<section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_intunit" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagprivate">private</span> _int<wbr>Unit</h3>
-					<div class="tsd-signature tsd-kind-icon">_int<wbr>Unit<span class="tsd-signature-symbols">:</span> <a href="../enums/_c__source_timezonecomplete_lib_index_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
+					<div class="tsd-signature tsd-kind-icon">_int<wbr>Unit<span class="tsd-signature-symbols">:</span> <a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1838</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1469</li>
 						</ul>
 					</aside>
 					<p>Normalized unit.</p>
@@ -225,7 +225,7 @@
 					<div class="tsd-signature tsd-kind-icon">_start<span class="tsd-signature-symbols">:</span> <a href="_c__source_timezonecomplete_lib_index_.datetime.html" class="tsd-signature-type">DateTime</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1806</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1437</li>
 						</ul>
 					</aside>
 					<p>Start moment of period</p>
@@ -233,10 +233,10 @@
 				<section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_unit" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagprivate">private</span> _unit</h3>
-					<div class="tsd-signature tsd-kind-icon">_unit<span class="tsd-signature-symbols">:</span> <a href="../enums/_c__source_timezonecomplete_lib_index_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
+					<div class="tsd-signature tsd-kind-icon">_unit<span class="tsd-signature-symbols">:</span> <a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1816</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1447</li>
 						</ul>
 					</aside>
 					<p>Units as given in constructor</p>
@@ -253,7 +253,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2349</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1980</li>
 								</ul>
 							</aside>
 							<p>Normalize the values where possible - not all values
@@ -273,7 +273,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2304</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1935</li>
 								</ul>
 							</aside>
 							<p>Corrects the difference between _start and _intStart.</p>
@@ -298,7 +298,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2336</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1967</li>
 								</ul>
 							</aside>
 							<p>Returns true if DST handling is relevant for us.
@@ -318,7 +318,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2319</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1950</li>
 								</ul>
 							</aside>
 							<p>If this._internalUnit in [Month, Year], normalizes the day-of-month
@@ -348,7 +348,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2237</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1868</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -366,7 +366,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1910</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1541</li>
 								</ul>
 							</aside>
 							<p>The amount of units</p>
@@ -385,7 +385,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1924</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1555</li>
 								</ul>
 							</aside>
 							<p>The dst handling mode</p>
@@ -404,7 +404,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1936</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1567</li>
 								</ul>
 							</aside>
 							<p>The first occurrence of the period greater than
@@ -433,7 +433,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2222</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1853</li>
 								</ul>
 							</aside>
 							<p>Returns the next timestamp in the period. The given timestamp must
@@ -467,7 +467,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2297</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1928</li>
 								</ul>
 							</aside>
 							<p>Used by util.inspect()</p>
@@ -486,7 +486,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1903</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1534</li>
 								</ul>
 							</aside>
 							<p>The start date</p>
@@ -505,7 +505,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2275</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1906</li>
 								</ul>
 							</aside>
 							<p>Returns an ISO duration string e.g.
@@ -527,7 +527,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:2283</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1914</li>
 								</ul>
 							</aside>
 							<p>A string representation e.g.
@@ -542,17 +542,17 @@
 					<a name="unit" class="anchor"></a>
 					<h3>unit</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">unit<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_index_.timeunit.html" class="tsd-signature-type">TimeUnit</a></li>
+						<li class="tsd-signature tsd-kind-icon">unit<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1917</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/index.ts:1548</li>
 								</ul>
 							</aside>
 							<p>The unit</p>
 							<h4>Returns 
-								<a href="../enums/_c__source_timezonecomplete_lib_index_.timeunit.html" class="tsd-signature-type">TimeUnit</a>
+								<a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a>
 							</h4>
 						</li>
 					</ul>
@@ -565,8 +565,20 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html">"c:/<wbr>Source/timezonecomplete/lib/basics"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_duration_.html">"c:/<wbr>Source/timezonecomplete/lib/duration"</a>
+					</li>
 					<li class="current tsd-kind-dynamic-module">
 						<a href="../modules/_c__source_timezonecomplete_lib_index_.html">"c:/<wbr>Source/timezonecomplete/lib/index"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_strings_.html">"c:/<wbr>Source/timezonecomplete/lib/strings"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_tz_database_.html">"c:/<wbr>Source/timezonecomplete/lib/tz-<wbr>database"</a>
 					</li>
 				</ul>
 			</nav>
@@ -579,22 +591,13 @@
 						<a href="../enums/_c__source_timezonecomplete_lib_index_.perioddst.html" class="tsd-kind-icon">Period<wbr>Dst</a>
 					</li>
 					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
-						<a href="../enums/_c__source_timezonecomplete_lib_index_.timeunit.html" class="tsd-kind-icon">Time<wbr>Unit</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
 						<a href="../enums/_c__source_timezonecomplete_lib_index_.timezonekind.html" class="tsd-kind-icon">Time<wbr>Zone<wbr>Kind</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
-						<a href="../enums/_c__source_timezonecomplete_lib_index_.weekday.html" class="tsd-kind-icon">Week<wbr>Day</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-dynamic-module">
 						<a href="../interfaces/_c__source_timezonecomplete_lib_index_.timesource.html" class="tsd-kind-icon">Time<wbr>Source</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_index_.datetime.html" class="tsd-kind-icon">Date<wbr>Time</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
-						<a href="_c__source_timezonecomplete_lib_index_.duration.html" class="tsd-kind-icon">Duration</a>
 					</li>
 					<li class="current tsd-kind-class tsd-parent-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_index_.period.html" class="tsd-kind-icon">Period</a>
@@ -685,14 +688,11 @@
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
 						<a href="../modules/_c__source_timezonecomplete_lib_index_.html#isostring" class="tsd-kind-icon">iso<wbr>String</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
-						<a href="../modules/_c__source_timezonecomplete_lib_index_.html#padleft" class="tsd-kind-icon">pad<wbr>Left</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
-						<a href="../modules/_c__source_timezonecomplete_lib_index_.html#padright" class="tsd-kind-icon">pad<wbr>Right</a>
-					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
 						<a href="../modules/_c__source_timezonecomplete_lib_index_.html#perioddsttostring" class="tsd-kind-icon">period<wbr>Dst<wbr>ToString</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-dynamic-module tsd-is-not-exported">
+						<a href="../modules/_c__source_timezonecomplete_lib_index_.html#timezonedata" class="tsd-kind-icon">timezone<wbr>Data</a>
 					</li>
 				</ul>
 			</nav>

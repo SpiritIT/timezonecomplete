@@ -30,7 +30,7 @@ var testTimeSource: TestTimeSource = new TestTimeSource();
 DateTime.timeSource = testTimeSource;
 
 describe("isLeapYear()", (): void => {
-	it("should work", (): void => {	
+	it("should work", (): void => {
 		expect(datetimeFuncs.isLeapYear(2001)).to.be.false; // normal non-leap year
 		expect(datetimeFuncs.isLeapYear(2004)).to.be.true; // normal leap year
 		expect(datetimeFuncs.isLeapYear(2200)).to.be.false; // divisible by 100 but not 400
@@ -39,22 +39,22 @@ describe("isLeapYear()", (): void => {
 });
 
 describe("daysInMonth()", (): void => {
-	it("should work", (): void => {	
-		expect(datetimeFuncs.daysInMonth(2001, 1)).to.equal(31); 
-		expect(datetimeFuncs.daysInMonth(2001, 2)).to.equal(28); 
-		expect(datetimeFuncs.daysInMonth(2004, 2)).to.equal(29); 
-		expect(datetimeFuncs.daysInMonth(2200, 2)).to.equal(28); 
-		expect(datetimeFuncs.daysInMonth(2000, 2)).to.equal(29); 
-		expect(datetimeFuncs.daysInMonth(2001, 3)).to.equal(31); 
-		expect(datetimeFuncs.daysInMonth(2001, 4)).to.equal(30); 
-		expect(datetimeFuncs.daysInMonth(2001, 5)).to.equal(31); 
-		expect(datetimeFuncs.daysInMonth(2001, 6)).to.equal(30); 
-		expect(datetimeFuncs.daysInMonth(2001, 7)).to.equal(31); 
-		expect(datetimeFuncs.daysInMonth(2001, 8)).to.equal(31); 
-		expect(datetimeFuncs.daysInMonth(2001, 9)).to.equal(30); 
-		expect(datetimeFuncs.daysInMonth(2001, 10)).to.equal(31); 
-		expect(datetimeFuncs.daysInMonth(2001, 11)).to.equal(30); 
-		expect(datetimeFuncs.daysInMonth(2001, 12)).to.equal(31); 
+	it("should work", (): void => {
+		expect(datetimeFuncs.daysInMonth(2001, 1)).to.equal(31);
+		expect(datetimeFuncs.daysInMonth(2001, 2)).to.equal(28);
+		expect(datetimeFuncs.daysInMonth(2004, 2)).to.equal(29);
+		expect(datetimeFuncs.daysInMonth(2200, 2)).to.equal(28);
+		expect(datetimeFuncs.daysInMonth(2000, 2)).to.equal(29);
+		expect(datetimeFuncs.daysInMonth(2001, 3)).to.equal(31);
+		expect(datetimeFuncs.daysInMonth(2001, 4)).to.equal(30);
+		expect(datetimeFuncs.daysInMonth(2001, 5)).to.equal(31);
+		expect(datetimeFuncs.daysInMonth(2001, 6)).to.equal(30);
+		expect(datetimeFuncs.daysInMonth(2001, 7)).to.equal(31);
+		expect(datetimeFuncs.daysInMonth(2001, 8)).to.equal(31);
+		expect(datetimeFuncs.daysInMonth(2001, 9)).to.equal(30);
+		expect(datetimeFuncs.daysInMonth(2001, 10)).to.equal(31);
+		expect(datetimeFuncs.daysInMonth(2001, 11)).to.equal(30);
+		expect(datetimeFuncs.daysInMonth(2001, 12)).to.equal(31);
 	});
 	it("should throw for invalid month", (): void => {
 		assert.throws((): void => {
@@ -67,277 +67,6 @@ describe("daysInMonth()", (): void => {
 			datetimeFuncs.daysInMonth(10, 2001);
 		});
 	});
-});
-
-describe("Duration()", (): void => {
-
-	describe("constructor", (): void => {
-
-		it("construct by hour", (): void => {
-			expect(Duration.hours(2).milliseconds()).to.equal(2 * 60 * 60 * 1000);
-		});
-
-		it("construct by minute", (): void => {
-			expect(Duration.minutes(2).milliseconds()).to.equal(2 * 60 * 1000);
-		});
-
-		it("construct by second", (): void => {
-			expect(Duration.seconds(2).milliseconds()).to.equal(2 * 1000);
-		});
-
-		it("construct by milliseconds", (): void => {
-			expect(Duration.milliseconds(2).milliseconds()).to.equal(2);
-		});
-
-		it("construct no args", (): void => {
-			expect((new Duration()).milliseconds()).to.equal(0);
-		});
-
-		it("construct from number", (): void => {
-			expect((new Duration(1)).milliseconds()).to.equal(1);
-			expect((new Duration(-1)).milliseconds()).to.equal(-1);
-		});
-
-		it("construct from string", (): void => {
-			expect((new Duration("01")).milliseconds()).to.equal(1 * 3600 * 1000);
-			expect((new Duration("01:01")).milliseconds()).to.equal(1 * 3600 * 1000 + 1 * 60 * 1000);
-			expect((new Duration("01:01:01")).milliseconds()).to.equal(1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000);
-			expect((new Duration("01:01:01.1")).milliseconds()).to.equal(1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000 + 100);
-			expect((new Duration("01:01:01.101")).milliseconds()).to.equal(1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000 + 101);
-			expect((new Duration("-01:01:01.101")).milliseconds()).to.equal(-1 * (1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000 + 101));
-			expect((new Duration("-1:1:1.101")).milliseconds()).to.equal(-1 * (1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000 + 101));
-			expect((new Duration("25")).milliseconds()).to.equal(25 * 3600 * 1000);
-			expect((new Duration("-01:02:03.004")).milliseconds()).to.equal(-1 * (1 * 3600 * 1000 + 2 * 60 * 1000 + 3 * 1000 + 4));
-		});
-
-		it("throws on invalid string", (): void => {
-			/* tslint:disable:no-unused-expression */
-			assert.throws(function (): void { new Duration("harrie"); });
-			assert.throws(function (): void { new Duration("01:01:01:01"); });
-			assert.throws(function (): void { new Duration("01.001"); });
-			assert.throws(function (): void { new Duration("01:02.003"); });
-			assert.throws(function (): void { new Duration("01:01:01:-2.003"); });
-			assert.throws(function (): void { new Duration(".001"); });
-			assert.throws(function (): void { new Duration(":01:01"); });
-			/* tslint:enable:no-unused-expression */
-		});
-	});
-
-	describe("clone", (): void => {
-		it("should return an object with the same value", (): void => {
-			var d: Duration = new Duration("01:00:00.000");
-			expect(d.clone().milliseconds()).to.equal(3600000);
-		});
-		it("should return a new object", (): void => {
-			var d: Duration = new Duration("01:00:00.000");
-			expect(d.clone() === d).to.be.false;
-		});
-	});
-
-	describe("getters", (): void => {
-		it("getters", (): void => {
-			var duration = new Duration("-01:02:03.004");
-			var millis = -1 * (1 * 3600 * 1000 + 2 * 60 * 1000 + 3 * 1000 + 4);
-			expect(duration.sign()).to.equal("-");
-			expect(duration.hours()).to.equal(millis / 3600000);
-			expect(duration.minutes()).to.equal(millis / 60000);
-			expect(duration.minute()).to.equal(2);
-			expect(duration.seconds()).to.equal(millis / 1000);
-			expect(duration.second()).to.equal(3);
-			expect(duration.milliseconds()).to.equal(millis);
-			expect(duration.millisecond()).to.equal(4);
-			var duration2 = new Duration("01:02:03.004");
-			expect(duration2.sign()).to.equal("");
-		});
-	});
-
-	describe("lessThan()", (): void => {
-		it("should return true for a greater other", (): void => {
-			expect(Duration.milliseconds(-1).lessThan(Duration.milliseconds(0))).to.be.true;
-			expect(Duration.milliseconds(-1).lessThan(Duration.milliseconds(1))).to.be.true;
-			expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(2))).to.be.true;
-			expect(Duration.seconds(1).lessThan(Duration.seconds(2))).to.be.true;
-			expect(Duration.seconds(1).lessThan(Duration.hours(1))).to.be.true;
-			expect(Duration.hours(-1).lessThan(Duration.seconds(1))).to.be.true;
-		});
-		it("should return false for an equal other", (): void => {
-			expect(Duration.milliseconds(60000).lessThan(Duration.milliseconds(60000))).to.be.false;
-			expect(Duration.milliseconds(60000).lessThan(Duration.minutes(1))).to.be.false;
-		});
-		it("should return false for a lesser other", (): void => {
-			expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(-1))).to.be.false;
-			expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(-1))).to.be.false;
-			expect(Duration.milliseconds(2).lessThan(Duration.milliseconds(1))).to.be.false;
-			expect(Duration.seconds(1).lessThan(Duration.seconds(1))).to.be.false;
-			expect(Duration.hours(1).lessThan(Duration.seconds(1))).to.be.false;
-			expect(Duration.seconds(1).lessThan(Duration.hours(-1))).to.be.false;
-		});
-	});
-
-	describe("equals()", (): void => {
-		it("should return false for a greater other", (): void => {
-			expect(Duration.milliseconds(-1).equals(Duration.milliseconds(0))).to.be.false;
-			expect(Duration.milliseconds(-1).equals(Duration.milliseconds(1))).to.be.false;
-			expect(Duration.milliseconds(1).equals(Duration.milliseconds(2))).to.be.false;
-			expect(Duration.seconds(1).equals(Duration.seconds(2))).to.be.false;
-			expect(Duration.seconds(1).equals(Duration.hours(1))).to.be.false;
-			expect(Duration.hours(-1).equals(Duration.seconds(1))).to.be.false;
-		});
-		it("should return true for an equal other", (): void => {
-			expect(Duration.milliseconds(60000).equals(Duration.milliseconds(60000))).to.be.true;
-			expect(Duration.milliseconds(60000).equals(Duration.minutes(1))).to.be.true;
-		});
-		it("should return false for a lesser other", (): void => {
-			expect(Duration.milliseconds(1).equals(Duration.milliseconds(-1))).to.be.false;
-			expect(Duration.milliseconds(1).equals(Duration.milliseconds(-1))).to.be.false;
-			expect(Duration.milliseconds(2).equals(Duration.milliseconds(1))).to.be.false;
-			expect(Duration.seconds(2).equals(Duration.seconds(1))).to.be.false;
-			expect(Duration.hours(1).equals(Duration.seconds(1))).to.be.false;
-			expect(Duration.seconds(1).equals(Duration.hours(-1))).to.be.false;
-		});
-	});
-
-	describe("greaterThan()", (): void => {
-		it("should return false for a greater other", (): void => {
-			expect(Duration.milliseconds(-1).greaterThan(Duration.milliseconds(0))).to.be.false;
-			expect(Duration.milliseconds(-1).greaterThan(Duration.milliseconds(1))).to.be.false;
-			expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(2))).to.be.false;
-			expect(Duration.seconds(1).greaterThan(Duration.seconds(2))).to.be.false;
-			expect(Duration.seconds(1).greaterThan(Duration.hours(1))).to.be.false;
-			expect(Duration.hours(-1).greaterThan(Duration.seconds(1))).to.be.false;
-		});
-		it("should return false for an equal other", (): void => {
-			expect(Duration.milliseconds(60000).greaterThan(Duration.milliseconds(60000))).to.be.false;
-			expect(Duration.milliseconds(60000).greaterThan(Duration.minutes(1))).to.be.false;
-		});
-		it("should return true for a lesser other", (): void => {
-			expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(-1))).to.be.true;
-			expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(-1))).to.be.true;
-			expect(Duration.milliseconds(2).greaterThan(Duration.milliseconds(1))).to.be.true;
-			expect(Duration.seconds(2).greaterThan(Duration.seconds(1))).to.be.true;
-			expect(Duration.hours(1).greaterThan(Duration.seconds(1))).to.be.true;
-			expect(Duration.seconds(1).greaterThan(Duration.hours(-1))).to.be.true;
-		});
-	});
-
-	describe("min()", (): void => {
-		it("should return a value equal to this if this is smaller", (): void => {
-			expect(Duration.milliseconds(1).min(Duration.milliseconds(2)).milliseconds()).to.equal(1);
-		});
-		it("should any of the values if they are equal", (): void => {
-			expect(Duration.milliseconds(1).min(Duration.milliseconds(1)).milliseconds()).to.equal(1);
-		});
-		it("should the other value if it is smaller", (): void => {
-			expect(Duration.milliseconds(2).min(Duration.milliseconds(1)).milliseconds()).to.equal(1);
-		});
-	});
-
-	describe("max()", (): void => {
-		it("should return a value equal to other if this is smaller", (): void => {
-			expect(Duration.milliseconds(1).max(Duration.milliseconds(2)).milliseconds()).to.equal(2);
-		});
-		it("should any of the values if they are equal", (): void => {
-			expect(Duration.milliseconds(1).max(Duration.milliseconds(1)).milliseconds()).to.equal(1);
-		});
-		it("should this value if this is greater", (): void => {
-			expect(Duration.milliseconds(2).max(Duration.milliseconds(1)).milliseconds()).to.equal(2);
-		});
-	});
-
-	describe("multiply()", (): void => {
-		it("should multiply by positive number", (): void => {
-			expect(Duration.milliseconds(2).multiply(3).milliseconds()).to.equal(6);
-		});
-		it("should multiply by 0", (): void => {
-			expect(Duration.milliseconds(2).multiply(0).milliseconds()).to.equal(0);
-		});
-		it("should multiply by negative number", (): void => {
-			expect(Duration.milliseconds(2).multiply(-3).milliseconds()).to.equal(-6);
-		});
-	});
-
-	describe("divide()", (): void => {
-		it("should divide by positive number", (): void => {
-			expect(Duration.milliseconds(6).divide(3).milliseconds()).to.equal(2);
-		});
-		it("should throw on divide by 0", (): void => {
-			assert.throws((): void => {
-				Duration.milliseconds(6).divide(0);
-			});
-		});
-		it("should divide by negative number", (): void => {
-			expect(Duration.milliseconds(6).divide(-3).milliseconds()).to.equal(-2);
-		});
-	});
-
-	describe("add()", (): void => {
-		it("should add positive number", (): void => {
-			expect(Duration.milliseconds(2).add(Duration.milliseconds(3)).milliseconds()).to.equal(5);
-		});
-		it("should add 0", (): void => {
-			expect(Duration.milliseconds(2).add(Duration.milliseconds(0)).milliseconds()).to.equal(2);
-		});
-		it("should add negative number", (): void => {
-			expect(Duration.milliseconds(2).add(Duration.milliseconds(-3)).milliseconds()).to.equal(-1);
-		});
-		it("should return a new object always", (): void => {
-			var d: Duration = Duration.milliseconds(2);
-			var e: Duration = Duration.milliseconds(0);
-			expect(d.add(e) === d).to.be.false;
-			expect(d.add(e) === e).to.be.false;
-		});
-	});
-
-	describe("sub()", (): void => {
-		it("should sub positive number", (): void => {
-			expect(Duration.milliseconds(2).sub(Duration.milliseconds(3)).milliseconds()).to.equal(-1);
-		});
-		it("should sub 0", (): void => {
-			expect(Duration.milliseconds(2).sub(Duration.milliseconds(0)).milliseconds()).to.equal(2);
-		});
-		it("should sub negative number", (): void => {
-			expect(Duration.milliseconds(2).sub(Duration.milliseconds(-3)).milliseconds()).to.equal(5);
-		});
-		it("should return a new object always", (): void => {
-			var d: Duration = Duration.milliseconds(2);
-			var e: Duration = Duration.milliseconds(0);
-			expect(d.sub(e) === d).to.be.false;
-			expect(d.sub(e) === e).to.be.false;
-		});
-	});
-
-	describe("toFullString()", (): void => {
-		it("toFullString", (): void => {
-			expect((new Duration("-30:02:03.004")).toFullString()).to.equal("-30:02:03.004");
-			expect((new Duration("-01:02:03.004")).toFullString()).to.equal("-01:02:03.004");
-			expect((new Duration("-01:02:03.4")).toFullString()).to.equal("-01:02:03.400");
-			expect((new Duration("01")).toFullString()).to.equal("01:00:00.000");
-		});
-	});
-
-	describe("toString()", (): void => {
-		it("should handle hours above 23", (): void => {
-			expect((new Duration("-30:02:03.004")).toString()).to.equal("-30:02:03.004");
-		});
-		it("should handle hours below 24", (): void => {
-			expect((new Duration("-01:02:03.004")).toString()).to.equal("-01:02:03.004");
-		});
-		it("should shorten the string if possible", (): void => {
-			expect((new Duration("-01:02:03.4")).toString()).to.equal("-01:02:03.400");
-			expect((new Duration("01")).toString()).to.equal("01");
-			expect((new Duration("01:02")).toString()).to.equal("01:02");
-			expect((new Duration("01:02:03")).toString()).to.equal("01:02:03");
-			expect((new Duration("01:02:03.000")).toString()).to.equal("01:02:03");
-		});
-	});
-	
-	describe("inspect()", (): void => {
-		it("should work", (): void => {
-			var d: Duration = new Duration("-01:02:03.4");
-			expect(d.inspect()).to.equal("[Duration: " + d.toString() + "]");
-		});
-	});
-
 });
 
 describe("TimeZone", (): void => {
@@ -469,24 +198,24 @@ describe("TimeZone", (): void => {
 		it("should work if time not given", (): void => {
 			var t = TimeZone.zone("+0130");
 			expect(t.offsetForUtc(2014, 1, 1)).to.equal(90);
-		});			
+		});
 	});
-	
+
 	describe("offsetForUtcDate()", (): void => {
 		it("should with Get", (): void => {
 			var t = TimeZone.zone("Europe/Amsterdam");
 			var d = new Date(2014, 2, 26, 3, 0, 1, 0);
 			expect(t.offsetForUtcDate(d, DateFunctions.Get)).to.equal(
-				t.offsetForUtc(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), 
+				t.offsetForUtc(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(),
 				d.getMinutes(), d.getSeconds(), d.getMilliseconds()));
-		});			
+		});
 		it("should with GetUtc", (): void => {
 			var t = TimeZone.zone("Europe/Amsterdam");
 			var d = new Date(2014, 2, 26, 3, 0, 1, 0);
 			expect(t.offsetForUtcDate(d, DateFunctions.GetUTC)).to.equal(
-				t.offsetForUtc(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(), 
+				t.offsetForUtc(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(),
 				d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()));
-		});			
+		});
 	});
 
 
@@ -505,7 +234,7 @@ describe("TimeZone", (): void => {
 			expect(t.offsetForZone(2014, 1, 1, 1, 2, 3, 4)).to.equal(-7 * 60);
 			expect(t.offsetForZone(2014, 7, 1, 1, 2, 3, 4)).to.equal(-6 * 60);
 		});
-		
+
 		// skipped because Date.getHours() is inconsistent at this moment:
 		// if TZ environment variable is set to Europe/Amsterdam then that is different
 		// from when the PC time zone is set to Europe/Amsterdam
@@ -527,24 +256,24 @@ describe("TimeZone", (): void => {
 		it("should work if time not given", (): void => {
 			var t = TimeZone.zone("+0130");
 			expect(t.offsetForZone(2014, 1, 1)).to.equal(90);
-		});			
+		});
 	});
-	
+
 	describe("offsetForZoneDate()", (): void => {
 		it("should with Get", (): void => {
 			var t = TimeZone.zone("Europe/Amsterdam");
 			var d = new Date(2014, 2, 26, 3, 0, 1, 0);
 			expect(t.offsetForZoneDate(d, DateFunctions.Get)).to.equal(
-				t.offsetForZone(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), 
+				t.offsetForZone(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(),
 				d.getMinutes(), d.getSeconds(), d.getMilliseconds()));
-		});			
+		});
 		it("should with GetUtc", (): void => {
 			var t = TimeZone.zone("Europe/Amsterdam");
 			var d = new Date(2014, 2, 26, 3, 0, 1, 0);
 			expect(t.offsetForZoneDate(d, DateFunctions.GetUTC)).to.equal(
-				t.offsetForZone(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(), 
+				t.offsetForZone(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(),
 				d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()));
-		});			
+		});
 	});
 
 	describe("equals()", (): void => {
@@ -571,13 +300,13 @@ describe("TimeZone", (): void => {
 			expect(TimeZone.utc().equals(TimeZone.zone(0))).to.be.true;
 		});
 	});
-	
+
 	describe("inspect()", (): void => {
 		it("should work", (): void => {
 			expect(TimeZone.zone("Europe/Amsterdam").inspect()).to.equal("[TimeZone: Europe/Amsterdam]");
 		});
 	});
-	
+
 	describe("stringToOffset()", (): void => {
 		it("should work for Z", (): void => {
 			expect(TimeZone.stringToOffset("Z")).to.equal(0);
@@ -759,7 +488,7 @@ describe("DateTime", (): void => {
 			expect(d.zone()).not.to.be.null;
 			expect(d.offset()).to.equal(6);
 		});
-	});	
+	});
 
 	describe("constructor(date: Date, dateKind: DateFunctions, timeZone?: TimeZone)", (): void => {
 		it("should parse date as local,unaware (winter time)", (): void => {
@@ -1084,7 +813,7 @@ describe("DateTime", (): void => {
 			expect(e.toString()).to.equal("2014-03-30T03:59:59.000 Europe/Amsterdam");
 		});
 		it("should account for DST backward", (): void => {
-			// the conversion to UTC for this date is not well-defined, could mean either 
+			// the conversion to UTC for this date is not well-defined, could mean either
 			// the first 02:59:59 or the second one of that day
 			var d = new DateTime(2014, 10, 26, 2, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
 			var e = d.add(Duration.hours(1));
@@ -1601,7 +1330,7 @@ describe("DateTime", (): void => {
 			expect(new DateTime("2014-02-02T02:02:02.002+00").greaterEqual(new DateTime("2014-02-02T02:02:02.002+01"))).to.be.true;
 		});
 	});
-	
+
 	describe("toIsoString()", (): void => {
 		it("should work for unaware date", (): void => {
 			expect((new DateTime("2014-02-03T05:06:07.008")).toIsoString()).to.equal("2014-02-03T05:06:07.008");
@@ -1636,7 +1365,7 @@ describe("DateTime", (): void => {
 				"[DateTime: " + (new DateTime("2014-02-03T05:06:07.008")).toString() + "]");
 		});
 	});
-	
+
 	describe("weekDay()", (): void => {
 		it("should return a local week day", (): void => {
 			expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
@@ -1702,7 +1431,7 @@ describe("Period", (): void => {
 			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 1, TimeUnit.Second, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-03-30T01:59:59.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-03-30T03:00:00.000 Europe/Amsterdam");
-			
+
 			// note the target time is 2AM during DST backward, so 2AM exists twice.
 			// Because we want to increase utc time, we expect to go from the FIRST 02:59:59 to 02:00:00
 			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 1, TimeUnit.Second, PeriodDst.RegularIntervals))
@@ -1780,7 +1509,7 @@ describe("Period", (): void => {
 				.to.equal("2014-10-26T03:00:00.000 Europe/Amsterdam");
 		});
 		it("should handle 1 Day", (): void => {
-			// check it keeps local time @ 12h 
+			// check it keeps local time @ 12h
 			expect((new Period(new DateTime("1970-01-01T12:05:06.007 Europe/Amsterdam"), 1, TimeUnit.Day, PeriodDst.RegularLocalTime))
 				.findFirst(new DateTime("2014-03-30T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-03-30T12:05:06.007 Europe/Amsterdam");
@@ -1790,7 +1519,7 @@ describe("Period", (): void => {
 				.to.equal("2014-01-02T12:05:06.007 Europe/Amsterdam");
 		});
 		it("should handle 1 Month", (): void => {
-			// check it keeps local time @ 12h 
+			// check it keeps local time @ 12h
 			expect((new Period(new DateTime("1970-01-01T12:05:06.007 Europe/Amsterdam"), 1, TimeUnit.Month, PeriodDst.RegularLocalTime))
 				.findFirst(new DateTime("2014-03-28T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-04-01T12:05:06.007 Europe/Amsterdam");
@@ -1920,7 +1649,7 @@ describe("Period", (): void => {
 				.to.equal("2014-03-30T12:05:06.007 Europe/Amsterdam");
 		});
 		it("should handle 2 Month", (): void => {
-			// check it keeps local time @ 12h 
+			// check it keeps local time @ 12h
 			expect((new Period(new DateTime("1970-01-01T12:05:06.007 Europe/Amsterdam"), 2, TimeUnit.Month, PeriodDst.RegularLocalTime))
 				.findFirst(new DateTime("2014-02-28T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-03-01T12:05:06.007 Europe/Amsterdam");
@@ -1943,7 +1672,7 @@ describe("Period", (): void => {
 
 	describe("Period(X, >X, X, RegularInterval).findFirst()", (): void => {
 		it("should handle >60 Second", (): void => {
-			// check that twice a unit works 
+			// check that twice a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 120, TimeUnit.Second, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-01T00:02:00.000 Europe/Amsterdam");
@@ -1953,7 +1682,7 @@ describe("Period", (): void => {
 				.to.equal("2014-01-02T00:01:00.000 Europe/Amsterdam");
 		});
 		it("should handle >60 Minute", (): void => {
-			// check that twice a unit works 
+			// check that twice a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 120, TimeUnit.Minute, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-01T02:00:00.000 Europe/Amsterdam");
@@ -1963,11 +1692,11 @@ describe("Period", (): void => {
 				.to.equal("2014-01-02T00:12:00.000 Europe/Amsterdam");
 		});
 		it("should handle >24 Hour", (): void => {
-			// check that twice a unit works 
+			// check that twice a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 48, TimeUnit.Hour, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-01-19T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-21T00:00:00.000 Europe/Amsterdam");
-			// check that non-multiple of a unit works 
+			// check that non-multiple of a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 25, TimeUnit.Hour, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-02T01:00:00.000 Europe/Amsterdam");
@@ -1996,7 +1725,7 @@ describe("Period", (): void => {
 
 	describe("Period(X, >X, X, RegularLocalTime).findFirst()", (): void => {
 		it("should handle >60 Second", (): void => {
-			// check that twice a unit works 
+			// check that twice a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 120, TimeUnit.Second, PeriodDst.RegularLocalTime))
 				.findFirst(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-01T00:02:00.000 Europe/Amsterdam");
@@ -2012,7 +1741,7 @@ describe("Period", (): void => {
 				.to.equal("2014-02-02T11:59:54.000 Europe/Amsterdam");
 		});
 		it("should handle >60 Minute", (): void => {
-			// check that twice a unit works 
+			// check that twice a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 120, TimeUnit.Minute, PeriodDst.RegularLocalTime))
 				.findFirst(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-01T02:00:00.000 Europe/Amsterdam");
@@ -2028,7 +1757,7 @@ describe("Period", (): void => {
 				.to.equal("2014-01-02T11:06:00.000 Europe/Amsterdam");
 		});
 		it("should handle >24 Hour", (): void => {
-			// check that twice a unit works 
+			// check that twice a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 48, TimeUnit.Hour, PeriodDst.RegularLocalTime))
 				.findFirst(new DateTime("2014-01-19T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-21T00:00:00.000 Europe/Amsterdam");
@@ -2168,23 +1897,23 @@ describe("Period", (): void => {
 				.to.equal("2016-02-29T00:00:00.000 Europe/Amsterdam");
 		});
 	});
-	
+
 	describe("toString()", (): void => {
 		it("should work with naive date", (): void => {
 			var p = new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000");			
+			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000");
 		});
 		it("should work with PeriodDst.RegularLocalTime", (): void => {
 			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular local time");			
+			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular local time");
 		});
 		it("should work with PeriodDst.RegularIntervals", (): void => {
 			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
-			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular intervals");			
+			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular intervals");
 		});
 		it("should work with multiple hours", (): void => {
 			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 2, TimeUnit.Hour, PeriodDst.RegularIntervals);
-			expect(p.toString()).to.equal("2 hours, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular intervals");			
+			expect(p.toString()).to.equal("2 hours, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular intervals");
 		});
 	});
 
@@ -2192,32 +1921,32 @@ describe("Period", (): void => {
 		it("should work", (): void => {
 			expect((new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Second, PeriodDst.RegularLocalTime))
 				.toIsoString())
-				.to.equal("2014-01-01T00:00:00.000/P1S");			
+				.to.equal("2014-01-01T00:00:00.000/P1S");
 			expect((new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Minute, PeriodDst.RegularLocalTime))
 				.toIsoString())
-				.to.equal("2014-01-01T00:00:00.000/PT1M");			
+				.to.equal("2014-01-01T00:00:00.000/PT1M");
 			expect((new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime))
 				.toIsoString())
-				.to.equal("2014-01-01T00:00:00.000/P1H");			
+				.to.equal("2014-01-01T00:00:00.000/P1H");
 			expect((new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Day, PeriodDst.RegularLocalTime))
 				.toIsoString())
-				.to.equal("2014-01-01T00:00:00.000/P1D");			
+				.to.equal("2014-01-01T00:00:00.000/P1D");
 			expect((new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Week, PeriodDst.RegularLocalTime))
 				.toIsoString())
-				.to.equal("2014-01-01T00:00:00.000/P1W");			
+				.to.equal("2014-01-01T00:00:00.000/P1W");
 			expect((new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Month, PeriodDst.RegularLocalTime))
 				.toIsoString())
-				.to.equal("2014-01-01T00:00:00.000/P1M");			
+				.to.equal("2014-01-01T00:00:00.000/P1M");
 			expect((new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Year, PeriodDst.RegularLocalTime))
 				.toIsoString())
-				.to.equal("2014-01-01T00:00:00.000/P1Y");			
+				.to.equal("2014-01-01T00:00:00.000/P1Y");
 		});
 	});
-	
+
 	describe("inspect()", (): void => {
 		it("should work", (): void => {
 			var p = new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.inspect()).to.equal("[Period: " + p.toString() + "]");			
+			expect(p.inspect()).to.equal("[Period: " + p.toString() + "]");
 		});
 	});
 

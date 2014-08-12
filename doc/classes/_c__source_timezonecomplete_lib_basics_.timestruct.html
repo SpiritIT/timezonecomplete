@@ -1,0 +1,361 @@
+﻿<!doctype html>
+<html class="no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>TimeStruct | timezonecomplete</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">timezonecomplete</a>
+				</div>
+				<div class="table-cell" id="tsd-filter">
+					<input type="checkbox" id="tsd-filter-inherited" checked />
+					<label for="tsd-filter-inherited">Inherited</label>
+					<input type="checkbox" id="tsd-filter-private" checked />
+					<label for="tsd-filter-private">Private</label>
+					<input type="checkbox" id="tsd-filter-externals" checked />
+					<label for="tsd-filter-externals">Externals</label>
+					<input type="checkbox" id="tsd-filter-only-exported" />
+					<label for="tsd-filter-only-exported">Only exported</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li>
+					<a href="../globals.html">timezonecomplete</a>
+				</li>
+				<li>
+					<a href="../modules/_c__source_timezonecomplete_lib_basics_.html">&quot;c:/Source/timezonecomplete/lib/basics&quot;</a>
+				</li>
+				<li>
+					<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html">TimeStruct</a>
+				</li>
+			</ul>
+			<h1>Class TimeStruct</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8">
+			<p>Basic representation of a date and time</p>
+			<section class="tsd-member-index">
+				<h2>Index</h2>
+				<section class="tsd-member-index-group ">
+					<h3>Constructor methods</h3>
+					<ul class="tsd-member-index">
+						<li class="tsd-kind-constructor-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#constructor" class="tsd-kind-icon">constructor</a></li>
+					</ul>
+				</section>
+				<section class="tsd-member-index-group ">
+					<h3>Properties</h3>
+					<ul class="tsd-member-index">
+						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#day" class="tsd-kind-icon">day</a></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#hour" class="tsd-kind-icon">hour</a></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#milli" class="tsd-kind-icon">milli</a></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#minute" class="tsd-kind-icon">minute</a></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#month" class="tsd-kind-icon">month</a></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#second" class="tsd-kind-icon">second</a></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#year" class="tsd-kind-icon">year</a></li>
+					</ul>
+				</section>
+				<section class="tsd-member-index-group ">
+					<h3>Methods</h3>
+					<ul class="tsd-member-index">
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#validate" class="tsd-kind-icon">validate</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#yearday" class="tsd-kind-icon">year<wbr>Day</a></li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-member-group ">
+				<h2>Constructor methods</h2>
+				<section class="tsd-member tsd-kind-constructor-method tsd-parent-kind-class">
+					<a name="constructor" class="anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>1970, month<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>1, day<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>1, hour<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, minute<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, second<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, milli<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0<span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:88</li>
+								</ul>
+							</aside>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>year?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Year, 1970-...</p>
+								</li>
+								<li>
+									<h5>month?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Month 1-12</p>
+								</li>
+								<li>
+									<h5>day?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Day of month, 1-31</p>
+								</li>
+								<li>
+									<h5>hour?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Hour 0-23</p>
+								</li>
+								<li>
+									<h5>minute?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Minute 0-59</p>
+								</li>
+								<li>
+									<h5>second?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Seconds, 0-61 (60, 61 for leap seconds)</p>
+								</li>
+								<li>
+									<h5>milli?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Milliseconds 0-999</p>
+								</li>
+							</ul>
+							<h4>Returns 
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
+							</h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="day" class="anchor"></a>
+					<h3>day</h3>
+					<div class="tsd-signature tsd-kind-icon">day<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:102</li>
+						</ul>
+					</aside>
+					<p>Day of month, 1-31</p>
+				</section>
+				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="hour" class="anchor"></a>
+					<h3>hour</h3>
+					<div class="tsd-signature tsd-kind-icon">hour<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:107</li>
+						</ul>
+					</aside>
+					<p>Hour 0-23</p>
+				</section>
+				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="milli" class="anchor"></a>
+					<h3>milli</h3>
+					<div class="tsd-signature tsd-kind-icon">milli<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:122</li>
+						</ul>
+					</aside>
+					<p>Milliseconds 0-999</p>
+				</section>
+				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="minute" class="anchor"></a>
+					<h3>minute</h3>
+					<div class="tsd-signature tsd-kind-icon">minute<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:112</li>
+						</ul>
+					</aside>
+					<p>Minute 0-59</p>
+				</section>
+				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="month" class="anchor"></a>
+					<h3>month</h3>
+					<div class="tsd-signature tsd-kind-icon">month<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:97</li>
+						</ul>
+					</aside>
+					<p>Month 1-12</p>
+				</section>
+				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="second" class="anchor"></a>
+					<h3>second</h3>
+					<div class="tsd-signature tsd-kind-icon">second<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:117</li>
+						</ul>
+					</aside>
+					<p>Seconds, 0-61 (60, 61 for leap seconds)</p>
+				</section>
+				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="year" class="anchor"></a>
+					<h3>year</h3>
+					<div class="tsd-signature tsd-kind-icon">year<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:92</li>
+						</ul>
+					</aside>
+					<p>Year, 1970-...</p>
+				</section>
+			</section>
+			<section class="tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="validate" class="anchor"></a>
+					<h3>validate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">validate<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:130</li>
+								</ul>
+							</aside>
+							<p>Validate a TimeStruct, returns false if invalid.</p>
+							<h4>Returns 
+								<span class="tsd-signature-type">boolean</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="yearday" class="anchor"></a>
+					<h3>year<wbr>Day</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">year<wbr>Day<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:146</li>
+								</ul>
+							</aside>
+							<p>The day-of-year 0-365</p>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="offset-1 col-3">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="current tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html">"c:/<wbr>Source/timezonecomplete/lib/basics"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_duration_.html">"c:/<wbr>Source/timezonecomplete/lib/duration"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_index_.html">"c:/<wbr>Source/timezonecomplete/lib/index"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_strings_.html">"c:/<wbr>Source/timezonecomplete/lib/strings"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_tz_database_.html">"c:/<wbr>Source/timezonecomplete/lib/tz-<wbr>database"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary">
+				<ul>
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+						<a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-kind-icon">Time<wbr>Unit</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+						<a href="../enums/_c__source_timezonecomplete_lib_basics_.weekday.html" class="tsd-kind-icon">Week<wbr>Day</a>
+					</li>
+					<li class="current tsd-kind-class tsd-parent-kind-dynamic-module">
+						<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-kind-icon">Time<wbr>Struct</a>
+						<ul>
+							<li class=" tsd-kind-constructor-method tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#day" class="tsd-kind-icon">day</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#hour" class="tsd-kind-icon">hour</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#milli" class="tsd-kind-icon">milli</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#minute" class="tsd-kind-icon">minute</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#month" class="tsd-kind-icon">month</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#second" class="tsd-kind-icon">second</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#year" class="tsd-kind-icon">year</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#validate" class="tsd-kind-icon">validate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#yearday" class="tsd-kind-icon">year<wbr>Day</a>
+							</li>
+						</ul>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html#assertunixtimestamp" class="tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html#isint" class="tsd-kind-icon">is<wbr>Int</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html#timetounixnoleapsecs" class="tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html#unixtotimenoleapsecs" class="tsd-kind-icon">unix<wbr>ToTime<wbr>NoLeap<wbr>Secs</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_c__source_timezonecomplete_lib_basics_.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

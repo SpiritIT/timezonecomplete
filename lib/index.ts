@@ -1,6 +1,6 @@
 /**
  * Copyright(c) 2014 Spirit IT BV
- * 
+ *
  * Date and Time utility functions
  */
 
@@ -12,45 +12,19 @@ import assert = require("assert");
 import path = require("path");
 import timezoneJS = require("timezone-js");
 
+import basics = require("./basics");
+import duration = require("./duration");
+import strings = require("./strings");
+
+export import Duration = duration.Duration;
+export import TimeUnit = basics.TimeUnit;
+export import WeekDay = basics.WeekDay;
+
 // timezone-js initialization
 var timezoneData : Object = require("./timezone-data.json");
 // need to preload all names in order to validate them
 timezoneJS.timezone.loadingScheme = timezoneJS.timezone.loadingSchemes.MANUAL_LOAD;
 timezoneJS.timezone.loadZoneDataFromObject(timezoneData);
-
-/**
- * Pad a string by adding characters to the beginning.
- * @param s	the string to pad
- * @param width	the desired minimum string width
- * @param char	the single character to pad with
- * @return	the padded string
- */
-function padLeft(s: string, width: number, char: string): string {
-	assert(width > 0, "expect width > 0");
-	assert(char.length === 1, "expect single character in char");
-	var padding: string = "";
-	for (var i = 0; i < (width - s.length); i++) {
-		padding += char;
-	}
-	return padding + s;
-}
-
-/**
- * Pad a string by adding characters to the end.
- * @param s	the string to pad
- * @param width	the desired minimum string width
- * @param char	the single character to pad with
- * @return	the padded string
- */
-function padRight(s: string, width: number, char: string): string {
-	assert(width > 0, "expect width > 0");
-	assert(char.length === 1, "expect single character in char");
-	var padding: string = "";
-	for (var i = 0; i < (width - s.length); i++) {
-		padding += char;
-	}
-	return s + padding;
-}
 
 /**
  * @return True iff the given year is a leap year.
@@ -106,358 +80,29 @@ export function daysInMonth(year: number, month: number): number {
  */
 export function isoString(year: number, month: number, day: number,
 	hour: number, minute: number, second: number, millisecond: number): string {
-	return padLeft(year.toString(10), 4, "0")
-		+ "-" + padLeft(month.toString(10), 2, "0")
-		+ "-" + padLeft(day.toString(10), 2, "0")
-		+ "T" + padLeft(hour.toString(10), 2, "0")
-		+ ":" + padLeft(minute.toString(10), 2, "0")
-		+ ":" + padLeft(second.toString(10), 2, "0")
-		+ "." + padLeft(millisecond.toString(10), 3, "0")
+	return strings.padLeft(year.toString(10), 4, "0")
+		+ "-" + strings.padLeft(month.toString(10), 2, "0")
+		+ "-" + strings.padLeft(day.toString(10), 2, "0")
+		+ "T" + strings.padLeft(hour.toString(10), 2, "0")
+		+ ":" + strings.padLeft(minute.toString(10), 2, "0")
+		+ ":" + strings.padLeft(second.toString(10), 2, "0")
+		+ "." + strings.padLeft(millisecond.toString(10), 3, "0")
 		;
 }
-
-/**
- * Time units
- */
-export enum TimeUnit {
-	Second,
-	Minute,
-	Hour,
-	Day,
-	Week,
-	Month,
-	Year
-}
-
-/** 
- * Time duration. Create one e.g. like this: var d = Duration.hours(1).
- * Note that time durations do not take leap seconds etc. into account:
- * one hour is simply represented as 3600000 milliseconds.
- */
-export class Duration {
-
-	/**
-	 * Positive number of milliseconds
-	 * Stored positive because otherwise we constantly have to choose
-	 * between Math.floor() and Math.ceil()
-	 */
-	private _milliseconds: number;
-
-	/**
-	 * Sign: 1 or -1
-	 */
-	private _sign: number;
-
-	/**
-	 * Construct a time duration
-	 * @param n	Number of hours
-	 * @return A duration of n hours
-	 */
-	public static hours(n: number): Duration {
-		return new Duration(n * 3600000);
-	}
-
-	/**
-	 * Construct a time duration
-	 * @param n	Number of minutes
-	 * @return A duration of n minutes
-	 */
-	public static minutes(n: number): Duration {
-		return new Duration(n * 60000);
-	}
-
-	/**
-	 * Construct a time duration
-	 * @param n	Number of seconds
-	 * @return A duration of n seconds
-	 */
-	public static seconds(n: number): Duration {
-		return new Duration(n * 1000);
-	}
-
-	/**
-	 * Construct a time duration
-	 * @param n	Number of milliseconds
-	 * @return A duration of n milliseconds
-	 */
-	public static milliseconds(n: number): Duration {
-		return new Duration(n);
-	}
-
-	/**
-	 * Construct a time duration of 0
-	 */
-	constructor();
-
-	/**
-	 * Construct a time duration from a number of milliseconds
-	 */
-	constructor(milliseconds: number);
-
-	/**
-	 * Construct a time duration from a string in format
-	 * [-]h[:m[:s[.n]]] e.g. -01:00:30.501
-	 */
-	constructor(input: string);
-
-	/**
-	 * Constructor implementation
-	 */
-	constructor(i1?: any) {
-		if (typeof (i1) === "number") {
-			this._milliseconds = Math.round(Math.abs(i1));
-			this._sign = (i1 < 0 ? -1 : 1);
-		} else {
-			if (typeof (i1) === "string") {
-				this._fromString(i1);
-			} else {
-				this._milliseconds = 0;
-				this._sign = 1;
-			}
-		}
-	}
-
-	/**
-	 * @return another instance of Duration with the same value.
-	 */
-	clone(): Duration {
-		return Duration.milliseconds(this.milliseconds());
-	}
-
-	/** 
-	 * The entire duration in milliseconds (negative or positive)
-	 */
-	milliseconds(): number {
-		return this._sign * this._milliseconds;
-	}
-
-	/** 
-	 * The millisecond part of the duration (always positive)
-	 * @return e.g. 400 for a -01:02:03.400 duration
-	 */
-	millisecond(): number {
-		return this._milliseconds % 1000;
-	}
-
-	/** 
-	 * The entire duration in seconds (negative or positive, fractional)
-	 * @return e.g. 1.5 for a 1500 milliseconds duration
-	 */
-	seconds(): number {
-		return this._sign * this._milliseconds / 1000;
-	}
-
-	/** 
-	 * The second part of the duration (always positive)
-	 * @return e.g. 3 for a -01:02:03.400 duration
-	 */
-	second(): number {
-		return Math.floor(this._milliseconds / 1000) % 60;
-	}
-
-	/** 
-	 * The entire duration in minutes (negative or positive, fractional)
-	 * @return e.g. 1.5 for a 90000 milliseconds duration
-	 */
-	minutes(): number {
-		return this._sign * this._milliseconds / 60000;
-	}
-
-	/** 
-	 * The minute part of the duration (always positive)
-	 * @return e.g. 2 for a -01:02:03.400 duration
-	 */
-	minute(): number {
-		return Math.floor(this._milliseconds / 60000) % 60;
-	}
-
-	/** 
-	 * The entire duration in hours (negative or positive, fractional)
-	 * @return e.g. 1.5 for a 5400000 milliseconds duration
-	 */
-	hours(): number {
-		return this._sign * this._milliseconds / 3600000;
-	}
-
-	/** 
-	 * The hour part of the duration (always positive).
-	 * Note that this part can exceed 23 hours, because for 
-	 * now, we do not have a days() function
-	 * @return e.g. 25 for a -25:02:03.400 duration
-	 */
-	wholeHours(): number {
-		return Math.floor(this._milliseconds / 3600000);
-	}
-
-	// note there is no hour() method as that would only make sense if we
-	// also had a days() method.
-
-	/**
-	 * Sign
-	 * @return "-" if the duration is negative
-	 */
-	sign(): string {
-		return (this._sign < 0 ? "-" : "");
-	}
-
-	/**
-	 * @return True iff (this < other)
-	 */
-	lessThan(other: Duration): boolean {
-		return this.milliseconds() < other.milliseconds();
-	}
-
-	/**
-	 * @return True iff this and other represent the same time duration
-	 */
-	equals(other: Duration): boolean {
-		return this.milliseconds() === other.milliseconds();
-	}
-
-	/**
-	 * @return True iff this > other
-	 */
-	greaterThan(other: Duration): boolean {
-		return this.milliseconds() > other.milliseconds();
-	}
-
-	/**
-	 * @return The minimum (most negative) of this and other
-	 */
-	min(other: Duration): Duration {
-		if (this.lessThan(other)) {
-			return this.clone();
-		}
-		return other.clone();
-	}
-
-	/**
-	 * @return The maximum (most positive) of this and other
-	 */
-	max(other: Duration): Duration {
-		if (this.greaterThan(other)) {
-			return this.clone();
-		}
-		return other.clone();
-	}
-
-	/**
-	 * Multiply with a fixed number.
-	 * @return a new Duration of (this * value)
-	 */
-	multiply(value: number): Duration {
-		return new Duration(this.milliseconds() * value);
-	}
-
-	/**
-	 * Divide by a fixed number.
-	 * @return a new Duration of (this / value)
-	 */
-	divide(value: number): Duration {
-		if (value === 0) {
-			throw new Error("Duration.divide(): Divide by zero");
-		}
-		return new Duration(this.milliseconds() / value);
-	}
-
-	/**
-	 * Add a duration.
-	 * @return a new Duration of (this + value)
-	 */
-	add(value: Duration): Duration {
-		return new Duration(this.milliseconds() + value.milliseconds());
-	}
-
-	/**
-	 * Subtract a duration.
-	 * @return a new Duration of (this - value)
-	 */
-	sub(value: Duration): Duration {
-		return new Duration(this.milliseconds() - value.milliseconds());
-	}
-
-	/**
-	 * String in [-]hh:mm:ss.nnn notation. All fields are 
-	 * always present except the sign.
-	 */
-	toFullString(): string {
-		return this._toString(true);
-	}
-
-	/**
-	 * String in [-]hh[:mm[:ss[.nnn]]] notation. Fields are 
-	 * added as necessary
-	 */
-	toString(): string {
-		return this._toString(false);
-	}
-	
-	/**
-	 * Used by util.inspect()
-	 */
-	inspect(): string {
-		return "[Duration: " + this.toString() + "]";
-	}
-
-	private _toString(full: boolean): string {
-		var result: string = "";
-		if (full || this.millisecond() > 0) {
-			result = "." + padLeft(this.millisecond().toString(10), 3, "0");
-		}
-		if (full || result.length > 0 || this.second() > 0) {
-			result = ":" + padLeft(this.second().toString(10), 2, "0") + result;
-		}
-		if (full || result.length > 0 || this.minute() > 0) {
-			result = ":" + padLeft(this.minute().toString(10), 2, "0") + result;
-		}
-		return this.sign() + padLeft(this.wholeHours().toString(10), 2, "0") + result;
-	}
-
-	private _fromString(s: string): void {
-		assert(s.match(/^-?\d\d?(:\d\d?(:\d\d?(.\d\d?\d?)?)?)?$/), "Not a proper time duration string: \"" + s + "\"");
-		var sign: number = 1;
-		var hours: number = 0;
-		var minutes: number = 0;
-		var seconds: number = 0;
-		var milliseconds: number = 0;
-		var parts: string[] = s.split(":");
-		assert(parts.length > 0 && parts.length < 4, "Not a proper time duration string: \"" + s + "\"");
-		if (s.charAt(0) === "-") {
-			sign = -1;
-			parts[0] = parts[0].substr(1);
-		}
-		if (parts.length > 0) {
-			hours = +parts[0];
-		}
-		if (parts.length > 1) {
-			minutes = +parts[1];
-		}
-		if (parts.length > 2) {
-			var secondParts = parts[2].split(".");
-			seconds = +secondParts[0];
-			if (secondParts.length > 1) {
-				milliseconds = +padRight(secondParts[1], 3, "0");
-			}
-		}
-		this._milliseconds = Math.round(milliseconds + 1000 * seconds + 60000 * minutes + 3600000 * hours);
-		this._sign = sign;
-	}
-};
-
 
 /**
  * The type of time zone
  */
 export enum TimeZoneKind {
-	/** 
+	/**
 	 * Local time offset as determined by JavaScript Date class.
 	 */
 	Local,
-	/** 
+	/**
 	 * Fixed offset from UTC, without DST.
 	 */
 	Offset,
-	/** 
+	/**
 	 * IANA timezone managed through Olsen TZ database. Includes
 	 * DST if applicable.
 	 */
@@ -465,13 +110,13 @@ export enum TimeZoneKind {
 }
 
 /**
- * Time zone. The object is immutable because it is cached: 
+ * Time zone. The object is immutable because it is cached:
  * requesting a time zone twice yields the very same object.
  * Note that we use time zone offsets inverted w.r.t. JavaScript Date.getTimezoneOffset(),
- * i.e. offset 90 means +01:30. 
+ * i.e. offset 90 means +01:30.
  *
- * Time zones come in three flavors: the local time zone, as calculated by JavaScript Date, 
- * a fixed offset ("+01:30") without DST, or a IANA timezone ("Europe/Amsterdam") with DST 
+ * Time zones come in three flavors: the local time zone, as calculated by JavaScript Date,
+ * a fixed offset ("+01:30") without DST, or a IANA timezone ("Europe/Amsterdam") with DST
  * applied depending on the time zone rules.
  */
 export class TimeZone {
@@ -496,22 +141,22 @@ export class TimeZone {
 
 	/**
 	 * Timezone-JS object used in calculations.
-	 * This is cached in a member to avoid creating one on the fly 
+	 * This is cached in a member to avoid creating one on the fly
 	 * for every calculation.
 	 */
 	private _tjs: timezoneJS.Date;
 
-	/** 
+	/**
 	 * JavaScript Date object used in calculations.
-	 * This is cached in a member to avoid creating one on the fly 
+	 * This is cached in a member to avoid creating one on the fly
 	 * for every calculation.
 	 */
 	private _date: Date;
 
 
 	/**
-	 * The local time zone for a given date. Note that 
-	 * the time zone varies with the date: amsterdam time for 
+	 * The local time zone for a given date. Note that
+	 * the time zone varies with the date: amsterdam time for
 	 * 2014-01-01 is +01:00 and amsterdam time for 2014-07-01 is +02:00
 	 */
 	public static local(): TimeZone {
@@ -534,7 +179,7 @@ export class TimeZone {
 
 	/**
 	 * Returns a time zone object from the cache. If it does not exist, it is created.
-	 * @param s: Empty string for local time, a TZ database time zone name (e.g. Europe/Amsterdam) 
+	 * @param s: Empty string for local time, a TZ database time zone name (e.g. Europe/Amsterdam)
 	 *			 or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
 	 *			 https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 	 */
@@ -589,7 +234,7 @@ export class TimeZone {
 
 	/**
 	 * The time zone identifier. Can be an offset "-01:30" or an
-	 * IANA time zone name "Europe/Amsterdam", or "localtime" for 
+	 * IANA time zone name "Europe/Amsterdam", or "localtime" for
 	 * the local time zone.
 	 */
 	public name(): string {
@@ -648,7 +293,7 @@ export class TimeZone {
 				|| this._name === "Zulu"
 				);
 			/* istanbul ignore next */
-			default: 
+			default:
 				/* istanbul ignore next */
 				return false;
 		}
@@ -681,13 +326,13 @@ export class TimeZone {
 			case TimeZoneKind.Local: {
 				this._date = new Date(Date.UTC(year, month-1, day, hour, minute, second, millisecond));
 				return -1 * this._date.getTimezoneOffset();
-			} 
+			}
 			case TimeZoneKind.Offset: {
 				return this._offset;
-			} 
+			}
 			case TimeZoneKind.Proper: {
 				if (this.isUtc()) {
-					// due to a bug in TimezoneJS a UTC time entered into the 
+					// due to a bug in TimezoneJS a UTC time entered into the
 					// setUTCx methods of a UTC timezoneJS.Date will result in a
 					// non-zero offset.
 					return 0;
@@ -705,9 +350,9 @@ export class TimeZone {
 						this._tjs.getMilliseconds(),
 						year, month, day, hour, minute, second, millisecond);
 				}
-			} 
+			}
 			/* istanbul ignore next */
-			default: 
+			default:
 				/* istanbul ignore next */
 				assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
 				/* istanbul ignore next */
@@ -741,10 +386,10 @@ export class TimeZone {
 			case TimeZoneKind.Local: {
 				this._date = new Date(year, month - 1, day, hour, minute, second, millisecond);
 				return -1 * this._date.getTimezoneOffset();
-			} 
+			}
 			case TimeZoneKind.Offset: {
 				return this._offset;
-			} 
+			}
 			case TimeZoneKind.Proper: {
 				this._tjs.setFullYear(year);
 				this._tjs.setMonth(month - 1);
@@ -754,9 +399,9 @@ export class TimeZone {
 				this._tjs.setSeconds(second);
 				this._tjs.setMilliseconds(millisecond);
 				return -1 * this._tjs.getTimezoneOffset();
-			} 
+			}
 			/* istanbul ignore next */
-			default: 
+			default:
 				/* istanbul ignore next */
 				assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
 				/* istanbul ignore next */
@@ -781,7 +426,7 @@ export class TimeZone {
 					date.getMinutes(),
 					date.getSeconds(),
 					date.getMilliseconds());
-			} 
+			}
 			case DateFunctions.GetUTC: {
 				return this.offsetForUtc(
 					date.getUTCFullYear(),
@@ -791,7 +436,7 @@ export class TimeZone {
 					date.getUTCMinutes(),
 					date.getUTCSeconds(),
 					date.getUTCMilliseconds());
-			} 
+			}
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
@@ -818,7 +463,7 @@ export class TimeZone {
 					date.getMinutes(),
 					date.getSeconds(),
 					date.getMilliseconds());
-			} 
+			}
 			case DateFunctions.GetUTC: {
 				return this.offsetForZone(
 					date.getUTCFullYear(),
@@ -828,7 +473,7 @@ export class TimeZone {
 					date.getUTCMinutes(),
 					date.getUTCSeconds(),
 					date.getUTCMilliseconds());
-			} 
+			}
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
@@ -862,11 +507,11 @@ export class TimeZone {
 		var sign = (offset < 0 ? "-" : "+");
 		var hours = Math.floor(Math.abs(offset) / 60);
 		var minutes = Math.floor(Math.abs(offset) % 60);
-		return sign + padLeft(hours.toString(10), 2, "0") + ":" + padLeft(minutes.toString(10), 2, "0");
+		return sign + strings.padLeft(hours.toString(10), 2, "0") + ":" + strings.padLeft(minutes.toString(10), 2, "0");
 	}
 
-	/** 
-	 * String to offset conversion. 
+	/**
+	 * String to offset conversion.
 	 * @param s	Formats: "-01:00", "-0100", "-01", "Z"
 	 * @return offset w.r.t. UTC in minutes
 	 */
@@ -911,7 +556,7 @@ export class TimeZone {
 	}
 
 	/**
-	 * Normalize a string so it can be used as a key for a 
+	 * Normalize a string so it can be used as a key for a
 	 * cache lookup
 	 */
 	private static _normalizeString(s: string): string {
@@ -993,9 +638,9 @@ export class RealTimeSource implements TimeSource {
 	}
 }
 
-/** 
+/**
  * Indicates how a Date object should be interpreted.
- * Either we can take getYear(), getMonth() etc for our field 
+ * Either we can take getYear(), getMonth() etc for our field
  * values, or we can take getUTCYear() etc to do that.
  */
 export enum DateFunctions {
@@ -1007,20 +652,6 @@ export enum DateFunctions {
 	 * Use the Date.getUTCFullYear(), Date.getUTCMonth(), ... functions.
 	 */
 	GetUTC
-}
-
-/**
- * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
- * Sunday = 0, Monday = 1 etc
- */
-export enum WeekDay {
-	Sunday,
-	Monday,
-	Tuesday,
-	Wednesday,
-	Thursday,
-	Friday,
-	Saturday
 }
 
 /**
@@ -1041,7 +672,7 @@ export class DateTime {
 	 */
 	private _zoneDate: Date;
 
-	/** 
+	/**
 	 * Original time zone this instance was created for.
 	 * Can be NULL for unaware timestamps
 	 */
@@ -1049,12 +680,12 @@ export class DateTime {
 
 	/**
 	 * Actual time source in use. Setting this property allows to
-	 * fake time in tests. DateTime.nowLocal() and DateTime.nowUtc() 
+	 * fake time in tests. DateTime.nowLocal() and DateTime.nowUtc()
 	 * use this property for obtaining the current time.
 	 */
 	public static timeSource: TimeSource = new RealTimeSource();
 
-	/** 
+	/**
 	 * Current date+time in local time (derived from DateTime.timeSource.now()).
 	 */
 	public static nowLocal(): DateTime {
@@ -1062,14 +693,14 @@ export class DateTime {
 		return new DateTime(n, DateFunctions.Get, TimeZone.local());
 	}
 
-	/** 
+	/**
 	 * Current date+time in UTC time (derived from DateTime.timeSource.now()).
 	 */
 	public static nowUtc(): DateTime {
 		return new DateTime(DateTime.timeSource.now(), DateFunctions.GetUTC, TimeZone.utc());
 	}
 
-	/** 
+	/**
 	 * Current date+time in the given time zone (derived from DateTime.timeSource.now()).
 	 * @param timeZone	The desired time zone.
 	 */
@@ -1082,8 +713,8 @@ export class DateTime {
 	 */
 	constructor();
 	/**
-	 * Constructor 
-	 * @param isoString	String in ISO 8601 format. Instead of ISO time zone, 
+	 * Constructor
+	 * @param isoString	String in ISO 8601 format. Instead of ISO time zone,
 	*		 it may include a space and then and IANA time zone.
 	 * e.g. "2007-04-05T12:30:40.500"					(no time zone, naive date)
 	 * e.g. "2007-04-05T12:30:40.500+01:00"				(UTC offset without daylight saving time)
@@ -1095,23 +726,23 @@ export class DateTime {
 	 */
 	constructor(isoString: string, timeZone?: TimeZone);
 	/**
-	 * Constructor. You provide a date, then you say whether to take the 
+	 * Constructor. You provide a date, then you say whether to take the
 	 * date.getYear()/getXxx methods or the date.getUTCYear()/date.getUTCXxx methods,
 	 * and then you state which time zone that date is in.
-	 * 
+	 *
 	 * @param date	A date object.
-	 * @param getters	Specifies which set of Date getters contains the date in the given time zone: the 
+	 * @param getters	Specifies which set of Date getters contains the date in the given time zone: the
 	 *					Date.getXxx() methods or the Date.getUTCXxx() methods.
 	 * @param timeZone	The time zone that the given date is assumed to be in (may be null for unaware dates)
 	 */
 	constructor(date: Date, getFuncs: DateFunctions, timeZone?: TimeZone);
-	/** 
+	/**
 	 * Constructor. Note that unlike JavaScript dates we require fields to be in normal ranges.
 	 * Use the add(duration) or sub(duration) for arithmetic.
 	 * @param year	The full year (e.g. 2014)
 	 * @param month	The month [1-12] (note this deviates from JavaScript Date)
 	 * @param day	The day of the month [1-31]
-	 * @param hour	The hour of the day [0-24) 
+	 * @param hour	The hour of the day [0-24)
 	 * @param minute	The minute of the hour [0-59]
 	 * @param second	The second of the minute [0-59]
 	 * @param millisecond	The millisecond of the second [0-999]
@@ -1121,7 +752,7 @@ export class DateTime {
 		year: number, month: number, day: number,
 		hour?: number, minute?: number, second?: number, millisecond?: number,
 		timeZone?: TimeZone);
-	/** 
+	/**
 	 * Constructor
 	 * @param unixTimestamp	milliseconds since 1970-01-01T00:00:00.000
 	 * @param timeZone	the time zone that the timestamp is assumed to be in (usually UTC).
@@ -1129,7 +760,7 @@ export class DateTime {
 	constructor(unixTimestamp: number, timeZone?: TimeZone);
 
 	/**
-	 * Constructor implementation, do not call 
+	 * Constructor implementation, do not call
 	 */
 	constructor(
 		a1?: any, a2?: any, a3?: any,
@@ -1252,28 +883,28 @@ export class DateTime {
 		return Math.round((this._zoneDate.valueOf() - this._utcDate.valueOf()) / 60000);
 	}
 
-	/** 
+	/**
 	 * @return The full year e.g. 2014
 	 */
 	public year(): number {
 		return this._zoneDate.getUTCFullYear();
 	}
 
-	/** 
+	/**
 	 * @return The month 1-12 (note this deviates from JavaScript Date)
 	 */
 	public month(): number {
 		return this._zoneDate.getUTCMonth() + 1;
 	}
 
-	/** 
-	 * @return The day of the month 1-31 
+	/**
+	 * @return The day of the month 1-31
 	 */
 	public day(): number {
 		return this._zoneDate.getUTCDate();
 	}
 
-	/** 
+	/**
 	 * @return The hour 0-23
 	 */
 	public hour(): number {
@@ -1300,7 +931,7 @@ export class DateTime {
 	public millisecond(): number {
 		return this._zoneDate.getUTCMilliseconds();
 	}
-	
+
 	/**
 	 * @return the day-of-week (the enum values correspond to JavaScript
 	 * week day numbers)
@@ -1316,28 +947,28 @@ export class DateTime {
 		return this._utcDate.valueOf();
 	}
 
-	/** 
+	/**
 	 * @return The full year e.g. 2014
 	 */
 	public utcYear(): number {
 		return this._utcDate.getUTCFullYear();
 	}
 
-	/** 
+	/**
 	 * @return The UTC month 1-12 (note this deviates from JavaScript Date)
 	 */
 	public utcMonth(): number {
 		return this._utcDate.getUTCMonth() + 1;
 	}
 
-	/** 
-	 * @return The UTC day of the month 1-31 
+	/**
+	 * @return The UTC day of the month 1-31
 	 */
 	public utcDay(): number {
 		return this._utcDate.getUTCDate();
 	}
 
-	/** 
+	/**
 	 * @return The UTC hour 0-23
 	 */
 	public utcHour(): number {
@@ -1427,7 +1058,7 @@ export class DateTime {
 
 	/**
 	 * Add a time duration. Note that this simply adds a number
-	 * of milliseconds to UTC and converts back to zone(), 
+	 * of milliseconds to UTC and converts back to zone(),
 	 * so in the presence of e.g. leap seconds there may be a
 	 * shift in the seconds field if you add an hour.
 	 * There is not DST handling and no leap second handling.
@@ -1436,11 +1067,11 @@ export class DateTime {
 	public add(duration: Duration): DateTime;
 	/**
 	 * Add an amount of time to UTC, taking leap seconds etc into account.
-	 * Adding e.g. 1 hour will increment the utcHour() field 
+	 * Adding e.g. 1 hour will increment the utcHour() field
 	 * date by one. In case of DST changes, the local hour() field
-	 * may not increase or increase by 2 hours. So if you add a month, the 
+	 * may not increase or increase by 2 hours. So if you add a month, the
 	 * local time may vary by an hour. There will not be a shift
-	 * in seconds due to leap seconds. 
+	 * in seconds due to leap seconds.
 	 */
 	public add(amount: number, unit: TimeUnit): DateTime;
 	/**
@@ -1466,22 +1097,22 @@ export class DateTime {
 			if (amount !== 0 && result.equals(this)) {
 				// workaround for bug in javascript, at least prevent endless loops due to
 				// date not changing
-				result = this.add(amount * 2, unit);				
+				result = this.add(amount * 2, unit);
 			}
 			return result;
 		}
 	}
-	
+
 	/**
 	 * Add an amount of time to the zone time, as regularly as possible.
 	 * Adding e.g. 1 hour will increment the hour() field of the zone
-	 * date by one. In case of DST changes, the utcHour() field may 
+	 * date by one. In case of DST changes, the utcHour() field may
 	 * increase by 1 or increase by 2. Adding a day will leave the time portion
 	 * intact. However, adding an hour around a forward DST change adds two hours,
 	 * since there is a zone time (e.g. 2AM in Amsterdam) that does not exist.
 	 *
-	 * Note adding Months or Years will clamp the date to the end-of-month if 
-	 * the start date was at the end of a month, i.e. contrary to JavaScript 
+	 * Note adding Months or Years will clamp the date to the end-of-month if
+	 * the start date was at the end of a month, i.e. contrary to JavaScript
 	 * Date#setUTCMonth() it will not overflow into the next month
 	 */
 	public addLocal(amount: number, unit: TimeUnit): DateTime {
@@ -1492,7 +1123,7 @@ export class DateTime {
 		if (amount !== 0 && result.equals(this)) {
 			// workaround for bug in javascript, at least prevent endless loops due to
 			// date not changing
-			result = this.addLocal(amount * 2, unit);				
+			result = this.addLocal(amount * 2, unit);
 		}
 		return result;
 	}
@@ -1523,9 +1154,9 @@ export class DateTime {
 				date.setUTCDate(date.getUTCDate() + amount * 7);
 			} break;
 			case TimeUnit.Month: {
-				targetYear = amount >= 0 ? (date.getUTCFullYear() + Math.floor((date.getUTCMonth() + amount) / 12)) 
+				targetYear = amount >= 0 ? (date.getUTCFullYear() + Math.floor((date.getUTCMonth() + amount) / 12))
 					: (date.getUTCFullYear() + Math.ceil((date.getUTCMonth() + amount) / 12));
-				targetMonth = amount >= 0 ? Math.floor((date.getUTCMonth() + amount) % 12) 
+				targetMonth = amount >= 0 ? Math.floor((date.getUTCMonth() + amount) % 12)
 					: Math.ceil((date.getUTCMonth() + amount) % 12);
 				targetDate = Math.min(date.getUTCDate(), daysInMonth(targetYear, targetMonth + 1));
 				targetHours = date.getUTCHours();
@@ -1534,8 +1165,8 @@ export class DateTime {
 				targetMilliseconds = date.getUTCMilliseconds();
 				// setUTCYears can lead to an overflow in days if the current date is
 				// at the end of a month
-				date = new Date(Date.UTC(targetYear, targetMonth, targetDate, 
-					targetHours, targetMinutes, targetSeconds, targetMilliseconds)); 					
+				date = new Date(Date.UTC(targetYear, targetMonth, targetDate,
+					targetHours, targetMinutes, targetSeconds, targetMilliseconds));
 			} break;
 			case TimeUnit.Year: {
 				targetYear = date.getUTCFullYear() + amount;
@@ -1547,8 +1178,8 @@ export class DateTime {
 				targetMilliseconds = date.getUTCMilliseconds();
 				// setUTCYears can lead to an overflow in days if the current date is
 				// at the end of a month
-				date = new Date(Date.UTC(targetYear, targetMonth, targetDate, 
-					targetHours, targetMinutes, targetSeconds, targetMilliseconds)); 					
+				date = new Date(Date.UTC(targetYear, targetMonth, targetDate,
+					targetHours, targetMinutes, targetSeconds, targetMilliseconds));
 			} break;
 			/* istanbul ignore next */
 			default:
@@ -1559,7 +1190,7 @@ export class DateTime {
 		}
 		return date;
 	}
-	
+
 	/**
 	 * Same as add(-1*duration);
 	 */
@@ -1621,7 +1252,7 @@ export class DateTime {
 	}
 
 	/**
-	 * @return True iff this and other represent the same time and 
+	 * @return True iff this and other represent the same time and
 	 * have the same zone
 	 */
 	identical(other: DateTime): boolean {
@@ -1659,7 +1290,7 @@ export class DateTime {
 	}
 
 	/**
-	 * Modified ISO 8601 format string with IANA name if applicable. 
+	 * Modified ISO 8601 format string with IANA name if applicable.
 	 * E.g. "2014-01-01T23:15:33.000 Europe/Amsterdam"
 	 */
 	public toString(): string {
@@ -1681,7 +1312,7 @@ export class DateTime {
 	inspect(): string {
 		return "[DateTime: " + this.toString() + "]";
 	}
-	
+
 	/**
 	 * Modified ISO 8601 format string in UTC without time zone info
 	 */
@@ -1753,25 +1384,25 @@ export class DateTime {
 
 /**
  * Specifies how the period should repeat across the day
- * during DST changes. 
+ * during DST changes.
  */
 export enum PeriodDst {
 	/**
-	 * Keep repeating in similar intervals measured in UTC, 
+	 * Keep repeating in similar intervals measured in UTC,
 	 * unaffected by Daylight Saving Time.
 	 * E.g. a repetition of one hour will take one real hour
-	 * every time, even in a time zone with DST. 
-	 * Leap seconds, leap days and month length 
+	 * every time, even in a time zone with DST.
+	 * Leap seconds, leap days and month length
 	 * differences will still make the intervals different.
 	 */
 	RegularIntervals,
 
 	/**
 	 * Ensure that the time at which the intervals occur stay
-	 * at the same place in the day, local time. So e.g. 
+	 * at the same place in the day, local time. So e.g.
 	 * a period of one day, starting at 8:05AM Europe/Amsterdam time
 	 * will always start at 8:05 Europe/Amsterdam. This means that
-	 * in UTC time, some intervals will be 25 hours and some 
+	 * in UTC time, some intervals will be 25 hours and some
 	 * 23 hours during DST changes.
 	 * Another example: an hourly interval will be hourly in local time,
 	 * skipping an hour in UTC for a DST backward change.
@@ -1849,7 +1480,7 @@ export class Period {
 	 * Constructor
 	 * LIMITATION: if dst equals RegularLocalTime, and unit is Second, Minute or Hour,
 	 * then the amount must be a factor of 24. So 120 seconds is allowed while 121 seconds is not.
-	 * This is due to the enormous processing power required by these cases. They are not 
+	 * This is due to the enormous processing power required by these cases. They are not
 	 * implemented and you will get an assert.
 	 *
 	 * @param start The start of the period. If the period is in Months or Years, and
@@ -1931,7 +1562,7 @@ export class Period {
 	 * the given date. The given date need not be at a period boundary.
 	 * Pre: the fromdate and startdate must either both have timezones or not
 	 * @param fromDate: the date after which to return the next date
-	 * @return the first date matching the period after fromDate, given 
+	 * @return the first date matching the period after fromDate, given
 	 *			in the same zone as the fromDate.
 	 */
 	public findFirst(fromDate: DateTime): DateTime {
@@ -2031,7 +1662,7 @@ export class Period {
 				}
 			}
 		} else {
-			// Amount is not 1, 
+			// Amount is not 1,
 			if (this._intDst === PeriodDst.RegularIntervals) {
 				// apply to UTC time
 				switch (this._intUnit) {
@@ -2090,7 +1721,7 @@ export class Period {
 							// per constructor assert, the seconds are less than a day, so just go the fromDate start-of-day
 							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
 								this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
-								
+
 							// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
 							remainder = Math.floor((24 * 3600) % this._intAmount);
 							if (approx.greaterThan(normalFrom)) {
@@ -2102,9 +1733,9 @@ export class Period {
 								if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Second).lessEqual(normalFrom)) {
 									// normalFrom lies in the boundary period, move to the next day
 									approx = approx.addLocal(1, TimeUnit.Day);
-								}								
+								}
 							}
-							
+
 							// optimization: binary search
 							var imax: number = Math.floor((24 * 3600) / this._intAmount);
 							var imin: number = 0;
@@ -2128,7 +1759,7 @@ export class Period {
 						break;
 					case TimeUnit.Minute:
 						if (this._intAmount < 60 && (60 % this._intAmount) === 0) {
-							// optimization: same hour this._intStartary each time, so just take the fromDate minus one hour 
+							// optimization: same hour this._intStartary each time, so just take the fromDate minus one hour
 							// with the this._intStart minutes, seconds
 							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
 								normalFrom.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone())
@@ -2149,7 +1780,7 @@ export class Period {
 								if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Minute).lessEqual(normalFrom)) {
 									// normalFrom lies in the boundary period, move to the next day
 									approx = approx.addLocal(1, TimeUnit.Day);
-								}								
+								}
 							}
 						}
 						break;
@@ -2168,7 +1799,7 @@ export class Period {
 							if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Hour).lessEqual(normalFrom)) {
 								// normalFrom lies in the boundary period, move to the next day
 								approx = approx.addLocal(1, TimeUnit.Day);
-							}								
+							}
 						}
 						break;
 					case TimeUnit.Day:
@@ -2212,12 +1843,12 @@ export class Period {
 	}
 
 	/**
-	 * Returns the next timestamp in the period. The given timestamp must 
+	 * Returns the next timestamp in the period. The given timestamp must
 	 * be at a period boundary, otherwise the answer is incorrect.
 	 * This function has MUCH better performance than findFirst.
 	 * Returns the datetime "count" times away from the given datetime.
 	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
-	 * @param count	Optional, must be >= 1 and whole. 
+	 * @param count	Optional, must be >= 1 and whole.
 	 * @return (prev + count * period), in the same timezone as prev.
 	 */
 	public findNext(prev: DateTime, count: number = 1): DateTime {
@@ -2263,10 +1894,10 @@ export class Period {
 				/* istanbul ignore next */
 				assert(false, "Unknown period unit.");
 				/* istanbul ignore next */
-				return "";			
+				return "";
 		}
 	}
-	
+
 	/**
 	 * Returns an ISO duration string e.g.
 	 * 2014-01-01T12:00:00.000+01:00/P1H
@@ -2278,7 +1909,7 @@ export class Period {
 	}
 
 	/**
-	 * A string representation e.g. 
+	 * A string representation e.g.
 	 * "10 years, starting at 2014-03-01T12:00:00 Europe/Amsterdam, keeping regular intervals".
 	 */
 	public toString(): string {
@@ -2354,7 +1985,7 @@ export class Period {
 
 		if (this._intUnit === TimeUnit.Second && this._intAmount >= 60 && this._intAmount % 60 === 0
 			&& this._dstRelevant() && this._dst === PeriodDst.RegularLocalTime) {
-			// cannot convert seconds to minutes if regular intervals are required due to 
+			// cannot convert seconds to minutes if regular intervals are required due to
 			// leap seconds, but for regular local time it does not matter
 			this._intAmount = this._intAmount / 60;
 			this._intUnit = TimeUnit.Minute;

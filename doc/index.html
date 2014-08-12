@@ -53,7 +53,7 @@
 		<div class="col-8">
 			<p>﻿# TimezoneComplete</p>
 			<p><a href="https://travis-ci.org/SpiritIT/timezonecomplete"><img src="https://travis-ci.org/SpiritIT/timezonecomplete.svg?branch=master" alt="Build Status"></a>
-			<a href="https://coveralls.io/r/SpiritIT/timezonecomplete"><img src="https://img.shields.io/coveralls/SpiritIT/timezonecomplete.svg" alt="Coverage Status"></a></p>
+			<a href="https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master"><img src="https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master" alt="Coverage Status"></a></p>
 			<h2 id="synopsis">Synopsis</h2>
 			<p>TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone&#39;s time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.</p>
 			<h2 id="difference-with-timezone-js-moment-js-and-other-date-libraries">Difference with timezone-js, Moment.js and other Date libraries</h2>
@@ -66,9 +66,10 @@
 						<li>Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with &quot;number&quot; type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.</li>
 						<li>Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.</li>
 						<li>Ability to use with NodeJS as well as in a browser</li>
+						<li>Complete test coverage</li>
+						<li>Under active development</li>
 					</ul>
 				</li>
-				<li>This is not meant to be light-weight. </li>
 			</ol>
 			<h2 id="usage">Usage</h2>
 			<p>See also ./doc/modules/index.html.</p>
@@ -189,9 +190,8 @@
 <span class="hljs-keyword">var</span> occurrence2 = period.findNext(occurrence);
 </code></pre>
 			<h2 id="on-a-web-page">On a web page</h2>
-			<p>Some effort has been made to make TimezoneComplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
-			<pre><code class="lang-html">
-<span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span>
+			<p>We spent some effort making TimezoneComplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
+			<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Timezone Complete test<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">body</span>&gt;</span>
     Hello world
@@ -204,7 +204,7 @@
 <span class="hljs-tag">&lt;/<span class="hljs-title">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-title">html</span>&gt;</span>
 </code></pre>
-			<p>In theory this bundle is also usable using module loaders like <a href="http://requirejs.org/">RequireJS</a>. However, this has not been thoroughly tested yet, so help on this part is welcome.</p>
+			<p>In theory this bundle is also usable using module loaders like <a href="http://requirejs.org/">RequireJS</a>. However, this has not been thoroughly tested yet, this will happen in the near future.</p>
 			<h2 id="faq">FAQ</h2>
 			<h3 id="what-time-zone-names-can-i-use-">What time zone names can I use?</h3>
 			<p>See <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></p>
@@ -212,8 +212,8 @@
 			<p>The DateTime class has a constructor that takes a date. It may seem rather complex because the constructor has three parameters. But that was necessary:</p>
 			<ol>
 				<li>The first parameter is the Date object.</li>
-				<li>The second parameter indicates which of the two values you want to use: a Date object has a UTC value (getUtcYear()) and a Local value (getYear()). You typically use the local functions, but e.g. if you created your date from a unix timestamp then the UTC date is most accurate.</li>
-				<li>The third parameter gives us the missing info: the time zone the the given value is in. </li>
+				<li>The second parameter indicates which of the two values in the Date object you want to use: a Date object has a UTC value (getUtcFullYear()) and a Local value (getFullYear()). You typically use the local functions, but if you created your date from a unix timestamp then the UTC date is most accurate.</li>
+				<li>The third parameter gives us the missing info: the time zone that the given value is in. </li>
 			</ol>
 			<pre><code class="lang-javascript">
 <span class="hljs-comment">// construct date from separate year, month, day etc.</span>
@@ -228,21 +228,18 @@
 <span class="hljs-comment">// now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.</span>
 <span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
 </code></pre>
-			<h2 id="known-issues">Known Issues</h2>
-			<ul>
-				<li><p>There are differences in behaviour between setting the TZ environment variable to a time zone or setting your PC to the same time zone. This is due to a bug in the V8 engine. This is most notably in the normalization of non-existing dates during DST changes. Stay away from those dates.</p>
-				</li>
-				<li><p>Adding a month to the END of January in a leap year produces a date with a different time. This is due to a bug in timezone-js. Presumably this also has an effect on Period.findFirst/Period.findNext.  </p>
-				</li>
-			</ul>
 			<h2 id="changelog">Changelog</h2>
-			<h3 id="1-4-2">1.4.2</h3>
+			<h3 id="1-4-3-2014-07-31-">1.4.3 (2014-07-31)</h3>
+			<ul>
+				<li>Improved timezonecomplete behaviour when using browserify</li>
+			</ul>
+			<h3 id="1-4-2-2014-07-28-">1.4.2 (2014-07-28)</h3>
 			<ul>
 				<li>Ensured tests run with different TZ environment variable settings</li>
 				<li>Ensured build runs on Travis CI and the coverage is picked up by Coveralls.io</li>
 				<li>Bugfix in weekDay() for times near 00:00:00 with certain machine time zones</li>
 			</ul>
-			<h3 id="1-4-1">1.4.1</h3>
+			<h3 id="1-4-1-2014-07-24-">1.4.1 (2014-07-24)</h3>
 			<ul>
 				<li>Ensured all code is covered with tests using istanbul</li>
 				<li>Bufgix in DateTime.toIsoString(): missing space</li>
@@ -251,7 +248,7 @@
 				<li>Bugfix in Period.toIsoString() which did not include the start date</li>
 				<li>Performance improvement for Period.findFirst() regarding Second periods.</li>
 			</ul>
-			<h3 id="1-4-0">1.4.0</h3>
+			<h3 id="1-4-0-2014-07-24-">1.4.0 (2014-07-24)</h3>
 			<ul>
 				<li>Enable use of timezonecomplete in browser</li>
 			</ul>
@@ -283,8 +280,11 @@
 				<li>First released version.</li>
 			</ul>
 			<h2 id="contributors">Contributors</h2>
-			<p>Rogier Schouten <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#114;&#46;&#115;&#99;&#x68;&#111;&#117;&#x74;&#x65;&#110;&#64;&#x73;&#112;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#x6d;">&#114;&#46;&#115;&#99;&#x68;&#111;&#117;&#x74;&#x65;&#110;&#64;&#x73;&#112;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#x6d;</a>
-			Daan Wissing <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#100;&#x2e;&#x77;&#x69;&#115;&#115;&#x69;&#x6e;&#x67;&#x40;&#115;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;">&#100;&#x2e;&#x77;&#x69;&#115;&#115;&#x69;&#x6e;&#x67;&#x40;&#115;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;</a></p>
+			<ul>
+				<li>Rogier Schouten <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#114;&#x2e;&#x73;&#99;&#x68;&#111;&#117;&#116;&#101;&#110;&#x40;&#115;&#x70;&#105;&#114;&#105;&#116;&#105;&#x74;&#46;&#x63;&#111;&#x6d;">&#114;&#x2e;&#x73;&#99;&#x68;&#111;&#117;&#116;&#101;&#110;&#x40;&#115;&#x70;&#105;&#114;&#105;&#116;&#105;&#x74;&#46;&#x63;&#111;&#x6d;</a></li>
+				<li>Daan Wissing <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x64;&#46;&#119;&#105;&#115;&#115;&#105;&#110;&#103;&#64;&#x73;&#x70;&#105;&#114;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#111;&#x6d;">&#x64;&#46;&#119;&#105;&#115;&#115;&#105;&#110;&#103;&#64;&#x73;&#x70;&#105;&#114;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#111;&#x6d;</a></li>
+				<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#112;&#46;&#107;&#x6f;&#111;&#x69;&#106;&#x6d;&#97;&#110;&#115;&#x40;&#x73;&#x70;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#x6d;">&#112;&#46;&#107;&#x6f;&#111;&#x69;&#106;&#x6d;&#97;&#110;&#115;&#x40;&#x73;&#x70;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#x6d;</a></li>
+			</ul>
 			<h2 id="license">License</h2>
 			<p>MIT</p>
 		</div>
@@ -295,7 +295,19 @@
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
+						<a href="modules/_c__source_timezonecomplete_lib_basics_.html">"c:/<wbr>Source/timezonecomplete/lib/basics"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="modules/_c__source_timezonecomplete_lib_duration_.html">"c:/<wbr>Source/timezonecomplete/lib/duration"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
 						<a href="modules/_c__source_timezonecomplete_lib_index_.html">"c:/<wbr>Source/timezonecomplete/lib/index"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="modules/_c__source_timezonecomplete_lib_strings_.html">"c:/<wbr>Source/timezonecomplete/lib/strings"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="modules/_c__source_timezonecomplete_lib_tz_database_.html">"c:/<wbr>Source/timezonecomplete/lib/tz-<wbr>database"</a>
 					</li>
 				</ul>
 			</nav>
