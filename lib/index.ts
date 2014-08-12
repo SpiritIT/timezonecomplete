@@ -9,7 +9,6 @@
 "use strict";
 
 import assert = require("assert");
-import path = require("path");
 import timezoneJS = require("timezone-js");
 
 import basics = require("./basics");
@@ -21,7 +20,9 @@ export import TimeUnit = basics.TimeUnit;
 export import WeekDay = basics.WeekDay;
 
 // timezone-js initialization
+/* tslint:disable:no-var-requires */
 var timezoneData : Object = require("./timezone-data.json");
+/* tslint:enable:no-var-requires */
 // need to preload all names in order to validate them
 timezoneJS.timezone.loadingScheme = timezoneJS.timezone.loadingSchemes.MANUAL_LOAD;
 timezoneJS.timezone.loadZoneDataFromObject(timezoneData);
@@ -324,7 +325,7 @@ export class TimeZone {
 		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
-				this._date = new Date(Date.UTC(year, month-1, day, hour, minute, second, millisecond));
+				this._date = new Date(Date.UTC(year, month - 1, day, hour, minute, second, millisecond));
 				return -1 * this._date.getTimezoneOffset();
 			}
 			case TimeZoneKind.Offset: {
@@ -1569,7 +1570,6 @@ export class Period {
 		assert((this._intStart.zone() === null) === (fromDate.zone() === null),
 			"The fromDate and startDate must both be aware or unaware");
 		var approx: DateTime;
-		var temp: DateTime;
 		var periods: number;
 		var diff: number;
 		var newYear: number;

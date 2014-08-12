@@ -77,7 +77,7 @@ describe("TimeStruct", function () {
     describe("validate()", function () {
         it("should work for valid dates", function () {
             expect((new TimeStruct()).validate()).to.be.true;
-            //expect((new TimeStruct(2014, 1, 1, 2, 2, 4)).validate()).to.be.true;
+            expect((new TimeStruct(2014, 1, 1, 2, 2, 4)).validate()).to.be.true;
         });
         it("should return false for non-numbers", function () {
             var t;

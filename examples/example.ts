@@ -1,8 +1,6 @@
 /// <reference path="../typings/lib.d.ts" />
 
 
-import util = require("util");
-
 import tc = require("../lib/index");
 
 var d = tc.Duration.milliseconds(3600);

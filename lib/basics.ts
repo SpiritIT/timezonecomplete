@@ -38,7 +38,7 @@ export function isLeapYear(year: number): boolean {
 /**
  * The days in a given year
  */
-export function daysInYear(year: number) {
+export function daysInYear(year: number): number {
 	return (isLeapYear(year) ? 366 : 365);
 }
 
@@ -209,7 +209,7 @@ export function timeToUnixNoLeapSecs(tm: TimeStruct): number {
 	return tm.milli + 1000 * (
 		tm.second + tm.minute * 60 + tm.hour * 3600 + tm.yearDay() * 86400 +
 		(tm.year - 1970) * 31536000 + Math.floor((tm.year - 1969) / 4) * 86400 -
-		Math.floor((tm.year - 1901) / 100) * 86400 + Math.floor((tm.year -1900 + 299) / 400) * 86400);
+		Math.floor((tm.year - 1901) / 100) * 86400 + Math.floor((tm.year - 1900 + 299) / 400) * 86400);
 }
 
 /**

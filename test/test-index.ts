@@ -1343,7 +1343,7 @@ describe("DateTime", (): void => {
 		});
 		it("should work for local timezone", (): void => {
 			expect((new DateTime("2014-02-03T05:06:07.008 localtime")).toIsoString()).to.equal(
-				"2014-02-03T05:06:07.008" + TimeZone.offsetToString(TimeZone.local().offsetForZone(2014,2,3,5,6,7,8)));
+				"2014-02-03T05:06:07.008" + TimeZone.offsetToString(TimeZone.local().offsetForZone(2014, 2, 3, 5, 6, 7, 8)));
 		});
 	});
 

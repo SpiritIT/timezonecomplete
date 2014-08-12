@@ -79,7 +79,7 @@ describe("TimeStruct", (): void => {
 	describe("validate()", (): void => {
 		it("should work for valid dates", (): void => {
 			expect((new TimeStruct()).validate()).to.be.true;
-			//expect((new TimeStruct(2014, 1, 1, 2, 2, 4)).validate()).to.be.true;
+			expect((new TimeStruct(2014, 1, 1, 2, 2, 4)).validate()).to.be.true;
 		});
 		it("should return false for non-numbers", (): void => {
 			var t: TimeStruct;
@@ -153,7 +153,7 @@ describe("TimeStruct", (): void => {
 		});
 		it("should return true for valid leap second", (): void => {
 			var t: TimeStruct;
-			t = new TimeStruct(1976,6,30,23,59,59);
+			t = new TimeStruct(1976, 6, 30, 23, 59, 59);
 			t.second = 60;
 			expect(t.validate()).to.be.true;
 		});

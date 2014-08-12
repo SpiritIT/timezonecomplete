@@ -1,14 +1,18 @@
-var gulp = require("gulp");
+
 var browserify = require("gulp-browserify");
-var gulpFilter = require("gulp-filter");
 var debug = require("gulp-debug");
-var rename = require("gulp-rename");
-var typescript = require("gulp-tsc");
-var wrapUmd = require("gulp-wrap-umd");
-var typedoc = require("gulp-typedoc");
-var rimraf = require("gulp-rimraf");
 var dtsBundle = require("dts-bundle");
 var fs = require("fs");
+var gulp = require("gulp");
+var gulpFilter = require("gulp-filter");
+var rename = require("gulp-rename");
+var rimraf = require("gulp-rimraf");
+var tslint = require("gulp-tslint");
+var typedoc = require("gulp-typedoc");
+var typescript = require("gulp-tsc");
+var wrapUmd = require("gulp-wrap-umd");
+
+process.chdir(__dirname);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Overall tasks
@@ -36,7 +40,7 @@ gulp.task("help", function(cb) {
 });
 
 // Default task: this is called when just typing "gulp" on command line
-gulp.task("default", ["release"]);
+gulp.task("default", ["build"]);
 
 gulp.task("clean", function() {
 	gulp
@@ -55,6 +59,7 @@ gulp.task("clean", function() {
 			"examples/**/*.map",
       "doc/"
 		], { read: false, base: "." })
+		.pipe(gulpFilter("!lib/node-preparse.js"))
 		.pipe(rimraf({force: true}))
 		.on("error", trapError) // make exit code non-zero
 })
@@ -81,11 +86,101 @@ gulp.task("doc", function() {
 		.on("error", trapError);
 });
 
+	var tslintOpts = {
+	  "rules": {
+		"ban": [true,
+			["_", "extend"],
+			["_", "isNull"],
+			["_", "isDefined"]
+		],
+		"class-name": true,
+		"comment-format": [true,
+			"check-space"
+			//,"check-lowercase"
+		],
+		"curly": true,
+		"eofline": true,
+		"forin": true,
+		"indent": [true, 4],
+		"interface-name": false, // we do not start our interfaces with "I"
+		"jsdoc-format": false, // buggy
+		"label-position": true,
+		"label-undefined": true,
+		"max-line-length": [true, 140],
+		"no-arg": true,
+		"no-bitwise": true,
+		"no-console": [true,
+			"time",
+			"timeEnd"
+		],
+		"no-construct": true,
+		"no-debugger": true,
+		"no-duplicate-key": true,
+		"no-duplicate-variable": true,
+		"no-empty": true,
+		"no-eval": true,
+		"no-string-literal": true,
+		"no-trailing-comma": true,
+		"no-trailing-whitespace": true,
+		"no-unused-expression": true,
+		"no-unused-variable": true,
+		"no-unreachable": true,
+		"no-use-before-declare": true,
+		"no-var-requires": true,
+		"one-line": [true,
+			"check-open-brace",
+			"check-catch",
+			"check-else",
+			"check-whitespace"
+		],
+		"quotemark": [true, "double"],
+		"radix": true,
+		"semicolon": true,
+		"triple-equals": [true, "allow-null-check"],
+		"typedef": [true,
+			"callSignature",
+			// "catchClause",   not allowed by TypeScript
+			"indexSignature",
+			"parameter",
+			"propertySignature",
+			// "variableDeclarator"  unnecessary since we have --noImplicitAny
+			"memberVariableDeclarator",
+		],
+		"typedef-whitespace": [true,
+			["callSignature", "noSpace"],
+			["catchClause", "noSpace"],
+			["indexSignature", "space"]
+		],
+		"use-strict": [true,
+			"check-module",
+			// "check-function"
+		],
+		"variable-name": [true,
+			"allow-leading-underscore"
+		],
+		"whitespace": [true,
+			"check-branch",
+			"check-decl",
+			"check-operator",
+			"check-separator",
+			"check-type"
+		],
+	  }
+
+	}
+
 gulp.task("build", function() {
 	 return gulp.src([
-			"**/*.ts",
+			"lib/*.ts",
+			"test/*.ts",
 		], {base: "."})
 		.pipe(gulpFilter("!**/*.d.ts"))
+		.pipe(tslint({
+			configuration: tslintOpts
+		}))
+		.pipe(tslint.report('verbose', {
+			emitError: true
+        }))
 		.pipe(typescript({
 			module: "commonjs",
 			declaration: true,

@@ -8,6 +8,8 @@
 
 "use strict";
 
+/* tslint:disable */
+
 import assert = require("assert");
 import basics = require("basics");
 import duration = require("duration");
