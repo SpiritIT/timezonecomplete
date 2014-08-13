@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;c:/Source/timezonecomplete/lib/math&quot; | timezonecomplete</title>
+	<title>&quot;c:/Source/timezonecomplete/lib/period&quot; | timezonecomplete</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -44,10 +44,10 @@
 					<a href="../globals.html">timezonecomplete</a>
 				</li>
 				<li>
-					<a href="_c__source_timezonecomplete_lib_math_.html">&quot;c:/Source/timezonecomplete/lib/math&quot;</a>
+					<a href="_c__source_timezonecomplete_lib_period_.html">&quot;c:/Source/timezonecomplete/lib/period&quot;</a>
 				</li>
 			</ul>
-			<h1>Dynamic module &quot;c:/Source/timezonecomplete/lib/math&quot;</h1>
+			<h1>Dynamic module &quot;c:/Source/timezonecomplete/lib/period&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -55,68 +55,52 @@
 	<div class="row">
 		<div class="col-8">
 			<p>Copyright(c) 2014 Spirit IT BV</p>
-			<p>Math utility functions</p>
+			<p>Date+time+timezone representation</p>
 			<section class="tsd-member-index">
 				<h2>Index</h2>
 				<section class="tsd-member-index-group ">
+					<h3>Enumerations</h3>
+					<ul class="tsd-member-index">
+						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_c__source_timezonecomplete_lib_period_.perioddst.html" class="tsd-kind-icon">Period<wbr>Dst</a></li>
+					</ul>
+				</section>
+				<section class="tsd-member-index-group ">
+					<h3>Classes</h3>
+					<ul class="tsd-member-index">
+						<li class="tsd-kind-class tsd-parent-kind-dynamic-module"><a href="../classes/_c__source_timezonecomplete_lib_period_.period.html" class="tsd-kind-icon">Period</a></li>
+					</ul>
+				</section>
+				<section class="tsd-member-index-group ">
 					<h3>Functions</h3>
 					<ul class="tsd-member-index">
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_math_.html#filterfloat" class="tsd-kind-icon">filter<wbr>Float</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_math_.html#isint" class="tsd-kind-icon">is<wbr>Int</a></li>
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_period_.html#perioddsttostring" class="tsd-kind-icon">period<wbr>Dst<wbr>ToString</a></li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
-					<a name="filterfloat" class="anchor"></a>
-					<h3>filter<wbr>Float</h3>
+					<a name="perioddsttostring" class="anchor"></a>
+					<h3>period<wbr>Dst<wbr>ToString</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">filter<wbr>Float<span class="tsd-signature-symbols">(</span>value<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">period<wbr>Dst<wbr>ToString<span class="tsd-signature-symbols">(</span>p<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/math.ts:30</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/period.ts:54</li>
 								</ul>
 							</aside>
-							<p>Stricter variant of parseFloat().</p>
+							<p>Convert a PeriodDst to a string: &quot;regular intervals&quot; or &quot;regular local time&quot;</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
-									<p>Input string</p>
+									<h5>p: <a href="../enums/_c__source_timezonecomplete_lib_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a></h5>
 								</li>
 							</ul>
 							<h4>Returns 
-								<span class="tsd-signature-type">number</span>
+								<span class="tsd-signature-type">string</span>
 							</h4>
-							<p>the float if the string is a valid float, NaN otherwise</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
-					<a name="isint" class="anchor"></a>
-					<h3>is<wbr>Int</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Int<span class="tsd-signature-symbols">(</span>n<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/math.ts:14</li>
-								</ul>
-							</aside>
-							<h4>Parameters</h4>
-							<ul>
-								<li>
-									<h5>n: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4>Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
-							<p>true iff given argument is an integer number</p>
 						</li>
 					</ul>
 				</section>
@@ -143,10 +127,10 @@
 					<li class=" tsd-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_javascript_.html">"c:/<wbr>Source/timezonecomplete/lib/javascript"</a>
 					</li>
-					<li class="current tsd-kind-dynamic-module">
+					<li class=" tsd-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_math_.html">"c:/<wbr>Source/timezonecomplete/lib/math"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class="current tsd-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_period_.html">"c:/<wbr>Source/timezonecomplete/lib/period"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
@@ -165,11 +149,14 @@
 			</nav>
 			<nav class="tsd-navigation secondary">
 				<ul>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
-						<a href="_c__source_timezonecomplete_lib_math_.html#filterfloat" class="tsd-kind-icon">filter<wbr>Float</a>
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+						<a href="../enums/_c__source_timezonecomplete_lib_period_.perioddst.html" class="tsd-kind-icon">Period<wbr>Dst</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
+						<a href="../classes/_c__source_timezonecomplete_lib_period_.period.html" class="tsd-kind-icon">Period</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
-						<a href="_c__source_timezonecomplete_lib_math_.html#isint" class="tsd-kind-icon">is<wbr>Int</a>
+						<a href="_c__source_timezonecomplete_lib_period_.html#perioddsttostring" class="tsd-kind-icon">period<wbr>Dst<wbr>ToString</a>
 					</li>
 				</ul>
 			</nav>
