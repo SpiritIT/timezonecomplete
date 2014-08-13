@@ -571,7 +571,26 @@ declare module '__timezonecomplete/basics' {
      * @return The number of days in the given month
      */
     export function daysInMonth(year: number, month: number): number;
-    export function isInt(n: number): boolean;
+    /**
+     * Returns the last instance of the given weekday in the given month
+     *
+     * @param year	The year
+     * @param month	the month 1-12
+     * @param weekDay	the desired week day
+     *
+     * @return the last occurrence of the week day in the month
+     */
+    export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number;
+    /**
+     * Returns the day-of-month that is on the given weekday and which is >= the given day.
+     * Throws if the month has no such day.
+     */
+    export function weekDayOnOrAfter(year: number, month: number, day: number, weekDay: WeekDay): number;
+    /**
+     * Returns the day-of-month that is on the given weekday and which is <= the given day.
+     * Throws if the month has no such day.
+     */
+    export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number;
     /**
      * Basic representation of a date and time
      */
@@ -634,6 +653,11 @@ declare module '__timezonecomplete/basics' {
          * The day-of-year 0-365
          */
         yearDay(): number;
+        /**
+         * Returns this time as a unix millisecond timestamp
+         * Does NOT take leap seconds into account.
+         */
+        toUnixNoLeapSecs(): number;
     }
     /**
      * Convert a unix milli timestamp into a TimeT structure.
@@ -656,6 +680,7 @@ declare module '__timezonecomplete/basics' {
         Wednesday = 3,
         Thursday = 4,
         Friday = 5,
+        Saturday = 6,
     }
     /**
      * Time units

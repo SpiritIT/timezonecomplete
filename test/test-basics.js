@@ -57,19 +57,57 @@ describe("daysInMonth()", function () {
     });
 });
 
-describe("isInt()", function () {
-    it("should return true for integers", function () {
-        expect(basics.isInt(1)).to.be.true;
-        expect(basics.isInt(0)).to.be.true;
-        expect(basics.isInt(-1)).to.be.true;
+describe("lastWeekDayOfMonth()", function () {
+    it("should work for month ending on Sunday", function () {
+        expect(basics.lastWeekDayOfMonth(2014, 8, 0 /* Sunday */)).to.equal(31);
+        expect(basics.lastWeekDayOfMonth(2014, 8, 1 /* Monday */)).to.equal(25);
+        expect(basics.lastWeekDayOfMonth(2014, 8, 2 /* Tuesday */)).to.equal(26);
+        expect(basics.lastWeekDayOfMonth(2014, 8, 3 /* Wednesday */)).to.equal(27);
+        expect(basics.lastWeekDayOfMonth(2014, 8, 4 /* Thursday */)).to.equal(28);
+        expect(basics.lastWeekDayOfMonth(2014, 8, 5 /* Friday */)).to.equal(29);
+        expect(basics.lastWeekDayOfMonth(2014, 8, 6 /* Saturday */)).to.equal(30);
     });
-    it("should return false for rational numbers", function () {
-        expect(basics.isInt(1.1)).to.be.false;
-        expect(basics.isInt(0.1)).to.be.false;
-        expect(basics.isInt(-1.1)).to.be.false;
+    it("should work for month ending on Tuesday", function () {
+        expect(basics.lastWeekDayOfMonth(2014, 9, 0 /* Sunday */)).to.equal(28);
+        expect(basics.lastWeekDayOfMonth(2014, 9, 1 /* Monday */)).to.equal(29);
+        expect(basics.lastWeekDayOfMonth(2014, 9, 2 /* Tuesday */)).to.equal(30);
+        expect(basics.lastWeekDayOfMonth(2014, 9, 3 /* Wednesday */)).to.equal(24);
+        expect(basics.lastWeekDayOfMonth(2014, 9, 4 /* Thursday */)).to.equal(25);
+        expect(basics.lastWeekDayOfMonth(2014, 9, 5 /* Friday */)).to.equal(26);
+        expect(basics.lastWeekDayOfMonth(2014, 9, 6 /* Saturday */)).to.equal(27);
     });
-    it("should return false for NaN", function () {
-        expect(basics.isInt(NaN)).to.be.false;
+    it("should work for leap day", function () {
+        expect(basics.lastWeekDayOfMonth(2004, 2, 0 /* Sunday */)).to.equal(29);
+        expect(basics.lastWeekDayOfMonth(2004, 2, 1 /* Monday */)).to.equal(23);
+        expect(basics.lastWeekDayOfMonth(2004, 2, 2 /* Tuesday */)).to.equal(24);
+        expect(basics.lastWeekDayOfMonth(2004, 2, 3 /* Wednesday */)).to.equal(25);
+        expect(basics.lastWeekDayOfMonth(2004, 2, 4 /* Thursday */)).to.equal(26);
+        expect(basics.lastWeekDayOfMonth(2004, 2, 5 /* Friday */)).to.equal(27);
+        expect(basics.lastWeekDayOfMonth(2004, 2, 6 /* Saturday */)).to.equal(28);
+    });
+});
+
+describe("weekDayOnOrAfter()", function () {
+    it("should work", function () {
+        expect(basics.weekDayOnOrAfter(2014, 8, 11, 1 /* Monday */)).to.equal(11);
+        expect(basics.weekDayOnOrAfter(2014, 8, 11, 2 /* Tuesday */)).to.equal(12);
+        expect(basics.weekDayOnOrAfter(2014, 8, 11, 3 /* Wednesday */)).to.equal(13);
+        expect(basics.weekDayOnOrAfter(2014, 8, 11, 4 /* Thursday */)).to.equal(14);
+        expect(basics.weekDayOnOrAfter(2014, 8, 11, 5 /* Friday */)).to.equal(15);
+        expect(basics.weekDayOnOrAfter(2014, 8, 11, 6 /* Saturday */)).to.equal(16);
+        expect(basics.weekDayOnOrAfter(2014, 8, 11, 0 /* Sunday */)).to.equal(17);
+    });
+});
+
+describe("weekDayOnOrBefore()", function () {
+    it("should work", function () {
+        expect(basics.weekDayOnOrBefore(2014, 8, 17, 1 /* Monday */)).to.equal(11);
+        expect(basics.weekDayOnOrBefore(2014, 8, 17, 2 /* Tuesday */)).to.equal(12);
+        expect(basics.weekDayOnOrBefore(2014, 8, 17, 3 /* Wednesday */)).to.equal(13);
+        expect(basics.weekDayOnOrBefore(2014, 8, 17, 4 /* Thursday */)).to.equal(14);
+        expect(basics.weekDayOnOrBefore(2014, 8, 17, 5 /* Friday */)).to.equal(15);
+        expect(basics.weekDayOnOrBefore(2014, 8, 17, 6 /* Saturday */)).to.equal(16);
+        expect(basics.weekDayOnOrBefore(2014, 8, 17, 0 /* Sunday */)).to.equal(17);
     });
 });
 
@@ -89,12 +127,6 @@ describe("TimeStruct", function () {
             var t;
             t = new TimeStruct();
             t.hour = 1.5;
-            expect(t.validate()).to.be.false;
-        });
-        it("should return false for invalid year", function () {
-            var t;
-            t = new TimeStruct();
-            t.year = 1969;
             expect(t.validate()).to.be.false;
         });
         it("should return false for invalid month", function () {
@@ -181,14 +213,26 @@ describe("TimeStruct", function () {
 });
 
 describe("unixToTimeNoLeapSecs()", function () {
-    it("should work", function () {
+    it("should work for post-1970", function () {
         expect(basics.unixToTimeNoLeapSecs(1407859203010)).to.deep.equal(new TimeStruct(2014, 8, 12, 16, 0, 3, 10));
+    });
+    it("should work for post-1970 leap day", function () {
+        expect(basics.unixToTimeNoLeapSecs(1078012800000)).to.deep.equal(new TimeStruct(2004, 2, 29, 0, 0, 0, 0));
+    });
+    it("should work for pre-1970", function () {
+        expect(basics.unixToTimeNoLeapSecs(-312749632999)).to.deep.equal(new TimeStruct(1960, 2, 3, 5, 6, 7, 1));
+    });
+    it("should work for pre-1970 leap day", function () {
+        expect(basics.unixToTimeNoLeapSecs(-58017600000)).to.deep.equal(new TimeStruct(1968, 2, 29, 12, 0, 0, 0));
     });
 });
 
 describe("timeToUnixNoLeapSecs()", function () {
-    it("should work", function () {
+    it("should work for post-1970", function () {
         expect(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 8, 12, 16, 0, 3, 10))).to.equal(1407859203010);
+    });
+    it("should work for pre-1970", function () {
+        expect(basics.timeToUnixNoLeapSecs(new TimeStruct(1960, 2, 3, 5, 6, 7, 1))).to.equal(-312749632999);
     });
     it("should work roundtrip", function () {
         expect(basics.unixToTimeNoLeapSecs(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 8, 12, 16, 0, 3, 10)))).to.deep.equal(new TimeStruct(2014, 8, 12, 16, 0, 3, 10));

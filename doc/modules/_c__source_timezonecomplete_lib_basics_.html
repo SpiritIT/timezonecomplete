@@ -77,11 +77,13 @@
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_c__source_timezonecomplete_lib_basics_.html#assertunixtimestamp" class="tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#isint" class="tsd-kind-icon">is<wbr>Int</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a></li>
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#lastweekdayofmonth" class="tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#timetounixnoleapsecs" class="tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#unixtotimenoleapsecs" class="tsd-kind-icon">unix<wbr>ToTime<wbr>NoLeap<wbr>Secs</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a></li>
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#weekdayonorafter" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After</a></li>
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#weekdayonorbefore" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before</a></li>
 					</ul>
 				</section>
 			</section>
@@ -96,7 +98,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:158</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:210</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -117,7 +119,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:49</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:51</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -147,7 +149,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:40</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:42</li>
 								</ul>
 							</aside>
 							<p>The days in a given year</p>
@@ -164,30 +166,6 @@
 					</ul>
 				</section>
 				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
-					<a name="isint" class="anchor"></a>
-					<h3>is<wbr>Int</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Int<span class="tsd-signature-symbols">(</span>n<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:73</li>
-								</ul>
-							</aside>
-							<h4>Parameters</h4>
-							<ul>
-								<li>
-									<h5>n: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4>Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="isleapyear" class="anchor"></a>
 					<h3>is<wbr>Leap<wbr>Year</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
@@ -196,7 +174,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:20</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:22</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -213,6 +191,41 @@
 					</ul>
 				</section>
 				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+					<a name="lastweekdayofmonth" class="anchor"></a>
+					<h3>last<wbr>Week<wbr>Day<wbr>OfMonth</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
+						<li class="tsd-signature tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:84</li>
+								</ul>
+							</aside>
+							<p>Returns the last instance of the given weekday in the given month</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
+									<p>The year</p>
+								</li>
+								<li>
+									<h5>month: <span class="tsd-signature-type">number</span></h5>
+									<p>the month 1-12</p>
+								</li>
+								<li>
+									<h5>weekDay: <a href="../enums/_c__source_timezonecomplete_lib_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
+									<p>the desired week day</p>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+							<p>the last occurrence of the week day in the month</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="timetounixnoleapsecs" class="anchor"></a>
 					<h3>time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
@@ -221,7 +234,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:206</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:287</li>
 								</ul>
 							</aside>
 							<p>Convert a TimeT structure into a unix milli timestamp.
@@ -247,7 +260,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:169</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:220</li>
 								</ul>
 							</aside>
 							<p>Convert a unix milli timestamp into a TimeT structure.
@@ -273,7 +286,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:245</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:327</li>
 								</ul>
 							</aside>
 							<p>Return the day-of-week.
@@ -286,6 +299,76 @@
 							</ul>
 							<h4>Returns 
 								<a href="../enums/_c__source_timezonecomplete_lib_basics_.weekday.html" class="tsd-signature-type">WeekDay</a>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+					<a name="weekdayonorafter" class="anchor"></a>
+					<h3>week<wbr>Day<wbr>OnOr<wbr>After</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
+						<li class="tsd-signature tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:99</li>
+								</ul>
+							</aside>
+							<p>Returns the day-of-month that is on the given weekday and which is &gt;= the given day.
+							Throws if the month has no such day.</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>month: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>day: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>weekDay: <a href="../enums/_c__source_timezonecomplete_lib_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+					<a name="weekdayonorbefore" class="anchor"></a>
+					<h3>week<wbr>Day<wbr>OnOr<wbr>Before</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
+						<li class="tsd-signature tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:115</li>
+								</ul>
+							</aside>
+							<p>Returns the day-of-month that is on the given weekday and which is &lt;= the given day.
+							Throws if the month has no such day.</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>month: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>day: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>weekDay: <a href="../enums/_c__source_timezonecomplete_lib_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
@@ -306,6 +389,9 @@
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_index_.html">"c:/<wbr>Source/timezonecomplete/lib/index"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="_c__source_timezonecomplete_lib_math_.html">"c:/<wbr>Source/timezonecomplete/lib/math"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_strings_.html">"c:/<wbr>Source/timezonecomplete/lib/strings"</a>
@@ -336,10 +422,10 @@
 						<a href="_c__source_timezonecomplete_lib_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
-						<a href="_c__source_timezonecomplete_lib_basics_.html#isint" class="tsd-kind-icon">is<wbr>Int</a>
+						<a href="_c__source_timezonecomplete_lib_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
-						<a href="_c__source_timezonecomplete_lib_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a>
+						<a href="_c__source_timezonecomplete_lib_basics_.html#lastweekdayofmonth" class="tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_basics_.html#timetounixnoleapsecs" class="tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</a>
@@ -349,6 +435,12 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_basics_.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="_c__source_timezonecomplete_lib_basics_.html#weekdayonorafter" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="_c__source_timezonecomplete_lib_basics_.html#weekdayonorbefore" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before</a>
 					</li>
 				</ul>
 			</nav>

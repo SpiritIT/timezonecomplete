@@ -35,6 +35,8 @@ describe("Duration()", function () {
         });
 
         it("construct from string", function () {
+            expect((new Duration("0")).milliseconds()).to.equal(0);
+            expect((new Duration("1")).milliseconds()).to.equal(1 * 3600 * 1000);
             expect((new Duration("01")).milliseconds()).to.equal(1 * 3600 * 1000);
             expect((new Duration("01:01")).milliseconds()).to.equal(1 * 3600 * 1000 + 1 * 60 * 1000);
             expect((new Duration("01:01:01")).milliseconds()).to.equal(1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000);

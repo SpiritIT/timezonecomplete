@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{bc335477-5741-4b94-aa34-2617b7957374}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <StartupFile>gulpfile.js</StartupFile>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -26,7 +26,13 @@
     <Compile Include="gulpfile.js" />
     <Compile Include="runtests.js" />
     <TypeScriptCompile Include="examples\example.ts" />
+    <TypeScriptCompile Include="lib\duration.ts" />
     <TypeScriptCompile Include="lib\index.ts" />
+    <TypeScriptCompile Include="lib\strings.ts" />
+    <TypeScriptCompile Include="lib\tz-database.ts" />
+    <TypeScriptCompile Include="lib\basics.ts" />
+    <TypeScriptCompile Include="test\test-basics.ts" />
+    <TypeScriptCompile Include="test\test-duration.ts" />
     <TypeScriptCompile Include="test\test-index.ts" />
     <TypeScriptCompile Include="typings\lib.d.ts" />
     <TypeScriptCompile Include="typings\test.d.ts" />

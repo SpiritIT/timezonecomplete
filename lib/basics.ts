@@ -11,6 +11,8 @@
 import assert = require("assert");
 import sourcemapsupport = require("source-map-support");
 
+import math = require("./math");
+
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: true });
 
@@ -71,14 +73,56 @@ export function daysInMonth(year: number, month: number): number {
 	}
 }
 
-export function isInt(n: number): boolean {
-	if (typeof (n) !== "number") {
-		return false;
+/**
+ * Returns the last instance of the given weekday in the given month
+ *
+ * @param year	The year
+ * @param month	the month 1-12
+ * @param weekDay	the desired week day
+ *
+ * @return the last occurrence of the week day in the month
+ */
+export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
+	var endOfMonth: TimeStruct = new TimeStruct(year, month, daysInMonth(year, month));
+	var endOfMonthMillis = timeToUnixNoLeapSecs(endOfMonth);
+	var endOfMonthWeekDay = weekDayNoLeapSecs(endOfMonthMillis);
+	var diff: number = weekDay - endOfMonthWeekDay;
+	if (diff > 0) {
+		diff -= 7;
 	}
-	if (isNaN(n)) {
-		return false;
+	return endOfMonth.day + diff;
+}
+
+/**
+ * Returns the day-of-month that is on the given weekday and which is >= the given day.
+ * Throws if the month has no such day.
+ */
+export function weekDayOnOrAfter(year: number, month: number, day: number, weekDay: WeekDay): number {
+	var start: TimeStruct = new TimeStruct(year, month, day);
+	var startMillis: number = timeToUnixNoLeapSecs(start);
+	var startWeekDay: WeekDay = weekDayNoLeapSecs(startMillis);
+	var diff: number = weekDay - startWeekDay;
+	if (diff < 0) {
+		diff += 7;
 	}
-	return (Math.floor(n) === n);
+	assert(start.day + diff <= daysInMonth(year, month), "The given month has no such weekday");
+	return start.day + diff;
+}
+
+/**
+ * Returns the day-of-month that is on the given weekday and which is <= the given day.
+ * Throws if the month has no such day.
+ */
+export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number {
+	var start: TimeStruct = new TimeStruct(year, month, day);
+	var startMillis: number = timeToUnixNoLeapSecs(start);
+	var startWeekDay: WeekDay = weekDayNoLeapSecs(startMillis);
+	var diff: number = weekDay - startWeekDay;
+	if (diff > 0) {
+		diff -= 7;
+	}
+	assert(start.day + diff >= 1, "The given month has no such weekday");
+	return start.day + diff;
 }
 
 /**
@@ -129,14 +173,14 @@ export class TimeStruct {
 	 * Validate a TimeStruct, returns false if invalid.
 	 */
 	public validate(): boolean {
-		return (typeof (this.year) === "number" && !isNaN(this.year) && isInt(this.year) && this.year >= 1970
-			&& typeof (this.month) === "number" && !isNaN(this.month) && isInt(this.month) && this.month >= 1 && this.month <= 12
-			&& typeof (this.day) === "number" && !isNaN(this.day) && isInt(this.day) && this.day >= 1
+		return (typeof (this.year) === "number" && !isNaN(this.year) && math.isInt(this.year) && this.year >= -10000 && this.year < 10000
+			&& typeof (this.month) === "number" && !isNaN(this.month) && math.isInt(this.month) && this.month >= 1 && this.month <= 12
+			&& typeof (this.day) === "number" && !isNaN(this.day) && math.isInt(this.day) && this.day >= 1
 				&& this.day <= daysInMonth(this.year, this.month)
-			&& typeof (this.hour) === "number" && !isNaN(this.hour) && isInt(this.hour) && this.hour >= 0 && this.hour <= 23
-			&& typeof (this.minute) === "number" && !isNaN(this.minute) && isInt(this.minute) && this.minute >= 0 && this.minute <= 59
-			&& typeof (this.second) === "number" && !isNaN(this.second) && isInt(this.second) && this.second >= 0 && this.second <= 61
-			&& typeof (this.milli) === "number" && !isNaN(this.milli) && isInt(this.milli) && this.milli >= 0
+			&& typeof (this.hour) === "number" && !isNaN(this.hour) && math.isInt(this.hour) && this.hour >= 0 && this.hour <= 23
+			&& typeof (this.minute) === "number" && !isNaN(this.minute) && math.isInt(this.minute) && this.minute >= 0 && this.minute <= 59
+			&& typeof (this.second) === "number" && !isNaN(this.second) && math.isInt(this.second) && this.second >= 0 && this.second <= 61
+			&& typeof (this.milli) === "number" && !isNaN(this.milli) && math.isInt(this.milli) && this.milli >= 0
 			&& this.milli <= 999
 			);
 	}
@@ -154,13 +198,20 @@ export class TimeStruct {
 		return yearDay;
 	}
 
+	/**
+	 * Returns this time as a unix millisecond timestamp
+	 * Does NOT take leap seconds into account.
+	 */
+	public toUnixNoLeapSecs(): number {
+		return timeToUnixNoLeapSecs(this);
+	}
+
 }
 
 function assertUnixTimestamp(unixMillis: number): void {
 	assert(typeof (unixMillis) === "number", "number input expected");
 	assert(!isNaN(unixMillis), "NaN not expected as input");
-	assert(isInt(unixMillis), "integer number expected");
-	assert(unixMillis >= 0, "Unix timestamps before 1970 cannot be converted.");
+	assert(math.isInt(unixMillis), "integer number expected");
 }
 
 /**
@@ -172,30 +223,60 @@ export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct {
 
 	var temp: number = unixMillis;
 	var result: TimeStruct = new TimeStruct();
+	var year: number;
+	var month: number;
 
-	result.milli = temp % 1000;
-	temp = Math.floor(temp / 1000);
-	result.second = temp % 60;
-	temp = Math.floor(temp / 60);
-	result.minute = temp % 60;
-	temp = Math.floor(temp / 60);
-	result.hour = temp % 24;
-	temp = Math.floor(temp / 24);
+	if (unixMillis >= 0) {
+		result.milli = temp % 1000;
+		temp = Math.floor(temp / 1000);
+		result.second = temp % 60;
+		temp = Math.floor(temp / 60);
+		result.minute = temp % 60;
+		temp = Math.floor(temp / 60);
+		result.hour = temp % 24;
+		temp = Math.floor(temp / 24);
 
-	var year = 1970;
-	while (temp >= daysInYear(year)) {
-		temp -= daysInYear(year);
-		year++;
+		year = 1970;
+		while (temp >= daysInYear(year)) {
+			temp -= daysInYear(year);
+			year++;
+		}
+		result.year = year;
+
+		month = 1;
+		while (temp >= daysInMonth(year, month)) {
+			temp -= daysInMonth(year, month);
+			month++;
+		}
+		result.month = month;
+		result.day = temp + 1;
+	} else {
+		// Note that a negative number modulo something yields a negative number.
+		// We make it positive by adding the modulo.
+		result.milli = ((temp % 1000) + 1000) % 1000;
+		temp = Math.floor(temp / 1000);
+		result.second = ((temp % 60) + 60) % 60;
+		temp = Math.floor(temp / 60);
+		result.minute = ((temp % 60) + 60) % 60;
+		temp = Math.floor(temp / 60);
+		result.hour = ((temp % 24) + 24) % 24;
+		temp = Math.floor(temp / 24);
+
+		year = 1969;
+		while (temp <= -daysInYear(year)) {
+			temp += daysInYear(year);
+			year--;
+		}
+		result.year = year;
+
+		month = 12;
+		while (temp <= -daysInMonth(year, month)) {
+			temp += daysInMonth(year, month);
+			month--;
+		}
+		result.month = month;
+		result.day = temp + 1 + daysInMonth(year, month);
 	}
-	result.year = year;
-
-	var month = 1;
-	while (temp >= daysInMonth(year, month)) {
-		temp -= daysInMonth(year, month);
-		month++;
-	}
-	result.month = month;
-	result.day = temp + 1;
 
 	return result;
 }
@@ -222,7 +303,8 @@ export enum WeekDay {
 	Tuesday,
 	Wednesday,
 	Thursday,
-	Friday
+	Friday,
+	Saturday
 }
 
 /**

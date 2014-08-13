@@ -58,16 +58,87 @@
 			<p>Olsen Timezone Database container</p>
 			<section class="tsd-member-index">
 				<h2>Index</h2>
-				<section class="tsd-member-index-group tsd-is-not-exported">
+				<section class="tsd-member-index-group ">
+					<h3>Enumerations</h3>
+					<ul class="tsd-member-index">
+						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_c__source_timezonecomplete_lib_tz_database_.attype.html" class="tsd-kind-icon">At<wbr>Type</a></li>
+						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_c__source_timezonecomplete_lib_tz_database_.ontype.html" class="tsd-kind-icon">On<wbr>Type</a></li>
+						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_c__source_timezonecomplete_lib_tz_database_.ruletype.html" class="tsd-kind-icon">Rule<wbr>Type</a></li>
+						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_c__source_timezonecomplete_lib_tz_database_.totype.html" class="tsd-kind-icon">To<wbr>Type</a></li>
+						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="../enums/_c__source_timezonecomplete_lib_tz_database_.tzdaynames.html" class="tsd-kind-icon">Tz<wbr>Day<wbr>Names</a></li>
+						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="../enums/_c__source_timezonecomplete_lib_tz_database_.tzmonthnames.html" class="tsd-kind-icon">Tz<wbr>Month<wbr>Names</a></li>
+					</ul>
+				</section>
+				<section class="tsd-member-index-group ">
 					<h3>Classes</h3>
 					<ul class="tsd-member-index">
-						<li class="tsd-kind-class tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="../classes/_c__source_timezonecomplete_lib_tz_database_.tzdatabase.html" class="tsd-kind-icon">Tz<wbr>Database</a></li>
+						<li class="tsd-kind-class tsd-parent-kind-dynamic-module"><a href="../classes/_c__source_timezonecomplete_lib_tz_database_.ruleinfo.html" class="tsd-kind-icon">Rule<wbr>Info</a></li>
+						<li class="tsd-kind-class tsd-parent-kind-dynamic-module"><a href="../classes/_c__source_timezonecomplete_lib_tz_database_.transition.html" class="tsd-kind-icon">Transition</a></li>
+						<li class="tsd-kind-class tsd-parent-kind-dynamic-module"><a href="../classes/_c__source_timezonecomplete_lib_tz_database_.tzdatabase.html" class="tsd-kind-icon">Tz<wbr>Database</a></li>
+						<li class="tsd-kind-class tsd-parent-kind-dynamic-module"><a href="../classes/_c__source_timezonecomplete_lib_tz_database_.zoneinfo.html" class="tsd-kind-icon">Zone<wbr>Info</a></li>
+					</ul>
+				</section>
+				<section class="tsd-member-index-group ">
+					<h3>Functions</h3>
+					<ul class="tsd-member-index">
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_tz_database_.html#isvalidoffsetstring" class="tsd-kind-icon">is<wbr>Valid<wbr>Offset<wbr>String</a></li>
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_c__source_timezonecomplete_lib_tz_database_.html#validatedata" class="tsd-kind-icon">validate<wbr>Data</a></li>
 					</ul>
 				</section>
 				<section class="tsd-member-index-group tsd-is-not-exported">
 					<h3>Variables</h3>
 					<ul class="tsd-member-index">
 						<li class="tsd-kind-variable tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_c__source_timezonecomplete_lib_tz_database_.html#data" class="tsd-kind-icon">data</a></li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+					<a name="isvalidoffsetstring" class="anchor"></a>
+					<h3>is<wbr>Valid<wbr>Offset<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Valid<wbr>Offset<wbr>String<span class="tsd-signature-symbols">(</span>s<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/tz-database.ts:391</li>
+								</ul>
+							</aside>
+							<p>Returns true if the given string is a valid offset string i.e.
+							1, -1, +1, 01, 1:00, 1:23:25.143</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>s: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">boolean</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<a name="validatedata" class="anchor"></a>
+					<h3>validate<wbr>Data</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Data<span class="tsd-signature-symbols">(</span>data<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbols">)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/tz-database.ts:753</li>
+								</ul>
+							</aside>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>data: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+						</li>
 					</ul>
 				</section>
 			</section>
@@ -79,7 +150,7 @@
 					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/tz-database.ts:17</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/tz-database.ts:19</li>
 						</ul>
 					</aside>
 				</section>
@@ -101,6 +172,9 @@
 						<a href="_c__source_timezonecomplete_lib_index_.html">"c:/<wbr>Source/timezonecomplete/lib/index"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
+						<a href="_c__source_timezonecomplete_lib_math_.html">"c:/<wbr>Source/timezonecomplete/lib/math"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_strings_.html">"c:/<wbr>Source/timezonecomplete/lib/strings"</a>
 					</li>
 					<li class="current tsd-kind-dynamic-module">
@@ -110,8 +184,41 @@
 			</nav>
 			<nav class="tsd-navigation secondary">
 				<ul>
-					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+						<a href="../enums/_c__source_timezonecomplete_lib_tz_database_.attype.html" class="tsd-kind-icon">At<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+						<a href="../enums/_c__source_timezonecomplete_lib_tz_database_.ontype.html" class="tsd-kind-icon">On<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+						<a href="../enums/_c__source_timezonecomplete_lib_tz_database_.ruletype.html" class="tsd-kind-icon">Rule<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+						<a href="../enums/_c__source_timezonecomplete_lib_tz_database_.totype.html" class="tsd-kind-icon">To<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module tsd-is-not-exported">
+						<a href="../enums/_c__source_timezonecomplete_lib_tz_database_.tzdaynames.html" class="tsd-kind-icon">Tz<wbr>Day<wbr>Names</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module tsd-is-not-exported">
+						<a href="../enums/_c__source_timezonecomplete_lib_tz_database_.tzmonthnames.html" class="tsd-kind-icon">Tz<wbr>Month<wbr>Names</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
+						<a href="../classes/_c__source_timezonecomplete_lib_tz_database_.ruleinfo.html" class="tsd-kind-icon">Rule<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
+						<a href="../classes/_c__source_timezonecomplete_lib_tz_database_.transition.html" class="tsd-kind-icon">Transition</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
 						<a href="../classes/_c__source_timezonecomplete_lib_tz_database_.tzdatabase.html" class="tsd-kind-icon">Tz<wbr>Database</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
+						<a href="../classes/_c__source_timezonecomplete_lib_tz_database_.zoneinfo.html" class="tsd-kind-icon">Zone<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="_c__source_timezonecomplete_lib_tz_database_.html#isvalidoffsetstring" class="tsd-kind-icon">is<wbr>Valid<wbr>Offset<wbr>String</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+						<a href="_c__source_timezonecomplete_lib_tz_database_.html#validatedata" class="tsd-kind-icon">validate<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-dynamic-module tsd-is-not-exported">
 						<a href="_c__source_timezonecomplete_lib_tz_database_.html#data" class="tsd-kind-icon">data</a>
