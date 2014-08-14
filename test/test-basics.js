@@ -237,6 +237,9 @@ describe("timeToUnixNoLeapSecs()", function () {
     it("should work roundtrip", function () {
         expect(basics.unixToTimeNoLeapSecs(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 8, 12, 16, 0, 3, 10)))).to.deep.equal(new TimeStruct(2014, 8, 12, 16, 0, 3, 10));
     });
+    it("should work for loose values", function () {
+        expect(basics.timeToUnixNoLeapSecs(2014, 8, 12, 16, 0, 3, 10)).to.equal(1407859203010);
+    });
 });
 
 describe("weekDayNoLeapSecs()", function () {

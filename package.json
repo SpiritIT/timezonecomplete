@@ -40,8 +40,7 @@
     "test": "node runtests.js"
   },
   "dependencies": {
-    "source-map-support": "^0.2.7",
-    "timezone-js": "~0.4.11"
+    "source-map-support": "^0.2.7"
   },
   "devDependencies": {
     "chai": "^1.9.1",

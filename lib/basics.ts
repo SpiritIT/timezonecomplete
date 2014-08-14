@@ -9,12 +9,13 @@
 "use strict";
 
 import assert = require("assert");
+
 import sourcemapsupport = require("source-map-support");
-
-import math = require("./math");
-
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: true });
+
+import math = require("./math");
+import strings = require("./strings");
 
 
 /**
@@ -71,6 +72,24 @@ export function daysInMonth(year: number, month: number): number {
 			/* istanbul ignore next */
 			return 0;
 	}
+}
+
+/**
+ * Returns the day of the year of the given date [0..365]. January first is 0.
+ *
+ * @param year	The year e.g. 1986
+ * @param month Month 1-12
+ * @param day Day of month 1-31
+ */
+export function dayOfYear(year: number, month: number, day: number): number {
+	assert(month >= 1 && month <= 12, "Month out of range");
+	assert(day >= 1 && day <= daysInMonth(year, month), "day out of range");
+	var yearDay: number = 0;
+	for (var i: number = 1; i < month; i++) {
+		yearDay += daysInMonth(year, i);
+	}
+	yearDay += (day - 1);
+	return yearDay;
 }
 
 /**
@@ -189,13 +208,8 @@ export class TimeStruct {
 	 * The day-of-year 0-365
 	 */
 	public yearDay(): number {
-		assert(this.validate(), "Invalid TimeStruct value");
-		var yearDay: number = 0;
-		for (var i: number = 1; i < this.month; i++) {
-			yearDay += daysInMonth(this.year, i);
-		}
-		yearDay += (this.day - 1);
-		return yearDay;
+		assert(this.validate(), "Invalid TimeStruct value: " + this.toString());
+		return dayOfYear(this.year, this.month, this.day);
 	}
 
 	/**
@@ -203,7 +217,33 @@ export class TimeStruct {
 	 * Does NOT take leap seconds into account.
 	 */
 	public toUnixNoLeapSecs(): number {
-		return timeToUnixNoLeapSecs(this);
+		assert(this.validate(), "Invalid TimeStruct value: " + this.toString());
+		return timeToUnixNoLeapSecs(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+	}
+
+	/**
+	 * Deep equals
+	 */
+	public equals(other: TimeStruct): boolean {
+		return (this.year === other.year
+			&& this.month === other.month
+			&& this.day === other.day
+			&& this.hour === other.hour
+			&& this.minute === other.minute
+			&& this.second === other.second
+			&& this.milli === other.milli);
+	}
+
+	public clone(): TimeStruct {
+		return new TimeStruct(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+	}
+
+	public toString(): string {
+		return strings.isoString(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+	}
+
+	public inspect(): string {
+		return "[TimeStruct: " + this.toString() + "]";
 	}
 
 }
@@ -282,16 +322,51 @@ export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct {
 }
 
 /**
+ * Convert a year, month, day etc into a unix milli timestamp.
+ * This does NOT take leap seconds into account.
+ *
+ * @param year	Year e.g. 1970
+ * @param month	Month 1-12
+ * @param day	Day 1-31
+ * @param hour	Hour 0-23
+ * @param minute	Minute 0-59
+ * @param second	Second 0-59 (no leap seconds)
+ * @param milli	Millisecond 0-999
+ */
+export function timeToUnixNoLeapSecs(
+	year?: number, month?: number, day?: number,
+	hour?: number, minute?: number, second?: number, milli?: number): number;
+
+/**
  * Convert a TimeT structure into a unix milli timestamp.
  * This does NOT take leap seconds into account.
  */
-export function timeToUnixNoLeapSecs(tm: TimeStruct): number {
-	assert(tm.validate(), "tm invalid");
-	return tm.milli + 1000 * (
-		tm.second + tm.minute * 60 + tm.hour * 3600 + tm.yearDay() * 86400 +
-		(tm.year - 1970) * 31536000 + Math.floor((tm.year - 1969) / 4) * 86400 -
-		Math.floor((tm.year - 1901) / 100) * 86400 + Math.floor((tm.year - 1900 + 299) / 400) * 86400);
+export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
+
+export function timeToUnixNoLeapSecs(
+	a: any = 0, month: number = 1, day: number = 1,
+	hour: number = 0, minute: number = 0, second: number = 0, milli: number = 0): number {
+	assert(typeof (a) === "object" || typeof (a) === "number", "Please give either a TimeStruct or a number as first argument.");
+
+	if (typeof (a) === "object") {
+		var tm: TimeStruct = <TimeStruct>a;
+		assert(tm.validate(), "tm invalid");
+		return timeToUnixNoLeapSecs(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second, tm.milli);
+	} else {
+		var year: number = <number> a;
+		assert(month >= 1 && month <= 12, "Month out of range");
+		assert(day >= 1 && day <= daysInMonth(year, month), "day out of range");
+		assert(hour >= 0 && hour <= 23, "hour out of range");
+		assert(minute >= 0 && minute <= 59, "minute out of range");
+		assert(second >= 0 && second <= 59, "second out of range");
+		assert(milli >= 0 && milli <= 999, "milli out of range");
+		return milli + 1000 * (
+			second + minute * 60 + hour * 3600 + dayOfYear(year, month, day) * 86400 +
+			(year - 1970) * 31536000 + Math.floor((year - 1969) / 4) * 86400 -
+			Math.floor((year - 1901) / 100) * 86400 + Math.floor((year - 1900 + 299) / 400) * 86400);
+	}
 }
+
 
 /**
  * Day-of-week. Note the enum values correspond to JavaScript day-of-week:

@@ -201,7 +201,7 @@ describe("TimeZone", function () {
         // skipped because Date.getHours() is inconsistent at this moment:
         // if TZ environment variable is set to Europe/Amsterdam then that is different
         // from when the PC time zone is set to Europe/Amsterdam
-        it.skip("should work for non-existing DST forward time", function () {
+        it("should work for non-existing DST forward time", function () {
             var t = TimeZone.zone("America/Edmonton");
 
             // check DST changes
@@ -209,8 +209,8 @@ describe("TimeZone", function () {
             expect(t.offsetForZone(2014, 7, 1, 1, 2, 3, 4)).to.equal(-6 * 60);
             t = TimeZone.zone("Europe/Amsterdam");
 
-            // non-existing europe/amsterdam date due to DST, should be processed as if no DST
-            expect(t.offsetForZone(2014, 3, 30, 2, 0, 0, 0)).to.equal(1 * 60);
+            // non-existing europe/amsterdam date due to DST, should be processed as if rounded up to existing time
+            expect(t.offsetForZone(2014, 3, 30, 2, 0, 0, 0)).to.equal(2 * 60);
         });
         it("should work for fixed offset", function () {
             var t = TimeZone.zone("+0130");

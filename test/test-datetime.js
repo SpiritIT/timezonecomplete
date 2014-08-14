@@ -3,6 +3,11 @@ var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
 
+var sourcemapsupport = require("source-map-support");
+
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: true });
+
 var datetimeFuncs = require("../lib/index");
 
 var DateFunctions = datetimeFuncs.DateFunctions;
@@ -310,10 +315,7 @@ describe("DateTime", function () {
             expect(d.zone()).to.equal(TimeZone.zone(90));
         });
 
-        // skipped because Date.getHours() is inconsistent at this moment:
-        // if TZ environment variable is set to Europe/Amsterdam then that is different
-        // from when the PC time zone is set to Europe/Amsterdam
-        it.skip("should normalize around DST", function () {
+        it("should normalize around DST", function () {
             var d = new DateTime(2014, 3, 30, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
             expect(d.hour()).to.equal(3); // should be normalized to 3AM
         });
@@ -458,9 +460,7 @@ describe("DateTime", function () {
             d = new DateTime(2014, 3, 30, 3, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
             expect(d.toZone(TimeZone.utc()).toString()).to.equal("2014-03-30T01:00:00.000 UTC");
         });
-
-        // skipped due to bug in JavaScript Date used by timezone-js
-        it.skip("Europe/Amsterdam DST forward to UTC (nonexisting)", function () {
+        it("Europe/Amsterdam DST forward to UTC (nonexisting)", function () {
             var d = new DateTime(2014, 3, 30, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
             expect(d.toZone(TimeZone.utc()).toString()).to.equal("2014-03-30T01:00:00.000 UTC");
         });
@@ -792,7 +792,7 @@ describe("DateTime", function () {
 
         // BUG IN TIMEZONECOMPLETE: FOR 2004-02-29T00:00:00 Europe/Amsterdam it
         // returns offset +120 minutes if TZ=Europe/Amsterdam is set.
-        it.skip("should clamp end-of-month (leap year)", function () {
+        it("should clamp end-of-month (leap year)", function () {
             var d = new DateTime(2004, 1, 31, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
             var e = d.addLocal(1, 5 /* Month */);
             expect(e.toString()).to.equal("2004-02-29T00:00:00.000 Europe/Amsterdam");
@@ -1119,3 +1119,4 @@ describe("DateTime", function () {
         });
     });
 });
+// todo test DST zone where DST save is not a whole hour (20 or 40 minutes)

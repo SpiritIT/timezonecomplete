@@ -154,13 +154,36 @@ describe("TzDatabase", function () {
         });
     });
 
-    describe("getTransitionsAround()", function () {
+    describe("getTransitionsDstOffsets()", function () {
         it("should work for rules that use UTC in AT column", function () {
-            expect(util.inspect(TzDatabase.instance().getTransitionsAround("EU", 2014, Duration.hours(1)))).to.equal(util.inspect([
-                new Transition((new TimeStruct(2013, 3, 31, 1, 0, 0, 0)).toUnixNoLeapSecs(), new RuleInfo(1981, 1 /* Max */, 0, "-", 3, 1 /* LastX */, 0, 0 /* Sunday */, 1, 0, 0, 2 /* Utc */, Duration.hours(1), "S")),
-                new Transition((new TimeStruct(2013, 10, 27, 1, 0, 0, 0)).toUnixNoLeapSecs(), new RuleInfo(1996, 1 /* Max */, 0, "-", 10, 1 /* LastX */, 0, 0 /* Sunday */, 1, 0, 0, 2 /* Utc */, Duration.hours(0), "")),
-                new Transition((new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs(), new RuleInfo(1981, 1 /* Max */, 0, "-", 3, 1 /* LastX */, 0, 0 /* Sunday */, 1, 0, 0, 2 /* Utc */, Duration.hours(1), "S")),
-                new Transition((new TimeStruct(2014, 10, 26, 1, 0, 0, 0)).toUnixNoLeapSecs(), new RuleInfo(1996, 1 /* Max */, 0, "-", 10, 1 /* LastX */, 0, 0 /* Sunday */, 1, 0, 0, 2 /* Utc */, Duration.hours(0), ""))
+            expect(util.inspect(TzDatabase.instance().getTransitionsDstOffsets("EU", 2013, 2014, Duration.hours(1)))).to.equal(util.inspect([
+                new Transition((new TimeStruct(2013, 3, 31, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1)),
+                new Transition((new TimeStruct(2013, 10, 27, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0)),
+                new Transition((new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1)),
+                new Transition((new TimeStruct(2014, 10, 26, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0))
+            ]));
+        });
+        // todors other types of rules
+    });
+
+    describe("getTransitionsTotalOffsets()", function () {
+        it("should work for UTC", function () {
+            expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Etc/GMT", 2013, 2014))).to.equal(util.inspect([
+                new Transition((new TimeStruct(2013, 1, 1, 0, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0))
+            ]));
+        });
+        it("should work for single zone info", function () {
+            expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Europe/Amsterdam", 2013, 2014))).to.equal(util.inspect([
+                new Transition(252374400000, Duration.hours(1)),
+                new Transition((new TimeStruct(2013, 3, 31, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(2)),
+                new Transition((new TimeStruct(2013, 10, 27, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1)),
+                new Transition((new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(2)),
+                new Transition((new TimeStruct(2014, 10, 26, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1))
+            ]));
+        });
+        it("should add zone info transition", function () {
+            expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Africa/Porto-Novo", 1969, 1969))).to.equal(util.inspect([
+                new Transition(-1131235200000, Duration.hours(1))
             ]));
         });
     });
@@ -185,6 +208,30 @@ describe("TzDatabase", function () {
             expect(TzDatabase.instance().totalOffset("Europe/Amsterdam", (new TimeStruct(2014, 10, 26, 1, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(1);
             expect(TzDatabase.instance().totalOffset("Europe/Amsterdam", (new TimeStruct(2014, 10, 26, 1, 0, 0, 1)).toUnixNoLeapSecs()).hours()).to.equal(1);
         });
+        // todors more info
+    });
+
+    describe("totalOffsetLocal()", function () {
+        it("should work for UTC", function () {
+            expect(TzDatabase.instance().totalOffset("Etc/GMT", (new TimeStruct(2014, 3, 30, 0, 59, 59, 999)).toUnixNoLeapSecs()).hours()).to.equal(0);
+        });
+        it("should work for normal local time", function () {
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 1, 1, 1, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(1);
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 7, 1, 1, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(2);
+        });
+        it("should work around DST forward (1h)", function () {
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 1, 59, 59, 999)).toUnixNoLeapSecs()).hours()).to.equal(1);
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 3, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(2);
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 3, 0, 0, 1)).toUnixNoLeapSecs()).hours()).to.equal(2);
+        });
+        it("should normalize non-existing times up", function () {
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 2, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(2);
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 2, 0, 0, 1)).toUnixNoLeapSecs()).hours()).to.equal(2);
+        });
+        it("should work around DST backward (1h)", function () {
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 10, 26, 2, 59, 59, 999)).toUnixNoLeapSecs()).hours()).to.equal(2);
+            expect(TzDatabase.instance().totalOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 10, 26, 3, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(1);
+        });
     });
 
     describe("standardOffset()", function () {
@@ -205,4 +252,51 @@ describe("TzDatabase", function () {
             expect(TzDatabase.instance().standardOffset("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 0, 59, 59, 999)).toUnixNoLeapSecs()).hours()).to.equal(1);
         });
     });
+
+    describe("minDstSave()", function () {
+        it("should return zero for zone without DST", function () {
+            expect(TzDatabase.instance().minDstSave("Etc/GMT").hours()).to.equal(0);
+        });
+        it("should return 1 for Europe/Amsterdam", function () {
+            expect(TzDatabase.instance().minDstSave("Europe/Amsterdam").hours()).to.equal(1);
+        });
+    });
+
+    describe("maxDstSave()", function () {
+        it("should return zero for zone without DST", function () {
+            expect(TzDatabase.instance().maxDstSave("Etc/GMT").hours()).to.equal(0);
+        });
+        it("should return 1 for Europe/Amsterdam", function () {
+            expect(TzDatabase.instance().maxDstSave("Europe/Amsterdam").hours()).to.equal(1);
+        });
+    });
+
+    describe("hasDst()", function () {
+        it("should return true for zone with DST", function () {
+            expect(TzDatabase.instance().hasDst("Europe/Amsterdam")).to.be.true;
+        });
+        it("should return false for zone with DST", function () {
+            expect(TzDatabase.instance().hasDst("Etc/GMT")).to.be.false;
+        });
+    });
+
+    describe("normalizeLocal()", function () {
+        it("should not change dates outside DST changes", function () {
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 8, 14, 3, 0, 0, 0))).to.deep.equal(new TimeStruct(2014, 8, 14, 3, 0, 0, 0));
+        });
+        it("should not change dates around DST backward changes", function () {
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 10, 26, 1, 0, 0, 0))).to.deep.equal(new TimeStruct(2014, 10, 26, 1, 0, 0, 0));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 10, 26, 2, 0, 0, 0))).to.deep.equal(new TimeStruct(2014, 10, 26, 2, 0, 0, 0));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 10, 26, 0, 59, 59, 999))).to.deep.equal(new TimeStruct(2014, 10, 26, 0, 59, 59, 999));
+        });
+        it("should round down date during DST forward change", function () {
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 0))).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 0, 0, 0));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 1))).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 0, 0, 1));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 59, 59, 999))).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 59, 59, 999));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 1, 59, 59, 999))).to.deep.equal(new TimeStruct(2014, 3, 30, 1, 59, 59, 999));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 3, 0, 0, 0))).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 0, 0, 0));
+        });
+    });
 });
+// todors time zones -11 and + 11
+// todors time zones that have two DSTs in a year

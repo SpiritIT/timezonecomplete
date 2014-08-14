@@ -10,19 +10,16 @@
 
 import assert = require("assert");
 
+import basics = require("./basics");
+import TimeStruct = basics.TimeStruct;
+
 import javascript = require("./javascript");
 import DateFunctions = javascript.DateFunctions;
 
 import strings = require("./strings");
 
-import timezoneJS = require("timezone-js");
-// timezone-js initialization
-/* tslint:disable:no-var-requires */
-var timezoneData: Object = require("./timezone-data.json");
-/* tslint:enable:no-var-requires */
-// need to preload all names in order to validate them
-timezoneJS.timezone.loadingScheme = timezoneJS.timezone.loadingSchemes.MANUAL_LOAD;
-timezoneJS.timezone.loadZoneDataFromObject(timezoneData);
+import tzDatabase = require("./tz-database");
+import TzDatabase = tzDatabase.TzDatabase;
 
 /**
  * The type of time zone
@@ -72,21 +69,6 @@ export class TimeZone {
 	 * Only for fixed offsets: the offset in minutes
 	 */
 	private _offset: number;
-
-	/**
-	 * Timezone-JS object used in calculations.
-	 * This is cached in a member to avoid creating one on the fly
-	 * for every calculation.
-	 */
-	private _tjs: timezoneJS.Date;
-
-	/**
-	 * JavaScript Date object used in calculations.
-	 * This is cached in a member to avoid creating one on the fly
-	 * for every calculation.
-	 */
-	private _date: Date;
-
 
 	/**
 	 * The local time zone for a given date. Note that
@@ -156,13 +138,11 @@ export class TimeZone {
 		this._name = name;
 		if (name === "localtime") {
 			this._kind = TimeZoneKind.Local;
-			this._date = new Date();
 		} else if (name.charAt(0) === "+" || name.charAt(0) === "-" || name.charAt(0).match(/\d/) || name === "Z") {
 			this._kind = TimeZoneKind.Offset;
 			this._offset = TimeZone.stringToOffset(name);
 		} else {
 			this._kind = TimeZoneKind.Proper;
-			this._tjs = new timezoneJS.Date(this._name);
 		}
 	}
 
@@ -243,7 +223,7 @@ export class TimeZone {
 	 * @param minute local minute 0-59
 	 * @param second local second 0-59
 	 * @param millisecond local millisecond 0-999
-	 * @return the offset of this time zone with respect to UTC at the given time.
+	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
 	public offsetForUtc(
 		year: number, month: number, day: number,
@@ -254,36 +234,19 @@ export class TimeZone {
 		assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
 		assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
 		assert(minute >= 0 && minute < 60, "TimeZone.offsetForUtc():  minute out of range.");
-		assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  hour out of range.");
+		assert(second >= 0 && second < 62, "TimeZone.offsetForUtc():  second out of range.");
 		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
-				this._date = new Date(Date.UTC(year, month - 1, day, hour, minute, second, millisecond));
-				return -1 * this._date.getTimezoneOffset();
+				var date: Date = new Date(Date.UTC(year, month - 1, day, hour, minute, second, millisecond));
+				return -1 * date.getTimezoneOffset();
 			}
 			case TimeZoneKind.Offset: {
 				return this._offset;
 			}
 			case TimeZoneKind.Proper: {
-				if (this.isUtc()) {
-					// due to a bug in TimezoneJS a UTC time entered into the
-					// setUTCx methods of a UTC timezoneJS.Date will result in a
-					// non-zero offset.
-					return 0;
-				} else {
-					this._tjs.setUTCFullYear(year);
-					this._tjs.setUTCMonth(month - 1);
-					this._tjs.setUTCDate(day);
-					this._tjs.setUTCHours(hour);
-					this._tjs.setUTCMinutes(minute);
-					this._tjs.setUTCSeconds(second);
-					this._tjs.setUTCMilliseconds(millisecond);
-					return this._diff(
-						this._tjs.getFullYear(), this._tjs.getMonth() + 1, this._tjs.getDate(),
-						this._tjs.getHours(), this._tjs.getMinutes(), this._tjs.getSeconds(),
-						this._tjs.getMilliseconds(),
-						year, month, day, hour, minute, second, millisecond);
-				}
+				var tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
+				return TzDatabase.instance().totalOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
 			}
 			/* istanbul ignore next */
 			default:
@@ -303,36 +266,31 @@ export class TimeZone {
 	 * @param minute local minute 0-59
 	 * @param second local second 0-59
 	 * @param millisecond local millisecond 0-999
-	 * @return the offset of this time zone with respect to UTC at the given time.
+	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
 	public offsetForZone(
 		year: number, month: number, day: number,
 		hour: number = 0, minute: number = 0, second: number = 0,
 		millisecond: number = 0): number {
-
+		// todors normalize local times
 		assert(month > 0 && month < 13, "TimeZone.offsetForZone():  month out of range: " + month);
 		assert(day > 0 && day < 32, "TimeZone.offsetForZone():  day out of range.");
 		assert(hour >= 0 && hour < 24, "TimeZone.offsetForZone():  hour out of range.");
 		assert(minute >= 0 && minute < 60, "TimeZone.offsetForZone():  minute out of range.");
-		assert(second >= 0 && second < 60, "TimeZone.offsetForZone():  hour out of range.");
+		assert(second >= 0 && second < 62, "TimeZone.offsetForZone():  second out of range.");
 		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForZone():  millisecond out of range.");
+
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
-				this._date = new Date(year, month - 1, day, hour, minute, second, millisecond);
-				return -1 * this._date.getTimezoneOffset();
+				var date: Date = new Date(year, month - 1, day, hour, minute, second, millisecond);
+				return -1 * date.getTimezoneOffset();
 			}
 			case TimeZoneKind.Offset: {
 				return this._offset;
 			}
 			case TimeZoneKind.Proper: {
-				this._tjs.setFullYear(year);
-				this._tjs.setMonth(month - 1);
-				this._tjs.setDate(day);
-				this._tjs.setHours(hour);
-				this._tjs.setMinutes(minute);
-				this._tjs.setSeconds(second);
-				this._tjs.setMilliseconds(millisecond);
-				return -1 * this._tjs.getTimezoneOffset();
+				var tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
+				return TzDatabase.instance().totalOffsetLocal(this._name, tm.toUnixNoLeapSecs()).minutes();
 			}
 			/* istanbul ignore next */
 			default:
@@ -414,6 +372,24 @@ export class TimeZone {
 				assert(false, "Unknown DateFunctions value");
 				/* istanbul ignore next */
 				break;
+		}
+	}
+
+	/**
+	 * Normalizes non-existing local times by adding a forward offset change.
+	 * During a forward standard offset change or DST offset change, some amount of
+	 * local time is skipped. Therefore, this amount of local time does not exist.
+	 * This function adds the amount of forward change to any non-existing time. After all,
+	 * this is probably what the user meant.
+	 *
+	 * @param localUnixMillis	Unix timestamp in zone time
+	 * @returns	Unix timestamp in zone time, normalized.
+	 */
+	public normalizeZoneTime(localUnixMillis: number): number {
+		if (this.kind() === TimeZoneKind.Proper) {
+			return TzDatabase.instance().normalizeLocal(this._name, localUnixMillis);
+		} else {
+			return localUnixMillis;
 		}
 	}
 
@@ -508,44 +484,6 @@ export class TimeZone {
 			// Olsen TZ database name
 			return t;
 		}
-	}
-
-	/**
-	 * Assuming that the difference in the dates is less than a day, returns
-	 * date1 - date2 in fractional minutes.
-	 */
-	private _diff(
-		year1: number, month1: number, day1: number,
-		hour1: number, minute1: number, second1: number,
-		millisecond1: number,
-		year2: number, month2: number, day2: number,
-		hour2: number, minute2: number, second2: number,
-		millisecond2: number): number {
-
-		var smaller1: boolean =
-			(year1 < year2)
-			|| (year1 === year2 && month1 < month2)
-			|| (year1 === year2 && month1 === month2 && day1 < day2)
-			|| (year1 === year2 && month1 === month2 && day1 === day2
-			&& hour1 < hour2)
-			|| (year1 === year2 && month1 === month2 && day1 === day2
-			&& hour1 === hour2 && minute1 < minute2)
-			|| (year1 === year2 && month1 === month2 && day1 === day2
-			&& hour1 === hour2 && minute1 === minute2 && second1 < second2)
-			|| (year1 === year2 && month1 === month2 && day1 === day2
-			&& hour1 === hour2 && minute1 === minute2 && second1 === second2
-			&& millisecond1 < millisecond2);
-
-		var seconds1: number = hour1 * 3600 + minute1 * 60 + second1 + 0.001 * millisecond1;
-		var seconds2: number = hour2 * 3600 + minute2 * 60 + second2 + 0.001 * millisecond2;
-		var secondDiff: number = seconds1 - seconds2;
-		if (smaller1 && secondDiff > 0) {
-			secondDiff -= 24 * 3600;
-		} else if (!smaller1 && secondDiff < 0) {
-			secondDiff += 24 * 3600;
-		}
-
-		return secondDiff / 60;
 	}
 
 }

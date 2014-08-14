@@ -8,9 +8,11 @@
 
 "use strict";
 
-/* tslint:disable */
-
 import assert = require("assert");
+
+import sourcemapsupport = require("source-map-support");
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: true });
 
 import basics = require("./basics");
 import duration = require("./duration");
@@ -132,7 +134,7 @@ export class RuleInfo {
 		 */
 		public atType: AtType,
 		/**
-		 * DST offset from local standard time (NOT UTC!)
+		 * DST offset from local standard time (NOT from UTC!)
 		 */
 		public save: Duration,
 		/**
@@ -184,13 +186,13 @@ export class RuleInfo {
 	 * @return (first effective date is equal to other's first effective date)
 	 */
 	public effectiveEqual(other: RuleInfo): boolean {
-		if (this.from != other.from) {
+		if (this.from !== other.from) {
 			return false;
 		}
-		if (this.inMonth != other.inMonth) {
+		if (this.inMonth !== other.inMonth) {
 			return false;
 		}
-		if (this.effectiveDate(this.from) != other.effectiveDate(this.from)) {
+		if (this.effectiveDate(this.from) !== other.effectiveDate(this.from)) {
 			return false;
 		}
 		return true;
@@ -238,8 +240,6 @@ export class RuleInfo {
 	 */
 	public transitionTimeUtc(year: number, standardOffset: Duration, prevRule: RuleInfo): number {
 		assert(this.applicable(year), "Rule not applicable in given year");
-		var i: number;
-
 		var unixMillis = this.effectiveDate(year).toUnixNoLeapSecs();
 
 		// adjust for given offset
@@ -325,7 +325,8 @@ export class ZoneInfo {
 		 * The RULES column tells us whether daylight saving time is being observed:
 		 * A hyphen, a kind of null value, means that we have not set our clocks ahead of standard time.
 		 * An amount of time (usually but not necessarily “1:00” meaning one hour) means that we have set our clocks ahead by that amount.
-		 * Some alphabetic string means that we might have set our clocks ahead; and we need to check the rule the name of which is the given alphabetic string.
+		 * Some alphabetic string means that we might have set our clocks ahead; and we need to check the rule
+		 * the name of which is the given alphabetic string.
 		 */
 		public ruleType: RuleType,
 
@@ -403,9 +404,9 @@ export class Transition {
 		 */
 		public at: number,
 		/**
-		 * The rule
+		 * New offset (type of offset depends on the function)
 		 */
-		public rule: RuleInfo) {
+		public offset: Duration) {
 	}
 }
 
@@ -414,14 +415,247 @@ export class Transition {
  */
 export class TzDatabase {
 
-	private static _instance: TzDatabase = new TzDatabase();
+	/**
+	 * Single instance member
+	 */
+	private static _instance: TzDatabase = null;
 
+	/**
+	 * Single instance of this database
+	 */
 	public static instance(): TzDatabase {
+		if (!TzDatabase._instance) {
+			TzDatabase._instance = new TzDatabase();
+		}
 		return TzDatabase._instance;
 	}
 
+	/**
+	 * Information on aggregate values in the database
+	 */
+	private _minmax: MinMaxInfo;
+
 	constructor() {
-		validateData(data);
+		assert(!TzDatabase._instance, "You should not create an instance of the TzDatabase class yourself. Use TzDatabase.instance()");
+		this._minmax = validateData(data);
+	}
+
+	/**
+	 * Minimum non-zero DST offset (which excludes standard offset) of all rules in the database.
+	 * Note that DST offsets need not be whole hours.
+	 *
+	 * Does return zero if a zoneName is given and there is no DST at all for the zone.
+	 *
+	 * @param zoneName	(optional) if given, the result for the given zone is returned
+	 */
+	public minDstSave(zoneName?: string): Duration {
+		if (zoneName) {
+			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+			var result: Duration = null;
+			var ruleNames: string[] = [];
+			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
+				if (zoneInfo.ruleType === RuleType.Offset) {
+					if (!result || result.greaterThan(zoneInfo.ruleOffset)) {
+						if (zoneInfo.ruleOffset.milliseconds() !== 0) {
+							result = zoneInfo.ruleOffset;
+						}
+					}
+				}
+				if (zoneInfo.ruleType === RuleType.RuleName
+					&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
+					ruleNames.push(zoneInfo.ruleName);
+					var temp = this.getRuleInfos(zoneInfo.ruleName);
+					temp.forEach((ruleInfo: RuleInfo): void => {
+						if (!result || result.greaterThan(ruleInfo.save)) {
+							if (ruleInfo.save.milliseconds() !== 0) {
+								result = ruleInfo.save;
+							}
+						}
+					});
+				}
+			});
+			if (!result) {
+				result = Duration.hours(0);
+			}
+			return result.clone();
+		} else {
+			return Duration.minutes(this._minmax.minDstSave);
+		}
+	}
+
+	/**
+	 * Maximum DST offset (which excludes standard offset) of all rules in the database.
+	 * Note that DST offsets need not be whole hours.
+	 *
+	 * Returns 0 if zoneName given and no DST observed.
+	 *
+	 * @param zoneName	(optional) if given, the result for the given zone is returned
+	 */
+	public maxDstSave(zoneName?: string): Duration {
+		if (zoneName) {
+			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+			var result: Duration = null;
+			var ruleNames: string[] = [];
+			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
+				if (zoneInfo.ruleType === RuleType.Offset) {
+					if (!result || result.lessThan(zoneInfo.ruleOffset)) {
+						result = zoneInfo.ruleOffset;
+					}
+				}
+				if (zoneInfo.ruleType === RuleType.RuleName
+					&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
+					ruleNames.push(zoneInfo.ruleName);
+					var temp = this.getRuleInfos(zoneInfo.ruleName);
+					temp.forEach((ruleInfo: RuleInfo): void => {
+						if (!result || result.lessThan(ruleInfo.save)) {
+							result = ruleInfo.save;
+						}
+					});
+				}
+			});
+			if (!result) {
+				result = Duration.hours(0);
+			}
+			return result.clone();
+		} else {
+			return Duration.minutes(this._minmax.maxDstSave);
+		}
+	}
+
+	/**
+	 * Minimum standard offset of all zones in the database.
+	 * Note, this can be a fractional number < -12 hours
+	 *
+	 * @param zoneName	(optional) if given, the result for the given zone is returned
+	 */
+	public minStandardOffset(zoneName?: string): Duration {
+		if (zoneName) {
+			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+			var result: Duration = null;
+			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
+				if (!result || result.greaterThan(zoneInfo.gmtoff)) {
+					result = zoneInfo.gmtoff.clone();
+				}
+			});
+			assert(result, "No zone info found.");
+			return result;
+		} else {
+			// note that minmax values are in opposite offsets from what we calculate with
+			return Duration.minutes(-1 * this._minmax.minGmtOff);
+		}
+	}
+
+	/**
+	 * Maximum standard offset of all zones in the database.
+	 * Note, this can be a fractional number > 12 hours
+	 *
+	 * @param zoneName	(optional) if given, the result for the given zone is returned
+	 */
+	public maxStandardOffset(zoneName?: string): Duration {
+		if (zoneName) {
+			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+			var result: Duration = null;
+			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
+				if (!result || result.lessThan(zoneInfo.gmtoff)) {
+					result = zoneInfo.gmtoff.clone();
+				}
+			});
+			assert(result, "No zone info found.");
+			return result;
+		} else {
+			// note that minmax values are in opposite offsets from what we calculate with
+			return Duration.minutes(-1 * this._minmax.maxGmtOff);
+		}
+	}
+
+	/**
+	 * Checks whether the zone has DST at all
+	 */
+	public hasDst(zoneName: string): boolean {
+		return (this.maxDstSave(zoneName).milliseconds() !== 0);
+	}
+
+	/**
+	 * Not all local times exist because of DST forward changes.
+	 *
+	 * @returns The given time exists in the given zone.
+	 */
+	public localTimeExists(zoneName: string, tm: TimeStruct): boolean {
+		if (this.hasDst(zoneName)) {
+			return (this.normalizeLocal(zoneName, tm).equals(tm));
+		} else {
+			return true;
+		}
+	}
+
+	// todors make function to check whether a zone is equal to UTC
+
+	/**
+	 * Normalizes non-existing local times by adding a forward offset change.
+	 * During a forward standard offset change or DST offset change, some amount of
+	 * local time is skipped. Therefore, this amount of local time does not exist.
+	 * This function adds the amount of forward change to any non-existing time. After all,
+	 * this is probably what the user meant.
+	 *
+	 * @param zoneName	IANA time zone name
+	 * @param localTime	A local time, either as a TimeStruct or as a unix millisecond value
+	 * @return	The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)
+	 */
+	public normalizeLocal(zoneName: string, localTime: TimeStruct): TimeStruct;
+	public normalizeLocal(zoneName: string, localTime: number): number;
+	public normalizeLocal(zoneName: string, a: any): any {
+		assert(typeof (a) === "number" || typeof (a) === "object", "number or object expected");
+		assert(typeof(a) !== "object" || a, "a is null");
+
+		if (this.hasDst(zoneName)) {
+			var unixMillis: number = 0;
+			var tm: TimeStruct = null;
+			if (typeof a === "object") {
+				unixMillis = (<TimeStruct>(a)).toUnixNoLeapSecs();
+				tm = <TimeStruct>(a);
+			} else {
+				unixMillis = <number>a;
+				tm = basics.unixToTimeNoLeapSecs(unixMillis);
+			}
+
+			// local times behave like this during DST changes:
+			// forward change (1h):   0 1 3 4 5
+			// forward change (2h):   0 1 4 5 6
+			// backward change (1h):  1 2 2 3 4
+			// backward change (2h):  1 2 1 2 3
+
+			// Therefore, binary searching is not possible.
+			// Instead, we should check the DST forward transitions within a window around the local time
+
+			// get all transitions (note this includes fake transition rules for zone offset changes)
+			var transitions: Transition[] = this.getTransitionsTotalOffsets(zoneName, tm.year - 1, tm.year + 1);
+
+			// find the DST forward transitions
+			var prev: Duration = Duration.hours(0);
+			for (var i = 0; i < transitions.length; ++i) {
+				var transition = transitions[i];
+				// forward transition?
+				if (transition.offset.greaterThan(prev)) {
+					var localBefore: number = transition.at + prev.milliseconds();
+					var localAfter: number = transition.at + transition.offset.milliseconds();
+					if (unixMillis >= localBefore && unixMillis < localAfter) {
+						var forwardChange = transition.offset.sub(prev);
+						// non-existing time
+						if (typeof a === "object") {
+							return basics.unixToTimeNoLeapSecs(unixMillis + forwardChange.milliseconds());
+						} else {
+							return unixMillis + forwardChange.milliseconds();
+						}
+					}
+				}
+				prev = transition.offset;
+			};
+
+			// no non-existing time
+			return a;
+		} else {
+			return a;
+		}
 	}
 
 	/**
@@ -436,8 +670,10 @@ export class TzDatabase {
 	}
 
 	/**
-	 * Returns the total time zone offset from UTC, including DST.
-	 * Throws if info not found.
+	 * Returns the total time zone offset from UTC, including DST, at
+	 * the given UTC timestamp.
+	 * Throws if zone info not found.
+	 *
 	 * @param zoneName	IANA time zone name
 	 * @param utcMillis	Timestamp in UTC
 	 */
@@ -447,7 +683,7 @@ export class TzDatabase {
 
 		switch (zoneInfo.ruleType) {
 			case RuleType.None: {
-				dstOffset = Duration.minutes(0)
+				dstOffset = Duration.minutes(0);
 			} break;
 			case RuleType.Offset: {
 				dstOffset = zoneInfo.ruleOffset;
@@ -458,6 +694,62 @@ export class TzDatabase {
 		}
 
 		return dstOffset.add(zoneInfo.gmtoff);
+	}
+
+	/**
+	 * Returns the total time zone offset from UTC, including DST, at
+	 * the given LOCAL timestamp. Non-existing local time is normalized out.
+	 * There can be multiple UTC times and therefore multiple offsets for a local time
+	 * namely during a backward DST change. This returns the FIRST such offset.
+	 * Throws if zone info not found.
+	 *
+	 * @param zoneName	IANA time zone name
+	 * @param localMillis	Timestamp in time zone time
+	 */
+	public totalOffsetLocal(zoneName: string, localMillis: number): Duration {
+		var normalized: number = this.normalizeLocal(zoneName, localMillis);
+		var normalizedTm: TimeStruct = basics.unixToTimeNoLeapSecs(normalized);
+
+		/// Note: during offset changes, local time can behave like:
+		// forward change (1h):   0 1 3 4 5
+		// forward change (2h):   0 1 4 5 6
+		// backward change (1h):  1 2 2 3 4
+		// backward change (2h):  1 2 1 2 3  <-- note time going BACKWARD
+
+		// Therefore binary search does not apply. Linear search through transitions
+		// and return the first offset that matches
+
+		var transitions: Transition[] = this.getTransitionsTotalOffsets(zoneName, normalizedTm.year - 1, normalizedTm.year + 1);
+		var prev: Transition = null;
+		var prevPrev: Transition = null;
+		for (var i = 0; i < transitions.length; ++i) {
+			var transition = transitions[i];
+			if (transition.at + transition.offset.milliseconds() > normalized) {
+				// found offset: prev.offset applies
+				break;
+			}
+			prevPrev = prev;
+			prev = transition;
+		}
+
+		if (prev) {
+			// special care during backward change: take first occurrence of local time
+			if (prevPrev && prevPrev.offset.greaterThan(prev.offset)) {
+				// backward change
+				var diff = prevPrev.offset.sub(prev.offset);
+				if (normalized >= prev.at + prev.offset.milliseconds()
+					&& normalized < prev.at + prev.offset.milliseconds() + diff.milliseconds()) {
+					// within duplicate range
+					return prevPrev.offset.clone();
+				} else {
+					return prev.offset.clone();
+				}
+			} else {
+				return prev.offset.clone();
+			}
+		} else {
+			return Duration.hours(0);
+		}
 	}
 
 	/**
@@ -472,14 +764,14 @@ export class TzDatabase {
 		var tm: TimeStruct = basics.unixToTimeNoLeapSecs(utcMillis);
 
 		// find applicable transition moments
-		var transitions: Transition[] = this.getTransitionsAround(ruleName, tm.year, standardOffset);
+		var transitions: Transition[] = this.getTransitionsDstOffsets(ruleName, tm.year - 1, tm.year, standardOffset);
 
 		// find the last prior to given date
 		var offset: Duration = null;
 		for (var i = transitions.length - 1; i >= 0; i--) {
 			var transition = transitions[i];
 			if (transition.at <= utcMillis) {
-				offset = transition.rule.save.clone();
+				offset = transition.offset.clone();
 				break;
 			}
 		}
@@ -490,27 +782,119 @@ export class TzDatabase {
 	}
 
 	/**
-	 * Return a list of all transitions in [year-1..year] sorted by effective date
+	 * Return a list of all transitions in [fromYear..toYear] sorted by effective date
 	 *
 	 * @param ruleName	Name of the rule set
-	 * @param year	Year to return transitions for
+	 * @param fromYear	first year to return transitions for
+	 * @param toYear	Last year to return transitions for
 	 * @param standardOffset	Standard offset without DST for the time zone
+	 *
+	 * @return Transitions, with DST offsets (no standard offset included)
 	 */
-	public getTransitionsAround(ruleName: string, year: number, standardOffset: Duration): Transition[] {
+	public getTransitionsDstOffsets(ruleName: string, fromYear: number, toYear: number, standardOffset: Duration): Transition[]{
+		assert(fromYear <= toYear, "fromYear must be <= toYear");
+
 		var ruleInfos: RuleInfo[] = this.getRuleInfos(ruleName);
 		var result: Transition[] = [];
 
-		for (var y = year - 1; y <= year; y++) {
+		for (var y = fromYear; y <= toYear; y++) {
 			var prevInfo: RuleInfo = null;
 			for (var i = 0; i < ruleInfos.length; i++) {
 				var ruleInfo: RuleInfo = ruleInfos[i];
 				if (ruleInfo.applicable(y)) {
 					result.push(new Transition(
 						ruleInfo.transitionTimeUtc(y, standardOffset, prevInfo),
-						ruleInfo));
+						ruleInfo.save));
 				}
 				prevInfo = ruleInfo;
 			}
+		}
+
+		result.sort((a: Transition, b: Transition): number => {
+			return a.at - b.at;
+		});
+		return result;
+	}
+
+	/**
+	 * Return both zone and rule changes as total (std + dst) offsets.
+	 * Adds an initial transition if there is no zone change within the range.
+	 *
+	 * @param zoneName	IANA zone name
+	 * @param fromYear	First year to include
+	 * @param toYear	Last year to include
+	 */
+	public getTransitionsTotalOffsets(zoneName: string, fromYear: number, toYear: number): Transition[]{
+		assert(fromYear <= toYear, "fromYear must be <= toYear");
+
+		var startMillis: number = basics.timeToUnixNoLeapSecs(fromYear);
+		var endMillis: number = basics.timeToUnixNoLeapSecs(toYear + 1);
+
+
+		var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+		assert(zoneInfos.length > 0, "Empty zoneInfos array returned from getZoneInfos()");
+
+		var result: Transition[] = [];
+
+		var prevZone: ZoneInfo = null;
+		var prevUntilTm: TimeStruct = null;
+		var prevStdOffset: Duration = Duration.hours(0);
+		var prevDstOffset: Duration = Duration.hours(0);
+		for (var i = 0; i < zoneInfos.length; ++i) {
+			var zoneInfo = zoneInfos[i];
+			var untilTm: TimeStruct = (zoneInfo.until ? basics.unixToTimeNoLeapSecs(zoneInfo.until) : new TimeStruct(toYear + 1));
+			var stdOffset: Duration = prevStdOffset;
+			var dstOffset: Duration = prevDstOffset;
+
+			// zone applicable?
+			if ((prevZone === null || prevZone.until < endMillis - 1)
+				&& (zoneInfo.until === null || zoneInfo.until >= startMillis)) {
+
+				stdOffset = zoneInfo.gmtoff;
+
+				switch (zoneInfo.ruleType) {
+					case RuleType.None:
+						dstOffset = Duration.hours(0);
+						break;
+					case RuleType.Offset:
+						dstOffset = zoneInfo.ruleOffset;
+						break;
+					case RuleType.RuleName:
+						// check whether the first rule takes effect immediately on the zone transition
+						// and yes this happens in the data (e.g. Lybia)
+						if (prevZone) {
+							var ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
+							ruleInfos.forEach((ruleInfo: RuleInfo): void => {
+								if (ruleInfo.applicable(prevUntilTm.year)) {
+									if (ruleInfo.transitionTimeUtc(prevUntilTm.year, stdOffset, null) === prevZone.until) {
+										dstOffset = ruleInfo.save;
+									}
+								}
+							});
+						}
+						break;
+				}
+
+				// add a transition for the zone transition
+				var at: number = (prevZone ? prevZone.until : startMillis);
+				result.push(new Transition(at, stdOffset.add(dstOffset)));
+
+				// add transitions for the zone rules in the range
+				if (zoneInfo.ruleType === RuleType.RuleName) {
+					var dstTransitions: Transition[] = this.getTransitionsDstOffsets(
+						zoneInfo.ruleName,
+						prevUntilTm ? Math.max(prevUntilTm.year, fromYear) : fromYear,
+						Math.min(untilTm.year, toYear), stdOffset);
+					dstTransitions.forEach((transition: Transition): void => {
+						result.push(new Transition(transition.at, transition.offset.add(stdOffset)));
+					});
+				}
+			}
+
+			prevZone = zoneInfo;
+			prevUntilTm = untilTm;
+			prevStdOffset = stdOffset;
+			prevDstOffset = dstOffset;
 		}
 
 		result.sort((a: Transition, b: Transition): number => {
@@ -574,7 +958,7 @@ export class TzDatabase {
 				Duration.minutes(-1 * math.filterFloat(zoneEntry[0])),
 				ruleType,
 				ruleType === RuleType.Offset ? new Duration(zoneEntry[1]) : new Duration(),
-				ruleType === RuleType.RuleName ? zoneEntry[1]: "",
+				ruleType === RuleType.RuleName ? zoneEntry[1] : "",
 				zoneEntry[2],
 				until
 			));
@@ -630,9 +1014,9 @@ export class TzDatabase {
 				onType,
 				onDay,
 				onWeekDay,
-				parseInt(rule[5][0], 10),
-				parseInt(rule[5][1], 10),
-				parseInt(rule[5][2], 10),
+				math.positiveModulo(parseInt(rule[5][0], 10), 24), // note the database sometimes contains "24" as hour value
+				math.positiveModulo(parseInt(rule[5][1], 10), 60),
+				math.positiveModulo(parseInt(rule[5][2], 10), 60),
 				this.parseAtType(rule[5][3]),
 				Duration.minutes(parseInt(rule[6], 10)),
 				rule[7] === "-" ? "" : rule[7]
@@ -642,7 +1026,7 @@ export class TzDatabase {
 
 		result.sort((a: RuleInfo, b: RuleInfo): number => {
 			if (a.effectiveLess(b)) {
-				return -1
+				return -1;
 			} else if (a.effectiveEqual(b)) {
 				return 0;
 			} else {
@@ -661,7 +1045,7 @@ export class TzDatabase {
 		if (rule === "-") {
 			return RuleType.None;
 		} else if (isValidOffsetString(rule)) {
-			return RuleType.Offset
+			return RuleType.Offset;
 		} else {
 			return RuleType.RuleName;
 		}
@@ -751,8 +1135,24 @@ export class TzDatabase {
 
 }
 
-function validateData(data: any): void {
+interface MinMaxInfo {
+	minDstSave: number;
+	maxDstSave: number;
+	minGmtOff: number;
+	maxGmtOff: number;
+}
+
+/**
+ * Sanity check on data. Returns min/max values.
+ */
+function validateData(data: any): MinMaxInfo {
 	var i: number;
+	var result: MinMaxInfo = {
+		minDstSave: null,
+		maxDstSave: null,
+		minGmtOff: null,
+		maxGmtOff: null
+	};
 
 	if (typeof(data) !== "object") {
 		throw new Error("data is not an object");
@@ -788,7 +1188,8 @@ function validateData(data: any): void {
 					if (typeof entry[0] !== "string") {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" first column is not a string");
 					}
-					if (isNaN(math.filterFloat(entry[0]))) {
+					var gmtoff = math.filterFloat(entry[0]);
+					if (isNaN(gmtoff)) {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" first column does not contain a number");
 					}
 					if (typeof entry[1] !== "string") {
@@ -802,6 +1203,12 @@ function validateData(data: any): void {
 					}
 					if (typeof entry[3] === "string" && isNaN(math.filterFloat(entry[3]))) {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" fourth column does not contain a number");
+					}
+					if (result.maxGmtOff === null || gmtoff > result.maxGmtOff) {
+						result.maxGmtOff = gmtoff;
+					}
+					if (result.minGmtOff === null || gmtoff < result.minGmtOff) {
+						result.minGmtOff = gmtoff;
 					}
 				}
 			}
@@ -847,24 +1254,34 @@ function validateData(data: any): void {
 				if (rule[5].length !== 4) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5] is not of length 4");
 				}
-				if (isNaN(parseInt(rule[5][0]))) {
+				if (isNaN(parseInt(rule[5][0], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][0] is not a number");
 				}
-				if (isNaN(parseInt(rule[5][1]))) {
+				if (isNaN(parseInt(rule[5][1], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][1] is not a number");
 				}
-				if (isNaN(parseInt(rule[5][2]))) {
+				if (isNaN(parseInt(rule[5][2], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][2] is not a number");
 				}
 				if (rule[5][3] !== "" && rule[5][3] !== "s" && rule[5][3] !== "w"
 					&& rule[5][3] !== "g" && rule[5][3] !== "u" && rule[5][3] !== "z" && rule[5][3] !== null) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][3] is not empty, g, z, s, w, u or null");
 				}
-				if (isNaN(parseInt(rule[6], 10))) {
+				var save: number = parseInt(rule[6], 10);
+				if (isNaN(save)) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][6] does not contain a valid number");
+				}
+				if (save !== 0) {
+					if (result.maxDstSave === null || save > result.maxDstSave) {
+						result.maxDstSave = save;
+					}
+					if (result.minDstSave === null || save < result.minDstSave) {
+						result.minDstSave = save;
+					}
 				}
 			}
 		}
 	}
 
+	return result;
 }

@@ -34,3 +34,11 @@ export function filterFloat(value: string): number {
 	}
 	return NaN;
 }
+
+export function positiveModulo(value: number, modulo: number): number {
+	if (value < 0) {
+		return ((value % modulo) + modulo) % modulo;
+	} else {
+		return value % modulo;
+	}
+}
