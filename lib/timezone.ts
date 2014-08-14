@@ -190,22 +190,7 @@ export class TimeZone {
 		switch (this._kind) {
 			case TimeZoneKind.Local: return false;
 			case TimeZoneKind.Offset: return (this._offset === 0);
-			case TimeZoneKind.Proper: return (
-				this._name === "Etc/GMT"
-				|| this._name === "Etc/GMT+0"
-				|| this._name === "Etc/UCT"
-				|| this._name === "Etc/Universal"
-				|| this._name === "Etc/UTC"
-				|| this._name === "Etc/Zulu"
-				|| this._name === "GMT"
-				|| this._name === "GMT+0"
-				|| this._name === "GMT0"
-				|| this._name === "GMT-0"
-				|| this._name === "Greenwich"
-				|| this._name === "Universal"
-				|| this._name === "UTC"
-				|| this._name === "Zulu"
-				);
+			case TimeZoneKind.Proper: return (TzDatabase.instance().zoneIsUtc(this._name));
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */

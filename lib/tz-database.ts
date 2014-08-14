@@ -18,9 +18,9 @@ import basics = require("./basics");
 import duration = require("./duration");
 import math = require("./math");
 
-/* tslint:disable:no-var-requires */
+/* tslint:disable */
 var data: any = require("./timezone-data.json");
-/* tslint:enable:no-var-requires */
+/* tslint:enable */
 
 import Duration = duration.Duration;
 import TimeStruct = basics.TimeStruct;
@@ -175,7 +175,7 @@ export class RuleInfo {
 		if (this.inMonth > other.inMonth) {
 			return false;
 		}
-		if (this.effectiveDate(this.from) < other.effectiveDate(this.from)) {
+		if (this.effectiveDate(this.from).lessThan(other.effectiveDate(this.from))) {
 			return true;
 		}
 		return false;
@@ -192,7 +192,7 @@ export class RuleInfo {
 		if (this.inMonth !== other.inMonth) {
 			return false;
 		}
-		if (this.effectiveDate(this.from) !== other.effectiveDate(this.from)) {
+		if (!this.effectiveDate(this.from).equals(other.effectiveDate(this.from))) {
 			return false;
 		}
 		return true;
@@ -204,6 +204,8 @@ export class RuleInfo {
 	 * not taken into account
 	 */
 	public effectiveDate(year: number): TimeStruct {
+		assert(this.applicable(year), "Rule is not applicable in " + year.toString(10));
+
 		// year and month are given
 		var tm: TimeStruct = new TimeStruct(year, this.inMonth);
 
@@ -258,8 +260,11 @@ export class RuleInfo {
 					offset = standardOffset;
 				}
 				break;
+			/* istanbul ignore next */
 			default:
+				/* istanbul ignore next */
 				assert(false, "unknown AtType");
+				/* istanbul ignore next */
 				break;
 		}
 
@@ -425,9 +430,17 @@ export class TzDatabase {
 	 */
 	public static instance(): TzDatabase {
 		if (!TzDatabase._instance) {
-			TzDatabase._instance = new TzDatabase();
+			TzDatabase._instance = new TzDatabase(data);
 		}
 		return TzDatabase._instance;
+	}
+
+	/**
+	 * Inject test timezone data for unittests
+	 */
+	public static inject(data: any): void {
+		TzDatabase._instance = null; // circumvent constructor check on duplicate instances
+		TzDatabase._instance = new TzDatabase(data);
 	}
 
 	/**
@@ -435,8 +448,11 @@ export class TzDatabase {
 	 */
 	private _minmax: MinMaxInfo;
 
-	constructor() {
+	private _data: any;
+
+	constructor(data: any) {
 		assert(!TzDatabase._instance, "You should not create an instance of the TzDatabase class yourself. Use TzDatabase.instance()");
+		this._data = data;
 		this._minmax = validateData(data);
 	}
 
@@ -528,6 +544,7 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	(optional) if given, the result for the given zone is returned
 	 */
+	/* NOT USED AND NOT TESTED AT THIS TIME
 	public minStandardOffset(zoneName?: string): Duration {
 		if (zoneName) {
 			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
@@ -544,6 +561,7 @@ export class TzDatabase {
 			return Duration.minutes(-1 * this._minmax.minGmtOff);
 		}
 	}
+	*/
 
 	/**
 	 * Maximum standard offset of all zones in the database.
@@ -551,6 +569,7 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	(optional) if given, the result for the given zone is returned
 	 */
+	/* NOT USED AND NOT TESTED AT THIS TIME
 	public maxStandardOffset(zoneName?: string): Duration {
 		if (zoneName) {
 			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
@@ -567,6 +586,7 @@ export class TzDatabase {
 			return Duration.minutes(-1 * this._minmax.maxGmtOff);
 		}
 	}
+	*/
 
 	/**
 	 * Checks whether the zone has DST at all
@@ -580,6 +600,7 @@ export class TzDatabase {
 	 *
 	 * @returns The given time exists in the given zone.
 	 */
+	/* NOT USED AND NOT TESTED AT THIS TIME
 	public localTimeExists(zoneName: string, tm: TimeStruct): boolean {
 		if (this.hasDst(zoneName)) {
 			return (this.normalizeLocal(zoneName, tm).equals(tm));
@@ -587,8 +608,30 @@ export class TzDatabase {
 			return true;
 		}
 	}
+	*/
 
-	// todors make function to check whether a zone is equal to UTC
+	/**
+	 * Returns true iff the given zone name eventually links to
+	 * "Etc/UTC", "Etc/GMT" or "Etc/UCT" in the TZ database. This is true e.g. for
+	 * "UTC", "GMT", "Etc/GMT" etc.
+	 *
+	 * @param zoneName	IANA time zone name.
+	 */
+	public zoneIsUtc(zoneName: string): boolean {
+		var actualZoneName: string = zoneName;
+		var zoneEntries: any = this._data.zones[zoneName];
+		// follow links
+		while (typeof (zoneEntries) === "string") {
+			/* istanbul ignore if */
+			if (!this._data.zones.hasOwnProperty(zoneEntries)) {
+				throw new Error("Zone \"" + zoneEntries + "\" not found (referred to in link from \""
+					+ zoneName + "\" via \"" + actualZoneName + "\"");
+			}
+			actualZoneName = zoneEntries;
+			zoneEntries = this._data.zones[actualZoneName];
+		}
+		return (actualZoneName === "Etc/UTC" || actualZoneName === "Etc/GMT" || actualZoneName === "Etc/UCT");
+	}
 
 	/**
 	 * Normalizes non-existing local times by adding a forward offset change.
@@ -732,6 +775,7 @@ export class TzDatabase {
 			prev = transition;
 		}
 
+		/* istanbul ignore else */
 		if (prev) {
 			// special care during backward change: take first occurrence of local time
 			if (prevPrev && prevPrev.offset.greaterThan(prev.offset)) {
@@ -748,6 +792,8 @@ export class TzDatabase {
 				return prev.offset.clone();
 			}
 		} else {
+			// this cannot happen as the transitions array is guaranteed to contain a transition at the
+			// beginning of the requested fromYear
 			return Duration.hours(0);
 		}
 	}
@@ -775,9 +821,12 @@ export class TzDatabase {
 				break;
 			}
 		}
+
+		/* istanbul ignore if */
 		if (!offset) {
 			throw new Error("No offset found.");
 		}
+
 		return offset;
 	}
 
@@ -861,7 +910,7 @@ export class TzDatabase {
 						break;
 					case RuleType.RuleName:
 						// check whether the first rule takes effect immediately on the zone transition
-						// and yes this happens in the data (e.g. Lybia)
+						// and yes this happens in the this._data (e.g. Lybia)
 						if (prevZone) {
 							var ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
 							ruleInfos.forEach((ruleInfo: RuleInfo): void => {
@@ -918,6 +967,7 @@ export class TzDatabase {
 				return zoneInfo;
 			}
 		}
+		/* istanbul ignore next */
 		throw new Error("No zone info found");
 	}
 
@@ -929,21 +979,24 @@ export class TzDatabase {
 	 */
 	public getZoneInfos(zoneName: string): ZoneInfo[]{
 		// todors maybe apply caching
-		if (!data.zones.hasOwnProperty(zoneName)) {
+		/* istanbul ignore if */
+		if (!this._data.zones.hasOwnProperty(zoneName)) {
+			/* istanbul ignore next */
 			throw new Error("Zone \"" + zoneName + "\" not found.");
 		}
 
 		var result = [];
 		var actualZoneName: string = zoneName;
-		var zoneEntries: any = data.zones[zoneName];
+		var zoneEntries: any = this._data.zones[zoneName];
 		// follow links
 		while (typeof (zoneEntries) === "string") {
-			if (!data.zones.hasOwnProperty(zoneEntries)) {
+			/* istanbul ignore if */
+			if (!this._data.zones.hasOwnProperty(zoneEntries)) {
 				throw new Error("Zone \"" + zoneEntries + "\" not found (referred to in link from \""
 					+ zoneName + "\" via \"" + actualZoneName + "\"");
 			}
 			actualZoneName = zoneEntries;
-			zoneEntries = data.zones[actualZoneName];
+			zoneEntries = this._data.zones[actualZoneName];
 		}
 		// final zone info found
 		for (var i: number = 0; i < zoneEntries.length; ++i) {
@@ -988,13 +1041,13 @@ export class TzDatabase {
 	 */
 	public getRuleInfos(ruleName: string): RuleInfo[]{
 		// todors maybe apply caching
-		if (!data.rules.hasOwnProperty(ruleName)) {
+		if (!this._data.rules.hasOwnProperty(ruleName)) {
 			throw new Error("Rule set \"" + ruleName + "\" not found.");
 		}
 
 		var result = [];
 
-		var ruleSet = data.rules[ruleName];
+		var ruleSet = this._data.rules[ruleName];
 		for (var i = 0; i < ruleSet.length; ++i) {
 			var rule = ruleSet[i];
 
@@ -1063,6 +1116,7 @@ export class TzDatabase {
 		} else if (!isNaN(parseInt(to, 10))) {
 			return ToType.Year;
 		} else {
+			/* istanbul ignore next */
 			throw new Error("TO column incorrect: " + to);
 		}
 	}
@@ -1089,18 +1143,13 @@ export class TzDatabase {
 	 */
 	public parseOnDay(on: string, onType: OnType): number {
 		switch (onType) {
-			case OnType.DayNum: {
-				return parseInt(on, 10);
-			} break;
-			case OnType.LeqX: {
-				return parseInt(on.substr(on.indexOf("<=") + 2), 10);
-			} break;
-			case OnType.GreqX: {
-				return parseInt(on.substr(on.indexOf(">=") + 2), 10);
-			} break;
-			default: {
+			case OnType.DayNum: return parseInt(on, 10);
+			case OnType.LeqX: return parseInt(on.substr(on.indexOf("<=") + 2), 10);
+			case OnType.GreqX: return parseInt(on.substr(on.indexOf(">=") + 2), 10);
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore next */
 				return 0;
-			}
 		}
 	}
 
@@ -1113,6 +1162,7 @@ export class TzDatabase {
 				return <WeekDay>i;
 			}
 		}
+		/* istanbul ignore next */
 		return WeekDay.Sunday;
 	}
 
@@ -1129,7 +1179,9 @@ export class TzDatabase {
 			case "w": return AtType.Wall;
 			case "": return AtType.Wall;
 			case null: return AtType.Wall;
-			default: return AtType.Wall;
+			default:
+				/* istanbul ignore next */
+				return AtType.Wall;
 		}
 	}
 
@@ -1154,12 +1206,15 @@ function validateData(data: any): MinMaxInfo {
 		maxGmtOff: null
 	};
 
+	/* istanbul ignore if */
 	if (typeof(data) !== "object") {
 		throw new Error("data is not an object");
 	}
+	/* istanbul ignore if */
 	if (!data.hasOwnProperty("rules")) {
 		throw new Error("data has no rules property");
 	}
+	/* istanbul ignore if */
 	if (!data.hasOwnProperty("zones")) {
 		throw new Error("data has no zones property");
 	}
@@ -1170,37 +1225,47 @@ function validateData(data: any): MinMaxInfo {
 			var zoneArr: any = data.zones[zoneName];
 			if (typeof (zoneArr) === "string") {
 				// ok, is link to other zone, check link
+				/* istanbul ignore if */
 				if (!data.zones.hasOwnProperty(<string>zoneArr)) {
 					throw new Error("Entry for zone \"" + zoneName + "\" links to \"" + <string>zoneArr + "\" but that doesn\'t exist");
 				}
 			} else {
+				/* istanbul ignore if */
 				if (!Array.isArray(zoneArr)) {
 					throw new Error("Entry for zone \"" + zoneName + "\" is neither a string nor an array");
 				}
 				for (i = 0; i < zoneArr.length; i++) {
 					var entry: any = zoneArr[i];
+					/* istanbul ignore if */
 					if (!Array.isArray(entry)) {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" is not an array");
 					}
+					/* istanbul ignore if */
 					if (entry.length !== 4) {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" has length != 4");
 					}
+					/* istanbul ignore if */
 					if (typeof entry[0] !== "string") {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" first column is not a string");
 					}
 					var gmtoff = math.filterFloat(entry[0]);
+					/* istanbul ignore if */
 					if (isNaN(gmtoff)) {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" first column does not contain a number");
 					}
+					/* istanbul ignore if */
 					if (typeof entry[1] !== "string") {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" second column is not a string");
 					}
+					/* istanbul ignore if */
 					if (typeof entry[2] !== "string") {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" third column is not a string");
 					}
+					/* istanbul ignore if */
 					if (typeof entry[3] !== "string" && entry[3] !== null) {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" fourth column is not a string nor null");
 					}
+					/* istanbul ignore if */
 					if (typeof entry[3] === "string" && isNaN(math.filterFloat(entry[3]))) {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" fourth column does not contain a number");
 					}
@@ -1219,55 +1284,70 @@ function validateData(data: any): MinMaxInfo {
 	for (var ruleName in data.rules) {
 		if (data.rules.hasOwnProperty(ruleName)) {
 			var ruleArr: any = data.rules[ruleName];
+			/* istanbul ignore if */
 			if (!Array.isArray(ruleArr)) {
 				throw new Error("Entry for rule \"" + ruleName + "\" is not an array");
 			}
 			for (i = 0; i < ruleArr.length; i++) {
 				var rule = ruleArr[i];
+					/* istanbul ignore if */
 				if (!Array.isArray(rule)) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "] is not an array");
 				}
+					/* istanbul ignore if */
 				if (rule.length < 8) { // note some rules > 8 exists but that seems to be a bug in tz file parsing
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "] is not of length 8");
 				}
 				for (var j = 0; j < rule.length; j++) {
+					/* istanbul ignore if */
 					if (j !== 5 && typeof rule[j] !== "string") {
 						throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][" + j.toString(10) + "] is not a string");
 					}
 				}
+				/* istanbul ignore if */
 				if (rule[0] !== "NaN" && isNaN(parseInt(rule[0], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][0] is not a number");
 				}
+				/* istanbul ignore if */
 				if (rule[1] !== "only" && rule[1] !== "max" && isNaN(parseInt(rule[1], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][1] is not a number, only or max");
 				}
+				/* istanbul ignore if */
 				if (!TzMonthNames.hasOwnProperty(rule[3])) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][3] is not a month name");
 				}
+				/* istanbul ignore if */
 				if (rule[4].substr(0, 4) !== "last" && rule[4].indexOf(">=") === -1
 				 && rule[4].indexOf("<=") === -1 && isNaN(parseInt(rule[4], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][4] is not a known type of expression");
 				}
+				/* istanbul ignore if */
 				if (!Array.isArray(rule[5])) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5] is not an array");
 				}
+				/* istanbul ignore if */
 				if (rule[5].length !== 4) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5] is not of length 4");
 				}
+				/* istanbul ignore if */
 				if (isNaN(parseInt(rule[5][0], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][0] is not a number");
 				}
+				/* istanbul ignore if */
 				if (isNaN(parseInt(rule[5][1], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][1] is not a number");
 				}
+				/* istanbul ignore if */
 				if (isNaN(parseInt(rule[5][2], 10))) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][2] is not a number");
 				}
+				/* istanbul ignore if */
 				if (rule[5][3] !== "" && rule[5][3] !== "s" && rule[5][3] !== "w"
 					&& rule[5][3] !== "g" && rule[5][3] !== "u" && rule[5][3] !== "z" && rule[5][3] !== null) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][3] is not empty, g, z, s, w, u or null");
 				}
 				var save: number = parseInt(rule[6], 10);
+				/* istanbul ignore if */
 				if (isNaN(save)) {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][6] does not contain a valid number");
 				}

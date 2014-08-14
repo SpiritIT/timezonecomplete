@@ -234,6 +234,13 @@ export class TimeStruct {
 			&& this.milli === other.milli);
 	}
 
+	/**
+	 * < operator
+	 */
+	public lessThan(other: TimeStruct): boolean {
+		return (this.toUnixNoLeapSecs() < other.toUnixNoLeapSecs());
+	}
+
 	public clone(): TimeStruct {
 		return new TimeStruct(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
 	}

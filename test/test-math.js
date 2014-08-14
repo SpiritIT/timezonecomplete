@@ -1,4 +1,5 @@
-/// <reference path="../typings/test.d.ts" />
+﻿/// <reference path="../typings/test.d.ts" />
+var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
 
@@ -17,6 +18,9 @@ describe("isInt()", function () {
     });
     it("should return false for NaN", function () {
         expect(math.isInt(NaN)).to.be.false;
+    });
+    it("should return false for null", function () {
+        expect(math.isInt(null)).to.be.false;
     });
 });
 
@@ -40,3 +44,25 @@ describe("filterFloat()", function () {
         expect(isNaN(math.filterFloat("1 "))).to.be.true;
     });
 });
+
+describe("positiveModulo()", function () {
+    it("should work for positive numbers", function () {
+        expect(math.positiveModulo(0, 2)).to.equal(0);
+        expect(math.positiveModulo(1, 2)).to.equal(1);
+        expect(math.positiveModulo(2, 2)).to.equal(0);
+    });
+    it("should work for negative numbers", function () {
+        expect(math.positiveModulo(0, 2)).to.equal(0);
+        expect(math.positiveModulo(-1, 2)).to.equal(1);
+        expect(math.positiveModulo(-2, 2)).to.equal(0);
+    });
+    it("should throw for modulo <= 0", function () {
+        assert.throws(function () {
+            math.positiveModulo(0, 0);
+        });
+        assert.throws(function () {
+            math.positiveModulo(0, -1);
+        });
+    });
+});
+//# sourceMappingURL=test-math.js.map

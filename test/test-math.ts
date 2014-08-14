@@ -1,5 +1,6 @@
 ﻿/// <reference path="../typings/test.d.ts" />
 
+import assert = require("assert");
 import chai = require("chai");
 import expect = chai.expect;
 
@@ -19,6 +20,9 @@ describe("isInt()", (): void => {
 	});
 	it("should return false for NaN", (): void => {
 		expect(math.isInt(NaN)).to.be.false;
+	});
+	it("should return false for null", (): void => {
+		expect(math.isInt(null)).to.be.false;
 	});
 });
 
@@ -40,5 +44,26 @@ describe("filterFloat()", (): void => {
 		expect(isNaN(math.filterFloat("a1"))).to.be.true;
 		expect(isNaN(math.filterFloat(" 1"))).to.be.true;
 		expect(isNaN(math.filterFloat("1 "))).to.be.true;
+	});
+});
+
+describe("positiveModulo()", (): void => {
+	it("should work for positive numbers", (): void => {
+		expect(math.positiveModulo(0, 2)).to.equal(0);
+		expect(math.positiveModulo(1, 2)).to.equal(1);
+		expect(math.positiveModulo(2, 2)).to.equal(0);
+	});
+	it("should work for negative numbers", (): void => {
+		expect(math.positiveModulo(0, 2)).to.equal(0);
+		expect(math.positiveModulo(-1, 2)).to.equal(1);
+		expect(math.positiveModulo(-2, 2)).to.equal(0);
+	});
+	it("should throw for modulo <= 0", (): void => {
+		assert.throws((): void => {
+			math.positiveModulo(0, 0);
+		});
+		assert.throws((): void => {
+			math.positiveModulo(0, -1);
+		});
 	});
 });

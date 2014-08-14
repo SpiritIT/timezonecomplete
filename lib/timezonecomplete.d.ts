@@ -6,6 +6,7 @@ declare module 'timezonecomplete' {
     export import WeekDay = basics.WeekDay;
     export import isLeapYear = basics.isLeapYear;
     export import daysInMonth = basics.daysInMonth;
+    export import dayOfYear = basics.dayOfYear;
     import datetime = require("__timezonecomplete/datetime");
     export import DateTime = datetime.DateTime;
     import duration = require("__timezonecomplete/duration");
@@ -41,6 +42,14 @@ declare module '__timezonecomplete/basics' {
      * @return The number of days in the given month
      */
     export function daysInMonth(year: number, month: number): number;
+    /**
+     * Returns the day of the year of the given date [0..365]. January first is 0.
+     *
+     * @param year	The year e.g. 1986
+     * @param month Month 1-12
+     * @param day Day of month 1-31
+     */
+    export function dayOfYear(year: number, month: number, day: number): number;
     /**
      * Returns the last instance of the given weekday in the given month
      *
@@ -128,12 +137,36 @@ declare module '__timezonecomplete/basics' {
          * Does NOT take leap seconds into account.
          */
         toUnixNoLeapSecs(): number;
+        /**
+         * Deep equals
+         */
+        equals(other: TimeStruct): boolean;
+        /**
+         * < operator
+         */
+        lessThan(other: TimeStruct): boolean;
+        clone(): TimeStruct;
+        toString(): string;
+        inspect(): string;
     }
     /**
      * Convert a unix milli timestamp into a TimeT structure.
      * This does NOT take leap seconds into account.
      */
     export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct;
+    /**
+     * Convert a year, month, day etc into a unix milli timestamp.
+     * This does NOT take leap seconds into account.
+     *
+     * @param year	Year e.g. 1970
+     * @param month	Month 1-12
+     * @param day	Day 1-31
+     * @param hour	Hour 0-23
+     * @param minute	Minute 0-59
+     * @param second	Second 0-59 (no leap seconds)
+     * @param milli	Millisecond 0-999
+     */
+    export function timeToUnixNoLeapSecs(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
     /**
      * Convert a TimeT structure into a unix milli timestamp.
      * This does NOT take leap seconds into account.
@@ -848,7 +881,7 @@ declare module '__timezonecomplete/timezone' {
          * @param minute local minute 0-59
          * @param second local second 0-59
          * @param millisecond local millisecond 0-999
-         * @return the offset of this time zone with respect to UTC at the given time.
+         * @return the offset of this time zone with respect to UTC at the given time, in minutes.
          */
         offsetForUtc(year: number, month: number, day: number, hour?: number, minute?: number, second?: number, millisecond?: number): number;
         /**
@@ -860,7 +893,7 @@ declare module '__timezonecomplete/timezone' {
          * @param minute local minute 0-59
          * @param second local second 0-59
          * @param millisecond local millisecond 0-999
-         * @return the offset of this time zone with respect to UTC at the given time.
+         * @return the offset of this time zone with respect to UTC at the given time, in minutes.
          */
         offsetForZone(year: number, month: number, day: number, hour?: number, minute?: number, second?: number, millisecond?: number): number;
         /**
@@ -877,6 +910,17 @@ declare module '__timezonecomplete/timezone' {
          * @param funcs: the set of functions to use: get() or getUTC()
          */
         offsetForZoneDate(date: Date, funcs: javascript.DateFunctions): number;
+        /**
+         * Normalizes non-existing local times by adding a forward offset change.
+         * During a forward standard offset change or DST offset change, some amount of
+         * local time is skipped. Therefore, this amount of local time does not exist.
+         * This function adds the amount of forward change to any non-existing time. After all,
+         * this is probably what the user meant.
+         *
+         * @param localUnixMillis	Unix timestamp in zone time
+         * @returns	Unix timestamp in zone time, normalized.
+         */
+        normalizeZoneTime(localUnixMillis: number): number;
         /**
          * The time zone identifier (normalized).
          * Either "localtime", IANA name, or "+hh:mm" offset.

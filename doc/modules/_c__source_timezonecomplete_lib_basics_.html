@@ -75,6 +75,7 @@
 					<h3>Functions</h3>
 					<ul class="tsd-member-index">
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_c__source_timezonecomplete_lib_basics_.html#assertunixtimestamp" class="tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp</a></li>
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_c__source_timezonecomplete_lib_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a></li>
@@ -98,7 +99,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:210</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:257</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -111,6 +112,40 @@
 					</ul>
 				</section>
 				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+					<a name="dayofyear" class="anchor"></a>
+					<h3>day<wbr>OfYear</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
+						<li class="tsd-signature tsd-kind-icon">day<wbr>OfYear<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:83</li>
+								</ul>
+							</aside>
+							<p>Returns the day of the year of the given date [0..365]. January first is 0.</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
+									<p>The year e.g. 1986</p>
+								</li>
+								<li>
+									<h5>month: <span class="tsd-signature-type">number</span></h5>
+									<p>Month 1-12</p>
+								</li>
+								<li>
+									<h5>day: <span class="tsd-signature-type">number</span></h5>
+									<p>Day of month 1-31</p>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="daysinmonth" class="anchor"></a>
 					<h3>days<wbr>InMonth</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
@@ -119,7 +154,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:51</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:52</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -149,7 +184,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:42</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:43</li>
 								</ul>
 							</aside>
 							<p>The days in a given year</p>
@@ -174,7 +209,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:22</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:23</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -199,7 +234,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:84</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:103</li>
 								</ul>
 							</aside>
 							<p>Returns the last instance of the given weekday in the given month</p>
@@ -230,11 +265,12 @@
 					<h3>time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
 						<li class="tsd-signature tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbols">(</span>tm<span class="tsd-signature-symbols">: </span><a href="../classes/_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, milli<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:287</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:350</li>
 								</ul>
 							</aside>
 							<p>Convert a TimeT structure into a unix milli timestamp.
@@ -243,6 +279,48 @@
 							<ul>
 								<li>
 									<h5>tm: <a href="../classes/_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+						</li>
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:342</li>
+								</ul>
+							</aside>
+							<p>Convert a year, month, day etc into a unix milli timestamp.
+							This does NOT take leap seconds into account.</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>year?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Year e.g. 1970</p>
+								</li>
+								<li>
+									<h5>month?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Month 1-12</p>
+								</li>
+								<li>
+									<h5>day?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Day 1-31</p>
+								</li>
+								<li>
+									<h5>hour?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Hour 0-23</p>
+								</li>
+								<li>
+									<h5>minute?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Minute 0-59</p>
+								</li>
+								<li>
+									<h5>second?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Second 0-59 (no leap seconds)</p>
+								</li>
+								<li>
+									<h5>milli?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>Millisecond 0-999</p>
 								</li>
 							</ul>
 							<h4>Returns 
@@ -260,7 +338,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:220</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:267</li>
 								</ul>
 							</aside>
 							<p>Convert a unix milli timestamp into a TimeT structure.
@@ -286,7 +364,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:327</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:409</li>
 								</ul>
 							</aside>
 							<p>Return the day-of-week.
@@ -312,7 +390,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:99</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:118</li>
 								</ul>
 							</aside>
 							<p>Returns the day-of-month that is on the given weekday and which is &gt;= the given day.
@@ -347,7 +425,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:115</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:134</li>
 								</ul>
 							</aside>
 							<p>Returns the day-of-month that is on the given weekday and which is &lt;= the given day.
@@ -429,6 +507,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
 						<a href="_c__source_timezonecomplete_lib_basics_.html#assertunixtimestamp" class="tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="_c__source_timezonecomplete_lib_basics_.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
 						<a href="_c__source_timezonecomplete_lib_basics_.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a>

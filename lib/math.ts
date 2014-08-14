@@ -8,6 +8,7 @@
 
 "use strict";
 
+import assert = require("assert");
 
 /**
  * @return true iff given argument is an integer number
@@ -36,6 +37,7 @@ export function filterFloat(value: string): number {
 }
 
 export function positiveModulo(value: number, modulo: number): number {
+	assert(modulo >= 1, "modulo should be >= 1");
 	if (value < 0) {
 		return ((value % modulo) + modulo) % modulo;
 	} else {
