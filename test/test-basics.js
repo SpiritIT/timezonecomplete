@@ -1,4 +1,4 @@
-/// <reference path="../typings/test.d.ts" />
+﻿/// <reference path="../typings/test.d.ts" />
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
@@ -247,3 +247,4 @@ describe("weekDayNoLeapSecs()", function () {
         expect(basics.weekDayNoLeapSecs(1407852032000)).to.equal(2 /* Tuesday */);
     });
 });
+//# sourceMappingURL=test-basics.js.map

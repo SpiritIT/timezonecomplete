@@ -1,4 +1,4 @@
-/// <reference path="../typings/test.d.ts" />
+﻿/// <reference path="../typings/test.d.ts" />
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
@@ -1120,3 +1120,4 @@ describe("DateTime", function () {
     });
 });
 // todo test DST zone where DST save is not a whole hour (20 or 40 minutes)
+//# sourceMappingURL=test-datetime.js.map

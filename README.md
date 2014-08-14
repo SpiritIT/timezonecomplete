@@ -7,14 +7,21 @@
 
 TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone's time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.
 
+
 ## Difference with timezone-js, Moment.js and other Date libraries
 
-Other libraries are great. In fact, we use timezone-js in our implementation and it works fantastically. We had a different set of requirements, that's all.
+Other libraries are great. We had different requirements, that's all. We do fix some bugs that originate from the Date class and that result in bugs in most other libraries.
 
-1. This library does not emulate the Date class. Its DateTime class does not have the same interface as Date, because the Date interface is broken and inconsistent. It is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project. 
-2. This library aims to be "complete", whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:
+
+1. Timezonecomplete works around inconsistent behaviour of the Date class. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete currently implements workarounds, but plans to be entirely independent of Date soon. Date problems include:
+  * The Date constructor normalizes non-existing local times (during DST forward changes) in different ways in Firefox, Chrome, IE and Node.
+  * The Date class responds differently to the TZ environment variable on different platforms.
+  * The conversion of a local time to a UTC value is broken by specification.
+2. The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project. 
+3. Timezonecomplete aims to be "complete", whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:
   * Naive dates (which know they have NO timezone information)
   * Aware dates (which have timezone information)
+  * Proper behaviour around DST changes (note that the ECMA 6 specification leaves this quite unclear and as a result, the JavaScript Date class 
   * Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with "number" type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.
   * Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
   * Ability to use with NodeJS as well as in a browser
@@ -133,8 +140,6 @@ We had a need for regularly scheduling a task. However if you think about it, wh
 The former means that the intervals are not always 12 hours. The latter means that it doesn't occur at the same time always.
 We needed to be able to specify both.
 
-
-
 ```javascript
 var tc = require("timezonecomplete");
 
@@ -211,7 +216,23 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 
 ```
 
+## Current TZ database version:
+
+The version of the included IANA time zone database is 2014e.
+
 ## Changelog
+
+### planned
+* Remove Date class usage altogether (v 1.4.5)
+* Performance improvements (caching in TzDatabase class) (v1.4.5)
+* Make a release 2 where we polish the interface to the library a bit (v2.0.0)
+
+### 1.4.4 (2014-08-14)
+* TZ database version: 2014e
+* Removed dependency on timezone-js
+* Fixed inconsistent behaviour across different platforms.
+* Fixed inconsistent behaviour with / without TZ environment variable setting.
+* Fixed behaviour with non-existing local times.
 
 ### 1.4.3 (2014-07-31)
 * Improved timezonecomplete behaviour when using browserify
