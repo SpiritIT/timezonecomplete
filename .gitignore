@@ -72,3 +72,4 @@ bower_components
 /test/*.d.ts
 /temp
 /obj
+/*.suo
