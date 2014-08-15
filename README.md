@@ -373,6 +373,9 @@ The version of the included IANA time zone database is 2014e.
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
 
+### 1.4.6 (2014-08-15)
+* Bugfix TypeScript .d.ts file
+
 ### 1.4.5 (2014-08-15)
 * Removed Javascript Date class as much as possible because it behaves differently across platforms.
 * Performance improvements (caching in TzDatabase class)
