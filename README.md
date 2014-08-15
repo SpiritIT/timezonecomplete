@@ -176,7 +176,6 @@ We spent some effort making TimezoneComplete usable in the browser, by packaging
 <body>
 	Hello world
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="bower_components/timezone-js/src/date.js"></script> <!-- External library timezone-js is also needed -->
 <script src="timezonecomplete.js"></script> <!-- This is the javascript bundle from ./dist/ -->
 	<script>
 	    alert(timezonecomplete.isLeapYear(2012));

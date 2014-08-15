@@ -561,76 +561,11 @@ export class TzDatabase {
 	}
 
 	/**
-	 * Minimum standard offset of all zones in the database.
-	 * Note, this can be a fractional number < -12 hours
-	 *
-	 * @param zoneName	(optional) if given, the result for the given zone is returned
-	 */
-	/* NOT USED AND NOT TESTED AT THIS TIME
-	public minStandardOffset(zoneName?: string): Duration {
-		if (zoneName) {
-			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-			var result: Duration = null;
-			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
-				if (!result || result.greaterThan(zoneInfo.gmtoff)) {
-					result = zoneInfo.gmtoff.clone();
-				}
-			});
-			assert(result, "No zone info found.");
-			return result;
-		} else {
-			// note that minmax values are in opposite offsets from what we calculate with
-			return Duration.minutes(-1 * this._minmax.minGmtOff);
-		}
-	}
-	*/
-
-	/**
-	 * Maximum standard offset of all zones in the database.
-	 * Note, this can be a fractional number > 12 hours
-	 *
-	 * @param zoneName	(optional) if given, the result for the given zone is returned
-	 */
-	/* NOT USED AND NOT TESTED AT THIS TIME
-	public maxStandardOffset(zoneName?: string): Duration {
-		if (zoneName) {
-			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-			var result: Duration = null;
-			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
-				if (!result || result.lessThan(zoneInfo.gmtoff)) {
-					result = zoneInfo.gmtoff.clone();
-				}
-			});
-			assert(result, "No zone info found.");
-			return result;
-		} else {
-			// note that minmax values are in opposite offsets from what we calculate with
-			return Duration.minutes(-1 * this._minmax.maxGmtOff);
-		}
-	}
-	*/
-
-	/**
 	 * Checks whether the zone has DST at all
 	 */
 	public hasDst(zoneName: string): boolean {
 		return (this.maxDstSave(zoneName).milliseconds() !== 0);
 	}
-
-	/**
-	 * Not all local times exist because of DST forward changes.
-	 *
-	 * @returns The given time exists in the given zone.
-	 */
-	/* NOT USED AND NOT TESTED AT THIS TIME
-	public localTimeExists(zoneName: string, tm: TimeStruct): boolean {
-		if (this.hasDst(zoneName)) {
-			return (this.normalizeLocal(zoneName, tm).equals(tm));
-		} else {
-			return true;
-		}
-	}
-	*/
 
 	/**
 	 * Returns true iff the given zone name eventually links to
@@ -981,7 +916,7 @@ export class TzDatabase {
 	 * Get the zone info for the given UTC timestamp. Throws if not found.
 	 * @param zoneName	IANA time zone name
 	 * @param utcMillis	UTC time stamp
-	 * @returns	ZoneInfo object
+	 * @returns	ZoneInfo object. Do not change, we cache this object.
 	 */
 	public getZoneInfo(zoneName: string, utcMillis: number): ZoneInfo {
 		var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
@@ -996,17 +931,28 @@ export class TzDatabase {
 	}
 
 	/**
+	 * Performance improvement: zone info cache
+	 */
+	private _zoneInfoCache: { [index: string]: ZoneInfo[] } = {};
+
+	/**
 	 * Return the zone records for a given zone name, after
 	 * following any links.
 	 *
 	 * @param zoneName	IANA zone name like "Pacific/Efate"
+	 * @return Array of zone infos. Do not change, this is a cached value.
 	 */
 	public getZoneInfos(zoneName: string): ZoneInfo[]{
-		// todors maybe apply caching
+		// FIRST validate zone name before searching cache
 		/* istanbul ignore if */
 		if (!this._data.zones.hasOwnProperty(zoneName)) {
 			/* istanbul ignore next */
 			throw new Error("Zone \"" + zoneName + "\" not found.");
+		}
+
+		// Take from cache
+		if (this._zoneInfoCache.hasOwnProperty(zoneName)) {
+			return this._zoneInfoCache[zoneName];
 		}
 
 		var result = [];
@@ -1054,23 +1000,35 @@ export class TzDatabase {
 			}
 			return (a.until - b.until);
 		});
+
+		this._zoneInfoCache[zoneName] = result;
 		return result;
 	}
+
+	/**
+	 * Performance improvement: rule info cache
+	 */
+	private _ruleInfoCache: { [index: string]: RuleInfo[] } = {};
 
 	/**
 	 * Returns the rule set with the given rule name,
 	 * sorted by first effective date (uncompensated for "w" or "s" AtTime)
 	 *
 	 * @param ruleName	Name of rule set
+	 * @return RuleInfo array. Do not change, this is a cached value.
 	 */
 	public getRuleInfos(ruleName: string): RuleInfo[]{
-		// todors maybe apply caching
+		// validate name BEFORE searching cache
 		if (!this._data.rules.hasOwnProperty(ruleName)) {
 			throw new Error("Rule set \"" + ruleName + "\" not found.");
 		}
 
-		var result = [];
+		// return from cache
+		if (this._ruleInfoCache.hasOwnProperty(ruleName)) {
+			return this._ruleInfoCache[ruleName];
+		}
 
+		var result = [];
 		var ruleSet = this._data.rules[ruleName];
 		for (var i = 0; i < ruleSet.length; ++i) {
 			var rule = ruleSet[i];
@@ -1111,6 +1069,7 @@ export class TzDatabase {
 			}
 		});
 
+		this._ruleInfoCache[ruleName] = result;
 		return result;
 	}
 
