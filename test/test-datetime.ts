@@ -204,6 +204,7 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	// todo check normalization
 	describe("constructor(date: Date, dateKind: DateFunctions, timeZone?: TimeZone)", (): void => {
 		it("should parse date as local,unaware (winter time)", (): void => {
 			var date = new Date("2014-01-02T03:04:05.006Z");
@@ -279,6 +280,7 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	// todo check normalization
 	describe("constructor(year, month, ..., millisecond, timeZone?: TimeZone)", (): void => {
 		it("full entries, unaware", (): void => {
 			var d = new DateTime(2014, 1, 2, 3, 4, 5, 6, null);
@@ -336,6 +338,7 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	// todo check normalization
 	describe("constructor(utcUnixTime: number, timeZone?: TimeZone)", (): void => {
 		it("unaware", (): void => {
 			var d = new DateTime(1);
@@ -383,6 +386,7 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	// todo check normalization
 	describe("convert()", (): void => {
 		it("unaware to aware", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -405,6 +409,7 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	// todo check normalization
 	describe("toZone()", (): void => {
 		it("unaware to aware", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -499,6 +504,7 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	// todo check normalization
 	describe("add(duration)", (): void => {
 		it("should add zero", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -533,6 +539,7 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	// todo check normalization
 	describe("add(amount, unit)", (): void => {
 		it("should add 0", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -696,6 +703,7 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	// todo check normalization
 	describe("addLocal(amount, unit)", (): void => {
 		it("should add 0", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -762,8 +770,6 @@ describe("DateTime", (): void => {
 			var e = d.addLocal(1, TimeUnit.Month);
 			expect(e.toString()).to.equal("2014-02-28T00:00:00.000 Europe/Amsterdam");
 		});
-		// BUG IN TIMEZONECOMPLETE: FOR 2004-02-29T00:00:00 Europe/Amsterdam it
-		// returns offset +120 minutes if TZ=Europe/Amsterdam is set.
 		it("should clamp end-of-month (leap year)", (): void => {
 			var d = new DateTime(2004, 1, 31, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			var e = d.addLocal(1, TimeUnit.Month);
@@ -799,13 +805,11 @@ describe("DateTime", (): void => {
 			var e = d.addLocal(1, TimeUnit.Hour);
 			expect(e.toString()).to.equal("2014-03-30T02:59:59.000 UTC");
 		});
-		// BUG in timezonecomplete/JavaScript Date
 		it("should account for DST forward", (): void => {
 			var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
 			var e = d.addLocal(1, TimeUnit.Hour);
 			expect(e.toString()).to.equal("2014-03-30T03:59:59.000 Europe/Amsterdam");
 		});
-		// BUG in timezonecomplete/JavaScript Date
 		it("should account for DST forward, -1", (): void => {
 			// it should skip over 02:59 since that does not exist
 			var d = new DateTime(2014, 3, 30, 3, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));

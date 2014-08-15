@@ -1,4 +1,4 @@
-﻿/// <reference path="../typings/test.d.ts" />
+/// <reference path="../typings/test.d.ts" />
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
@@ -205,6 +205,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("constructor(date: Date, dateKind: DateFunctions, timeZone?: TimeZone)", function () {
         it("should parse date as local,unaware (winter time)", function () {
             var date = new Date("2014-01-02T03:04:05.006Z");
@@ -280,6 +281,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("constructor(year, month, ..., millisecond, timeZone?: TimeZone)", function () {
         it("full entries, unaware", function () {
             var d = new DateTime(2014, 1, 2, 3, 4, 5, 6, null);
@@ -361,6 +363,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("constructor(utcUnixTime: number, timeZone?: TimeZone)", function () {
         it("unaware", function () {
             var d = new DateTime(1);
@@ -408,6 +411,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("convert()", function () {
         it("unaware to aware", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -432,6 +436,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("toZone()", function () {
         it("unaware to aware", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -526,6 +531,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("add(duration)", function () {
         it("should add zero", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -560,6 +566,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("add(amount, unit)", function () {
         it("should add 0", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -723,6 +730,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("addLocal(amount, unit)", function () {
         it("should add 0", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -789,9 +797,6 @@ describe("DateTime", function () {
             var e = d.addLocal(1, 5 /* Month */);
             expect(e.toString()).to.equal("2014-02-28T00:00:00.000 Europe/Amsterdam");
         });
-
-        // BUG IN TIMEZONECOMPLETE: FOR 2004-02-29T00:00:00 Europe/Amsterdam it
-        // returns offset +120 minutes if TZ=Europe/Amsterdam is set.
         it("should clamp end-of-month (leap year)", function () {
             var d = new DateTime(2004, 1, 31, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
             var e = d.addLocal(1, 5 /* Month */);
@@ -827,15 +832,11 @@ describe("DateTime", function () {
             var e = d.addLocal(1, 2 /* Hour */);
             expect(e.toString()).to.equal("2014-03-30T02:59:59.000 UTC");
         });
-
-        // BUG in timezonecomplete/JavaScript Date
         it("should account for DST forward", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
             var e = d.addLocal(1, 2 /* Hour */);
             expect(e.toString()).to.equal("2014-03-30T03:59:59.000 Europe/Amsterdam");
         });
-
-        // BUG in timezonecomplete/JavaScript Date
         it("should account for DST forward, -1", function () {
             // it should skip over 02:59 since that does not exist
             var d = new DateTime(2014, 3, 30, 3, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -1120,4 +1121,3 @@ describe("DateTime", function () {
     });
 });
 // todo test DST zone where DST save is not a whole hour (20 or 40 minutes)
-//# sourceMappingURL=test-datetime.js.map

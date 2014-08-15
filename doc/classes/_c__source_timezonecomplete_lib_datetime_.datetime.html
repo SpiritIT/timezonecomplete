@@ -58,7 +58,7 @@
 	<div class="row">
 		<div class="col-8">
 			<p>DateTime class which is time zone-aware
-			and which can be mocked for testing purposes</p>
+			and which can be mocked for testing purposes.</p>
 			<section class="tsd-member-index">
 				<h2>Index</h2>
 				<section class="tsd-member-index-group ">
@@ -79,7 +79,7 @@
 				<section class="tsd-member-index-group ">
 					<h3>Methods</h3>
 					<ul class="tsd-member-index">
-						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#_addtodate" class="tsd-kind-icon">_add<wbr>ToDate</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#_addtotimestruct" class="tsd-kind-icon">_add<wbr>ToTime<wbr>Struct</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#static-_splitdatefromtimezone" class="tsd-kind-icon">_split<wbr>Date<wbr>From<wbr>Time<wbr>Zone</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#_utcdatetozonedate" class="tsd-kind-icon">_utc<wbr>Date<wbr>ToZone<wbr>Date</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#_zonedatetoutcdate" class="tsd-kind-icon">_zone<wbr>Date<wbr>ToUtc<wbr>Date</a></li>
@@ -143,7 +143,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:141</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:148</li>
 								</ul>
 							</aside>
 							<p>Constructor implementation, do not call</p>
@@ -180,7 +180,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:136</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:143</li>
 								</ul>
 							</aside>
 							<p>Constructor</p>
@@ -201,7 +201,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:127</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:134</li>
 								</ul>
 							</aside>
 							<p>Constructor. Note that unlike JavaScript dates we require fields to be in normal ranges.
@@ -247,12 +247,15 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:114</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:121</li>
 								</ul>
 							</aside>
 							<p>Constructor. You provide a date, then you say whether to take the
 								date.getYear()/getXxx methods or the date.getUTCYear()/date.getUTCXxx methods,
-							and then you state which time zone that date is in.</p>
+								and then you state which time zone that date is in.
+								Non-existing local times are normalized by rounding up to the next DST offset.
+								Note that the Date class has bugs and inconsistencies when constructing them with times around
+							DST changes.</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
@@ -273,10 +276,11 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:103</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:107</li>
 								</ul>
 							</aside>
-							<p>Constructor</p>
+							<p>Constructor
+							Non-existing local times are normalized by rounding up to the next DST offset.</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
@@ -301,7 +305,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:90</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:92</li>
 								</ul>
 							</aside>
 							<p>Constructor. Creates current time in local timezone.</p>
@@ -317,10 +321,10 @@
 				<section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_utcdate" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagprivate">private</span> _utc<wbr>Date</h3>
-					<div class="tsd-signature tsd-kind-icon">_utc<wbr>Date<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Date</span></div>
+					<div class="tsd-signature tsd-kind-icon">_utc<wbr>Date<span class="tsd-signature-symbols">:</span> <a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:43</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:45</li>
 						</ul>
 					</aside>
 					<p>Date object that contains the represented date converted to UTC in its
@@ -332,7 +336,7 @@
 					<div class="tsd-signature tsd-kind-icon">_zone<span class="tsd-signature-symbols">:</span> <a href="_c__source_timezonecomplete_lib_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:55</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:57</li>
 						</ul>
 					</aside>
 					<p>Original time zone this instance was created for.
@@ -341,10 +345,10 @@
 				<section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_zonedate" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagprivate">private</span> _zone<wbr>Date</h3>
-					<div class="tsd-signature tsd-kind-icon">_zone<wbr>Date<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Date</span></div>
+					<div class="tsd-signature tsd-kind-icon">_zone<wbr>Date<span class="tsd-signature-symbols">:</span> <a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:49</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:51</li>
 						</ul>
 					</aside>
 					<p>Date object that contains the represented date converted to this._zone in its
@@ -356,7 +360,7 @@
 					<div class="tsd-signature tsd-kind-icon">time<wbr>Source<span class="tsd-signature-symbols">:</span> <a href="../interfaces/_c__source_timezonecomplete_lib_timesource_.timesource.html" class="tsd-signature-type">TimeSource</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:62</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:64</li>
 						</ul>
 					</aside>
 					<p>Actual time source in use. Setting this property allows to
@@ -367,21 +371,24 @@
 			<section class="tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_addtodate" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _add<wbr>ToDate</h3>
+					<a name="_addtotimestruct" class="anchor"></a>
+					<h3><span class="tsd-flag ts-flagprivate">private</span> _add<wbr>ToTime<wbr>Struct</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_add<wbr>ToDate<span class="tsd-signature-symbols">(</span>date<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">Date</span>, amount<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, unit<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">Date</span></li>
+						<li class="tsd-signature tsd-kind-icon">_add<wbr>ToTime<wbr>Struct<span class="tsd-signature-symbols">(</span>tm<span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>, amount<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, unit<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:507</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:517</li>
 								</ul>
 							</aside>
+							<p>Add an amount of time to the given time struct. Note: does not normalize.
+								Keeps lower unit fields the same where possible, clamps day to end-of-month if
+							necessary.</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
-									<h5>date: <span class="tsd-signature-type">Date</span></h5>
+									<h5>tm: <a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
 								</li>
 								<li>
 									<h5>amount: <span class="tsd-signature-type">number</span></h5>
@@ -391,7 +398,7 @@
 								</li>
 							</ul>
 							<h4>Returns 
-								<span class="tsd-signature-type">Date</span>
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
 							</h4>
 						</li>
 					</ul>
@@ -405,7 +412,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:727</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:732</li>
 								</ul>
 							</aside>
 							<p>Split a combined ISO datetime and timezone into datetime and timezone</p>
@@ -430,7 +437,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:703</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:706</li>
 								</ul>
 							</aside>
 							<p>Calculate this._zoneDate from this._utcDate</p>
@@ -446,7 +453,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:715</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:719</li>
 								</ul>
 							</aside>
 							<p>Calculate this._utcDate from this._zoneDate</p>
@@ -463,14 +470,12 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:443</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:448</li>
 								</ul>
 							</aside>
-							<p>Add a time duration. Note that this simply adds a number
+							<p>Add a time duration relative to UTC. Note that this simply adds a number
 								of milliseconds to UTC and converts back to zone(),
-								so in the presence of e.g. leap seconds there may be a
-								shift in the seconds field if you add an hour.
-							There is not DST handling and no leap second handling.</p>
+							There is not DST handling.</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
@@ -484,15 +489,19 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:452</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:464</li>
 								</ul>
 							</aside>
-							<p>Add an amount of time to UTC, taking leap seconds etc into account.
-								Adding e.g. 1 hour will increment the utcHour() field
-								date by one. In case of DST changes, the local hour() field
-								may not increase or increase by 2 hours. So if you add a month, the
-								local time may vary by an hour. There will not be a shift
-							in seconds due to leap seconds.</p>
+							<p>Add an amount of time relative to UTC, as regularly as possible.</p>
+							<p>Adding e.g. 1 hour will increment the utcHour() field, adding 1 month
+								increments the utcMonth() field.
+								Adding an amount of units leaves lower units intact. E.g.
+							adding a month will leave the day() field untouched if possible.</p>
+							<p>Note adding Months or Years will clamp the date to the end-of-month if
+								the start date was at the end of a month, i.e. contrary to JavaScript
+							Date#setUTCMonth() it will not overflow into the next month</p>
+							<p>In case of DST changes, the utc time fields are still untouched but local
+							time fields may shift.</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
@@ -517,15 +526,16 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:494</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:501</li>
 								</ul>
 							</aside>
-							<p>Add an amount of time to the zone time, as regularly as possible.
-								Adding e.g. 1 hour will increment the hour() field of the zone
-								date by one. In case of DST changes, the utcHour() field may
-								increase by 1 or increase by 2. Adding a day will leave the time portion
-								intact. However, adding an hour around a forward DST change adds two hours,
-							since there is a zone time (e.g. 2AM in Amsterdam) that does not exist.</p>
+							<p>Add an amount of time to the zone time, as regularly as possible.</p>
+							<p>Adding e.g. 1 hour will increment the hour() field of the zone
+								date by one. In case of DST changes, the time fields may additionally
+								increase by the DST offset, if a non-existing local time would
+							be reached otherwise.</p>
+							<p>Adding a unit of time will leave lower-unit fields intact, unless the result
+							would be a non-existing time. Then an extra DST offset is added.</p>
 							<p>Note adding Months or Years will clamp the date to the end-of-month if
 								the start date was at the end of a month, i.e. contrary to JavaScript
 							Date#setUTCMonth() it will not overflow into the next month</p>
@@ -553,7 +563,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:240</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:243</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -572,7 +582,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:389</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:392</li>
 								</ul>
 							</aside>
 							<p>Convert this date to the given time zone (in-place).
@@ -599,7 +609,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:279</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:282</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -618,7 +628,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:605</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:609</li>
 								</ul>
 							</aside>
 							<p>Time difference between two DateTimes</p>
@@ -644,7 +654,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:626</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:630</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -669,7 +679,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:651</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:655</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -694,7 +704,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:644</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:648</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -719,7 +729,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:286</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:289</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -738,7 +748,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:634</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:638</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -764,7 +774,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:688</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:692</li>
 								</ul>
 							</aside>
 							<p>Used by util.inspect()</p>
@@ -783,7 +793,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:619</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:623</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -808,7 +818,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:612</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:616</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -833,7 +843,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:307</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:310</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -852,7 +862,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:293</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:296</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -871,7 +881,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:272</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:275</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -890,7 +900,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:83</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:85</li>
 								</ul>
 							</aside>
 							<p>Current date+time in the given time zone (derived from DateTime.timeSource.now()).</p>
@@ -916,7 +926,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:67</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:69</li>
 								</ul>
 							</aside>
 							<p>Current date+time in local time (derived from DateTime.timeSource.now()).</p>
@@ -935,7 +945,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:75</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:77</li>
 								</ul>
 							</aside>
 							<p>Current date+time in UTC time (derived from DateTime.timeSource.now()).</p>
@@ -954,7 +964,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:258</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:261</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -973,7 +983,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:300</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:303</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -993,7 +1003,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:573</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:581</li>
 								</ul>
 							</aside>
 							<p>Same as add(-1*duration);</p>
@@ -1009,7 +1019,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:577</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:585</li>
 								</ul>
 							</aside>
 							<p>Same as add(-1*amount, unit);</p>
@@ -1037,7 +1047,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:597</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:601</li>
 								</ul>
 							</aside>
 							<p>Same as addLocal(-1*amount, unit);</p>
@@ -1065,11 +1075,12 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:431</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:437</li>
 								</ul>
 							</aside>
 							<p>Convert to JavaScript date with the zone time in the getX() methods.
-							Unless the timezone is local, the Date.getUTCX() methods will NOT be correct.</p>
+								Unless the timezone is local, the Date.getUTCX() methods will NOT be correct.
+							This is because Date calculates getUTCX() from getX() applying local time zone.</p>
 							<h4>Returns 
 								<span class="tsd-signature-type">Date</span>
 							</h4>
@@ -1085,7 +1096,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:659</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:663</li>
 								</ul>
 							</aside>
 							<p>Proper ISO 8601 format string with any IANA zone converted to ISO offset
@@ -1105,7 +1116,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:672</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:676</li>
 								</ul>
 							</aside>
 							<p>Modified ISO 8601 format string with IANA name if applicable.
@@ -1125,7 +1136,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:695</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:699</li>
 								</ul>
 							</aside>
 							<p>Modified ISO 8601 format string in UTC without time zone info</p>
@@ -1144,12 +1155,13 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:412</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:417</li>
 								</ul>
 							</aside>
 							<p>Returns this date converted to the given time zone.
 								Unaware dates can only be converted to unaware dates (clone)
-							For unaware dates, an exception is thrown</p>
+								Converting an unaware date to an aware date throws an exception. Use the constructor
+							if you really need to do that.</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
@@ -1173,7 +1185,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:322</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:325</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1192,7 +1204,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:343</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:346</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1211,7 +1223,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:350</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:353</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1230,7 +1242,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:371</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:374</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1249,7 +1261,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:357</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:360</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1268,7 +1280,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:336</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:339</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1287,7 +1299,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:364</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:367</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1306,7 +1318,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:379</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:382</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1326,7 +1338,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:329</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:332</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1345,7 +1357,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:315</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:318</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1365,7 +1377,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:265</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:268</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1384,7 +1396,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:251</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/datetime.ts:254</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1458,7 +1470,7 @@
 								<a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#static-timesource" class="tsd-kind-icon">time<wbr>Source</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#_addtodate" class="tsd-kind-icon">_add<wbr>ToDate</a>
+								<a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#_addtotimestruct" class="tsd-kind-icon">_add<wbr>ToTime<wbr>Struct</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
 								<a href="_c__source_timezonecomplete_lib_datetime_.datetime.html#static-_splitdatefromtimezone" class="tsd-kind-icon">_split<wbr>Date<wbr>From<wbr>Time<wbr>Zone</a>

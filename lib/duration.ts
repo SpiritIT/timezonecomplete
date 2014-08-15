@@ -1,7 +1,7 @@
 ﻿/**
  * Copyright(c) 2014 Spirit IT BV
  *
- * Date and Time utility functions
+ * Time duration
  */
 
 /// <reference path="../typings/lib.d.ts"/>

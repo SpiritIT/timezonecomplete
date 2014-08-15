@@ -83,11 +83,15 @@
 					<ul class="tsd-member-index">
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#clone" class="tsd-kind-icon">clone</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#equals" class="tsd-kind-icon">equals</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#static-fromdate" class="tsd-kind-icon">from<wbr>Date</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#static-fromstring" class="tsd-kind-icon">from<wbr>String</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#static-fromunix" class="tsd-kind-icon">from<wbr>Unix</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#inspect" class="tsd-kind-icon">inspect</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#lessthan" class="tsd-kind-icon">less<wbr>Than</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#tounixnoleapsecs" class="tsd-kind-icon">to<wbr>Unix<wbr>NoLeap<wbr>Secs</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#validate" class="tsd-kind-icon">validate</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#valueof" class="tsd-kind-icon">value<wbr>Of</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#yearday" class="tsd-kind-icon">year<wbr>Day</a></li>
 					</ul>
 				</section>
@@ -103,14 +107,15 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:151</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:306</li>
 								</ul>
 							</aside>
+							<p>Constructor</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
 									<h5>year?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Year, 1970-...</p>
+									<p>Year e.g. 1970</p>
 								</li>
 								<li>
 									<h5>month?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
@@ -118,7 +123,7 @@
 								</li>
 								<li>
 									<h5>day?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Day of month, 1-31</p>
+									<p>Day 1-31</p>
 								</li>
 								<li>
 									<h5>hour?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
@@ -130,11 +135,11 @@
 								</li>
 								<li>
 									<h5>second?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Seconds, 0-61 (60, 61 for leap seconds)</p>
+									<p>Second 0-59 (no leap seconds)</p>
 								</li>
 								<li>
 									<h5>milli?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Milliseconds 0-999</p>
+									<p>Millisecond 0-999</p>
 								</li>
 							</ul>
 							<h4>Returns 
@@ -152,7 +157,7 @@
 					<div class="tsd-signature tsd-kind-icon">day<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:165</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:320</li>
 						</ul>
 					</aside>
 					<p>Day of month, 1-31</p>
@@ -163,7 +168,7 @@
 					<div class="tsd-signature tsd-kind-icon">hour<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:170</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:325</li>
 						</ul>
 					</aside>
 					<p>Hour 0-23</p>
@@ -174,7 +179,7 @@
 					<div class="tsd-signature tsd-kind-icon">milli<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:185</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:340</li>
 						</ul>
 					</aside>
 					<p>Milliseconds 0-999</p>
@@ -185,7 +190,7 @@
 					<div class="tsd-signature tsd-kind-icon">minute<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:175</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:330</li>
 						</ul>
 					</aside>
 					<p>Minute 0-59</p>
@@ -196,7 +201,7 @@
 					<div class="tsd-signature tsd-kind-icon">month<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:160</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:315</li>
 						</ul>
 					</aside>
 					<p>Month 1-12</p>
@@ -207,10 +212,10 @@
 					<div class="tsd-signature tsd-kind-icon">second<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:180</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:335</li>
 						</ul>
 					</aside>
-					<p>Seconds, 0-61 (60, 61 for leap seconds)</p>
+					<p>Seconds, 0-59</p>
 				</section>
 				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="year" class="anchor"></a>
@@ -218,7 +223,7 @@
 					<div class="tsd-signature tsd-kind-icon">year<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:155</li>
+							<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:310</li>
 						</ul>
 					</aside>
 					<p>Year, 1970-...</p>
@@ -235,7 +240,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:243</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:398</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -253,7 +258,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:226</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:381</li>
 								</ul>
 							</aside>
 							<p>Deep equals</p>
@@ -269,6 +274,86 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="static-fromdate" class="anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> from<wbr>Date</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">from<wbr>Date<span class="tsd-signature-symbols">(</span>d<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">Date</span>, df<span class="tsd-signature-symbols">: </span><a href="../enums/_c__source_timezonecomplete_lib_javascript_.datefunctions.html" class="tsd-signature-type">DateFunctions</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:167</li>
+								</ul>
+							</aside>
+							<p>Create a TimeStruct from a JavaScript date</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>d: <span class="tsd-signature-type">Date</span></h5>
+									<p>The date</p>
+								</li>
+								<li>
+									<h5>df: <a href="../enums/_c__source_timezonecomplete_lib_javascript_.datefunctions.html" class="tsd-signature-type">DateFunctions</a></h5>
+									<p>Which functions to take (getX() or getUTCX())</p>
+								</li>
+							</ul>
+							<h4>Returns 
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="static-fromstring" class="anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> from<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">from<wbr>String<span class="tsd-signature-symbols">(</span>s<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:180</li>
+								</ul>
+							</aside>
+							<p>Returns a TimeStruct from an ISO 8601 string WITHOUT time zone</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>s: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4>Returns 
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="static-fromunix" class="anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> from<wbr>Unix</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">from<wbr>Unix<span class="tsd-signature-symbols">(</span>unixMillis<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:157</li>
+								</ul>
+							</aside>
+							<p>Create a TimeStruct from a number of unix milliseconds</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>unixMillis: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4>Returns 
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
+							</h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="inspect" class="anchor"></a>
 					<h3>inspect</h3>
@@ -278,7 +363,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:251</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:419</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -296,7 +381,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:239</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:394</li>
 								</ul>
 							</aside>
 							<p>&lt; operator</p>
@@ -321,9 +406,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:247</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:409</li>
 								</ul>
 							</aside>
+							<p>ISO 8601 string YYYY-MM-DDThh:mm:ss.nnn</p>
 							<h4>Returns 
 								<span class="tsd-signature-type">string</span>
 							</h4>
@@ -339,7 +425,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:218</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:373</li>
 								</ul>
 							</aside>
 							<p>Returns this time as a unix millisecond timestamp
@@ -359,12 +445,30 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:193</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:348</li>
 								</ul>
 							</aside>
 							<p>Validate a TimeStruct, returns false if invalid.</p>
 							<h4>Returns 
 								<span class="tsd-signature-type">boolean</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="valueof" class="anchor"></a>
+					<h3>value<wbr>Of</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">value<wbr>Of<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:402</li>
+								</ul>
+							</aside>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
@@ -378,7 +482,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:209</li>
+									<li>Defined in c:/Source/timezonecomplete/lib/basics.ts:364</li>
 								</ul>
 							</aside>
 							<p>The day-of-year 0-365</p>
@@ -472,6 +576,15 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#equals" class="tsd-kind-icon">equals</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#static-fromdate" class="tsd-kind-icon">from<wbr>Date</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#static-fromstring" class="tsd-kind-icon">from<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#static-fromunix" class="tsd-kind-icon">from<wbr>Unix</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#inspect" class="tsd-kind-icon">inspect</a>
 							</li>
@@ -486,6 +599,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#validate" class="tsd-kind-icon">validate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#valueof" class="tsd-kind-icon">value<wbr>Of</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_c__source_timezonecomplete_lib_basics_.timestruct.html#yearday" class="tsd-kind-icon">year<wbr>Day</a>

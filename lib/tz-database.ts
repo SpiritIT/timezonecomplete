@@ -2,6 +2,8 @@
  * Copyright(c) 2014 Spirit IT BV
  *
  * Olsen Timezone Database container
+ *
+ * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
  */
 
 /// <reference path="../typings/lib.d.ts"/>
@@ -79,6 +81,8 @@ export enum AtType {
 }
 
 /**
+ * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+ *
  * See http://www.cstdbill.com/tzdb/tz-how-to.html
  */
 export class RuleInfo {
@@ -293,6 +297,8 @@ export enum RuleType {
 }
 
 /**
+ * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+ *
  * See http://www.cstdbill.com/tzdb/tz-how-to.html
  * First, and somewhat trivially, whereas Rules are considered to contain one or more records, a Zone is considered to
  * be a single record with zero or more continuation lines. Thus, the keyword, “Zone,” and the zone name are not repeated.
@@ -416,6 +422,22 @@ export class Transition {
 }
 
 /**
+ * Option for TzDatabase#normalizeLocal()
+ */
+export enum NormalizeOption {
+	/**
+	 * Normalize non-existing times by ADDING the DST offset
+	 */
+	Up,
+	/**
+	 * Normalize non-existing times by SUBTRACTING the DST offset
+	 */
+	Down
+}
+
+/**
+ * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+ *
  * This class typescriptifies reading the TZ data
  */
 export class TzDatabase {
@@ -634,7 +656,7 @@ export class TzDatabase {
 	}
 
 	/**
-	 * Normalizes non-existing local times by adding a forward offset change.
+	 * Normalizes non-existing local times by adding/subtracting a forward offset change.
 	 * During a forward standard offset change or DST offset change, some amount of
 	 * local time is skipped. Therefore, this amount of local time does not exist.
 	 * This function adds the amount of forward change to any non-existing time. After all,
@@ -642,11 +664,13 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	IANA time zone name
 	 * @param localTime	A local time, either as a TimeStruct or as a unix millisecond value
+	 * @param opt	(optional) Round up or down? Default: up.
+	 *
 	 * @return	The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)
 	 */
-	public normalizeLocal(zoneName: string, localTime: TimeStruct): TimeStruct;
-	public normalizeLocal(zoneName: string, localTime: number): number;
-	public normalizeLocal(zoneName: string, a: any): any {
+	public normalizeLocal(zoneName: string, localTime: TimeStruct, opt?: NormalizeOption): TimeStruct;
+	public normalizeLocal(zoneName: string, localTime: number, opt?: NormalizeOption): number;
+	public normalizeLocal(zoneName: string, a: any, opt: NormalizeOption = NormalizeOption.Up): any {
 		assert(typeof (a) === "number" || typeof (a) === "object", "number or object expected");
 		assert(typeof(a) !== "object" || a, "a is null");
 
@@ -684,10 +708,11 @@ export class TzDatabase {
 					if (unixMillis >= localBefore && unixMillis < localAfter) {
 						var forwardChange = transition.offset.sub(prev);
 						// non-existing time
+						var factor: number = (opt === NormalizeOption.Up ? 1 : -1);
 						if (typeof a === "object") {
-							return basics.unixToTimeNoLeapSecs(unixMillis + forwardChange.milliseconds());
+							return basics.unixToTimeNoLeapSecs(unixMillis + factor * forwardChange.milliseconds());
 						} else {
-							return unixMillis + forwardChange.milliseconds();
+							return unixMillis + factor * forwardChange.milliseconds();
 						}
 					}
 				}
@@ -960,7 +985,6 @@ export class TzDatabase {
 	 */
 	public getZoneInfo(zoneName: string, utcMillis: number): ZoneInfo {
 		var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-		// todors use binary search maybe
 		for (var i = 0; i < zoneInfos.length; ++i) {
 			var zoneInfo = zoneInfos[i];
 			if (zoneInfo.until === null || zoneInfo.until > utcMillis) {

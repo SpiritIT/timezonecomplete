@@ -27,6 +27,9 @@ var sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: true });
 
+var javascript = require("./javascript");
+var DateFunctions = javascript.DateFunctions;
+
 var math = require("./math");
 var strings = require("./strings");
 
@@ -168,6 +171,17 @@ exports.weekDayOnOrBefore = weekDayOnOrBefore;
 * Basic representation of a date and time
 */
 var TimeStruct = (function () {
+    /**
+    * Constructor
+    *
+    * @param year	Year e.g. 1970
+    * @param month	Month 1-12
+    * @param day	Day 1-31
+    * @param hour	Hour 0-23
+    * @param minute	Minute 0-59
+    * @param second	Second 0-59 (no leap seconds)
+    * @param milli	Millisecond 0-999
+    */
     function TimeStruct(/**
     * Year, 1970-...
     */
@@ -184,7 +198,7 @@ var TimeStruct = (function () {
     * Minute 0-59
     */
     minute, /**
-    * Seconds, 0-61 (60, 61 for leap seconds)
+    * Seconds, 0-59
     */
     second, /**
     * Milliseconds 0-999
@@ -204,13 +218,159 @@ var TimeStruct = (function () {
         this.minute = minute;
         this.second = second;
         this.milli = milli;
-        assert(this.validate(), "Invalid arguments");
+        assert(this.validate(), "Invalid arguments: " + this.toString());
     }
+    /**
+    * Create a TimeStruct from a number of unix milliseconds
+    */
+    TimeStruct.fromUnix = function (unixMillis) {
+        return exports.unixToTimeNoLeapSecs(unixMillis);
+    };
+
+    /**
+    * Create a TimeStruct from a JavaScript date
+    *
+    * @param d	The date
+    * @param df	Which functions to take (getX() or getUTCX())
+    */
+    TimeStruct.fromDate = function (d, df) {
+        if (df === 0 /* Get */) {
+            return new TimeStruct(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
+        } else {
+            return new TimeStruct(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
+        }
+    };
+
+    /**
+    * Returns a TimeStruct from an ISO 8601 string WITHOUT time zone
+    */
+    TimeStruct.fromString = function (s) {
+        try  {
+            var year = 1970;
+            var month = 1;
+            var day = 1;
+            var hour = 0;
+            var minute = 0;
+            var second = 0;
+            var fractionMillis = 0;
+            var lastUnit = 6 /* Year */;
+
+            // separate any fractional part
+            var split = s.trim().split(".");
+            assert(split.length >= 1 && split.length <= 2, "Empty string or multiple dots.");
+
+            // parse main part
+            var isBasicFormat = (s.indexOf("-") === -1);
+            if (isBasicFormat) {
+                assert(split[0].match(/^((\d)+)|(\d\d\d\d\d\d\d\dT(\d)+)$/), "ISO string in basic notation may only contain numbers before the fractional part");
+
+                // remove any "T" separator
+                split[0] = split[0].replace("T", "");
+
+                assert([4, 8, 10, 12, 14].indexOf(split[0].length) !== -1, "Padding or required components are missing. Note that YYYYMM is not valid per ISO 8601");
+
+                if (split[0].length >= 4) {
+                    year = parseInt(split[0].substr(0, 4), 10);
+                    lastUnit = 6 /* Year */;
+                }
+                if (split[0].length >= 8) {
+                    month = parseInt(split[0].substr(4, 2), 10);
+                    day = parseInt(split[0].substr(6, 2), 10); // note that YYYYMM format is disallowed so if month is present, day is too
+                    lastUnit = 3 /* Day */;
+                }
+                if (split[0].length >= 10) {
+                    hour = parseInt(split[0].substr(8, 2), 10);
+                    lastUnit = 2 /* Hour */;
+                }
+                if (split[0].length >= 12) {
+                    minute = parseInt(split[0].substr(10, 2), 10);
+                    lastUnit = 1 /* Minute */;
+                }
+                if (split[0].length >= 14) {
+                    second = parseInt(split[0].substr(12, 2), 10);
+                    lastUnit = 0 /* Second */;
+                }
+            } else {
+                assert(split[0].match(/^\d\d\d\d(-\d\d-\d\d((T)?\d\d(\:\d\d(:\d\d)?)?)?)?$/), "Invalid ISO string");
+                var dateAndTime = [];
+                if (s.indexOf("T") !== -1) {
+                    dateAndTime = split[0].split("T");
+                } else if (s.length > 10) {
+                    dateAndTime = [split[0].substr(0, 10), split[0].substr(10)];
+                } else {
+                    dateAndTime = [split[0], ""];
+                }
+                assert([4, 10].indexOf(dateAndTime[0].length) !== -1, "Padding or required components are missing. Note that YYYYMM is not valid per ISO 8601");
+
+                if (dateAndTime[0].length >= 4) {
+                    year = parseInt(dateAndTime[0].substr(0, 4), 10);
+                    lastUnit = 6 /* Year */;
+                }
+                if (dateAndTime[0].length >= 10) {
+                    month = parseInt(dateAndTime[0].substr(5, 2), 10);
+                    day = parseInt(dateAndTime[0].substr(8, 2), 10); // note that YYYYMM format is disallowed so if month is present, day is too
+                    lastUnit = 3 /* Day */;
+                }
+                if (dateAndTime[1].length >= 2) {
+                    hour = parseInt(dateAndTime[1].substr(0, 2), 10);
+                    lastUnit = 2 /* Hour */;
+                }
+                if (dateAndTime[1].length >= 5) {
+                    minute = parseInt(dateAndTime[1].substr(3, 2), 10);
+                    lastUnit = 1 /* Minute */;
+                }
+                if (dateAndTime[1].length >= 8) {
+                    second = parseInt(dateAndTime[1].substr(6, 2), 10);
+                    lastUnit = 0 /* Second */;
+                }
+            }
+
+            // parse fractional part
+            if (split.length > 1 && split[1].length > 0) {
+                var fraction = parseFloat("0." + split[1]);
+                switch (lastUnit) {
+                    case 6 /* Year */:
+                         {
+                            fractionMillis = exports.daysInYear(year) * 86400000 * fraction;
+                        }
+                        break;
+                    case 3 /* Day */:
+                         {
+                            fractionMillis = 86400000 * fraction;
+                        }
+                        break;
+                    case 2 /* Hour */:
+                         {
+                            fractionMillis = 3600000 * fraction;
+                        }
+                        break;
+                    case 1 /* Minute */:
+                         {
+                            fractionMillis = 60000 * fraction;
+                        }
+                        break;
+                    case 0 /* Second */:
+                         {
+                            fractionMillis = 1000 * fraction;
+                        }
+                        break;
+                }
+            }
+
+            // combine main and fractional part
+            var unixMillis = exports.timeToUnixNoLeapSecs(year, month, day, hour, minute, second);
+            unixMillis = Math.floor(unixMillis + fractionMillis);
+            return exports.unixToTimeNoLeapSecs(unixMillis);
+        } catch (e) {
+            throw new Error("Invalid ISO 8601 string: \"" + s + "\": " + e.message);
+        }
+    };
+
     /**
     * Validate a TimeStruct, returns false if invalid.
     */
     TimeStruct.prototype.validate = function () {
-        return (typeof (this.year) === "number" && !isNaN(this.year) && math.isInt(this.year) && this.year >= -10000 && this.year < 10000 && typeof (this.month) === "number" && !isNaN(this.month) && math.isInt(this.month) && this.month >= 1 && this.month <= 12 && typeof (this.day) === "number" && !isNaN(this.day) && math.isInt(this.day) && this.day >= 1 && this.day <= exports.daysInMonth(this.year, this.month) && typeof (this.hour) === "number" && !isNaN(this.hour) && math.isInt(this.hour) && this.hour >= 0 && this.hour <= 23 && typeof (this.minute) === "number" && !isNaN(this.minute) && math.isInt(this.minute) && this.minute >= 0 && this.minute <= 59 && typeof (this.second) === "number" && !isNaN(this.second) && math.isInt(this.second) && this.second >= 0 && this.second <= 61 && typeof (this.milli) === "number" && !isNaN(this.milli) && math.isInt(this.milli) && this.milli >= 0 && this.milli <= 999);
+        return (typeof (this.year) === "number" && !isNaN(this.year) && math.isInt(this.year) && this.year >= -10000 && this.year < 10000 && typeof (this.month) === "number" && !isNaN(this.month) && math.isInt(this.month) && this.month >= 1 && this.month <= 12 && typeof (this.day) === "number" && !isNaN(this.day) && math.isInt(this.day) && this.day >= 1 && this.day <= exports.daysInMonth(this.year, this.month) && typeof (this.hour) === "number" && !isNaN(this.hour) && math.isInt(this.hour) && this.hour >= 0 && this.hour <= 23 && typeof (this.minute) === "number" && !isNaN(this.minute) && math.isInt(this.minute) && this.minute >= 0 && this.minute <= 59 && typeof (this.second) === "number" && !isNaN(this.second) && math.isInt(this.second) && this.second >= 0 && this.second <= 59 && typeof (this.milli) === "number" && !isNaN(this.milli) && math.isInt(this.milli) && this.milli >= 0 && this.milli <= 999);
     };
 
     /**
@@ -248,8 +408,15 @@ var TimeStruct = (function () {
         return new TimeStruct(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
     };
 
+    TimeStruct.prototype.valueOf = function () {
+        return exports.timeToUnixNoLeapSecs(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+    };
+
+    /**
+    * ISO 8601 string YYYY-MM-DDThh:mm:ss.nnn
+    */
     TimeStruct.prototype.toString = function () {
-        return strings.isoString(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+        return strings.padLeft(this.year.toString(10), 4, "0") + "-" + strings.padLeft(this.month.toString(10), 2, "0") + "-" + strings.padLeft(this.day.toString(10), 2, "0") + "T" + strings.padLeft(this.hour.toString(10), 2, "0") + ":" + strings.padLeft(this.minute.toString(10), 2, "0") + ":" + strings.padLeft(this.second.toString(10), 2, "0") + "." + strings.padLeft(this.milli.toString(10), 3, "0");
     };
 
     TimeStruct.prototype.inspect = function () {
@@ -404,7 +571,7 @@ function weekDayNoLeapSecs(unixMillis) {
 }
 exports.weekDayNoLeapSecs = weekDayNoLeapSecs;
 
-},{"./math":8,"./strings":10,"assert":16,"source-map-support":35}],2:[function(require,module,exports){
+},{"./javascript":7,"./math":8,"./strings":10,"assert":16,"source-map-support":35}],2:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *
@@ -413,9 +580,14 @@ exports.weekDayNoLeapSecs = weekDayNoLeapSecs;
 /// <reference path="../typings/lib.d.ts"/>
 "use strict";
 var assert = require("assert");
+var sourcemapsupport = require("source-map-support");
+
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: true });
 
 var basics = require("./basics");
 
+var TimeStruct = basics.TimeStruct;
 var TimeUnit = basics.TimeUnit;
 
 var duration = require("./duration");
@@ -424,28 +596,24 @@ var Duration = duration.Duration;
 var javascript = require("./javascript");
 var DateFunctions = javascript.DateFunctions;
 
-var strings = require("./strings");
-
 var timesource = require("./timesource");
 
 var RealTimeSource = timesource.RealTimeSource;
 
 var timezone = require("./timezone");
+var NormalizeOption = timezone.NormalizeOption;
 var TimeZone = timezone.TimeZone;
 var TimeZoneKind = timezone.TimeZoneKind;
 
 /**
 * DateTime class which is time zone-aware
-* and which can be mocked for testing purposes
+* and which can be mocked for testing purposes.
 */
 var DateTime = (function () {
     /**
     * Constructor implementation, do not call
     */
     function DateTime(a1, a2, a3, h, m, s, ms, timeZone) {
-        var tempDate;
-        var offset;
-
         switch (typeof (a1)) {
             case "number":
                  {
@@ -453,7 +621,11 @@ var DateTime = (function () {
                         // unix timestamp constructor
                         assert(typeof (a1) === "number", "DateTime.DateTime(): expect unixTimestamp to be a number");
                         this._zone = (typeof (a2) === "object" && a2 instanceof TimeZone ? a2 : null);
-                        this._zoneDate = new Date(a1);
+                        if (this._zone) {
+                            this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(a1));
+                        } else {
+                            this._zoneDate = TimeStruct.fromUnix(a1);
+                        }
                         this._zoneDateToUtcDate();
                     } else {
                         // year month day constructor
@@ -477,11 +649,12 @@ var DateTime = (function () {
                         this._zone = (typeof (timeZone) === "object" && timeZone instanceof TimeZone ? timeZone : null);
 
                         // normalize local time (remove non-existing local time)
-                        var localMillis = basics.timeToUnixNoLeapSecs(year, month, day, hour, minute, second, millisecond);
                         if (this._zone) {
-                            localMillis = this._zone.normalizeZoneTime(localMillis);
+                            var localMillis = basics.timeToUnixNoLeapSecs(year, month, day, hour, minute, second, millisecond);
+                            this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(localMillis));
+                        } else {
+                            this._zoneDate = new TimeStruct(year, month, day, hour, minute, second, millisecond);
                         }
-                        this._zoneDate = new Date(localMillis);
                         this._zoneDateToUtcDate();
                     }
                 }
@@ -495,7 +668,13 @@ var DateTime = (function () {
                     } else {
                         this._zone = TimeZone.zone(ss[1]);
                     }
-                    this._zoneDate = new Date(ss[0] + "Z");
+
+                    // use our own ISO parsing because that it platform independent
+                    // (free of Date quirks)
+                    this._zoneDate = TimeStruct.fromString(ss[0]);
+                    if (this._zone) {
+                        this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(this._zoneDate.toUnixNoLeapSecs()));
+                    }
                     this._zoneDateToUtcDate();
                 }
                 break;
@@ -507,28 +686,18 @@ var DateTime = (function () {
                     var d = (a1);
                     var dk = (a2);
                     this._zone = (a3 ? a3 : null);
-
-                    // set time zone
-                    // calculate internal time representation
-                    // go through string conversion because JavaScript has a bug otherwise
-                    if (dk === 0 /* Get */) {
-                        tempDate = new Date(strings.isoString(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()) + "Z");
-                        offset = (this._zone ? this._zone.offsetForZoneDate(tempDate, 1 /* GetUTC */) : 0);
-                        this._utcDate = new Date(tempDate.valueOf() - offset * 60000);
-                        this._utcDateToZoneDate();
-                    } else {
-                        tempDate = new Date(strings.isoString(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()) + "Z");
-                        offset = (this._zone ? this._zone.offsetForZoneDate(tempDate, 1 /* GetUTC */) : 0);
-                        this._utcDate = new Date(tempDate.valueOf() - offset * 60000);
-                        this._utcDateToZoneDate();
+                    this._zoneDate = TimeStruct.fromDate(d, dk);
+                    if (this._zone) {
+                        this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(this._zoneDate.toUnixNoLeapSecs()));
                     }
+                    this._zoneDateToUtcDate();
                 }
                 break;
             case "undefined":
                  {
                     // nothing given, make local datetime
-                    this._utcDate = DateTime.timeSource.now();
                     this._zone = TimeZone.local();
+                    this._utcDate = TimeStruct.fromDate(DateTime.timeSource.now(), 1 /* GetUTC */);
                     this._utcDateToZoneDate();
                 }
                 break;
@@ -568,8 +737,8 @@ var DateTime = (function () {
     */
     DateTime.prototype.clone = function () {
         var result = new DateTime();
-        result._utcDate = new Date(this._utcDate.valueOf());
-        result._zoneDate = new Date(this._zoneDate.valueOf());
+        result._utcDate = this._utcDate.clone();
+        result._zoneDate = this._zoneDate.clone();
         result._zone = this._zone;
         return result;
     };
@@ -585,56 +754,56 @@ var DateTime = (function () {
     * @return the offset w.r.t. UTC in minutes. Returns 0 for unaware dates and for UTC dates.
     */
     DateTime.prototype.offset = function () {
-        return Math.round((this._zoneDate.valueOf() - this._utcDate.valueOf()) / 60000);
+        return Math.round((this._zoneDate.toUnixNoLeapSecs() - this._utcDate.toUnixNoLeapSecs()) / 60000);
     };
 
     /**
     * @return The full year e.g. 2014
     */
     DateTime.prototype.year = function () {
-        return this._zoneDate.getUTCFullYear();
+        return this._zoneDate.year;
     };
 
     /**
     * @return The month 1-12 (note this deviates from JavaScript Date)
     */
     DateTime.prototype.month = function () {
-        return this._zoneDate.getUTCMonth() + 1;
+        return this._zoneDate.month;
     };
 
     /**
     * @return The day of the month 1-31
     */
     DateTime.prototype.day = function () {
-        return this._zoneDate.getUTCDate();
+        return this._zoneDate.day;
     };
 
     /**
     * @return The hour 0-23
     */
     DateTime.prototype.hour = function () {
-        return this._zoneDate.getUTCHours();
+        return this._zoneDate.hour;
     };
 
     /**
     * @return the minutes 0-59
     */
     DateTime.prototype.minute = function () {
-        return this._zoneDate.getUTCMinutes();
+        return this._zoneDate.minute;
     };
 
     /**
     * @return the seconds 0-59
     */
     DateTime.prototype.second = function () {
-        return this._zoneDate.getUTCSeconds();
+        return this._zoneDate.second;
     };
 
     /**
     * @return the milliseconds 0-999
     */
     DateTime.prototype.millisecond = function () {
-        return this._zoneDate.getUTCMilliseconds();
+        return this._zoneDate.milli;
     };
 
     /**
@@ -642,63 +811,63 @@ var DateTime = (function () {
     * week day numbers)
     */
     DateTime.prototype.weekDay = function () {
-        return this._zoneDate.getUTCDay();
+        return basics.weekDayNoLeapSecs(this._zoneDate.toUnixNoLeapSecs());
     };
 
     /**
     * @return Milliseconds since 1970-01-01T00:00:00.000Z
     */
     DateTime.prototype.unixUtcMillis = function () {
-        return this._utcDate.valueOf();
+        return this._utcDate.toUnixNoLeapSecs();
     };
 
     /**
     * @return The full year e.g. 2014
     */
     DateTime.prototype.utcYear = function () {
-        return this._utcDate.getUTCFullYear();
+        return this._utcDate.year;
     };
 
     /**
     * @return The UTC month 1-12 (note this deviates from JavaScript Date)
     */
     DateTime.prototype.utcMonth = function () {
-        return this._utcDate.getUTCMonth() + 1;
+        return this._utcDate.month;
     };
 
     /**
     * @return The UTC day of the month 1-31
     */
     DateTime.prototype.utcDay = function () {
-        return this._utcDate.getUTCDate();
+        return this._utcDate.day;
     };
 
     /**
     * @return The UTC hour 0-23
     */
     DateTime.prototype.utcHour = function () {
-        return this._utcDate.getUTCHours();
+        return this._utcDate.hour;
     };
 
     /**
     * @return The UTC minutes 0-59
     */
     DateTime.prototype.utcMinute = function () {
-        return this._utcDate.getUTCMinutes();
+        return this._utcDate.minute;
     };
 
     /**
     * @return The UTC seconds 0-59
     */
     DateTime.prototype.utcSecond = function () {
-        return this._utcDate.getUTCSeconds();
+        return this._utcDate.second;
     };
 
     /**
     * @return The UTC milliseconds 0-999
     */
     DateTime.prototype.utcMillisecond = function () {
-        return this._utcDate.getUTCMilliseconds();
+        return this._utcDate.milli;
     };
 
     /**
@@ -706,7 +875,7 @@ var DateTime = (function () {
     * week day numbers)
     */
     DateTime.prototype.utcWeekDay = function () {
-        return this._utcDate.getUTCDay();
+        return basics.weekDayNoLeapSecs(this._utcDate.toUnixNoLeapSecs());
     };
 
     /**
@@ -725,7 +894,7 @@ var DateTime = (function () {
             }
         } else {
             this._zone = null;
-            this._utcDate = new Date(this._zoneDate.valueOf());
+            this._utcDate = this._zoneDate.clone();
         }
         return this;
     };
@@ -733,7 +902,9 @@ var DateTime = (function () {
     /**
     * Returns this date converted to the given time zone.
     * Unaware dates can only be converted to unaware dates (clone)
-    * For unaware dates, an exception is thrown
+    * Converting an unaware date to an aware date throws an exception. Use the constructor
+    * if you really need to do that.
+    *
     * @param zone	The new time zone. This may be null to create unaware date.
     * @return The converted date
     */
@@ -749,16 +920,17 @@ var DateTime = (function () {
             }
             return result;
         } else {
-            return new DateTime(this._zoneDate.valueOf(), null);
+            return new DateTime(this._zoneDate.toUnixNoLeapSecs(), null);
         }
     };
 
     /**
     * Convert to JavaScript date with the zone time in the getX() methods.
     * Unless the timezone is local, the Date.getUTCX() methods will NOT be correct.
+    * This is because Date calculates getUTCX() from getX() applying local time zone.
     */
     DateTime.prototype.toDate = function () {
-        return new Date(this._zoneDate.valueOf() + this._utcDate.getTimezoneOffset() * 60000);
+        return new Date(this.year(), this.month() - 1, this.day(), this.hour(), this.minute(), this.second(), this.millisecond());
     };
 
     /**
@@ -767,121 +939,102 @@ var DateTime = (function () {
     DateTime.prototype.add = function (a1, unit) {
         if (typeof (a1) === "object" && a1 instanceof Duration) {
             var duration = (a1);
-            var newTimestamp = this._utcDate.valueOf() + duration.milliseconds();
+            var newMillis = this._utcDate.toUnixNoLeapSecs() + duration.milliseconds();
             if (this._zone) {
-                newTimestamp += this._zone.offsetForUtcDate(new Date(newTimestamp), 1 /* GetUTC */) * 60000;
+                var tm = TimeStruct.fromUnix(newMillis);
+                newMillis += this._zone.offsetForUtc(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second, tm.milli) * 60000;
             }
-            return new DateTime(newTimestamp, this.zone());
+            return new DateTime(newMillis, this.zone());
         } else {
             assert(typeof (a1) === "number", "expect number as first argument");
             assert(typeof (unit) === "number", "expect number as second argument");
             var amount = (a1);
-            var utcDate = new Date(this._utcDate.valueOf());
-            utcDate = this._addToDate(utcDate, amount, unit);
-            assert(this._utcDate.valueOf() !== utcDate.valueOf() || amount === 0);
-            var result = new DateTime(utcDate, 1 /* GetUTC */, TimeZone.utc()).toZone(this._zone);
-
-            // TODO remove this once bug in V8 engine solved
-            if (amount !== 0 && result.equals(this)) {
-                // workaround for bug in javascript, at least prevent endless loops due to
-                // date not changing
-                result = this.add(amount * 2, unit);
-            }
-            return result;
+            var utcTm = this._addToTimeStruct(this._utcDate, amount, unit);
+            return new DateTime(utcTm.toUnixNoLeapSecs(), TimeZone.utc()).toZone(this._zone);
         }
     };
 
     /**
     * Add an amount of time to the zone time, as regularly as possible.
+    *
     * Adding e.g. 1 hour will increment the hour() field of the zone
-    * date by one. In case of DST changes, the utcHour() field may
-    * increase by 1 or increase by 2. Adding a day will leave the time portion
-    * intact. However, adding an hour around a forward DST change adds two hours,
-    * since there is a zone time (e.g. 2AM in Amsterdam) that does not exist.
+    * date by one. In case of DST changes, the time fields may additionally
+    * increase by the DST offset, if a non-existing local time would
+    * be reached otherwise.
+    *
+    * Adding a unit of time will leave lower-unit fields intact, unless the result
+    * would be a non-existing time. Then an extra DST offset is added.
     *
     * Note adding Months or Years will clamp the date to the end-of-month if
     * the start date was at the end of a month, i.e. contrary to JavaScript
     * Date#setUTCMonth() it will not overflow into the next month
     */
     DateTime.prototype.addLocal = function (amount, unit) {
-        var zoneDate = new Date(this._zoneDate.valueOf());
-        zoneDate = this._addToDate(zoneDate, amount, unit);
-        var result = new DateTime(zoneDate, 1 /* GetUTC */, this.zone());
-
-        // TODO remove this once bug in V8 engine solved
-        if (amount !== 0 && result.equals(this)) {
-            // workaround for bug in javascript, at least prevent endless loops due to
-            // date not changing
-            result = this.addLocal(amount * 2, unit);
+        var localTm = this._addToTimeStruct(this._zoneDate, amount, unit);
+        if (this._zone) {
+            var direction = (amount >= 0 ? 0 /* Up */ : 1 /* Down */);
+            var normalized = this._zone.normalizeZoneTime(localTm.toUnixNoLeapSecs(), direction);
+            return new DateTime(normalized, this._zone);
+        } else {
+            return new DateTime(localTm.toUnixNoLeapSecs(), null);
         }
-        return result;
     };
 
-    DateTime.prototype._addToDate = function (date, amount, unit) {
+    /**
+    * Add an amount of time to the given time struct. Note: does not normalize.
+    * Keeps lower unit fields the same where possible, clamps day to end-of-month if
+    * necessary.
+    */
+    DateTime.prototype._addToTimeStruct = function (tm, amount, unit) {
         var targetYear;
         var targetMonth;
-        var targetDate;
+        var targetDay;
         var targetHours;
         var targetMinutes;
         var targetSeconds;
         var targetMilliseconds;
 
         switch (unit) {
-            case 0 /* Second */:
-                 {
-                    date.setUTCSeconds(date.getUTCSeconds() + amount);
-                }
-                break;
-            case 1 /* Minute */:
-                 {
-                    date.setUTCMinutes(date.getUTCMinutes() + amount);
-                }
-                break;
-            case 2 /* Hour */:
-                 {
-                    date.setUTCHours(date.getUTCHours() + amount);
-                }
-                break;
-            case 3 /* Day */:
-                 {
-                    date.setUTCDate(date.getUTCDate() + amount);
-                }
-                break;
-            case 4 /* Week */:
-                 {
-                    date.setUTCDate(date.getUTCDate() + amount * 7);
-                }
-                break;
-            case 5 /* Month */:
-                 {
-                    targetYear = amount >= 0 ? (date.getUTCFullYear() + Math.floor((date.getUTCMonth() + amount) / 12)) : (date.getUTCFullYear() + Math.ceil((date.getUTCMonth() + amount) / 12));
-                    targetMonth = amount >= 0 ? Math.floor((date.getUTCMonth() + amount) % 12) : Math.ceil((date.getUTCMonth() + amount) % 12);
-                    targetDate = Math.min(date.getUTCDate(), basics.daysInMonth(targetYear, targetMonth + 1));
-                    targetHours = date.getUTCHours();
-                    targetMinutes = date.getUTCMinutes();
-                    targetSeconds = date.getUTCSeconds();
-                    targetMilliseconds = date.getUTCMilliseconds();
-
-                    // setUTCYears can lead to an overflow in days if the current date is
-                    // at the end of a month
-                    date = new Date(Date.UTC(targetYear, targetMonth, targetDate, targetHours, targetMinutes, targetSeconds, targetMilliseconds));
-                }
-                break;
-            case 6 /* Year */:
-                 {
-                    targetYear = date.getUTCFullYear() + amount;
-                    targetMonth = date.getUTCMonth();
-                    targetDate = Math.min(date.getUTCDate(), basics.daysInMonth(targetYear, targetMonth + 1)); // +1 because we don't count from 0
-                    targetHours = date.getUTCHours();
-                    targetMinutes = date.getUTCMinutes();
-                    targetSeconds = date.getUTCSeconds();
-                    targetMilliseconds = date.getUTCMilliseconds();
-
-                    // setUTCYears can lead to an overflow in days if the current date is
-                    // at the end of a month
-                    date = new Date(Date.UTC(targetYear, targetMonth, targetDate, targetHours, targetMinutes, targetSeconds, targetMilliseconds));
-                }
-                break;
+            case 0 /* Second */: {
+                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 1000);
+            }
+            case 1 /* Minute */: {
+                // todo more intelligent approach needed when implementing leap seconds
+                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 60000);
+            }
+            case 2 /* Hour */: {
+                // todo more intelligent approach needed when implementing leap seconds
+                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 3600000);
+            }
+            case 3 /* Day */: {
+                // todo more intelligent approach needed when implementing leap seconds
+                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 86400000);
+            }
+            case 4 /* Week */: {
+                // todo more intelligent approach needed when implementing leap seconds
+                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 7 * 86400000);
+            }
+            case 5 /* Month */: {
+                // keep the day-of-month the same (clamp to end-of-month)
+                targetYear = amount >= 0 ? (tm.year + Math.floor((tm.month - 1 + amount) / 12)) : (tm.year + Math.ceil((tm.month - 1 + amount) / 12));
+                targetMonth = 1 + (amount >= 0 ? Math.floor((tm.month - 1 + amount) % 12) : Math.ceil((tm.month - 1 + amount) % 12));
+                targetDay = Math.min(tm.day, basics.daysInMonth(targetYear, targetMonth));
+                targetHours = tm.hour;
+                targetMinutes = tm.minute;
+                targetSeconds = tm.second;
+                targetMilliseconds = tm.milli;
+                return new TimeStruct(targetYear, targetMonth, targetDay, targetHours, targetMinutes, targetSeconds, targetMilliseconds);
+            }
+            case 6 /* Year */: {
+                targetYear = tm.year + amount;
+                targetMonth = tm.month;
+                targetDay = Math.min(tm.day, basics.daysInMonth(targetYear, targetMonth));
+                targetHours = tm.hour;
+                targetMinutes = tm.minute;
+                targetSeconds = tm.second;
+                targetMilliseconds = tm.milli;
+                return new TimeStruct(targetYear, targetMonth, targetDay, targetHours, targetMinutes, targetSeconds, targetMilliseconds);
+            }
 
             default:
                 /* istanbul ignore next */
@@ -889,17 +1042,12 @@ var DateTime = (function () {
 
                 break;
         }
-        return date;
     };
 
     DateTime.prototype.sub = function (a1, unit) {
         if (typeof (a1) === "object" && a1 instanceof Duration) {
             var duration = (a1);
-            var newTimestamp = this._utcDate.valueOf() - duration.milliseconds();
-            if (this._zone) {
-                newTimestamp += this._zone.offsetForUtcDate(new Date(newTimestamp), 1 /* GetUTC */) * 60000;
-            }
-            return new DateTime(newTimestamp, this.zone());
+            return this.add(duration.multiply(-1));
         } else {
             assert(typeof (a1) === "number", "expect number as first argument");
             assert(typeof (unit) === "number", "expect number as second argument");
@@ -920,28 +1068,28 @@ var DateTime = (function () {
     * @return this - other
     */
     DateTime.prototype.diff = function (other) {
-        return new Duration(this._utcDate.valueOf() - other._utcDate.valueOf());
+        return new Duration(this._utcDate.toUnixNoLeapSecs() - other._utcDate.toUnixNoLeapSecs());
     };
 
     /**
     * @return True iff (this < other)
     */
     DateTime.prototype.lessThan = function (other) {
-        return this._utcDate.valueOf() < other._utcDate.valueOf();
+        return this._utcDate.toUnixNoLeapSecs() < other._utcDate.toUnixNoLeapSecs();
     };
 
     /**
     * @return True iff (this <= other)
     */
     DateTime.prototype.lessEqual = function (other) {
-        return this._utcDate.valueOf() <= other._utcDate.valueOf();
+        return this._utcDate.toUnixNoLeapSecs() <= other._utcDate.toUnixNoLeapSecs();
     };
 
     /**
     * @return True iff this and other represent the same time in UTC
     */
     DateTime.prototype.equals = function (other) {
-        return this._utcDate.valueOf() === other._utcDate.valueOf();
+        return this._utcDate.equals(other._utcDate);
     };
 
     /**
@@ -949,21 +1097,21 @@ var DateTime = (function () {
     * have the same zone
     */
     DateTime.prototype.identical = function (other) {
-        return (this._zoneDate.valueOf() === other._zoneDate.valueOf() && (this._zone === null) === (other._zone === null) && (this._zone === null || this._zone.equals(other._zone)));
+        return (this._zoneDate.equals(other._zoneDate) && (this._zone === null) === (other._zone === null) && (this._zone === null || this._zone.equals(other._zone)));
     };
 
     /**
     * @return True iff this > other
     */
     DateTime.prototype.greaterThan = function (other) {
-        return this._utcDate.valueOf() > other._utcDate.valueOf();
+        return this._utcDate.toUnixNoLeapSecs() > other._utcDate.toUnixNoLeapSecs();
     };
 
     /**
     * @return True iff this >= other
     */
     DateTime.prototype.greaterEqual = function (other) {
-        return this._utcDate.valueOf() >= other._utcDate.valueOf();
+        return this._utcDate.toUnixNoLeapSecs() >= other._utcDate.toUnixNoLeapSecs();
     };
 
     /**
@@ -971,7 +1119,7 @@ var DateTime = (function () {
     * E.g. "2014-01-01T23:15:33+01:00" for Europe/Amsterdam
     */
     DateTime.prototype.toIsoString = function () {
-        var s = strings.isoString(this.year(), this.month(), this.day(), this.hour(), this.minute(), this.second(), this.millisecond());
+        var s = this._zoneDate.toString();
         if (this._zone) {
             return s + TimeZone.offsetToString(this.offset());
         } else {
@@ -984,7 +1132,7 @@ var DateTime = (function () {
     * E.g. "2014-01-01T23:15:33.000 Europe/Amsterdam"
     */
     DateTime.prototype.toString = function () {
-        var s = strings.isoString(this.year(), this.month(), this.day(), this.hour(), this.minute(), this.second(), this.millisecond());
+        var s = this._zoneDate.toString();
         if (this._zone) {
             if (this._zone.kind() !== 1 /* Offset */) {
                 return s + " " + this._zone.toString();
@@ -1007,7 +1155,7 @@ var DateTime = (function () {
     * Modified ISO 8601 format string in UTC without time zone info
     */
     DateTime.prototype.toUtcString = function () {
-        return strings.isoString(this.utcYear(), this.utcMonth(), this.utcDay(), this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond());
+        return this._utcDate.toString();
     };
 
     /**
@@ -1015,10 +1163,10 @@ var DateTime = (function () {
     */
     DateTime.prototype._utcDateToZoneDate = function () {
         if (this._zone) {
-            var offset = this._zone.offsetForUtcDate(this._utcDate, 1 /* GetUTC */);
-            this._zoneDate = new Date(this._utcDate.valueOf() + offset * 60000);
+            var offset = this._zone.offsetForUtc(this._utcDate.year, this._utcDate.month, this._utcDate.day, this._utcDate.hour, this._utcDate.minute, this._utcDate.second, this._utcDate.milli);
+            this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(this._utcDate.toUnixNoLeapSecs() + offset * 60000));
         } else {
-            this._zoneDate = new Date(this._utcDate.valueOf());
+            this._zoneDate = this._utcDate.clone();
         }
     };
 
@@ -1027,10 +1175,10 @@ var DateTime = (function () {
     */
     DateTime.prototype._zoneDateToUtcDate = function () {
         if (this._zone) {
-            var offset = this._zone.offsetForZoneDate(this._zoneDate, 1 /* GetUTC */);
-            this._utcDate = new Date(this._zoneDate.valueOf() - offset * 60000);
+            var offset = this._zone.offsetForZone(this._zoneDate.year, this._zoneDate.month, this._zoneDate.day, this._zoneDate.hour, this._zoneDate.minute, this._zoneDate.second, this._zoneDate.milli);
+            this._utcDate = TimeStruct.fromUnix(this._zoneDate.toUnixNoLeapSecs() - offset * 60000);
         } else {
-            this._utcDate = new Date(this._zoneDate.valueOf());
+            this._utcDate = this._zoneDate.clone();
         }
     };
 
@@ -1074,11 +1222,11 @@ var DateTime = (function () {
 })();
 exports.DateTime = DateTime;
 
-},{"./basics":1,"./duration":3,"./javascript":7,"./strings":10,"./timesource":11,"./timezone":13,"assert":16}],3:[function(require,module,exports){
+},{"./basics":1,"./duration":3,"./javascript":7,"./timesource":11,"./timezone":13,"assert":16,"source-map-support":35}],3:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *
-* Date and Time utility functions
+* Time duration
 */
 /// <reference path="../typings/lib.d.ts"/>
 "use strict";
@@ -1393,8 +1541,16 @@ var isLeapYear = basics.isLeapYear;
 exports.isLeapYear = isLeapYear;
 var daysInMonth = basics.daysInMonth;
 exports.daysInMonth = daysInMonth;
+var daysInYear = basics.daysInYear;
+exports.daysInYear = daysInYear;
 var dayOfYear = basics.dayOfYear;
 exports.dayOfYear = dayOfYear;
+var lastWeekDayOfMonth = basics.lastWeekDayOfMonth;
+exports.lastWeekDayOfMonth = lastWeekDayOfMonth;
+var weekDayOnOrAfter = basics.weekDayOnOrAfter;
+exports.weekDayOnOrAfter = weekDayOnOrAfter;
+var weekDayOnOrBefore = basics.weekDayOnOrBefore;
+exports.weekDayOnOrBefore = weekDayOnOrBefore;
 
 var datetime = require("./datetime");
 datetime;
@@ -1420,11 +1576,6 @@ exports.PeriodDst = PeriodDst;
 var periodDstToString = period.periodDstToString;
 exports.periodDstToString = periodDstToString;
 
-var strings = require("./strings");
-strings;
-var isoString = strings.isoString;
-exports.isoString = isoString;
-
 var timesource = require("./timesource");
 timesource;
 
@@ -1433,16 +1584,18 @@ exports.RealTimeSource = RealTimeSource;
 
 var timezone = require("./timezone");
 timezone;
+var NormalizeOption = timezone.NormalizeOption;
+exports.NormalizeOption = NormalizeOption;
 var TimeZoneKind = timezone.TimeZoneKind;
 exports.TimeZoneKind = TimeZoneKind;
 var TimeZone = timezone.TimeZone;
 exports.TimeZone = TimeZone;
 
-},{"./basics":1,"./datetime":2,"./duration":3,"./javascript":7,"./period":9,"./strings":10,"./timesource":11,"./timezone":13}],"timezonecomplete":[function(require,module,exports){
-module.exports=require('Focm2+');
-},{}],"Focm2+":[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./javascript":7,"./period":9,"./timesource":11,"./timezone":13}],"Focm2+":[function(require,module,exports){
 module.exports=require(4)
-},{"./basics":1,"./datetime":2,"./duration":3,"./javascript":7,"./period":9,"./strings":10,"./timesource":11,"./timezone":13}],7:[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./javascript":7,"./period":9,"./timesource":11,"./timezone":13}],"timezonecomplete":[function(require,module,exports){
+module.exports=require('Focm2+');
+},{}],7:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 */
@@ -1517,11 +1670,15 @@ exports.positiveModulo = positiveModulo;
 /**
 * Copyright(c) 2014 Spirit IT BV
 *
-* Date+time+timezone representation
+* Periodic interval functions
 */
 /// <reference path="../typings/lib.d.ts"/>
 "use strict";
 var assert = require("assert");
+var sourcemapsupport = require("source-map-support");
+
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: true });
 
 var basics = require("./basics");
 var TimeUnit = basics.TimeUnit;
@@ -2088,7 +2245,7 @@ var Period = (function () {
 })();
 exports.Period = Period;
 
-},{"./basics":1,"./datetime":2,"./timezone":13,"assert":16}],10:[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./timezone":13,"assert":16,"source-map-support":35}],10:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *
@@ -2133,14 +2290,6 @@ function padRight(s, width, char) {
     return s + padding;
 }
 exports.padRight = padRight;
-
-/**
-* Returns an ISO time string. Note that months are 1-12.
-*/
-function isoString(year, month, day, hour, minute, second, millisecond) {
-    return exports.padLeft(year.toString(10), 4, "0") + "-" + exports.padLeft(month.toString(10), 2, "0") + "-" + exports.padLeft(day.toString(10), 2, "0") + "T" + exports.padLeft(hour.toString(10), 2, "0") + ":" + exports.padLeft(minute.toString(10), 2, "0") + ":" + exports.padLeft(second.toString(10), 2, "0") + "." + exports.padLeft(millisecond.toString(10), 3, "0");
-}
-exports.isoString = isoString;
 
 },{"assert":16}],11:[function(require,module,exports){
 /**
@@ -2208,6 +2357,22 @@ var TzDatabase = tzDatabase.TzDatabase;
     TimeZoneKind[TimeZoneKind["Proper"] = 2] = "Proper";
 })(exports.TimeZoneKind || (exports.TimeZoneKind = {}));
 var TimeZoneKind = exports.TimeZoneKind;
+
+/**
+* Option for TimeZone#normalizeLocal()
+*/
+(function (NormalizeOption) {
+    /**
+    * Normalize non-existing times by ADDING the DST offset
+    */
+    NormalizeOption[NormalizeOption["Up"] = 0] = "Up";
+
+    /**
+    * Normalize non-existing times by SUBTRACTING the DST offset
+    */
+    NormalizeOption[NormalizeOption["Down"] = 1] = "Down";
+})(exports.NormalizeOption || (exports.NormalizeOption = {}));
+var NormalizeOption = exports.NormalizeOption;
 
 /**
 * Time zone. The object is immutable because it is cached:
@@ -2363,7 +2528,7 @@ var TimeZone = (function () {
         assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
         assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
         assert(minute >= 0 && minute < 60, "TimeZone.offsetForUtc():  minute out of range.");
-        assert(second >= 0 && second < 62, "TimeZone.offsetForUtc():  second out of range.");
+        assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  second out of range.");
         assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
         switch (this._kind) {
             case 0 /* Local */: {
@@ -2402,14 +2567,12 @@ var TimeZone = (function () {
         if (typeof minute === "undefined") { minute = 0; }
         if (typeof second === "undefined") { second = 0; }
         if (typeof millisecond === "undefined") { millisecond = 0; }
-        // todors normalize local times
         assert(month > 0 && month < 13, "TimeZone.offsetForZone():  month out of range: " + month);
         assert(day > 0 && day < 32, "TimeZone.offsetForZone():  day out of range.");
         assert(hour >= 0 && hour < 24, "TimeZone.offsetForZone():  hour out of range.");
         assert(minute >= 0 && minute < 60, "TimeZone.offsetForZone():  minute out of range.");
-        assert(second >= 0 && second < 62, "TimeZone.offsetForZone():  second out of range.");
+        assert(second >= 0 && second < 60, "TimeZone.offsetForZone():  second out of range.");
         assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForZone():  millisecond out of range.");
-
         switch (this._kind) {
             case 0 /* Local */: {
                 var date = new Date(year, month - 1, day, hour, minute, second, millisecond);
@@ -2419,6 +2582,7 @@ var TimeZone = (function () {
                 return this._offset;
             }
             case 2 /* Proper */: {
+                // note that TzDatabase normalizes the given date so we don't have to do it
                 var tm = new TimeStruct(year, month, day, hour, minute, second, millisecond);
                 return TzDatabase.instance().totalOffsetLocal(this._name, tm.toUnixNoLeapSecs()).minutes();
             }
@@ -2432,8 +2596,11 @@ var TimeZone = (function () {
     };
 
     /**
+    * Note: will be removed in version 2.0.0
+    *
     * Convenience function, takes values from a Javascript Date
     * Calls offsetForUtc() with the contents of the date
+    *
     * @param date: the date
     * @param funcs: the set of functions to use: get() or getUTC()
     */
@@ -2455,8 +2622,11 @@ var TimeZone = (function () {
     };
 
     /**
+    * Note: will be removed in version 2.0.0
+    *
     * Convenience function, takes values from a Javascript Date
     * Calls offsetForUtc() with the contents of the date
+    *
     * @param date: the date
     * @param funcs: the set of functions to use: get() or getUTC()
     */
@@ -2485,11 +2655,15 @@ var TimeZone = (function () {
     * this is probably what the user meant.
     *
     * @param localUnixMillis	Unix timestamp in zone time
+    * @param opt	(optional) Round up or down? Default: up
+    *
     * @returns	Unix timestamp in zone time, normalized.
     */
-    TimeZone.prototype.normalizeZoneTime = function (localUnixMillis) {
+    TimeZone.prototype.normalizeZoneTime = function (localUnixMillis, opt) {
+        if (typeof opt === "undefined") { opt = 0 /* Up */; }
         if (this.kind() === 2 /* Proper */) {
-            return TzDatabase.instance().normalizeLocal(this._name, localUnixMillis);
+            var tzopt = (opt === 1 /* Down */ ? 1 /* Down */ : 0 /* Up */);
+            return TzDatabase.instance().normalizeLocal(this._name, localUnixMillis, tzopt);
         } else {
             return localUnixMillis;
         }
@@ -2593,6 +2767,8 @@ exports.TimeZone = TimeZone;
 * Copyright(c) 2014 Spirit IT BV
 *
 * Olsen Timezone Database container
+*
+* DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
 */
 /// <reference path="../typings/lib.d.ts"/>
 "use strict";
@@ -2676,6 +2852,8 @@ var OnType = exports.OnType;
 var AtType = exports.AtType;
 
 /**
+* DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+*
 * See http://www.cstdbill.com/tzdb/tz-how-to.html
 */
 var RuleInfo = (function () {
@@ -2899,6 +3077,8 @@ exports.RuleInfo = RuleInfo;
 var RuleType = exports.RuleType;
 
 /**
+* DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+*
 * See http://www.cstdbill.com/tzdb/tz-how-to.html
 * First, and somewhat trivially, whereas Rules are considered to contain one or more records, a Zone is considered to
 * be a single record with zero or more continuation lines. Thus, the keyword, “Zone,” and the zone name are not repeated.
@@ -3021,6 +3201,24 @@ var Transition = (function () {
 exports.Transition = Transition;
 
 /**
+* Option for TzDatabase#normalizeLocal()
+*/
+(function (NormalizeOption) {
+    /**
+    * Normalize non-existing times by ADDING the DST offset
+    */
+    NormalizeOption[NormalizeOption["Up"] = 0] = "Up";
+
+    /**
+    * Normalize non-existing times by SUBTRACTING the DST offset
+    */
+    NormalizeOption[NormalizeOption["Down"] = 1] = "Down";
+})(exports.NormalizeOption || (exports.NormalizeOption = {}));
+var NormalizeOption = exports.NormalizeOption;
+
+/**
+* DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+*
 * This class typescriptifies reading the TZ data
 */
 var TzDatabase = (function () {
@@ -3220,7 +3418,8 @@ var TzDatabase = (function () {
         return (actualZoneName === "Etc/UTC" || actualZoneName === "Etc/GMT" || actualZoneName === "Etc/UCT");
     };
 
-    TzDatabase.prototype.normalizeLocal = function (zoneName, a) {
+    TzDatabase.prototype.normalizeLocal = function (zoneName, a, opt) {
+        if (typeof opt === "undefined") { opt = 0 /* Up */; }
         assert(typeof (a) === "number" || typeof (a) === "object", "number or object expected");
         assert(typeof (a) !== "object" || a, "a is null");
 
@@ -3258,10 +3457,11 @@ var TzDatabase = (function () {
                         var forwardChange = transition.offset.sub(prev);
 
                         // non-existing time
+                        var factor = (opt === 0 /* Up */ ? 1 : -1);
                         if (typeof a === "object") {
-                            return basics.unixToTimeNoLeapSecs(unixMillis + forwardChange.milliseconds());
+                            return basics.unixToTimeNoLeapSecs(unixMillis + factor * forwardChange.milliseconds());
                         } else {
-                            return unixMillis + forwardChange.milliseconds();
+                            return unixMillis + factor * forwardChange.milliseconds();
                         }
                     }
                 }
@@ -3527,7 +3727,6 @@ var TzDatabase = (function () {
     */
     TzDatabase.prototype.getZoneInfo = function (zoneName, utcMillis) {
         var zoneInfos = this.getZoneInfos(zoneName);
-
         for (var i = 0; i < zoneInfos.length; ++i) {
             var zoneInfo = zoneInfos[i];
             if (zoneInfo.until === null || zoneInfo.until > utcMillis) {

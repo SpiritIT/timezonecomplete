@@ -41,6 +41,21 @@ export enum TimeZoneKind {
 }
 
 /**
+ * Option for TimeZone#normalizeLocal()
+ */
+export enum NormalizeOption {
+	/**
+	 * Normalize non-existing times by ADDING the DST offset
+	 */
+	Up,
+	/**
+	 * Normalize non-existing times by SUBTRACTING the DST offset
+	 */
+	Down
+}
+
+
+/**
  * Time zone. The object is immutable because it is cached:
  * requesting a time zone twice yields the very same object.
  * Note that we use time zone offsets inverted w.r.t. JavaScript Date.getTimezoneOffset(),
@@ -219,7 +234,7 @@ export class TimeZone {
 		assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
 		assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
 		assert(minute >= 0 && minute < 60, "TimeZone.offsetForUtc():  minute out of range.");
-		assert(second >= 0 && second < 62, "TimeZone.offsetForUtc():  second out of range.");
+		assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  second out of range.");
 		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
@@ -257,14 +272,12 @@ export class TimeZone {
 		year: number, month: number, day: number,
 		hour: number = 0, minute: number = 0, second: number = 0,
 		millisecond: number = 0): number {
-		// todors normalize local times
 		assert(month > 0 && month < 13, "TimeZone.offsetForZone():  month out of range: " + month);
 		assert(day > 0 && day < 32, "TimeZone.offsetForZone():  day out of range.");
 		assert(hour >= 0 && hour < 24, "TimeZone.offsetForZone():  hour out of range.");
 		assert(minute >= 0 && minute < 60, "TimeZone.offsetForZone():  minute out of range.");
-		assert(second >= 0 && second < 62, "TimeZone.offsetForZone():  second out of range.");
+		assert(second >= 0 && second < 60, "TimeZone.offsetForZone():  second out of range.");
 		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForZone():  millisecond out of range.");
-
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
 				var date: Date = new Date(year, month - 1, day, hour, minute, second, millisecond);
@@ -274,6 +287,7 @@ export class TimeZone {
 				return this._offset;
 			}
 			case TimeZoneKind.Proper: {
+				// note that TzDatabase normalizes the given date so we don't have to do it
 				var tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
 				return TzDatabase.instance().totalOffsetLocal(this._name, tm.toUnixNoLeapSecs()).minutes();
 			}
@@ -287,8 +301,11 @@ export class TimeZone {
 	}
 
 	/**
+	 * Note: will be removed in version 2.0.0
+	 *
 	 * Convenience function, takes values from a Javascript Date
 	 * Calls offsetForUtc() with the contents of the date
+	 *
 	 * @param date: the date
 	 * @param funcs: the set of functions to use: get() or getUTC()
 	 */
@@ -324,8 +341,11 @@ export class TimeZone {
 	}
 
 	/**
+	 * Note: will be removed in version 2.0.0
+	 *
 	 * Convenience function, takes values from a Javascript Date
 	 * Calls offsetForUtc() with the contents of the date
+	 *
 	 * @param date: the date
 	 * @param funcs: the set of functions to use: get() or getUTC()
 	 */
@@ -368,11 +388,15 @@ export class TimeZone {
 	 * this is probably what the user meant.
 	 *
 	 * @param localUnixMillis	Unix timestamp in zone time
+	 * @param opt	(optional) Round up or down? Default: up
+	 *
 	 * @returns	Unix timestamp in zone time, normalized.
 	 */
-	public normalizeZoneTime(localUnixMillis: number): number {
+	public normalizeZoneTime(localUnixMillis: number, opt: NormalizeOption = NormalizeOption.Up): number {
 		if (this.kind() === TimeZoneKind.Proper) {
-			return TzDatabase.instance().normalizeLocal(this._name, localUnixMillis);
+			var tzopt: tzDatabase.NormalizeOption =
+				(opt === NormalizeOption.Down ? tzDatabase.NormalizeOption.Down : tzDatabase.NormalizeOption.Up);
+			return TzDatabase.instance().normalizeLocal(this._name, localUnixMillis, tzopt);
 		} else {
 			return localUnixMillis;
 		}

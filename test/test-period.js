@@ -1,4 +1,4 @@
-﻿/// <reference path="../typings/test.d.ts" />
+/// <reference path="../typings/test.d.ts" />
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
@@ -427,4 +427,3 @@ describe("Period", function () {
         });
     });
 });
-//# sourceMappingURL=test-period.js.map
