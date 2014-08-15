@@ -87,6 +87,7 @@
 						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_timezone_.timezone.html#static-_findorcreate" class="tsd-kind-icon">_find<wbr>OrCreate</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_timezone_.timezone.html#static-_normalizestring" class="tsd-kind-icon">_normalize<wbr>String</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#equals" class="tsd-kind-icon">equals</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#hasdst" class="tsd-kind-icon">has<wbr>Dst</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#inspect" class="tsd-kind-icon">inspect</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#isutc" class="tsd-kind-icon">is<wbr>Utc</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#kind" class="tsd-kind-icon">kind</a></li>
@@ -143,7 +144,7 @@
 					<div class="tsd-signature tsd-kind-icon">_cache<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in timezone.ts:460</li>
+							<li>Defined in timezone.ts:476</li>
 						</ul>
 					</aside>
 					<p>Time zone cache.</p>
@@ -156,7 +157,7 @@
 						<ul class="tsd-descriptions">
 							<li class="tsd-description"><aside class="tsd-sources">
 									<ul>
-										<li>Defined in timezone.ts:460</li>
+										<li>Defined in timezone.ts:476</li>
 									</ul>
 								</aside>
 								<h4>Parameters</h4>
@@ -220,7 +221,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:466</li>
+									<li>Defined in timezone.ts:482</li>
 								</ul>
 							</aside>
 							<p>Find in cache or create zone</p>
@@ -246,7 +247,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:480</li>
+									<li>Defined in timezone.ts:496</li>
 								</ul>
 							</aside>
 							<p>Normalize a string so it can be used as a key for a
@@ -290,6 +291,25 @@
 					</ul>
 				</section>
 				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="hasdst" class="anchor"></a>
+					<h3>has<wbr>Dst</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Dst<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in timezone.ts:219</li>
+								</ul>
+							</aside>
+							<p>Does this zone have Daylight Saving Time at all?</p>
+							<h4>Returns 
+								<span class="tsd-signature-type">boolean</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="inspect" class="anchor"></a>
 					<h3>inspect</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -298,7 +318,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:415</li>
+									<li>Defined in timezone.ts:431</li>
 								</ul>
 							</aside>
 							<p>Used by util.inspect()</p>
@@ -397,7 +417,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:394</li>
+									<li>Defined in timezone.ts:410</li>
 								</ul>
 							</aside>
 							<p>Normalizes non-existing local times by adding a forward offset change.
@@ -432,7 +452,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:227</li>
+									<li>Defined in timezone.ts:243</li>
 								</ul>
 							</aside>
 							<p>Calculate timezone offset from a UTC time.</p>
@@ -483,7 +503,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:311</li>
+									<li>Defined in timezone.ts:327</li>
 								</ul>
 							</aside>
 							<p>Note: will be removed in version 2.0.0</p>
@@ -513,7 +533,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:270</li>
+									<li>Defined in timezone.ts:286</li>
 								</ul>
 							</aside>
 							<p>Calculate timezone offset from a zone-local time (NOT a UTC time).</p>
@@ -564,7 +584,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:351</li>
+									<li>Defined in timezone.ts:367</li>
 								</ul>
 							</aside>
 							<p>Note: will be removed in version 2.0.0</p>
@@ -594,7 +614,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:424</li>
+									<li>Defined in timezone.ts:440</li>
 								</ul>
 							</aside>
 							<p>Convert an offset number into an offset string</p>
@@ -621,7 +641,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:436</li>
+									<li>Defined in timezone.ts:452</li>
 								</ul>
 							</aside>
 							<p>String to offset conversion.</p>
@@ -648,7 +668,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:408</li>
+									<li>Defined in timezone.ts:424</li>
 								</ul>
 							</aside>
 							<p>The time zone identifier (normalized).
@@ -798,6 +818,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_timezone_.timezone.html#equals" class="tsd-kind-icon">equals</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_timezone_.timezone.html#hasdst" class="tsd-kind-icon">has<wbr>Dst</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_timezone_.timezone.html#inspect" class="tsd-kind-icon">inspect</a>

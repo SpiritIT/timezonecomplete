@@ -33,6 +33,31 @@ declare module 'timezonecomplete' {
 declare module '__timezonecomplete/basics' {
     import javascript = require("__timezonecomplete/javascript");
     /**
+     * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
+     * Sunday = 0, Monday = 1 etc
+     */
+    export enum WeekDay {
+        Sunday = 0,
+        Monday = 1,
+        Tuesday = 2,
+        Wednesday = 3,
+        Thursday = 4,
+        Friday = 5,
+        Saturday = 6,
+    }
+    /**
+     * Time units
+     */
+    export enum TimeUnit {
+        Second = 0,
+        Minute = 1,
+        Hour = 2,
+        Day = 3,
+        Week = 4,
+        Month = 5,
+        Year = 6,
+    }
+    /**
      * @return True iff the given year is a leap year.
      */
     export function isLeapYear(year: number): boolean;
@@ -74,6 +99,34 @@ declare module '__timezonecomplete/basics' {
      * Throws if the month has no such day.
      */
     export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number;
+    /**
+     * Convert a unix milli timestamp into a TimeT structure.
+     * This does NOT take leap seconds into account.
+     */
+    export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct;
+    /**
+     * Convert a year, month, day etc into a unix milli timestamp.
+     * This does NOT take leap seconds into account.
+     *
+     * @param year	Year e.g. 1970
+     * @param month	Month 1-12
+     * @param day	Day 1-31
+     * @param hour	Hour 0-23
+     * @param minute	Minute 0-59
+     * @param second	Second 0-59 (no leap seconds)
+     * @param milli	Millisecond 0-999
+     */
+    export function timeToUnixNoLeapSecs(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
+    /**
+     * Convert a TimeT structure into a unix milli timestamp.
+     * This does NOT take leap seconds into account.
+     */
+    export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
+    /**
+     * Return the day-of-week.
+     * This does NOT take leap seconds into account.
+     */
+    export function weekDayNoLeapSecs(unixMillis: number): WeekDay;
     /**
      * Basic representation of a date and time
      */
@@ -183,59 +236,6 @@ declare module '__timezonecomplete/basics' {
         toString(): string;
         inspect(): string;
     }
-    /**
-     * Convert a unix milli timestamp into a TimeT structure.
-     * This does NOT take leap seconds into account.
-     */
-    export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct;
-    /**
-     * Convert a year, month, day etc into a unix milli timestamp.
-     * This does NOT take leap seconds into account.
-     *
-     * @param year	Year e.g. 1970
-     * @param month	Month 1-12
-     * @param day	Day 1-31
-     * @param hour	Hour 0-23
-     * @param minute	Minute 0-59
-     * @param second	Second 0-59 (no leap seconds)
-     * @param milli	Millisecond 0-999
-     */
-    export function timeToUnixNoLeapSecs(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
-    /**
-     * Convert a TimeT structure into a unix milli timestamp.
-     * This does NOT take leap seconds into account.
-     */
-    export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
-    /**
-     * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
-     * Sunday = 0, Monday = 1 etc
-     */
-    export enum WeekDay {
-        Sunday = 0,
-        Monday = 1,
-        Tuesday = 2,
-        Wednesday = 3,
-        Thursday = 4,
-        Friday = 5,
-        Saturday = 6,
-    }
-    /**
-     * Time units
-     */
-    export enum TimeUnit {
-        Second = 0,
-        Minute = 1,
-        Hour = 2,
-        Day = 3,
-        Week = 4,
-        Month = 5,
-        Year = 6,
-    }
-    /**
-     * Return the day-of-week.
-     * This does NOT take leap seconds into account.
-     */
-    export function weekDayNoLeapSecs(unixMillis: number): WeekDay;
 }
 
 declare module '__timezonecomplete/datetime' {
@@ -912,6 +912,10 @@ declare module '__timezonecomplete/timezone' {
          * Is this zone equivalent to UTC?
          */
         isUtc(): boolean;
+        /**
+         * Does this zone have Daylight Saving Time at all?
+         */
+        hasDst(): boolean;
         /**
          * Calculate timezone offset from a UTC time.
          * @param year local full year

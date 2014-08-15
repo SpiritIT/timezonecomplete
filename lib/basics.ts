@@ -20,6 +20,32 @@ import DateFunctions = javascript.DateFunctions;
 import math = require("./math");
 import strings = require("./strings");
 
+/**
+ * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
+ * Sunday = 0, Monday = 1 etc
+ */
+export enum WeekDay {
+	Sunday,
+	Monday,
+	Tuesday,
+	Wednesday,
+	Thursday,
+	Friday,
+	Saturday
+}
+
+/**
+ * Time units
+ */
+export enum TimeUnit {
+	Second,
+	Minute,
+	Hour,
+	Day,
+	Week,
+	Month,
+	Year
+}
 
 /**
  * @return True iff the given year is a leap year.
@@ -145,6 +171,137 @@ export function weekDayOnOrBefore(year: number, month: number, day: number, week
 	}
 	assert(start.day + diff >= 1, "The given month has no such weekday");
 	return start.day + diff;
+}
+
+function assertUnixTimestamp(unixMillis: number): void {
+	assert(typeof (unixMillis) === "number", "number input expected");
+	assert(!isNaN(unixMillis), "NaN not expected as input");
+	assert(math.isInt(unixMillis), "integer number expected");
+}
+
+/**
+ * Convert a unix milli timestamp into a TimeT structure.
+ * This does NOT take leap seconds into account.
+ */
+export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct {
+	assertUnixTimestamp(unixMillis);
+
+	var temp: number = unixMillis;
+	var result: TimeStruct = new TimeStruct();
+	var year: number;
+	var month: number;
+
+	if (unixMillis >= 0) {
+		result.milli = temp % 1000;
+		temp = Math.floor(temp / 1000);
+		result.second = temp % 60;
+		temp = Math.floor(temp / 60);
+		result.minute = temp % 60;
+		temp = Math.floor(temp / 60);
+		result.hour = temp % 24;
+		temp = Math.floor(temp / 24);
+
+		year = 1970;
+		while (temp >= daysInYear(year)) {
+			temp -= daysInYear(year);
+			year++;
+		}
+		result.year = year;
+
+		month = 1;
+		while (temp >= daysInMonth(year, month)) {
+			temp -= daysInMonth(year, month);
+			month++;
+		}
+		result.month = month;
+		result.day = temp + 1;
+	} else {
+		// Note that a negative number modulo something yields a negative number.
+		// We make it positive by adding the modulo.
+		result.milli = math.positiveModulo(temp, 1000);
+		temp = Math.floor(temp / 1000);
+		result.second = math.positiveModulo(temp, 60);
+		temp = Math.floor(temp / 60);
+		result.minute = math.positiveModulo(temp, 60);
+		temp = Math.floor(temp / 60);
+		result.hour = math.positiveModulo(temp, 24);
+		temp = Math.floor(temp / 24);
+
+		year = 1969;
+		while (temp < -daysInYear(year)) {
+			temp += daysInYear(year);
+			year--;
+		}
+		result.year = year;
+
+		month = 12;
+		while (temp < -daysInMonth(year, month)) {
+			temp += daysInMonth(year, month);
+			month--;
+		}
+		result.month = month;
+		result.day = temp + 1 + daysInMonth(year, month);
+	}
+
+	return result;
+}
+
+/**
+ * Convert a year, month, day etc into a unix milli timestamp.
+ * This does NOT take leap seconds into account.
+ *
+ * @param year	Year e.g. 1970
+ * @param month	Month 1-12
+ * @param day	Day 1-31
+ * @param hour	Hour 0-23
+ * @param minute	Minute 0-59
+ * @param second	Second 0-59 (no leap seconds)
+ * @param milli	Millisecond 0-999
+ */
+export function timeToUnixNoLeapSecs(
+	year?: number, month?: number, day?: number,
+	hour?: number, minute?: number, second?: number, milli?: number): number;
+
+/**
+ * Convert a TimeT structure into a unix milli timestamp.
+ * This does NOT take leap seconds into account.
+ */
+export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
+
+export function timeToUnixNoLeapSecs(
+	a: any = 0, month: number = 1, day: number = 1,
+	hour: number = 0, minute: number = 0, second: number = 0, milli: number = 0): number {
+	assert(typeof (a) === "object" || typeof (a) === "number", "Please give either a TimeStruct or a number as first argument.");
+
+	if (typeof (a) === "object") {
+		var tm: TimeStruct = <TimeStruct>a;
+		assert(tm.validate(), "tm invalid");
+		return timeToUnixNoLeapSecs(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second, tm.milli);
+	} else {
+		var year: number = <number> a;
+		assert(month >= 1 && month <= 12, "Month out of range");
+		assert(day >= 1 && day <= daysInMonth(year, month), "day out of range");
+		assert(hour >= 0 && hour <= 23, "hour out of range");
+		assert(minute >= 0 && minute <= 59, "minute out of range");
+		assert(second >= 0 && second <= 59, "second out of range");
+		assert(milli >= 0 && milli <= 999, "milli out of range");
+		return milli + 1000 * (
+			second + minute * 60 + hour * 3600 + dayOfYear(year, month, day) * 86400 +
+			(year - 1970) * 31536000 + Math.floor((year - 1969) / 4) * 86400 -
+			Math.floor((year - 1901) / 100) * 86400 + Math.floor((year - 1900 + 299) / 400) * 86400);
+	}
+}
+
+/**
+ * Return the day-of-week.
+ * This does NOT take leap seconds into account.
+ */
+export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
+	assertUnixTimestamp(unixMillis);
+
+	var epochDay: WeekDay = WeekDay.Thursday;
+	var days = Math.floor(unixMillis / 1000 / 86400);
+	return (epochDay + days) % 7;
 }
 
 /**
@@ -421,165 +578,5 @@ export class TimeStruct {
 		return "[TimeStruct: " + this.toString() + "]";
 	}
 
-}
-
-function assertUnixTimestamp(unixMillis: number): void {
-	assert(typeof (unixMillis) === "number", "number input expected");
-	assert(!isNaN(unixMillis), "NaN not expected as input");
-	assert(math.isInt(unixMillis), "integer number expected");
-}
-
-/**
- * Convert a unix milli timestamp into a TimeT structure.
- * This does NOT take leap seconds into account.
- */
-export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct {
-	assertUnixTimestamp(unixMillis);
-
-	var temp: number = unixMillis;
-	var result: TimeStruct = new TimeStruct();
-	var year: number;
-	var month: number;
-
-	if (unixMillis >= 0) {
-		result.milli = temp % 1000;
-		temp = Math.floor(temp / 1000);
-		result.second = temp % 60;
-		temp = Math.floor(temp / 60);
-		result.minute = temp % 60;
-		temp = Math.floor(temp / 60);
-		result.hour = temp % 24;
-		temp = Math.floor(temp / 24);
-
-		year = 1970;
-		while (temp >= daysInYear(year)) {
-			temp -= daysInYear(year);
-			year++;
-		}
-		result.year = year;
-
-		month = 1;
-		while (temp >= daysInMonth(year, month)) {
-			temp -= daysInMonth(year, month);
-			month++;
-		}
-		result.month = month;
-		result.day = temp + 1;
-	} else {
-		// Note that a negative number modulo something yields a negative number.
-		// We make it positive by adding the modulo.
-		result.milli = ((temp % 1000) + 1000) % 1000;
-		temp = Math.floor(temp / 1000);
-		result.second = ((temp % 60) + 60) % 60;
-		temp = Math.floor(temp / 60);
-		result.minute = ((temp % 60) + 60) % 60;
-		temp = Math.floor(temp / 60);
-		result.hour = ((temp % 24) + 24) % 24;
-		temp = Math.floor(temp / 24);
-
-		year = 1969;
-		while (temp <= -daysInYear(year)) {
-			temp += daysInYear(year);
-			year--;
-		}
-		result.year = year;
-
-		month = 12;
-		while (temp <= -daysInMonth(year, month)) {
-			temp += daysInMonth(year, month);
-			month--;
-		}
-		result.month = month;
-		result.day = temp + 1 + daysInMonth(year, month);
-	}
-
-	return result;
-}
-
-/**
- * Convert a year, month, day etc into a unix milli timestamp.
- * This does NOT take leap seconds into account.
- *
- * @param year	Year e.g. 1970
- * @param month	Month 1-12
- * @param day	Day 1-31
- * @param hour	Hour 0-23
- * @param minute	Minute 0-59
- * @param second	Second 0-59 (no leap seconds)
- * @param milli	Millisecond 0-999
- */
-export function timeToUnixNoLeapSecs(
-	year?: number, month?: number, day?: number,
-	hour?: number, minute?: number, second?: number, milli?: number): number;
-
-/**
- * Convert a TimeT structure into a unix milli timestamp.
- * This does NOT take leap seconds into account.
- */
-export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
-
-export function timeToUnixNoLeapSecs(
-	a: any = 0, month: number = 1, day: number = 1,
-	hour: number = 0, minute: number = 0, second: number = 0, milli: number = 0): number {
-	assert(typeof (a) === "object" || typeof (a) === "number", "Please give either a TimeStruct or a number as first argument.");
-
-	if (typeof (a) === "object") {
-		var tm: TimeStruct = <TimeStruct>a;
-		assert(tm.validate(), "tm invalid");
-		return timeToUnixNoLeapSecs(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second, tm.milli);
-	} else {
-		var year: number = <number> a;
-		assert(month >= 1 && month <= 12, "Month out of range");
-		assert(day >= 1 && day <= daysInMonth(year, month), "day out of range");
-		assert(hour >= 0 && hour <= 23, "hour out of range");
-		assert(minute >= 0 && minute <= 59, "minute out of range");
-		assert(second >= 0 && second <= 59, "second out of range");
-		assert(milli >= 0 && milli <= 999, "milli out of range");
-		return milli + 1000 * (
-			second + minute * 60 + hour * 3600 + dayOfYear(year, month, day) * 86400 +
-			(year - 1970) * 31536000 + Math.floor((year - 1969) / 4) * 86400 -
-			Math.floor((year - 1901) / 100) * 86400 + Math.floor((year - 1900 + 299) / 400) * 86400);
-	}
-}
-
-
-/**
- * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
- * Sunday = 0, Monday = 1 etc
- */
-export enum WeekDay {
-	Sunday,
-	Monday,
-	Tuesday,
-	Wednesday,
-	Thursday,
-	Friday,
-	Saturday
-}
-
-/**
- * Time units
- */
-export enum TimeUnit {
-	Second,
-	Minute,
-	Hour,
-	Day,
-	Week,
-	Month,
-	Year
-}
-
-
-/**
- * Return the day-of-week.
- * This does NOT take leap seconds into account.
- */
-export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
-	assertUnixTimestamp(unixMillis);
-
-	var epochDay: WeekDay = WeekDay.Thursday;
-	var days = Math.floor(unixMillis / 1000 / 86400);
-	return (epochDay + days) % 7;
 }
 

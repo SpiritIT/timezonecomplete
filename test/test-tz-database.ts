@@ -643,8 +643,3 @@ describe("TzDatabase", (): void => {
 		});
 	});
 });
-
-
-// todors time zones -11 and + 11
-// todors time zones that have two DSTs in a year
-

@@ -34,6 +34,35 @@ var math = require("./math");
 var strings = require("./strings");
 
 /**
+* Day-of-week. Note the enum values correspond to JavaScript day-of-week:
+* Sunday = 0, Monday = 1 etc
+*/
+(function (WeekDay) {
+    WeekDay[WeekDay["Sunday"] = 0] = "Sunday";
+    WeekDay[WeekDay["Monday"] = 1] = "Monday";
+    WeekDay[WeekDay["Tuesday"] = 2] = "Tuesday";
+    WeekDay[WeekDay["Wednesday"] = 3] = "Wednesday";
+    WeekDay[WeekDay["Thursday"] = 4] = "Thursday";
+    WeekDay[WeekDay["Friday"] = 5] = "Friday";
+    WeekDay[WeekDay["Saturday"] = 6] = "Saturday";
+})(exports.WeekDay || (exports.WeekDay = {}));
+var WeekDay = exports.WeekDay;
+
+/**
+* Time units
+*/
+(function (TimeUnit) {
+    TimeUnit[TimeUnit["Second"] = 0] = "Second";
+    TimeUnit[TimeUnit["Minute"] = 1] = "Minute";
+    TimeUnit[TimeUnit["Hour"] = 2] = "Hour";
+    TimeUnit[TimeUnit["Day"] = 3] = "Day";
+    TimeUnit[TimeUnit["Week"] = 4] = "Week";
+    TimeUnit[TimeUnit["Month"] = 5] = "Month";
+    TimeUnit[TimeUnit["Year"] = 6] = "Year";
+})(exports.TimeUnit || (exports.TimeUnit = {}));
+var TimeUnit = exports.TimeUnit;
+
+/**
 * @return True iff the given year is a leap year.
 */
 function isLeapYear(year) {
@@ -166,6 +195,122 @@ function weekDayOnOrBefore(year, month, day, weekDay) {
     return start.day + diff;
 }
 exports.weekDayOnOrBefore = weekDayOnOrBefore;
+
+function assertUnixTimestamp(unixMillis) {
+    assert(typeof (unixMillis) === "number", "number input expected");
+    assert(!isNaN(unixMillis), "NaN not expected as input");
+    assert(math.isInt(unixMillis), "integer number expected");
+}
+
+/**
+* Convert a unix milli timestamp into a TimeT structure.
+* This does NOT take leap seconds into account.
+*/
+function unixToTimeNoLeapSecs(unixMillis) {
+    assertUnixTimestamp(unixMillis);
+
+    var temp = unixMillis;
+    var result = new TimeStruct();
+    var year;
+    var month;
+
+    if (unixMillis >= 0) {
+        result.milli = temp % 1000;
+        temp = Math.floor(temp / 1000);
+        result.second = temp % 60;
+        temp = Math.floor(temp / 60);
+        result.minute = temp % 60;
+        temp = Math.floor(temp / 60);
+        result.hour = temp % 24;
+        temp = Math.floor(temp / 24);
+
+        year = 1970;
+        while (temp >= exports.daysInYear(year)) {
+            temp -= exports.daysInYear(year);
+            year++;
+        }
+        result.year = year;
+
+        month = 1;
+        while (temp >= exports.daysInMonth(year, month)) {
+            temp -= exports.daysInMonth(year, month);
+            month++;
+        }
+        result.month = month;
+        result.day = temp + 1;
+    } else {
+        // Note that a negative number modulo something yields a negative number.
+        // We make it positive by adding the modulo.
+        result.milli = math.positiveModulo(temp, 1000);
+        temp = Math.floor(temp / 1000);
+        result.second = math.positiveModulo(temp, 60);
+        temp = Math.floor(temp / 60);
+        result.minute = math.positiveModulo(temp, 60);
+        temp = Math.floor(temp / 60);
+        result.hour = math.positiveModulo(temp, 24);
+        temp = Math.floor(temp / 24);
+
+        year = 1969;
+        while (temp < -exports.daysInYear(year)) {
+            temp += exports.daysInYear(year);
+            year--;
+        }
+        result.year = year;
+
+        month = 12;
+        while (temp < -exports.daysInMonth(year, month)) {
+            temp += exports.daysInMonth(year, month);
+            month--;
+        }
+        result.month = month;
+        result.day = temp + 1 + exports.daysInMonth(year, month);
+    }
+
+    return result;
+}
+exports.unixToTimeNoLeapSecs = unixToTimeNoLeapSecs;
+
+
+
+function timeToUnixNoLeapSecs(a, month, day, hour, minute, second, milli) {
+    if (typeof a === "undefined") { a = 0; }
+    if (typeof month === "undefined") { month = 1; }
+    if (typeof day === "undefined") { day = 1; }
+    if (typeof hour === "undefined") { hour = 0; }
+    if (typeof minute === "undefined") { minute = 0; }
+    if (typeof second === "undefined") { second = 0; }
+    if (typeof milli === "undefined") { milli = 0; }
+    assert(typeof (a) === "object" || typeof (a) === "number", "Please give either a TimeStruct or a number as first argument.");
+
+    if (typeof (a) === "object") {
+        var tm = a;
+        assert(tm.validate(), "tm invalid");
+        return exports.timeToUnixNoLeapSecs(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second, tm.milli);
+    } else {
+        var year = a;
+        assert(month >= 1 && month <= 12, "Month out of range");
+        assert(day >= 1 && day <= exports.daysInMonth(year, month), "day out of range");
+        assert(hour >= 0 && hour <= 23, "hour out of range");
+        assert(minute >= 0 && minute <= 59, "minute out of range");
+        assert(second >= 0 && second <= 59, "second out of range");
+        assert(milli >= 0 && milli <= 999, "milli out of range");
+        return milli + 1000 * (second + minute * 60 + hour * 3600 + exports.dayOfYear(year, month, day) * 86400 + (year - 1970) * 31536000 + Math.floor((year - 1969) / 4) * 86400 - Math.floor((year - 1901) / 100) * 86400 + Math.floor((year - 1900 + 299) / 400) * 86400);
+    }
+}
+exports.timeToUnixNoLeapSecs = timeToUnixNoLeapSecs;
+
+/**
+* Return the day-of-week.
+* This does NOT take leap seconds into account.
+*/
+function weekDayNoLeapSecs(unixMillis) {
+    assertUnixTimestamp(unixMillis);
+
+    var epochDay = 4 /* Thursday */;
+    var days = Math.floor(unixMillis / 1000 / 86400);
+    return (epochDay + days) % 7;
+}
+exports.weekDayNoLeapSecs = weekDayNoLeapSecs;
 
 /**
 * Basic representation of a date and time
@@ -425,151 +570,6 @@ var TimeStruct = (function () {
     return TimeStruct;
 })();
 exports.TimeStruct = TimeStruct;
-
-function assertUnixTimestamp(unixMillis) {
-    assert(typeof (unixMillis) === "number", "number input expected");
-    assert(!isNaN(unixMillis), "NaN not expected as input");
-    assert(math.isInt(unixMillis), "integer number expected");
-}
-
-/**
-* Convert a unix milli timestamp into a TimeT structure.
-* This does NOT take leap seconds into account.
-*/
-function unixToTimeNoLeapSecs(unixMillis) {
-    assertUnixTimestamp(unixMillis);
-
-    var temp = unixMillis;
-    var result = new TimeStruct();
-    var year;
-    var month;
-
-    if (unixMillis >= 0) {
-        result.milli = temp % 1000;
-        temp = Math.floor(temp / 1000);
-        result.second = temp % 60;
-        temp = Math.floor(temp / 60);
-        result.minute = temp % 60;
-        temp = Math.floor(temp / 60);
-        result.hour = temp % 24;
-        temp = Math.floor(temp / 24);
-
-        year = 1970;
-        while (temp >= exports.daysInYear(year)) {
-            temp -= exports.daysInYear(year);
-            year++;
-        }
-        result.year = year;
-
-        month = 1;
-        while (temp >= exports.daysInMonth(year, month)) {
-            temp -= exports.daysInMonth(year, month);
-            month++;
-        }
-        result.month = month;
-        result.day = temp + 1;
-    } else {
-        // Note that a negative number modulo something yields a negative number.
-        // We make it positive by adding the modulo.
-        result.milli = ((temp % 1000) + 1000) % 1000;
-        temp = Math.floor(temp / 1000);
-        result.second = ((temp % 60) + 60) % 60;
-        temp = Math.floor(temp / 60);
-        result.minute = ((temp % 60) + 60) % 60;
-        temp = Math.floor(temp / 60);
-        result.hour = ((temp % 24) + 24) % 24;
-        temp = Math.floor(temp / 24);
-
-        year = 1969;
-        while (temp <= -exports.daysInYear(year)) {
-            temp += exports.daysInYear(year);
-            year--;
-        }
-        result.year = year;
-
-        month = 12;
-        while (temp <= -exports.daysInMonth(year, month)) {
-            temp += exports.daysInMonth(year, month);
-            month--;
-        }
-        result.month = month;
-        result.day = temp + 1 + exports.daysInMonth(year, month);
-    }
-
-    return result;
-}
-exports.unixToTimeNoLeapSecs = unixToTimeNoLeapSecs;
-
-
-
-function timeToUnixNoLeapSecs(a, month, day, hour, minute, second, milli) {
-    if (typeof a === "undefined") { a = 0; }
-    if (typeof month === "undefined") { month = 1; }
-    if (typeof day === "undefined") { day = 1; }
-    if (typeof hour === "undefined") { hour = 0; }
-    if (typeof minute === "undefined") { minute = 0; }
-    if (typeof second === "undefined") { second = 0; }
-    if (typeof milli === "undefined") { milli = 0; }
-    assert(typeof (a) === "object" || typeof (a) === "number", "Please give either a TimeStruct or a number as first argument.");
-
-    if (typeof (a) === "object") {
-        var tm = a;
-        assert(tm.validate(), "tm invalid");
-        return exports.timeToUnixNoLeapSecs(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second, tm.milli);
-    } else {
-        var year = a;
-        assert(month >= 1 && month <= 12, "Month out of range");
-        assert(day >= 1 && day <= exports.daysInMonth(year, month), "day out of range");
-        assert(hour >= 0 && hour <= 23, "hour out of range");
-        assert(minute >= 0 && minute <= 59, "minute out of range");
-        assert(second >= 0 && second <= 59, "second out of range");
-        assert(milli >= 0 && milli <= 999, "milli out of range");
-        return milli + 1000 * (second + minute * 60 + hour * 3600 + exports.dayOfYear(year, month, day) * 86400 + (year - 1970) * 31536000 + Math.floor((year - 1969) / 4) * 86400 - Math.floor((year - 1901) / 100) * 86400 + Math.floor((year - 1900 + 299) / 400) * 86400);
-    }
-}
-exports.timeToUnixNoLeapSecs = timeToUnixNoLeapSecs;
-
-/**
-* Day-of-week. Note the enum values correspond to JavaScript day-of-week:
-* Sunday = 0, Monday = 1 etc
-*/
-(function (WeekDay) {
-    WeekDay[WeekDay["Sunday"] = 0] = "Sunday";
-    WeekDay[WeekDay["Monday"] = 1] = "Monday";
-    WeekDay[WeekDay["Tuesday"] = 2] = "Tuesday";
-    WeekDay[WeekDay["Wednesday"] = 3] = "Wednesday";
-    WeekDay[WeekDay["Thursday"] = 4] = "Thursday";
-    WeekDay[WeekDay["Friday"] = 5] = "Friday";
-    WeekDay[WeekDay["Saturday"] = 6] = "Saturday";
-})(exports.WeekDay || (exports.WeekDay = {}));
-var WeekDay = exports.WeekDay;
-
-/**
-* Time units
-*/
-(function (TimeUnit) {
-    TimeUnit[TimeUnit["Second"] = 0] = "Second";
-    TimeUnit[TimeUnit["Minute"] = 1] = "Minute";
-    TimeUnit[TimeUnit["Hour"] = 2] = "Hour";
-    TimeUnit[TimeUnit["Day"] = 3] = "Day";
-    TimeUnit[TimeUnit["Week"] = 4] = "Week";
-    TimeUnit[TimeUnit["Month"] = 5] = "Month";
-    TimeUnit[TimeUnit["Year"] = 6] = "Year";
-})(exports.TimeUnit || (exports.TimeUnit = {}));
-var TimeUnit = exports.TimeUnit;
-
-/**
-* Return the day-of-week.
-* This does NOT take leap seconds into account.
-*/
-function weekDayNoLeapSecs(unixMillis) {
-    assertUnixTimestamp(unixMillis);
-
-    var epochDay = 4 /* Thursday */;
-    var days = Math.floor(unixMillis / 1000 / 86400);
-    return (epochDay + days) % 7;
-}
-exports.weekDayNoLeapSecs = weekDayNoLeapSecs;
 
 },{"./javascript":7,"./math":8,"./strings":10,"assert":16,"source-map-support":35}],2:[function(require,module,exports){
 /**
@@ -2191,7 +2191,7 @@ var Period = (function () {
     * (i.e. if the start time zone has DST)
     */
     Period.prototype._dstRelevant = function () {
-        return (this._start.zone() != null && this._start.zone().kind() === 2 /* Proper */ && this._start.zone().isUtc() === false);
+        return (this._start.zone() != null && this._start.zone().kind() === 2 /* Proper */ && this._start.zone().hasDst());
     };
 
     /**
@@ -2501,6 +2501,24 @@ var TimeZone = (function () {
                 return (this._offset === 0);
             case 2 /* Proper */:
                 return (TzDatabase.instance().zoneIsUtc(this._name));
+
+            default:
+                /* istanbul ignore next */
+                return false;
+        }
+    };
+
+    /**
+    * Does this zone have Daylight Saving Time at all?
+    */
+    TimeZone.prototype.hasDst = function () {
+        switch (this._kind) {
+            case 0 /* Local */:
+                return false;
+            case 1 /* Offset */:
+                return false;
+            case 2 /* Proper */:
+                return (TzDatabase.instance().hasDst(this._name));
 
             default:
                 /* istanbul ignore next */

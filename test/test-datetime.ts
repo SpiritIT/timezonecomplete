@@ -8,6 +8,7 @@ import sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: true });
 
+import basics = require("../lib/basics");
 import datetimeFuncs = require("../lib/index");
 
 import DateFunctions = datetimeFuncs.DateFunctions;
@@ -204,7 +205,6 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	// todo check normalization
 	describe("constructor(date: Date, dateKind: DateFunctions, timeZone?: TimeZone)", (): void => {
 		it("should parse date as local,unaware (winter time)", (): void => {
 			var date = new Date("2014-01-02T03:04:05.006Z");
@@ -280,7 +280,6 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	// todo check normalization
 	describe("constructor(year, month, ..., millisecond, timeZone?: TimeZone)", (): void => {
 		it("full entries, unaware", (): void => {
 			var d = new DateTime(2014, 1, 2, 3, 4, 5, 6, null);
@@ -338,7 +337,6 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	// todo check normalization
 	describe("constructor(utcUnixTime: number, timeZone?: TimeZone)", (): void => {
 		it("unaware", (): void => {
 			var d = new DateTime(1);
@@ -373,6 +371,11 @@ describe("DateTime", (): void => {
 			expect(d.millisecond()).to.equal(1);
 			expect(d.zone()).to.equal(TimeZone.zone(240));
 		});
+		it("non-existing", (): void => {
+			// non-existing due to DST forward
+			var d = new DateTime(basics.timeToUnixNoLeapSecs(2014, 3, 30, 2, 0, 0, 0), TimeZone.zone("Europe/Amsterdam"));
+			expect(d.hour()).to.equal(3); // should be normalized to 3AM
+		});
 	});
 
 	describe("clone", (): void => {
@@ -386,7 +389,6 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	// todo check normalization
 	describe("convert()", (): void => {
 		it("unaware to aware", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -409,7 +411,6 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	// todo check normalization
 	describe("toZone()", (): void => {
 		it("unaware to aware", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -528,6 +529,11 @@ describe("DateTime", (): void => {
 			var e = d.add(Duration.hours(1));
 			expect(e.toString()).to.equal("2014-03-30T03:59:59.000 Europe/Amsterdam");
 		});
+		it("should account for DST forward (2)", (): void => {
+			var d = new DateTime(2014, 3, 30, 1, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.add(Duration.hours(1));
+			expect(e.toString()).to.equal("2014-03-30T03:00:00.000 Europe/Amsterdam");
+		});
 		it("should account for DST backward", (): void => {
 			// the conversion to UTC for this date is not well-defined, could mean either
 			// the first 02:59:59 or the second one of that day
@@ -539,7 +545,6 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	// todo check normalization
 	describe("add(amount, unit)", (): void => {
 		it("should add 0", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -703,7 +708,6 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	// todo check normalization
 	describe("addLocal(amount, unit)", (): void => {
 		it("should add 0", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -1096,5 +1100,4 @@ describe("DateTime", (): void => {
 });
 
 
-// todo test DST zone where DST save is not a whole hour (20 or 40 minutes)
 

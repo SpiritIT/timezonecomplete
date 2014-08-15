@@ -215,6 +215,22 @@ export class TimeZone {
 	}
 
 	/**
+	 * Does this zone have Daylight Saving Time at all?
+	 */
+	public hasDst(): boolean {
+		switch (this._kind) {
+			case TimeZoneKind.Local: return false;
+			case TimeZoneKind.Offset: return false;
+			case TimeZoneKind.Proper: return (TzDatabase.instance().hasDst(this._name));
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore next */
+				return false;
+		}
+
+	}
+
+	/**
 	 * Calculate timezone offset from a UTC time.
 	 * @param year local full year
 	 * @param month local month 1-12 (note this deviates from JavaScript date)

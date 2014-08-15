@@ -609,7 +609,7 @@ export class Period {
 	private _dstRelevant(): boolean {
 		return (this._start.zone() != null
 			&& this._start.zone().kind() === TimeZoneKind.Proper
-			&& this._start.zone().isUtc() === false);
+			&& this._start.zone().hasDst());
 	}
 
 	/**
@@ -661,5 +661,3 @@ export class Period {
 	}
 
 }
-
-
