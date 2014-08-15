@@ -86,7 +86,7 @@ tc.lastWeekDayOfMonth(2014, 8, tc.WeekDay.Monday); // returns 25
 tc.weekDayOnOrAfter(2014, 8, 15, tc.WeekDay.Sunday); // returns 17
 
 // Last Sunday on or before August 15th, 2014
-tc.weekDayOnOrAfter(2014, 8, 15, tc.WeekDay.Sunday); // returns 10
+tc.weekDayOnOrBefore(2014, 8, 15, tc.WeekDay.Sunday); // returns 10
 
 ```
 
