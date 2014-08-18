@@ -373,6 +373,9 @@ The version of the included IANA time zone database is 2014e.
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
 
+### Next (already implemented, not published)
+* Add valueOf() method to DateTime and Duration
+
 ### 1.4.6 (2014-08-15)
 * Bugfix TypeScript .d.ts file
 

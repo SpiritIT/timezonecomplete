@@ -1152,6 +1152,13 @@ var DateTime = (function () {
     };
 
     /**
+    * The valueOf() method returns the primitive value of the specified object.
+    */
+    DateTime.prototype.valueOf = function () {
+        return this._utcDate.milli;
+    };
+
+    /**
     * Modified ISO 8601 format string in UTC without time zone info
     */
     DateTime.prototype.toUtcString = function () {
@@ -1471,6 +1478,13 @@ var Duration = (function () {
     */
     Duration.prototype.inspect = function () {
         return "[Duration: " + this.toString() + "]";
+    };
+
+    /**
+    * The valueOf() method returns the primitive value of the specified object.
+    */
+    Duration.prototype.valueOf = function () {
+        return this.milliseconds();
     };
 
     Duration.prototype._toString = function (full) {

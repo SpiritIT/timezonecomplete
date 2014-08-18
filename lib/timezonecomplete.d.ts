@@ -242,7 +242,6 @@ declare module '__timezonecomplete/datetime' {
     import basics = require("__timezonecomplete/basics");
     import duration = require("__timezonecomplete/duration");
     import javascript = require("__timezonecomplete/javascript");
-    import timesource = require("__timezonecomplete/timesource");
     import timezone = require("__timezonecomplete/timezone");
     /**
      * DateTime class which is time zone-aware
@@ -520,6 +519,10 @@ declare module '__timezonecomplete/datetime' {
          */
         inspect(): string;
         /**
+         * The valueOf() method returns the primitive value of the specified object.
+         */
+        valueOf(): any;
+        /**
          * Modified ISO 8601 format string in UTC without time zone info
          */
         toUtcString(): string;
@@ -674,6 +677,10 @@ declare module '__timezonecomplete/duration' {
          * Used by util.inspect()
          */
         inspect(): string;
+        /**
+         * The valueOf() method returns the primitive value of the specified object.
+         */
+        valueOf(): any;
     }
 }
 
