@@ -256,11 +256,13 @@ declare module '__timezonecomplete/datetime' {
     import duration = require("__timezonecomplete/duration");
     import javascript = require("__timezonecomplete/javascript");
     import timezone = require("__timezonecomplete/timezone");
+    import dateTimeInterface = require("__timezonecomplete/datetime-interface");
     /**
      * DateTime class which is time zone-aware
      * and which can be mocked for testing purposes.
      */
-    export class DateTime {
+    export class DateTime implements dateTimeInterface.DateTimeAccess {
+        static formatter: format.Formatter;
         /**
          * Actual time source in use. Setting this property allows to
          * fake time in tests. DateTime.nowLocal() and DateTime.nowUtc()
@@ -545,6 +547,7 @@ declare module '__timezonecomplete/datetime' {
          * E.g. "2014-01-01T23:15:33+01:00" for Europe/Amsterdam
          */
         toIsoString(): string;
+        format(formatString: string): string;
         /**
          * Modified ISO 8601 format string with IANA name if applicable.
          * E.g. "2014-01-01T23:15:33.000 Europe/Amsterdam"
@@ -1038,6 +1041,23 @@ declare module '__timezonecomplete/timezone' {
          * @return offset w.r.t. UTC in minutes
          */
         static stringToOffset(s: string): number;
+    }
+}
+
+declare module '__timezonecomplete/datetime-interface' {
+    import TimeZone = require("__timezonecomplete/timezone");
+    import basics = require("__timezonecomplete/basics");
+    export interface DateTimeAccess {
+        year(): number;
+        month(): number;
+        day(): number;
+        weekDay(): basics.WeekDay;
+        weekNumber(): number;
+        hour(): number;
+        minute(): number;
+        second(): number;
+        millisecond(): number;
+        zone(): TimeZone.TimeZone;
     }
 }
 
