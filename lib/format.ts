@@ -38,7 +38,6 @@ export class Formatter {
 
 	private _formatToken(dateTime: DateTimeAccess, token: Token): string {
 		switch (token.type) {
-			case TokenType.IDENTITY: return token.raw;
 			case TokenType.ERA: return this._formatEra(dateTime, token);
 			case TokenType.YEAR: return this._formatYear(dateTime, token);
 			case TokenType.QUARTER: return this._formatQuarter(dateTime, token);
@@ -50,6 +49,9 @@ export class Formatter {
 			case TokenType.MINUTE: return this._formatMinute(dateTime, token);
 			case TokenType.SECOND: return this._formatSecond(dateTime, token);
 			case TokenType.ZONE: return this._formatZone(dateTime, token);
+			case TokenType.WEEK: return this._formatWeek(dateTime, token);
+			default:
+			case TokenType.IDENTITY: return token.raw;
 		}
 	}
 
@@ -117,13 +119,26 @@ export class Formatter {
 		}
 	}
 
+	private _formatWeek(dateTime: DateTimeAccess, token: Token): string {
+		if (token.symbol === "w") {
+			// return strings.padLeft(dateTime.week().toString(), token.length, "0");
+			// TODO: Week is not implemented yet in DateTime
+			return "-1";
+		} else {
+			// return strings.padLeft(dateTime.weekOfMonth().toString(), token.length, "0");
+			// TODO: Week of month is not implemented yet in DateTime
+			return "-1";
+		}
+	}
+
 	private _formatDay(dateTime: DateTimeAccess, token: Token): string {
 		switch (token.symbol) {
 			case "d":
 			default:
 				return strings.padLeft(dateTime.day().toString(), token.length, "0");
 			case "D":
-				// not implemented yet...
+				// return strings.padLeft(dateTime.dayOfYear().toString(), token.length, "0");
+				// TODO: Day of year is not implemented yet in DateTime 
 				return "-1";
 		}
 	}
@@ -189,18 +204,14 @@ export class Formatter {
 				fractionString = strings.padRight(fractionString, token.length, "0");
 				return fractionString.slice(0, token.length);
 			case "A":
-				// Not implemented yet...
+				// return strings.padLeft(dateTime.secondOfDay().toString(), token.length, "0");
+				// TODO: Second of day is not implemented yet in DateTime
 				return "-1";
 		}
 	}
 
 	private _formatZone(dateTime: DateTimeAccess, token: Token): string {
 		var zone = dateTime.zone();
-		switch (token.symbol) {
-			case "z":
-				if (token.length < 4) {
-					return zone.name();
-				}
-		}
+		return zone.toString(); // Best we can do for now...
 	}
 }

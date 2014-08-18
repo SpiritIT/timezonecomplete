@@ -3,6 +3,7 @@ var expect = chai.expect;
 
 var format = require("../lib/format");
 
+var timeZone = require("../lib/timezone");
 var basics = require("../lib/basics");
 
 /*
@@ -22,6 +23,9 @@ var DateTimeDummy = (function () {
     };
     DateTimeDummy.prototype.weekDay = function () {
         return this.dateWeekDay;
+    };
+    DateTimeDummy.prototype.week = function () {
+        return this.dateWeek;
     };
 
     DateTimeDummy.prototype.hour = function () {
@@ -170,6 +174,29 @@ describe("Formatter", function () {
             dateTime.dateMonth = 11;
             var result = formatter.format(dateTime, "MMMMM");
             expect(result).to.equal("N");
+        });
+    });
+
+    describe.skip("formatWeek", function () {
+        it("should format the week number with w", function () {
+            dateTime.dateWeek = 3;
+            var result = formatter.format(dateTime, "w");
+            expect(result).to.equal("3");
+        });
+        it("should format the week number with w", function () {
+            dateTime.dateWeek = 16;
+            var result = formatter.format(dateTime, "w");
+            expect(result).to.equal("16");
+        });
+        it("should format the week number with ww", function () {
+            dateTime.dateWeek = 8;
+            var result = formatter.format(dateTime, "ww");
+            expect(result).to.equal("08");
+        });
+        it("should format the week number with ww", function () {
+            dateTime.dateWeek = 45;
+            var result = formatter.format(dateTime, "ww");
+            expect(result).to.equal("45");
         });
     });
 
@@ -397,6 +424,89 @@ describe("Formatter", function () {
             dateTime.dateMilli = 44;
             var result = formatter.format(dateTime, "SSSS");
             expect(result).to.equal("0440");
+        });
+    });
+
+    describe.skip("formatTimeZone", function () {
+        it("should get the short specific name of the timezone for format z", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 7;
+            var result = formatter.format(dateTime, "z");
+            expect(result).to.equal("CEST");
+        });
+        it("should get the short specific name of the timezone for format z", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 2;
+            var result = formatter.format(dateTime, "z");
+            expect(result).to.equal("CET");
+        });
+        it("should get the long specific name of the timezone for format zzzz", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 7;
+            var result = formatter.format(dateTime, "zzzz");
+            expect(result).to.equal("Central European Summer Time");
+        });
+        it("should get the long specific name of the timezone for format zzzz", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 7;
+            var result = formatter.format(dateTime, "zzzz");
+            expect(result).to.equal("Central European Time");
+        });
+
+        it("should get the short specific name of the timezone for format O", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 7;
+            var result = formatter.format(dateTime, "O");
+            expect(result).to.equal("GMT+2");
+        });
+        it("should get the short specific name of the timezone for format O", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 2;
+            var result = formatter.format(dateTime, "O");
+            expect(result).to.equal("GMT+1");
+        });
+        it("should get the short specific name of the timezone for format OOOO", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 7;
+            var result = formatter.format(dateTime, "OOOO");
+            expect(result).to.equal("GMT+2:00");
+        });
+        it("should get the short specific name of the timezone for format OOOO", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 2;
+            var result = formatter.format(dateTime, "OOOO");
+            expect(result).to.equal("GMT+1:00");
+        });
+
+        it("should get the short specific name of the timezone for format v", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 7;
+            var result = formatter.format(dateTime, "z");
+            expect(result).to.equal("CET");
+        });
+        it("should get the short specific name of the timezone for format v", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 2;
+            var result = formatter.format(dateTime, "z");
+            expect(result).to.equal("CET");
+        });
+        it("should get the long specific name of the timezone for format vvvv", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 7;
+            var result = formatter.format(dateTime, "vvvv");
+            expect(result).to.equal("Central European Time");
+        });
+        it("should get the long specific name of the timezone for format vvvv", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateMonth = 7;
+            var result = formatter.format(dateTime, "vvvv");
+            expect(result).to.equal("Central European Time");
+        });
+
+        it("should get the long Timezone ID for format VV", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            var result = formatter.format(dateTime, "VV");
+            expect(result).to.equal("Europe/Amsterdam");
         });
     });
 });

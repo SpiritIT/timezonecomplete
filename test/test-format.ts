@@ -14,6 +14,7 @@ import basics = require("../lib/basics");
 class DateTimeDummy implements datetimeInterface.DateTimeAccess {
 	dateYear: number;
 	dateMonth: number;
+	dateWeek: number;
 	dateDay: number;
 	dateWeekDay: basics.WeekDay;
 
@@ -28,6 +29,7 @@ class DateTimeDummy implements datetimeInterface.DateTimeAccess {
 	month(): number { return this.dateMonth; }
 	day(): number { return this.dateDay; }
 	weekDay(): basics.WeekDay { return this.dateWeekDay; }
+	week(): number { return this.dateWeek; }
 
 	hour(): number { return this.dateHour; }
 	minute(): number { return this.dateMinute; }
@@ -164,6 +166,29 @@ describe("Formatter", (): void => {
 			dateTime.dateMonth = 11;
 			var result = formatter.format(dateTime, "MMMMM");
 			expect(result).to.equal("N");
+		});
+	});
+
+	describe.skip("formatWeek", (): void => {
+		it("should format the week number with w", (): void => {
+			dateTime.dateWeek = 3;
+			var result = formatter.format(dateTime, "w");
+			expect(result).to.equal("3");
+		});
+		it("should format the week number with w", (): void => {
+			dateTime.dateWeek = 16;
+			var result = formatter.format(dateTime, "w");
+			expect(result).to.equal("16");
+		});
+		it("should format the week number with ww", (): void => {
+			dateTime.dateWeek = 8;
+			var result = formatter.format(dateTime, "ww");
+			expect(result).to.equal("08");
+		});
+		it("should format the week number with ww", (): void => {
+			dateTime.dateWeek = 45;
+			var result = formatter.format(dateTime, "ww");
+			expect(result).to.equal("45");
 		});
 	});
 
@@ -392,5 +417,89 @@ describe("Formatter", (): void => {
 			var result = formatter.format(dateTime, "SSSS");
 			expect(result).to.equal("0440");
 		});
+	});
+
+	describe.skip("formatTimeZone", (): void => {
+		it("should get the short specific name of the timezone for format z", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 7;
+			var result = formatter.format(dateTime, "z");
+			expect(result).to.equal("CEST");
+		});
+		it("should get the short specific name of the timezone for format z", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 2;
+			var result = formatter.format(dateTime, "z");
+			expect(result).to.equal("CET");
+		});
+		it("should get the long specific name of the timezone for format zzzz", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 7;
+			var result = formatter.format(dateTime, "zzzz");
+			expect(result).to.equal("Central European Summer Time");
+		});
+		it("should get the long specific name of the timezone for format zzzz", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 7;
+			var result = formatter.format(dateTime, "zzzz");
+			expect(result).to.equal("Central European Time");
+		});
+
+		it("should get the short specific name of the timezone for format O", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 7;
+			var result = formatter.format(dateTime, "O");
+			expect(result).to.equal("GMT+2");
+		});
+		it("should get the short specific name of the timezone for format O", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 2;
+			var result = formatter.format(dateTime, "O");
+			expect(result).to.equal("GMT+1");
+		});
+		it("should get the short specific name of the timezone for format OOOO", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 7;
+			var result = formatter.format(dateTime, "OOOO");
+			expect(result).to.equal("GMT+2:00");
+		});
+		it("should get the short specific name of the timezone for format OOOO", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 2;
+			var result = formatter.format(dateTime, "OOOO");
+			expect(result).to.equal("GMT+1:00");
+		});
+
+		it("should get the short specific name of the timezone for format v", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 7;
+			var result = formatter.format(dateTime, "z");
+			expect(result).to.equal("CET");
+		});
+		it("should get the short specific name of the timezone for format v", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 2;
+			var result = formatter.format(dateTime, "z");
+			expect(result).to.equal("CET");
+		});
+		it("should get the long specific name of the timezone for format vvvv", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 7;
+			var result = formatter.format(dateTime, "vvvv");
+			expect(result).to.equal("Central European Time");
+		});
+		it("should get the long specific name of the timezone for format vvvv", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.dateMonth = 7;
+			var result = formatter.format(dateTime, "vvvv");
+			expect(result).to.equal("Central European Time");
+		});
+
+		it("should get the long Timezone ID for format VV", (): void => {
+			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+			var result = formatter.format(dateTime, "VV");
+			expect(result).to.equal("Europe/Amsterdam");
+		});
+
 	});
 });
