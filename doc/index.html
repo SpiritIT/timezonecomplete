@@ -57,9 +57,9 @@
 			<h2 id="synopsis">Synopsis</h2>
 			<p>TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone&#39;s time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.</p>
 			<h2 id="difference-with-timezone-js-moment-js-and-other-date-libraries">Difference with timezone-js, Moment.js and other Date libraries</h2>
-			<p>Other libraries are great. We had different requirements, that&#39;s all. We do fix some bugs that originate from the Date class and that result in bugs in most other libraries.</p>
+			<p>Other libraries are great. We had different requirements, that&#39;s all.</p>
 			<ol>
-				<li>Timezonecomplete works around inconsistent behaviour of the Date class. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete currently implements workarounds, but plans to be entirely independent of Date soon. Date problems include:<ul>
+				<li>Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings. Most other libraries internally use JavaScript Date. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete does not use Date internally for this reason. Date problems include:<ul>
 						<li>The Date constructor normalizes non-existing local times (during DST forward changes) in different ways in Firefox, Chrome, IE and Node.</li>
 						<li>The Date class responds differently to the TZ environment variable on different platforms.</li>
 						<li>The conversion of a local time to a UTC value is broken by specification.</li>
@@ -72,14 +72,64 @@
 						<li>Proper behaviour around DST changes (note that the ECMA 6 specification leaves this quite unclear and as a result, the JavaScript Date class </li>
 						<li>Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with &quot;number&quot; type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.</li>
 						<li>Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.</li>
-						<li>Ability to use with NodeJS as well as in a browser</li>
-						<li>Complete test coverage</li>
-						<li>Under active development</li>
+						<li>Utility functions for e.g. determining leap years, determining the last Monday of the month etc.</li>
+						<li>Ability to use with NodeJS as well as in a browser.</li>
 					</ul>
 				</li>
+				<li>Timezonecomplete has 99% test coverage.</li>
+				<li>Timezonecomplete is under active development by a company who have an interest in keeping it up to date.</li>
 			</ol>
 			<h2 id="usage">Usage</h2>
 			<p>See also ./doc/modules/index.html.</p>
+			<h3 id="enums">Enums</h3>
+			<pre><code class="lang-javascript">
+<span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+
+<span class="hljs-comment">// day-of-week</span>
+tc.WeekDay.Sunday;
+tc.WeekDay.Monday;
+tc.WeekDay.Tuesday;
+tc.WeekDay.Wednesday;
+tc.WeekDay.Friday;
+tc.WeekDay.Saturday;
+
+<span class="hljs-comment">// time units, used e.g. when adding to DateTime</span>
+tc.TimeUnit.Year;
+tc.TimeUnit.Month;
+tc.TimeUnit.Day;
+tc.TimeUnit.Hour;
+tc.TimeUnit.Minute;
+tc.TimeUnit.Second;
+</code></pre>
+			<h3 id="utility-functions">Utility Functions</h3>
+			<p>Timezonecomplete defines a number of utility functions.</p>
+			<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+
+<span class="hljs-comment">// n-th day of the year, counting from 0</span>
+tc.dayOfYear(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// returns 0</span>
+tc.dayOfYear(<span class="hljs-number">2014</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// returns 31</span>
+
+<span class="hljs-comment">// number of days in a month, accounting for leap years</span>
+tc.daysInMonth(<span class="hljs-number">2004</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// returns 29</span>
+tc.daysInMonth(<span class="hljs-number">2014</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// returns 28</span>
+
+<span class="hljs-comment">// number of days in a given year</span>
+tc.daysInYear(<span class="hljs-number">2004</span>); <span class="hljs-comment">// returns 366</span>
+tc.daysInYear(<span class="hljs-number">2014</span>); <span class="hljs-comment">// returns 365</span>
+
+<span class="hljs-comment">// is the given year a leap year?</span>
+tc.isLeapYear(<span class="hljs-number">2004</span>); <span class="hljs-comment">// returns true</span>
+tc.isLeapYear(<span class="hljs-number">2014</span>); <span class="hljs-comment">// returns false</span>
+
+<span class="hljs-comment">// last Monday of August in 2014</span>
+tc.lastWeekDayOfMonth(<span class="hljs-number">2014</span>, <span class="hljs-number">8</span>, tc.WeekDay.Monday); <span class="hljs-comment">// returns 25</span>
+
+<span class="hljs-comment">// First Sunday on or after August 15th, 2014</span>
+tc.weekDayOnOrAfter(<span class="hljs-number">2014</span>, <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, tc.WeekDay.Sunday); <span class="hljs-comment">// returns 17</span>
+
+<span class="hljs-comment">// Last Sunday on or before August 15th, 2014</span>
+tc.weekDayOnOrAfter(<span class="hljs-number">2014</span>, <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, tc.WeekDay.Sunday); <span class="hljs-comment">// returns 10</span>
+</code></pre>
 			<h3 id="duration">Duration</h3>
 			<p>The Duration class is a unit-aware representation of a duration in wall clock time.
 			You can create a Duration in milliseconds, seconds, minutes or hours and then query the value in another unit.</p>
@@ -90,25 +140,52 @@
 
 <span class="hljs-comment">// duration to string</span>
 <span class="hljs-built_in">console</span>.log(duration.toString()); <span class="hljs-comment">// 00:00:02</span>
+<span class="hljs-built_in">console</span>.log(duration.toFullString()); <span class="hljs-comment">// 00:00:02.000</span>
 
 <span class="hljs-comment">// convert to different unit</span>
 <span class="hljs-built_in">console</span>.log(duration.milliseconds()); <span class="hljs-comment">// 2000</span>
 
 <span class="hljs-comment">// arithmetic</span>
-<span class="hljs-keyword">var</span> duration2 = duration.multiply(<span class="hljs-number">3</span>); <span class="hljs-comment">// 6 seconds</span>
+<span class="hljs-keyword">var</span> duration2;
+duration2 = duration.add(tc.Duration.hours(<span class="hljs-number">5</span>)); <span class="hljs-comment">// 5 hours and 2 seconds</span>
+duration2 = duration.sub(tc.Duration.milliseconds(<span class="hljs-number">500</span>)); <span class="hljs-comment">// 1.5 seconds</span>
+duration2 = duration.multiply(<span class="hljs-number">3</span>); <span class="hljs-comment">// 6 seconds</span>
+duration2 = duration.divide(<span class="hljs-number">3</span>); <span class="hljs-comment">// two thirds of a second</span>
 
 <span class="hljs-comment">// min and max functions</span>
-<span class="hljs-keyword">var</span> duration3 = duration2.max(duration); <span class="hljs-comment">// 6 seconds</span>
+<span class="hljs-keyword">var</span> duration3 = tc.Duration.seconds(<span class="hljs-number">6</span>);
+<span class="hljs-keyword">var</span> duration4 = tc.Duration.seconds(<span class="hljs-number">3</span>);
+<span class="hljs-keyword">var</span> duration5;
+duration5 = duration3.max(duration4); <span class="hljs-comment">// 6 seconds</span>
+duration5 = duration3.min(duration4); <span class="hljs-comment">// 3 seconds</span>
+
+<span class="hljs-comment">// getters</span>
+<span class="hljs-comment">// Note Duration has two sets of getters: singular and plural:</span>
+<span class="hljs-comment">// - wholeHours(), minute(), second(), millisecond(): these get the hour part, minute part 0-59, second part 0-59 etc.</span>
+<span class="hljs-comment">//   Note that wholeHours() may be 24 or more. </span>
+<span class="hljs-comment">// - hours(), minutes(), seconds(), milliseconds(): these return the whole duration as fractional number in hours/minutes/etc</span>
+<span class="hljs-keyword">var</span> duration6 = tc.Duration.hours(<span class="hljs-number">1.5</span>); <span class="hljs-comment">// 1:30:00.000</span>
+
+duration6.wholeHours(); <span class="hljs-comment">// 1</span>
+duration6.minute(); <span class="hljs-comment">// 30</span>
+duration6.second(); <span class="hljs-comment">// 0</span>
+duration6.millisecond(); <span class="hljs-comment">// 0</span>
+
+duration6.hours(); <span class="hljs-comment">// 1.5</span>
+duration6.minutes(); <span class="hljs-comment">// 90</span>
+duration6.seconds(); <span class="hljs-comment">// 5400</span>
+duration6.milliseconds(); <span class="hljs-comment">// 5400000</span>
 </code></pre>
 			<h3 id="datetime">DateTime</h3>
 			<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
-				It is smart enough to be able to represent different dates which map to the same UTC date around DST. Therefore you could increment the local time by an hour and be sure
+				It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
 			that the local time is incremented by one hour even if the UTC date does not change.</p>
-			<p>The DateTime class also fixes various annoyances. </p>
+			<p>The main differences with the JavaScript Date are: </p>
 			<ul>
+				<li>DateTime is time zone aware.</li>
 				<li>All methods are in singular form: &quot;year()&quot; not &quot;years()&quot; and &quot;hour()&quot; not &quot;hours()&quot;. The JavaScript Date class mixes these forms. </li>
-				<li>The JavaScript day-of-month is called &quot;date()&quot; instead of &quot;day()&quot;. We fixed that.</li>
-				<li>We count months from 1 to 12 inclusive like normal human beings, not from 0 to 11 as JavaScript does.</li>
+				<li>Our day-of-month is called day() not date().</li>
+				<li>We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.</li>
 				<li>With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
 				is always UTC for dates that have a time zone, and it is equal to the &quot;local&quot; date value for naive dates.</li>
 			</ul>
@@ -123,54 +200,111 @@
 <span class="hljs-comment">// a fully aware time</span>
 <span class="hljs-keyword">var</span> utcDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.TimeZone.utc());
 <span class="hljs-keyword">var</span> amsterdamDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
+
+<span class="hljs-comment">// date from ISO 8601 string</span>
 <span class="hljs-keyword">var</span> amsterdamDateFromString = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000 Europe/Amsterdam"</span>);
 
 <span class="hljs-comment">// a fully aware time without Daylight Saving Time: a fixed offset from UTC of 2 hours</span>
-<span class="hljs-keyword">var</span> fixedOffset = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000+02:00"</span>);
+<span class="hljs-keyword">var</span> fixedOffset;
+fixedOffset = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000+02:00"</span>);
+fixedOffset = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.TimeZone.zone(<span class="hljs-number">2</span>));
 
+<span class="hljs-comment">// Current time</span>
+<span class="hljs-keyword">var</span> nd;
+nd = tc.DateTime.nowLocal(); <span class="hljs-comment">// computer-local current time</span>
+nd = tc.DateTime.nowUtc(); <span class="hljs-comment">// current time in UTC</span>
+nd = tc.DateTime.now(tc.TimeZone.zone(<span class="hljs-string">"Africa/Algiers"</span>)); <span class="hljs-comment">// local time in given zone</span>
+nd = <span class="hljs-keyword">new</span> tc.DateTime();  <span class="hljs-comment">// computer-local current time</span>
+
+<span class="hljs-comment">// To string</span>
 <span class="hljs-built_in">console</span>.log(amsterdamDate.toUtcString()); <span class="hljs-comment">// 2014-01-01T12:59:59.000</span>
-<span class="hljs-built_in">console</span>.log(amsterdamDate.toString()); <span class="hljs-comment">// 2014-01-01T13:59:59.000 Europe/Amsterdam</span>
+<span class="hljs-built_in">console</span>.log(amsterdamDate.toString()); <span class="hljs-comment">// "2014-01-01T13:59:59.000 Europe/Amsterdam", note that this is not ISO 8601</span>
+<span class="hljs-built_in">console</span>.log(amsterdamDate.toIsoString()); <span class="hljs-comment">// "2014-01-01T13:59:59.000+01:00", note that zone name is removed to make perfect ISO 8601</span>
 
-<span class="hljs-comment">// time zone conversions</span>
+<span class="hljs-comment">// Local Getters</span>
+amsterdamDate.year(); <span class="hljs-comment">// 2014</span>
+amsterdamDate.month(); <span class="hljs-comment">// 1  (note: months are 1-12)</span>
+amsterdamDate.day(); <span class="hljs-comment">// 1</span>
+amsterdamDate.hour(); <span class="hljs-comment">// 13</span>
+amsterdamDate.minute(); <span class="hljs-comment">// 59</span>
+amsterdamDate.second(); <span class="hljs-comment">// 59</span>
+amsterdamDate.millisecond(); <span class="hljs-comment">// 0</span>
+amsterdamDate.weekDay(); <span class="hljs-comment">// tc.WeekDay.Wednesday = 3</span>
+
+<span class="hljs-comment">// UTC getters</span>
+amsterdamDate.utcYear(); <span class="hljs-comment">// 2014</span>
+amsterdamDate.utcMonth(); <span class="hljs-comment">// 1  (note: months are 1-12)</span>
+amsterdamDate.utcDay(); <span class="hljs-comment">// 1</span>
+amsterdamDate.utcHour(); <span class="hljs-comment">// 12</span>
+amsterdamDate.utcMinute(); <span class="hljs-comment">// 59</span>
+amsterdamDate.utcSecond(); <span class="hljs-comment">// 59</span>
+amsterdamDate.utcMillisecond(); <span class="hljs-comment">// 0</span>
+amsterdamDate.utcWeekDay(); <span class="hljs-comment">// tc.WeekDay.Wednesday = 3</span>
+
+<span class="hljs-comment">// Unix millisecond timestamp getter</span>
+amsterdamDate.unixUtcMillis(); <span class="hljs-comment">// milliseconds of UTC date since 1970-01-01</span>
+
+<span class="hljs-comment">// Zone getter</span>
+amsterdamDate.zone(); <span class="hljs-comment">// TimeZone.zone("Europe/Amsterdam");</span>
+
+<span class="hljs-comment">// Time zone conversion</span>
 <span class="hljs-keyword">var</span> africaDoualaDate = amsterdamDate.toZone(<span class="hljs-string">"Africa/Douala"</span>);
 
 <span class="hljs-comment">// Protection against creating aware dates from naive ones</span>
-<span class="hljs-keyword">var</span> error = naiveDate.toZone(<span class="hljs-string">"Europe/Amsterdam"</span>); <span class="hljs-comment">// throws</span>
+<span class="hljs-keyword">var</span> error = naiveDate.toZone(<span class="hljs-string">"Europe/Amsterdam"</span>); <span class="hljs-comment">// ERROR! THROWS</span>
 
 <span class="hljs-comment">// Other way around is ok</span>
 <span class="hljs-keyword">var</span> ok = amsterdamDate.toZone(<span class="hljs-literal">null</span>); <span class="hljs-comment">// returns naive date</span>
 
-<span class="hljs-comment">// Week days</span>
-<span class="hljs-keyword">var</span> weekDay1 = (<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-07-07T00:00:00 Europe/Amsterdam"</span>)).weekDay(); <span class="hljs-comment">// Monday = 1</span>
+<span class="hljs-comment">// In-place time zone conversion</span>
+<span class="hljs-keyword">var</span> d = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000 Europe/Amsterdam"</span>);
+d.convert(tc.TimeZone.zone(<span class="hljs-string">"UTC"</span>)); <span class="hljs-comment">// now d has changed to UTC</span>
 
-<span class="hljs-comment">// UTC week day from zone datetime</span>
-<span class="hljs-keyword">var</span> weekDay2 = (<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-07-07T00:00:00 Europe/Amsterdam"</span>)).utcWeekDay(); <span class="hljs-comment">// Sunday = 0</span>
+<span class="hljs-comment">// Cloning</span>
+<span class="hljs-keyword">var</span> newCopy = amsterdamDate.clone();
 </code></pre>
 			<h3 id="date-arithmetic">Date Arithmetic</h3>
-			<p>The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST and leap seconds: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
-			<pre><code class="lang-javascript"><span class="hljs-comment">// CONTINUATION FROM PREVIOUS EXAMPLE</span>
+			<p>The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
+			<pre><code class="lang-javascript">
+<span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
-<span class="hljs-comment">// difference between dates in different zones</span>
-<span class="hljs-comment">// returns a Duration</span>
+<span class="hljs-keyword">var</span> utcDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.TimeZone.utc());
+<span class="hljs-keyword">var</span> amsterdamDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
+
+<span class="hljs-comment">// Difference between dates (may be in different zones).</span>
+<span class="hljs-comment">// Returns a Duration</span>
 <span class="hljs-keyword">var</span> difference = utcDate.diff(amsterdamDate);
-
 <span class="hljs-built_in">console</span>.log(difference.hours()); <span class="hljs-comment">// 1</span>
 
-<span class="hljs-comment">// Add a real hour (3600 seconds) to a time</span>
-<span class="hljs-comment">// Note this does NOT account for leap seconds</span>
-<span class="hljs-keyword">var</span> added = localdate.add(tc.Duration.hours(<span class="hljs-number">1</span>));
+<span class="hljs-comment">// Add an hour (3600 seconds) to a time. It may be that</span>
+<span class="hljs-comment">// local time does not increase because of a DST change.</span>
+<span class="hljs-keyword">var</span> added;
+added = localdate.add(tc.Duration.hours(<span class="hljs-number">1</span>));
 
 <span class="hljs-comment">// Add a LOCAL hour to a time (ensure the hour() field increments by 1)</span>
-<span class="hljs-comment">// Note this DOES account for leap seconds and DST</span>
-<span class="hljs-keyword">var</span> added = localdate.addLocal(<span class="hljs-number">1</span>, tc.TimeUnit.Hour);
+<span class="hljs-comment">// Note this DOES account for DST</span>
+added = localdate.addLocal(<span class="hljs-number">1</span>, tc.TimeUnit.Hour);
 
-<span class="hljs-comment">// Add a UTC hour to a time (ensure the utcHour() increments by 1,</span>
+<span class="hljs-comment">// Add a UTC hour to a time. (ensure the utcHour() increments by 1,</span>
 <span class="hljs-comment">// due to DST changes the local hour might not change or change 2 hours)</span>
-<span class="hljs-comment">// Note this DOES account for leap seconds and DST</span>
-<span class="hljs-keyword">var</span> added = localdate.add(<span class="hljs-number">1</span>, tc.TimeUnit.Hour);
+added = localdate.add(<span class="hljs-number">1</span>, tc.TimeUnit.Hour);
+
+<span class="hljs-comment">// Equality operators</span>
+<span class="hljs-keyword">var</span> d1 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">31</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>, <span class="hljs-number">55</span>, <span class="hljs-number">45</span>, <span class="hljs-number">999</span>, tc.TimeZone.zone(<span class="hljs-string">"UTC"</span>));
+<span class="hljs-keyword">var</span> d2 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">31</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>, <span class="hljs-number">55</span>, <span class="hljs-number">45</span>, <span class="hljs-number">999</span>, tc.TimeZone.zone(<span class="hljs-string">"GMT"</span>));
+d1.equals(d2); <span class="hljs-comment">// true - equivalent time zones</span>
+d1.identical(d2); <span class="hljs-comment">// false - not exactly the same time zones</span>
+
+<span class="hljs-comment">// Comparison operators</span>
+<span class="hljs-keyword">var</span> d3 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">31</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>, <span class="hljs-number">55</span>, <span class="hljs-number">45</span>, <span class="hljs-number">999</span>, tc.TimeZone.zone(<span class="hljs-string">"UTC"</span>));
+<span class="hljs-keyword">var</span> d4 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">31</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>, <span class="hljs-number">55</span>, <span class="hljs-number">45</span>, <span class="hljs-number">999</span>, tc.TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
+d3.greaterEqual(d4); <span class="hljs-comment">// false, Amsterdam is ahead of UTC</span>
+d3.lessThan(d4); <span class="hljs-comment">// true</span>
+d4.lessEqual(d3); <span class="hljs-comment">// false, Amsterdam is ahead of UTC</span>
+d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 </code></pre>
 			<h3 id="periods">Periods</h3>
-			<p>We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it shift with DST?<br>The former means that the intervals are not always 12 hours. The latter means that it doesn&#39;t occur at the same time always.
+			<p>We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it happen at regular intervals, shifting with DST?  The former means that the intervals are not always 12 hours. The latter means that it doesn&#39;t occur at the same time always.
 			We needed to be able to specify both.</p>
 			<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
@@ -197,13 +331,12 @@
 <span class="hljs-keyword">var</span> occurrence2 = period.findNext(occurrence);
 </code></pre>
 			<h2 id="on-a-web-page">On a web page</h2>
-			<p>We spent some effort making TimezoneComplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
+			<p>We spent some effort making timezonecomplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
 			<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Timezone Complete test<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Timezonecomplete test<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">body</span>&gt;</span>
     Hello world
 <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"bower_components/timezone-js/src/date.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span> <span class="hljs-comment">&lt;!-- External library timezone-js is also needed --&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"timezonecomplete.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span> <span class="hljs-comment">&lt;!-- This is the javascript bundle from ./dist/ --&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">script</span>&gt;</span><span class="javascript">
         alert(timezonecomplete.isLeapYear(<span class="hljs-number">2012</span>));
@@ -235,14 +368,22 @@
 <span class="hljs-comment">// now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.</span>
 <span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
 </code></pre>
+			<h3 id="does-timezonecomplete-handle-leap-seconds-">Does timezonecomplete handle leap seconds?</h3>
+			<p>Currently not. This is because most platforms don&#39;t, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren&#39;t. We do plan to add support in some form though.</p>
 			<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 			<p>The version of the included IANA time zone database is 2014e.</p>
 			<h2 id="changelog">Changelog</h2>
-			<h3 id="planned">planned</h3>
+			<h3 id="planned">Planned</h3>
 			<ul>
-				<li>Remove Date class usage altogether (v 1.4.5)</li>
-				<li>Performance improvements (caching in TzDatabase class) (v1.4.5)</li>
-				<li>Make a release 2 where we polish the interface to the library a bit (v2.0.0)</li>
+				<li>A release 2 where we polish the interface to the library a bit</li>
+				<li>Leap second handling</li>
+			</ul>
+			<h3 id="1-4-5-2014-08-15-">1.4.5 (2014-08-15)</h3>
+			<ul>
+				<li>Removed Javascript Date class as much as possible because it behaves differently across platforms.</li>
+				<li>Performance improvements (caching in TzDatabase class)</li>
+				<li>Corrected HTML example in README.md now that timezone-js is gone</li>
+				<li>Bugfix in unix timestamp -&gt; datetime conversion for dates on jan 1st prior to 1970</li>
 			</ul>
 			<h3 id="1-4-4-2014-08-14-">1.4.4 (2014-08-14)</h3>
 			<ul>
@@ -304,9 +445,9 @@
 			</ul>
 			<h2 id="contributors">Contributors</h2>
 			<ul>
-				<li>Rogier Schouten <a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#x72;&#46;&#115;&#99;&#104;&#111;&#117;&#116;&#x65;&#x6e;&#x40;&#x73;&#112;&#105;&#114;&#105;&#x74;&#105;&#116;&#46;&#x63;&#111;&#x6d;">&#x72;&#46;&#115;&#99;&#104;&#111;&#117;&#116;&#x65;&#x6e;&#x40;&#x73;&#112;&#105;&#114;&#105;&#x74;&#105;&#116;&#46;&#x63;&#111;&#x6d;</a></li>
-				<li>Daan Wissing <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#100;&#x2e;&#119;&#x69;&#x73;&#115;&#x69;&#110;&#103;&#64;&#x73;&#x70;&#x69;&#x72;&#105;&#116;&#105;&#116;&#46;&#99;&#111;&#109;">&#100;&#x2e;&#119;&#x69;&#x73;&#115;&#x69;&#110;&#103;&#64;&#x73;&#x70;&#x69;&#x72;&#105;&#116;&#105;&#116;&#46;&#99;&#111;&#109;</a></li>
-				<li>Peter Kooijmans <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#x70;&#x2e;&#107;&#111;&#111;&#105;&#106;&#x6d;&#97;&#x6e;&#x73;&#64;&#x73;&#x70;&#x69;&#x72;&#105;&#x74;&#105;&#x74;&#x2e;&#99;&#111;&#109;">&#x70;&#x2e;&#107;&#111;&#111;&#105;&#106;&#x6d;&#97;&#x6e;&#x73;&#64;&#x73;&#x70;&#x69;&#x72;&#105;&#x74;&#105;&#x74;&#x2e;&#99;&#111;&#109;</a></li>
+				<li>Rogier Schouten <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x72;&#46;&#x73;&#99;&#104;&#111;&#x75;&#116;&#x65;&#110;&#x40;&#115;&#112;&#x69;&#114;&#105;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#109;">&#x72;&#46;&#x73;&#99;&#104;&#111;&#x75;&#116;&#x65;&#110;&#x40;&#115;&#112;&#x69;&#114;&#105;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#109;</a></li>
+				<li>Daan Wissing <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x64;&#x2e;&#x77;&#105;&#115;&#115;&#x69;&#x6e;&#x67;&#64;&#x73;&#112;&#x69;&#114;&#105;&#116;&#105;&#x74;&#46;&#x63;&#111;&#109;">&#x64;&#x2e;&#x77;&#105;&#115;&#115;&#x69;&#x6e;&#x67;&#64;&#x73;&#112;&#x69;&#114;&#105;&#116;&#105;&#x74;&#46;&#x63;&#111;&#109;</a></li>
+				<li>Peter Kooijmans <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#112;&#46;&#x6b;&#x6f;&#111;&#x69;&#x6a;&#x6d;&#97;&#x6e;&#x73;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#112;&#46;&#x6b;&#x6f;&#111;&#x69;&#x6a;&#x6d;&#97;&#x6e;&#x73;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
 			</ul>
 			<h2 id="license">License</h2>
 			<p>MIT</p>
@@ -318,37 +459,37 @@
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_basics_.html">"c:/<wbr>Source/timezonecomplete/lib/basics"</a>
+						<a href="modules/_basics_.html">"basics"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_datetime_.html">"c:/<wbr>Source/timezonecomplete/lib/datetime"</a>
+						<a href="modules/_datetime_.html">"datetime"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_duration_.html">"c:/<wbr>Source/timezonecomplete/lib/duration"</a>
+						<a href="modules/_duration_.html">"duration"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_index_.html">"c:/<wbr>Source/timezonecomplete/lib/index"</a>
+						<a href="modules/_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_javascript_.html">"c:/<wbr>Source/timezonecomplete/lib/javascript"</a>
+						<a href="modules/_javascript_.html">"javascript"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_math_.html">"c:/<wbr>Source/timezonecomplete/lib/math"</a>
+						<a href="modules/_math_.html">"math"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_period_.html">"c:/<wbr>Source/timezonecomplete/lib/period"</a>
+						<a href="modules/_period_.html">"period"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_strings_.html">"c:/<wbr>Source/timezonecomplete/lib/strings"</a>
+						<a href="modules/_strings_.html">"strings"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_timesource_.html">"c:/<wbr>Source/timezonecomplete/lib/timesource"</a>
+						<a href="modules/_timesource_.html">"timesource"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_timezone_.html">"c:/<wbr>Source/timezonecomplete/lib/timezone"</a>
+						<a href="modules/_timezone_.html">"timezone"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
-						<a href="modules/_c__source_timezonecomplete_lib_tz_database_.html">"c:/<wbr>Source/timezonecomplete/lib/tz-<wbr>database"</a>
+						<a href="modules/_tz_database_.html">"tz-<wbr>database"</a>
 					</li>
 				</ul>
 			</nav>

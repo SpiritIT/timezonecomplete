@@ -1,7 +1,7 @@
 ﻿/**
  * Copyright(c) 2014 Spirit IT BV
  *
- * Date+time+timezone representation
+ * Periodic interval functions
  */
 
 /// <reference path="../typings/lib.d.ts"/>
@@ -9,6 +9,9 @@
 "use strict";
 
 import assert = require("assert");
+import sourcemapsupport = require("source-map-support");
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: true });
 
 import basics = require("./basics");
 import TimeUnit = basics.TimeUnit;
@@ -606,7 +609,7 @@ export class Period {
 	private _dstRelevant(): boolean {
 		return (this._start.zone() != null
 			&& this._start.zone().kind() === TimeZoneKind.Proper
-			&& this._start.zone().isUtc() === false);
+			&& this._start.zone().hasDst());
 	}
 
 	/**
@@ -658,5 +661,3 @@ export class Period {
 	}
 
 }
-
-

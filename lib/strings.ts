@@ -44,17 +44,3 @@ export function padRight(s: string, width: number, char: string): string {
 	return s + padding;
 }
 
-/**
- * Returns an ISO time string. Note that months are 1-12.
- */
-export function isoString(year: number, month: number, day: number,
-	hour: number, minute: number, second: number, millisecond: number): string {
-	return padLeft(year.toString(10), 4, "0")
-		+ "-" + padLeft(month.toString(10), 2, "0")
-		+ "-" + padLeft(day.toString(10), 2, "0")
-		+ "T" + padLeft(hour.toString(10), 2, "0")
-		+ ":" + padLeft(minute.toString(10), 2, "0")
-		+ ":" + padLeft(second.toString(10), 2, "0")
-		+ "." + padLeft(millisecond.toString(10), 3, "0")
-		;
-}

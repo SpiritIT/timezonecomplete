@@ -192,7 +192,8 @@ gulp.task("build", function() {
 	});
 
 
-gulp.task("release", ["build", "browser_package", "doc", "bundle"]);
+	// note "doc" not part of release because we must call that separately in a DOS window due typedoc bug
+gulp.task("release", ["build", "browser_package", "bundle"]);
 
 gulp.task("browser_package", ["build"], function() {
 	return browserifyTask("timezonecomplete");

@@ -6,7 +6,11 @@ declare module 'timezonecomplete' {
     export import WeekDay = basics.WeekDay;
     export import isLeapYear = basics.isLeapYear;
     export import daysInMonth = basics.daysInMonth;
+    export import daysInYear = basics.daysInYear;
     export import dayOfYear = basics.dayOfYear;
+    export import lastWeekDayOfMonth = basics.lastWeekDayOfMonth;
+    export import weekDayOnOrAfter = basics.weekDayOnOrAfter;
+    export import weekDayOnOrBefore = basics.weekDayOnOrBefore;
     import datetime = require("__timezonecomplete/datetime");
     export import DateTime = datetime.DateTime;
     import duration = require("__timezonecomplete/duration");
@@ -17,17 +21,42 @@ declare module 'timezonecomplete' {
     export import Period = period.Period;
     export import PeriodDst = period.PeriodDst;
     export import periodDstToString = period.periodDstToString;
-    import strings = require("__timezonecomplete/strings");
-    export import isoString = strings.isoString;
     import timesource = require("__timezonecomplete/timesource");
     export import TimeSource = timesource.TimeSource;
     export import RealTimeSource = timesource.RealTimeSource;
     import timezone = require("__timezonecomplete/timezone");
+    export import NormalizeOption = timezone.NormalizeOption;
     export import TimeZoneKind = timezone.TimeZoneKind;
     export import TimeZone = timezone.TimeZone;
 }
 
 declare module '__timezonecomplete/basics' {
+    import javascript = require("__timezonecomplete/javascript");
+    /**
+     * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
+     * Sunday = 0, Monday = 1 etc
+     */
+    export enum WeekDay {
+        Sunday = 0,
+        Monday = 1,
+        Tuesday = 2,
+        Wednesday = 3,
+        Thursday = 4,
+        Friday = 5,
+        Saturday = 6,
+    }
+    /**
+     * Time units
+     */
+    export enum TimeUnit {
+        Second = 0,
+        Minute = 1,
+        Hour = 2,
+        Day = 3,
+        Week = 4,
+        Month = 5,
+        Year = 6,
+    }
     /**
      * @return True iff the given year is a leap year.
      */
@@ -71,6 +100,34 @@ declare module '__timezonecomplete/basics' {
      */
     export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number;
     /**
+     * Convert a unix milli timestamp into a TimeT structure.
+     * This does NOT take leap seconds into account.
+     */
+    export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct;
+    /**
+     * Convert a year, month, day etc into a unix milli timestamp.
+     * This does NOT take leap seconds into account.
+     *
+     * @param year	Year e.g. 1970
+     * @param month	Month 1-12
+     * @param day	Day 1-31
+     * @param hour	Hour 0-23
+     * @param minute	Minute 0-59
+     * @param second	Second 0-59 (no leap seconds)
+     * @param milli	Millisecond 0-999
+     */
+    export function timeToUnixNoLeapSecs(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
+    /**
+     * Convert a TimeT structure into a unix milli timestamp.
+     * This does NOT take leap seconds into account.
+     */
+    export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
+    /**
+     * Return the day-of-week.
+     * This does NOT take leap seconds into account.
+     */
+    export function weekDayNoLeapSecs(unixMillis: number): WeekDay;
+    /**
      * Basic representation of a date and time
      */
     export class TimeStruct {
@@ -95,13 +152,39 @@ declare module '__timezonecomplete/basics' {
          */
         minute: number;
         /**
-         * Seconds, 0-61 (60, 61 for leap seconds)
+         * Seconds, 0-59
          */
         second: number;
         /**
          * Milliseconds 0-999
          */
         milli: number;
+        /**
+         * Create a TimeStruct from a number of unix milliseconds
+         */
+        static fromUnix(unixMillis: number): TimeStruct;
+        /**
+         * Create a TimeStruct from a JavaScript date
+         *
+         * @param d	The date
+         * @param df	Which functions to take (getX() or getUTCX())
+         */
+        static fromDate(d: Date, df: javascript.DateFunctions): TimeStruct;
+        /**
+         * Returns a TimeStruct from an ISO 8601 string WITHOUT time zone
+         */
+        static fromString(s: string): TimeStruct;
+        /**
+         * Constructor
+         *
+         * @param year	Year e.g. 1970
+         * @param month	Month 1-12
+         * @param day	Day 1-31
+         * @param hour	Hour 0-23
+         * @param minute	Minute 0-59
+         * @param second	Second 0-59 (no leap seconds)
+         * @param milli	Millisecond 0-999
+         */
         constructor(/**
             * Year, 1970-...
             */
@@ -118,7 +201,7 @@ declare module '__timezonecomplete/basics' {
             * Minute 0-59
             */
             minute?: number, /**
-            * Seconds, 0-61 (60, 61 for leap seconds)
+            * Seconds, 0-59
             */
             second?: number, /**
             * Milliseconds 0-999
@@ -146,72 +229,24 @@ declare module '__timezonecomplete/basics' {
          */
         lessThan(other: TimeStruct): boolean;
         clone(): TimeStruct;
+        valueOf(): number;
+        /**
+         * ISO 8601 string YYYY-MM-DDThh:mm:ss.nnn
+         */
         toString(): string;
         inspect(): string;
     }
-    /**
-     * Convert a unix milli timestamp into a TimeT structure.
-     * This does NOT take leap seconds into account.
-     */
-    export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct;
-    /**
-     * Convert a year, month, day etc into a unix milli timestamp.
-     * This does NOT take leap seconds into account.
-     *
-     * @param year	Year e.g. 1970
-     * @param month	Month 1-12
-     * @param day	Day 1-31
-     * @param hour	Hour 0-23
-     * @param minute	Minute 0-59
-     * @param second	Second 0-59 (no leap seconds)
-     * @param milli	Millisecond 0-999
-     */
-    export function timeToUnixNoLeapSecs(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
-    /**
-     * Convert a TimeT structure into a unix milli timestamp.
-     * This does NOT take leap seconds into account.
-     */
-    export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
-    /**
-     * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
-     * Sunday = 0, Monday = 1 etc
-     */
-    export enum WeekDay {
-        Sunday = 0,
-        Monday = 1,
-        Tuesday = 2,
-        Wednesday = 3,
-        Thursday = 4,
-        Friday = 5,
-        Saturday = 6,
-    }
-    /**
-     * Time units
-     */
-    export enum TimeUnit {
-        Second = 0,
-        Minute = 1,
-        Hour = 2,
-        Day = 3,
-        Week = 4,
-        Month = 5,
-        Year = 6,
-    }
-    /**
-     * Return the day-of-week.
-     * This does NOT take leap seconds into account.
-     */
-    export function weekDayNoLeapSecs(unixMillis: number): WeekDay;
 }
 
 declare module '__timezonecomplete/datetime' {
     import basics = require("__timezonecomplete/basics");
     import duration = require("__timezonecomplete/duration");
     import javascript = require("__timezonecomplete/javascript");
+    import timesource = require("__timezonecomplete/timesource");
     import timezone = require("__timezonecomplete/timezone");
     /**
      * DateTime class which is time zone-aware
-     * and which can be mocked for testing purposes
+     * and which can be mocked for testing purposes.
      */
     export class DateTime {
         /**
@@ -239,6 +274,8 @@ declare module '__timezonecomplete/datetime' {
         constructor();
         /**
          * Constructor
+         * Non-existing local times are normalized by rounding up to the next DST offset.
+         *
          * @param isoString	String in ISO 8601 format. Instead of ISO time zone,
          *		 it may include a space and then and IANA time zone.
          * e.g. "2007-04-05T12:30:40.500"					(no time zone, naive date)
@@ -254,6 +291,9 @@ declare module '__timezonecomplete/datetime' {
          * Constructor. You provide a date, then you say whether to take the
          * date.getYear()/getXxx methods or the date.getUTCYear()/date.getUTCXxx methods,
          * and then you state which time zone that date is in.
+         * Non-existing local times are normalized by rounding up to the next DST offset.
+         * Note that the Date class has bugs and inconsistencies when constructing them with times around
+         * DST changes.
          *
          * @param date	A date object.
          * @param getters	Specifies which set of Date getters contains the date in the given time zone: the
@@ -371,7 +411,9 @@ declare module '__timezonecomplete/datetime' {
         /**
          * Returns this date converted to the given time zone.
          * Unaware dates can only be converted to unaware dates (clone)
-         * For unaware dates, an exception is thrown
+         * Converting an unaware date to an aware date throws an exception. Use the constructor
+         * if you really need to do that.
+         *
          * @param zone	The new time zone. This may be null to create unaware date.
          * @return The converted date
          */
@@ -379,33 +421,42 @@ declare module '__timezonecomplete/datetime' {
         /**
          * Convert to JavaScript date with the zone time in the getX() methods.
          * Unless the timezone is local, the Date.getUTCX() methods will NOT be correct.
+         * This is because Date calculates getUTCX() from getX() applying local time zone.
          */
         toDate(): Date;
         /**
-         * Add a time duration. Note that this simply adds a number
+         * Add a time duration relative to UTC. Note that this simply adds a number
          * of milliseconds to UTC and converts back to zone(),
-         * so in the presence of e.g. leap seconds there may be a
-         * shift in the seconds field if you add an hour.
-         * There is not DST handling and no leap second handling.
+         * There is not DST handling.
          * @return this + duration
          */
         add(duration: duration.Duration): DateTime;
         /**
-         * Add an amount of time to UTC, taking leap seconds etc into account.
-         * Adding e.g. 1 hour will increment the utcHour() field
-         * date by one. In case of DST changes, the local hour() field
-         * may not increase or increase by 2 hours. So if you add a month, the
-         * local time may vary by an hour. There will not be a shift
-         * in seconds due to leap seconds.
+         * Add an amount of time relative to UTC, as regularly as possible.
+         *
+         * Adding e.g. 1 hour will increment the utcHour() field, adding 1 month
+         * increments the utcMonth() field.
+         * Adding an amount of units leaves lower units intact. E.g.
+         * adding a month will leave the day() field untouched if possible.
+         *
+         * Note adding Months or Years will clamp the date to the end-of-month if
+         * the start date was at the end of a month, i.e. contrary to JavaScript
+         * Date#setUTCMonth() it will not overflow into the next month
+         *
+         * In case of DST changes, the utc time fields are still untouched but local
+         * time fields may shift.
          */
         add(amount: number, unit: basics.TimeUnit): DateTime;
         /**
          * Add an amount of time to the zone time, as regularly as possible.
+         *
          * Adding e.g. 1 hour will increment the hour() field of the zone
-         * date by one. In case of DST changes, the utcHour() field may
-         * increase by 1 or increase by 2. Adding a day will leave the time portion
-         * intact. However, adding an hour around a forward DST change adds two hours,
-         * since there is a zone time (e.g. 2AM in Amsterdam) that does not exist.
+         * date by one. In case of DST changes, the time fields may additionally
+         * increase by the DST offset, if a non-existing local time would
+         * be reached otherwise.
+         *
+         * Adding a unit of time will leave lower-unit fields intact, unless the result
+         * would be a non-existing time. Then an extra DST offset is added.
          *
          * Note adding Months or Years will clamp the date to the end-of-month if
          * the start date was at the end of a month, i.e. contrary to JavaScript
@@ -751,29 +802,6 @@ declare module '__timezonecomplete/period' {
     }
 }
 
-declare module '__timezonecomplete/strings' {
-    /**
-     * Pad a string by adding characters to the beginning.
-     * @param s	the string to pad
-     * @param width	the desired minimum string width
-     * @param char	the single character to pad with
-     * @return	the padded string
-     */
-    export function padLeft(s: string, width: number, char: string): string;
-    /**
-     * Pad a string by adding characters to the end.
-     * @param s	the string to pad
-     * @param width	the desired minimum string width
-     * @param char	the single character to pad with
-     * @return	the padded string
-     */
-    export function padRight(s: string, width: number, char: string): string;
-    /**
-     * Returns an ISO time string. Note that months are 1-12.
-     */
-    export function isoString(year: number, month: number, day: number, hour: number, minute: number, second: number, millisecond: number): string;
-}
-
 declare module '__timezonecomplete/timesource' {
     /**
      * For testing purposes, we often need to manipulate what the current
@@ -813,6 +841,19 @@ declare module '__timezonecomplete/timezone' {
          * DST if applicable.
          */
         Proper = 2,
+    }
+    /**
+     * Option for TimeZone#normalizeLocal()
+     */
+    export enum NormalizeOption {
+        /**
+         * Normalize non-existing times by ADDING the DST offset
+         */
+        Up = 0,
+        /**
+         * Normalize non-existing times by SUBTRACTING the DST offset
+         */
+        Down = 1,
     }
     /**
      * Time zone. The object is immutable because it is cached:
@@ -873,6 +914,10 @@ declare module '__timezonecomplete/timezone' {
          */
         isUtc(): boolean;
         /**
+         * Does this zone have Daylight Saving Time at all?
+         */
+        hasDst(): boolean;
+        /**
          * Calculate timezone offset from a UTC time.
          * @param year local full year
          * @param month local month 1-12 (note this deviates from JavaScript date)
@@ -897,15 +942,21 @@ declare module '__timezonecomplete/timezone' {
          */
         offsetForZone(year: number, month: number, day: number, hour?: number, minute?: number, second?: number, millisecond?: number): number;
         /**
+         * Note: will be removed in version 2.0.0
+         *
          * Convenience function, takes values from a Javascript Date
          * Calls offsetForUtc() with the contents of the date
+         *
          * @param date: the date
          * @param funcs: the set of functions to use: get() or getUTC()
          */
         offsetForUtcDate(date: Date, funcs: javascript.DateFunctions): number;
         /**
+         * Note: will be removed in version 2.0.0
+         *
          * Convenience function, takes values from a Javascript Date
          * Calls offsetForUtc() with the contents of the date
+         *
          * @param date: the date
          * @param funcs: the set of functions to use: get() or getUTC()
          */
@@ -918,9 +969,11 @@ declare module '__timezonecomplete/timezone' {
          * this is probably what the user meant.
          *
          * @param localUnixMillis	Unix timestamp in zone time
+         * @param opt	(optional) Round up or down? Default: up
+         *
          * @returns	Unix timestamp in zone time, normalized.
          */
-        normalizeZoneTime(localUnixMillis: number): number;
+        normalizeZoneTime(localUnixMillis: number, opt?: NormalizeOption): number;
         /**
          * The time zone identifier (normalized).
          * Either "localtime", IANA name, or "+hh:mm" offset.

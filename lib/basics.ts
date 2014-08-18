@@ -14,9 +14,38 @@ import sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: true });
 
+import javascript = require("./javascript");
+import DateFunctions = javascript.DateFunctions;
+
 import math = require("./math");
 import strings = require("./strings");
 
+/**
+ * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
+ * Sunday = 0, Monday = 1 etc
+ */
+export enum WeekDay {
+	Sunday,
+	Monday,
+	Tuesday,
+	Wednesday,
+	Thursday,
+	Friday,
+	Saturday
+}
+
+/**
+ * Time units
+ */
+export enum TimeUnit {
+	Second,
+	Minute,
+	Hour,
+	Day,
+	Week,
+	Month,
+	Year
+}
 
 /**
  * @return True iff the given year is a leap year.
@@ -144,117 +173,6 @@ export function weekDayOnOrBefore(year: number, month: number, day: number, week
 	return start.day + diff;
 }
 
-/**
- * Basic representation of a date and time
- */
-export class TimeStruct {
-
-	constructor(
-		/**
-		 * Year, 1970-...
-		 */
-		public year: number = 1970,
-
-		/**
-		 * Month 1-12
-		 */
-		public month: number = 1,
-
-		/**
-		 * Day of month, 1-31
-		 */
-		public day: number = 1,
-
-		/**
-		 * Hour 0-23
-		 */
-		public hour: number = 0,
-
-		/**
-		 * Minute 0-59
-		 */
-		public minute: number = 0,
-
-		/**
-		 * Seconds, 0-61 (60, 61 for leap seconds)
-		 */
-		public second: number = 0,
-
-		/**
-		 * Milliseconds 0-999
-		 */
-		public milli: number = 0
-		) {
-		assert(this.validate(), "Invalid arguments");
-	}
-
-	/**
-	 * Validate a TimeStruct, returns false if invalid.
-	 */
-	public validate(): boolean {
-		return (typeof (this.year) === "number" && !isNaN(this.year) && math.isInt(this.year) && this.year >= -10000 && this.year < 10000
-			&& typeof (this.month) === "number" && !isNaN(this.month) && math.isInt(this.month) && this.month >= 1 && this.month <= 12
-			&& typeof (this.day) === "number" && !isNaN(this.day) && math.isInt(this.day) && this.day >= 1
-				&& this.day <= daysInMonth(this.year, this.month)
-			&& typeof (this.hour) === "number" && !isNaN(this.hour) && math.isInt(this.hour) && this.hour >= 0 && this.hour <= 23
-			&& typeof (this.minute) === "number" && !isNaN(this.minute) && math.isInt(this.minute) && this.minute >= 0 && this.minute <= 59
-			&& typeof (this.second) === "number" && !isNaN(this.second) && math.isInt(this.second) && this.second >= 0 && this.second <= 61
-			&& typeof (this.milli) === "number" && !isNaN(this.milli) && math.isInt(this.milli) && this.milli >= 0
-			&& this.milli <= 999
-			);
-	}
-
-	/**
-	 * The day-of-year 0-365
-	 */
-	public yearDay(): number {
-		assert(this.validate(), "Invalid TimeStruct value: " + this.toString());
-		return dayOfYear(this.year, this.month, this.day);
-	}
-
-	/**
-	 * Returns this time as a unix millisecond timestamp
-	 * Does NOT take leap seconds into account.
-	 */
-	public toUnixNoLeapSecs(): number {
-		assert(this.validate(), "Invalid TimeStruct value: " + this.toString());
-		return timeToUnixNoLeapSecs(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
-	}
-
-	/**
-	 * Deep equals
-	 */
-	public equals(other: TimeStruct): boolean {
-		return (this.year === other.year
-			&& this.month === other.month
-			&& this.day === other.day
-			&& this.hour === other.hour
-			&& this.minute === other.minute
-			&& this.second === other.second
-			&& this.milli === other.milli);
-	}
-
-	/**
-	 * < operator
-	 */
-	public lessThan(other: TimeStruct): boolean {
-		return (this.toUnixNoLeapSecs() < other.toUnixNoLeapSecs());
-	}
-
-	public clone(): TimeStruct {
-		return new TimeStruct(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
-	}
-
-	public toString(): string {
-		return strings.isoString(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
-	}
-
-	public inspect(): string {
-		return "[TimeStruct: " + this.toString() + "]";
-	}
-
-}
-
 function assertUnixTimestamp(unixMillis: number): void {
 	assert(typeof (unixMillis) === "number", "number input expected");
 	assert(!isNaN(unixMillis), "NaN not expected as input");
@@ -300,24 +218,24 @@ export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct {
 	} else {
 		// Note that a negative number modulo something yields a negative number.
 		// We make it positive by adding the modulo.
-		result.milli = ((temp % 1000) + 1000) % 1000;
+		result.milli = math.positiveModulo(temp, 1000);
 		temp = Math.floor(temp / 1000);
-		result.second = ((temp % 60) + 60) % 60;
+		result.second = math.positiveModulo(temp, 60);
 		temp = Math.floor(temp / 60);
-		result.minute = ((temp % 60) + 60) % 60;
+		result.minute = math.positiveModulo(temp, 60);
 		temp = Math.floor(temp / 60);
-		result.hour = ((temp % 24) + 24) % 24;
+		result.hour = math.positiveModulo(temp, 24);
 		temp = Math.floor(temp / 24);
 
 		year = 1969;
-		while (temp <= -daysInYear(year)) {
+		while (temp < -daysInYear(year)) {
 			temp += daysInYear(year);
 			year--;
 		}
 		result.year = year;
 
 		month = 12;
-		while (temp <= -daysInMonth(year, month)) {
+		while (temp < -daysInMonth(year, month)) {
 			temp += daysInMonth(year, month);
 			month--;
 		}
@@ -374,35 +292,6 @@ export function timeToUnixNoLeapSecs(
 	}
 }
 
-
-/**
- * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
- * Sunday = 0, Monday = 1 etc
- */
-export enum WeekDay {
-	Sunday,
-	Monday,
-	Tuesday,
-	Wednesday,
-	Thursday,
-	Friday,
-	Saturday
-}
-
-/**
- * Time units
- */
-export enum TimeUnit {
-	Second,
-	Minute,
-	Hour,
-	Day,
-	Week,
-	Month,
-	Year
-}
-
-
 /**
  * Return the day-of-week.
  * This does NOT take leap seconds into account.
@@ -413,5 +302,281 @@ export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
 	var epochDay: WeekDay = WeekDay.Thursday;
 	var days = Math.floor(unixMillis / 1000 / 86400);
 	return (epochDay + days) % 7;
+}
+
+/**
+ * Basic representation of a date and time
+ */
+export class TimeStruct {
+
+	/**
+	 * Create a TimeStruct from a number of unix milliseconds
+	 */
+	public static fromUnix(unixMillis: number): TimeStruct {
+		return unixToTimeNoLeapSecs(unixMillis);
+	}
+
+	/**
+	 * Create a TimeStruct from a JavaScript date
+	 *
+	 * @param d	The date
+	 * @param df	Which functions to take (getX() or getUTCX())
+	 */
+	public static fromDate(d: Date, df: DateFunctions): TimeStruct {
+		if (df === DateFunctions.Get) {
+			return new TimeStruct(d.getFullYear(), d.getMonth() + 1, d.getDate(),
+				d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
+		} else {
+			return new TimeStruct(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(),
+				d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
+		}
+	}
+
+	/**
+	 * Returns a TimeStruct from an ISO 8601 string WITHOUT time zone
+	 */
+	public static fromString(s: string): TimeStruct {
+		try {
+			var year: number = 1970;
+			var month: number = 1;
+			var day: number = 1;
+			var hour: number = 0;
+			var minute: number = 0;
+			var second: number = 0;
+			var fractionMillis: number = 0;
+			var lastUnit: TimeUnit = TimeUnit.Year;
+
+			// separate any fractional part
+			var split: string[] = s.trim().split(".");
+			assert(split.length >= 1 && split.length <= 2, "Empty string or multiple dots.");
+
+			// parse main part
+			var isBasicFormat = (s.indexOf("-") === -1);
+			if (isBasicFormat) {
+				assert(split[0].match(/^((\d)+)|(\d\d\d\d\d\d\d\dT(\d)+)$/),
+					"ISO string in basic notation may only contain numbers before the fractional part");
+
+				// remove any "T" separator
+				split[0] = split[0].replace("T", "");
+
+				assert([4, 8, 10, 12, 14].indexOf(split[0].length) !== -1,
+					"Padding or required components are missing. Note that YYYYMM is not valid per ISO 8601");
+
+				if (split[0].length >= 4) {
+					year = parseInt(split[0].substr(0, 4), 10);
+					lastUnit = TimeUnit.Year;
+				}
+				if (split[0].length >= 8) {
+					month = parseInt(split[0].substr(4, 2), 10);
+					day = parseInt(split[0].substr(6, 2), 10); // note that YYYYMM format is disallowed so if month is present, day is too
+					lastUnit = TimeUnit.Day;
+				}
+				if (split[0].length >= 10) {
+					hour = parseInt(split[0].substr(8, 2), 10);
+					lastUnit = TimeUnit.Hour;
+				}
+				if (split[0].length >= 12) {
+					minute = parseInt(split[0].substr(10, 2), 10);
+					lastUnit = TimeUnit.Minute;
+				}
+				if (split[0].length >= 14) {
+					second = parseInt(split[0].substr(12, 2), 10);
+					lastUnit = TimeUnit.Second;
+				}
+			} else {
+				assert(split[0].match(/^\d\d\d\d(-\d\d-\d\d((T)?\d\d(\:\d\d(:\d\d)?)?)?)?$/), "Invalid ISO string");
+				var dateAndTime: string[] = [];
+				if (s.indexOf("T") !== -1) {
+					dateAndTime = split[0].split("T");
+				} else if (s.length > 10) {
+					dateAndTime = [split[0].substr(0, 10), split[0].substr(10)];
+				} else {
+					dateAndTime = [split[0], ""];
+				}
+				assert([4, 10].indexOf(dateAndTime[0].length) !== -1,
+					"Padding or required components are missing. Note that YYYYMM is not valid per ISO 8601");
+
+				if (dateAndTime[0].length >= 4) {
+					year = parseInt(dateAndTime[0].substr(0, 4), 10);
+					lastUnit = TimeUnit.Year;
+				}
+				if (dateAndTime[0].length >= 10) {
+					month = parseInt(dateAndTime[0].substr(5, 2), 10);
+					day = parseInt(dateAndTime[0].substr(8, 2), 10); // note that YYYYMM format is disallowed so if month is present, day is too
+					lastUnit = TimeUnit.Day;
+				}
+				if (dateAndTime[1].length >= 2) {
+					hour = parseInt(dateAndTime[1].substr(0, 2), 10);
+					lastUnit = TimeUnit.Hour;
+				}
+				if (dateAndTime[1].length >= 5) {
+					minute = parseInt(dateAndTime[1].substr(3, 2), 10);
+					lastUnit = TimeUnit.Minute;
+				}
+				if (dateAndTime[1].length >= 8) {
+					second = parseInt(dateAndTime[1].substr(6, 2), 10);
+					lastUnit = TimeUnit.Second;
+				}
+			}
+
+			// parse fractional part
+			if (split.length > 1 && split[1].length > 0) {
+				var fraction: number = parseFloat("0." + split[1]);
+				switch (lastUnit) {
+					case TimeUnit.Year: {
+						fractionMillis = daysInYear(year) * 86400000 * fraction;
+					} break;
+					case TimeUnit.Day: {
+						fractionMillis = 86400000 * fraction;
+					} break;
+					case TimeUnit.Hour: {
+						fractionMillis = 3600000 * fraction;
+					} break;
+					case TimeUnit.Minute: {
+						fractionMillis = 60000 * fraction;
+					} break;
+					case TimeUnit.Second: {
+						fractionMillis = 1000 * fraction;
+					} break;
+				}
+			}
+
+			// combine main and fractional part
+			var unixMillis: number = timeToUnixNoLeapSecs(year, month, day, hour, minute, second);
+			unixMillis = Math.floor(unixMillis + fractionMillis);
+			return unixToTimeNoLeapSecs(unixMillis);
+		} catch (e) {
+			throw new Error("Invalid ISO 8601 string: \"" + s + "\": " + e.message);
+		}
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param year	Year e.g. 1970
+	 * @param month	Month 1-12
+	 * @param day	Day 1-31
+	 * @param hour	Hour 0-23
+	 * @param minute	Minute 0-59
+	 * @param second	Second 0-59 (no leap seconds)
+	 * @param milli	Millisecond 0-999
+	 */
+	constructor(
+		/**
+		 * Year, 1970-...
+		 */
+		public year: number = 1970,
+
+		/**
+		 * Month 1-12
+		 */
+		public month: number = 1,
+
+		/**
+		 * Day of month, 1-31
+		 */
+		public day: number = 1,
+
+		/**
+		 * Hour 0-23
+		 */
+		public hour: number = 0,
+
+		/**
+		 * Minute 0-59
+		 */
+		public minute: number = 0,
+
+		/**
+		 * Seconds, 0-59
+		 */
+		public second: number = 0,
+
+		/**
+		 * Milliseconds 0-999
+		 */
+		public milli: number = 0
+		) {
+		assert(this.validate(), "Invalid arguments: " + this.toString());
+	}
+
+	/**
+	 * Validate a TimeStruct, returns false if invalid.
+	 */
+	public validate(): boolean {
+		return (typeof (this.year) === "number" && !isNaN(this.year) && math.isInt(this.year) && this.year >= -10000 && this.year < 10000
+			&& typeof (this.month) === "number" && !isNaN(this.month) && math.isInt(this.month) && this.month >= 1 && this.month <= 12
+			&& typeof (this.day) === "number" && !isNaN(this.day) && math.isInt(this.day) && this.day >= 1
+			&& this.day <= daysInMonth(this.year, this.month)
+			&& typeof (this.hour) === "number" && !isNaN(this.hour) && math.isInt(this.hour) && this.hour >= 0 && this.hour <= 23
+			&& typeof (this.minute) === "number" && !isNaN(this.minute) && math.isInt(this.minute) && this.minute >= 0 && this.minute <= 59
+			&& typeof (this.second) === "number" && !isNaN(this.second) && math.isInt(this.second) && this.second >= 0 && this.second <= 59
+			&& typeof (this.milli) === "number" && !isNaN(this.milli) && math.isInt(this.milli) && this.milli >= 0
+			&& this.milli <= 999
+			);
+	}
+
+	/**
+	 * The day-of-year 0-365
+	 */
+	public yearDay(): number {
+		assert(this.validate(), "Invalid TimeStruct value: " + this.toString());
+		return dayOfYear(this.year, this.month, this.day);
+	}
+
+	/**
+	 * Returns this time as a unix millisecond timestamp
+	 * Does NOT take leap seconds into account.
+	 */
+	public toUnixNoLeapSecs(): number {
+		assert(this.validate(), "Invalid TimeStruct value: " + this.toString());
+		return timeToUnixNoLeapSecs(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+	}
+
+	/**
+	 * Deep equals
+	 */
+	public equals(other: TimeStruct): boolean {
+		return (this.year === other.year
+			&& this.month === other.month
+			&& this.day === other.day
+			&& this.hour === other.hour
+			&& this.minute === other.minute
+			&& this.second === other.second
+			&& this.milli === other.milli);
+	}
+
+	/**
+	 * < operator
+	 */
+	public lessThan(other: TimeStruct): boolean {
+		return (this.toUnixNoLeapSecs() < other.toUnixNoLeapSecs());
+	}
+
+	public clone(): TimeStruct {
+		return new TimeStruct(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+	}
+
+	public valueOf(): number {
+		return timeToUnixNoLeapSecs(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+	}
+
+	/**
+	 * ISO 8601 string YYYY-MM-DDThh:mm:ss.nnn
+	 */
+	public toString(): string {
+		return strings.padLeft(this.year.toString(10), 4, "0")
+			+ "-" + strings.padLeft(this.month.toString(10), 2, "0")
+			+ "-" + strings.padLeft(this.day.toString(10), 2, "0")
+			+ "T" + strings.padLeft(this.hour.toString(10), 2, "0")
+			+ ":" + strings.padLeft(this.minute.toString(10), 2, "0")
+			+ ":" + strings.padLeft(this.second.toString(10), 2, "0")
+			+ "." + strings.padLeft(this.milli.toString(10), 3, "0");
+	}
+
+	public inspect(): string {
+		return "[TimeStruct: " + this.toString() + "]";
+	}
+
 }
 

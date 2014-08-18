@@ -1,4 +1,4 @@
-﻿/// <reference path="../typings/test.d.ts" />
+/// <reference path="../typings/test.d.ts" />
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
@@ -8,6 +8,7 @@ var sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: true });
 
+var basics = require("../lib/basics");
 var datetimeFuncs = require("../lib/index");
 
 var DateFunctions = datetimeFuncs.DateFunctions;
@@ -395,6 +396,11 @@ describe("DateTime", function () {
             expect(d.millisecond()).to.equal(1);
             expect(d.zone()).to.equal(TimeZone.zone(240));
         });
+        it("non-existing", function () {
+            // non-existing due to DST forward
+            var d = new DateTime(basics.timeToUnixNoLeapSecs(2014, 3, 30, 2, 0, 0, 0), TimeZone.zone("Europe/Amsterdam"));
+            expect(d.hour()).to.equal(3); // should be normalized to 3AM
+        });
     });
 
     describe("clone", function () {
@@ -526,6 +532,7 @@ describe("DateTime", function () {
         });
     });
 
+    // todo check normalization
     describe("add(duration)", function () {
         it("should add zero", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -548,6 +555,11 @@ describe("DateTime", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
             var e = d.add(Duration.hours(1));
             expect(e.toString()).to.equal("2014-03-30T03:59:59.000 Europe/Amsterdam");
+        });
+        it("should account for DST forward (2)", function () {
+            var d = new DateTime(2014, 3, 30, 1, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+            var e = d.add(Duration.hours(1));
+            expect(e.toString()).to.equal("2014-03-30T03:00:00.000 Europe/Amsterdam");
         });
         it("should account for DST backward", function () {
             // the conversion to UTC for this date is not well-defined, could mean either
@@ -789,9 +801,6 @@ describe("DateTime", function () {
             var e = d.addLocal(1, 5 /* Month */);
             expect(e.toString()).to.equal("2014-02-28T00:00:00.000 Europe/Amsterdam");
         });
-
-        // BUG IN TIMEZONECOMPLETE: FOR 2004-02-29T00:00:00 Europe/Amsterdam it
-        // returns offset +120 minutes if TZ=Europe/Amsterdam is set.
         it("should clamp end-of-month (leap year)", function () {
             var d = new DateTime(2004, 1, 31, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
             var e = d.addLocal(1, 5 /* Month */);
@@ -827,15 +836,11 @@ describe("DateTime", function () {
             var e = d.addLocal(1, 2 /* Hour */);
             expect(e.toString()).to.equal("2014-03-30T02:59:59.000 UTC");
         });
-
-        // BUG in timezonecomplete/JavaScript Date
         it("should account for DST forward", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
             var e = d.addLocal(1, 2 /* Hour */);
             expect(e.toString()).to.equal("2014-03-30T03:59:59.000 Europe/Amsterdam");
         });
-
-        // BUG in timezonecomplete/JavaScript Date
         it("should account for DST forward, -1", function () {
             // it should skip over 02:59 since that does not exist
             var d = new DateTime(2014, 3, 30, 3, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -1119,5 +1124,3 @@ describe("DateTime", function () {
         });
     });
 });
-// todo test DST zone where DST save is not a whole hour (20 or 40 minutes)
-//# sourceMappingURL=test-datetime.js.map

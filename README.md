@@ -10,10 +10,9 @@ TimezoneComplete is a library of date/time utilities, all of which are aware of 
 
 ## Difference with timezone-js, Moment.js and other Date libraries
 
-Other libraries are great. We had different requirements, that's all. We do fix some bugs that originate from the Date class and that result in bugs in most other libraries.
+Other libraries are great. We had different requirements, that's all.
 
-
-1. Timezonecomplete works around inconsistent behaviour of the Date class. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete currently implements workarounds, but plans to be entirely independent of Date soon. Date problems include:
+1. Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings. Most other libraries internally use JavaScript Date. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete does not use Date internally for this reason. Date problems include:
   * The Date constructor normalizes non-existing local times (during DST forward changes) in different ways in Firefox, Chrome, IE and Node.
   * The Date class responds differently to the TZ environment variable on different platforms.
   * The conversion of a local time to a UTC value is broken by specification.
@@ -21,16 +20,75 @@ Other libraries are great. We had different requirements, that's all. We do fix 
 3. Timezonecomplete aims to be "complete", whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:
   * Naive dates (which know they have NO timezone information)
   * Aware dates (which have timezone information)
-  * Proper behaviour around DST changes (note that the ECMA 6 specification leaves this quite unclear and as a result, the JavaScript Date class 
+  * Proper behaviour around DST changes
   * Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with "number" type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.
   * Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
-  * Ability to use with NodeJS as well as in a browser
-  * Complete test coverage
-  * Under active development
+  * Utility functions for e.g. determining leap years, determining the last Monday of the month etc.
+  * Ability to use with NodeJS as well as in a browser.
+4. Timezonecomplete has 99% test coverage.
+5. Timezonecomplete is under active development by a company who have an interest in keeping it up to date.
 
 ## Usage
 
 See also ./doc/modules/index.html.
+
+### Enums
+
+```javascript
+
+var tc = require("timezonecomplete");
+
+// day-of-week
+tc.WeekDay.Sunday;
+tc.WeekDay.Monday;
+tc.WeekDay.Tuesday;
+tc.WeekDay.Wednesday;
+tc.WeekDay.Friday;
+tc.WeekDay.Saturday;
+
+// time units, used e.g. when adding to DateTime
+tc.TimeUnit.Year;
+tc.TimeUnit.Month;
+tc.TimeUnit.Day;
+tc.TimeUnit.Hour;
+tc.TimeUnit.Minute;
+tc.TimeUnit.Second;
+
+```
+
+### Utility Functions
+
+Timezonecomplete defines a number of utility functions.
+
+```javascript
+var tc = require("timezonecomplete");
+
+// n-th day of the year, counting from 0
+tc.dayOfYear(2014, 1, 1); // returns 0
+tc.dayOfYear(2014, 2, 1); // returns 31
+
+// number of days in a month, accounting for leap years
+tc.daysInMonth(2004, 2); // returns 29
+tc.daysInMonth(2014, 2); // returns 28
+
+// number of days in a given year
+tc.daysInYear(2004); // returns 366
+tc.daysInYear(2014); // returns 365
+
+// is the given year a leap year?
+tc.isLeapYear(2004); // returns true
+tc.isLeapYear(2014); // returns false
+
+// last Monday of August in 2014
+tc.lastWeekDayOfMonth(2014, 8, tc.WeekDay.Monday); // returns 25
+
+// First Sunday on or after August 15th, 2014
+tc.weekDayOnOrAfter(2014, 8, 15, tc.WeekDay.Sunday); // returns 17
+
+// Last Sunday on or before August 15th, 2014
+tc.weekDayOnOrBefore(2014, 8, 15, tc.WeekDay.Sunday); // returns 10
+
+```
 
 ### Duration
 
@@ -45,26 +103,54 @@ var duration = tc.Duration.seconds(2);
 
 // duration to string
 console.log(duration.toString()); // 00:00:02
+console.log(duration.toFullString()); // 00:00:02.000
 
 // convert to different unit
 console.log(duration.milliseconds()); // 2000
 
 // arithmetic
-var duration2 = duration.multiply(3); // 6 seconds
+var duration2;
+duration2 = duration.add(tc.Duration.hours(5)); // 5 hours and 2 seconds
+duration2 = duration.sub(tc.Duration.milliseconds(500)); // 1.5 seconds
+duration2 = duration.multiply(3); // 6 seconds
+duration2 = duration.divide(3); // two thirds of a second
 
 // min and max functions
-var duration3 = duration2.max(duration); // 6 seconds
+var duration3 = tc.Duration.seconds(6);
+var duration4 = tc.Duration.seconds(3);
+var duration5;
+duration5 = duration3.max(duration4); // 6 seconds
+duration5 = duration3.min(duration4); // 3 seconds
+
+// getters
+// Note Duration has two sets of getters: singular and plural:
+// - wholeHours(), minute(), second(), millisecond(): these get the hour part, minute part 0-59, second part 0-59 etc.
+//   Note that wholeHours() may be 24 or more. 
+// - hours(), minutes(), seconds(), milliseconds(): these return the whole duration as fractional number in hours/minutes/etc
+var duration6 = tc.Duration.hours(1.5); // 1:30:00.000
+
+duration6.wholeHours(); // 1
+duration6.minute(); // 30
+duration6.second(); // 0
+duration6.millisecond(); // 0
+
+duration6.hours(); // 1.5
+duration6.minutes(); // 90
+duration6.seconds(); // 5400
+duration6.milliseconds(); // 5400000
+
 ```
 
 ### DateTime
 The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
-It is smart enough to be able to represent different dates which map to the same UTC date around DST. Therefore you could increment the local time by an hour and be sure
+It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
 that the local time is incremented by one hour even if the UTC date does not change.
 
-The DateTime class also fixes various annoyances. 
+The main differences with the JavaScript Date are: 
+- DateTime is time zone aware.
 - All methods are in singular form: "year()" not "years()" and "hour()" not "hours()". The JavaScript Date class mixes these forms. 
-- The JavaScript day-of-month is called "date()" instead of "day()". We fixed that.
-- We count months from 1 to 12 inclusive like normal human beings, not from 0 to 11 as JavaScript does.
+- Our day-of-month is called day() not date().
+- We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.
 - With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
   is always UTC for dates that have a time zone, and it is equal to the "local" date value for naive dates.
 
@@ -80,64 +166,122 @@ var localdate = new tc.DateTime("2014-01-01T12:00:00.001", tc.TimeZone.local());
 // a fully aware time
 var utcDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.utc());
 var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.zone("Europe/Amsterdam"));
+
+// date from ISO 8601 string
 var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
 
 // a fully aware time without Daylight Saving Time: a fixed offset from UTC of 2 hours
-var fixedOffset = new tc.DateTime("2014-01-01T13:59:59.000+02:00");
+var fixedOffset;
+fixedOffset = new tc.DateTime("2014-01-01T13:59:59.000+02:00");
+fixedOffset = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.zone(2));
 
+// Current time
+var nd;
+nd = tc.DateTime.nowLocal(); // computer-local current time
+nd = tc.DateTime.nowUtc(); // current time in UTC
+nd = tc.DateTime.now(tc.TimeZone.zone("Africa/Algiers")); // local time in given zone
+nd = new tc.DateTime();  // computer-local current time
+
+// To string
 console.log(amsterdamDate.toUtcString()); // 2014-01-01T12:59:59.000
-console.log(amsterdamDate.toString()); // 2014-01-01T13:59:59.000 Europe/Amsterdam
+console.log(amsterdamDate.toString()); // "2014-01-01T13:59:59.000 Europe/Amsterdam", note that this is not ISO 8601
+console.log(amsterdamDate.toIsoString()); // "2014-01-01T13:59:59.000+01:00", note that zone name is removed to make perfect ISO 8601
 
-// time zone conversions
+// Local Getters
+amsterdamDate.year(); // 2014
+amsterdamDate.month(); // 1  (note: months are 1-12)
+amsterdamDate.day(); // 1
+amsterdamDate.hour(); // 13
+amsterdamDate.minute(); // 59
+amsterdamDate.second(); // 59
+amsterdamDate.millisecond(); // 0
+amsterdamDate.weekDay(); // tc.WeekDay.Wednesday = 3
+
+// UTC getters
+amsterdamDate.utcYear(); // 2014
+amsterdamDate.utcMonth(); // 1  (note: months are 1-12)
+amsterdamDate.utcDay(); // 1
+amsterdamDate.utcHour(); // 12
+amsterdamDate.utcMinute(); // 59
+amsterdamDate.utcSecond(); // 59
+amsterdamDate.utcMillisecond(); // 0
+amsterdamDate.utcWeekDay(); // tc.WeekDay.Wednesday = 3
+
+// Unix millisecond timestamp getter
+amsterdamDate.unixUtcMillis(); // milliseconds of UTC date since 1970-01-01
+
+// Zone getter
+amsterdamDate.zone(); // TimeZone.zone("Europe/Amsterdam");
+
+// Time zone conversion
 var africaDoualaDate = amsterdamDate.toZone("Africa/Douala");
 
 // Protection against creating aware dates from naive ones
-var error = naiveDate.toZone("Europe/Amsterdam"); // throws
+var error = naiveDate.toZone("Europe/Amsterdam"); // ERROR! THROWS
 
 // Other way around is ok
 var ok = amsterdamDate.toZone(null); // returns naive date
 
-// Week days
-var weekDay1 = (new tc.DateTime("2014-07-07T00:00:00 Europe/Amsterdam")).weekDay(); // Monday = 1
+// In-place time zone conversion
+var d = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
+d.convert(tc.TimeZone.zone("UTC")); // now d has changed to UTC
 
-// UTC week day from zone datetime
-var weekDay2 = (new tc.DateTime("2014-07-07T00:00:00 Europe/Amsterdam")).utcWeekDay(); // Sunday = 0
+// Cloning
+var newCopy = amsterdamDate.clone();
 
 ```
 
 ### Date Arithmetic
 
-The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST and leap seconds: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.
+The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.
 
 
 ```javascript
-// CONTINUATION FROM PREVIOUS EXAMPLE
 
-// difference between dates in different zones
-// returns a Duration
+var tc = require("timezonecomplete");
+
+var utcDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.utc());
+var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.zone("Europe/Amsterdam"));
+
+// Difference between dates (may be in different zones).
+// Returns a Duration
 var difference = utcDate.diff(amsterdamDate);
-
 console.log(difference.hours()); // 1
 
-// Add a real hour (3600 seconds) to a time
-// Note this does NOT account for leap seconds
-var added = localdate.add(tc.Duration.hours(1));
+// Add an hour (3600 seconds) to a time. It may be that
+// local time does not increase because of a DST change.
+var added;
+added = localdate.add(tc.Duration.hours(1));
 
 // Add a LOCAL hour to a time (ensure the hour() field increments by 1)
-// Note this DOES account for leap seconds and DST
-var added = localdate.addLocal(1, tc.TimeUnit.Hour);
+// Note this DOES account for DST
+added = localdate.addLocal(1, tc.TimeUnit.Hour);
 
-// Add a UTC hour to a time (ensure the utcHour() increments by 1,
+// Add a UTC hour to a time. (ensure the utcHour() increments by 1,
 // due to DST changes the local hour might not change or change 2 hours)
-// Note this DOES account for leap seconds and DST
-var added = localdate.add(1, tc.TimeUnit.Hour);
+added = localdate.add(1, tc.TimeUnit.Hour);
+
+// Equality operators
+var d1 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("UTC"));
+var d2 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("GMT"));
+d1.equals(d2); // true - equivalent time zones
+d1.identical(d2); // false - not exactly the same time zones
+
+// Comparison operators
+var d3 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("UTC"));
+var d4 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("Europe/Amsterdam"));
+d3.greaterEqual(d4); // false, Amsterdam is ahead of UTC
+d3.lessThan(d4); // true
+d4.lessEqual(d3); // false, Amsterdam is ahead of UTC
+d4.greaterThan(d3); // true
+
+
 
 ```
 
 ### Periods
 
-We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it shift with DST?  
-The former means that the intervals are not always 12 hours. The latter means that it doesn't occur at the same time always.
+We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it happen at regular intervals, shifting with DST?  The former means that the intervals are not always 12 hours. The latter means that it doesn't occur at the same time always.
 We needed to be able to specify both.
 
 ```javascript
@@ -168,15 +312,14 @@ var occurrence2 = period.findNext(occurrence);
 ```
 
 ## On a web page
-We spent some effort making TimezoneComplete usable in the browser, by packaging it in a [UMD](https://github.com/umdjs/umd). This way, it can be used for example in plain html/javascript:
+We spent some effort making timezonecomplete usable in the browser, by packaging it in a [UMD](https://github.com/umdjs/umd). This way, it can be used for example in plain html/javascript:
 
 ```html
 <html>
-<head><title>Timezone Complete test</title></head>
+<head><title>Timezonecomplete test</title></head>
 <body>
 	Hello world
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="bower_components/timezone-js/src/date.js"></script> <!-- External library timezone-js is also needed -->
 <script src="timezonecomplete.js"></script> <!-- This is the javascript bundle from ./dist/ -->
 	<script>
 	    alert(timezonecomplete.isLeapYear(2012));
@@ -216,16 +359,28 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 
 ```
 
+### Does timezonecomplete handle leap seconds?
+
+Currently not. This is because most platforms don't, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren't. We do plan to add support in some form though.
+
 ## Current TZ database version:
 
 The version of the included IANA time zone database is 2014e.
 
 ## Changelog
 
-### planned
-* Remove Date class usage altogether (v 1.4.5)
-* Performance improvements (caching in TzDatabase class) (v1.4.5)
-* Make a release 2 where we polish the interface to the library a bit (v2.0.0)
+### Planned
+* A release 2 where we polish the interface to the library a bit
+* Leap second handling
+
+### 1.4.6 (2014-08-15)
+* Bugfix TypeScript .d.ts file
+
+### 1.4.5 (2014-08-15)
+* Removed Javascript Date class as much as possible because it behaves differently across platforms.
+* Performance improvements (caching in TzDatabase class)
+* Corrected HTML example in README.md now that timezone-js is gone
+* Bugfix in unix timestamp -> datetime conversion for dates on jan 1st prior to 1970
 
 ### 1.4.4 (2014-08-14)
 * TZ database version: 2014e

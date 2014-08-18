@@ -1,4 +1,4 @@
-﻿/// <reference path="../typings/test.d.ts" />
+/// <reference path="../typings/test.d.ts" />
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
@@ -14,6 +14,7 @@ var WeekDay = basics.WeekDay;
 var Duration = duration.Duration;
 
 var AtType = tzDatabase.AtType;
+var NormalizeOption = tzDatabase.NormalizeOption;
 var OnType = tzDatabase.OnType;
 var RuleType = tzDatabase.RuleType;
 var RuleInfo = tzDatabase.RuleInfo;
@@ -437,15 +438,19 @@ describe("TzDatabase", function () {
             expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 10, 26, 2, 0, 0, 0))).to.deep.equal(new TimeStruct(2014, 10, 26, 2, 0, 0, 0));
             expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 10, 26, 0, 59, 59, 999))).to.deep.equal(new TimeStruct(2014, 10, 26, 0, 59, 59, 999));
         });
-        it("should round down date during DST forward change", function () {
+        it("should round up date during DST forward change", function () {
             expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 0))).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 0, 0, 0));
             expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 1))).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 0, 0, 1));
             expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 59, 59, 999))).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 59, 59, 999));
             expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 1, 59, 59, 999))).to.deep.equal(new TimeStruct(2014, 3, 30, 1, 59, 59, 999));
             expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 3, 0, 0, 0))).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 0, 0, 0));
         });
+        it("should round down date during DST forward change", function () {
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 0), 1 /* Down */)).to.deep.equal(new TimeStruct(2014, 3, 30, 1, 0, 0, 0));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 1), 1 /* Down */)).to.deep.equal(new TimeStruct(2014, 3, 30, 1, 0, 0, 1));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 59, 59, 999), 1 /* Down */)).to.deep.equal(new TimeStruct(2014, 3, 30, 1, 59, 59, 999));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 1, 59, 59, 999), 1 /* Down */)).to.deep.equal(new TimeStruct(2014, 3, 30, 1, 59, 59, 999));
+            expect(TzDatabase.instance().normalizeLocal("Europe/Amsterdam", new TimeStruct(2014, 3, 30, 3, 0, 0, 0), 1 /* Down */)).to.deep.equal(new TimeStruct(2014, 3, 30, 3, 0, 0, 0));
+        });
     });
 });
-// todors time zones -11 and + 11
-// todors time zones that have two DSTs in a year
-//# sourceMappingURL=test-tz-database.js.map

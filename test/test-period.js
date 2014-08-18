@@ -74,6 +74,10 @@ describe("Period", function () {
             // check it returns OK in local time (which stays from 2AM at 2AM)
             expect((new Period(new DateTime("1970-01-01T12:05:06.007 Europe/Amsterdam"), 1, 2 /* Hour */, 0 /* RegularIntervals */)).findFirst(new DateTime("2014-10-26T00:10:00.000 UTC").toZone(TimeZone.zone("Europe/Amsterdam"))).toString()).to.equal("2014-10-26T02:05:06.007 Europe/Amsterdam");
         });
+        it("should handle 1 Hour in zone with DST !== 1h", function () {
+            // Ghana had DST of 20 minutes
+            expect((new Period(new DateTime("1930-01-01T12:05:06.007 Africa/Accra"), 1, 2 /* Hour */, 0 /* RegularIntervals */)).findFirst(new DateTime("1937-10-26T00:10:00.000 Africa/Accra")).toString()).to.equal("1937-10-26T00:25:06.007 Africa/Accra");
+        });
         it("should handle 1 Day", function () {
             // check it shifts local time from 12h to 13h
             expect((new Period(new DateTime("1970-01-01T12:05:06.007 Europe/Amsterdam"), 1, 3 /* Day */, 0 /* RegularIntervals */)).findFirst(new DateTime("2014-03-30T00:00:00.000 Europe/Amsterdam")).toString()).to.equal("2014-03-30T13:05:06.007 Europe/Amsterdam");
@@ -112,6 +116,10 @@ describe("Period", function () {
 
             // check it returns OK in local time (which changes from 2AM to 3AM)
             expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */)).findFirst(new DateTime("2014-10-26T00:00:00.000 UTC").toZone(TimeZone.zone("Europe/Amsterdam"))).toString()).to.equal("2014-10-26T03:00:00.000 Europe/Amsterdam");
+        });
+        it("should handle 1 Hour in zone with DST !== 1h", function () {
+            // Ghana had DST of 20 minutes
+            expect((new Period(new DateTime("1930-01-01T12:05:06.007 Africa/Accra"), 1, 2 /* Hour */, 1 /* RegularLocalTime */)).findFirst(new DateTime("1937-10-26T00:10:00.000 Africa/Accra")).toString()).to.equal("1937-10-26T01:05:06.007 Africa/Accra");
         });
         it("should handle 1 Day", function () {
             // check it keeps local time @ 12h
@@ -153,6 +161,10 @@ describe("Period", function () {
 
             // check it returns OK in local time (which stays from 2AM at 2AM)
             expect((new Period(new DateTime("1970-01-01T01:00:00.000 Europe/Amsterdam"), 2, 2 /* Hour */, 0 /* RegularIntervals */)).findFirst(new DateTime("2014-10-25T23:10:00.000 UTC").toZone(TimeZone.zone("Europe/Amsterdam"))).toString()).to.equal("2014-10-26T02:00:00.000 Europe/Amsterdam");
+        });
+        it("should handle 2 Hour in zone with DST !== 1h", function () {
+            // Ghana had DST of 20 minutes
+            expect((new Period(new DateTime("1930-01-01T12:05:06.007 Africa/Accra"), 2, 2 /* Hour */, 0 /* RegularIntervals */)).findFirst(new DateTime("1937-10-26T00:10:00.000 Africa/Accra")).toString()).to.equal("1937-10-26T00:25:06.007 Africa/Accra");
         });
         it("should handle 2 Day", function () {
             // check it shifts local time from 12h to 13h
@@ -201,6 +213,10 @@ describe("Period", function () {
 
             // check it returns OK in local time (which changes from 2AM to 3AM)
             expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 2, 2 /* Hour */, 1 /* RegularLocalTime */)).findFirst(new DateTime("2014-10-26T00:00:00.000 UTC").toZone(TimeZone.zone("Europe/Amsterdam"))).toString()).to.equal("2014-10-26T04:00:00.000 Europe/Amsterdam");
+        });
+        it("should handle 2 Hour in zone with DST !== 1h", function () {
+            // Ghana had DST of 20 minutes
+            expect((new Period(new DateTime("1930-01-01T12:05:06.007 Africa/Accra"), 2, 2 /* Hour */, 1 /* RegularLocalTime */)).findFirst(new DateTime("1937-10-26T00:10:00.000 Africa/Accra")).toString()).to.equal("1937-10-26T02:05:06.007 Africa/Accra");
         });
         it("should handle 2 Day", function () {
             // check it keeps local time @ 12h across DST
@@ -427,4 +443,6 @@ describe("Period", function () {
         });
     });
 });
+// todo test DST zone where DST save is not a whole hour (20 or 40 minutes)
+// todo test zone with two DSTs
 //# sourceMappingURL=test-period.js.map

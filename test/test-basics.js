@@ -1,10 +1,12 @@
-﻿/// <reference path="../typings/test.d.ts" />
+/// <reference path="../typings/test.d.ts" />
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
 
 var basics = require("../lib/basics");
+var javascript = require("../lib/javascript");
 
+var DateFunctions = javascript.DateFunctions;
 var TimeStruct = basics.TimeStruct;
 var WeekDay = basics.WeekDay;
 
@@ -112,6 +114,90 @@ describe("weekDayOnOrBefore()", function () {
 });
 
 describe("TimeStruct", function () {
+    describe("fromDate", function () {
+        it("should work", function () {
+            var d = new Date(2014, 0, 2, 3, 4, 5, 6);
+            expect(TimeStruct.fromDate(d, 0 /* Get */)).to.deep.equal(new TimeStruct(2014, 1, 2, 3, 4, 5, 6));
+            expect(TimeStruct.fromDate(new Date(2014, 0, 2, 3, 4, 5, 6), 1 /* GetUTC */)).to.deep.equal(new TimeStruct(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()));
+        });
+    });
+
+    describe("fromString()", function () {
+        it("should parse basic format", function () {
+            expect(TimeStruct.fromString("2014")).to.deep.equal(new TimeStruct(2014, 1, 1, 0, 0, 0, 0));
+            expect(TimeStruct.fromString("20140506")).to.deep.equal(new TimeStruct(2014, 5, 6, 0, 0, 0, 0));
+            expect(TimeStruct.fromString("20140506T07")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 0, 0, 0));
+            expect(TimeStruct.fromString("20140506T0708")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 0, 0));
+            expect(TimeStruct.fromString("20140506T070809")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 9, 0));
+            expect(TimeStruct.fromString("2014050607")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 0, 0, 0));
+            expect(TimeStruct.fromString("201405060708")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 0, 0));
+            expect(TimeStruct.fromString("20140506070809")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 9, 0));
+        });
+        it("should parse hyphenated format", function () {
+            expect(TimeStruct.fromString("2014-05-06")).to.deep.equal(new TimeStruct(2014, 5, 6, 0, 0, 0, 0));
+            expect(TimeStruct.fromString("2014-05-06T07")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 0, 0, 0));
+            expect(TimeStruct.fromString("2014-05-06T07:08")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 0, 0));
+            expect(TimeStruct.fromString("2014-05-06T07:08:09")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 9, 0));
+            expect(TimeStruct.fromString("2014-05-0607")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 0, 0, 0));
+            expect(TimeStruct.fromString("2014-05-0607:08")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 0, 0));
+            expect(TimeStruct.fromString("2014-05-0607:08:09")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 9, 0));
+            expect(TimeStruct.fromString("1969-05-06T07:08:09")).to.deep.equal(new TimeStruct(1969, 5, 6, 7, 8, 9, 0));
+            expect(TimeStruct.fromString("1972-02-29T07:08:09")).to.deep.equal(new TimeStruct(1972, 2, 29, 7, 8, 9, 0));
+            expect(TimeStruct.fromString("1930-01-01T12:05:06.007")).to.deep.equal(new TimeStruct(1930, 1, 1, 12, 5, 6, 7));
+        });
+        it("should parse fraction", function () {
+            expect(TimeStruct.fromString("2014.0")).to.deep.equal(new TimeStruct(2014, 1, 1, 0, 0, 0, 0));
+            expect(TimeStruct.fromString("2014.1")).to.deep.equal(new TimeStruct(2014, 2, 6, 12, 0, 0, 0));
+            expect(TimeStruct.fromString("20140506.5")).to.deep.equal(new TimeStruct(2014, 5, 6, 12, 0, 0, 0));
+            expect(TimeStruct.fromString("20140506T07.5")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 30, 0, 0));
+            expect(TimeStruct.fromString("20140506T0708.5")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 30, 0));
+            expect(TimeStruct.fromString("20140506T070809.5")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 9, 500));
+            expect(TimeStruct.fromString("20140506T070809.001")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 9, 1));
+            expect(TimeStruct.fromString("2014050607.5")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 30, 0, 0));
+            expect(TimeStruct.fromString("201405060708.5")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 30, 0));
+            expect(TimeStruct.fromString("20140506070809.5")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 9, 500));
+        });
+        it("should trim whitespace", function () {
+            expect(TimeStruct.fromString(" 2014-05-06T07:08:09 ")).to.deep.equal(new TimeStruct(2014, 5, 6, 7, 8, 9, 0));
+        });
+        it("should throw on invalid format", function () {
+            assert.throws(function () {
+                TimeStruct.fromString("");
+            });
+            assert.throws(function () {
+                TimeStruct.fromString("14");
+            });
+            assert.throws(function () {
+                TimeStruct.fromString("14-03-01T16:48:23");
+            });
+            assert.throws(function () {
+                TimeStruct.fromString("20145");
+            });
+            assert.throws(function () {
+                TimeStruct.fromString("2014-5-1");
+            });
+            assert.throws(function () {
+                TimeStruct.fromString("2014-02-29");
+            });
+        });
+        it("should throw on invalid values", function () {
+            assert.throws(function () {
+                TimeStruct.fromString("2014-13");
+            });
+            assert.throws(function () {
+                TimeStruct.fromString("2014-02-30");
+            });
+        });
+        it("should throw on missing required field", function () {
+            assert.throws(function () {
+                TimeStruct.fromString("201505");
+            });
+            assert.throws(function () {
+                TimeStruct.fromString("2015-05");
+            });
+        });
+    });
+
     describe("validate()", function () {
         it("should work for valid dates", function () {
             expect((new TimeStruct()).validate()).to.be.true;
@@ -181,12 +267,15 @@ describe("TimeStruct", function () {
             t.second = 62;
             expect(t.validate()).to.be.false;
         });
-        it("should return true for valid leap second", function () {
-            var t;
-            t = new TimeStruct(1976, 6, 30, 23, 59, 59);
-            t.second = 60;
-            expect(t.validate()).to.be.true;
+
+        /* todo use this when implementing leap seconds
+        it("should return true for valid leap second", (): void => {
+        var t: TimeStruct;
+        t = new TimeStruct(1976, 6, 30, 23, 59, 59);
+        t.second = 60;
+        expect(t.validate()).to.be.true;
         });
+        */
         it("should return false for invalid milli", function () {
             var t;
             t = new TimeStruct();
@@ -206,9 +295,11 @@ describe("TimeStruct", function () {
         it("should work for leap year", function () {
             expect((new TimeStruct(2004, 12, 31, 0, 0, 0, 0)).yearDay()).to.equal(365);
         });
-        it("should work for leap second in leap year", function () {
-            expect((new TimeStruct(1972, 12, 31, 23, 59, 60, 999)).yearDay()).to.equal(365);
+        /* todo use this when implementing leap seconds
+        it("should work for leap second in leap year", (): void => {
+        expect((new TimeStruct(1972, 12, 31, 23, 59, 60, 999)).yearDay()).to.equal(365);
         });
+        */
     });
 });
 
@@ -230,9 +321,13 @@ describe("unixToTimeNoLeapSecs()", function () {
 describe("timeToUnixNoLeapSecs()", function () {
     it("should work for post-1970", function () {
         expect(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 8, 12, 16, 0, 3, 10))).to.equal(1407859203010);
+        expect(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 1, 1, 0, 0, 0, 0))).to.equal(1388534400000);
+        expect(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 12, 31, 23, 59, 59, 999))).to.equal(1420070399999);
     });
     it("should work for pre-1970", function () {
         expect(basics.timeToUnixNoLeapSecs(new TimeStruct(1960, 2, 3, 5, 6, 7, 1))).to.equal(-312749632999);
+        expect(basics.timeToUnixNoLeapSecs(new TimeStruct(1930, 1, 1, 0, 0, 0, 0))).to.equal(-1262304000000);
+        expect(basics.timeToUnixNoLeapSecs(new TimeStruct(1930, 12, 31, 23, 59, 59, 999))).to.equal(-1230768000001);
     });
     it("should work roundtrip", function () {
         expect(basics.unixToTimeNoLeapSecs(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 8, 12, 16, 0, 3, 10)))).to.deep.equal(new TimeStruct(2014, 8, 12, 16, 0, 3, 10));
@@ -247,4 +342,3 @@ describe("weekDayNoLeapSecs()", function () {
         expect(basics.weekDayNoLeapSecs(1407852032000)).to.equal(2 /* Tuesday */);
     });
 });
-//# sourceMappingURL=test-basics.js.map

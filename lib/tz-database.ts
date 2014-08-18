@@ -2,6 +2,8 @@
  * Copyright(c) 2014 Spirit IT BV
  *
  * Olsen Timezone Database container
+ *
+ * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
  */
 
 /// <reference path="../typings/lib.d.ts"/>
@@ -79,6 +81,8 @@ export enum AtType {
 }
 
 /**
+ * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+ *
  * See http://www.cstdbill.com/tzdb/tz-how-to.html
  */
 export class RuleInfo {
@@ -293,6 +297,8 @@ export enum RuleType {
 }
 
 /**
+ * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+ *
  * See http://www.cstdbill.com/tzdb/tz-how-to.html
  * First, and somewhat trivially, whereas Rules are considered to contain one or more records, a Zone is considered to
  * be a single record with zero or more continuation lines. Thus, the keyword, “Zone,” and the zone name are not repeated.
@@ -416,6 +422,22 @@ export class Transition {
 }
 
 /**
+ * Option for TzDatabase#normalizeLocal()
+ */
+export enum NormalizeOption {
+	/**
+	 * Normalize non-existing times by ADDING the DST offset
+	 */
+	Up,
+	/**
+	 * Normalize non-existing times by SUBTRACTING the DST offset
+	 */
+	Down
+}
+
+/**
+ * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+ *
  * This class typescriptifies reading the TZ data
  */
 export class TzDatabase {
@@ -539,76 +561,11 @@ export class TzDatabase {
 	}
 
 	/**
-	 * Minimum standard offset of all zones in the database.
-	 * Note, this can be a fractional number < -12 hours
-	 *
-	 * @param zoneName	(optional) if given, the result for the given zone is returned
-	 */
-	/* NOT USED AND NOT TESTED AT THIS TIME
-	public minStandardOffset(zoneName?: string): Duration {
-		if (zoneName) {
-			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-			var result: Duration = null;
-			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
-				if (!result || result.greaterThan(zoneInfo.gmtoff)) {
-					result = zoneInfo.gmtoff.clone();
-				}
-			});
-			assert(result, "No zone info found.");
-			return result;
-		} else {
-			// note that minmax values are in opposite offsets from what we calculate with
-			return Duration.minutes(-1 * this._minmax.minGmtOff);
-		}
-	}
-	*/
-
-	/**
-	 * Maximum standard offset of all zones in the database.
-	 * Note, this can be a fractional number > 12 hours
-	 *
-	 * @param zoneName	(optional) if given, the result for the given zone is returned
-	 */
-	/* NOT USED AND NOT TESTED AT THIS TIME
-	public maxStandardOffset(zoneName?: string): Duration {
-		if (zoneName) {
-			var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-			var result: Duration = null;
-			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
-				if (!result || result.lessThan(zoneInfo.gmtoff)) {
-					result = zoneInfo.gmtoff.clone();
-				}
-			});
-			assert(result, "No zone info found.");
-			return result;
-		} else {
-			// note that minmax values are in opposite offsets from what we calculate with
-			return Duration.minutes(-1 * this._minmax.maxGmtOff);
-		}
-	}
-	*/
-
-	/**
 	 * Checks whether the zone has DST at all
 	 */
 	public hasDst(zoneName: string): boolean {
 		return (this.maxDstSave(zoneName).milliseconds() !== 0);
 	}
-
-	/**
-	 * Not all local times exist because of DST forward changes.
-	 *
-	 * @returns The given time exists in the given zone.
-	 */
-	/* NOT USED AND NOT TESTED AT THIS TIME
-	public localTimeExists(zoneName: string, tm: TimeStruct): boolean {
-		if (this.hasDst(zoneName)) {
-			return (this.normalizeLocal(zoneName, tm).equals(tm));
-		} else {
-			return true;
-		}
-	}
-	*/
 
 	/**
 	 * Returns true iff the given zone name eventually links to
@@ -634,7 +591,7 @@ export class TzDatabase {
 	}
 
 	/**
-	 * Normalizes non-existing local times by adding a forward offset change.
+	 * Normalizes non-existing local times by adding/subtracting a forward offset change.
 	 * During a forward standard offset change or DST offset change, some amount of
 	 * local time is skipped. Therefore, this amount of local time does not exist.
 	 * This function adds the amount of forward change to any non-existing time. After all,
@@ -642,11 +599,13 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	IANA time zone name
 	 * @param localTime	A local time, either as a TimeStruct or as a unix millisecond value
+	 * @param opt	(optional) Round up or down? Default: up.
+	 *
 	 * @return	The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)
 	 */
-	public normalizeLocal(zoneName: string, localTime: TimeStruct): TimeStruct;
-	public normalizeLocal(zoneName: string, localTime: number): number;
-	public normalizeLocal(zoneName: string, a: any): any {
+	public normalizeLocal(zoneName: string, localTime: TimeStruct, opt?: NormalizeOption): TimeStruct;
+	public normalizeLocal(zoneName: string, localTime: number, opt?: NormalizeOption): number;
+	public normalizeLocal(zoneName: string, a: any, opt: NormalizeOption = NormalizeOption.Up): any {
 		assert(typeof (a) === "number" || typeof (a) === "object", "number or object expected");
 		assert(typeof(a) !== "object" || a, "a is null");
 
@@ -684,10 +643,11 @@ export class TzDatabase {
 					if (unixMillis >= localBefore && unixMillis < localAfter) {
 						var forwardChange = transition.offset.sub(prev);
 						// non-existing time
+						var factor: number = (opt === NormalizeOption.Up ? 1 : -1);
 						if (typeof a === "object") {
-							return basics.unixToTimeNoLeapSecs(unixMillis + forwardChange.milliseconds());
+							return basics.unixToTimeNoLeapSecs(unixMillis + factor * forwardChange.milliseconds());
 						} else {
-							return unixMillis + forwardChange.milliseconds();
+							return unixMillis + factor * forwardChange.milliseconds();
 						}
 					}
 				}
@@ -956,11 +916,10 @@ export class TzDatabase {
 	 * Get the zone info for the given UTC timestamp. Throws if not found.
 	 * @param zoneName	IANA time zone name
 	 * @param utcMillis	UTC time stamp
-	 * @returns	ZoneInfo object
+	 * @returns	ZoneInfo object. Do not change, we cache this object.
 	 */
 	public getZoneInfo(zoneName: string, utcMillis: number): ZoneInfo {
 		var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-		// todors use binary search maybe
 		for (var i = 0; i < zoneInfos.length; ++i) {
 			var zoneInfo = zoneInfos[i];
 			if (zoneInfo.until === null || zoneInfo.until > utcMillis) {
@@ -972,17 +931,28 @@ export class TzDatabase {
 	}
 
 	/**
+	 * Performance improvement: zone info cache
+	 */
+	private _zoneInfoCache: { [index: string]: ZoneInfo[] } = {};
+
+	/**
 	 * Return the zone records for a given zone name, after
 	 * following any links.
 	 *
 	 * @param zoneName	IANA zone name like "Pacific/Efate"
+	 * @return Array of zone infos. Do not change, this is a cached value.
 	 */
 	public getZoneInfos(zoneName: string): ZoneInfo[]{
-		// todors maybe apply caching
+		// FIRST validate zone name before searching cache
 		/* istanbul ignore if */
 		if (!this._data.zones.hasOwnProperty(zoneName)) {
 			/* istanbul ignore next */
 			throw new Error("Zone \"" + zoneName + "\" not found.");
+		}
+
+		// Take from cache
+		if (this._zoneInfoCache.hasOwnProperty(zoneName)) {
+			return this._zoneInfoCache[zoneName];
 		}
 
 		var result = [];
@@ -1030,23 +1000,35 @@ export class TzDatabase {
 			}
 			return (a.until - b.until);
 		});
+
+		this._zoneInfoCache[zoneName] = result;
 		return result;
 	}
+
+	/**
+	 * Performance improvement: rule info cache
+	 */
+	private _ruleInfoCache: { [index: string]: RuleInfo[] } = {};
 
 	/**
 	 * Returns the rule set with the given rule name,
 	 * sorted by first effective date (uncompensated for "w" or "s" AtTime)
 	 *
 	 * @param ruleName	Name of rule set
+	 * @return RuleInfo array. Do not change, this is a cached value.
 	 */
 	public getRuleInfos(ruleName: string): RuleInfo[]{
-		// todors maybe apply caching
+		// validate name BEFORE searching cache
 		if (!this._data.rules.hasOwnProperty(ruleName)) {
 			throw new Error("Rule set \"" + ruleName + "\" not found.");
 		}
 
-		var result = [];
+		// return from cache
+		if (this._ruleInfoCache.hasOwnProperty(ruleName)) {
+			return this._ruleInfoCache[ruleName];
+		}
 
+		var result = [];
 		var ruleSet = this._data.rules[ruleName];
 		for (var i = 0; i < ruleSet.length; ++i) {
 			var rule = ruleSet[i];
@@ -1087,6 +1069,7 @@ export class TzDatabase {
 			}
 		});
 
+		this._ruleInfoCache[ruleName] = result;
 		return result;
 	}
 

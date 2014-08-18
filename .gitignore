@@ -15,6 +15,7 @@ coverage
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
+.gulp-tsc*
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
@@ -71,3 +72,4 @@ bower_components
 /test/*.d.ts
 /temp
 /obj
+/*.suo

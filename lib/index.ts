@@ -16,7 +16,11 @@ export import WeekDay = basics.WeekDay;
 
 export import isLeapYear = basics.isLeapYear;
 export import daysInMonth = basics.daysInMonth;
+export import daysInYear = basics.daysInYear;
 export import dayOfYear = basics.dayOfYear;
+export import lastWeekDayOfMonth = basics.lastWeekDayOfMonth;
+export import weekDayOnOrAfter = basics.weekDayOnOrAfter;
+export import weekDayOnOrBefore = basics.weekDayOnOrBefore;
 
 import datetime = require("./datetime"); datetime;
 export import DateTime = datetime.DateTime;
@@ -32,14 +36,12 @@ export import Period = period.Period;
 export import PeriodDst = period.PeriodDst;
 export import periodDstToString = period.periodDstToString;
 
-import strings = require("./strings"); strings;
-export import isoString = strings.isoString;
-
 import timesource = require("./timesource"); timesource;
 export import TimeSource = timesource.TimeSource;
 export import RealTimeSource = timesource.RealTimeSource;
 
 import timezone = require("./timezone"); timezone;
+export import NormalizeOption = timezone.NormalizeOption;
 export import TimeZoneKind = timezone.TimeZoneKind;
 export import TimeZone = timezone.TimeZone;
 

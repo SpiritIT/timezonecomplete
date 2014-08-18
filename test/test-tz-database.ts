@@ -15,6 +15,7 @@ import WeekDay = basics.WeekDay;
 import Duration = duration.Duration;
 
 import AtType = tzDatabase.AtType;
+import NormalizeOption = tzDatabase.NormalizeOption;
 import OnType = tzDatabase.OnType;
 import RuleType = tzDatabase.RuleType;
 import RuleInfo = tzDatabase.RuleInfo;
@@ -606,7 +607,7 @@ describe("TzDatabase", (): void => {
 				"Europe/Amsterdam", new TimeStruct(2014, 10, 26, 0, 59, 59, 999))).to.deep.equal(
 				new TimeStruct(2014, 10, 26, 0, 59, 59, 999));
 		});
-		it("should round down date during DST forward change", (): void => {
+		it("should round up date during DST forward change", (): void => {
 			expect(TzDatabase.instance().normalizeLocal(
 				"Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 0))).to.deep.equal(
 				new TimeStruct(2014, 3, 30, 3, 0, 0, 0));
@@ -623,10 +624,22 @@ describe("TzDatabase", (): void => {
 				"Europe/Amsterdam", new TimeStruct(2014, 3, 30, 3, 0, 0, 0))).to.deep.equal(
 				new TimeStruct(2014, 3, 30, 3, 0, 0, 0));
 		});
+		it("should round down date during DST forward change", (): void => {
+			expect(TzDatabase.instance().normalizeLocal(
+				"Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 0), NormalizeOption.Down)).to.deep.equal(
+				new TimeStruct(2014, 3, 30, 1, 0, 0, 0));
+			expect(TzDatabase.instance().normalizeLocal(
+				"Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 0, 0, 1), NormalizeOption.Down)).to.deep.equal(
+				new TimeStruct(2014, 3, 30, 1, 0, 0, 1));
+			expect(TzDatabase.instance().normalizeLocal(
+				"Europe/Amsterdam", new TimeStruct(2014, 3, 30, 2, 59, 59, 999), NormalizeOption.Down)).to.deep.equal(
+				new TimeStruct(2014, 3, 30, 1, 59, 59, 999));
+			expect(TzDatabase.instance().normalizeLocal(
+				"Europe/Amsterdam", new TimeStruct(2014, 3, 30, 1, 59, 59, 999), NormalizeOption.Down)).to.deep.equal(
+				new TimeStruct(2014, 3, 30, 1, 59, 59, 999));
+			expect(TzDatabase.instance().normalizeLocal(
+				"Europe/Amsterdam", new TimeStruct(2014, 3, 30, 3, 0, 0, 0), NormalizeOption.Down)).to.deep.equal(
+				new TimeStruct(2014, 3, 30, 3, 0, 0, 0));
+		});
 	});
 });
-
-
-// todors time zones -11 and + 11
-// todors time zones that have two DSTs in a year
-
