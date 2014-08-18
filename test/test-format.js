@@ -24,7 +24,7 @@ var DateTimeDummy = (function () {
     DateTimeDummy.prototype.weekDay = function () {
         return this.dateWeekDay;
     };
-    DateTimeDummy.prototype.week = function () {
+    DateTimeDummy.prototype.weekNumber = function () {
         return this.dateWeek;
     };
 
@@ -177,7 +177,7 @@ describe("Formatter", function () {
         });
     });
 
-    describe.skip("formatWeek", function () {
+    describe("formatWeek", function () {
         it("should format the week number with w", function () {
             dateTime.dateWeek = 3;
             var result = formatter.format(dateTime, "w");

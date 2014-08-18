@@ -29,7 +29,7 @@ class DateTimeDummy implements datetimeInterface.DateTimeAccess {
 	month(): number { return this.dateMonth; }
 	day(): number { return this.dateDay; }
 	weekDay(): basics.WeekDay { return this.dateWeekDay; }
-	week(): number { return this.dateWeek; }
+	weekNumber(): number { return this.dateWeek; }
 
 	hour(): number { return this.dateHour; }
 	minute(): number { return this.dateMinute; }
@@ -169,7 +169,7 @@ describe("Formatter", (): void => {
 		});
 	});
 
-	describe.skip("formatWeek", (): void => {
+	describe("formatWeek", (): void => {
 		it("should format the week number with w", (): void => {
 			dateTime.dateWeek = 3;
 			var result = formatter.format(dateTime, "w");

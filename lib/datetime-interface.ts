@@ -5,6 +5,7 @@ export interface DateTimeAccess {
 	month(): number;
 	day(): number;
 	weekDay(): basics.WeekDay;
+	weekNumber(): number;
 
 	hour(): number;
 	minute(): number;

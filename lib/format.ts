@@ -121,9 +121,7 @@ export class Formatter {
 
 	private _formatWeek(dateTime: DateTimeAccess, token: Token): string {
 		if (token.symbol === "w") {
-			// return strings.padLeft(dateTime.week().toString(), token.length, "0");
-			// TODO: Week is not implemented yet in DateTime
-			return "-1";
+			return strings.padLeft(dateTime.weekNumber().toString(), token.length, "0");
 		} else {
 			// return strings.padLeft(dateTime.weekOfMonth().toString(), token.length, "0");
 			// TODO: Week of month is not implemented yet in DateTime
