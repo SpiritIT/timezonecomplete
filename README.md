@@ -88,6 +88,9 @@ tc.weekDayOnOrAfter(2014, 8, 15, tc.WeekDay.Sunday); // returns 17
 // Last Sunday on or before August 15th, 2014
 tc.weekDayOnOrBefore(2014, 8, 15, tc.WeekDay.Sunday); // returns 10
 
+// Week number according to ISO 8601 (note this does NOT match American week numbers)
+tc.weekNumber(2013, 12, 30); // 1
+
 ```
 
 ### Duration
@@ -196,6 +199,7 @@ amsterdamDate.minute(); // 59
 amsterdamDate.second(); // 59
 amsterdamDate.millisecond(); // 0
 amsterdamDate.weekDay(); // tc.WeekDay.Wednesday = 3
+amsterdamDate.weekNumber(); // ISO week number 1-53 = 1
 
 // UTC getters
 amsterdamDate.utcYear(); // 2014
@@ -206,6 +210,7 @@ amsterdamDate.utcMinute(); // 59
 amsterdamDate.utcSecond(); // 59
 amsterdamDate.utcMillisecond(); // 0
 amsterdamDate.utcWeekDay(); // tc.WeekDay.Wednesday = 3
+amsterdamDate.utcWeekNumber(); // ISO week number 1-53 = 1
 
 // Unix millisecond timestamp getter
 amsterdamDate.unixUtcMillis(); // milliseconds of UTC date since 1970-01-01
@@ -358,6 +363,10 @@ var datetime = new tc.DateTime(jsDate, tc.DateFunctions.Get, tc.TimeZone.zone("A
 var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone("America/Boise"));
 
 ```
+
+### Why does the number returned by weekNumber() not correspond to my calendar
+Different countries have different week number algoritms. We adhere to the ISO 8601 standard, where the first week starts on a Monday and is defined as the week having January 4th in it.
+If you need different week numbers, please submit an issue or a pull request.
 
 ### Does timezonecomplete handle leap seconds?
 

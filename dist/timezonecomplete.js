@@ -196,6 +196,68 @@ function weekDayOnOrBefore(year, month, day, weekDay) {
 }
 exports.weekDayOnOrBefore = weekDayOnOrBefore;
 
+/**
+* Returns the day-of-year of the Monday of week 1 in the given year.
+* Note that the result may lie in the previous year, in which case it
+* will be (much) greater than 4
+*/
+function getWeekOneDayOfYear(year) {
+    // first monday of January, minus one because we want day-of-year
+    var result = exports.weekDayOnOrAfter(year, 1, 1, 1 /* Monday */) - 1;
+    if (result > 3) {
+        result -= 7;
+        if (result < 0) {
+            result += exports.daysInYear(year - 1);
+        }
+    }
+    return result;
+}
+
+/**
+* The ISO 8601 week number for the given date. Week 1 is the week
+* that has January 4th in it, and it starts on Monday.
+* See https://en.wikipedia.org/wiki/ISO_week_date
+*
+* @param year	Year e.g. 1988
+* @param month	Month 1-12
+* @param day	Day of month 1-31
+*
+* @return Week number 1-53
+*/
+function weekNumber(year, month, day) {
+    var doy = exports.dayOfYear(year, month, day);
+
+    // check end-of-year corner case: may be week 1 of next year
+    if (doy >= exports.dayOfYear(year, 12, 29)) {
+        var nextYearWeekOne = getWeekOneDayOfYear(year + 1);
+        if (nextYearWeekOne > 4 && nextYearWeekOne <= doy) {
+            return 1;
+        }
+    }
+
+    // check beginning-of-year corner case
+    var thisYearWeekOne = getWeekOneDayOfYear(year);
+    if (thisYearWeekOne > 4) {
+        // week 1 is at end of last year
+        var weekTwo = thisYearWeekOne + 7 - exports.daysInYear(year - 1);
+        if (doy < weekTwo) {
+            return 1;
+        } else {
+            return Math.floor((doy - weekTwo) / 7) + 2;
+        }
+    }
+
+    // Week 1 is entirely inside this year.
+    if (doy < thisYearWeekOne) {
+        // The date is part of the last week of prev year.
+        return exports.weekNumber(year - 1, 12, 31);
+    }
+
+    // normal cases; note that week numbers start from 1 so +1
+    return Math.floor((doy - thisYearWeekOne) / 7) + 1;
+}
+exports.weekNumber = weekNumber;
+
 function assertUnixTimestamp(unixMillis) {
     assert(typeof (unixMillis) === "number", "number input expected");
     assert(!isNaN(unixMillis), "NaN not expected as input");
@@ -815,6 +877,27 @@ var DateTime = (function () {
     };
 
     /**
+    * Returns the day number within the year: Jan 1st has number 0,
+    * Jan 2nd has number 1 etc.
+    *
+    * @return the day-of-year [0-366]
+    */
+    DateTime.prototype.dayOfYear = function () {
+        return basics.dayOfYear(this.year(), this.month(), this.day());
+    };
+
+    /**
+    * The ISO 8601 week number. Week 1 is the week
+    * that has January 4th in it, and it starts on Monday.
+    * See https://en.wikipedia.org/wiki/ISO_week_date
+    *
+    * @return Week number [1-53]
+    */
+    DateTime.prototype.weekNumber = function () {
+        return basics.weekNumber(this.year(), this.month(), this.day());
+    };
+
+    /**
     * @return Milliseconds since 1970-01-01T00:00:00.000Z
     */
     DateTime.prototype.unixUtcMillis = function () {
@@ -876,6 +959,17 @@ var DateTime = (function () {
     */
     DateTime.prototype.utcWeekDay = function () {
         return basics.weekDayNoLeapSecs(this._utcDate.toUnixNoLeapSecs());
+    };
+
+    /**
+    * The ISO 8601 UTC week number. Week 1 is the week
+    * that has January 4th in it, and it starts on Monday.
+    * See https://en.wikipedia.org/wiki/ISO_week_date
+    *
+    * @return Week number [1-53]
+    */
+    DateTime.prototype.utcWeekNumber = function () {
+        return basics.weekNumber(this.utcYear(), this.utcMonth(), this.utcDay());
     };
 
     /**
@@ -1565,6 +1659,8 @@ var weekDayOnOrAfter = basics.weekDayOnOrAfter;
 exports.weekDayOnOrAfter = weekDayOnOrAfter;
 var weekDayOnOrBefore = basics.weekDayOnOrBefore;
 exports.weekDayOnOrBefore = weekDayOnOrBefore;
+var weekNumber = basics.weekNumber;
+exports.weekNumber = weekNumber;
 
 var datetime = require("./datetime");
 datetime;

@@ -88,6 +88,7 @@
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#clone" class="tsd-kind-icon">clone</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#convert" class="tsd-kind-icon">convert</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#day" class="tsd-kind-icon">day</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#diff" class="tsd-kind-icon">diff</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#equals" class="tsd-kind-icon">equals</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#greaterequal" class="tsd-kind-icon">greater<wbr>Equal</a></li>
@@ -120,9 +121,11 @@
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#utcmonth" class="tsd-kind-icon">utc<wbr>Month</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#utcsecond" class="tsd-kind-icon">utc<wbr>Second</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#utcweekday" class="tsd-kind-icon">utc<wbr>Week<wbr>Day</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#utcweeknumber" class="tsd-kind-icon">utc<wbr>Week<wbr>Number</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#utcyear" class="tsd-kind-icon">utc<wbr>Year</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#valueof" class="tsd-kind-icon">value<wbr>Of</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#weekday" class="tsd-kind-icon">week<wbr>Day</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#weeknumber" class="tsd-kind-icon">week<wbr>Number</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#year" class="tsd-kind-icon">year</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_datetime_.datetime.html#zone" class="tsd-kind-icon">zone</a></li>
 					</ul>
@@ -380,7 +383,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:517</li>
+									<li>Defined in datetime.ts:548</li>
 								</ul>
 							</aside>
 							<p>Add an amount of time to the given time struct. Note: does not normalize.
@@ -413,7 +416,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:739</li>
+									<li>Defined in datetime.ts:770</li>
 								</ul>
 							</aside>
 							<p>Split a combined ISO datetime and timezone into datetime and timezone</p>
@@ -438,7 +441,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:713</li>
+									<li>Defined in datetime.ts:744</li>
 								</ul>
 							</aside>
 							<p>Calculate this._zoneDate from this._utcDate</p>
@@ -454,7 +457,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:726</li>
+									<li>Defined in datetime.ts:757</li>
 								</ul>
 							</aside>
 							<p>Calculate this._utcDate from this._zoneDate</p>
@@ -471,7 +474,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:448</li>
+									<li>Defined in datetime.ts:479</li>
 								</ul>
 							</aside>
 							<p>Add a time duration relative to UTC. Note that this simply adds a number
@@ -490,7 +493,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:464</li>
+									<li>Defined in datetime.ts:495</li>
 								</ul>
 							</aside>
 							<p>Add an amount of time relative to UTC, as regularly as possible.</p>
@@ -527,7 +530,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:501</li>
+									<li>Defined in datetime.ts:532</li>
 								</ul>
 							</aside>
 							<p>Add an amount of time to the zone time, as regularly as possible.</p>
@@ -583,7 +586,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:392</li>
+									<li>Defined in datetime.ts:423</li>
 								</ul>
 							</aside>
 							<p>Convert this date to the given time zone (in-place).
@@ -621,6 +624,27 @@
 					</ul>
 				</section>
 				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="dayofyear" class="anchor"></a>
+					<h3>day<wbr>OfYear</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">day<wbr>OfYear<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in datetime.ts:328</li>
+								</ul>
+							</aside>
+							<p>Returns the day number within the year: Jan 1st has number 0,
+							Jan 2nd has number 1 etc.</p>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+							<p>the day-of-year [0-366]</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="diff" class="anchor"></a>
 					<h3>diff</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -629,7 +653,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:609</li>
+									<li>Defined in datetime.ts:640</li>
 								</ul>
 							</aside>
 							<p>Time difference between two DateTimes</p>
@@ -655,7 +679,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:630</li>
+									<li>Defined in datetime.ts:661</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -680,7 +704,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:655</li>
+									<li>Defined in datetime.ts:686</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -705,7 +729,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:648</li>
+									<li>Defined in datetime.ts:679</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -749,7 +773,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:638</li>
+									<li>Defined in datetime.ts:669</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -775,7 +799,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:692</li>
+									<li>Defined in datetime.ts:723</li>
 								</ul>
 							</aside>
 							<p>Used by util.inspect()</p>
@@ -794,7 +818,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:623</li>
+									<li>Defined in datetime.ts:654</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -819,7 +843,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:616</li>
+									<li>Defined in datetime.ts:647</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -1004,7 +1028,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:581</li>
+									<li>Defined in datetime.ts:612</li>
 								</ul>
 							</aside>
 							<p>Same as add(-1*duration);</p>
@@ -1020,7 +1044,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:585</li>
+									<li>Defined in datetime.ts:616</li>
 								</ul>
 							</aside>
 							<p>Same as add(-1*amount, unit);</p>
@@ -1048,7 +1072,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:601</li>
+									<li>Defined in datetime.ts:632</li>
 								</ul>
 							</aside>
 							<p>Same as addLocal(-1*amount, unit);</p>
@@ -1076,7 +1100,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:437</li>
+									<li>Defined in datetime.ts:468</li>
 								</ul>
 							</aside>
 							<p>Convert to JavaScript date with the zone time in the getX() methods.
@@ -1097,7 +1121,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:663</li>
+									<li>Defined in datetime.ts:694</li>
 								</ul>
 							</aside>
 							<p>Proper ISO 8601 format string with any IANA zone converted to ISO offset
@@ -1117,7 +1141,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:676</li>
+									<li>Defined in datetime.ts:707</li>
 								</ul>
 							</aside>
 							<p>Modified ISO 8601 format string with IANA name if applicable.
@@ -1137,7 +1161,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:706</li>
+									<li>Defined in datetime.ts:737</li>
 								</ul>
 							</aside>
 							<p>Modified ISO 8601 format string in UTC without time zone info</p>
@@ -1156,7 +1180,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:417</li>
+									<li>Defined in datetime.ts:448</li>
 								</ul>
 							</aside>
 							<p>Returns this date converted to the given time zone.
@@ -1186,7 +1210,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:325</li>
+									<li>Defined in datetime.ts:346</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1205,7 +1229,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:346</li>
+									<li>Defined in datetime.ts:367</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1224,7 +1248,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:353</li>
+									<li>Defined in datetime.ts:374</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1243,7 +1267,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:374</li>
+									<li>Defined in datetime.ts:395</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1262,7 +1286,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:360</li>
+									<li>Defined in datetime.ts:381</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1281,7 +1305,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:339</li>
+									<li>Defined in datetime.ts:360</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1300,7 +1324,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:367</li>
+									<li>Defined in datetime.ts:388</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1319,7 +1343,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:382</li>
+									<li>Defined in datetime.ts:403</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1327,6 +1351,28 @@
 							</h4>
 							<p>the UTC day-of-week (the enum values correspond to JavaScript
 							week day numbers)</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="utcweeknumber" class="anchor"></a>
+					<h3>utc<wbr>Week<wbr>Number</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">utc<wbr>Week<wbr>Number<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in datetime.ts:414</li>
+								</ul>
+							</aside>
+							<p>The ISO 8601 UTC week number. Week 1 is the week
+								that has January 4th in it, and it starts on Monday.
+							See <a href="https://en.wikipedia.org/wiki/ISO_week_date">https://en.wikipedia.org/wiki/ISO_week_date</a></p>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+							<p>Week number [1-53]</p>
 						</li>
 					</ul>
 				</section>
@@ -1339,7 +1385,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:332</li>
+									<li>Defined in datetime.ts:353</li>
 								</ul>
 							</aside>
 							<h4>Returns 
@@ -1358,7 +1404,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in datetime.ts:699</li>
+									<li>Defined in datetime.ts:730</li>
 								</ul>
 							</aside>
 							<p>The valueOf() method returns the primitive value of the specified object.</p>
@@ -1385,6 +1431,28 @@
 							</h4>
 							<p>the day-of-week (the enum values correspond to JavaScript
 							week day numbers)</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="weeknumber" class="anchor"></a>
+					<h3>week<wbr>Number</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">week<wbr>Number<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in datetime.ts:339</li>
+								</ul>
+							</aside>
+							<p>The ISO 8601 week number. Week 1 is the week
+								that has January 4th in it, and it starts on Monday.
+							See <a href="https://en.wikipedia.org/wiki/ISO_week_date">https://en.wikipedia.org/wiki/ISO_week_date</a></p>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+							<p>Week number [1-53]</p>
 						</li>
 					</ul>
 				</section>
@@ -1517,6 +1585,9 @@
 								<a href="_datetime_.datetime.html#day" class="tsd-kind-icon">day</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_datetime_.datetime.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_datetime_.datetime.html#diff" class="tsd-kind-icon">diff</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -1613,6 +1684,9 @@
 								<a href="_datetime_.datetime.html#utcweekday" class="tsd-kind-icon">utc<wbr>Week<wbr>Day</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_datetime_.datetime.html#utcweeknumber" class="tsd-kind-icon">utc<wbr>Week<wbr>Number</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_datetime_.datetime.html#utcyear" class="tsd-kind-icon">utc<wbr>Year</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -1620,6 +1694,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_datetime_.datetime.html#weekday" class="tsd-kind-icon">week<wbr>Day</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_datetime_.datetime.html#weeknumber" class="tsd-kind-icon">week<wbr>Number</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_datetime_.datetime.html#year" class="tsd-kind-icon">year</a>

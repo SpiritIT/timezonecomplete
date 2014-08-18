@@ -1123,4 +1123,20 @@ describe("DateTime", function () {
             expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").utcWeekDay()).to.equal(0 /* Sunday */);
         });
     });
+
+    describe("weekNumber()", function () {
+        // note already thoroughly tested in basics.weekDay()
+        it("should work on local date", function () {
+            var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone(60));
+            expect(d.weekNumber()).to.equal(22);
+        });
+    });
+
+    describe("weekNumber()", function () {
+        // note already thoroughly tested in basics.weekDay()
+        it("should work on utc date", function () {
+            var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone(60));
+            expect(d.utcWeekNumber()).to.equal(21);
+        });
+    });
 });
