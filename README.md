@@ -384,6 +384,8 @@ The version of the included IANA time zone database is 2014e.
 
 ### Next (already implemented, not published)
 * Add valueOf() method to DateTime and Duration
+* Add weekNumber() utility function
+* Add weekNumber() and utcWeekNumber() methods to DateTime
 
 ### 1.4.6 (2014-08-15)
 * Bugfix TypeScript .d.ts file
