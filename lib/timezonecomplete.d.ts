@@ -11,6 +11,7 @@ declare module 'timezonecomplete' {
     export import lastWeekDayOfMonth = basics.lastWeekDayOfMonth;
     export import weekDayOnOrAfter = basics.weekDayOnOrAfter;
     export import weekDayOnOrBefore = basics.weekDayOnOrBefore;
+    export import weekNumber = basics.weekNumber;
     import datetime = require("__timezonecomplete/datetime");
     export import DateTime = datetime.DateTime;
     import duration = require("__timezonecomplete/duration");
@@ -99,6 +100,18 @@ declare module '__timezonecomplete/basics' {
      * Throws if the month has no such day.
      */
     export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number;
+    /**
+     * The ISO 8601 week number for the given date. Week 1 is the week
+     * that has January 4th in it, and it starts on Monday.
+     * See https://en.wikipedia.org/wiki/ISO_week_date
+     *
+     * @param year	Year e.g. 1988
+     * @param month	Month 1-12
+     * @param day	Day of month 1-31
+     *
+     * @return Week number 1-53
+     */
+    export function weekNumber(year: number, month: number, day: number): number;
     /**
      * Convert a unix milli timestamp into a TimeT structure.
      * This does NOT take leap seconds into account.
@@ -242,7 +255,6 @@ declare module '__timezonecomplete/datetime' {
     import basics = require("__timezonecomplete/basics");
     import duration = require("__timezonecomplete/duration");
     import javascript = require("__timezonecomplete/javascript");
-    import timesource = require("__timezonecomplete/timesource");
     import timezone = require("__timezonecomplete/timezone");
     /**
      * DateTime class which is time zone-aware
@@ -366,6 +378,21 @@ declare module '__timezonecomplete/datetime' {
          */
         weekDay(): basics.WeekDay;
         /**
+         * Returns the day number within the year: Jan 1st has number 0,
+         * Jan 2nd has number 1 etc.
+         *
+         * @return the day-of-year [0-366]
+         */
+        dayOfYear(): number;
+        /**
+         * The ISO 8601 week number. Week 1 is the week
+         * that has January 4th in it, and it starts on Monday.
+         * See https://en.wikipedia.org/wiki/ISO_week_date
+         *
+         * @return Week number [1-53]
+         */
+        weekNumber(): number;
+        /**
          * @return Milliseconds since 1970-01-01T00:00:00.000Z
          */
         unixUtcMillis(): number;
@@ -402,6 +429,14 @@ declare module '__timezonecomplete/datetime' {
          * week day numbers)
          */
         utcWeekDay(): basics.WeekDay;
+        /**
+         * The ISO 8601 UTC week number. Week 1 is the week
+         * that has January 4th in it, and it starts on Monday.
+         * See https://en.wikipedia.org/wiki/ISO_week_date
+         *
+         * @return Week number [1-53]
+         */
+        utcWeekNumber(): number;
         /**
          * Convert this date to the given time zone (in-place).
          * Throws if this date does not have a time zone.
@@ -519,6 +554,10 @@ declare module '__timezonecomplete/datetime' {
          * Used by util.inspect()
          */
         inspect(): string;
+        /**
+         * The valueOf() method returns the primitive value of the specified object.
+         */
+        valueOf(): any;
         /**
          * Modified ISO 8601 format string in UTC without time zone info
          */
@@ -674,6 +713,10 @@ declare module '__timezonecomplete/duration' {
          * Used by util.inspect()
          */
         inspect(): string;
+        /**
+         * The valueOf() method returns the primitive value of the specified object.
+         */
+        valueOf(): any;
     }
 }
 

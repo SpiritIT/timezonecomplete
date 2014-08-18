@@ -88,6 +88,9 @@ tc.weekDayOnOrAfter(2014, 8, 15, tc.WeekDay.Sunday); // returns 17
 // Last Sunday on or before August 15th, 2014
 tc.weekDayOnOrBefore(2014, 8, 15, tc.WeekDay.Sunday); // returns 10
 
+// Week number according to ISO 8601 (note this does NOT match American week numbers)
+tc.weekNumber(2013, 12, 30); // 1
+
 ```
 
 ### Duration
@@ -196,6 +199,7 @@ amsterdamDate.minute(); // 59
 amsterdamDate.second(); // 59
 amsterdamDate.millisecond(); // 0
 amsterdamDate.weekDay(); // tc.WeekDay.Wednesday = 3
+amsterdamDate.weekNumber(); // ISO week number 1-53 = 1
 
 // UTC getters
 amsterdamDate.utcYear(); // 2014
@@ -206,6 +210,7 @@ amsterdamDate.utcMinute(); // 59
 amsterdamDate.utcSecond(); // 59
 amsterdamDate.utcMillisecond(); // 0
 amsterdamDate.utcWeekDay(); // tc.WeekDay.Wednesday = 3
+amsterdamDate.utcWeekNumber(); // ISO week number 1-53 = 1
 
 // Unix millisecond timestamp getter
 amsterdamDate.unixUtcMillis(); // milliseconds of UTC date since 1970-01-01
@@ -359,6 +364,10 @@ var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zon
 
 ```
 
+### Why does the number returned by weekNumber() not correspond to my calendar
+Different countries have different week number algoritms. We adhere to the ISO 8601 standard, where the first week starts on a Monday and is defined as the week having January 4th in it.
+If you need different week numbers, please submit an issue or a pull request.
+
 ### Does timezonecomplete handle leap seconds?
 
 Currently not. This is because most platforms don't, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren't. We do plan to add support in some form though.
@@ -372,6 +381,11 @@ The version of the included IANA time zone database is 2014e.
 ### Planned
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
+
+### Next (already implemented, not published)
+* Add valueOf() method to DateTime and Duration
+* Add weekNumber() utility function
+* Add weekNumber() and utcWeekNumber() methods to DateTime
 
 ### 1.4.6 (2014-08-15)
 * Bugfix TypeScript .d.ts file

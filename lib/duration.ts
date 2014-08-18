@@ -103,14 +103,14 @@ export class Duration {
 	/**
 	 * @return another instance of Duration with the same value.
 	 */
-	clone(): Duration {
+	public clone(): Duration {
 		return Duration.milliseconds(this.milliseconds());
 	}
 
 	/**
 	 * The entire duration in milliseconds (negative or positive)
 	 */
-	milliseconds(): number {
+	public milliseconds(): number {
 		return this._sign * this._milliseconds;
 	}
 
@@ -118,7 +118,7 @@ export class Duration {
 	 * The millisecond part of the duration (always positive)
 	 * @return e.g. 400 for a -01:02:03.400 duration
 	 */
-	millisecond(): number {
+	public millisecond(): number {
 		return this._milliseconds % 1000;
 	}
 
@@ -126,7 +126,7 @@ export class Duration {
 	 * The entire duration in seconds (negative or positive, fractional)
 	 * @return e.g. 1.5 for a 1500 milliseconds duration
 	 */
-	seconds(): number {
+	public seconds(): number {
 		return this._sign * this._milliseconds / 1000;
 	}
 
@@ -134,7 +134,7 @@ export class Duration {
 	 * The second part of the duration (always positive)
 	 * @return e.g. 3 for a -01:02:03.400 duration
 	 */
-	second(): number {
+	public second(): number {
 		return Math.floor(this._milliseconds / 1000) % 60;
 	}
 
@@ -142,7 +142,7 @@ export class Duration {
 	 * The entire duration in minutes (negative or positive, fractional)
 	 * @return e.g. 1.5 for a 90000 milliseconds duration
 	 */
-	minutes(): number {
+	public minutes(): number {
 		return this._sign * this._milliseconds / 60000;
 	}
 
@@ -150,7 +150,7 @@ export class Duration {
 	 * The minute part of the duration (always positive)
 	 * @return e.g. 2 for a -01:02:03.400 duration
 	 */
-	minute(): number {
+	public minute(): number {
 		return Math.floor(this._milliseconds / 60000) % 60;
 	}
 
@@ -158,7 +158,7 @@ export class Duration {
 	 * The entire duration in hours (negative or positive, fractional)
 	 * @return e.g. 1.5 for a 5400000 milliseconds duration
 	 */
-	hours(): number {
+	public hours(): number {
 		return this._sign * this._milliseconds / 3600000;
 	}
 
@@ -168,7 +168,7 @@ export class Duration {
 	 * now, we do not have a days() function
 	 * @return e.g. 25 for a -25:02:03.400 duration
 	 */
-	wholeHours(): number {
+	public wholeHours(): number {
 		return Math.floor(this._milliseconds / 3600000);
 	}
 
@@ -179,35 +179,35 @@ export class Duration {
 	 * Sign
 	 * @return "-" if the duration is negative
 	 */
-	sign(): string {
+	public sign(): string {
 		return (this._sign < 0 ? "-" : "");
 	}
 
 	/**
 	 * @return True iff (this < other)
 	 */
-	lessThan(other: Duration): boolean {
+	public lessThan(other: Duration): boolean {
 		return this.milliseconds() < other.milliseconds();
 	}
 
 	/**
 	 * @return True iff this and other represent the same time duration
 	 */
-	equals(other: Duration): boolean {
+	public equals(other: Duration): boolean {
 		return this.milliseconds() === other.milliseconds();
 	}
 
 	/**
 	 * @return True iff this > other
 	 */
-	greaterThan(other: Duration): boolean {
+	public greaterThan(other: Duration): boolean {
 		return this.milliseconds() > other.milliseconds();
 	}
 
 	/**
 	 * @return The minimum (most negative) of this and other
 	 */
-	min(other: Duration): Duration {
+	public min(other: Duration): Duration {
 		if (this.lessThan(other)) {
 			return this.clone();
 		}
@@ -217,7 +217,7 @@ export class Duration {
 	/**
 	 * @return The maximum (most positive) of this and other
 	 */
-	max(other: Duration): Duration {
+	public max(other: Duration): Duration {
 		if (this.greaterThan(other)) {
 			return this.clone();
 		}
@@ -228,7 +228,7 @@ export class Duration {
 	 * Multiply with a fixed number.
 	 * @return a new Duration of (this * value)
 	 */
-	multiply(value: number): Duration {
+	public multiply(value: number): Duration {
 		return new Duration(this.milliseconds() * value);
 	}
 
@@ -236,7 +236,7 @@ export class Duration {
 	 * Divide by a fixed number.
 	 * @return a new Duration of (this / value)
 	 */
-	divide(value: number): Duration {
+	public divide(value: number): Duration {
 		if (value === 0) {
 			throw new Error("Duration.divide(): Divide by zero");
 		}
@@ -247,7 +247,7 @@ export class Duration {
 	 * Add a duration.
 	 * @return a new Duration of (this + value)
 	 */
-	add(value: Duration): Duration {
+	public add(value: Duration): Duration {
 		return new Duration(this.milliseconds() + value.milliseconds());
 	}
 
@@ -255,7 +255,7 @@ export class Duration {
 	 * Subtract a duration.
 	 * @return a new Duration of (this - value)
 	 */
-	sub(value: Duration): Duration {
+	public sub(value: Duration): Duration {
 		return new Duration(this.milliseconds() - value.milliseconds());
 	}
 
@@ -263,7 +263,7 @@ export class Duration {
 	 * String in [-]hh:mm:ss.nnn notation. All fields are
 	 * always present except the sign.
 	 */
-	toFullString(): string {
+	public toFullString(): string {
 		return this._toString(true);
 	}
 
@@ -271,15 +271,22 @@ export class Duration {
 	 * String in [-]hh[:mm[:ss[.nnn]]] notation. Fields are
 	 * added as necessary
 	 */
-	toString(): string {
+	public toString(): string {
 		return this._toString(false);
 	}
 
 	/**
 	 * Used by util.inspect()
 	 */
-	inspect(): string {
+	public inspect(): string {
 		return "[Duration: " + this.toString() + "]";
+	}
+
+	/**
+	 * The valueOf() method returns the primitive value of the specified object.
+	 */
+	public valueOf(): any {
+		return this.milliseconds();
 	}
 
 	private _toString(full: boolean): string {

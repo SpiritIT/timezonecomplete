@@ -150,6 +150,11 @@ describe("TzDatabase", (): void => {
 		it("should work for year", (): void => {
 			expect(TzDatabase.instance().parseToType("1972")).to.equal(ToType.Year);
 		});
+		it("should throw for invalid TO type", (): void => {
+			assert.throws((): void => {
+				TzDatabase.instance().parseToType("NaN");
+			});
+		});
 	});
 
 	describe("parseOnType()", (): void => {
@@ -360,6 +365,12 @@ describe("TzDatabase", (): void => {
 					)
 				]));
 		});
+
+		it("should throw for invalid rule name", (): void => {
+			assert.throws((): void => {
+				TzDatabase.instance().getRuleInfos("rubbish");
+			});
+		});
 	});
 
 	describe("getZoneInfo()", (): void => {
@@ -374,6 +385,11 @@ describe("TzDatabase", (): void => {
 				.to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[5]));
 			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", 252374400001)))
 				.to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[5]));
+		});
+		it("should throw for invalid zone name", (): void => {
+			assert.throws((): void => {
+				TzDatabase.instance().getZoneInfo("rubbish", 0);
+			});
 		});
 	});
 

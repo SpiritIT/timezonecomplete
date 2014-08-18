@@ -328,6 +328,27 @@ export class DateTime implements DateTimeAccess {
 	}
 
 	/**
+	 * Returns the day number within the year: Jan 1st has number 0,
+	 * Jan 2nd has number 1 etc.
+	 *
+	 * @return the day-of-year [0-366]
+	 */
+	public dayOfYear(): number {
+		return basics.dayOfYear(this.year(), this.month(), this.day());
+	}
+
+	/**
+	 * The ISO 8601 week number. Week 1 is the week
+	 * that has January 4th in it, and it starts on Monday.
+	 * See https://en.wikipedia.org/wiki/ISO_week_date
+	 *
+	 * @return Week number [1-53]
+	 */
+	public weekNumber(): number {
+		return basics.weekNumber(this.year(), this.month(), this.day());
+	}
+
+	/**
 	 * @return Milliseconds since 1970-01-01T00:00:00.000Z
 	 */
 	public unixUtcMillis(): number {
@@ -391,6 +412,16 @@ export class DateTime implements DateTimeAccess {
 		return <WeekDay>basics.weekDayNoLeapSecs(this._utcDate.toUnixNoLeapSecs());
 	}
 
+	/**
+	 * The ISO 8601 UTC week number. Week 1 is the week
+	 * that has January 4th in it, and it starts on Monday.
+	 * See https://en.wikipedia.org/wiki/ISO_week_date
+	 *
+	 * @return Week number [1-53]
+	 */
+	public utcWeekNumber(): number {
+		return basics.weekNumber(this.utcYear(), this.utcMonth(), this.utcDay());
+	}
 
 	/**
 	 * Convert this date to the given time zone (in-place).
@@ -703,8 +734,15 @@ export class DateTime implements DateTimeAccess {
 	/**
 	 * Used by util.inspect()
 	 */
-	inspect(): string {
+	public inspect(): string {
 		return "[DateTime: " + this.toString() + "]";
+	}
+
+	/**
+	 * The valueOf() method returns the primitive value of the specified object.
+	 */
+	public valueOf(): any {
+		return this._utcDate.milli;
 	}
 
 	/**

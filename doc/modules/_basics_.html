@@ -78,6 +78,7 @@
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a></li>
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_basics_.html#getweekonedayofyear" class="tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#lastweekdayofmonth" class="tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#timetounixnoleapsecs" class="tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</a></li>
@@ -85,6 +86,7 @@
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdayonorafter" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After</a></li>
 						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdayonorbefore" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before</a></li>
+						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weeknumber" class="tsd-kind-icon">week<wbr>Number</a></li>
 					</ul>
 				</section>
 			</section>
@@ -99,7 +101,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:175</li>
+									<li>Defined in basics.ts:237</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -200,6 +202,33 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<a name="getweekonedayofyear" class="anchor"></a>
+					<h3>get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in basics.ts:180</li>
+								</ul>
+							</aside>
+							<p>Returns the day-of-year of the Monday of week 1 in the given year.
+								Note that the result may lie in the previous year, in which case it
+							will be (much) greater than 4</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="isleapyear" class="anchor"></a>
 					<h3>is<wbr>Leap<wbr>Year</h3>
@@ -270,7 +299,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:268</li>
+									<li>Defined in basics.ts:330</li>
 								</ul>
 							</aside>
 							<p>Convert a TimeT structure into a unix milli timestamp.
@@ -287,7 +316,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:260</li>
+									<li>Defined in basics.ts:322</li>
 								</ul>
 							</aside>
 							<p>Convert a year, month, day etc into a unix milli timestamp.
@@ -338,7 +367,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:185</li>
+									<li>Defined in basics.ts:247</li>
 								</ul>
 							</aside>
 							<p>Convert a unix milli timestamp into a TimeT structure.
@@ -364,7 +393,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:298</li>
+									<li>Defined in basics.ts:360</li>
 								</ul>
 							</aside>
 							<p>Return the day-of-week.
@@ -451,6 +480,43 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+					<a name="weeknumber" class="anchor"></a>
+					<h3>week<wbr>Number</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
+						<li class="tsd-signature tsd-kind-icon">week<wbr>Number<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in basics.ts:203</li>
+								</ul>
+							</aside>
+							<p>The ISO 8601 week number for the given date. Week 1 is the week
+								that has January 4th in it, and it starts on Monday.
+							See <a href="https://en.wikipedia.org/wiki/ISO_week_date">https://en.wikipedia.org/wiki/ISO_week_date</a></p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
+									<p>Year e.g. 1988</p>
+								</li>
+								<li>
+									<h5>month: <span class="tsd-signature-type">number</span></h5>
+									<p>Month 1-12</p>
+								</li>
+								<li>
+									<h5>day: <span class="tsd-signature-type">number</span></h5>
+									<p>Day of month 1-31</p>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+							<p>Week number 1-53</p>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="offset-1 col-3">
@@ -517,6 +583,9 @@
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
 						<a href="_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a>
 					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+						<a href="_basics_.html#getweekonedayofyear" class="tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
 						<a href="_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a>
 					</li>
@@ -537,6 +606,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
 						<a href="_basics_.html#weekdayonorbefore" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="_basics_.html#weeknumber" class="tsd-kind-icon">week<wbr>Number</a>
 					</li>
 				</ul>
 			</nav>

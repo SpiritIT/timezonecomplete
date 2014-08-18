@@ -277,4 +277,19 @@ describe("TimeZone", function () {
             expect(TimeZone.stringToOffset("-01")).to.equal(-60);
         });
     });
+
+    describe("hasDst()", function () {
+        it("should work for local timezone", function () {
+            expect(TimeZone.local().hasDst()).to.be.false;
+        });
+        it("should work for offset timezone", function () {
+            expect(TimeZone.zone(3).hasDst()).to.be.false;
+        });
+        it("should work for named zone without DST", function () {
+            expect(TimeZone.zone("UTC").hasDst()).to.be.false;
+        });
+        it("should work for named zone with DST", function () {
+            expect(TimeZone.zone("Europe/Amsterdam").hasDst()).to.be.true;
+        });
+    });
 });

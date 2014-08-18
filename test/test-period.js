@@ -1,4 +1,4 @@
-﻿/// <reference path="../typings/test.d.ts" />
+/// <reference path="../typings/test.d.ts" />
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
@@ -445,4 +445,3 @@ describe("Period", function () {
 });
 // todo test DST zone where DST save is not a whole hour (20 or 40 minutes)
 // todo test zone with two DSTs
-//# sourceMappingURL=test-period.js.map

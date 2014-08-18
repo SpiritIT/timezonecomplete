@@ -147,6 +147,11 @@ describe("TzDatabase", function () {
         it("should work for year", function () {
             expect(TzDatabase.instance().parseToType("1972")).to.equal(0 /* Year */);
         });
+        it("should throw for invalid TO type", function () {
+            assert.throws(function () {
+                TzDatabase.instance().parseToType("NaN");
+            });
+        });
     });
 
     describe("parseOnType()", function () {
@@ -240,6 +245,12 @@ describe("TzDatabase", function () {
                 new RuleInfo(1996, 1 /* Max */, 0, "-", 10, 1 /* LastX */, 0, 0 /* Sunday */, 1, 0, 0, 2 /* Utc */, Duration.hours(0), "")
             ]));
         });
+
+        it("should throw for invalid rule name", function () {
+            assert.throws(function () {
+                TzDatabase.instance().getRuleInfos("rubbish");
+            });
+        });
     });
 
     describe("getZoneInfo()", function () {
@@ -249,6 +260,11 @@ describe("TzDatabase", function () {
             expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", 252374399999))).to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[4]));
             expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", 252374400000))).to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[5]));
             expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", 252374400001))).to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[5]));
+        });
+        it("should throw for invalid zone name", function () {
+            assert.throws(function () {
+                TzDatabase.instance().getZoneInfo("rubbish", 0);
+            });
         });
     });
 

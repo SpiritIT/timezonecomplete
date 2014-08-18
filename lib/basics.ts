@@ -173,6 +173,68 @@ export function weekDayOnOrBefore(year: number, month: number, day: number, week
 	return start.day + diff;
 }
 
+/**
+ * Returns the day-of-year of the Monday of week 1 in the given year.
+ * Note that the result may lie in the previous year, in which case it
+ * will be (much) greater than 4
+ */
+function getWeekOneDayOfYear(year: number): number {
+	// first monday of January, minus one because we want day-of-year
+	var result: number = weekDayOnOrAfter(year, 1, 1, WeekDay.Monday) - 1;
+	if (result > 3) { // greater than jan 4th
+		result -= 7;
+		if (result < 0) {
+			result += exports.daysInYear(year - 1);
+		}
+	}
+	return result;
+}
+
+/**
+ * The ISO 8601 week number for the given date. Week 1 is the week
+ * that has January 4th in it, and it starts on Monday.
+ * See https://en.wikipedia.org/wiki/ISO_week_date
+ *
+ * @param year	Year e.g. 1988
+ * @param month	Month 1-12
+ * @param day	Day of month 1-31
+ *
+ * @return Week number 1-53
+ */
+export function weekNumber(year: number, month: number, day: number): number {
+	var doy = dayOfYear(year, month, day);
+
+	// check end-of-year corner case: may be week 1 of next year
+	if (doy >= dayOfYear(year, 12, 29)) {
+		var nextYearWeekOne = getWeekOneDayOfYear(year + 1);
+		if (nextYearWeekOne > 4 && nextYearWeekOne <= doy) {
+			return 1;
+		}
+	}
+
+	// check beginning-of-year corner case
+	var thisYearWeekOne = getWeekOneDayOfYear(year);
+	if (thisYearWeekOne > 4) {
+		// week 1 is at end of last year
+		var weekTwo = thisYearWeekOne + 7 - daysInYear(year - 1);
+		if (doy < weekTwo) {
+			return 1;
+		} else {
+			return Math.floor((doy - weekTwo) / 7) + 2;
+		}
+	}
+
+	// Week 1 is entirely inside this year.
+	if (doy < thisYearWeekOne) {
+		// The date is part of the last week of prev year.
+		return weekNumber(year - 1, 12, 31);
+	}
+
+	// normal cases; note that week numbers start from 1 so +1
+	return Math.floor((doy - thisYearWeekOne) / 7) + 1;
+}
+
+
 function assertUnixTimestamp(unixMillis: number): void {
 	assert(typeof (unixMillis) === "number", "number input expected");
 	assert(!isNaN(unixMillis), "NaN not expected as input");

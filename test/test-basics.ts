@@ -309,6 +309,22 @@ describe("TimeStruct", (): void => {
 
 	});
 
+	describe("valueOf()", (): void => {
+		it("should return unix millis", (): void => {
+			// note unix millisec conversion already tested elsewhere
+			expect((new TimeStruct(1970, 1, 1)).valueOf()).to.equal(0);
+			expect((new TimeStruct(1970, 1, 1, 0, 0, 0, 1)).valueOf()).to.equal(1);
+			expect((new TimeStruct(1969, 12, 31, 23, 59, 59, 999)).valueOf()).to.equal(-1);
+		});
+	});
+
+	describe("inspect()", (): void => {
+		it("should a wrapped toString()", (): void => {
+			var tm = new TimeStruct(1969, 12, 31, 23, 59, 59, 999);
+			expect(tm.inspect()).to.equal("[TimeStruct: " + tm.toString() + "]");
+		});
+	});
+
 });
 
 describe("unixToTimeNoLeapSecs()", (): void => {
@@ -357,3 +373,44 @@ describe("weekDayNoLeapSecs()", (): void => {
 	});
 });
 
+describe("weekNumber()", (): void => {
+	it("should work", (): void => {
+		// start of year
+		expect(basics.weekNumber(2013, 12, 30)).to.equal(1);
+		expect(basics.weekNumber(2013, 12, 31)).to.equal(1);
+		expect(basics.weekNumber(2014, 1, 1)).to.equal(1);
+		expect(basics.weekNumber(2014, 1, 2)).to.equal(1);
+		expect(basics.weekNumber(2014, 1, 3)).to.equal(1);
+		expect(basics.weekNumber(2014, 1, 4)).to.equal(1);
+		expect(basics.weekNumber(2014, 1, 5)).to.equal(1);
+
+		// mid-year
+		expect(basics.weekNumber(2014, 5, 26)).to.equal(22);
+		expect(basics.weekNumber(2014, 5, 27)).to.equal(22);
+		expect(basics.weekNumber(2014, 5, 28)).to.equal(22);
+		expect(basics.weekNumber(2014, 5, 29)).to.equal(22);
+		expect(basics.weekNumber(2014, 5, 30)).to.equal(22);
+		expect(basics.weekNumber(2014, 5, 31)).to.equal(22);
+		expect(basics.weekNumber(2014, 6, 1)).to.equal(22);
+
+		// end-year
+		expect(basics.weekNumber(2014, 12, 28)).to.equal(52);
+		expect(basics.weekNumber(2014, 12, 29)).to.equal(1);
+		expect(basics.weekNumber(2014, 12, 30)).to.equal(1);
+		expect(basics.weekNumber(2014, 12, 31)).to.equal(1);
+		expect(basics.weekNumber(2015, 1, 1)).to.equal(1);
+		expect(basics.weekNumber(2015, 1, 2)).to.equal(1);
+		expect(basics.weekNumber(2015, 1, 3)).to.equal(1);
+		expect(basics.weekNumber(2015, 1, 4)).to.equal(1);
+
+		// week 53
+		expect(basics.weekNumber(2015, 12, 28)).to.equal(53);
+		expect(basics.weekNumber(2015, 12, 29)).to.equal(53);
+		expect(basics.weekNumber(2015, 12, 30)).to.equal(53);
+		expect(basics.weekNumber(2015, 12, 31)).to.equal(53);
+		expect(basics.weekNumber(2016, 1, 1)).to.equal(53);
+		expect(basics.weekNumber(2016, 1, 2)).to.equal(53);
+		expect(basics.weekNumber(2016, 1, 3)).to.equal(53);
+		expect(basics.weekNumber(2016, 1, 4)).to.equal(1);
+	});
+});

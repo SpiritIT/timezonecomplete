@@ -69,7 +69,7 @@
 				<li>Timezonecomplete aims to be &quot;complete&quot;, whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:<ul>
 						<li>Naive dates (which know they have NO timezone information)</li>
 						<li>Aware dates (which have timezone information)</li>
-						<li>Proper behaviour around DST changes (note that the ECMA 6 specification leaves this quite unclear and as a result, the JavaScript Date class </li>
+						<li>Proper behaviour around DST changes</li>
 						<li>Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with &quot;number&quot; type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.</li>
 						<li>Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.</li>
 						<li>Utility functions for e.g. determining leap years, determining the last Monday of the month etc.</li>
@@ -128,7 +128,10 @@ tc.lastWeekDayOfMonth(<span class="hljs-number">2014</span>, <span class="hljs-n
 tc.weekDayOnOrAfter(<span class="hljs-number">2014</span>, <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, tc.WeekDay.Sunday); <span class="hljs-comment">// returns 17</span>
 
 <span class="hljs-comment">// Last Sunday on or before August 15th, 2014</span>
-tc.weekDayOnOrAfter(<span class="hljs-number">2014</span>, <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, tc.WeekDay.Sunday); <span class="hljs-comment">// returns 10</span>
+tc.weekDayOnOrBefore(<span class="hljs-number">2014</span>, <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, tc.WeekDay.Sunday); <span class="hljs-comment">// returns 10</span>
+
+<span class="hljs-comment">// Week number according to ISO 8601 (note this does NOT match American week numbers)</span>
+tc.weekNumber(<span class="hljs-number">2013</span>, <span class="hljs-number">12</span>, <span class="hljs-number">30</span>); <span class="hljs-comment">// 1</span>
 </code></pre>
 			<h3 id="duration">Duration</h3>
 			<p>The Duration class is a unit-aware representation of a duration in wall clock time.
@@ -230,6 +233,7 @@ amsterdamDate.minute(); <span class="hljs-comment">// 59</span>
 amsterdamDate.second(); <span class="hljs-comment">// 59</span>
 amsterdamDate.millisecond(); <span class="hljs-comment">// 0</span>
 amsterdamDate.weekDay(); <span class="hljs-comment">// tc.WeekDay.Wednesday = 3</span>
+amsterdamDate.weekNumber(); <span class="hljs-comment">// ISO week number 1-53 = 1</span>
 
 <span class="hljs-comment">// UTC getters</span>
 amsterdamDate.utcYear(); <span class="hljs-comment">// 2014</span>
@@ -240,6 +244,7 @@ amsterdamDate.utcMinute(); <span class="hljs-comment">// 59</span>
 amsterdamDate.utcSecond(); <span class="hljs-comment">// 59</span>
 amsterdamDate.utcMillisecond(); <span class="hljs-comment">// 0</span>
 amsterdamDate.utcWeekDay(); <span class="hljs-comment">// tc.WeekDay.Wednesday = 3</span>
+amsterdamDate.utcWeekNumber(); <span class="hljs-comment">// ISO week number 1-53 = 1</span>
 
 <span class="hljs-comment">// Unix millisecond timestamp getter</span>
 amsterdamDate.unixUtcMillis(); <span class="hljs-comment">// milliseconds of UTC date since 1970-01-01</span>
@@ -368,6 +373,9 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 <span class="hljs-comment">// now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.</span>
 <span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
 </code></pre>
+			<h3 id="why-does-the-number-returned-by-weeknumber-not-correspond-to-my-calendar">Why does the number returned by weekNumber() not correspond to my calendar</h3>
+			<p>Different countries have different week number algoritms. We adhere to the ISO 8601 standard, where the first week starts on a Monday and is defined as the week having January 4th in it.
+			If you need different week numbers, please submit an issue or a pull request.</p>
 			<h3 id="does-timezonecomplete-handle-leap-seconds-">Does timezonecomplete handle leap seconds?</h3>
 			<p>Currently not. This is because most platforms don&#39;t, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren&#39;t. We do plan to add support in some form though.</p>
 			<h2 id="current-tz-database-version-">Current TZ database version:</h2>
@@ -377,6 +385,14 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 			<ul>
 				<li>A release 2 where we polish the interface to the library a bit</li>
 				<li>Leap second handling</li>
+			</ul>
+			<h3 id="next-already-implemented-not-published-">Next (already implemented, not published)</h3>
+			<ul>
+				<li>Add valueOf() method to DateTime and Duration</li>
+			</ul>
+			<h3 id="1-4-6-2014-08-15-">1.4.6 (2014-08-15)</h3>
+			<ul>
+				<li>Bugfix TypeScript .d.ts file</li>
 			</ul>
 			<h3 id="1-4-5-2014-08-15-">1.4.5 (2014-08-15)</h3>
 			<ul>
@@ -445,9 +461,9 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 			</ul>
 			<h2 id="contributors">Contributors</h2>
 			<ul>
-				<li>Rogier Schouten <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x72;&#46;&#x73;&#99;&#104;&#111;&#x75;&#116;&#x65;&#110;&#x40;&#115;&#112;&#x69;&#114;&#105;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#109;">&#x72;&#46;&#x73;&#99;&#104;&#111;&#x75;&#116;&#x65;&#110;&#x40;&#115;&#112;&#x69;&#114;&#105;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#109;</a></li>
-				<li>Daan Wissing <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x64;&#x2e;&#x77;&#105;&#115;&#115;&#x69;&#x6e;&#x67;&#64;&#x73;&#112;&#x69;&#114;&#105;&#116;&#105;&#x74;&#46;&#x63;&#111;&#109;">&#x64;&#x2e;&#x77;&#105;&#115;&#115;&#x69;&#x6e;&#x67;&#64;&#x73;&#112;&#x69;&#114;&#105;&#116;&#105;&#x74;&#46;&#x63;&#111;&#109;</a></li>
-				<li>Peter Kooijmans <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#112;&#46;&#x6b;&#x6f;&#111;&#x69;&#x6a;&#x6d;&#97;&#x6e;&#x73;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#112;&#46;&#x6b;&#x6f;&#111;&#x69;&#x6a;&#x6d;&#97;&#x6e;&#x73;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+				<li>Rogier Schouten <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#x40;&#115;&#112;&#105;&#114;&#x69;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#109;">&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#x40;&#115;&#112;&#105;&#114;&#x69;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#109;</a></li>
+				<li>Daan Wissing <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#100;&#x2e;&#119;&#x69;&#x73;&#x73;&#x69;&#110;&#103;&#64;&#115;&#x70;&#x69;&#114;&#x69;&#x74;&#x69;&#116;&#46;&#99;&#111;&#x6d;">&#100;&#x2e;&#119;&#x69;&#x73;&#x73;&#x69;&#110;&#103;&#64;&#115;&#x70;&#x69;&#114;&#x69;&#x74;&#x69;&#116;&#46;&#99;&#111;&#x6d;</a></li>
+				<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x70;&#x2e;&#107;&#x6f;&#x6f;&#105;&#x6a;&#x6d;&#97;&#x6e;&#x73;&#64;&#115;&#112;&#105;&#114;&#x69;&#x74;&#x69;&#x74;&#46;&#x63;&#111;&#109;">&#x70;&#x2e;&#107;&#x6f;&#x6f;&#105;&#x6a;&#x6d;&#97;&#x6e;&#x73;&#64;&#115;&#112;&#105;&#114;&#x69;&#x74;&#x69;&#x74;&#46;&#x63;&#111;&#109;</a></li>
 			</ul>
 			<h2 id="license">License</h2>
 			<p>MIT</p>
