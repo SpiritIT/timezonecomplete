@@ -30,12 +30,13 @@ import timezone = require("./timezone");
 import TimeZone = timezone.TimeZone;
 import TimeZoneKind = timezone.TimeZoneKind;
 
-
+import dateTimeInterface = require("./datetime-interface");
+import DateTimeAccess = dateTimeInterface.DateTimeAccess;
 /**
  * DateTime class which is time zone-aware
  * and which can be mocked for testing purposes
  */
-export class DateTime {
+export class DateTime implements DateTimeAccess {
 
 	/**
 	 * Date object that contains the represented date converted to UTC in its

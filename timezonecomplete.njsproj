@@ -20,14 +20,17 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include="bower.json" />
+    <Content Include="lib\format.ts" />
     <Content Include="package.json" />
     <Content Include="tsd.json" />
     <Content Include="README.md" />
     <Compile Include="gulpfile.js" />
     <Compile Include="runtests.js" />
     <TypeScriptCompile Include="examples\example.ts" />
+    <TypeScriptCompile Include="lib\datetime-interface.ts" />
     <TypeScriptCompile Include="lib\datetime.ts" />
     <TypeScriptCompile Include="lib\duration.ts" />
+    <TypeScriptCompile Include="lib\token.ts" />
     <TypeScriptCompile Include="lib\index.ts" />
     <TypeScriptCompile Include="lib\javascript.ts" />
     <TypeScriptCompile Include="lib\math.ts" />
@@ -46,6 +49,10 @@
     <TypeScriptCompile Include="test\test-duration.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="test\test-format.ts">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="test\test-math.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
@@ -56,6 +63,10 @@
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="test\test-tz-database.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="test\test-token.ts">
+      <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="typings\lib.d.ts" />
