@@ -156,6 +156,7 @@ The main differences with the JavaScript Date are:
 - We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.
 - With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
   is always UTC for dates that have a time zone, and it is equal to the "local" date value for naive dates.
+- format() is a function that takes an [LDML](http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns) formatting string and returns a formatted string.
 
 ```javascript
 var tc = require("timezonecomplete");
@@ -233,6 +234,10 @@ d.convert(tc.TimeZone.zone("UTC")); // now d has changed to UTC
 
 // Cloning
 var newCopy = amsterdamDate.clone();
+
+// Formatting
+var formatDate = new tc.DateTime("2014-05-29T13:59:59.000 Europe/Amsterdam")
+console.log(amsterdamDate.format("dd/MM/yyy hh.mm.ss")); // 29/05/2014 13.59.59
 
 ```
 
