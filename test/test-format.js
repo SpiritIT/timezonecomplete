@@ -27,6 +27,9 @@ var DateTimeDummy = (function () {
     DateTimeDummy.prototype.weekNumber = function () {
         return this.dateWeek;
     };
+    DateTimeDummy.prototype.dayOfYear = function () {
+        return this.dateDayOfYear;
+    };
 
     DateTimeDummy.prototype.hour = function () {
         return this.dateHour;
@@ -216,11 +219,15 @@ describe("Formatter", function () {
             var result = formatter.format(dateTime, "dd");
             expect(result).to.equal("06");
         });
-        it.skip("should return the day of the year with D", function () {
-            dateTime.dateDay = 15;
-            dateTime.dateMonth = 4;
+        it("should return the day of the year with D", function () {
+            dateTime.dateDayOfYear = 105;
             var result = formatter.format(dateTime, "D");
             expect(result).to.equal("105");
+        });
+        it("should return the day of the year with DD", function () {
+            dateTime.dateDayOfYear = 6;
+            var result = formatter.format(dateTime, "DD");
+            expect(result).to.equal("06");
         });
     });
 

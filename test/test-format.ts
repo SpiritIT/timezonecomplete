@@ -17,6 +17,7 @@ class DateTimeDummy implements datetimeInterface.DateTimeAccess {
 	dateWeek: number;
 	dateDay: number;
 	dateWeekDay: basics.WeekDay;
+	dateDayOfYear: number;
 
 	dateHour: number;
 	dateMinute: number;
@@ -30,6 +31,7 @@ class DateTimeDummy implements datetimeInterface.DateTimeAccess {
 	day(): number { return this.dateDay; }
 	weekDay(): basics.WeekDay { return this.dateWeekDay; }
 	weekNumber(): number { return this.dateWeek; }
+	dayOfYear(): number { return this.dateDayOfYear; }
 
 	hour(): number { return this.dateHour; }
 	minute(): number { return this.dateMinute; }
@@ -208,12 +210,17 @@ describe("Formatter", (): void => {
 			var result = formatter.format(dateTime, "dd");
 			expect(result).to.equal("06");
 		});
-		it.skip("should return the day of the year with D", (): void => {
-			dateTime.dateDay = 15;
-			dateTime.dateMonth = 4;
+		it("should return the day of the year with D", (): void => {
+			dateTime.dateDayOfYear = 105;
 			var result = formatter.format(dateTime, "D");
 			expect(result).to.equal("105");
 		});
+		it("should return the day of the year with DD", (): void => {
+			dateTime.dateDayOfYear = 6;
+			var result = formatter.format(dateTime, "DD");
+			expect(result).to.equal("06");
+		});
+
 	});
 
 	describe("formatWeekday", (): void => {

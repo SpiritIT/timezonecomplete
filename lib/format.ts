@@ -135,9 +135,7 @@ export class Formatter {
 			default:
 				return strings.padLeft(dateTime.day().toString(), token.length, "0");
 			case "D":
-				// return strings.padLeft(dateTime.dayOfYear().toString(), token.length, "0");
-				// TODO: Day of year is not implemented yet in DateTime 
-				return "-1";
+				return strings.padLeft(dateTime.dayOfYear().toString(), token.length, "0");
 		}
 	}
 

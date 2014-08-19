@@ -11,6 +11,7 @@ export interface DateTimeAccess {
 	minute(): number;
 	second(): number;
 	millisecond(): number;
+	dayOfYear(): number;
 
 	zone(): TimeZone.TimeZone;
 }
