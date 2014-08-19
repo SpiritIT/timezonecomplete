@@ -49,6 +49,14 @@ describe("Formatter", (): void => {
 		formatter = new format.Formatter();
 	});
 
+	describe("identity", (): void => {
+		it("should return the raw contents", (): void => {
+			dateTime.dateYear = 18;
+			var result = formatter.format(dateTime, "'abcdefghijklmnopqrstuvwxyz'");
+			expect(result).to.equal("abcdefghijklmnopqrstuvwxyz");
+		});
+	});
+
 	describe("formatEra", (): void => {
 		it("should return BC for years > 0", (): void => {
 			dateTime.dateYear = -1;

@@ -58,6 +58,13 @@ describe("Formatter", function () {
         formatter = new format.Formatter();
     });
 
+    describe("identity", function () {
+        it("should return the raw contents", function () {
+            dateTime.dateYear = 18;
+            var result = formatter.format(dateTime, "'abcdefghijklmnopqrstuvwxyz'");
+            expect(result).to.equal("abcdefghijklmnopqrstuvwxyz");
+        });
+    });
     describe("formatEra", function () {
         it("should return BC for years > 0", function () {
             dateTime.dateYear = -1;

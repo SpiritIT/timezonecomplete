@@ -17,14 +17,6 @@ export class Tokenizer {
 		this._formatString = formatString;
 	}
 
-	tokenize(formatString?: string): void {
-		if (formatString) {
-			this._formatString = formatString;
-		}
-
-
-	}
-
 	private _appendToken(tokenString: string, tokenArray: Token[], raw?: boolean): Token[] {
 		if (tokenString !== "") {
 			var token: Token = {
