@@ -233,8 +233,10 @@ function _formatZone(currentZone: TimeStruct, utcZone: TimeStruct, zone: timeZon
 	switch (token.symbol) {
 		case "O":
 			result = "GMT";
-			if (offsetHours > 0) {
+			if (offset >= 0) {
 				result += "+";
+			} else {
+				result += "-";
 			}
 			result += offsetHours.toString();
 			if (token.length >= 4 || offsetMinutes !== 0) {
@@ -248,7 +250,13 @@ function _formatZone(currentZone: TimeStruct, utcZone: TimeStruct, zone: timeZon
 				case 3:
 					return offsetHoursString + offsetMinutesString;
 				case 4:
-					return "GMT" + offsetHoursString + ":" + offsetMinutesString;
+					var newToken :Token = {
+						length: 4,
+						raw: "OOOO",
+						symbol: "O",
+						type: TokenType.ZONE
+					};
+					return _formatZone(currentZone, utcZone, zone, newToken);
 				case 5:
 					return offsetHoursString + ":" + offsetMinutesString;
 			}

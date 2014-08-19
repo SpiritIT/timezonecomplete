@@ -844,6 +844,146 @@ describe("format", function () {
             var result = format.format(dateTime, utcTime, localZone, "xxxxx");
             expect(result).to.equal("+00:00");
         });
+
+        it("should get the basic ISO format for format Z with positive offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "x");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format Z with negative offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "x");
+            expect(result).to.equal("-08");
+        });
+        it("should get the basic ISO format for format Z with 0 offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "x");
+            expect(result).to.equal("+00");
+        });
+
+        it("should get the basic ISO format for format ZZ with positive offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZ");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format ZZ with negative offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZ");
+            expect(result).to.equal("-0800");
+        });
+        it("should get the basic ISO format for format ZZ with 0 offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZ");
+            expect(result).to.equal("+0000");
+        });
+
+        it("should get the basic ISO format for format ZZZ with positive offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZ");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format ZZZ with negative offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZ");
+            expect(result).to.equal("-0800");
+        });
+        it("should get the basic ISO format for format ZZZ with 0 offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZ");
+            expect(result).to.equal("+0000");
+        });
+
+        it("should get the basic ISO format for format ZZZZ with positive offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZZ");
+            expect(result).to.equal("GMT+2:30");
+        });
+        it("should get the basic ISO format for format ZZZZ with negative offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZZ");
+            expect(result).to.equal("GMT-8:00");
+        });
+        it("should get the basic ISO format for format ZZZZ with 0 offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZZ");
+            expect(result).to.equal("GMT+0:00");
+        });
+
+        it("should get the basic ISO format for format ZZZZZ with positive offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZZZ");
+            expect(result).to.equal("+02:30");
+        });
+        it("should get the basic ISO format for format ZZZZZ with negative offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZZZ");
+            expect(result).to.equal("-08:00");
+        });
+        it("should get the basic ISO format for format ZZZZZ with 0 offset", function () {
+            localZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.year = 2014;
+            dateTime.month = 7;
+            dateTime.day = 15;
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "ZZZZZ");
+            expect(result).to.equal("+00:00");
+        });
     });
 });
 //# sourceMappingURL=test-format.js.map
