@@ -178,6 +178,8 @@ duration6.hours(); <span class="hljs-comment">// 1.5</span>
 duration6.minutes(); <span class="hljs-comment">// 90</span>
 duration6.seconds(); <span class="hljs-comment">// 5400</span>
 duration6.milliseconds(); <span class="hljs-comment">// 5400000</span>
+
+duration6.valueOf(); <span class="hljs-comment">// same as milliseconds()</span>
 </code></pre>
 			<h3 id="datetime">DateTime</h3>
 			<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
@@ -255,6 +257,7 @@ amsterdamDate.utcDayOfYear(); <span class="hljs-comment">// 0th day of year</spa
 
 <span class="hljs-comment">// Unix millisecond timestamp getter</span>
 amsterdamDate.unixUtcMillis(); <span class="hljs-comment">// milliseconds of UTC date since 1970-01-01</span>
+amsterdamDate.valueOf(); <span class="hljs-comment">// same</span>
 
 <span class="hljs-comment">// Zone getter</span>
 amsterdamDate.zone(); <span class="hljs-comment">// TimeZone.zone("Europe/Amsterdam");</span>
@@ -478,9 +481,9 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 			</ul>
 			<h2 id="contributors">Contributors</h2>
 			<ul>
-				<li>Rogier Schouten <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#x2e;&#115;&#99;&#x68;&#x6f;&#117;&#x74;&#101;&#x6e;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#x2e;&#115;&#99;&#x68;&#x6f;&#117;&#x74;&#101;&#x6e;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
-				<li>Daan Wissing <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#100;&#46;&#x77;&#105;&#115;&#x73;&#105;&#x6e;&#103;&#x40;&#x73;&#112;&#x69;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;">&#100;&#46;&#x77;&#105;&#115;&#x73;&#105;&#x6e;&#103;&#x40;&#x73;&#112;&#x69;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;</a></li>
-				<li>Peter Kooijmans <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#x70;&#x2e;&#x6b;&#x6f;&#x6f;&#x69;&#106;&#109;&#x61;&#110;&#x73;&#64;&#x73;&#112;&#105;&#x72;&#105;&#116;&#x69;&#116;&#x2e;&#99;&#111;&#109;">&#x70;&#x2e;&#x6b;&#x6f;&#x6f;&#x69;&#106;&#109;&#x61;&#110;&#x73;&#64;&#x73;&#112;&#105;&#x72;&#105;&#116;&#x69;&#116;&#x2e;&#99;&#111;&#109;</a></li>
+				<li>Rogier Schouten <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#x2e;&#x73;&#99;&#104;&#111;&#117;&#x74;&#x65;&#x6e;&#x40;&#115;&#x70;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;">&#x72;&#x2e;&#x73;&#99;&#104;&#111;&#117;&#x74;&#x65;&#x6e;&#x40;&#115;&#x70;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
+				<li>Daan Wissing <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#100;&#46;&#x77;&#x69;&#115;&#115;&#105;&#110;&#x67;&#x40;&#115;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#100;&#46;&#x77;&#x69;&#115;&#115;&#105;&#110;&#x67;&#x40;&#115;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+				<li>Peter Kooijmans <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#112;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#x61;&#x6e;&#115;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#109;">&#112;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#x61;&#x6e;&#115;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#109;</a></li>
 			</ul>
 			<h2 id="license">License</h2>
 			<p>MIT</p>

@@ -297,3 +297,4 @@ describe("Duration()", function () {
         });
     });
 });
+//# sourceMappingURL=test-duration.js.map

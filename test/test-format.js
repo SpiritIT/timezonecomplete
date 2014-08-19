@@ -510,3 +510,4 @@ describe("Formatter", function () {
         });
     });
 });
+//# sourceMappingURL=test-format.js.map
