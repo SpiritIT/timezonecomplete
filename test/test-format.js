@@ -49,7 +49,9 @@ var DateTimeDummy = (function () {
     DateTimeDummy.prototype.secondOfDay = function () {
         return this.dateSecondOfDay;
     };
-
+    DateTimeDummy.prototype.offset = function () {
+        return this.dateOffset;
+    };
     DateTimeDummy.prototype.zone = function () {
         return this.dateZone;
     };
@@ -459,27 +461,31 @@ describe("Formatter", function () {
         });
     });
 
-    describe.skip("formatTimeZone", function () {
+    describe("formatTimeZone", function () {
         it("should get the short specific name of the timezone for format z", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 7;
             var result = formatter.format(dateTime, "z");
             expect(result).to.equal("CEST");
         });
         it("should get the short specific name of the timezone for format z", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 2;
             var result = formatter.format(dateTime, "z");
             expect(result).to.equal("CET");
         });
         it("should get the long specific name of the timezone for format zzzz", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 7;
             var result = formatter.format(dateTime, "zzzz");
             expect(result).to.equal("Central European Summer Time");
         });
         it("should get the long specific name of the timezone for format zzzz", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 7;
             var result = formatter.format(dateTime, "zzzz");
             expect(result).to.equal("Central European Time");
@@ -487,24 +493,28 @@ describe("Formatter", function () {
 
         it("should get the short specific name of the timezone for format O", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 7;
             var result = formatter.format(dateTime, "O");
             expect(result).to.equal("GMT+2");
         });
         it("should get the short specific name of the timezone for format O", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 60;
             dateTime.dateMonth = 2;
             var result = formatter.format(dateTime, "O");
             expect(result).to.equal("GMT+1");
         });
         it("should get the short specific name of the timezone for format OOOO", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 7;
             var result = formatter.format(dateTime, "OOOO");
             expect(result).to.equal("GMT+2:00");
         });
         it("should get the short specific name of the timezone for format OOOO", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 60;
             dateTime.dateMonth = 2;
             var result = formatter.format(dateTime, "OOOO");
             expect(result).to.equal("GMT+1:00");
@@ -512,24 +522,28 @@ describe("Formatter", function () {
 
         it("should get the short specific name of the timezone for format v", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 7;
             var result = formatter.format(dateTime, "z");
             expect(result).to.equal("CET");
         });
         it("should get the short specific name of the timezone for format v", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 2;
             var result = formatter.format(dateTime, "z");
             expect(result).to.equal("CET");
         });
         it("should get the long specific name of the timezone for format vvvv", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 7;
             var result = formatter.format(dateTime, "vvvv");
             expect(result).to.equal("Central European Time");
         });
         it("should get the long specific name of the timezone for format vvvv", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             dateTime.dateMonth = 7;
             var result = formatter.format(dateTime, "vvvv");
             expect(result).to.equal("Central European Time");
@@ -537,8 +551,199 @@ describe("Formatter", function () {
 
         it("should get the long Timezone ID for format VV", function () {
             dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 120;
             var result = formatter.format(dateTime, "VV");
             expect(result).to.equal("Europe/Amsterdam");
+        });
+
+        it("should get the basic ISO format for format X with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "X");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format X with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "X");
+            expect(result).to.equal("-08");
+        });
+        it("should get the basic ISO format for format X with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "X");
+            expect(result).to.equal("Z");
+        });
+
+        it("should get the basic ISO format for format XX with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "XX");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format XX with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "XX");
+            expect(result).to.equal("-0800");
+        });
+        it("should get the basic ISO format for format XX with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "XX");
+            expect(result).to.equal("Z");
+        });
+
+        it("should get the basic ISO format for format XXX with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "XXX");
+            expect(result).to.equal("+02:30");
+        });
+        it("should get the basic ISO format for format XXX with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "XXX");
+            expect(result).to.equal("-08:00");
+        });
+        it("should get the basic ISO format for format XXX with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "XXX");
+            expect(result).to.equal("Z");
+        });
+
+        it("should get the basic ISO format for format XXXX with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "XXXX");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format XXXX with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "XXXX");
+            expect(result).to.equal("-0800");
+        });
+        it("should get the basic ISO format for format XXXX with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "XXXX");
+            expect(result).to.equal("Z");
+        });
+
+        it("should get the basic ISO format for format XXXXX with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "XXXXX");
+            expect(result).to.equal("+02:30");
+        });
+        it("should get the basic ISO format for format XXXXX with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "XXXXX");
+            expect(result).to.equal("-08:00");
+        });
+        it("should get the basic ISO format for format XXXXX with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "XXXXX");
+            expect(result).to.equal("Z");
+        });
+
+        it("should get the basic ISO format for format x with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "x");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format x with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "x");
+            expect(result).to.equal("-08");
+        });
+        it("should get the basic ISO format for format x with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "x");
+            expect(result).to.equal("+00");
+        });
+
+        it("should get the basic ISO format for format xx with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "xx");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format xx with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "xx");
+            expect(result).to.equal("-0800");
+        });
+        it("should get the basic ISO format for format xx with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "xx");
+            expect(result).to.equal("+0000");
+        });
+
+        it("should get the basic ISO format for format xxx with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "xxx");
+            expect(result).to.equal("+02:30");
+        });
+        it("should get the basic ISO format for format xxx with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "xxx");
+            expect(result).to.equal("-08:00");
+        });
+        it("should get the basic ISO format for format xxx with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "xxx");
+            expect(result).to.equal("+00:00");
+        });
+
+        it("should get the basic ISO format for format xxxx with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "xxxx");
+            expect(result).to.equal("+0230");
+        });
+        it("should get the basic ISO format for format xxxx with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "xxxx");
+            expect(result).to.equal("-0800");
+        });
+        it("should get the basic ISO format for format xxxx with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "xxxx");
+            expect(result).to.equal("+0000");
+        });
+
+        it("should get the basic ISO format for format xxxxx with positive offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
+            dateTime.dateOffset = 150;
+            var result = formatter.format(dateTime, "xxxxx");
+            expect(result).to.equal("+02:30");
+        });
+        it("should get the basic ISO format for format xxxxx with negative offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
+            dateTime.dateOffset = -8 * 60;
+            var result = formatter.format(dateTime, "xxxxx");
+            expect(result).to.equal("-08:00");
+        });
+        it("should get the basic ISO format for format xxxxx with 0 offset", function () {
+            dateTime.dateZone = new timeZone.TimeZone("Europe/London");
+            dateTime.dateOffset = 0;
+            var result = formatter.format(dateTime, "xxxxx");
+            expect(result).to.equal("+00:00");
         });
     });
 });
