@@ -1,4 +1,4 @@
-﻿var chai = require("chai");
+var chai = require("chai");
 var expect = chai.expect;
 
 var format = require("../lib/format");
@@ -504,7 +504,7 @@ describe("format", function () {
             dateTime.year = 2014;
             dateTime.month = 7;
             dateTime.day = 15;
-            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (60 * 60 * 1000));
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
             var result = format.format(dateTime, utcTime, localZone, "OOOO");
             expect(result).to.equal("GMT+2:00");
         });
@@ -524,16 +524,16 @@ describe("format", function () {
             dateTime.month = 7;
             dateTime.day = 15;
             utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
-            var result = format.format(dateTime, utcTime, localZone, "z");
+            var result = format.format(dateTime, utcTime, localZone, "v");
             expect(result).to.equal("CET");
         });
         it("should get the short specific name of the timezone for format v", function () {
             localZone = new timeZone.TimeZone("Europe/Amsterdam");
             dateTime.year = 2014;
-            dateTime.month = 7;
+            dateTime.month = 2;
             dateTime.day = 15;
-            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
-            var result = format.format(dateTime, utcTime, localZone, "z");
+            utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (60 * 60 * 1000));
+            var result = format.format(dateTime, utcTime, localZone, "v");
             expect(result).to.equal("CET");
         });
         it("should get the long specific name of the timezone for format vvvv", function () {

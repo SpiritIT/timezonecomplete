@@ -91,6 +91,16 @@ declare module '__timezonecomplete/basics' {
      */
     export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number;
     /**
+     * Returns the first instance of the given weekday in the given month
+     *
+     * @param year	The year
+     * @param month	the month 1-12
+     * @param weekDay	the desired week day
+     *
+     * @return the first occurrence of the week day in the month
+     */
+    export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number;
+    /**
      * Returns the day-of-month that is on the given weekday and which is >= the given day.
      * Throws if the month has no such day.
      */
@@ -100,6 +110,7 @@ declare module '__timezonecomplete/basics' {
      * Throws if the month has no such day.
      */
     export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number;
+    export function weekOfMonth(year: number, month: number, day: number): number;
     /**
      * The ISO 8601 week number for the given date. Week 1 is the week
      * that has January 4th in it, and it starts on Monday.
@@ -140,6 +151,7 @@ declare module '__timezonecomplete/basics' {
      * This does NOT take leap seconds into account.
      */
     export function weekDayNoLeapSecs(unixMillis: number): WeekDay;
+    export function secondInDay(hour: number, minute: number, second: number): number;
     /**
      * Basic representation of a date and time
      */
@@ -256,13 +268,11 @@ declare module '__timezonecomplete/datetime' {
     import duration = require("__timezonecomplete/duration");
     import javascript = require("__timezonecomplete/javascript");
     import timezone = require("__timezonecomplete/timezone");
-    import dateTimeInterface = require("__timezonecomplete/datetime-interface");
     /**
      * DateTime class which is time zone-aware
      * and which can be mocked for testing purposes.
      */
-    export class DateTime implements dateTimeInterface.DateTimeAccess {
-        static formatter: format.Formatter;
+    export class DateTime {
         /**
          * Actual time source in use. Setting this property allows to
          * fake time in tests. DateTime.nowLocal() and DateTime.nowUtc()
@@ -399,6 +409,21 @@ declare module '__timezonecomplete/datetime' {
          */
         weekNumber(): number;
         /**
+         * The week of this month. There is no official standard for this,
+         * but we assume the same rules for the weekNumber (i.e.
+         * week 1 is the week that has the 4th day of the month in it)
+         *
+         * @return Week number [1-5]
+         */
+        weekOfMonth(): number;
+        /**
+         * Returns the number of seconds that have passed on the current day
+         * Does not consider leap seconds
+         *
+         * @return seconds [0-86399]
+         */
+        secondOfDay(): number;
+        /**
          * @return Milliseconds since 1970-01-01T00:00:00.000Z
          */
         unixUtcMillis(): number;
@@ -450,6 +475,21 @@ declare module '__timezonecomplete/datetime' {
          * @return Week number [1-53]
          */
         utcWeekNumber(): number;
+        /**
+         * The week of this month. There is no official standard for this,
+         * but we assume the same rules for the weekNumber (i.e.
+         * week 1 is the week that has the 4th day of the month in it)
+         *
+         * @return Week number [1-5]
+         */
+        utcWeekOfMonth(): number;
+        /**
+         * Returns the number of seconds that have passed on the current day
+         * Does not consider leap seconds
+         *
+         * @return seconds [0-86399]
+         */
+        utcSecondOfDay(): number;
         /**
          * Convert this date to the given time zone (in-place).
          * Throws if this date does not have a time zone.
@@ -1033,7 +1073,7 @@ declare module '__timezonecomplete/timezone' {
          *
          * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
          */
-        abbreviationForUtc(year: number, month: number, day: number, hour?: number, minute?: number, second?: number, millisecond?: number): string;
+        abbreviationForUtc(year: number, month: number, day: number, hour?: number, minute?: number, second?: number, millisecond?: number, dstDependent?: boolean): string;
         /**
          * Normalizes non-existing local times by adding a forward offset change.
          * During a forward standard offset change or DST offset change, some amount of
@@ -1068,23 +1108,6 @@ declare module '__timezonecomplete/timezone' {
          * @return offset w.r.t. UTC in minutes
          */
         static stringToOffset(s: string): number;
-    }
-}
-
-declare module '__timezonecomplete/datetime-interface' {
-    import TimeZone = require("__timezonecomplete/timezone");
-    import basics = require("__timezonecomplete/basics");
-    export interface DateTimeAccess {
-        year(): number;
-        month(): number;
-        day(): number;
-        weekDay(): basics.WeekDay;
-        weekNumber(): number;
-        hour(): number;
-        minute(): number;
-        second(): number;
-        millisecond(): number;
-        zone(): TimeZone.TimeZone;
     }
 }
 

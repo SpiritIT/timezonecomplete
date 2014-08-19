@@ -258,12 +258,14 @@ export class DateTime {
 
 	/**
 	 * Zone name abbreviation at this time
+	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
+	 * @return The abbreviation
 	 */
-	public zoneAbbreviation(): string {
+	public zoneAbbreviation(dstDependent: boolean = true): string {
 		if (this.zone()) {
 			return this.zone().abbreviationForUtc(
 				this.utcYear(), this.utcMonth(), this.utcDay(),
-				this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond());
+				this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond(), dstDependent);
 		} else {
 			return "";
 		}

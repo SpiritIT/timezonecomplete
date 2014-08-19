@@ -17,7 +17,7 @@ import TokenType = token.DateTimeTokenType;
 import strings = require("./strings");
 import timeZone = require("./timezone");
 
-export function format(dateTime: TimeStruct, utcTime: TimeStruct, localZone: timeZone.TimeZone,  formatString: string): string {
+export function format(dateTime: TimeStruct, utcTime: TimeStruct, localZone: timeZone.TimeZone, formatString: string): string {
 	var tokenizer = new Tokenizer(formatString);
 	var tokens: Token[] = tokenizer.parseTokens();
 	var result: string = "";
@@ -252,6 +252,23 @@ function _formatZone(currentZone: TimeStruct, utcZone: TimeStruct, zone: timeZon
 				case 5:
 					return offsetHoursString + ":" + offsetMinutesString;
 			}
+		case "z":
+			switch (token.length) {
+				case 1:
+				case 2:
+				case 3:
+					return zone.abbreviationForUtc(currentZone.year, currentZone.month, currentZone.day,
+						currentZone.hour, currentZone.minute, currentZone.second, currentZone.milli, true);
+				case 4:
+					return zone.toString();
+			}
+		case "v":
+			if (token.length === 1) {
+				return zone.abbreviationForUtc(currentZone.year, currentZone.month, currentZone.day,
+					currentZone.hour, currentZone.minute, currentZone.second, currentZone.milli, false);
+			} else {
+				return zone.toString();
+			}
 		case "V":
 			switch (token.length) {
 				case 1:
@@ -282,6 +299,8 @@ function _formatZone(currentZone: TimeStruct, utcZone: TimeStruct, zone: timeZon
 				case 5: // No seconds in our implementation, so this is the same
 					return offsetHoursString + ":" + offsetMinutesString;
 			}
+		default:
+			throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
 	}
 }
 
