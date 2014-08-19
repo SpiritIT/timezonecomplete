@@ -420,10 +420,10 @@ describe("TzDatabase", (): void => {
 		it("should work for rules that use UTC in AT column", (): void => {
 			expect(util.inspect(TzDatabase.instance().getTransitionsDstOffsets("EU", 2013, 2014, Duration.hours(1)))).
 				to.equal(util.inspect([
-					new Transition((new TimeStruct(2013, 3, 31, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1)),
-					new Transition((new TimeStruct(2013, 10, 27, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0)),
-					new Transition((new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1)),
-					new Transition((new TimeStruct(2014, 10, 26, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0)),
+					new Transition((new TimeStruct(2013, 3, 31, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1), "S"),
+					new Transition((new TimeStruct(2013, 10, 27, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0), ""),
+					new Transition((new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1), "S"),
+					new Transition((new TimeStruct(2014, 10, 26, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0), ""),
 				]));
 		});
 		// todors other types of rules
@@ -433,23 +433,23 @@ describe("TzDatabase", (): void => {
 		it("should work for UTC", (): void => {
 			expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Etc/GMT", 2013, 2014))).
 				to.equal(util.inspect([
-					new Transition((new TimeStruct(2013, 1, 1, 0, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0)),
+					new Transition((new TimeStruct(2013, 1, 1, 0, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(0), ""),
 				]));
 		});
 		it("should work for single zone info", (): void => {
 			expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Europe/Amsterdam", 2013, 2014))).
 				to.equal(util.inspect([
-					new Transition(252374400000, Duration.hours(1)), // time zone offset
-					new Transition((new TimeStruct(2013, 3, 31, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(2)),
-					new Transition((new TimeStruct(2013, 10, 27, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1)),
-					new Transition((new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(2)),
-					new Transition((new TimeStruct(2014, 10, 26, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1)),
+					new Transition(252374400000, Duration.hours(1), ""), // time zone offset
+					new Transition((new TimeStruct(2013, 3, 31, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(2), "S"),
+					new Transition((new TimeStruct(2013, 10, 27, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1), ""),
+					new Transition((new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(2), "S"),
+					new Transition((new TimeStruct(2014, 10, 26, 1, 0, 0, 0)).toUnixNoLeapSecs(), Duration.hours(1), ""),
 				]));
 		});
 		it("should add zone info transition", (): void => {
 			expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Africa/Porto-Novo", 1969, 1969))).
 				to.equal(util.inspect([
-					new Transition(-1131235200000, Duration.hours(1)),
+					new Transition(-1131235200000, Duration.hours(1), ""),
 				]));
 		});
 	});
@@ -491,6 +491,26 @@ describe("TzDatabase", (): void => {
 				"Pacific/Apia", 1325203100000).hours()).to.equal(-10);
 		});
 		// todors more info
+	});
+
+	describe("abbreviation()", (): void => {
+		it("should work for zones with rules", (): void => {
+			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 0, 59, 59, 999)).toUnixNoLeapSecs())).
+				to.equal("CET");
+			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs())).
+				to.equal("CEST");
+		});
+		it("should work around zone changes", (): void => {
+			expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", 1388534399999)).
+				to.equal("TIR");
+			expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", 1388534400000)).
+				to.equal("TST");
+			expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", 1388534400)).
+				to.equal("TIR");
+		});
+		it("should work for zones that have a fixed DST offset", (): void => {
+			expect(TzDatabase.instance().abbreviation("Africa/Algiers", -1855958400001)).to.equal("PMT");
+		});
 	});
 
 	describe("totalOffsetLocal()", (): void => {

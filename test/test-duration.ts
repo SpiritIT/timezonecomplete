@@ -279,5 +279,11 @@ describe("Duration()", (): void => {
 		});
 	});
 
+	describe("valueOf()", (): void => {
+		it("should work", (): void => {
+			var d: Duration = new Duration("-01:02:03.4");
+			expect(d.valueOf()).to.equal(d.milliseconds());
+		});
+	});
 });
 

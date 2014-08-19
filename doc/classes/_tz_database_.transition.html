@@ -70,6 +70,7 @@
 					<h3>Properties</h3>
 					<ul class="tsd-member-index">
 						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_tz_database_.transition.html#at" class="tsd-kind-icon">at</a></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_tz_database_.transition.html#letter" class="tsd-kind-icon">letter</a></li>
 						<li class="tsd-kind-property tsd-parent-kind-class"><a href="_tz_database_.transition.html#offset" class="tsd-kind-icon">offset</a></li>
 					</ul>
 				</section>
@@ -80,12 +81,12 @@
 					<a name="constructor" class="anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbols">(</span>at<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, offset<span class="tsd-signature-symbols">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_tz_database_.transition.html" class="tsd-signature-type">Transition</a></li>
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbols">(</span>at<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, offset<span class="tsd-signature-symbols">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, letter<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="_tz_database_.transition.html" class="tsd-signature-type">Transition</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:411</li>
+									<li>Defined in tz-database.ts:410</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -97,6 +98,10 @@
 								<li>
 									<h5>offset: <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
 									<p>New offset (type of offset depends on the function)</p>
+								</li>
+								<li>
+									<h5>letter: <span class="tsd-signature-type">string</span></h5>
+									<p>New timzone abbreviation letter</p>
 								</li>
 							</ul>
 							<h4>Returns 
@@ -114,10 +119,21 @@
 					<div class="tsd-signature tsd-kind-icon">at<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:415</li>
+							<li>Defined in tz-database.ts:414</li>
 						</ul>
 					</aside>
 					<p>Transition time in UTC millis</p>
+				</section>
+				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="letter" class="anchor"></a>
+					<h3>letter</h3>
+					<div class="tsd-signature tsd-kind-icon">letter<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in tz-database.ts:423</li>
+						</ul>
+					</aside>
+					<p>New timzone abbreviation letter</p>
 				</section>
 				<section class="tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="offset" class="anchor"></a>
@@ -125,7 +141,7 @@
 					<div class="tsd-signature tsd-kind-icon">offset<span class="tsd-signature-symbols">:</span> <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:419</li>
+							<li>Defined in tz-database.ts:418</li>
 						</ul>
 					</aside>
 					<p>New offset (type of offset depends on the function)</p>
@@ -145,7 +161,13 @@
 						<a href="../modules/_datetime_.html">"datetime"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_datetime_interface_.html">"datetime-<wbr>interface"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_duration_.html">"duration"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_format_.html">"format"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_index_.html">"index"</a>
@@ -167,6 +189,9 @@
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_timezone_.html">"timezone"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_token_.html">"token"</a>
 					</li>
 					<li class="current tsd-kind-dynamic-module">
 						<a href="../modules/_tz_database_.html">"tz-<wbr>database"</a>
@@ -210,6 +235,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_tz_database_.transition.html#at" class="tsd-kind-icon">at</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_tz_database_.transition.html#letter" class="tsd-kind-icon">letter</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_tz_database_.transition.html#offset" class="tsd-kind-icon">offset</a>

@@ -329,3 +329,4 @@ describe("format", function () {
         });
     });
 });
+//# sourceMappingURL=test-token.js.map

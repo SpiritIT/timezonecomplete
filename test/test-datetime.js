@@ -1111,6 +1111,12 @@ describe("DateTime", function () {
         });
     });
 
+    describe("valueOf()", function () {
+        it("should work", function () {
+            expect((new DateTime("2014-02-03T05:06:07.008")).valueOf()).to.equal((new DateTime("2014-02-03T05:06:07.008")).unixUtcMillis());
+        });
+    });
+
     describe("weekDay()", function () {
         it("should return a local week day", function () {
             expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(1 /* Monday */);
@@ -1121,6 +1127,20 @@ describe("DateTime", function () {
     describe("utcWeekDay()", function () {
         it("should return a UTC week day", function () {
             expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").utcWeekDay()).to.equal(0 /* Sunday */);
+        });
+    });
+
+    describe("dayOfYear()", function () {
+        it("should return a local dayOfYear", function () {
+            expect(new DateTime("2014-01-01T00:00:00.00 Europe/Amsterdam").dayOfYear()).to.equal(0);
+            expect(new DateTime("2014-12-31T23:59:59.999 Europe/Amsterdam").dayOfYear()).to.equal(364);
+        });
+    });
+
+    describe("utcDayOfYear()", function () {
+        it("should return a UTC week day", function () {
+            // note this is still january 1st in utc
+            expect(new DateTime("2014-01-02T00:00:00.00 Europe/Amsterdam").utcDayOfYear()).to.equal(0);
         });
     });
 
@@ -1139,4 +1159,17 @@ describe("DateTime", function () {
             expect(d.utcWeekNumber()).to.equal(21);
         });
     });
+
+    describe("zoneAbbreviation()", function () {
+        it("should return nothing for naive date", function () {
+            var d = new DateTime(2014, 5, 26, 0, 30, 0, 0);
+            expect(d.zoneAbbreviation()).to.equal("");
+        });
+        it("should return the zone abbrev for aware date", function () {
+            // note already tested in test-tz-database
+            var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+            expect(d.zoneAbbreviation()).to.equal("CEST");
+        });
+    });
 });
+//# sourceMappingURL=test-datetime.js.map

@@ -62,9 +62,7 @@ export function periodDstToString(p: PeriodDst): string {
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			assert(false, "Unknown PeriodDst");
-			/* istanbul ignore next */
-			return "";
+			throw new Error("Unknown PeriodDst");
 	}
 }
 
@@ -257,9 +255,7 @@ export class Period {
 					/* istanbul ignore next */
 					default:
 						/* istanbul ignore next */
-						assert(false, "Unknown TimeUnit");
-						/* istanbul ignore next */
-						break;
+						throw new Error("Unknown TimeUnit");
 				}
 				while (!approx.greaterThan(fromDate)) {
 					approx = approx.add(this._intAmount, this._intUnit);
@@ -294,9 +290,7 @@ export class Period {
 					/* istanbul ignore next */
 					default:
 						/* istanbul ignore next */
-						assert(false, "Unknown TimeUnit");
-						/* istanbul ignore next */
-						break;
+						throw new Error("Unknown TimeUnit");
 				}
 				while (!approx.greaterThan(normalFrom)) {
 					approx = approx.addLocal(this._intAmount, this._intUnit);
@@ -342,9 +336,7 @@ export class Period {
 					/* istanbul ignore next */
 					default:
 						/* istanbul ignore next */
-						assert(false, "Unknown TimeUnit");
-						/* istanbul ignore next */
-						break;
+						throw new Error("Unknown TimeUnit");
 				}
 				while (!approx.greaterThan(fromDate)) {
 					approx = approx.add(this._intAmount, this._intUnit);
@@ -471,9 +463,7 @@ export class Period {
 					/* istanbul ignore next */
 					default:
 						/* istanbul ignore next */
-						assert(false, "Unknown TimeUnit");
-						/* istanbul ignore next */
-						break;
+						throw new Error("Unknown TimeUnit");
 				}
 				while (!approx.greaterThan(normalFrom)) {
 					approx = approx.addLocal(this._intAmount, this._intUnit);
@@ -533,9 +523,7 @@ export class Period {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "Unknown period unit.");
-				/* istanbul ignore next */
-				return "";
+				throw new Error("Unknown period unit.");
 		}
 	}
 

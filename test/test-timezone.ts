@@ -286,5 +286,20 @@ describe("TimeZone", (): void => {
 		});
 	});
 
+	describe("abbreviationForUtc()", (): void => {
+		it("should work for local timezone", (): void => {
+			expect(TimeZone.local().abbreviationForUtc(2014, 1, 1)).to.equal("local");
+		});
+		it("should work for offset timezone", (): void => {
+			expect(TimeZone.zone(3).abbreviationForUtc(2014, 1, 1)).to.equal(TimeZone.zone(3).toString());
+		});
+		it("should work for named zone without DST", (): void => {
+			expect(TimeZone.zone("UTC").abbreviationForUtc(2014, 1, 1)).to.equal("UTC");
+		});
+		it("should work for named zone with DST", (): void => {
+			// note that the underlying functionality is fully tested in test-tz-database
+			expect(TimeZone.zone("Europe/Amsterdam").abbreviationForUtc(2014, 7, 1)).to.equal("CEST");
+		});
+	});
 });
 

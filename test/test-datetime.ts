@@ -1084,6 +1084,13 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("valueOf()", (): void => {
+		it("should work", (): void => {
+			expect((new DateTime("2014-02-03T05:06:07.008")).valueOf()).to.equal(
+				(new DateTime("2014-02-03T05:06:07.008")).unixUtcMillis());
+		});
+	});
+
 	describe("weekDay()", (): void => {
 		it("should return a local week day", (): void => {
 			expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
@@ -1094,6 +1101,20 @@ describe("DateTime", (): void => {
 	describe("utcWeekDay()", (): void => {
 		it("should return a UTC week day", (): void => {
 			expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").utcWeekDay()).to.equal(WeekDay.Sunday);
+		});
+	});
+
+	describe("dayOfYear()", (): void => {
+		it("should return a local dayOfYear", (): void => {
+			expect(new DateTime("2014-01-01T00:00:00.00 Europe/Amsterdam").dayOfYear()).to.equal(0);
+			expect(new DateTime("2014-12-31T23:59:59.999 Europe/Amsterdam").dayOfYear()).to.equal(364);
+		});
+	});
+
+	describe("utcDayOfYear()", (): void => {
+		it("should return a UTC week day", (): void => {
+			// note this is still january 1st in utc
+			expect(new DateTime("2014-01-02T00:00:00.00 Europe/Amsterdam").utcDayOfYear()).to.equal(0);
 		});
 	});
 
@@ -1113,6 +1134,17 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("zoneAbbreviation()", (): void => {
+		it("should return nothing for naive date", (): void => {
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0);
+			expect(d.zoneAbbreviation()).to.equal("");
+		});
+		it("should return the zone abbrev for aware date", (): void => {
+			// note already tested in test-tz-database
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			expect(d.zoneAbbreviation()).to.equal("CEST");
+		});
+	});
 });
 
 

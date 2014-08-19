@@ -343,6 +343,10 @@ declare module '__timezonecomplete/datetime' {
          */
         zone(): timezone.TimeZone;
         /**
+         * Zone name abbreviation at this time
+         */
+        zoneAbbreviation(): string;
+        /**
          * @return the offset w.r.t. UTC in minutes. Returns 0 for unaware dates and for UTC dates.
          */
         offset(): number;
@@ -422,6 +426,13 @@ declare module '__timezonecomplete/datetime' {
          * @return The UTC seconds 0-59
          */
         utcSecond(): number;
+        /**
+         * Returns the UTC day number within the year: Jan 1st has number 0,
+         * Jan 2nd has number 1 etc.
+         *
+         * @return the day-of-year [0-366]
+         */
+        utcDayOfYear(): number;
         /**
          * @return The UTC milliseconds 0-999
          */
@@ -965,13 +976,15 @@ declare module '__timezonecomplete/timezone' {
         hasDst(): boolean;
         /**
          * Calculate timezone offset from a UTC time.
-         * @param year local full year
-         * @param month local month 1-12 (note this deviates from JavaScript date)
-         * @param day local day of month 1-31
-         * @param hour local hour 0-23
-         * @param minute local minute 0-59
-         * @param second local second 0-59
-         * @param millisecond local millisecond 0-999
+         *
+         * @param year Full year
+         * @param month Month 1-12 (note this deviates from JavaScript date)
+         * @param day Day of month 1-31
+         * @param hour Hour 0-23
+         * @param minute Minute 0-59
+         * @param second Second 0-59
+         * @param millisecond Millisecond 0-999
+         *
          * @return the offset of this time zone with respect to UTC at the given time, in minutes.
          */
         offsetForUtc(year: number, month: number, day: number, hour?: number, minute?: number, second?: number, millisecond?: number): number;
@@ -1007,6 +1020,20 @@ declare module '__timezonecomplete/timezone' {
          * @param funcs: the set of functions to use: get() or getUTC()
          */
         offsetForZoneDate(date: Date, funcs: javascript.DateFunctions): number;
+        /**
+         * Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.
+         *
+         * @param year Full year
+         * @param month Month 1-12 (note this deviates from JavaScript date)
+         * @param day Day of month 1-31
+         * @param hour Hour 0-23
+         * @param minute Minute 0-59
+         * @param second Second 0-59
+         * @param millisecond Millisecond 0-999
+         *
+         * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
+         */
+        abbreviationForUtc(year: number, month: number, day: number, hour?: number, minute?: number, second?: number, millisecond?: number): string;
         /**
          * Normalizes non-existing local times by adding a forward offset change.
          * During a forward standard offset change or DST offset change, some amount of

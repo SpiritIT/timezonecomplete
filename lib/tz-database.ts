@@ -11,6 +11,7 @@
 "use strict";
 
 import assert = require("assert");
+import util = require("util");
 
 import sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
@@ -143,7 +144,7 @@ export class RuleInfo {
 		public save: Duration,
 		/**
 		 * Character to insert in %s for time zone abbreviation
-		 * Note if TZ database indicates "-" the empty string is returned
+		 * Note if TZ database indicates "-" this is the empty string
 		 */
 		public letter: string
 		) {
@@ -267,9 +268,7 @@ export class RuleInfo {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "unknown AtType");
-				/* istanbul ignore next */
-				break;
+				throw new Error("unknown AtType");
 		}
 
 		return unixMillis - offset.milliseconds();
@@ -417,7 +416,14 @@ export class Transition {
 		/**
 		 * New offset (type of offset depends on the function)
 		 */
-		public offset: Duration) {
+		public offset: Duration,
+
+		/**
+		 * New timzone abbreviation letter
+		 */
+		public letter: string
+
+		) {
 	}
 }
 
@@ -700,6 +706,30 @@ export class TzDatabase {
 	}
 
 	/**
+	 * The time zone rule abbreviation, e.g. CEST for Central European Summer Time.
+	 * Note this is dependent on the time, because with time different rules are in effect
+	 * and therefore different abbreviations. They also change with DST: e.g. CEST or CET.
+	 *
+	 * @param zoneName	IANA zone name
+	 * @param utcMillis	Timestamp in UTC unix milliseconds
+	 * @return	The abbreviation of the rule that is in effect
+	 */
+	public abbreviation(zoneName: string, utcMillis: number): string {
+		var zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcMillis);
+		var format: string = zoneInfo.format;
+
+		// is format dependent on DST?
+		if (format.indexOf("%s") !== -1
+			&& zoneInfo.ruleType === RuleType.RuleName) {
+			var letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+			// place in format string
+			return util.format(format, letter);
+		}
+
+		return format;
+	}
+
+	/**
 	 * Returns the total time zone offset from UTC, including DST, at
 	 * the given LOCAL timestamp. Non-existing local time is normalized out.
 	 * There can be multiple UTC times and therefore multiple offsets for a local time
@@ -791,6 +821,38 @@ export class TzDatabase {
 	}
 
 	/**
+	 * Returns the time zone letter for the given
+	 * ruleset and the given UTC timestamp
+	 *
+	 * @param ruleName	name of ruleset
+	 * @param utcMillis	UTC timestamp
+	 * @param standardOffset	Standard offset without DST for the time zone
+	 */
+	public letterForRule(ruleName: string, utcMillis: number, standardOffset: Duration): string {
+		var tm: TimeStruct = basics.unixToTimeNoLeapSecs(utcMillis);
+
+		// find applicable transition moments
+		var transitions: Transition[] = this.getTransitionsDstOffsets(ruleName, tm.year - 1, tm.year, standardOffset);
+
+		// find the last prior to given date
+		var letter: string = null;
+		for (var i = transitions.length - 1; i >= 0; i--) {
+			var transition = transitions[i];
+			if (transition.at <= utcMillis) {
+				letter = transition.letter;
+				break;
+			}
+		}
+
+		/* istanbul ignore if */
+		if (letter === null) {
+			throw new Error("No offset found.");
+		}
+
+		return letter;
+	}
+
+	/**
 	 * Return a list of all transitions in [fromYear..toYear] sorted by effective date
 	 *
 	 * @param ruleName	Name of the rule set
@@ -813,7 +875,8 @@ export class TzDatabase {
 				if (ruleInfo.applicable(y)) {
 					result.push(new Transition(
 						ruleInfo.transitionTimeUtc(y, standardOffset, prevInfo),
-						ruleInfo.save));
+						ruleInfo.save,
+						ruleInfo.letter));
 				}
 				prevInfo = ruleInfo;
 			}
@@ -849,11 +912,13 @@ export class TzDatabase {
 		var prevUntilTm: TimeStruct = null;
 		var prevStdOffset: Duration = Duration.hours(0);
 		var prevDstOffset: Duration = Duration.hours(0);
+		var prevLetter: string = "";
 		for (var i = 0; i < zoneInfos.length; ++i) {
 			var zoneInfo = zoneInfos[i];
 			var untilTm: TimeStruct = (zoneInfo.until ? basics.unixToTimeNoLeapSecs(zoneInfo.until) : new TimeStruct(toYear + 1));
 			var stdOffset: Duration = prevStdOffset;
 			var dstOffset: Duration = prevDstOffset;
+			var letter: string = prevLetter;
 
 			// zone applicable?
 			if ((prevZone === null || prevZone.until < endMillis - 1)
@@ -864,19 +929,22 @@ export class TzDatabase {
 				switch (zoneInfo.ruleType) {
 					case RuleType.None:
 						dstOffset = Duration.hours(0);
+						letter = "";
 						break;
 					case RuleType.Offset:
 						dstOffset = zoneInfo.ruleOffset;
+						letter = "";
 						break;
 					case RuleType.RuleName:
 						// check whether the first rule takes effect immediately on the zone transition
-						// and yes this happens in the this._data (e.g. Lybia)
+						// (e.g. Lybia)
 						if (prevZone) {
 							var ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
 							ruleInfos.forEach((ruleInfo: RuleInfo): void => {
 								if (ruleInfo.applicable(prevUntilTm.year)) {
 									if (ruleInfo.transitionTimeUtc(prevUntilTm.year, stdOffset, null) === prevZone.until) {
 										dstOffset = ruleInfo.save;
+										letter = ruleInfo.letter;
 									}
 								}
 							});
@@ -886,7 +954,7 @@ export class TzDatabase {
 
 				// add a transition for the zone transition
 				var at: number = (prevZone ? prevZone.until : startMillis);
-				result.push(new Transition(at, stdOffset.add(dstOffset)));
+				result.push(new Transition(at, stdOffset.add(dstOffset), letter));
 
 				// add transitions for the zone rules in the range
 				if (zoneInfo.ruleType === RuleType.RuleName) {
@@ -895,7 +963,9 @@ export class TzDatabase {
 						prevUntilTm ? Math.max(prevUntilTm.year, fromYear) : fromYear,
 						Math.min(untilTm.year, toYear), stdOffset);
 					dstTransitions.forEach((transition: Transition): void => {
-						result.push(new Transition(transition.at, transition.offset.add(stdOffset)));
+						letter = transition.letter;
+						dstOffset = transition.offset;
+						result.push(new Transition(transition.at, transition.offset.add(stdOffset), transition.letter));
 					});
 				}
 			}
@@ -904,6 +974,7 @@ export class TzDatabase {
 			prevUntilTm = untilTm;
 			prevStdOffset = stdOffset;
 			prevDstOffset = dstOffset;
+			prevLetter = letter;
 		}
 
 		result.sort((a: Transition, b: Transition): number => {
@@ -926,8 +997,10 @@ export class TzDatabase {
 				return zoneInfo;
 			}
 		}
-		/* istanbul ignore next */
-		throw new Error("No zone info found");
+		/* istanbul ignore if */
+		if (true) {
+			throw new Error("No zone info found");
+		}
 	}
 
 	/**
@@ -989,6 +1062,7 @@ export class TzDatabase {
 
 		result.sort((a: ZoneInfo, b: ZoneInfo): number => {
 			// sort null last
+			/* istanbul ignore if */
 			if (a.until === null && b.until === null) {
 				return 0;
 			}
@@ -1045,7 +1119,7 @@ export class TzDatabase {
 				toType,
 				toYear,
 				rule[2],
-				<number>TzMonthNames[<string>rule[3]],
+				<number>(TzMonthNames[(<string>rule[3])]),
 				onType,
 				onDay,
 				onWeekDay,
@@ -1060,10 +1134,11 @@ export class TzDatabase {
 		}
 
 		result.sort((a: RuleInfo, b: RuleInfo): number => {
-			if (a.effectiveLess(b)) {
-				return -1;
-			} else if (a.effectiveEqual(b)) {
+			/* istanbul ignore if */
+			if (a.effectiveEqual(b)) {
 				return 0;
+			} else if (a.effectiveLess(b)) {
+				return -1;
 			} else {
 				return 1;
 			}
