@@ -33,11 +33,18 @@ import NormalizeOption = timezone.NormalizeOption;
 import TimeZone = timezone.TimeZone;
 import TimeZoneKind = timezone.TimeZoneKind;
 
+import dateTimeInterface = require("./datetime-interface");
+import DateTimeAccess = dateTimeInterface.DateTimeAccess;
+
+import format = require("./format");
+import Formatter = format.Formatter;
 /**
  * DateTime class which is time zone-aware
  * and which can be mocked for testing purposes.
  */
-export class DateTime {
+export class DateTime implements DateTimeAccess {
+
+	public static formatter: Formatter = new Formatter();
 
 	/**
 	 * Date object that contains the represented date converted to UTC in its
@@ -698,6 +705,12 @@ export class DateTime {
 			return s + TimeZone.offsetToString(this.offset()); // convert IANA name to offset
 		} else {
 			return s; // no zone present
+		}
+	}
+
+	public format(formatString: string): string {
+		if (DateTime.formatter) {
+			return DateTime.formatter.format(this, formatString);
 		}
 	}
 

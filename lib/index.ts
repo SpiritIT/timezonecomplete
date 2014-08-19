@@ -45,5 +45,3 @@ import timezone = require("./timezone"); timezone;
 export import NormalizeOption = timezone.NormalizeOption;
 export import TimeZoneKind = timezone.TimeZoneKind;
 export import TimeZone = timezone.TimeZone;
-
-

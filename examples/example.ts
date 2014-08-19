@@ -13,3 +13,4 @@ console.log(d);
 console.log(tz);
 console.log(dt);
 console.log(p);
+console.log(dt.format("dd/MM/yyy HH:mm:ss"));
