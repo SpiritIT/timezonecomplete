@@ -27,6 +27,9 @@ var DateTimeDummy = (function () {
     DateTimeDummy.prototype.weekNumber = function () {
         return this.dateWeek;
     };
+    DateTimeDummy.prototype.weekOfMonth = function () {
+        return this.dateWeekOfMonth;
+    };
     DateTimeDummy.prototype.dayOfYear = function () {
         return this.dateDayOfYear;
     };
@@ -42,6 +45,9 @@ var DateTimeDummy = (function () {
     };
     DateTimeDummy.prototype.millisecond = function () {
         return this.dateMilli;
+    };
+    DateTimeDummy.prototype.secondOfDay = function () {
+        return this.dateSecondOfDay;
     };
 
     DateTimeDummy.prototype.zone = function () {
@@ -65,6 +71,7 @@ describe("Formatter", function () {
             expect(result).to.equal("abcdefghijklmnopqrstuvwxyz");
         });
     });
+
     describe("formatEra", function () {
         it("should return BC for years > 0", function () {
             dateTime.dateYear = -1;
@@ -207,6 +214,11 @@ describe("Formatter", function () {
             dateTime.dateWeek = 45;
             var result = formatter.format(dateTime, "ww");
             expect(result).to.equal("45");
+        });
+        it("should format the month week number with W", function () {
+            dateTime.dateWeekOfMonth = 4;
+            var result = formatter.format(dateTime, "W");
+            expect(result).to.equal("4");
         });
     });
 
@@ -438,6 +450,12 @@ describe("Formatter", function () {
             dateTime.dateMilli = 44;
             var result = formatter.format(dateTime, "SSSS");
             expect(result).to.equal("0440");
+        });
+
+        it("should get the seconds of a day for format A", function () {
+            dateTime.dateSecondOfDay = 11765;
+            var result = formatter.format(dateTime, "A");
+            expect(result).to.equal("11765");
         });
     });
 

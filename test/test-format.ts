@@ -17,7 +17,9 @@ class DateTimeDummy implements datetimeInterface.DateTimeAccess {
 	dateWeek: number;
 	dateDay: number;
 	dateWeekDay: basics.WeekDay;
+	dateWeekOfMonth: number;
 	dateDayOfYear: number;
+	dateSecondOfDay: number;
 
 	dateHour: number;
 	dateMinute: number;
@@ -31,12 +33,14 @@ class DateTimeDummy implements datetimeInterface.DateTimeAccess {
 	day(): number { return this.dateDay; }
 	weekDay(): basics.WeekDay { return this.dateWeekDay; }
 	weekNumber(): number { return this.dateWeek; }
+	weekOfMonth(): number { return this.dateWeekOfMonth; }
 	dayOfYear(): number { return this.dateDayOfYear; }
 
 	hour(): number { return this.dateHour; }
 	minute(): number { return this.dateMinute; }
 	second(): number { return this.dateSecond; }
 	millisecond(): number { return this.dateMilli; }
+	secondOfDay(): number { return this.dateSecondOfDay; }
 
 	zone(): timeZone.TimeZone { return this.dateZone; }
 }
@@ -200,6 +204,12 @@ describe("Formatter", (): void => {
 			var result = formatter.format(dateTime, "ww");
 			expect(result).to.equal("45");
 		});
+		it("should format the month week number with W", (): void => {
+			dateTime.dateWeekOfMonth = 4;
+			var result = formatter.format(dateTime, "W");
+			expect(result).to.equal("4");
+		});
+
 	});
 
 	describe("formatDay", (): void => {
@@ -431,6 +441,12 @@ describe("Formatter", (): void => {
 			dateTime.dateMilli = 44;
 			var result = formatter.format(dateTime, "SSSS");
 			expect(result).to.equal("0440");
+		});
+
+		it("should get the seconds of a day for format A", (): void => {
+			dateTime.dateSecondOfDay = 11765;
+			var result = formatter.format(dateTime, "A");
+			expect(result).to.equal("11765");
 		});
 	});
 

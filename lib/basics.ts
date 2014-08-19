@@ -192,6 +192,45 @@ export function weekDayOnOrBefore(year: number, month: number, day: number, week
 	return start.day + diff;
 }
 
+export function weekOfMonth(year: number, month: number, day: number): number {
+	var firstThursday = firstWeekDayOfMonth(year, month, WeekDay.Thursday);
+	var firstMonday = firstWeekDayOfMonth(year, month, WeekDay.Monday);
+	// Corner case: check if we are in week 1 or last week of previous month
+	if (day < firstMonday) {
+		if (firstThursday < firstMonday) {
+			// Week 1
+			return 1;
+		} else {
+			// Last week of previous month
+			if (month > 1) {
+				// Default case
+				return weekOfMonth(year, month - 1, 31);
+			} else {
+				// January
+				return weekOfMonth(year - 1, 12, 31);
+			}
+		}
+	}
+
+	var lastMonday = lastWeekDayOfMonth(year, month, WeekDay.Monday);
+	var lastThursday = lastWeekDayOfMonth(year, month, WeekDay.Thursday);
+	// Corner case: check if we are in last week or week 1 of previous month
+	if (day >= lastMonday) {
+		if (lastMonday > lastThursday) {
+			// Week 1 of previous month
+			return 1;
+		}
+	}
+
+	// Normal case
+	var result = Math.floor((day - firstMonday) / 7) + 1;
+	if (firstThursday < 4) {
+		result += 1;
+	}
+
+	return result;
+}
+
 /**
  * Returns the day-of-year of the Monday of week 1 in the given year.
  * Note that the result may lie in the previous year, in which case it
@@ -383,6 +422,10 @@ export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
 	var epochDay: WeekDay = WeekDay.Thursday;
 	var days = Math.floor(unixMillis / 1000 / 86400);
 	return (epochDay + days) % 7;
+}
+
+export function secondInDay(hour: number, minute: number, second: number): number {
+	return (((hour * 60) + minute) * 60) + second;
 }
 
 /**

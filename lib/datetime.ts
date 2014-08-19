@@ -349,6 +349,27 @@ export class DateTime implements DateTimeAccess {
 	}
 
 	/**
+	 * The week of this month. There is no official standard for this,
+	 * but we assume the same rules for the weekNumber (i.e. 
+	 * week 1 is the week that has the 4th day of the month in it)
+	 *
+	 * @return Week number [1-5]
+	 */
+	public weekOfMonth(): number {
+		return basics.weekOfMonth(this.year(), this.month(), this.day());
+	}
+
+	/**
+	 * Returns the number of seconds that have passed on the current day
+	 * Does not consider leap seconds
+	 * 
+	 * @return seconds [0-86399]
+	 */
+	public secondOfDay(): number {
+		return basics.secondInDay(this.hour(), this.month(), this.day());
+	}
+
+	/**
 	 * @return Milliseconds since 1970-01-01T00:00:00.000Z
 	 */
 	public unixUtcMillis(): number {
@@ -421,6 +442,27 @@ export class DateTime implements DateTimeAccess {
 	 */
 	public utcWeekNumber(): number {
 		return basics.weekNumber(this.utcYear(), this.utcMonth(), this.utcDay());
+	}
+
+	/**
+	 * The week of this month. There is no official standard for this,
+	 * but we assume the same rules for the weekNumber (i.e. 
+	 * week 1 is the week that has the 4th day of the month in it)
+	 *
+	 * @return Week number [1-5]
+	 */
+	public utcWeekOfMonth(): number {
+		return basics.weekOfMonth(this.utcYear(), this.utcMonth(), this.utcDay());
+	}
+
+	/**
+	 * Returns the number of seconds that have passed on the current day
+	 * Does not consider leap seconds
+	 * 
+	 * @return seconds [0-86399]
+	 */
+	public utcSecondOfDay(): number {
+		return basics.secondInDay(this.utcHour(), this.utcMonth(), this.utcDay());
 	}
 
 	/**

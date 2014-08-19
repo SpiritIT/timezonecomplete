@@ -123,9 +123,7 @@ export class Formatter {
 		if (token.symbol === "w") {
 			return strings.padLeft(dateTime.weekNumber().toString(), token.length, "0");
 		} else {
-			// return strings.padLeft(dateTime.weekOfMonth().toString(), token.length, "0");
-			// TODO: Week of month is not implemented yet in DateTime
-			return "-1";
+			return strings.padLeft(dateTime.weekOfMonth().toString(), token.length, "0");
 		}
 	}
 
@@ -200,9 +198,7 @@ export class Formatter {
 				fractionString = strings.padRight(fractionString, token.length, "0");
 				return fractionString.slice(0, token.length);
 			case "A":
-				// return strings.padLeft(dateTime.secondOfDay().toString(), token.length, "0");
-				// TODO: Second of day is not implemented yet in DateTime
-				return "-1";
+				return strings.padLeft(dateTime.secondOfDay().toString(), token.length, "0");
 		}
 	}
 
