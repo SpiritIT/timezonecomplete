@@ -4,735 +4,849 @@ import chai = require("chai");
 import expect = chai.expect;
 
 import format = require("../lib/format");
-import datetimeInterface = require("../lib/datetime-interface");
 import timeZone = require("../lib/timezone");
 import basics = require("../lib/basics");
 
 /*
- * Dummy implementation of a DateTimeAccess class, for testing the Formatter
+ * Dummy implementation of a DateTimeAccess class, for testing the format
  */
-class DateTimeDummy implements datetimeInterface.DateTimeAccess {
-	dateYear: number;
-	dateMonth: number;
-	dateWeek: number;
-	dateDay: number;
-	dateWeekDay: basics.WeekDay;
-	dateWeekOfMonth: number;
-	dateDayOfYear: number;
-	dateSecondOfDay: number;
 
-	dateHour: number;
-	dateMinute: number;
-	dateSecond: number;
-	dateMilli: number;
+describe("format", (): void => {
+	var dateTime: basics.TimeStruct;
+	var utcTime: basics.TimeStruct;
+	var localZone: timeZone.TimeZone;
 
-	dateZone: timeZone.TimeZone;
-	dateOffset: number;
-
-	year(): number { return this.dateYear; }
-	month(): number { return this.dateMonth; }
-	day(): number { return this.dateDay; }
-	weekDay(): basics.WeekDay { return this.dateWeekDay; }
-	weekNumber(): number { return this.dateWeek; }
-	weekOfMonth(): number { return this.dateWeekOfMonth; }
-	dayOfYear(): number { return this.dateDayOfYear; }
-
-	hour(): number { return this.dateHour; }
-	minute(): number { return this.dateMinute; }
-	second(): number { return this.dateSecond; }
-	millisecond(): number { return this.dateMilli; }
-	secondOfDay(): number { return this.dateSecondOfDay; }
-	offset(): number { return this.dateOffset; }
-	zone(): timeZone.TimeZone { return this.dateZone; }
-}
-
-describe("Formatter", (): void => {
-	var dateTime: DateTimeDummy;
-	var formatter: format.Formatter;
 	beforeEach((): void => {
-		dateTime = new DateTimeDummy();
-		formatter = new format.Formatter();
+		dateTime = new basics.TimeStruct();
 	});
 
 	describe("identity", (): void => {
 		it("should return the raw contents", (): void => {
-			dateTime.dateYear = 18;
-			var result = formatter.format(dateTime, "'abcdefghijklmnopqrstuvwxyz'");
+			dateTime.year = 18;
+			var result = format.format(dateTime, utcTime, localZone, "'abcdefghijklmnopqrstuvwxyz'");
 			expect(result).to.equal("abcdefghijklmnopqrstuvwxyz");
 		});
 	});
 
 	describe("formatEra", (): void => {
 		it("should return BC for years > 0", (): void => {
-			dateTime.dateYear = -1;
-			var result = formatter.format(dateTime, "G");
+			dateTime.year = -1;
+			var result = format.format(dateTime, utcTime, localZone, "G");
 			expect(result).to.equal("BC");
 		});
 		it("should return AD for years < 0", (): void => {
-			dateTime.dateYear = 1;
-			var result = formatter.format(dateTime, "G");
+			dateTime.year = 1;
+			var result = format.format(dateTime, utcTime, localZone, "G");
 			expect(result).to.equal("AD");
 		});
 		it("should return Before Christ for years > 0", (): void => {
-			dateTime.dateYear = -1;
-			var result = formatter.format(dateTime, "GGGG");
+			dateTime.year = -1;
+			var result = format.format(dateTime, utcTime, localZone, "GGGG");
 			expect(result).to.equal("Before Christ");
 		});
 		it("should return Anno Domini for years < 0", (): void => {
-			dateTime.dateYear = 1;
-			var result = formatter.format(dateTime, "GGGG");
+			dateTime.year = 1;
+			var result = format.format(dateTime, utcTime, localZone, "GGGG");
 			expect(result).to.equal("Anno Domini");
 		});
 		it("should return B for years > 0", (): void => {
-			dateTime.dateYear = -1;
-			var result = formatter.format(dateTime, "GGGGG");
+			dateTime.year = -1;
+			var result = format.format(dateTime, utcTime, localZone, "GGGGG");
 			expect(result).to.equal("B");
 		});
 		it("should return A for years < 0", (): void => {
-			dateTime.dateYear = 1;
-			var result = formatter.format(dateTime, "GGGGG");
+			dateTime.year = 1;
+			var result = format.format(dateTime, utcTime, localZone, "GGGGG");
 			expect(result).to.equal("A");
 		});
 	});
 
 	describe("formatYear", (): void => {
 		it("should return at least one digit year for y", (): void => {
-			dateTime.dateYear = 123;
-			var result = formatter.format(dateTime, "y");
+			dateTime.year = 123;
+			var result = format.format(dateTime, utcTime, localZone, "y");
 			expect(result).to.equal("123");
 		});
 		it("should return at least two digit year for yy", (): void => {
-			dateTime.dateYear = 3;
-			var result = formatter.format(dateTime, "yy");
+			dateTime.year = 3;
+			var result = format.format(dateTime, utcTime, localZone, "yy");
 			expect(result).to.equal("03");
 		});
 		it("should return exactly two digit year for yy", (): void => {
-			dateTime.dateYear = 1997;
-			var result = formatter.format(dateTime, "yy");
+			dateTime.year = 1997;
+			var result = format.format(dateTime, utcTime, localZone, "yy");
 			expect(result).to.equal("97");
 		});
 		it("should pad to four digit year for yyyy", (): void => {
-			dateTime.dateYear = 123;
-			var result = formatter.format(dateTime, "yyyy");
+			dateTime.year = 123;
+			var result = format.format(dateTime, utcTime, localZone, "yyyy");
 			expect(result).to.equal("0123");
 		});
 		it("should return at least four digit year for yyyy", (): void => {
-			dateTime.dateYear = 12345;
-			var result = formatter.format(dateTime, "yyyy");
+			dateTime.year = 12345;
+			var result = format.format(dateTime, utcTime, localZone, "yyyy");
 			expect(result).to.equal("12345");
 		});
 	});
 
 	describe("formatQuarter", (): void => {
 		it("should return the numerical value of the quarter of q", (): void => {
-			dateTime.dateMonth = 1;
-			var result = formatter.format(dateTime, "q");
+			dateTime.month = 1;
+			var result = format.format(dateTime, utcTime, localZone, "q");
 			expect(result).to.equal("01");
 		});
 		it("should return the numerical value of the quarter of qq", (): void => {
-			dateTime.dateMonth = 3;
-			var result = formatter.format(dateTime, "qq");
+			dateTime.month = 3;
+			var result = format.format(dateTime, utcTime, localZone, "qq");
 			expect(result).to.equal("01");
 		});
 		it("should return the short value of the quarter of qqq", (): void => {
-			dateTime.dateMonth = 4;
-			var result = formatter.format(dateTime, "qqq");
+			dateTime.month = 4;
+			var result = format.format(dateTime, utcTime, localZone, "qqq");
 			expect(result).to.equal("Q2");
 		});
 		it("should return the long value of the quarter of qqqq", (): void => {
-			dateTime.dateMonth = 12;
-			var result = formatter.format(dateTime, "qqqq");
+			dateTime.month = 12;
+			var result = format.format(dateTime, utcTime, localZone, "qqqq");
 			expect(result).to.equal("4th quarter");
 		});
 		it("should return only the number of the quarter of qqqq", (): void => {
-			dateTime.dateMonth = 9;
-			var result = formatter.format(dateTime, "qqqqq");
+			dateTime.month = 9;
+			var result = format.format(dateTime, utcTime, localZone, "qqqqq");
 			expect(result).to.equal("3");
 		});
 	});
 
 	describe("formatMonth", (): void => {
 		it("should return just the number of the month for M", (): void => {
-			dateTime.dateMonth = 9;
-			var result = formatter.format(dateTime, "M");
+			dateTime.month = 9;
+			var result = format.format(dateTime, utcTime, localZone, "M");
 			expect(result).to.equal("9");
 		});
 		it("should return just the number of the month for M", (): void => {
-			dateTime.dateMonth = 11;
-			var result = formatter.format(dateTime, "M");
+			dateTime.month = 11;
+			var result = format.format(dateTime, utcTime, localZone, "M");
 			expect(result).to.equal("11");
 		});
 		it("should return just the number of the month for MM, padded to two characters", (): void => {
-			dateTime.dateMonth = 3;
-			var result = formatter.format(dateTime, "MM");
+			dateTime.month = 3;
+			var result = format.format(dateTime, utcTime, localZone, "MM");
 			expect(result).to.equal("03");
 		});
 		it("should return the shortened name of the month with MMM", (): void => {
-			dateTime.dateMonth = 8;
-			var result = formatter.format(dateTime, "MMM");
+			dateTime.month = 8;
+			var result = format.format(dateTime, utcTime, localZone, "MMM");
 			expect(result).to.equal("Aug");
 		});
 		it("should return the full name of the month with MMMM", (): void => {
-			dateTime.dateMonth = 2;
-			var result = formatter.format(dateTime, "MMMM");
+			dateTime.month = 2;
+			var result = format.format(dateTime, utcTime, localZone, "MMMM");
 			expect(result).to.equal("February");
 		});
 		it("should return the narrow name of the month with MMMMM", (): void => {
-			dateTime.dateMonth = 11;
-			var result = formatter.format(dateTime, "MMMMM");
+			dateTime.month = 11;
+			var result = format.format(dateTime, utcTime, localZone, "MMMMM");
 			expect(result).to.equal("N");
 		});
 	});
 
 	describe("formatWeek", (): void => {
 		it("should format the week number with w", (): void => {
-			dateTime.dateWeek = 3;
-			var result = formatter.format(dateTime, "w");
-			expect(result).to.equal("3");
+			dateTime.year = 2014;
+			dateTime.month = 1;
+			dateTime.day = 4;
+			var result = format.format(dateTime, utcTime, localZone, "w");
+			expect(result).to.equal("1");
 		});
 		it("should format the week number with w", (): void => {
-			dateTime.dateWeek = 16;
-			var result = formatter.format(dateTime, "w");
-			expect(result).to.equal("16");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 17;
+			var result = format.format(dateTime, utcTime, localZone, "w");
+			expect(result).to.equal("33");
 		});
 		it("should format the week number with ww", (): void => {
-			dateTime.dateWeek = 8;
-			var result = formatter.format(dateTime, "ww");
-			expect(result).to.equal("08");
+			dateTime.year = 2014;
+			dateTime.month = 1;
+			dateTime.day = 4;
+			var result = format.format(dateTime, utcTime, localZone, "ww");
+			expect(result).to.equal("01");
 		});
 		it("should format the week number with ww", (): void => {
-			dateTime.dateWeek = 45;
-			var result = formatter.format(dateTime, "ww");
-			expect(result).to.equal("45");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 17;
+			var result = format.format(dateTime, utcTime, localZone, "ww");
+			expect(result).to.equal("33");
 		});
 		it("should format the month week number with W", (): void => {
-			dateTime.dateWeekOfMonth = 4;
-			var result = formatter.format(dateTime, "W");
-			expect(result).to.equal("4");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 17;
+			var result = format.format(dateTime, utcTime, localZone, "W");
+			expect(result).to.equal("2");
 		});
 
 	});
 
 	describe("formatDay", (): void => {
 		it("should return the number of the day with d", (): void => {
-			dateTime.dateDay = 8;
-			var result = formatter.format(dateTime, "d");
+			dateTime.day = 8;
+			var result = format.format(dateTime, utcTime, localZone, "d");
 			expect(result).to.equal("8");
 		});
 		it("should return the number of the day with d", (): void => {
-			dateTime.dateDay = 25;
-			var result = formatter.format(dateTime, "d");
+			dateTime.day = 25;
+			var result = format.format(dateTime, utcTime, localZone, "d");
 			expect(result).to.equal("25");
 		});
 		it("should return the number of the day with dd, padded to two characters", (): void => {
-			dateTime.dateDay = 6;
-			var result = formatter.format(dateTime, "dd");
+			dateTime.day = 6;
+			var result = format.format(dateTime, utcTime, localZone, "dd");
 			expect(result).to.equal("06");
 		});
 		it("should return the day of the year with D", (): void => {
-			dateTime.dateDayOfYear = 105;
-			var result = formatter.format(dateTime, "D");
-			expect(result).to.equal("105");
+			dateTime.year = 2014;
+			dateTime.month = 2;
+			dateTime.day = 1;
+			var result = format.format(dateTime, utcTime, localZone, "D");
+			expect(result).to.equal("32");
 		});
 		it("should return the day of the year with DD", (): void => {
-			dateTime.dateDayOfYear = 6;
-			var result = formatter.format(dateTime, "DD");
-			expect(result).to.equal("06");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 17;
+			var result = format.format(dateTime, utcTime, localZone, "DD");
+			expect(result).to.equal("229");
 		});
 
 	});
 
 	describe("formatWeekday", (): void => {
 		it("should return the abbreviated name for E", (): void => {
-			dateTime.dateWeekDay = basics.WeekDay.Saturday;
-			var result = formatter.format(dateTime, "E");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 16;
+			var result = format.format(dateTime, utcTime, localZone, "E");
 			expect(result).to.equal("Sat");
 		});
 		it("should return the abbreviated name for EE", (): void => {
-			dateTime.dateWeekDay = basics.WeekDay.Thursday;
-			var result = formatter.format(dateTime, "EE");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 21;
+			var result = format.format(dateTime, utcTime, localZone, "EE");
 			expect(result).to.equal("Thu");
 		});
 		it("should return the abbreviated name for EEE", (): void => {
-			dateTime.dateWeekDay = basics.WeekDay.Monday;
-			var result = formatter.format(dateTime, "EEE");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 18;
+			var result = format.format(dateTime, utcTime, localZone, "EEE");
 			expect(result).to.equal("Mon");
 		});
 		it("should return the full name for EEEE", (): void => {
-			dateTime.dateWeekDay = basics.WeekDay.Wednesday;
-			var result = formatter.format(dateTime, "EEEE");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 20;
+			var result = format.format(dateTime, utcTime, localZone, "EEEE");
 			expect(result).to.equal("Wednesday");
 		});
 		it("should return the narrow name for EEEEE", (): void => {
-			dateTime.dateWeekDay = basics.WeekDay.Friday;
-			var result = formatter.format(dateTime, "EEEEE");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 15;
+			var result = format.format(dateTime, utcTime, localZone, "EEEEE");
 			expect(result).to.equal("F");
 		});
 		it("should return the short name for EEEEEE", (): void => {
-			dateTime.dateWeekDay = basics.WeekDay.Sunday;
-			var result = formatter.format(dateTime, "EEEEEE");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 17;
+			var result = format.format(dateTime, utcTime, localZone, "EEEEEE");
 			expect(result).to.equal("Su");
 		});
 
 		it("should return the weekday number for e", (): void => {
-			dateTime.dateWeekDay = basics.WeekDay.Tuesday;
-			var result = formatter.format(dateTime, "e");
+			dateTime.year = 2014;
+			dateTime.month = 8;
+			dateTime.day = 19;
+			var result = format.format(dateTime, utcTime, localZone, "e");
 			expect(result).to.equal("2");
 		});
 	});
 
 	describe("formatDayPeriod", (): void => {
 		it("should return AM for the morning", (): void => {
-			dateTime.dateHour = 11;
-			var result = formatter.format(dateTime, "a");
+			dateTime.hour = 11;
+			var result = format.format(dateTime, utcTime, localZone, "a");
 			expect(result).to.equal("AM");
 		});
 		it("should return PM for the afternoon", (): void => {
-			dateTime.dateHour = 23;
-			var result = formatter.format(dateTime, "a");
+			dateTime.hour = 23;
+			var result = format.format(dateTime, utcTime, localZone, "a");
 			expect(result).to.equal("PM");
 		});
 	});
 
 	describe("formatHour", (): void => {
 		it("should return 1-12 hour period for format h", (): void => {
-			dateTime.dateHour = 0;
-			var result = formatter.format(dateTime, "h");
+			dateTime.hour = 0;
+			var result = format.format(dateTime, utcTime, localZone, "h");
 			expect(result).to.equal("12");
 		});
 		it("should return 1-12 hour period for format h", (): void => {
-			dateTime.dateHour = 22;
-			var result = formatter.format(dateTime, "h");
+			dateTime.hour = 22;
+			var result = format.format(dateTime, utcTime, localZone, "h");
 			expect(result).to.equal("10");
 		});
 		it("should return 1-12 hour period for format hh, padding to two characters", (): void => {
-			dateTime.dateHour = 1;
-			var result = formatter.format(dateTime, "hh");
+			dateTime.hour = 1;
+			var result = format.format(dateTime, utcTime, localZone, "hh");
 			expect(result).to.equal("01");
 		});
 		it("should return 1-12 hour period for format hh", (): void => {
-			dateTime.dateHour = 20;
-			var result = formatter.format(dateTime, "hh");
+			dateTime.hour = 20;
+			var result = format.format(dateTime, utcTime, localZone, "hh");
 			expect(result).to.equal("08");
 		});
 		it("should return 0-11 hour period for format K", (): void => {
-			dateTime.dateHour = 0;
-			var result = formatter.format(dateTime, "K");
+			dateTime.hour = 0;
+			var result = format.format(dateTime, utcTime, localZone, "K");
 			expect(result).to.equal("0");
 		});
 		it("should return 0-11 hour period for format K", (): void => {
-			dateTime.dateHour = 22;
-			var result = formatter.format(dateTime, "K");
+			dateTime.hour = 22;
+			var result = format.format(dateTime, utcTime, localZone, "K");
 			expect(result).to.equal("10");
 		});
 		it("should return 0-11 hour period for format KK, padding to two characters", (): void => {
-			dateTime.dateHour = 1;
-			var result = formatter.format(dateTime, "KK");
+			dateTime.hour = 1;
+			var result = format.format(dateTime, utcTime, localZone, "KK");
 			expect(result).to.equal("01");
 		});
 		it("should return 0-11 hour period for format KK", (): void => {
-			dateTime.dateHour = 20;
-			var result = formatter.format(dateTime, "KK");
+			dateTime.hour = 20;
+			var result = format.format(dateTime, utcTime, localZone, "KK");
 			expect(result).to.equal("08");
 		});
 
 		it("should return 1-24 hour period for format k", (): void => {
-			dateTime.dateHour = 0;
-			var result = formatter.format(dateTime, "k");
+			dateTime.hour = 0;
+			var result = format.format(dateTime, utcTime, localZone, "k");
 			expect(result).to.equal("24");
 		});
 		it("should return 1-24 hour period for format k", (): void => {
-			dateTime.dateHour = 22;
-			var result = formatter.format(dateTime, "k");
+			dateTime.hour = 22;
+			var result = format.format(dateTime, utcTime, localZone, "k");
 			expect(result).to.equal("22");
 		});
 		it("should return 1-24 hour period for format kk, padding to two characters", (): void => {
-			dateTime.dateHour = 1;
-			var result = formatter.format(dateTime, "kk");
+			dateTime.hour = 1;
+			var result = format.format(dateTime, utcTime, localZone, "kk");
 			expect(result).to.equal("01");
 		});
 		it("should return 1-24 hour period for format kk", (): void => {
-			dateTime.dateHour = 20;
-			var result = formatter.format(dateTime, "kk");
+			dateTime.hour = 20;
+			var result = format.format(dateTime, utcTime, localZone, "kk");
 			expect(result).to.equal("20");
 		});
 		it("should return 0-23 hour period for format H", (): void => {
-			dateTime.dateHour = 0;
-			var result = formatter.format(dateTime, "H");
+			dateTime.hour = 0;
+			var result = format.format(dateTime, utcTime, localZone, "H");
 			expect(result).to.equal("0");
 		});
 		it("should return 0-23 hour period for format H", (): void => {
-			dateTime.dateHour = 22;
-			var result = formatter.format(dateTime, "H");
+			dateTime.hour = 22;
+			var result = format.format(dateTime, utcTime, localZone, "H");
 			expect(result).to.equal("22");
 		});
 		it("should return 0-23 hour period for format HH, padding to two characters", (): void => {
-			dateTime.dateHour = 1;
-			var result = formatter.format(dateTime, "HH");
+			dateTime.hour = 1;
+			var result = format.format(dateTime, utcTime, localZone, "HH");
 			expect(result).to.equal("01");
 		});
 		it("should return 0-23 hour period for format HH", (): void => {
-			dateTime.dateHour = 20;
-			var result = formatter.format(dateTime, "HH");
+			dateTime.hour = 20;
+			var result = format.format(dateTime, utcTime, localZone, "HH");
 			expect(result).to.equal("20");
 		});
 	});
 
 	describe("formatMinute", (): void => {
 		it("should format minutes for format m", (): void => {
-			dateTime.dateMinute = 5;
-			var result = formatter.format(dateTime, "m");
+			dateTime.minute = 5;
+			var result = format.format(dateTime, utcTime, localZone, "m");
 			expect(result).to.equal("5");
 		});
 		it("should format minutes for format m", (): void => {
-			dateTime.dateMinute = 38;
-			var result = formatter.format(dateTime, "m");
+			dateTime.minute = 38;
+			var result = format.format(dateTime, utcTime, localZone, "m");
 			expect(result).to.equal("38");
 		});
 		it("should format minutes for format mm, padding to two characters", (): void => {
-			dateTime.dateMinute = 5;
-			var result = formatter.format(dateTime, "mm");
+			dateTime.minute = 5;
+			var result = format.format(dateTime, utcTime, localZone, "mm");
 			expect(result).to.equal("05");
 		});
 		it("should format minutes for format mm", (): void => {
-			dateTime.dateMinute = 38;
-			var result = formatter.format(dateTime, "mm");
+			dateTime.minute = 38;
+			var result = format.format(dateTime, utcTime, localZone, "mm");
 			expect(result).to.equal("38");
 		});
 	});
 
 	describe("formatSecond", (): void => {
 		it("should format seconds for format s", (): void => {
-			dateTime.dateSecond = 5;
-			var result = formatter.format(dateTime, "s");
+			dateTime.second = 5;
+			var result = format.format(dateTime, utcTime, localZone, "s");
 			expect(result).to.equal("5");
 		});
 		it("should format seconds for format s", (): void => {
-			dateTime.dateSecond = 38;
-			var result = formatter.format(dateTime, "s");
+			dateTime.second = 38;
+			var result = format.format(dateTime, utcTime, localZone, "s");
 			expect(result).to.equal("38");
 		});
 		it("should format seconds for format ss, padding to two characters", (): void => {
-			dateTime.dateSecond = 5;
-			var result = formatter.format(dateTime, "ss");
+			dateTime.second = 5;
+			var result = format.format(dateTime, utcTime, localZone, "ss");
 			expect(result).to.equal("05");
 		});
 		it("should format seconds for format ss", (): void => {
-			dateTime.dateSecond = 38;
-			var result = formatter.format(dateTime, "ss");
+			dateTime.second = 38;
+			var result = format.format(dateTime, utcTime, localZone, "ss");
 			expect(result).to.equal("38");
 		});
 
 		it("should get the fraction of a second for format S", (): void => {
-			dateTime.dateMilli = 388;
-			var result = formatter.format(dateTime, "S");
+			dateTime.milli = 388;
+			var result = format.format(dateTime, utcTime, localZone, "S");
 			expect(result).to.equal("3");
 		});
 		it("should get the fraction of a second for format SS", (): void => {
-			dateTime.dateMilli = 2;
-			var result = formatter.format(dateTime, "SS");
+			dateTime.milli = 2;
+			var result = format.format(dateTime, utcTime, localZone, "SS");
 			expect(result).to.equal("00");
 		});
 		it("should get the fraction of a second for format SSS", (): void => {
-			dateTime.dateMilli = 891;
-			var result = formatter.format(dateTime, "SSS");
+			dateTime.milli = 891;
+			var result = format.format(dateTime, utcTime, localZone, "SSS");
 			expect(result).to.equal("891");
 		});
 		it("should get the fraction of a second for format SSSS", (): void => {
-			dateTime.dateMilli = 44;
-			var result = formatter.format(dateTime, "SSSS");
+			dateTime.milli = 44;
+			var result = format.format(dateTime, utcTime, localZone, "SSSS");
 			expect(result).to.equal("0440");
 		});
 
 		it("should get the seconds of a day for format A", (): void => {
-			dateTime.dateSecondOfDay = 11765;
-			var result = formatter.format(dateTime, "A");
-			expect(result).to.equal("11765");
+			dateTime.hour = 3;
+			dateTime.minute = 14;
+			dateTime.second = 15;
+			var result = format.format(dateTime, utcTime, localZone, "A");
+			expect(result).to.equal("11655");
 		});
 	});
 
 	describe("formatTimeZone", (): void => {
 		it("should get the short specific name of the timezone for format z", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 7;
-			var result = formatter.format(dateTime, "z");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "z");
 			expect(result).to.equal("CEST");
 		});
 		it("should get the short specific name of the timezone for format z", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 2;
-			var result = formatter.format(dateTime, "z");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			dateTime.month = 2;
+			var result = format.format(dateTime, utcTime, localZone, "z");
 			expect(result).to.equal("CET");
 		});
 		it("should get the long specific name of the timezone for format zzzz", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 7;
-			var result = formatter.format(dateTime, "zzzz");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "zzzz");
 			expect(result).to.equal("Central European Summer Time");
 		});
 		it("should get the long specific name of the timezone for format zzzz", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 7;
-			var result = formatter.format(dateTime, "zzzz");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "zzzz");
 			expect(result).to.equal("Central European Time");
 		});
 
 		it("should get the short specific name of the timezone for format O", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 7;
-			var result = formatter.format(dateTime, "O");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "O");
 			expect(result).to.equal("GMT+2");
 		});
 		it("should get the short specific name of the timezone for format O", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 60;
-			dateTime.dateMonth = 2;
-			var result = formatter.format(dateTime, "O");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (60 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "O");
 			expect(result).to.equal("GMT+1");
 		});
 		it("should get the short specific name of the timezone for format OOOO", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 7;
-			var result = formatter.format(dateTime, "OOOO");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (60 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "OOOO");
 			expect(result).to.equal("GMT+2:00");
 		});
 		it("should get the short specific name of the timezone for format OOOO", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 60;
-			dateTime.dateMonth = 2;
-			var result = formatter.format(dateTime, "OOOO");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (60 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "OOOO");
 			expect(result).to.equal("GMT+1:00");
 		});
 
 		it("should get the short specific name of the timezone for format v", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 7;
-			var result = formatter.format(dateTime, "z");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "z");
 			expect(result).to.equal("CET");
 		});
 		it("should get the short specific name of the timezone for format v", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 2;
-			var result = formatter.format(dateTime, "z");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "z");
 			expect(result).to.equal("CET");
 		});
 		it("should get the long specific name of the timezone for format vvvv", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 7;
-			var result = formatter.format(dateTime, "vvvv");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "vvvv");
 			expect(result).to.equal("Central European Time");
 		});
 		it("should get the long specific name of the timezone for format vvvv", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			dateTime.dateMonth = 7;
-			var result = formatter.format(dateTime, "vvvv");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "vvvv");
 			expect(result).to.equal("Central European Time");
 		});
 
 		it("should get the long Timezone ID for format VV", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 120;
-			var result = formatter.format(dateTime, "VV");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "VV");
 			expect(result).to.equal("Europe/Amsterdam");
 		});
 
 		it("should get the basic ISO format for format X with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "X");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "X");
 			expect(result).to.equal("+0230");
 		});
 		it("should get the basic ISO format for format X with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "X");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "X");
 			expect(result).to.equal("-08");
 		});
 		it("should get the basic ISO format for format X with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "X");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "X");
 			expect(result).to.equal("Z");
 		});
 
 		it("should get the basic ISO format for format XX with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "XX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XX");
 			expect(result).to.equal("+0230");
 		});
 		it("should get the basic ISO format for format XX with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "XX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XX");
 			expect(result).to.equal("-0800");
 		});
 		it("should get the basic ISO format for format XX with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "XX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XX");
 			expect(result).to.equal("Z");
 		});
 
 		it("should get the basic ISO format for format XXX with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "XXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXX");
 			expect(result).to.equal("+02:30");
 		});
 		it("should get the basic ISO format for format XXX with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "XXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXX");
 			expect(result).to.equal("-08:00");
 		});
 		it("should get the basic ISO format for format XXX with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "XXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXX");
 			expect(result).to.equal("Z");
 		});
 
 		it("should get the basic ISO format for format XXXX with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "XXXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXXX");
 			expect(result).to.equal("+0230");
 		});
 		it("should get the basic ISO format for format XXXX with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "XXXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXXX");
 			expect(result).to.equal("-0800");
 		});
 		it("should get the basic ISO format for format XXXX with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "XXXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXXX");
 			expect(result).to.equal("Z");
 		});
 
 		it("should get the basic ISO format for format XXXXX with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "XXXXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXXXX");
 			expect(result).to.equal("+02:30");
 		});
 		it("should get the basic ISO format for format XXXXX with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "XXXXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXXXX");
 			expect(result).to.equal("-08:00");
 		});
 		it("should get the basic ISO format for format XXXXX with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "XXXXX");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "XXXXX");
 			expect(result).to.equal("Z");
 		});
 
 		it("should get the basic ISO format for format x with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "x");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "x");
 			expect(result).to.equal("+0230");
 		});
 		it("should get the basic ISO format for format x with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "x");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "x");
 			expect(result).to.equal("-08");
 		});
 		it("should get the basic ISO format for format x with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "x");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "x");
 			expect(result).to.equal("+00");
 		});
 
 		it("should get the basic ISO format for format xx with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "xx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xx");
 			expect(result).to.equal("+0230");
 		});
 		it("should get the basic ISO format for format xx with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "xx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xx");
 			expect(result).to.equal("-0800");
 		});
 		it("should get the basic ISO format for format xx with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "xx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xx");
 			expect(result).to.equal("+0000");
 		});
 
 		it("should get the basic ISO format for format xxx with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "xxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxx");
 			expect(result).to.equal("+02:30");
 		});
 		it("should get the basic ISO format for format xxx with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "xxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxx");
 			expect(result).to.equal("-08:00");
 		});
 		it("should get the basic ISO format for format xxx with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "xxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxx");
 			expect(result).to.equal("+00:00");
 		});
 
 		it("should get the basic ISO format for format xxxx with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "xxxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxxx");
 			expect(result).to.equal("+0230");
 		});
 		it("should get the basic ISO format for format xxxx with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "xxxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxxx");
 			expect(result).to.equal("-0800");
 		});
 		it("should get the basic ISO format for format xxxx with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "xxxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxxx");
 			expect(result).to.equal("+0000");
 		});
 
 		it("should get the basic ISO format for format xxxxx with positive offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/Amsterdam");
-			dateTime.dateOffset = 150;
-			var result = formatter.format(dateTime, "xxxxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxxxx");
 			expect(result).to.equal("+02:30");
 		});
 		it("should get the basic ISO format for format xxxxx with negative offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("America/Los_Angeles");
-			dateTime.dateOffset = -8 * 60;
-			var result = formatter.format(dateTime, "xxxxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxxxx");
 			expect(result).to.equal("-08:00");
 		});
 		it("should get the basic ISO format for format xxxxx with 0 offset", (): void => {
-			dateTime.dateZone = new timeZone.TimeZone("Europe/London");
-			dateTime.dateOffset = 0;
-			var result = formatter.format(dateTime, "xxxxx");
+			localZone = new timeZone.TimeZone("Europe/Amsterdam");
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
+			var result = format.format(dateTime, utcTime, localZone, "xxxxx");
 			expect(result).to.equal("+00:00");
 		});
 	});

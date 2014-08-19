@@ -27,7 +27,6 @@
     <Compile Include="gulpfile.js" />
     <Compile Include="runtests.js" />
     <TypeScriptCompile Include="examples\example.ts" />
-    <TypeScriptCompile Include="lib\datetime-interface.ts" />
     <TypeScriptCompile Include="lib\datetime.ts" />
     <TypeScriptCompile Include="lib\duration.ts" />
     <TypeScriptCompile Include="lib\token.ts" />
