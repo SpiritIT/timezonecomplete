@@ -137,9 +137,7 @@ export class TimeZone {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "TimeZone.zone(): Unexpected argument type \"" + typeof (a) + "\"");
-				/* istanbul ignore next */
-				break;
+				throw new Error("TimeZone.zone(): Unexpected argument type \"" + typeof (a) + "\"");
 		}
 		return TimeZone._findOrCreate(name);
 	}
@@ -192,9 +190,7 @@ export class TimeZone {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "Unknown time zone kind.");
-				/* istanbul ignore next */
-				return false;
+				throw new Error("Unknown time zone kind.");
 		}
 	}
 
@@ -268,9 +264,7 @@ export class TimeZone {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
-				/* istanbul ignore next */
-				break;
+				throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
 		}
 	}
 
@@ -311,9 +305,7 @@ export class TimeZone {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
-				/* istanbul ignore next */
-				break;
+				throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
 		}
 	}
 
@@ -351,9 +343,7 @@ export class TimeZone {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "Unknown DateFunctions value");
-				/* istanbul ignore next */
-				break;
+				throw new Error("Unknown DateFunctions value");
 		}
 	}
 
@@ -391,9 +381,7 @@ export class TimeZone {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "Unknown DateFunctions value");
-				/* istanbul ignore next */
-				break;
+				throw new Error("Unknown DateFunctions value");
 		}
 	}
 
@@ -433,9 +421,7 @@ export class TimeZone {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
-				/* istanbul ignore next */
-				break;
+				throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
 		}
 	}
 

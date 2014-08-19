@@ -225,6 +225,10 @@ nd = <span class="hljs-keyword">new</span> tc.DateTime();  <span class="hljs-com
 <span class="hljs-built_in">console</span>.log(amsterdamDate.toString()); <span class="hljs-comment">// "2014-01-01T13:59:59.000 Europe/Amsterdam", note that this is not ISO 8601</span>
 <span class="hljs-built_in">console</span>.log(amsterdamDate.toIsoString()); <span class="hljs-comment">// "2014-01-01T13:59:59.000+01:00", note that zone name is removed to make perfect ISO 8601</span>
 
+<span class="hljs-comment">// Formatting</span>
+<span class="hljs-keyword">var</span> formatDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-05-29T13:59:59.000 Europe/Amsterdam"</span>)
+<span class="hljs-built_in">console</span>.log(amsterdamDate.format(<span class="hljs-string">"dd/MM/yyy hh.mm.ss"</span>)); <span class="hljs-comment">// 29/05/2014 13.59.59</span>
+
 <span class="hljs-comment">// Local Getters</span>
 amsterdamDate.year(); <span class="hljs-comment">// 2014</span>
 amsterdamDate.month(); <span class="hljs-comment">// 1  (note: months are 1-12)</span>
@@ -235,6 +239,7 @@ amsterdamDate.second(); <span class="hljs-comment">// 59</span>
 amsterdamDate.millisecond(); <span class="hljs-comment">// 0</span>
 amsterdamDate.weekDay(); <span class="hljs-comment">// tc.WeekDay.Wednesday = 3</span>
 amsterdamDate.weekNumber(); <span class="hljs-comment">// ISO week number 1-53 = 1</span>
+amsterdamDate.dayOfYear(); <span class="hljs-comment">// 0th day of year</span>
 
 <span class="hljs-comment">// UTC getters</span>
 amsterdamDate.utcYear(); <span class="hljs-comment">// 2014</span>
@@ -246,12 +251,17 @@ amsterdamDate.utcSecond(); <span class="hljs-comment">// 59</span>
 amsterdamDate.utcMillisecond(); <span class="hljs-comment">// 0</span>
 amsterdamDate.utcWeekDay(); <span class="hljs-comment">// tc.WeekDay.Wednesday = 3</span>
 amsterdamDate.utcWeekNumber(); <span class="hljs-comment">// ISO week number 1-53 = 1</span>
+amsterdamDate.utcDayOfYear(); <span class="hljs-comment">// 0th day of year</span>
 
 <span class="hljs-comment">// Unix millisecond timestamp getter</span>
 amsterdamDate.unixUtcMillis(); <span class="hljs-comment">// milliseconds of UTC date since 1970-01-01</span>
 
 <span class="hljs-comment">// Zone getter</span>
 amsterdamDate.zone(); <span class="hljs-comment">// TimeZone.zone("Europe/Amsterdam");</span>
+
+<span class="hljs-comment">// Zone abbreviation getter (note that zone abbreviation depends on the date,</span>
+<span class="hljs-comment">// many zones have a different abbreviation during summer time)</span>
+amsterdamDate.zoneAbbreviation(); <span class="hljs-comment">// "CET"</span>
 
 <span class="hljs-comment">// Time zone conversion</span>
 <span class="hljs-keyword">var</span> africaDoualaDate = amsterdamDate.toZone(<span class="hljs-string">"Africa/Douala"</span>);
@@ -268,10 +278,6 @@ d.convert(tc.TimeZone.zone(<span class="hljs-string">"UTC"</span>)); <span class
 
 <span class="hljs-comment">// Cloning</span>
 <span class="hljs-keyword">var</span> newCopy = amsterdamDate.clone();
-
-<span class="hljs-comment">// Formatting</span>
-<span class="hljs-keyword">var</span> formatDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-05-29T13:59:59.000 Europe/Amsterdam"</span>)
-<span class="hljs-built_in">console</span>.log(amsterdamDate.format(<span class="hljs-string">"dd/MM/yyy hh.mm.ss"</span>)); <span class="hljs-comment">// 29/05/2014 13.59.59</span>
 </code></pre>
 			<h3 id="date-arithmetic">Date Arithmetic</h3>
 			<p>The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
@@ -394,8 +400,12 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 			<h3 id="next-already-implemented-not-published-">Next (already implemented, not published)</h3>
 			<ul>
 				<li>Add valueOf() method to DateTime and Duration</li>
-				<li>Add weekNumber() utility function</li>
+				<li>Add dayOfYear() and utcDayOfYear() to DateTime returning the n-th day of the year, starting at 0</li>
+				<li>Add weekNumber() utility function (ISO week number)</li>
 				<li>Add weekNumber() and utcWeekNumber() methods to DateTime</li>
+				<li>Add abbreviationForUtc() to TimeZone</li>
+				<li>Add zoneAbbreviation() to DateTime to get time zone abbreviation at the specified datetime.</li>
+				<li>Add format() function to DateTime to convert a DateTime to a string with a specified format.</li>
 			</ul>
 			<h3 id="1-4-6-2014-08-15-">1.4.6 (2014-08-15)</h3>
 			<ul>
@@ -468,9 +478,9 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 			</ul>
 			<h2 id="contributors">Contributors</h2>
 			<ul>
-				<li>Rogier Schouten <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#x72;&#46;&#x73;&#x63;&#104;&#111;&#117;&#x74;&#101;&#110;&#x40;&#x73;&#112;&#105;&#x72;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#111;&#x6d;">&#x72;&#46;&#x73;&#x63;&#104;&#111;&#117;&#x74;&#101;&#110;&#x40;&#x73;&#112;&#105;&#x72;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#111;&#x6d;</a></li>
-				<li>Daan Wissing <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x64;&#x2e;&#x77;&#x69;&#x73;&#115;&#x69;&#110;&#103;&#64;&#x73;&#x70;&#105;&#114;&#105;&#116;&#x69;&#116;&#x2e;&#99;&#111;&#109;">&#x64;&#x2e;&#x77;&#x69;&#x73;&#115;&#x69;&#110;&#103;&#64;&#x73;&#x70;&#105;&#114;&#105;&#116;&#x69;&#116;&#x2e;&#99;&#111;&#109;</a></li>
-				<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#112;&#46;&#107;&#x6f;&#x6f;&#x69;&#106;&#109;&#97;&#110;&#115;&#64;&#115;&#112;&#105;&#114;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;">&#112;&#46;&#107;&#x6f;&#x6f;&#x69;&#106;&#109;&#97;&#110;&#115;&#64;&#115;&#112;&#105;&#114;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;</a></li>
+				<li>Rogier Schouten <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#x2e;&#115;&#99;&#x68;&#x6f;&#117;&#x74;&#101;&#x6e;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#x2e;&#115;&#99;&#x68;&#x6f;&#117;&#x74;&#101;&#x6e;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+				<li>Daan Wissing <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#100;&#46;&#x77;&#105;&#115;&#x73;&#105;&#x6e;&#103;&#x40;&#x73;&#112;&#x69;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;">&#100;&#46;&#x77;&#105;&#115;&#x73;&#105;&#x6e;&#103;&#x40;&#x73;&#112;&#x69;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;</a></li>
+				<li>Peter Kooijmans <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#x70;&#x2e;&#x6b;&#x6f;&#x6f;&#x69;&#106;&#109;&#x61;&#110;&#x73;&#64;&#x73;&#112;&#105;&#x72;&#105;&#116;&#x69;&#116;&#x2e;&#99;&#111;&#109;">&#x70;&#x2e;&#x6b;&#x6f;&#x6f;&#x69;&#106;&#109;&#x61;&#110;&#x73;&#64;&#x73;&#112;&#105;&#x72;&#105;&#116;&#x69;&#116;&#x2e;&#99;&#111;&#109;</a></li>
 			</ul>
 			<h2 id="license">License</h2>
 			<p>MIT</p>

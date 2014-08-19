@@ -142,6 +142,8 @@ duration6.minutes(); // 90
 duration6.seconds(); // 5400
 duration6.milliseconds(); // 5400000
 
+duration6.valueOf(); // same as milliseconds()
+
 ```
 
 ### DateTime
@@ -205,6 +207,7 @@ amsterdamDate.second(); // 59
 amsterdamDate.millisecond(); // 0
 amsterdamDate.weekDay(); // tc.WeekDay.Wednesday = 3
 amsterdamDate.weekNumber(); // ISO week number 1-53 = 1
+amsterdamDate.dayOfYear(); // 0th day of year
 
 // UTC getters
 amsterdamDate.utcYear(); // 2014
@@ -216,9 +219,11 @@ amsterdamDate.utcSecond(); // 59
 amsterdamDate.utcMillisecond(); // 0
 amsterdamDate.utcWeekDay(); // tc.WeekDay.Wednesday = 3
 amsterdamDate.utcWeekNumber(); // ISO week number 1-53 = 1
+amsterdamDate.utcDayOfYear(); // 0th day of year
 
 // Unix millisecond timestamp getter
 amsterdamDate.unixUtcMillis(); // milliseconds of UTC date since 1970-01-01
+amsterdamDate.valueOf(); // same
 
 // Zone getter
 amsterdamDate.zone(); // TimeZone.zone("Europe/Amsterdam");
@@ -393,7 +398,8 @@ The version of the included IANA time zone database is 2014e.
 
 ### Next (already implemented, not published)
 * Add valueOf() method to DateTime and Duration
-* Add weekNumber() utility function
+* Add dayOfYear() and utcDayOfYear() to DateTime returning the n-th day of the year, starting at 0
+* Add weekNumber() utility function (ISO week number)
 * Add weekNumber() and utcWeekNumber() methods to DateTime
 * Add abbreviationForUtc() to TimeZone
 * Add zoneAbbreviation() to DateTime to get time zone abbreviation at the specified datetime.

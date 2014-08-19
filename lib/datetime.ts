@@ -239,9 +239,7 @@ export class DateTime implements DateTimeAccess {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "DateTime.DateTime(): unexpected first argument type.");
-				/* istanbul ignore next */
-				break;
+				throw new Error("DateTime.DateTime(): unexpected first argument type.");
 		}
 	}
 
@@ -408,6 +406,16 @@ export class DateTime implements DateTimeAccess {
 	 */
 	public utcSecond(): number {
 		return this._utcDate.second;
+	}
+
+	/**
+	 * Returns the UTC day number within the year: Jan 1st has number 0,
+	 * Jan 2nd has number 1 etc.
+	 *
+	 * @return the day-of-year [0-366]
+	 */
+	public utcDayOfYear(): number {
+		return basics.dayOfYear(this.utcYear(), this.utcMonth(), this.utcDay());
 	}
 
 	/**
@@ -621,9 +629,7 @@ export class DateTime implements DateTimeAccess {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "Unknown period unit.");
-				/* istanbul ignore next */
-				break;
+				throw new Error("Unknown period unit.");
 		}
 	}
 
@@ -755,7 +761,7 @@ export class DateTime implements DateTimeAccess {
 	 * The valueOf() method returns the primitive value of the specified object.
 	 */
 	public valueOf(): any {
-		return this._utcDate.milli;
+		return this.unixUtcMillis();
 	}
 
 	/**
@@ -769,6 +775,7 @@ export class DateTime implements DateTimeAccess {
 	 * Calculate this._zoneDate from this._utcDate
 	 */
 	private _utcDateToZoneDate(): void {
+		/* istanbul ignore else */
 		if (this._zone) {
 			var offset: number = this._zone.offsetForUtc(this._utcDate.year, this._utcDate.month, this._utcDate.day,
 				this._utcDate.hour, this._utcDate.minute, this._utcDate.second, this._utcDate.milli);

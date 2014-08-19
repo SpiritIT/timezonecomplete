@@ -268,9 +268,7 @@ export class RuleInfo {
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore next */
-				assert(false, "unknown AtType");
-				/* istanbul ignore next */
-				break;
+				throw new Error("unknown AtType");
 		}
 
 		return unixMillis - offset.milliseconds();
@@ -999,8 +997,10 @@ export class TzDatabase {
 				return zoneInfo;
 			}
 		}
-		/* istanbul ignore next */
-		throw new Error("No zone info found");
+		/* istanbul ignore if */
+		if (true) {
+			throw new Error("No zone info found");
+		}
 	}
 
 	/**
@@ -1062,6 +1062,7 @@ export class TzDatabase {
 
 		result.sort((a: ZoneInfo, b: ZoneInfo): number => {
 			// sort null last
+			/* istanbul ignore if */
 			if (a.until === null && b.until === null) {
 				return 0;
 			}
@@ -1118,7 +1119,7 @@ export class TzDatabase {
 				toType,
 				toYear,
 				rule[2],
-				<number>TzMonthNames[<string>rule[3]],
+				<number>(TzMonthNames[(<string>rule[3])]),
 				onType,
 				onDay,
 				onWeekDay,
@@ -1133,10 +1134,11 @@ export class TzDatabase {
 		}
 
 		result.sort((a: RuleInfo, b: RuleInfo): number => {
-			if (a.effectiveLess(b)) {
-				return -1;
-			} else if (a.effectiveEqual(b)) {
+			/* istanbul ignore if */
+			if (a.effectiveEqual(b)) {
 				return 0;
+			} else if (a.effectiveLess(b)) {
+				return -1;
 			} else {
 				return 1;
 			}

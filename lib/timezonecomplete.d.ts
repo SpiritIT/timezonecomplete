@@ -427,6 +427,13 @@ declare module '__timezonecomplete/datetime' {
          */
         utcSecond(): number;
         /**
+         * Returns the UTC day number within the year: Jan 1st has number 0,
+         * Jan 2nd has number 1 etc.
+         *
+         * @return the day-of-year [0-366]
+         */
+        utcDayOfYear(): number;
+        /**
          * @return The UTC milliseconds 0-999
          */
         utcMillisecond(): number;

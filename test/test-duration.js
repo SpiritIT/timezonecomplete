@@ -289,4 +289,11 @@ describe("Duration()", function () {
             expect(d.inspect()).to.equal("[Duration: " + d.toString() + "]");
         });
     });
+
+    describe("valueOf()", function () {
+        it("should work", function () {
+            var d = new Duration("-01:02:03.4");
+            expect(d.valueOf()).to.equal(d.milliseconds());
+        });
+    });
 });

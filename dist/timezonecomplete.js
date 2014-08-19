@@ -114,10 +114,7 @@ function daysInMonth(year, month) {
         case 11:
             return 30;
         default:
-            assert(false, "Invalid month: " + month);
-
-            /* istanbul ignore next */
-            return 0;
+            throw new Error("Invalid month: " + month);
     }
 }
 exports.daysInMonth = daysInMonth;
@@ -768,10 +765,7 @@ var DateTime = (function () {
                 break;
 
             default:
-                /* istanbul ignore next */
-                assert(false, "DateTime.DateTime(): unexpected first argument type.");
-
-                break;
+                throw new Error("DateTime.DateTime(): unexpected first argument type.");
         }
     }
     /**
@@ -961,6 +955,16 @@ var DateTime = (function () {
     };
 
     /**
+    * Returns the UTC day number within the year: Jan 1st has number 0,
+    * Jan 2nd has number 1 etc.
+    *
+    * @return the day-of-year [0-366]
+    */
+    DateTime.prototype.utcDayOfYear = function () {
+        return basics.dayOfYear(this.utcYear(), this.utcMonth(), this.utcDay());
+    };
+
+    /**
     * @return The UTC milliseconds 0-999
     */
     DateTime.prototype.utcMillisecond = function () {
@@ -1145,10 +1149,7 @@ var DateTime = (function () {
             }
 
             default:
-                /* istanbul ignore next */
-                assert(false, "Unknown period unit.");
-
-                break;
+                throw new Error("Unknown period unit.");
         }
     };
 
@@ -1269,7 +1270,7 @@ var DateTime = (function () {
     * The valueOf() method returns the primitive value of the specified object.
     */
     DateTime.prototype.valueOf = function () {
-        return this._utcDate.milli;
+        return this.unixUtcMillis();
     };
 
     /**
@@ -1283,6 +1284,7 @@ var DateTime = (function () {
     * Calculate this._zoneDate from this._utcDate
     */
     DateTime.prototype._utcDateToZoneDate = function () {
+        /* istanbul ignore else */
         if (this._zone) {
             var offset = this._zone.offsetForUtc(this._utcDate.year, this._utcDate.month, this._utcDate.day, this._utcDate.hour, this._utcDate.minute, this._utcDate.second, this._utcDate.milli);
             this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(this._utcDate.toUnixNoLeapSecs() + offset * 60000));
@@ -2089,11 +2091,7 @@ function periodDstToString(p) {
             return "regular local time";
 
         default:
-            /* istanbul ignore next */
-            assert(false, "Unknown PeriodDst");
-
-            /* istanbul ignore next */
-            return "";
+            throw new Error("Unknown PeriodDst");
     }
 }
 exports.periodDstToString = periodDstToString;
@@ -2222,10 +2220,7 @@ var Period = (function () {
                         break;
 
                     default:
-                        /* istanbul ignore next */
-                        assert(false, "Unknown TimeUnit");
-
-                        break;
+                        throw new Error("Unknown TimeUnit");
                 }
                 while (!approx.greaterThan(fromDate)) {
                     approx = approx.add(this._intAmount, this._intUnit);
@@ -2252,10 +2247,7 @@ var Period = (function () {
                         break;
 
                     default:
-                        /* istanbul ignore next */
-                        assert(false, "Unknown TimeUnit");
-
-                        break;
+                        throw new Error("Unknown TimeUnit");
                 }
                 while (!approx.greaterThan(normalFrom)) {
                     approx = approx.addLocal(this._intAmount, this._intUnit);
@@ -2299,10 +2291,7 @@ var Period = (function () {
                         break;
 
                     default:
-                        /* istanbul ignore next */
-                        assert(false, "Unknown TimeUnit");
-
-                        break;
+                        throw new Error("Unknown TimeUnit");
                 }
                 while (!approx.greaterThan(fromDate)) {
                     approx = approx.add(this._intAmount, this._intUnit);
@@ -2419,10 +2408,7 @@ var Period = (function () {
                         break;
 
                     default:
-                        /* istanbul ignore next */
-                        assert(false, "Unknown TimeUnit");
-
-                        break;
+                        throw new Error("Unknown TimeUnit");
                 }
                 while (!approx.greaterThan(normalFrom)) {
                     approx = approx.addLocal(this._intAmount, this._intUnit);
@@ -2481,11 +2467,7 @@ var Period = (function () {
             }
 
             default:
-                /* istanbul ignore next */
-                assert(false, "Unknown period unit.");
-
-                /* istanbul ignore next */
-                return "";
+                throw new Error("Unknown period unit.");
         }
     };
 
@@ -2800,10 +2782,7 @@ var TimeZone = (function () {
                 break;
 
             default:
-                /* istanbul ignore next */
-                assert(false, "TimeZone.zone(): Unexpected argument type \"" + typeof (a) + "\"");
-
-                break;
+                throw new Error("TimeZone.zone(): Unexpected argument type \"" + typeof (a) + "\"");
         }
         return TimeZone._findOrCreate(name);
     };
@@ -2841,11 +2820,7 @@ var TimeZone = (function () {
                 return (other.kind() === 2 /* Proper */ && this._name === other._name);
 
             default:
-                /* istanbul ignore next */
-                assert(false, "Unknown time zone kind.");
-
-                /* istanbul ignore next */
-                return false;
+                throw new Error("Unknown time zone kind.");
         }
     };
 
@@ -2923,10 +2898,7 @@ var TimeZone = (function () {
             }
 
             default:
-                /* istanbul ignore next */
-                assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
-
-                break;
+                throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
         }
     };
 
@@ -2967,10 +2939,7 @@ var TimeZone = (function () {
             }
 
             default:
-                /* istanbul ignore next */
-                assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
-
-                break;
+                throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
         }
     };
 
@@ -2993,10 +2962,7 @@ var TimeZone = (function () {
             }
 
             default:
-                /* istanbul ignore next */
-                assert(false, "Unknown DateFunctions value");
-
-                break;
+                throw new Error("Unknown DateFunctions value");
         }
     };
 
@@ -3019,10 +2985,7 @@ var TimeZone = (function () {
             }
 
             default:
-                /* istanbul ignore next */
-                assert(false, "Unknown DateFunctions value");
-
-                break;
+                throw new Error("Unknown DateFunctions value");
         }
     };
 
@@ -3063,10 +3026,7 @@ var TimeZone = (function () {
             }
 
             default:
-                /* istanbul ignore next */
-                assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
-
-                break;
+                throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
         }
     };
 
@@ -3650,10 +3610,7 @@ var RuleInfo = (function () {
                 break;
 
             default:
-                /* istanbul ignore next */
-                assert(false, "unknown AtType");
-
-                break;
+                throw new Error("unknown AtType");
         }
 
         return unixMillis - offset.milliseconds();
@@ -4355,7 +4312,10 @@ var TzDatabase = (function () {
             }
         }
 
-        throw new Error("No zone info found");
+        /* istanbul ignore if */
+        if (true) {
+            throw new Error("No zone info found");
+        }
     };
 
     /**
@@ -4403,6 +4363,7 @@ var TzDatabase = (function () {
 
         result.sort(function (a, b) {
             // sort null last
+            /* istanbul ignore if */
             if (a.until === null && b.until === null) {
                 return 0;
             }
@@ -4449,14 +4410,15 @@ var TzDatabase = (function () {
             var onDay = this.parseOnDay(rule[4], onType);
             var onWeekDay = this.parseOnWeekDay(rule[4]);
 
-            result.push(new RuleInfo(fromYear, toType, toYear, rule[2], TzMonthNames[rule[3]], onType, onDay, onWeekDay, math.positiveModulo(parseInt(rule[5][0], 10), 24), math.positiveModulo(parseInt(rule[5][1], 10), 60), math.positiveModulo(parseInt(rule[5][2], 10), 60), this.parseAtType(rule[5][3]), Duration.minutes(parseInt(rule[6], 10)), rule[7] === "-" ? "" : rule[7]));
+            result.push(new RuleInfo(fromYear, toType, toYear, rule[2], (TzMonthNames[rule[3]]), onType, onDay, onWeekDay, math.positiveModulo(parseInt(rule[5][0], 10), 24), math.positiveModulo(parseInt(rule[5][1], 10), 60), math.positiveModulo(parseInt(rule[5][2], 10), 60), this.parseAtType(rule[5][3]), Duration.minutes(parseInt(rule[6], 10)), rule[7] === "-" ? "" : rule[7]));
         }
 
         result.sort(function (a, b) {
-            if (a.effectiveLess(b)) {
-                return -1;
-            } else if (a.effectiveEqual(b)) {
+            /* istanbul ignore if */
+            if (a.effectiveEqual(b)) {
                 return 0;
+            } else if (a.effectiveLess(b)) {
+                return -1;
             } else {
                 return 1;
             }

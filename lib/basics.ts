@@ -97,9 +97,7 @@ export function daysInMonth(year: number, month: number): number {
 		case 11:
 			return 30;
 		default:
-			assert(false, "Invalid month: " + month);
-			/* istanbul ignore next */
-			return 0;
+			throw new Error("Invalid month: " + month);
 	}
 }
 
