@@ -142,6 +142,25 @@ export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay
 }
 
 /**
+ * Returns the first instance of the given weekday in the given month
+ *
+ * @param year	The year
+ * @param month	the month 1-12
+ * @param weekDay	the desired week day
+ *
+ * @return the first occurrence of the week day in the month
+ */
+export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
+	var beginOfMonth: TimeStruct = new TimeStruct(year, month, 1);
+	var beginOfMonthMillis = timeToUnixNoLeapSecs(beginOfMonth);
+	var beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonthMillis);
+	var diff: number = weekDay - beginOfMonthWeekDay;
+	if (diff < 0) {
+		diff += 7;
+	}
+	return beginOfMonth.day + diff;
+}
+/**
  * Returns the day-of-month that is on the given weekday and which is >= the given day.
  * Throws if the month has no such day.
  */

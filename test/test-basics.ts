@@ -90,6 +90,36 @@ describe("lastWeekDayOfMonth()", (): void => {
 	});
 });
 
+describe("firstWeekDayOfMonth()", (): void => {
+	it("should work for month ending on Sunday", (): void => {
+		expect(basics.firstWeekDayOfMonth(2014, 8, WeekDay.Sunday)).to.equal(3);
+		expect(basics.firstWeekDayOfMonth(2014, 8, WeekDay.Monday)).to.equal(4);
+		expect(basics.firstWeekDayOfMonth(2014, 8, WeekDay.Tuesday)).to.equal(5);
+		expect(basics.firstWeekDayOfMonth(2014, 8, WeekDay.Wednesday)).to.equal(6);
+		expect(basics.firstWeekDayOfMonth(2014, 8, WeekDay.Thursday)).to.equal(7);
+		expect(basics.firstWeekDayOfMonth(2014, 8, WeekDay.Friday)).to.equal(1);
+		expect(basics.firstWeekDayOfMonth(2014, 8, WeekDay.Saturday)).to.equal(2);
+	});
+	it("should work for month ending on Tuesday", (): void => {
+		expect(basics.firstWeekDayOfMonth(2014, 9, WeekDay.Sunday)).to.equal(7);
+		expect(basics.firstWeekDayOfMonth(2014, 9, WeekDay.Monday)).to.equal(1);
+		expect(basics.firstWeekDayOfMonth(2014, 9, WeekDay.Tuesday)).to.equal(2);
+		expect(basics.firstWeekDayOfMonth(2014, 9, WeekDay.Wednesday)).to.equal(3);
+		expect(basics.firstWeekDayOfMonth(2014, 9, WeekDay.Thursday)).to.equal(4);
+		expect(basics.firstWeekDayOfMonth(2014, 9, WeekDay.Friday)).to.equal(5);
+		expect(basics.firstWeekDayOfMonth(2014, 9, WeekDay.Saturday)).to.equal(6);
+	});
+	it("should work for leap day", (): void => {
+		expect(basics.firstWeekDayOfMonth(2004, 3, WeekDay.Sunday)).to.equal(7);
+		expect(basics.firstWeekDayOfMonth(2004, 3, WeekDay.Monday)).to.equal(1);
+		expect(basics.firstWeekDayOfMonth(2004, 3, WeekDay.Tuesday)).to.equal(2);
+		expect(basics.firstWeekDayOfMonth(2004, 3, WeekDay.Wednesday)).to.equal(3);
+		expect(basics.firstWeekDayOfMonth(2004, 3, WeekDay.Thursday)).to.equal(4);
+		expect(basics.firstWeekDayOfMonth(2004, 3, WeekDay.Friday)).to.equal(5);
+		expect(basics.firstWeekDayOfMonth(2004, 3, WeekDay.Saturday)).to.equal(6);
+	});
+});
+
 describe("weekDayOnOrAfter()", (): void => {
 	it("should work", (): void => {
 		expect(basics.weekDayOnOrAfter(2014, 8, 11, WeekDay.Monday)).to.equal(11);

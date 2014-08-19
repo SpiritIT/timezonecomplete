@@ -89,6 +89,36 @@ describe("lastWeekDayOfMonth()", function () {
     });
 });
 
+describe("firstWeekDayOfMonth()", function () {
+    it("should work for month ending on Sunday", function () {
+        expect(basics.firstWeekDayOfMonth(2014, 8, 0 /* Sunday */)).to.equal(3);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 1 /* Monday */)).to.equal(4);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 2 /* Tuesday */)).to.equal(5);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 3 /* Wednesday */)).to.equal(6);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 4 /* Thursday */)).to.equal(7);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 5 /* Friday */)).to.equal(1);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 6 /* Saturday */)).to.equal(2);
+    });
+    it("should work for month ending on Tuesday", function () {
+        expect(basics.firstWeekDayOfMonth(2014, 9, 0 /* Sunday */)).to.equal(7);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 1 /* Monday */)).to.equal(1);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 2 /* Tuesday */)).to.equal(2);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 3 /* Wednesday */)).to.equal(3);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 4 /* Thursday */)).to.equal(4);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 5 /* Friday */)).to.equal(5);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 6 /* Saturday */)).to.equal(6);
+    });
+    it("should work for leap day", function () {
+        expect(basics.firstWeekDayOfMonth(2004, 3, 0 /* Sunday */)).to.equal(7);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 1 /* Monday */)).to.equal(1);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 2 /* Tuesday */)).to.equal(2);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 3 /* Wednesday */)).to.equal(3);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 4 /* Thursday */)).to.equal(4);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 5 /* Friday */)).to.equal(5);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 6 /* Saturday */)).to.equal(6);
+    });
+});
+
 describe("weekDayOnOrAfter()", function () {
     it("should work", function () {
         expect(basics.weekDayOnOrAfter(2014, 8, 11, 1 /* Monday */)).to.equal(11);
