@@ -1139,4 +1139,16 @@ describe("DateTime", function () {
             expect(d.utcWeekNumber()).to.equal(21);
         });
     });
+
+    describe("zoneAbbreciation()", function () {
+        it("should return nothing for naive date", function () {
+            var d = new DateTime(2014, 5, 26, 0, 30, 0, 0);
+            expect(d.zoneAbbreviation()).to.equal("");
+        });
+        it("should return the zone abbrev for aware date", function () {
+            // note already tested in test-tz-database
+            var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+            expect(d.zoneAbbreviation()).to.equal("CEST");
+        });
+    });
 });

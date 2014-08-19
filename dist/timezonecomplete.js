@@ -25,7 +25,7 @@ var assert = require("assert");
 var sourcemapsupport = require("source-map-support");
 
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
-sourcemapsupport.install({ handleUncaughtExceptions: true });
+sourcemapsupport.install({ handleUncaughtExceptions: false });
 
 var javascript = require("./javascript");
 var DateFunctions = javascript.DateFunctions;
@@ -633,7 +633,7 @@ var TimeStruct = (function () {
 })();
 exports.TimeStruct = TimeStruct;
 
-},{"./javascript":8,"./math":9,"./strings":11,"assert":18,"source-map-support":37}],2:[function(require,module,exports){
+},{"./javascript":8,"./math":9,"./strings":11,"assert":18,"source-map-support":39}],2:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *
@@ -813,6 +813,17 @@ var DateTime = (function () {
     */
     DateTime.prototype.zone = function () {
         return this._zone;
+    };
+
+    /**
+    * Zone name abbreviation at this time
+    */
+    DateTime.prototype.zoneAbbreviation = function () {
+        if (this.zone()) {
+            return this.zone().abbreviationForUtc(this.utcYear(), this.utcMonth(), this.utcDay(), this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond());
+        } else {
+            return "";
+        }
     };
 
     /**
@@ -1334,7 +1345,7 @@ var DateTime = (function () {
 })();
 exports.DateTime = DateTime;
 
-},{"./basics":1,"./duration":3,"./format":5,"./javascript":8,"./timesource":12,"./timezone":14,"assert":18,"source-map-support":37}],3:[function(require,module,exports){
+},{"./basics":1,"./duration":3,"./format":5,"./javascript":8,"./timesource":12,"./timezone":14,"assert":18,"source-map-support":39}],3:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *
@@ -2593,7 +2604,7 @@ var Period = (function () {
 })();
 exports.Period = Period;
 
-},{"./basics":1,"./datetime":2,"./timezone":14,"assert":18,"source-map-support":37}],11:[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./timezone":14,"assert":18,"source-map-support":39}],11:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *
@@ -2876,13 +2887,15 @@ var TimeZone = (function () {
 
     /**
     * Calculate timezone offset from a UTC time.
-    * @param year local full year
-    * @param month local month 1-12 (note this deviates from JavaScript date)
-    * @param day local day of month 1-31
-    * @param hour local hour 0-23
-    * @param minute local minute 0-59
-    * @param second local second 0-59
-    * @param millisecond local millisecond 0-999
+    *
+    * @param year Full year
+    * @param month Month 1-12 (note this deviates from JavaScript date)
+    * @param day Day of month 1-31
+    * @param hour Hour 0-23
+    * @param minute Minute 0-59
+    * @param second Second 0-59
+    * @param millisecond Millisecond 0-999
+    *
     * @return the offset of this time zone with respect to UTC at the given time, in minutes.
     */
     TimeZone.prototype.offsetForUtc = function (year, month, day, hour, minute, second, millisecond) {
@@ -3008,6 +3021,50 @@ var TimeZone = (function () {
             default:
                 /* istanbul ignore next */
                 assert(false, "Unknown DateFunctions value");
+
+                break;
+        }
+    };
+
+    /**
+    * Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.
+    *
+    * @param year Full year
+    * @param month Month 1-12 (note this deviates from JavaScript date)
+    * @param day Day of month 1-31
+    * @param hour Hour 0-23
+    * @param minute Minute 0-59
+    * @param second Second 0-59
+    * @param millisecond Millisecond 0-999
+    *
+    * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
+    */
+    TimeZone.prototype.abbreviationForUtc = function (year, month, day, hour, minute, second, millisecond) {
+        if (typeof hour === "undefined") { hour = 0; }
+        if (typeof minute === "undefined") { minute = 0; }
+        if (typeof second === "undefined") { second = 0; }
+        if (typeof millisecond === "undefined") { millisecond = 0; }
+        assert(month > 0 && month < 13, "TimeZone.offsetForUtc():  month out of range.");
+        assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
+        assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
+        assert(minute >= 0 && minute < 60, "TimeZone.offsetForUtc():  minute out of range.");
+        assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  second out of range.");
+        assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
+        switch (this._kind) {
+            case 0 /* Local */: {
+                return "local";
+            }
+            case 1 /* Offset */: {
+                return this.toString();
+            }
+            case 2 /* Proper */: {
+                var tm = new TimeStruct(year, month, day, hour, minute, second, millisecond);
+                return TzDatabase.instance().abbreviation(this._name, tm.toUnixNoLeapSecs());
+            }
+
+            default:
+                /* istanbul ignore next */
+                assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
 
                 break;
         }
@@ -3322,6 +3379,7 @@ function mapSymbolToType(symbol) {
 /// <reference path="../typings/lib.d.ts"/>
 "use strict";
 var assert = require("assert");
+var util = require("util");
 
 var sourcemapsupport = require("source-map-support");
 
@@ -3448,7 +3506,7 @@ var RuleInfo = (function () {
     */
     save, /**
     * Character to insert in %s for time zone abbreviation
-    * Note if TZ database indicates "-" the empty string is returned
+    * Note if TZ database indicates "-" this is the empty string
     */
     letter) {
         this.from = from;
@@ -3741,9 +3799,13 @@ var Transition = (function () {
     at, /**
     * New offset (type of offset depends on the function)
     */
-    offset) {
+    offset, /**
+    * New timzone abbreviation letter
+    */
+    letter) {
         this.at = at;
         this.offset = offset;
+        this.letter = letter;
     }
     return Transition;
 })();
@@ -4014,6 +4076,30 @@ var TzDatabase = (function () {
     };
 
     /**
+    * The time zone rule abbreviation, e.g. CEST for Central European Summer Time.
+    * Note this is dependent on the time, because with time different rules are in effect
+    * and therefore different abbreviations. They also change with DST: e.g. CEST or CET.
+    *
+    * @param zoneName	IANA zone name
+    * @param utcMillis	Timestamp in UTC unix milliseconds
+    * @return	The abbreviation of the rule that is in effect
+    */
+    TzDatabase.prototype.abbreviation = function (zoneName, utcMillis) {
+        var zoneInfo = this.getZoneInfo(zoneName, utcMillis);
+        var format = zoneInfo.format;
+
+        // is format dependent on DST?
+        if (format.indexOf("%s") !== -1 && zoneInfo.ruleType === 2 /* RuleName */) {
+            var letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+
+            // place in format string
+            return util.format(format, letter);
+        }
+
+        return format;
+    };
+
+    /**
     * Returns the total time zone offset from UTC, including DST, at
     * the given LOCAL timestamp. Non-existing local time is normalized out.
     * There can be multiple UTC times and therefore multiple offsets for a local time
@@ -4101,6 +4187,38 @@ var TzDatabase = (function () {
     };
 
     /**
+    * Returns the time zone letter for the given
+    * ruleset and the given UTC timestamp
+    *
+    * @param ruleName	name of ruleset
+    * @param utcMillis	UTC timestamp
+    * @param standardOffset	Standard offset without DST for the time zone
+    */
+    TzDatabase.prototype.letterForRule = function (ruleName, utcMillis, standardOffset) {
+        var tm = basics.unixToTimeNoLeapSecs(utcMillis);
+
+        // find applicable transition moments
+        var transitions = this.getTransitionsDstOffsets(ruleName, tm.year - 1, tm.year, standardOffset);
+
+        // find the last prior to given date
+        var letter = null;
+        for (var i = transitions.length - 1; i >= 0; i--) {
+            var transition = transitions[i];
+            if (transition.at <= utcMillis) {
+                letter = transition.letter;
+                break;
+            }
+        }
+
+        /* istanbul ignore if */
+        if (letter === null) {
+            throw new Error("No offset found.");
+        }
+
+        return letter;
+    };
+
+    /**
     * Return a list of all transitions in [fromYear..toYear] sorted by effective date
     *
     * @param ruleName	Name of the rule set
@@ -4121,7 +4239,7 @@ var TzDatabase = (function () {
             for (var i = 0; i < ruleInfos.length; i++) {
                 var ruleInfo = ruleInfos[i];
                 if (ruleInfo.applicable(y)) {
-                    result.push(new Transition(ruleInfo.transitionTimeUtc(y, standardOffset, prevInfo), ruleInfo.save));
+                    result.push(new Transition(ruleInfo.transitionTimeUtc(y, standardOffset, prevInfo), ruleInfo.save, ruleInfo.letter));
                 }
                 prevInfo = ruleInfo;
             }
@@ -4156,11 +4274,13 @@ var TzDatabase = (function () {
         var prevUntilTm = null;
         var prevStdOffset = Duration.hours(0);
         var prevDstOffset = Duration.hours(0);
+        var prevLetter = "";
         for (var i = 0; i < zoneInfos.length; ++i) {
             var zoneInfo = zoneInfos[i];
             var untilTm = (zoneInfo.until ? basics.unixToTimeNoLeapSecs(zoneInfo.until) : new TimeStruct(toYear + 1));
             var stdOffset = prevStdOffset;
             var dstOffset = prevDstOffset;
+            var letter = prevLetter;
 
             // zone applicable?
             if ((prevZone === null || prevZone.until < endMillis - 1) && (zoneInfo.until === null || zoneInfo.until >= startMillis)) {
@@ -4169,19 +4289,22 @@ var TzDatabase = (function () {
                 switch (zoneInfo.ruleType) {
                     case 0 /* None */:
                         dstOffset = Duration.hours(0);
+                        letter = "";
                         break;
                     case 1 /* Offset */:
                         dstOffset = zoneInfo.ruleOffset;
+                        letter = "";
                         break;
                     case 2 /* RuleName */:
                         // check whether the first rule takes effect immediately on the zone transition
-                        // and yes this happens in the this._data (e.g. Lybia)
+                        // (e.g. Lybia)
                         if (prevZone) {
                             var ruleInfos = this.getRuleInfos(zoneInfo.ruleName);
                             ruleInfos.forEach(function (ruleInfo) {
                                 if (ruleInfo.applicable(prevUntilTm.year)) {
                                     if (ruleInfo.transitionTimeUtc(prevUntilTm.year, stdOffset, null) === prevZone.until) {
                                         dstOffset = ruleInfo.save;
+                                        letter = ruleInfo.letter;
                                     }
                                 }
                             });
@@ -4191,13 +4314,15 @@ var TzDatabase = (function () {
 
                 // add a transition for the zone transition
                 var at = (prevZone ? prevZone.until : startMillis);
-                result.push(new Transition(at, stdOffset.add(dstOffset)));
+                result.push(new Transition(at, stdOffset.add(dstOffset), letter));
 
                 // add transitions for the zone rules in the range
                 if (zoneInfo.ruleType === 2 /* RuleName */) {
                     var dstTransitions = this.getTransitionsDstOffsets(zoneInfo.ruleName, prevUntilTm ? Math.max(prevUntilTm.year, fromYear) : fromYear, Math.min(untilTm.year, toYear), stdOffset);
                     dstTransitions.forEach(function (transition) {
-                        result.push(new Transition(transition.at, transition.offset.add(stdOffset)));
+                        letter = transition.letter;
+                        dstOffset = transition.offset;
+                        result.push(new Transition(transition.at, transition.offset.add(stdOffset), transition.letter));
                     });
                 }
             }
@@ -4206,6 +4331,7 @@ var TzDatabase = (function () {
             prevUntilTm = untilTm;
             prevStdOffset = stdOffset;
             prevDstOffset = dstOffset;
+            prevLetter = letter;
         }
 
         result.sort(function (a, b) {
@@ -4641,7 +4767,7 @@ function validateData(data) {
     return result;
 }
 
-},{"./basics":1,"./duration":3,"./math":9,"./timezone-data.json":13,"assert":18,"source-map-support":37}],17:[function(require,module,exports){
+},{"./basics":1,"./duration":3,"./math":9,"./timezone-data.json":13,"assert":18,"source-map-support":39,"util":28}],17:[function(require,module,exports){
 
 },{}],18:[function(require,module,exports){
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
@@ -7240,6 +7366,10 @@ process.chdir = function (dir) {
 };
 
 },{}],27:[function(require,module,exports){
+module.exports=require(19)
+},{}],28:[function(require,module,exports){
+module.exports=require(20)
+},{"./support/isBuffer":27,"VCmEsw":26,"inherits":24}],29:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -7249,7 +7379,7 @@ exports.SourceMapGenerator = require('./source-map/source-map-generator').Source
 exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":32,"./source-map/source-map-generator":33,"./source-map/source-node":34}],28:[function(require,module,exports){
+},{"./source-map/source-map-consumer":34,"./source-map/source-map-generator":35,"./source-map/source-node":36}],30:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7348,7 +7478,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":35,"amdefine":36}],29:[function(require,module,exports){
+},{"./util":37,"amdefine":38}],31:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7494,7 +7624,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./base64":30,"amdefine":36}],30:[function(require,module,exports){
+},{"./base64":32,"amdefine":38}],32:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7538,7 +7668,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":36}],31:[function(require,module,exports){
+},{"amdefine":38}],33:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7621,7 +7751,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":36}],32:[function(require,module,exports){
+},{"amdefine":38}],34:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8101,7 +8231,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":28,"./base64-vlq":29,"./binary-search":31,"./util":35,"amdefine":36}],33:[function(require,module,exports){
+},{"./array-set":30,"./base64-vlq":31,"./binary-search":33,"./util":37,"amdefine":38}],35:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8483,7 +8613,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":28,"./base64-vlq":29,"./util":35,"amdefine":36}],34:[function(require,module,exports){
+},{"./array-set":30,"./base64-vlq":31,"./util":37,"amdefine":38}],36:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8856,7 +8986,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./source-map-generator":33,"./util":35,"amdefine":36}],35:[function(require,module,exports){
+},{"./source-map-generator":35,"./util":37,"amdefine":38}],37:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -9063,7 +9193,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":36}],36:[function(require,module,exports){
+},{"amdefine":38}],38:[function(require,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
@@ -9366,7 +9496,7 @@ function amdefine(module, requireFn) {
 module.exports = amdefine;
 
 }).call(this,require("VCmEsw"),"/..\\node_modules\\source-map-support\\node_modules\\source-map\\node_modules\\amdefine\\amdefine.js")
-},{"VCmEsw":26,"path":25}],37:[function(require,module,exports){
+},{"VCmEsw":26,"path":25}],39:[function(require,module,exports){
 (function (process,Buffer){
 var SourceMapConsumer = require('source-map').SourceMapConsumer;
 var path = require('path');
@@ -9675,7 +9805,7 @@ exports.install = function(options) {
 };
 
 }).call(this,require("VCmEsw"),require("buffer").Buffer)
-},{"VCmEsw":26,"buffer":21,"fs":17,"path":25,"source-map":27}]},{},[4]);
+},{"VCmEsw":26,"buffer":21,"fs":17,"path":25,"source-map":29}]},{},[4]);
 return require("timezonecomplete");
 
 }));

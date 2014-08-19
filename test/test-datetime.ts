@@ -1113,6 +1113,17 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("zoneAbbreciation()", (): void => {
+		it("should return nothing for naive date", (): void => {
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0);
+			expect(d.zoneAbbreviation()).to.equal("");
+		});
+		it("should return the zone abbrev for aware date", (): void => {
+			// note already tested in test-tz-database
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			expect(d.zoneAbbreviation()).to.equal("CEST");
+		});
+	});
 });
 
 

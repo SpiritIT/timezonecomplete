@@ -12,7 +12,7 @@ import assert = require("assert");
 
 import sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
-sourcemapsupport.install({ handleUncaughtExceptions: true });
+sourcemapsupport.install({ handleUncaughtExceptions: false });
 
 import javascript = require("./javascript");
 import DateFunctions = javascript.DateFunctions;

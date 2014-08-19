@@ -191,6 +191,10 @@ console.log(amsterdamDate.toUtcString()); // 2014-01-01T12:59:59.000
 console.log(amsterdamDate.toString()); // "2014-01-01T13:59:59.000 Europe/Amsterdam", note that this is not ISO 8601
 console.log(amsterdamDate.toIsoString()); // "2014-01-01T13:59:59.000+01:00", note that zone name is removed to make perfect ISO 8601
 
+// Formatting
+var formatDate = new tc.DateTime("2014-05-29T13:59:59.000 Europe/Amsterdam")
+console.log(amsterdamDate.format("dd/MM/yyy hh.mm.ss")); // 29/05/2014 13.59.59
+
 // Local Getters
 amsterdamDate.year(); // 2014
 amsterdamDate.month(); // 1  (note: months are 1-12)
@@ -219,6 +223,10 @@ amsterdamDate.unixUtcMillis(); // milliseconds of UTC date since 1970-01-01
 // Zone getter
 amsterdamDate.zone(); // TimeZone.zone("Europe/Amsterdam");
 
+// Zone abbreviation getter (note that zone abbreviation depends on the date,
+// many zones have a different abbreviation during summer time)
+amsterdamDate.zoneAbbreviation(); // "CET"
+
 // Time zone conversion
 var africaDoualaDate = amsterdamDate.toZone("Africa/Douala");
 
@@ -234,10 +242,6 @@ d.convert(tc.TimeZone.zone("UTC")); // now d has changed to UTC
 
 // Cloning
 var newCopy = amsterdamDate.clone();
-
-// Formatting
-var formatDate = new tc.DateTime("2014-05-29T13:59:59.000 Europe/Amsterdam")
-console.log(amsterdamDate.format("dd/MM/yyy hh.mm.ss")); // 29/05/2014 13.59.59
 
 ```
 
@@ -391,6 +395,9 @@ The version of the included IANA time zone database is 2014e.
 * Add valueOf() method to DateTime and Duration
 * Add weekNumber() utility function
 * Add weekNumber() and utcWeekNumber() methods to DateTime
+* Add abbreviationForUtc() to TimeZone
+* Add zoneAbbreviation() to DateTime to get time zone abbreviation at the specified datetime.
+* Add format() function to DateTime to convert a DateTime to a string with a specified format.
 
 ### 1.4.6 (2014-08-15)
 * Bugfix TypeScript .d.ts file

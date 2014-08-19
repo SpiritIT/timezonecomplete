@@ -232,20 +232,21 @@ export class TimeZone {
 
 	/**
 	 * Calculate timezone offset from a UTC time.
-	 * @param year local full year
-	 * @param month local month 1-12 (note this deviates from JavaScript date)
-	 * @param day local day of month 1-31
-	 * @param hour local hour 0-23
-	 * @param minute local minute 0-59
-	 * @param second local second 0-59
-	 * @param millisecond local millisecond 0-999
+	 *
+	 * @param year Full year
+	 * @param month Month 1-12 (note this deviates from JavaScript date)
+	 * @param day Day of month 1-31
+	 * @param hour Hour 0-23
+	 * @param minute Minute 0-59
+	 * @param second Second 0-59
+	 * @param millisecond Millisecond 0-999
+	 *
 	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
 	public offsetForUtc(
 		year: number, month: number, day: number,
 		hour: number = 0, minute: number = 0, second: number = 0,
 		millisecond: number = 0): number {
-
 		assert(month > 0 && month < 13, "TimeZone.offsetForUtc():  month out of range.");
 		assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
 		assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
@@ -391,6 +392,48 @@ export class TimeZone {
 			default:
 				/* istanbul ignore next */
 				assert(false, "Unknown DateFunctions value");
+				/* istanbul ignore next */
+				break;
+		}
+	}
+
+	/**
+	 * Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.
+	 *
+	 * @param year Full year
+	 * @param month Month 1-12 (note this deviates from JavaScript date)
+	 * @param day Day of month 1-31
+	 * @param hour Hour 0-23
+	 * @param minute Minute 0-59
+	 * @param second Second 0-59
+	 * @param millisecond Millisecond 0-999
+	 *
+	 * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
+	 */
+	public abbreviationForUtc(year: number, month: number, day: number,
+		hour: number = 0, minute: number = 0, second: number = 0,
+		millisecond: number = 0): string {
+		assert(month > 0 && month < 13, "TimeZone.offsetForUtc():  month out of range.");
+		assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
+		assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
+		assert(minute >= 0 && minute < 60, "TimeZone.offsetForUtc():  minute out of range.");
+		assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  second out of range.");
+		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
+		switch (this._kind) {
+			case TimeZoneKind.Local: {
+				return "local";
+			}
+			case TimeZoneKind.Offset: {
+				return this.toString();
+			}
+			case TimeZoneKind.Proper: {
+				var tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
+				return TzDatabase.instance().abbreviation(this._name, tm.toUnixNoLeapSecs());
+			}
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore next */
+				assert(false, "Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
 				/* istanbul ignore next */
 				break;
 		}

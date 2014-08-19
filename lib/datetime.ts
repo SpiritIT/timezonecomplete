@@ -264,6 +264,19 @@ export class DateTime implements DateTimeAccess {
 	}
 
 	/**
+	 * Zone name abbreviation at this time
+	 */
+	public zoneAbbreviation(): string {
+		if (this.zone()) {
+			return this.zone().abbreviationForUtc(
+				this.utcYear(), this.utcMonth(), this.utcDay(),
+				this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond());
+		} else {
+			return "";
+		}
+	}
+
+	/**
 	 * @return the offset w.r.t. UTC in minutes. Returns 0 for unaware dates and for UTC dates.
 	 */
 	public offset(): number {

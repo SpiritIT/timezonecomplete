@@ -80,6 +80,7 @@
 				<section class="tsd-member-index-group ">
 					<h3>Methods</h3>
 					<ul class="tsd-member-index">
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#abbreviation" class="tsd-kind-icon">abbreviation</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#dstoffsetforrule" class="tsd-kind-icon">dst<wbr>Offset<wbr>For<wbr>Rule</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#getruleinfos" class="tsd-kind-icon">get<wbr>Rule<wbr>Infos</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#gettransitionsdstoffsets" class="tsd-kind-icon">get<wbr>Transitions<wbr>Dst<wbr>Offsets</a></li>
@@ -89,6 +90,7 @@
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#hasdst" class="tsd-kind-icon">has<wbr>Dst</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_tz_database_.tzdatabase.html#static-inject" class="tsd-kind-icon">inject</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_tz_database_.tzdatabase.html#static-instance" class="tsd-kind-icon">instance</a></li>
+						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#letterforrule" class="tsd-kind-icon">letter<wbr>For<wbr>Rule</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#maxdstsave" class="tsd-kind-icon">max<wbr>Dst<wbr>Save</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#mindstsave" class="tsd-kind-icon">min<wbr>Dst<wbr>Save</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#normalizelocal" class="tsd-kind-icon">normalize<wbr>Local</a></li>
@@ -116,7 +118,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:474</li>
+									<li>Defined in tz-database.ts:482</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -140,7 +142,7 @@
 					<div class="tsd-signature tsd-kind-icon">_data<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:472</li>
+							<li>Defined in tz-database.ts:480</li>
 						</ul>
 					</aside>
 				</section>
@@ -150,7 +152,7 @@
 					<div class="tsd-signature tsd-kind-icon">_instance<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdatabase.html" class="tsd-signature-type">TzDatabase</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:447</li>
+							<li>Defined in tz-database.ts:455</li>
 						</ul>
 					</aside>
 					<p>Single instance member</p>
@@ -161,7 +163,7 @@
 					<div class="tsd-signature tsd-kind-icon">_minmax<span class="tsd-signature-symbols">:</span> <a href="../interfaces/_tz_database_.minmaxinfo.html" class="tsd-signature-type">MinMaxInfo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:470</li>
+							<li>Defined in tz-database.ts:478</li>
 						</ul>
 					</aside>
 					<p>Information on aggregate values in the database</p>
@@ -172,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">_rule<wbr>Info<wbr>Cache<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:1010</li>
+							<li>Defined in tz-database.ts:1083</li>
 						</ul>
 					</aside>
 					<p>Performance improvement: rule info cache</p>
@@ -185,7 +187,7 @@
 						<ul class="tsd-descriptions">
 							<li class="tsd-description"><aside class="tsd-sources">
 									<ul>
-										<li>Defined in tz-database.ts:1010</li>
+										<li>Defined in tz-database.ts:1083</li>
 									</ul>
 								</aside>
 								<h4>Parameters</h4>
@@ -207,7 +209,7 @@
 					<div class="tsd-signature tsd-kind-icon">_zone<wbr>Info<wbr>Cache<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:935</li>
+							<li>Defined in tz-database.ts:1008</li>
 						</ul>
 					</aside>
 					<p>Performance improvement: zone info cache</p>
@@ -220,7 +222,7 @@
 						<ul class="tsd-descriptions">
 							<li class="tsd-description"><aside class="tsd-sources">
 									<ul>
-										<li>Defined in tz-database.ts:935</li>
+										<li>Defined in tz-database.ts:1008</li>
 									</ul>
 								</aside>
 								<h4>Parameters</h4>
@@ -240,6 +242,39 @@
 			<section class="tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="abbreviation" class="anchor"></a>
+					<h3>abbreviation</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">abbreviation<span class="tsd-signature-symbols">(</span>zoneName<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span>, utcMillis<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in tz-database.ts:718</li>
+								</ul>
+							</aside>
+							<p>The time zone rule abbreviation, e.g. CEST for Central European Summer Time.
+								Note this is dependent on the time, because with time different rules are in effect
+							and therefore different abbreviations. They also change with DST: e.g. CEST or CET.</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<p>IANA zone name</p>
+								</li>
+								<li>
+									<h5>utcMillis: <span class="tsd-signature-type">number</span></h5>
+									<p>Timestamp in UTC unix milliseconds</p>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">string</span>
+							</h4>
+							<p>The abbreviation of the rule that is in effect</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="dstoffsetforrule" class="anchor"></a>
 					<h3>dst<wbr>Offset<wbr>For<wbr>Rule</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -248,7 +283,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:768</li>
+									<li>Defined in tz-database.ts:800</li>
 								</ul>
 							</aside>
 							<p>Returns the DST offset (WITHOUT the standard zone offset) for the given
@@ -283,7 +318,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1019</li>
+									<li>Defined in tz-database.ts:1092</li>
 								</ul>
 							</aside>
 							<p>Returns the rule set with the given rule name,
@@ -311,7 +346,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:802</li>
+									<li>Defined in tz-database.ts:866</li>
 								</ul>
 							</aside>
 							<p>Return a list of all transitions in [fromYear..toYear] sorted by effective date</p>
@@ -350,7 +385,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:835</li>
+									<li>Defined in tz-database.ts:900</li>
 								</ul>
 							</aside>
 							<p>Return both zone and rule changes as total (std + dst) offsets.
@@ -385,7 +420,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:920</li>
+									<li>Defined in tz-database.ts:993</li>
 								</ul>
 							</aside>
 							<p>Get the zone info for the given UTC timestamp. Throws if not found.</p>
@@ -416,7 +451,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:944</li>
+									<li>Defined in tz-database.ts:1017</li>
 								</ul>
 							</aside>
 							<p>Return the zone records for a given zone name, after
@@ -444,7 +479,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:565</li>
+									<li>Defined in tz-database.ts:573</li>
 								</ul>
 							</aside>
 							<p>Checks whether the zone has DST at all</p>
@@ -469,7 +504,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:462</li>
+									<li>Defined in tz-database.ts:470</li>
 								</ul>
 							</aside>
 							<p>Inject test timezone data for unittests</p>
@@ -491,12 +526,47 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:452</li>
+									<li>Defined in tz-database.ts:460</li>
 								</ul>
 							</aside>
 							<p>Single instance of this database</p>
 							<h4>Returns 
 								<a href="_tz_database_.tzdatabase.html" class="tsd-signature-type">TzDatabase</a>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="letterforrule" class="anchor"></a>
+					<h3>letter<wbr>For<wbr>Rule</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">letter<wbr>For<wbr>Rule<span class="tsd-signature-symbols">(</span>ruleName<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span>, utcMillis<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, standardOffset<span class="tsd-signature-symbols">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in tz-database.ts:832</li>
+								</ul>
+							</aside>
+							<p>Returns the time zone letter for the given
+							ruleset and the given UTC timestamp</p>
+							<h4>Parameters</h4>
+							<ul>
+								<li>
+									<h5>ruleName: <span class="tsd-signature-type">string</span></h5>
+									<p>name of ruleset</p>
+								</li>
+								<li>
+									<h5>utcMillis: <span class="tsd-signature-type">number</span></h5>
+									<p>UTC timestamp</p>
+								</li>
+								<li>
+									<h5>standardOffset: <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+									<p>Standard offset without DST for the time zone</p>
+								</li>
+							</ul>
+							<h4>Returns 
+								<span class="tsd-signature-type">string</span>
 							</h4>
 						</li>
 					</ul>
@@ -510,7 +580,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:531</li>
+									<li>Defined in tz-database.ts:539</li>
 								</ul>
 							</aside>
 							<p>Maximum DST offset (which excludes standard offset) of all rules in the database.
@@ -538,7 +608,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:488</li>
+									<li>Defined in tz-database.ts:496</li>
 								</ul>
 							</aside>
 							<p>Minimum non-zero DST offset (which excludes standard offset) of all rules in the database.
@@ -567,7 +637,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:605</li>
+									<li>Defined in tz-database.ts:613</li>
 								</ul>
 							</aside>
 							<p>Normalizes non-existing local times by adding/subtracting a forward offset change.
@@ -597,7 +667,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:606</li>
+									<li>Defined in tz-database.ts:614</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -627,7 +697,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1155</li>
+									<li>Defined in tz-database.ts:1228</li>
 								</ul>
 							</aside>
 							<p>Parse the AT column of a rule info entry
@@ -653,7 +723,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1126</li>
+									<li>Defined in tz-database.ts:1199</li>
 								</ul>
 							</aside>
 							<p>Get the day number from an ON column string, 0 if no day.</p>
@@ -681,7 +751,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1110</li>
+									<li>Defined in tz-database.ts:1183</li>
 								</ul>
 							</aside>
 							<p>Parse the ON column of a rule info entry
@@ -707,7 +777,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1141</li>
+									<li>Defined in tz-database.ts:1214</li>
 								</ul>
 							</aside>
 							<p>Get the day-of-week from an ON column string, Sunday if not present.</p>
@@ -732,7 +802,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1079</li>
+									<li>Defined in tz-database.ts:1152</li>
 								</ul>
 							</aside>
 							<p>Parse the RULES column of a zone info entry
@@ -758,7 +828,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1093</li>
+									<li>Defined in tz-database.ts:1166</li>
 								</ul>
 							</aside>
 							<p>Parse the TO column of a rule info entry
@@ -784,7 +854,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:669</li>
+									<li>Defined in tz-database.ts:677</li>
 								</ul>
 							</aside>
 							<p>Returns the standard time zone offset from UTC, without DST.
@@ -815,7 +885,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:682</li>
+									<li>Defined in tz-database.ts:690</li>
 								</ul>
 							</aside>
 							<p>Returns the total time zone offset from UTC, including DST, at
@@ -847,7 +917,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:711</li>
+									<li>Defined in tz-database.ts:743</li>
 								</ul>
 							</aside>
 							<p>Returns the total time zone offset from UTC, including DST, at
@@ -881,7 +951,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:576</li>
+									<li>Defined in tz-database.ts:584</li>
 								</ul>
 							</aside>
 							<p>Returns true iff the given zone name eventually links to
@@ -915,7 +985,13 @@
 						<a href="../modules/_datetime_.html">"datetime"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_datetime_interface_.html">"datetime-<wbr>interface"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_duration_.html">"duration"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_format_.html">"format"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_index_.html">"index"</a>
@@ -937,6 +1013,9 @@
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_timezone_.html">"timezone"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="../modules/_token_.html">"token"</a>
 					</li>
 					<li class="current tsd-kind-dynamic-module">
 						<a href="../modules/_tz_database_.html">"tz-<wbr>database"</a>
@@ -997,6 +1076,9 @@
 								<a href="_tz_database_.tzdatabase.html#_zoneinfocache" class="tsd-kind-icon">_zone<wbr>Info<wbr>Cache</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_tz_database_.tzdatabase.html#abbreviation" class="tsd-kind-icon">abbreviation</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_tz_database_.tzdatabase.html#dstoffsetforrule" class="tsd-kind-icon">dst<wbr>Offset<wbr>For<wbr>Rule</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -1022,6 +1104,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_tz_database_.tzdatabase.html#static-instance" class="tsd-kind-icon">instance</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_tz_database_.tzdatabase.html#letterforrule" class="tsd-kind-icon">letter<wbr>For<wbr>Rule</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_tz_database_.tzdatabase.html#maxdstsave" class="tsd-kind-icon">max<wbr>Dst<wbr>Save</a>

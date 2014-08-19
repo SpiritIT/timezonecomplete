@@ -292,4 +292,20 @@ describe("TimeZone", function () {
             expect(TimeZone.zone("Europe/Amsterdam").hasDst()).to.be.true;
         });
     });
+
+    describe("abbreviationForUtc()", function () {
+        it("should work for local timezone", function () {
+            expect(TimeZone.local().abbreviationForUtc(2014, 1, 1)).to.equal("local");
+        });
+        it("should work for offset timezone", function () {
+            expect(TimeZone.zone(3).abbreviationForUtc(2014, 1, 1)).to.equal(TimeZone.zone(3).toString());
+        });
+        it("should work for named zone without DST", function () {
+            expect(TimeZone.zone("UTC").abbreviationForUtc(2014, 1, 1)).to.equal("UTC");
+        });
+        it("should work for named zone with DST", function () {
+            // note that the underlying functionality is fully tested in test-tz-database
+            expect(TimeZone.zone("Europe/Amsterdam").abbreviationForUtc(2014, 7, 1)).to.equal("CEST");
+        });
+    });
 });
