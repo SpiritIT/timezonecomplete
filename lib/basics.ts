@@ -190,6 +190,16 @@ export function weekDayOnOrBefore(year: number, month: number, day: number, week
 	return start.day + diff;
 }
 
+/**
+ * The week of this month. There is no official standard for this,
+ * but we assume the same rules for the weekNumber (i.e.
+ * week 1 is the week that has the 4th day of the month in it)
+ *
+ * @param year The year
+ * @param month The month [1-12]
+ * @param day The day [1-31]
+ * @return Week number [1-5]
+ */
 export function weekOfMonth(year: number, month: number, day: number): number {
 	var firstThursday = firstWeekDayOfMonth(year, month, WeekDay.Thursday);
 	var firstMonday = firstWeekDayOfMonth(year, month, WeekDay.Monday);
@@ -215,7 +225,7 @@ export function weekOfMonth(year: number, month: number, day: number): number {
 	// Corner case: check if we are in last week or week 1 of previous month
 	if (day >= lastMonday) {
 		if (lastMonday > lastThursday) {
-			// Week 1 of previous month
+			// Week 1 of next month
 			return 1;
 		}
 	}

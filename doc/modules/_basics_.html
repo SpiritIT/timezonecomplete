@@ -104,7 +104,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:293</li>
+									<li>Defined in basics.ts:303</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -249,7 +249,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:236</li>
+									<li>Defined in basics.ts:246</li>
 								</ul>
 							</aside>
 							<p>Returns the day-of-year of the Monday of week 1 in the given year.
@@ -336,7 +336,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:427</li>
+									<li>Defined in basics.ts:437</li>
 								</ul>
 							</aside>
 							<p>N-th second in the day, counting from 0</p>
@@ -369,7 +369,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:388</li>
+									<li>Defined in basics.ts:398</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -402,7 +402,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:386</li>
+									<li>Defined in basics.ts:396</li>
 								</ul>
 							</aside>
 							<p>Convert a TimeT structure into a unix milli timestamp.
@@ -419,7 +419,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:378</li>
+									<li>Defined in basics.ts:388</li>
 								</ul>
 							</aside>
 							<p>Convert a year, month, day etc into a unix milli timestamp.
@@ -470,7 +470,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:303</li>
+									<li>Defined in basics.ts:313</li>
 								</ul>
 							</aside>
 							<p>Convert a unix milli timestamp into a TimeT structure.
@@ -496,7 +496,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:416</li>
+									<li>Defined in basics.ts:426</li>
 								</ul>
 							</aside>
 							<p>Return the day-of-week.
@@ -592,7 +592,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:259</li>
+									<li>Defined in basics.ts:269</li>
 								</ul>
 							</aside>
 							<p>The ISO 8601 week number for the given date. Week 1 is the week
@@ -629,24 +629,31 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in basics.ts:192</li>
+									<li>Defined in basics.ts:202</li>
 								</ul>
 							</aside>
+							<p>The week of this month. There is no official standard for this,
+								but we assume the same rules for the weekNumber (i.e.
+							week 1 is the week that has the 4th day of the month in it)</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
+									<p>The year</p>
 								</li>
 								<li>
 									<h5>month: <span class="tsd-signature-type">number</span></h5>
+									<p>The month [1-12]</p>
 								</li>
 								<li>
 									<h5>day: <span class="tsd-signature-type">number</span></h5>
+									<p>The day [1-31]</p>
 								</li>
 							</ul>
 							<h4>Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
+							<p>Week number [1-5]</p>
 						</li>
 					</ul>
 				</section>
