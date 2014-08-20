@@ -397,7 +397,7 @@ describe("TzDatabase", function () {
         });
         it("should work for time zones with rule starting at start of zone", function () {
             expect(TzDatabase.instance().totalOffsetLocal("TEST/ImmediateRule", (new TimeStruct(2013, 12, 31, 23, 59, 59, 999)).toUnixNoLeapSecs()).hours()).to.equal(1);
-            expect(TzDatabase.instance().totalOffsetLocal("TEST/ImmediateRule", (new TimeStruct(2014, 1, 1, 0, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(2);
+            expect(TzDatabase.instance().totalOffsetLocal("TEST/ImmediateRule", (new TimeStruct(2014, 1, 1, 0, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(1);
             expect(TzDatabase.instance().totalOffsetLocal("TEST/ImmediateRule", (new TimeStruct(2014, 1, 1, 1, 0, 0, 0)).toUnixNoLeapSecs()).hours()).to.equal(2);
         });
     });

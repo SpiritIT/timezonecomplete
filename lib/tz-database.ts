@@ -386,6 +386,15 @@ enum TzMonthNames {
 	Dec = 12
 }
 
+function monthNameToString(name: string): number {
+	for (var i: number = 1; i <= 12; ++i) {
+		if (TzMonthNames[i] === name) {
+			return i;
+		}
+	}
+	throw new Error("Invalid month name \"" + name + "\"");
+}
+
 enum TzDayNames {
 	Sun = 0,
 	Mon = 1,
@@ -1028,7 +1037,7 @@ export class TzDatabase {
 			return this._zoneInfoCache[zoneName];
 		}
 
-		var result = [];
+		var result: ZoneInfo[] = [];
 		var actualZoneName: string = zoneName;
 		var zoneEntries: any = this._data.zones[zoneName];
 		// follow links
@@ -1102,7 +1111,7 @@ export class TzDatabase {
 			return this._ruleInfoCache[ruleName];
 		}
 
-		var result = [];
+		var result: RuleInfo[] = [];
 		var ruleSet = this._data.rules[ruleName];
 		for (var i = 0; i < ruleSet.length; ++i) {
 			var rule = ruleSet[i];
@@ -1113,13 +1122,15 @@ export class TzDatabase {
 			var onType: OnType = this.parseOnType(rule[4]);
 			var onDay: number = this.parseOnDay(rule[4], onType);
 			var onWeekDay: WeekDay = this.parseOnWeekDay(rule[4]);
+			var monthName: string = <string>rule[3];
+			var monthNumber: number = monthNameToString(monthName);
 
 			result.push(new RuleInfo(
 				fromYear,
 				toType,
 				toYear,
 				rule[2],
-				<number>(TzMonthNames[(<string>rule[3])]),
+				monthNumber,
 				onType,
 				onDay,
 				onWeekDay,
