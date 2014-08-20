@@ -17,6 +17,15 @@ import TokenType = token.DateTimeTokenType;
 import strings = require("./strings");
 import timeZone = require("./timezone");
 
+/**
+ * Format the supplied dateTime with the formatting string. 
+ * 
+ * @param dateTime The current time to format
+ * @param utcTime The time in UTC
+ * @param localZone The zone that currentTime is in
+ * @param formatString The formatting string to be applied
+ * @return string
+ */
 export function format(dateTime: TimeStruct, utcTime: TimeStruct, localZone: timeZone.TimeZone, formatString: string): string {
 	var tokenizer = new Tokenizer(formatString);
 	var tokens: Token[] = tokenizer.parseTokens();
@@ -71,36 +80,60 @@ export function format(dateTime: TimeStruct, utcTime: TimeStruct, localZone: tim
 	return result;
 }
 
-
+/**
+ * Format the era (BC or AD)
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatEra(dateTime: TimeStruct, token: Token): string {
 	var AD: boolean = dateTime.year > 0;
 	switch (token.length) {
 		case 1:
 		case 2:
 		case 3:
-		default:
 			return (AD ? "AD" : "BC");
 		case 4:
 			return (AD ? "Anno Domini" : "Before Christ");
 		case 5:
 			return (AD ? "A" : "B");
+		default:
+			throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
 	}
 }
 
+/**
+ * Format the year
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatYear(dateTime: TimeStruct, token: Token): string {
 	switch (token.symbol) {
 		case "y":
 		case "Y":
 		case "r":
-		default:
 			var yearValue = strings.padLeft(dateTime.year.toString(), token.length, "0");
 			if (token.length === 2) { // Special case: exactly two characters are expected
 				yearValue = yearValue.slice(-2);
 			}
 			return yearValue;
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
 	}
 }
 
+/**
+ * Format the quarter
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatQuarter(dateTime: TimeStruct, token: Token): string {
 	var quarterAbbr = ["1st", "2nd", "3rd", "4th"];
 	var quarter = Math.ceil(dateTime.month / 3);
@@ -109,15 +142,25 @@ function _formatQuarter(dateTime: TimeStruct, token: Token): string {
 		case 2:
 			return strings.padLeft(quarter.toString(), 2, "0");
 		case 3:
-		default:
 			return "Q" + quarter;
 		case 4:
 			return quarterAbbr[quarter - 1] + " quarter";
 		case 5:
 			return quarter.toString();
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
 	}
 }
 
+/**
+ * Format the month
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatMonth(dateTime: TimeStruct, token: Token): string {
 	var monthStrings = ["January", "February", "March", "April", "May",
 		"June", "July", "August", "September", "October", "November", "December"];
@@ -129,13 +172,23 @@ function _formatMonth(dateTime: TimeStruct, token: Token): string {
 		case 3:
 			return monthString.slice(0, 3);
 		case 4:
-		default:
 			return monthString;
 		case 5:
 			return monthString.slice(0, 1);
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
 	}
 }
 
+/**
+ * Format the week number
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatWeek(dateTime: TimeStruct, token: Token): string {
 	if (token.symbol === "w") {
 		return strings.padLeft(basics.weekNumber(dateTime.year, dateTime.month, dateTime.day).toString(), token.length, "0");
@@ -144,17 +197,34 @@ function _formatWeek(dateTime: TimeStruct, token: Token): string {
 	}
 }
 
+/**
+ * Format the day of the month (or year)
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatDay(dateTime: TimeStruct, token: Token): string {
 	switch (token.symbol) {
 		case "d":
-		default:
 			return strings.padLeft(dateTime.day.toString(), token.length, "0");
 		case "D":
 			var dayOfYear = basics.dayOfYear(dateTime.year, dateTime.month, dateTime.day) + 1;
 			return strings.padLeft(dayOfYear.toString(), token.length, "0");
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
 	}
 }
 
+/**
+ * Format the day of the week
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatWeekday(dateTime: TimeStruct, token: Token): string {
 	var weekDay = basics.WeekDay[basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs())];
 
@@ -163,23 +233,40 @@ function _formatWeekday(dateTime: TimeStruct, token: Token): string {
 		case 2:
 			if (token.symbol === "e") {
 				return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs()).toString(), token.length, "0");
-			}
+			} // No break, this is intentional fallthrough!
 		case 3:
 			return weekDay.slice(0, 3);
 		case 4:
-		default:
 			return weekDay;
 		case 5:
 			return weekDay.slice(0, 1);
 		case 6:
 			return weekDay.slice(0, 2);
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
 	}
 }
 
+/**
+ * Format the Day Period (AM or PM)
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatDayPeriod(dateTime: TimeStruct, token: Token): string {
 	return (dateTime.hour < 12 ? "AM" : "PM");
 }
 
+/**
+ * Format the Hour
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatHour(dateTime: TimeStruct, token: Token): string {
 	var hour = dateTime.hour;
 	switch (token.symbol) {
@@ -199,13 +286,31 @@ function _formatHour(dateTime: TimeStruct, token: Token): string {
 				hour = 24;
 			};
 			return strings.padLeft(hour.toString(), token.length, "0");
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
 	}
 }
 
+/**
+ * Format the minute
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatMinute(dateTime: TimeStruct, token: Token): string {
 	return strings.padLeft(dateTime.minute.toString(), token.length, "0");
 }
 
+/**
+ * Format the seconds (or fraction of a second)
+ * 
+ * @param dateTime The current time to format
+ * @param token The token passed
+ * @return string
+ */
 function _formatSecond(dateTime: TimeStruct, token: Token): string {
 	switch (token.symbol) {
 		case "s":
@@ -217,11 +322,23 @@ function _formatSecond(dateTime: TimeStruct, token: Token): string {
 			return fractionString.slice(0, token.length);
 		case "A":
 			return strings.padLeft(basics.secondInDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
 	}
 }
 
-function _formatZone(currentZone: TimeStruct, utcZone: TimeStruct, zone: timeZone.TimeZone, token: Token): string {
-	var offset = Math.round((currentZone.toUnixNoLeapSecs() - utcZone.toUnixNoLeapSecs()) / 60000);
+/**
+ * Format the time zone. For this, we need the current time, the time in UTC and the time zone
+ * @param currentTime The time to format
+ * @param utcTime The time in UTC
+ * @param zone The timezone currentTime is in
+ * @param token The token passed
+ * @return string
+ */
+function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: timeZone.TimeZone, token: Token): string {
+	var offset = Math.round((currentTime.toUnixNoLeapSecs() - utcTime.toUnixNoLeapSecs()) / 60000);
 
 	var offsetHours: number = Math.floor(Math.abs(offset) / 60);
 	var offsetHoursString = strings.padLeft(offsetHours.toString(), 2, "0");
@@ -250,30 +367,38 @@ function _formatZone(currentZone: TimeStruct, utcZone: TimeStruct, zone: timeZon
 				case 3:
 					return offsetHoursString + offsetMinutesString;
 				case 4:
-					var newToken :Token = {
+					var newToken: Token = {
 						length: 4,
 						raw: "OOOO",
 						symbol: "O",
 						type: TokenType.ZONE
 					};
-					return _formatZone(currentZone, utcZone, zone, newToken);
+					return _formatZone(currentTime, utcTime, zone, newToken);
 				case 5:
 					return offsetHoursString + ":" + offsetMinutesString;
+				/* istanbul ignore next */
+				default:
+					/* istanbul ignore next */
+					throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
 			}
 		case "z":
 			switch (token.length) {
 				case 1:
 				case 2:
 				case 3:
-					return zone.abbreviationForUtc(currentZone.year, currentZone.month, currentZone.day,
-						currentZone.hour, currentZone.minute, currentZone.second, currentZone.milli, true);
+					return zone.abbreviationForUtc(currentTime.year, currentTime.month, currentTime.day,
+						currentTime.hour, currentTime.minute, currentTime.second, currentTime.milli, true);
 				case 4:
 					return zone.toString();
+				/* istanbul ignore next */
+				default:
+					/* istanbul ignore next */
+					throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
 			}
 		case "v":
 			if (token.length === 1) {
-				return zone.abbreviationForUtc(currentZone.year, currentZone.month, currentZone.day,
-					currentZone.hour, currentZone.minute, currentZone.second, currentZone.milli, false);
+				return zone.abbreviationForUtc(currentTime.year, currentTime.month, currentTime.day,
+					currentTime.hour, currentTime.minute, currentTime.second, currentTime.milli, false);
 			} else {
 				return zone.toString();
 			}
@@ -287,6 +412,10 @@ function _formatZone(currentZone: TimeStruct, utcZone: TimeStruct, zone: timeZon
 				case 3:
 				case 4:
 					return "Unknown";
+				/* istanbul ignore next */
+				default:
+					/* istanbul ignore next */
+					throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
 			}
 		case "X":
 			if (offset === 0) {
@@ -306,8 +435,14 @@ function _formatZone(currentZone: TimeStruct, utcZone: TimeStruct, zone: timeZon
 				case 3:
 				case 5: // No seconds in our implementation, so this is the same
 					return offsetHoursString + ":" + offsetMinutesString;
+				/* istanbul ignore next */
+				default:
+					/* istanbul ignore next */
+					throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
 			}
+		/* istanbul ignore next */
 		default:
+			/* istanbul ignore next */
 			throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
 	}
 }

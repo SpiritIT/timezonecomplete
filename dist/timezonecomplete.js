@@ -160,6 +160,27 @@ function lastWeekDayOfMonth(year, month, weekDay) {
 exports.lastWeekDayOfMonth = lastWeekDayOfMonth;
 
 /**
+* Returns the first instance of the given weekday in the given month
+*
+* @param year	The year
+* @param month	the month 1-12
+* @param weekDay	the desired week day
+*
+* @return the first occurrence of the week day in the month
+*/
+function firstWeekDayOfMonth(year, month, weekDay) {
+    var beginOfMonth = new TimeStruct(year, month, 1);
+    var beginOfMonthMillis = exports.timeToUnixNoLeapSecs(beginOfMonth);
+    var beginOfMonthWeekDay = exports.weekDayNoLeapSecs(beginOfMonthMillis);
+    var diff = weekDay - beginOfMonthWeekDay;
+    if (diff < 0) {
+        diff += 7;
+    }
+    return beginOfMonth.day + diff;
+}
+exports.firstWeekDayOfMonth = firstWeekDayOfMonth;
+
+/**
 * Returns the day-of-month that is on the given weekday and which is >= the given day.
 * Throws if the month has no such day.
 */
@@ -192,6 +213,48 @@ function weekDayOnOrBefore(year, month, day, weekDay) {
     return start.day + diff;
 }
 exports.weekDayOnOrBefore = weekDayOnOrBefore;
+
+function weekOfMonth(year, month, day) {
+    var firstThursday = exports.firstWeekDayOfMonth(year, month, 4 /* Thursday */);
+    var firstMonday = exports.firstWeekDayOfMonth(year, month, 1 /* Monday */);
+
+    // Corner case: check if we are in week 1 or last week of previous month
+    if (day < firstMonday) {
+        if (firstThursday < firstMonday) {
+            // Week 1
+            return 1;
+        } else {
+            // Last week of previous month
+            if (month > 1) {
+                // Default case
+                return exports.weekOfMonth(year, month - 1, 31);
+            } else {
+                // January
+                return exports.weekOfMonth(year - 1, 12, 31);
+            }
+        }
+    }
+
+    var lastMonday = exports.lastWeekDayOfMonth(year, month, 1 /* Monday */);
+    var lastThursday = exports.lastWeekDayOfMonth(year, month, 4 /* Thursday */);
+
+    // Corner case: check if we are in last week or week 1 of previous month
+    if (day >= lastMonday) {
+        if (lastMonday > lastThursday) {
+            // Week 1 of previous month
+            return 1;
+        }
+    }
+
+    // Normal case
+    var result = Math.floor((day - firstMonday) / 7) + 1;
+    if (firstThursday < 4) {
+        result += 1;
+    }
+
+    return result;
+}
+exports.weekOfMonth = weekOfMonth;
 
 /**
 * Returns the day-of-year of the Monday of week 1 in the given year.
@@ -370,6 +433,11 @@ function weekDayNoLeapSecs(unixMillis) {
     return (epochDay + days) % 7;
 }
 exports.weekDayNoLeapSecs = weekDayNoLeapSecs;
+
+function secondInDay(hour, minute, second) {
+    return (((hour * 60) + minute) * 60) + second;
+}
+exports.secondInDay = secondInDay;
 
 /**
 * Basic representation of a date and time
@@ -666,7 +734,6 @@ var TimeZone = timezone.TimeZone;
 var TimeZoneKind = timezone.TimeZoneKind;
 
 var format = require("./format");
-var Formatter = format.Formatter;
 
 /**
 * DateTime class which is time zone-aware
@@ -812,10 +879,13 @@ var DateTime = (function () {
 
     /**
     * Zone name abbreviation at this time
+    * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
+    * @return The abbreviation
     */
-    DateTime.prototype.zoneAbbreviation = function () {
+    DateTime.prototype.zoneAbbreviation = function (dstDependent) {
+        if (typeof dstDependent === "undefined") { dstDependent = true; }
         if (this.zone()) {
-            return this.zone().abbreviationForUtc(this.utcYear(), this.utcMonth(), this.utcDay(), this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond());
+            return this.zone().abbreviationForUtc(this.utcYear(), this.utcMonth(), this.utcDay(), this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond(), dstDependent);
         } else {
             return "";
         }
@@ -907,6 +977,27 @@ var DateTime = (function () {
     };
 
     /**
+    * The week of this month. There is no official standard for this,
+    * but we assume the same rules for the weekNumber (i.e.
+    * week 1 is the week that has the 4th day of the month in it)
+    *
+    * @return Week number [1-5]
+    */
+    DateTime.prototype.weekOfMonth = function () {
+        return basics.weekOfMonth(this.year(), this.month(), this.day());
+    };
+
+    /**
+    * Returns the number of seconds that have passed on the current day
+    * Does not consider leap seconds
+    *
+    * @return seconds [0-86399]
+    */
+    DateTime.prototype.secondOfDay = function () {
+        return basics.secondInDay(this.hour(), this.month(), this.day());
+    };
+
+    /**
     * @return Milliseconds since 1970-01-01T00:00:00.000Z
     */
     DateTime.prototype.unixUtcMillis = function () {
@@ -989,6 +1080,27 @@ var DateTime = (function () {
     */
     DateTime.prototype.utcWeekNumber = function () {
         return basics.weekNumber(this.utcYear(), this.utcMonth(), this.utcDay());
+    };
+
+    /**
+    * The week of this month. There is no official standard for this,
+    * but we assume the same rules for the weekNumber (i.e.
+    * week 1 is the week that has the 4th day of the month in it)
+    *
+    * @return Week number [1-5]
+    */
+    DateTime.prototype.utcWeekOfMonth = function () {
+        return basics.weekOfMonth(this.utcYear(), this.utcMonth(), this.utcDay());
+    };
+
+    /**
+    * Returns the number of seconds that have passed on the current day
+    * Does not consider leap seconds
+    *
+    * @return seconds [0-86399]
+    */
+    DateTime.prototype.utcSecondOfDay = function () {
+        return basics.secondInDay(this.utcHour(), this.utcMonth(), this.utcDay());
     };
 
     /**
@@ -1238,9 +1350,7 @@ var DateTime = (function () {
     };
 
     DateTime.prototype.format = function (formatString) {
-        if (DateTime.formatter) {
-            return DateTime.formatter.format(this, formatString);
-        }
+        return format.format(this._zoneDate, this._utcDate, this.zone(), formatString);
     };
 
     /**
@@ -1341,8 +1451,6 @@ var DateTime = (function () {
         result[0] = s;
         return result;
     };
-    DateTime.formatter = new Formatter();
-
     DateTime.timeSource = new RealTimeSource();
     return DateTime;
 })();
@@ -1735,6 +1843,7 @@ exports.TimeZone = TimeZone;
 *
 * Functionality to parse a DateTime object to a string
 */
+/// <reference path="../typings/lib.d.ts"/>
 var basics = require("./basics");
 
 var token = require("./token");
@@ -1744,217 +1853,425 @@ var TokenType = token.DateTimeTokenType;
 
 var strings = require("./strings");
 
-var Formatter = (function () {
-    function Formatter() {
-        this._tokenizer = new Tokenizer();
-    }
-    Formatter.prototype.format = function (dateTime, formatString) {
-        var _this = this;
-        this._tokenizer.setFormatString(formatString);
-        var tokens = this._tokenizer.parseTokens();
-        var result = "";
-        tokens.forEach(function (token) {
-            result += _this._formatToken(dateTime, token);
-        });
-
-        return result;
-    };
-
-    Formatter.prototype._formatToken = function (dateTime, token) {
+/**
+* Format the supplied dateTime with the formatting string.
+*
+* @param dateTime The current time to format
+* @param utcTime The time in UTC
+* @param localZone The zone that currentTime is in
+* @param formatString The formatting string to be applied
+* @return string
+*/
+function format(dateTime, utcTime, localZone, formatString) {
+    var tokenizer = new Tokenizer(formatString);
+    var tokens = tokenizer.parseTokens();
+    var result = "";
+    tokens.forEach(function (token) {
+        var tokenResult;
         switch (token.type) {
             case 1 /* ERA */:
-                return this._formatEra(dateTime, token);
+                tokenResult = _formatEra(dateTime, token);
+                break;
             case 2 /* YEAR */:
-                return this._formatYear(dateTime, token);
+                tokenResult = _formatYear(dateTime, token);
+                break;
             case 3 /* QUARTER */:
-                return this._formatQuarter(dateTime, token);
+                tokenResult = _formatQuarter(dateTime, token);
+                break;
             case 4 /* MONTH */:
-                return this._formatMonth(dateTime, token);
+                tokenResult = _formatMonth(dateTime, token);
+                break;
             case 6 /* DAY */:
-                return this._formatDay(dateTime, token);
+                tokenResult = _formatDay(dateTime, token);
+                break;
             case 7 /* WEEKDAY */:
-                return this._formatWeekday(dateTime, token);
+                tokenResult = _formatWeekday(dateTime, token);
+                break;
             case 8 /* DAYPERIOD */:
-                return this._formatDayPeriod(dateTime, token);
+                tokenResult = _formatDayPeriod(dateTime, token);
+                break;
             case 9 /* HOUR */:
-                return this._formatHour(dateTime, token);
+                tokenResult = _formatHour(dateTime, token);
+                break;
             case 10 /* MINUTE */:
-                return this._formatMinute(dateTime, token);
+                tokenResult = _formatMinute(dateTime, token);
+                break;
             case 11 /* SECOND */:
-                return this._formatSecond(dateTime, token);
+                tokenResult = _formatSecond(dateTime, token);
+                break;
             case 12 /* ZONE */:
-                return this._formatZone(dateTime, token);
+                tokenResult = _formatZone(dateTime, utcTime, localZone, token);
+                break;
             case 5 /* WEEK */:
-                return this._formatWeek(dateTime, token);
+                tokenResult = _formatWeek(dateTime, token);
+                break;
             default:
             case 0 /* IDENTITY */:
-                return token.raw;
+                tokenResult = token.raw;
+                break;
         }
-    };
+        result += tokenResult;
+    });
 
-    Formatter.prototype._formatEra = function (dateTime, token) {
-        var AD = dateTime.year() > 0;
-        switch (token.length) {
-            case 1:
-            case 2:
-            case 3:
-            default:
-                return (AD ? "AD" : "BC");
-            case 4:
-                return (AD ? "Anno Domini" : "Before Christ");
-            case 5:
-                return (AD ? "A" : "B");
-        }
-    };
+    return result;
+}
+exports.format = format;
 
-    Formatter.prototype._formatYear = function (dateTime, token) {
-        switch (token.symbol) {
-            case "y":
-            case "Y":
-            case "r":
-            default:
-                var yearValue = strings.padLeft(dateTime.year().toString(), token.length, "0");
-                if (token.length === 2) {
-                    yearValue = yearValue.slice(-2);
-                }
-                return yearValue;
-        }
-    };
+/**
+* Format the era (BC or AD)
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatEra(dateTime, token) {
+    var AD = dateTime.year > 0;
+    switch (token.length) {
+        case 1:
+        case 2:
+        case 3:
+            return (AD ? "AD" : "BC");
+        case 4:
+            return (AD ? "Anno Domini" : "Before Christ");
+        case 5:
+            return (AD ? "A" : "B");
+        default:
+            throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+    }
+}
 
-    Formatter.prototype._formatQuarter = function (dateTime, token) {
-        var quarterAbbr = ["1st", "2nd", "3rd", "4th"];
-        var quarter = Math.ceil(dateTime.month() / 3);
-        switch (token.length) {
-            case 1:
-            case 2:
-                return strings.padLeft(quarter.toString(), 2, "0");
-            case 3:
-            default:
-                return "Q" + quarter;
-            case 4:
-                return quarterAbbr[quarter - 1] + " quarter";
-            case 5:
-                return quarter.toString();
-        }
-    };
+/**
+* Format the year
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatYear(dateTime, token) {
+    switch (token.symbol) {
+        case "y":
+        case "Y":
+        case "r":
+            var yearValue = strings.padLeft(dateTime.year.toString(), token.length, "0");
+            if (token.length === 2) {
+                yearValue = yearValue.slice(-2);
+            }
+            return yearValue;
 
-    Formatter.prototype._formatMonth = function (dateTime, token) {
-        var monthStrings = [
-            "January", "February", "March", "April", "May",
-            "June", "July", "August", "September", "October", "November", "December"];
-        var monthString = monthStrings[dateTime.month() - 1];
-        switch (token.length) {
-            case 1:
-            case 2:
-                return strings.padLeft(dateTime.month().toString(), token.length, "0");
-            case 3:
-                return monthString.slice(0, 3);
-            case 4:
-            default:
-                return monthString;
-            case 5:
-                return monthString.slice(0, 1);
-        }
-    };
+        default:
+            throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
+    }
+}
 
-    Formatter.prototype._formatWeek = function (dateTime, token) {
-        if (token.symbol === "w") {
-            return strings.padLeft(dateTime.weekNumber().toString(), token.length, "0");
-        } else {
-            // return strings.padLeft(dateTime.weekOfMonth().toString(), token.length, "0");
-            // TODO: Week of month is not implemented yet in DateTime
-            return "-1";
-        }
-    };
+/**
+* Format the quarter
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatQuarter(dateTime, token) {
+    var quarterAbbr = ["1st", "2nd", "3rd", "4th"];
+    var quarter = Math.ceil(dateTime.month / 3);
+    switch (token.length) {
+        case 1:
+        case 2:
+            return strings.padLeft(quarter.toString(), 2, "0");
+        case 3:
+            return "Q" + quarter;
+        case 4:
+            return quarterAbbr[quarter - 1] + " quarter";
+        case 5:
+            return quarter.toString();
 
-    Formatter.prototype._formatDay = function (dateTime, token) {
-        switch (token.symbol) {
-            case "d":
-            default:
-                return strings.padLeft(dateTime.day().toString(), token.length, "0");
-            case "D":
-                // return strings.padLeft(dateTime.dayOfYear().toString(), token.length, "0");
-                // TODO: Day of year is not implemented yet in DateTime
-                return "-1";
-        }
-    };
+        default:
+            throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+    }
+}
 
-    Formatter.prototype._formatWeekday = function (dateTime, token) {
-        var weekDay = basics.WeekDay[dateTime.weekDay()];
+/**
+* Format the month
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatMonth(dateTime, token) {
+    var monthStrings = [
+        "January", "February", "March", "April", "May",
+        "June", "July", "August", "September", "October", "November", "December"];
+    var monthString = monthStrings[dateTime.month - 1];
+    switch (token.length) {
+        case 1:
+        case 2:
+            return strings.padLeft(dateTime.month.toString(), token.length, "0");
+        case 3:
+            return monthString.slice(0, 3);
+        case 4:
+            return monthString;
+        case 5:
+            return monthString.slice(0, 1);
 
-        switch (token.length) {
-            case 1:
-            case 2:
-                if (token.symbol === "e") {
-                    return strings.padLeft(dateTime.weekDay().toString(), token.length, "0");
-                }
-            case 3:
-                return weekDay.slice(0, 3);
-            case 4:
-            default:
-                return weekDay;
-            case 5:
-                return weekDay.slice(0, 1);
-            case 6:
-                return weekDay.slice(0, 2);
-        }
-    };
+        default:
+            throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+    }
+}
 
-    Formatter.prototype._formatDayPeriod = function (dateTime, token) {
-        return (dateTime.hour() < 12 ? "AM" : "PM");
-    };
+/**
+* Format the week number
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatWeek(dateTime, token) {
+    if (token.symbol === "w") {
+        return strings.padLeft(basics.weekNumber(dateTime.year, dateTime.month, dateTime.day).toString(), token.length, "0");
+    } else {
+        return strings.padLeft(basics.weekOfMonth(dateTime.year, dateTime.month, dateTime.day).toString(), token.length, "0");
+    }
+}
 
-    Formatter.prototype._formatHour = function (dateTime, token) {
-        var hour = dateTime.hour();
-        switch (token.symbol) {
-            case "h":
-                hour = hour % 12;
-                if (hour === 0) {
-                    hour = 12;
-                }
-                ;
-                return strings.padLeft(hour.toString(), token.length, "0");
-            case "H":
-                return strings.padLeft(hour.toString(), token.length, "0");
-            case "K":
-                hour = hour % 12;
-                return strings.padLeft(hour.toString(), token.length, "0");
-            case "k":
-                if (hour === 0) {
-                    hour = 24;
-                }
-                ;
-                return strings.padLeft(hour.toString(), token.length, "0");
-        }
-    };
+/**
+* Format the day of the month (or year)
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatDay(dateTime, token) {
+    switch (token.symbol) {
+        case "d":
+            return strings.padLeft(dateTime.day.toString(), token.length, "0");
+        case "D":
+            var dayOfYear = basics.dayOfYear(dateTime.year, dateTime.month, dateTime.day) + 1;
+            return strings.padLeft(dayOfYear.toString(), token.length, "0");
 
-    Formatter.prototype._formatMinute = function (dateTime, token) {
-        return strings.padLeft(dateTime.minute().toString(), token.length, "0");
-    };
+        default:
+            throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
+    }
+}
 
-    Formatter.prototype._formatSecond = function (dateTime, token) {
-        switch (token.symbol) {
-            case "s":
-                return strings.padLeft(dateTime.second().toString(), token.length, "0");
-            case "S":
-                var fraction = dateTime.millisecond();
-                var fractionString = strings.padLeft(fraction.toString(), 3, "0");
-                fractionString = strings.padRight(fractionString, token.length, "0");
-                return fractionString.slice(0, token.length);
-            case "A":
-                // return strings.padLeft(dateTime.secondOfDay().toString(), token.length, "0");
-                // TODO: Second of day is not implemented yet in DateTime
-                return "-1";
-        }
-    };
+/**
+* Format the day of the week
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatWeekday(dateTime, token) {
+    var weekDay = basics.WeekDay[basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs())];
 
-    Formatter.prototype._formatZone = function (dateTime, token) {
-        var zone = dateTime.zone();
-        return zone.toString();
-    };
-    return Formatter;
-})();
-exports.Formatter = Formatter;
+    switch (token.length) {
+        case 1:
+        case 2:
+            if (token.symbol === "e") {
+                return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs()).toString(), token.length, "0");
+            }
+        case 3:
+            return weekDay.slice(0, 3);
+        case 4:
+            return weekDay;
+        case 5:
+            return weekDay.slice(0, 1);
+        case 6:
+            return weekDay.slice(0, 2);
+
+        default:
+            throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+    }
+}
+
+/**
+* Format the Day Period (AM or PM)
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatDayPeriod(dateTime, token) {
+    return (dateTime.hour < 12 ? "AM" : "PM");
+}
+
+/**
+* Format the Hour
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatHour(dateTime, token) {
+    var hour = dateTime.hour;
+    switch (token.symbol) {
+        case "h":
+            hour = hour % 12;
+            if (hour === 0) {
+                hour = 12;
+            }
+            ;
+            return strings.padLeft(hour.toString(), token.length, "0");
+        case "H":
+            return strings.padLeft(hour.toString(), token.length, "0");
+        case "K":
+            hour = hour % 12;
+            return strings.padLeft(hour.toString(), token.length, "0");
+        case "k":
+            if (hour === 0) {
+                hour = 24;
+            }
+            ;
+            return strings.padLeft(hour.toString(), token.length, "0");
+
+        default:
+            throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
+    }
+}
+
+/**
+* Format the minute
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatMinute(dateTime, token) {
+    return strings.padLeft(dateTime.minute.toString(), token.length, "0");
+}
+
+/**
+* Format the seconds (or fraction of a second)
+*
+* @param dateTime The current time to format
+* @param token The token passed
+* @return string
+*/
+function _formatSecond(dateTime, token) {
+    switch (token.symbol) {
+        case "s":
+            return strings.padLeft(dateTime.second.toString(), token.length, "0");
+        case "S":
+            var fraction = dateTime.milli;
+            var fractionString = strings.padLeft(fraction.toString(), 3, "0");
+            fractionString = strings.padRight(fractionString, token.length, "0");
+            return fractionString.slice(0, token.length);
+        case "A":
+            return strings.padLeft(basics.secondInDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
+
+        default:
+            throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
+    }
+}
+
+/**
+* Format the time zone. For this, we need the current time, the time in UTC and the time zone
+* @param currentTime The time to format
+* @param utcTime The time in UTC
+* @param zone The timezone currentTime is in
+* @param token The token passed
+* @return string
+*/
+function _formatZone(currentTime, utcTime, zone, token) {
+    var offset = Math.round((currentTime.toUnixNoLeapSecs() - utcTime.toUnixNoLeapSecs()) / 60000);
+
+    var offsetHours = Math.floor(Math.abs(offset) / 60);
+    var offsetHoursString = strings.padLeft(offsetHours.toString(), 2, "0");
+    offsetHoursString = (offset >= 0 ? "+" + offsetHoursString : "-" + offsetHoursString);
+    var offsetMinutes = Math.abs(offset % 60);
+    var offsetMinutesString = strings.padLeft(offsetMinutes.toString(), 2, "0");
+    var result;
+
+    switch (token.symbol) {
+        case "O":
+            result = "GMT";
+            if (offset >= 0) {
+                result += "+";
+            } else {
+                result += "-";
+            }
+            result += offsetHours.toString();
+            if (token.length >= 4 || offsetMinutes !== 0) {
+                result += ":" + offsetMinutesString;
+            }
+            return result;
+        case "Z":
+            switch (token.length) {
+                case 1:
+                case 2:
+                case 3:
+                    return offsetHoursString + offsetMinutesString;
+                case 4:
+                    var newToken = {
+                        length: 4,
+                        raw: "OOOO",
+                        symbol: "O",
+                        type: 12 /* ZONE */
+                    };
+                    return _formatZone(currentTime, utcTime, zone, newToken);
+                case 5:
+                    return offsetHoursString + ":" + offsetMinutesString;
+
+                default:
+                    throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+            }
+        case "z":
+            switch (token.length) {
+                case 1:
+                case 2:
+                case 3:
+                    return zone.abbreviationForUtc(currentTime.year, currentTime.month, currentTime.day, currentTime.hour, currentTime.minute, currentTime.second, currentTime.milli, true);
+                case 4:
+                    return zone.toString();
+
+                default:
+                    throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+            }
+        case "v":
+            if (token.length === 1) {
+                return zone.abbreviationForUtc(currentTime.year, currentTime.month, currentTime.day, currentTime.hour, currentTime.minute, currentTime.second, currentTime.milli, false);
+            } else {
+                return zone.toString();
+            }
+        case "V":
+            switch (token.length) {
+                case 1:
+                    // Not implemented
+                    return "unk";
+                case 2:
+                    return zone.name();
+                case 3:
+                case 4:
+                    return "Unknown";
+
+                default:
+                    throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+            }
+        case "X":
+            if (offset === 0) {
+                return "Z";
+            }
+        case "x":
+            switch (token.length) {
+                case 1:
+                    result = offsetHoursString;
+                    if (offsetMinutes !== 0) {
+                        result += offsetMinutesString;
+                    }
+                    return result;
+                case 2:
+                case 4:
+                    return offsetHoursString + offsetMinutesString;
+                case 3:
+                case 5:
+                    return offsetHoursString + ":" + offsetMinutesString;
+
+                default:
+                    throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+            }
+
+        default:
+            throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
+    }
+}
 //# sourceMappingURL=format.js.map
 
 },{"./basics":1,"./strings":11,"./token":15}],"Focm2+":[function(require,module,exports){
@@ -3009,14 +3326,16 @@ var TimeZone = (function () {
     * @param minute Minute 0-59
     * @param second Second 0-59
     * @param millisecond Millisecond 0-999
+    * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
     *
     * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
     */
-    TimeZone.prototype.abbreviationForUtc = function (year, month, day, hour, minute, second, millisecond) {
+    TimeZone.prototype.abbreviationForUtc = function (year, month, day, hour, minute, second, millisecond, dstDependent) {
         if (typeof hour === "undefined") { hour = 0; }
         if (typeof minute === "undefined") { minute = 0; }
         if (typeof second === "undefined") { second = 0; }
         if (typeof millisecond === "undefined") { millisecond = 0; }
+        if (typeof dstDependent === "undefined") { dstDependent = true; }
         assert(month > 0 && month < 13, "TimeZone.offsetForUtc():  month out of range.");
         assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
         assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
@@ -3032,7 +3351,7 @@ var TimeZone = (function () {
             }
             case 2 /* Proper */: {
                 var tm = new TimeStruct(year, month, day, hour, minute, second, millisecond);
-                return TzDatabase.instance().abbreviation(this._name, tm.toUnixNoLeapSecs());
+                return TzDatabase.instance().abbreviation(this._name, tm.toUnixNoLeapSecs(), dstDependent);
             }
 
             default:
@@ -3171,12 +3490,14 @@ var Tokenizer = (function () {
         this._formatString = formatString;
     };
 
-    Tokenizer.prototype.tokenize = function (formatString) {
-        if (formatString) {
-            this._formatString = formatString;
-        }
-    };
-
+    /**
+    * Append a new token to the current list of tokens.
+    *
+    * @param tokenString The string that makes up the token
+    * @param tokenArray The existing array of tokens
+    * @param raw (optional) If true, don't parse the token but insert it as is
+    * @return Token[] The resulting array of tokens.
+    */
     Tokenizer.prototype._appendToken = function (tokenString, tokenArray, raw) {
         if (tokenString !== "") {
             var token = {
@@ -3194,6 +3515,9 @@ var Tokenizer = (function () {
         return tokenArray;
     };
 
+    /**
+    * Parse the internal string and return an array of tokens.
+    */
     Tokenizer.prototype.parseTokens = function () {
         var result = [];
 
@@ -3272,6 +3596,9 @@ var Tokenizer = (function () {
 })();
 exports.Tokenizer = Tokenizer;
 
+/**
+* Different types of tokens, each for a DateTime "period type" (like year, month, hour etc.)
+*/
 (function (DateTimeTokenType) {
     DateTimeTokenType[DateTimeTokenType["IDENTITY"] = 0] = "IDENTITY";
 
@@ -3289,6 +3616,7 @@ exports.Tokenizer = Tokenizer;
     DateTimeTokenType[DateTimeTokenType["ZONE"] = 12] = "ZONE";
 })(exports.DateTimeTokenType || (exports.DateTimeTokenType = {}));
 var DateTimeTokenType = exports.DateTimeTokenType;
+
 
 var symbolMapping = {
     "G": 1 /* ERA */,
@@ -4051,17 +4379,24 @@ var TzDatabase = (function () {
     *
     * @param zoneName	IANA zone name
     * @param utcMillis	Timestamp in UTC unix milliseconds
+    * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
     * @return	The abbreviation of the rule that is in effect
     */
-    TzDatabase.prototype.abbreviation = function (zoneName, utcMillis) {
+    TzDatabase.prototype.abbreviation = function (zoneName, utcMillis, dstDependent) {
+        if (typeof dstDependent === "undefined") { dstDependent = true; }
         var zoneInfo = this.getZoneInfo(zoneName, utcMillis);
         var format = zoneInfo.format;
 
         // is format dependent on DST?
         if (format.indexOf("%s") !== -1 && zoneInfo.ruleType === 2 /* RuleName */) {
-            var letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+            var letter;
 
             // place in format string
+            if (dstDependent) {
+                letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+            } else {
+                letter = "";
+            }
             return util.format(format, letter);
         }
 

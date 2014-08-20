@@ -354,8 +354,10 @@ declare module '__timezonecomplete/datetime' {
         zone(): timezone.TimeZone;
         /**
          * Zone name abbreviation at this time
+         * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
+         * @return The abbreviation
          */
-        zoneAbbreviation(): string;
+        zoneAbbreviation(dstDependent?: boolean): string;
         /**
          * @return the offset w.r.t. UTC in minutes. Returns 0 for unaware dates and for UTC dates.
          */
@@ -1070,6 +1072,7 @@ declare module '__timezonecomplete/timezone' {
          * @param minute Minute 0-59
          * @param second Second 0-59
          * @param millisecond Millisecond 0-999
+         * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
          *
          * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
          */

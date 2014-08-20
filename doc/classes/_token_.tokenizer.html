@@ -79,7 +79,6 @@
 						<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_token_.tokenizer.html#_appendtoken" class="tsd-kind-icon">_append<wbr>Token</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_token_.tokenizer.html#parsetokens" class="tsd-kind-icon">parse<wbr>Tokens</a></li>
 						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_token_.tokenizer.html#setformatstring" class="tsd-kind-icon">set<wbr>Format<wbr>String</a></li>
-						<li class="tsd-kind-method tsd-parent-kind-class"><a href="_token_.tokenizer.html#tokenize" class="tsd-kind-icon">tokenize</a></li>
 					</ul>
 				</section>
 			</section>
@@ -137,21 +136,26 @@
 									<li>Defined in token.ts:27</li>
 								</ul>
 							</aside>
+							<p>Append a new token to the current list of tokens.</p>
 							<h4>Parameters</h4>
 							<ul>
 								<li>
 									<h5>tokenString: <span class="tsd-signature-type">string</span></h5>
+									<p>The string that makes up the token</p>
 								</li>
 								<li>
 									<h5>tokenArray: <a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbols">[]</span></h5>
+									<p>The existing array of tokens</p>
 								</li>
 								<li>
 									<h5>raw?: <span class="tsd-signature-type">boolean</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>(optional) If true, don&#39;t parse the token but insert it as is</p>
 								</li>
 							</ul>
 							<h4>Returns 
 								<a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbols">[]</span>
 							</h4>
+							<p>Token[] The resulting array of tokens.</p>
 						</li>
 					</ul>
 				</section>
@@ -164,9 +168,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in token.ts:44</li>
+									<li>Defined in token.ts:47</li>
 								</ul>
 							</aside>
+							<p>Parse the internal string and return an array of tokens.</p>
 							<h4>Returns 
 								<a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbols">[]</span>
 							</h4>
@@ -194,27 +199,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="tokenize" class="anchor"></a>
-					<h3>tokenize</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">tokenize<span class="tsd-signature-symbols">(</span>formatString<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbols">)</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in token.ts:19</li>
-								</ul>
-							</aside>
-							<h4>Parameters</h4>
-							<ul>
-								<li>
-									<h5>formatString?: <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
 			</section>
 		</div>
 		<div class="offset-1 col-3">
@@ -228,9 +212,6 @@
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_datetime_.html">"datetime"</a>
-					</li>
-					<li class=" tsd-kind-dynamic-module">
-						<a href="../modules/_datetime_interface_.html">"datetime-<wbr>interface"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_duration_.html">"duration"</a>
@@ -292,9 +273,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_token_.tokenizer.html#setformatstring" class="tsd-kind-icon">set<wbr>Format<wbr>String</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_token_.tokenizer.html#tokenize" class="tsd-kind-icon">tokenize</a>
 							</li>
 						</ul>
 					</li>

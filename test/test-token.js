@@ -3,8 +3,21 @@ var expect = chai.expect;
 
 var token = require("../lib/token");
 
-describe("format", function () {
-    describe("separateTokens", function () {
+describe("Token", function () {
+    describe("constructor", function () {
+        it("should accept an initial format string", function () {
+            var tokenizer = new token.Tokenizer("foo");
+            expect(tokenizer.parseTokens()).to.not.be.empty;
+        });
+    });
+    describe("setFormatString", function () {
+        it("should accept a new format string", function () {
+            var tokenizer = new token.Tokenizer("");
+            tokenizer.setFormatString("foo");
+            expect(tokenizer.parseTokens()).to.not.be.empty;
+        });
+    });
+    describe("parseTokens", function () {
         it("should return the empty list for an empty string", function () {
             var tokenizer = new token.Tokenizer("");
             var result = tokenizer.parseTokens();
