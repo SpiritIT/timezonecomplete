@@ -118,7 +118,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:149</li>
+									<li>Defined in timezone.ts:152</li>
 								</ul>
 							</aside>
 							<p>Do not use this constructor, use the static
@@ -145,7 +145,7 @@
 					<div class="tsd-signature tsd-kind-icon">_cache<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in timezone.ts:505</li>
+							<li>Defined in timezone.ts:533</li>
 						</ul>
 					</aside>
 					<p>Time zone cache.</p>
@@ -158,7 +158,7 @@
 						<ul class="tsd-descriptions">
 							<li class="tsd-description"><aside class="tsd-sources">
 									<ul>
-										<li>Defined in timezone.ts:505</li>
+										<li>Defined in timezone.ts:533</li>
 									</ul>
 								</aside>
 								<h4>Parameters</h4>
@@ -222,7 +222,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:511</li>
+									<li>Defined in timezone.ts:539</li>
 								</ul>
 							</aside>
 							<p>Find in cache or create zone</p>
@@ -248,7 +248,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:525</li>
+									<li>Defined in timezone.ts:553</li>
 								</ul>
 							</aside>
 							<p>Normalize a string so it can be used as a key for a
@@ -269,12 +269,12 @@
 					<a name="abbreviationforutc" class="anchor"></a>
 					<h3>abbreviation<wbr>For<wbr>Utc</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">abbreviation<wbr>For<wbr>Utc<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, minute<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, second<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, millisecond<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0<span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">abbreviation<wbr>For<wbr>Utc<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, minute<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, second<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, millisecond<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, dstDependent<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbols"> =&nbsp;</span>true<span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:400</li>
+									<li>Defined in timezone.ts:425</li>
 								</ul>
 							</aside>
 							<p>Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.</p>
@@ -308,6 +308,10 @@
 									<h5>millisecond?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
 									<p>Millisecond 0-999</p>
 								</li>
+								<li>
+									<h5>dstDependent?: <span class="tsd-signature-type">boolean</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>(default true) set to false for a DST-agnostic abbreviation</p>
+								</li>
 							</ul>
 							<h4>Returns 
 								<span class="tsd-signature-type">string</span>
@@ -325,7 +329,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:181</li>
+									<li>Defined in timezone.ts:184</li>
 								</ul>
 							</aside>
 							<p>Equality operator. Maps zero offsets and different names for UTC onto
@@ -351,7 +355,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:215</li>
+									<li>Defined in timezone.ts:224</li>
 								</ul>
 							</aside>
 							<p>Does this zone have Daylight Saving Time at all?</p>
@@ -370,7 +374,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:460</li>
+									<li>Defined in timezone.ts:488</li>
 								</ul>
 							</aside>
 							<p>Used by util.inspect()</p>
@@ -389,7 +393,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:199</li>
+									<li>Defined in timezone.ts:205</li>
 								</ul>
 							</aside>
 							<p>Is this zone equivalent to UTC?</p>
@@ -408,7 +412,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:173</li>
+									<li>Defined in timezone.ts:176</li>
 								</ul>
 							</aside>
 							<p>The kind of time zone (Local/Offset/Proper)</p>
@@ -448,7 +452,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:166</li>
+									<li>Defined in timezone.ts:169</li>
 								</ul>
 							</aside>
 							<p>The time zone identifier. Can be an offset &quot;-01:30&quot; or an
@@ -469,7 +473,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:439</li>
+									<li>Defined in timezone.ts:467</li>
 								</ul>
 							</aside>
 							<p>Normalizes non-existing local times by adding a forward offset change.
@@ -504,7 +508,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:241</li>
+									<li>Defined in timezone.ts:253</li>
 								</ul>
 							</aside>
 							<p>Calculate timezone offset from a UTC time.</p>
@@ -555,7 +559,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:320</li>
+									<li>Defined in timezone.ts:338</li>
 								</ul>
 							</aside>
 							<p>Note: will be removed in version 2.0.0</p>
@@ -585,7 +589,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:281</li>
+									<li>Defined in timezone.ts:296</li>
 								</ul>
 							</aside>
 							<p>Calculate timezone offset from a zone-local time (NOT a UTC time).</p>
@@ -636,7 +640,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:358</li>
+									<li>Defined in timezone.ts:379</li>
 								</ul>
 							</aside>
 							<p>Note: will be removed in version 2.0.0</p>
@@ -666,7 +670,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:469</li>
+									<li>Defined in timezone.ts:497</li>
 								</ul>
 							</aside>
 							<p>Convert an offset number into an offset string</p>
@@ -693,7 +697,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:481</li>
+									<li>Defined in timezone.ts:509</li>
 								</ul>
 							</aside>
 							<p>String to offset conversion.</p>
@@ -720,7 +724,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:453</li>
+									<li>Defined in timezone.ts:481</li>
 								</ul>
 							</aside>
 							<p>The time zone identifier (normalized).
@@ -806,9 +810,6 @@
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_datetime_.html">"datetime"</a>
-					</li>
-					<li class=" tsd-kind-dynamic-module">
-						<a href="../modules/_datetime_interface_.html">"datetime-<wbr>interface"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_duration_.html">"duration"</a>

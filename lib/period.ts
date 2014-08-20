@@ -61,8 +61,11 @@ export function periodDstToString(p: PeriodDst): string {
 		case PeriodDst.RegularLocalTime: return "regular local time";
 		/* istanbul ignore next */
 		default:
+			/* istanbul ignore if */
 			/* istanbul ignore next */
-			throw new Error("Unknown PeriodDst");
+			if (true) {
+				throw new Error("Unknown PeriodDst");
+			}
 	}
 }
 
@@ -254,8 +257,11 @@ export class Period {
 						break;
 					/* istanbul ignore next */
 					default:
+						/* istanbul ignore if */
 						/* istanbul ignore next */
-						throw new Error("Unknown TimeUnit");
+						if (true) {
+							throw new Error("Unknown TimeUnit");
+						}
 				}
 				while (!approx.greaterThan(fromDate)) {
 					approx = approx.add(this._intAmount, this._intUnit);
@@ -289,8 +295,11 @@ export class Period {
 						break;
 					/* istanbul ignore next */
 					default:
+						/* istanbul ignore if */
 						/* istanbul ignore next */
-						throw new Error("Unknown TimeUnit");
+						if (true) {
+							throw new Error("Unknown TimeUnit");
+						}
 				}
 				while (!approx.greaterThan(normalFrom)) {
 					approx = approx.addLocal(this._intAmount, this._intUnit);
@@ -335,8 +344,11 @@ export class Period {
 						break;
 					/* istanbul ignore next */
 					default:
+						/* istanbul ignore if */
 						/* istanbul ignore next */
-						throw new Error("Unknown TimeUnit");
+						if (true) {
+							throw new Error("Unknown TimeUnit");
+						}
 				}
 				while (!approx.greaterThan(fromDate)) {
 					approx = approx.add(this._intAmount, this._intUnit);
@@ -462,8 +474,11 @@ export class Period {
 						break;
 					/* istanbul ignore next */
 					default:
+						/* istanbul ignore if */
 						/* istanbul ignore next */
-						throw new Error("Unknown TimeUnit");
+						if (true) {
+							throw new Error("Unknown TimeUnit");
+						}
 				}
 				while (!approx.greaterThan(normalFrom)) {
 					approx = approx.addLocal(this._intAmount, this._intUnit);
@@ -522,8 +537,11 @@ export class Period {
 			}
 			/* istanbul ignore next */
 			default:
+				/* istanbul ignore if */
 				/* istanbul ignore next */
-				throw new Error("Unknown period unit.");
+				if (true) {
+					throw new Error("Unknown period unit.");
+				}
 		}
 	}
 

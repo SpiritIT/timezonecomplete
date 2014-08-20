@@ -118,7 +118,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:489</li>
+									<li>Defined in tz-database.ts:496</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -142,7 +142,7 @@
 					<div class="tsd-signature tsd-kind-icon">_data<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:487</li>
+							<li>Defined in tz-database.ts:494</li>
 						</ul>
 					</aside>
 				</section>
@@ -152,7 +152,7 @@
 					<div class="tsd-signature tsd-kind-icon">_instance<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdatabase.html" class="tsd-signature-type">TzDatabase</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:462</li>
+							<li>Defined in tz-database.ts:469</li>
 						</ul>
 					</aside>
 					<p>Single instance member</p>
@@ -163,7 +163,7 @@
 					<div class="tsd-signature tsd-kind-icon">_minmax<span class="tsd-signature-symbols">:</span> <a href="../interfaces/_tz_database_.minmaxinfo.html" class="tsd-signature-type">MinMaxInfo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:485</li>
+							<li>Defined in tz-database.ts:492</li>
 						</ul>
 					</aside>
 					<p>Information on aggregate values in the database</p>
@@ -174,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">_rule<wbr>Info<wbr>Cache<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:1093</li>
+							<li>Defined in tz-database.ts:1110</li>
 						</ul>
 					</aside>
 					<p>Performance improvement: rule info cache</p>
@@ -187,7 +187,7 @@
 						<ul class="tsd-descriptions">
 							<li class="tsd-description"><aside class="tsd-sources">
 									<ul>
-										<li>Defined in tz-database.ts:1093</li>
+										<li>Defined in tz-database.ts:1110</li>
 									</ul>
 								</aside>
 								<h4>Parameters</h4>
@@ -209,7 +209,7 @@
 					<div class="tsd-signature tsd-kind-icon">_zone<wbr>Info<wbr>Cache<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:1017</li>
+							<li>Defined in tz-database.ts:1031</li>
 						</ul>
 					</aside>
 					<p>Performance improvement: zone info cache</p>
@@ -222,7 +222,7 @@
 						<ul class="tsd-descriptions">
 							<li class="tsd-description"><aside class="tsd-sources">
 									<ul>
-										<li>Defined in tz-database.ts:1017</li>
+										<li>Defined in tz-database.ts:1031</li>
 									</ul>
 								</aside>
 								<h4>Parameters</h4>
@@ -245,12 +245,12 @@
 					<a name="abbreviation" class="anchor"></a>
 					<h3>abbreviation</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">abbreviation<span class="tsd-signature-symbols">(</span>zoneName<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span>, utcMillis<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">abbreviation<span class="tsd-signature-symbols">(</span>zoneName<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span>, utcMillis<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, dstDependent<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbols"> =&nbsp;</span>true<span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:725</li>
+									<li>Defined in tz-database.ts:733</li>
 								</ul>
 							</aside>
 							<p>The time zone rule abbreviation, e.g. CEST for Central European Summer Time.
@@ -265,6 +265,10 @@
 								<li>
 									<h5>utcMillis: <span class="tsd-signature-type">number</span></h5>
 									<p>Timestamp in UTC unix milliseconds</p>
+								</li>
+								<li>
+									<h5>dstDependent?: <span class="tsd-signature-type">boolean</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<p>(default true) set to false for a DST-agnostic abbreviation</p>
 								</li>
 							</ul>
 							<h4>Returns 
@@ -283,7 +287,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:807</li>
+									<li>Defined in tz-database.ts:820</li>
 								</ul>
 							</aside>
 							<p>Returns the DST offset (WITHOUT the standard zone offset) for the given
@@ -318,7 +322,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1102</li>
+									<li>Defined in tz-database.ts:1119</li>
 								</ul>
 							</aside>
 							<p>Returns the rule set with the given rule name,
@@ -346,7 +350,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:873</li>
+									<li>Defined in tz-database.ts:886</li>
 								</ul>
 							</aside>
 							<p>Return a list of all transitions in [fromYear..toYear] sorted by effective date</p>
@@ -385,7 +389,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:907</li>
+									<li>Defined in tz-database.ts:920</li>
 								</ul>
 							</aside>
 							<p>Return both zone and rule changes as total (std + dst) offsets.
@@ -420,7 +424,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1000</li>
+									<li>Defined in tz-database.ts:1013</li>
 								</ul>
 							</aside>
 							<p>Get the zone info for the given UTC timestamp. Throws if not found.</p>
@@ -451,7 +455,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1026</li>
+									<li>Defined in tz-database.ts:1040</li>
 								</ul>
 							</aside>
 							<p>Return the zone records for a given zone name, after
@@ -479,7 +483,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:580</li>
+									<li>Defined in tz-database.ts:587</li>
 								</ul>
 							</aside>
 							<p>Checks whether the zone has DST at all</p>
@@ -504,7 +508,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:477</li>
+									<li>Defined in tz-database.ts:484</li>
 								</ul>
 							</aside>
 							<p>Inject test timezone data for unittests</p>
@@ -526,7 +530,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:467</li>
+									<li>Defined in tz-database.ts:474</li>
 								</ul>
 							</aside>
 							<p>Single instance of this database</p>
@@ -545,7 +549,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:839</li>
+									<li>Defined in tz-database.ts:852</li>
 								</ul>
 							</aside>
 							<p>Returns the time zone letter for the given
@@ -580,7 +584,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:546</li>
+									<li>Defined in tz-database.ts:553</li>
 								</ul>
 							</aside>
 							<p>Maximum DST offset (which excludes standard offset) of all rules in the database.
@@ -608,7 +612,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:503</li>
+									<li>Defined in tz-database.ts:510</li>
 								</ul>
 							</aside>
 							<p>Minimum non-zero DST offset (which excludes standard offset) of all rules in the database.
@@ -637,7 +641,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:620</li>
+									<li>Defined in tz-database.ts:627</li>
 								</ul>
 							</aside>
 							<p>Normalizes non-existing local times by adding/subtracting a forward offset change.
@@ -667,7 +671,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:621</li>
+									<li>Defined in tz-database.ts:628</li>
 								</ul>
 							</aside>
 							<h4>Parameters</h4>
@@ -697,7 +701,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1241</li>
+									<li>Defined in tz-database.ts:1267</li>
 								</ul>
 							</aside>
 							<p>Parse the AT column of a rule info entry
@@ -723,7 +727,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1212</li>
+									<li>Defined in tz-database.ts:1232</li>
 								</ul>
 							</aside>
 							<p>Get the day number from an ON column string, 0 if no day.</p>
@@ -751,7 +755,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1196</li>
+									<li>Defined in tz-database.ts:1216</li>
 								</ul>
 							</aside>
 							<p>Parse the ON column of a rule info entry
@@ -777,7 +781,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1227</li>
+									<li>Defined in tz-database.ts:1250</li>
 								</ul>
 							</aside>
 							<p>Get the day-of-week from an ON column string, Sunday if not present.</p>
@@ -802,7 +806,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1165</li>
+									<li>Defined in tz-database.ts:1182</li>
 								</ul>
 							</aside>
 							<p>Parse the RULES column of a zone info entry
@@ -828,7 +832,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1179</li>
+									<li>Defined in tz-database.ts:1196</li>
 								</ul>
 							</aside>
 							<p>Parse the TO column of a rule info entry
@@ -854,7 +858,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:684</li>
+									<li>Defined in tz-database.ts:691</li>
 								</ul>
 							</aside>
 							<p>Returns the standard time zone offset from UTC, without DST.
@@ -885,7 +889,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:697</li>
+									<li>Defined in tz-database.ts:704</li>
 								</ul>
 							</aside>
 							<p>Returns the total time zone offset from UTC, including DST, at
@@ -917,7 +921,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:750</li>
+									<li>Defined in tz-database.ts:763</li>
 								</ul>
 							</aside>
 							<p>Returns the total time zone offset from UTC, including DST, at
@@ -951,7 +955,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:591</li>
+									<li>Defined in tz-database.ts:598</li>
 								</ul>
 							</aside>
 							<p>Returns true iff the given zone name eventually links to
@@ -983,9 +987,6 @@
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_datetime_.html">"datetime"</a>
-					</li>
-					<li class=" tsd-kind-dynamic-module">
-						<a href="../modules/_datetime_interface_.html">"datetime-<wbr>interface"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="../modules/_duration_.html">"duration"</a>

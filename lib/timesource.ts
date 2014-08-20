@@ -24,7 +24,10 @@ export interface TimeSource {
  */
 export class RealTimeSource implements TimeSource {
 	now(): Date {
+		/* istanbul ignore if */
 		/* istanbul ignore next */
-		return new Date();
+		if (true) {
+			return new Date();
+		}
 	}
 }

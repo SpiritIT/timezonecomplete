@@ -1126,11 +1126,43 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	describe("weekNumber()", (): void => {
+	describe("utcWeekNumber()", (): void => {
 		// note already thoroughly tested in basics.weekDay()
 		it("should work on utc date", (): void => {
 			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone(60));
 			expect(d.utcWeekNumber()).to.equal(21);
+		});
+	});
+
+	describe("weekOfMonth()", (): void => {
+		// note already thoroughly tested in basics.weekOfMonth()
+		it("should work", (): void => {
+			var d = new DateTime(2014, 8, 11, 0, 0, 0, 0, TimeZone.zone(60));
+			expect(d.weekOfMonth()).to.equal(2);
+		});
+	});
+
+	describe("utcWeekOfMonth()", (): void => {
+		// note already thoroughly tested in basics.weekOfMonth()
+		it("should work", (): void => {
+			var d = new DateTime(2014, 8, 11, 0, 0, 0, 0, TimeZone.zone(60));
+			expect(d.utcWeekOfMonth()).to.equal(1);
+		});
+	});
+
+	describe("secondOfDay()", (): void => {
+		// note already thoroughly tested in basics.secondOfDay()
+		it("should work", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 3, 0, TimeZone.zone(60));
+			expect(d.secondOfDay()).to.equal(3);
+		});
+	});
+
+	describe("utcSecondOfDay()", (): void => {
+		// note already thoroughly tested in basics.secondOfDay()
+		it("should work", (): void => {
+			var d = new DateTime(2014, 1, 1, 1, 0, 0, 0, TimeZone.zone(60));
+			expect(d.utcSecondOfDay()).to.equal(0);
 		});
 	});
 
@@ -1143,6 +1175,13 @@ describe("DateTime", (): void => {
 			// note already tested in test-tz-database
 			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			expect(d.zoneAbbreviation()).to.equal("CEST");
+		});
+	});
+
+	describe("format()", (): void => {
+		it("should format to a user-defined string", (): void => {
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			expect(d.format("dd/MM/yyyy HH:mm:ss")).to.equal("26/05/2014 00:30:00");
 		});
 	});
 });

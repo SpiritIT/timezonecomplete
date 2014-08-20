@@ -89,6 +89,36 @@ describe("lastWeekDayOfMonth()", function () {
     });
 });
 
+describe("firstWeekDayOfMonth()", function () {
+    it("should work for month ending on Sunday", function () {
+        expect(basics.firstWeekDayOfMonth(2014, 8, 0 /* Sunday */)).to.equal(3);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 1 /* Monday */)).to.equal(4);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 2 /* Tuesday */)).to.equal(5);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 3 /* Wednesday */)).to.equal(6);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 4 /* Thursday */)).to.equal(7);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 5 /* Friday */)).to.equal(1);
+        expect(basics.firstWeekDayOfMonth(2014, 8, 6 /* Saturday */)).to.equal(2);
+    });
+    it("should work for month ending on Tuesday", function () {
+        expect(basics.firstWeekDayOfMonth(2014, 9, 0 /* Sunday */)).to.equal(7);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 1 /* Monday */)).to.equal(1);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 2 /* Tuesday */)).to.equal(2);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 3 /* Wednesday */)).to.equal(3);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 4 /* Thursday */)).to.equal(4);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 5 /* Friday */)).to.equal(5);
+        expect(basics.firstWeekDayOfMonth(2014, 9, 6 /* Saturday */)).to.equal(6);
+    });
+    it("should work for leap day", function () {
+        expect(basics.firstWeekDayOfMonth(2004, 3, 0 /* Sunday */)).to.equal(7);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 1 /* Monday */)).to.equal(1);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 2 /* Tuesday */)).to.equal(2);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 3 /* Wednesday */)).to.equal(3);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 4 /* Thursday */)).to.equal(4);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 5 /* Friday */)).to.equal(5);
+        expect(basics.firstWeekDayOfMonth(2004, 3, 6 /* Saturday */)).to.equal(6);
+    });
+});
+
 describe("weekDayOnOrAfter()", function () {
     it("should work", function () {
         expect(basics.weekDayOnOrAfter(2014, 8, 11, 1 /* Monday */)).to.equal(11);
@@ -398,6 +428,60 @@ describe("weekNumber()", function () {
         expect(basics.weekNumber(2016, 1, 2)).to.equal(53);
         expect(basics.weekNumber(2016, 1, 3)).to.equal(53);
         expect(basics.weekNumber(2016, 1, 4)).to.equal(1);
+    });
+});
+
+describe("weekOfMonth()", function () {
+    it("should work", function () {
+        // end of month
+        expect(basics.weekOfMonth(2014, 7, 28)).to.equal(5);
+        expect(basics.weekOfMonth(2014, 7, 29)).to.equal(5);
+        expect(basics.weekOfMonth(2014, 7, 30)).to.equal(5);
+        expect(basics.weekOfMonth(2014, 7, 31)).to.equal(5);
+        expect(basics.weekOfMonth(2014, 8, 1)).to.equal(5);
+        expect(basics.weekOfMonth(2014, 8, 2)).to.equal(5);
+        expect(basics.weekOfMonth(2014, 8, 3)).to.equal(5);
+
+        // mid-month
+        expect(basics.weekOfMonth(2014, 8, 11)).to.equal(2);
+        expect(basics.weekOfMonth(2014, 8, 12)).to.equal(2);
+        expect(basics.weekOfMonth(2014, 8, 13)).to.equal(2);
+        expect(basics.weekOfMonth(2014, 8, 14)).to.equal(2);
+        expect(basics.weekOfMonth(2014, 8, 15)).to.equal(2);
+        expect(basics.weekOfMonth(2014, 8, 16)).to.equal(2);
+        expect(basics.weekOfMonth(2014, 8, 17)).to.equal(2);
+
+        // begin-month
+        expect(basics.weekOfMonth(2014, 4, 28)).to.equal(1);
+        expect(basics.weekOfMonth(2014, 4, 29)).to.equal(1);
+        expect(basics.weekOfMonth(2014, 4, 30)).to.equal(1);
+        expect(basics.weekOfMonth(2014, 5, 1)).to.equal(1);
+        expect(basics.weekOfMonth(2014, 5, 1)).to.equal(1);
+        expect(basics.weekOfMonth(2014, 5, 1)).to.equal(1);
+        expect(basics.weekOfMonth(2014, 5, 1)).to.equal(1);
+
+        // end of year
+        expect(basics.weekOfMonth(2015, 12, 28)).to.equal(5);
+        expect(basics.weekOfMonth(2015, 12, 29)).to.equal(5);
+        expect(basics.weekOfMonth(2015, 12, 30)).to.equal(5);
+        expect(basics.weekOfMonth(2015, 12, 31)).to.equal(5);
+        expect(basics.weekOfMonth(2016, 1, 1)).to.equal(5);
+        expect(basics.weekOfMonth(2016, 1, 2)).to.equal(5);
+        expect(basics.weekOfMonth(2016, 1, 3)).to.equal(5);
+        expect(basics.weekOfMonth(2016, 1, 4)).to.equal(1);
+    });
+});
+
+describe("secondsInDay()", function () {
+    it("should work", function () {
+        expect(basics.secondInDay(0, 0, 0)).to.equal(0);
+        expect(basics.secondInDay(0, 0, 1)).to.equal(1);
+        expect(basics.secondInDay(0, 1, 0)).to.equal(60);
+        expect(basics.secondInDay(0, 1, 1)).to.equal(61);
+        expect(basics.secondInDay(1, 0, 0)).to.equal(3600);
+        expect(basics.secondInDay(1, 0, 1)).to.equal(3601);
+        expect(basics.secondInDay(1, 1, 0)).to.equal(3660);
+        expect(basics.secondInDay(1, 1, 1)).to.equal(3661);
     });
 });
 //# sourceMappingURL=test-basics.js.map

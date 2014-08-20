@@ -33,18 +33,13 @@ import NormalizeOption = timezone.NormalizeOption;
 import TimeZone = timezone.TimeZone;
 import TimeZoneKind = timezone.TimeZoneKind;
 
-import dateTimeInterface = require("./datetime-interface");
-import DateTimeAccess = dateTimeInterface.DateTimeAccess;
-
 import format = require("./format");
-import Formatter = format.Formatter;
+
 /**
  * DateTime class which is time zone-aware
  * and which can be mocked for testing purposes.
  */
-export class DateTime implements DateTimeAccess {
-
-	public static formatter: Formatter = new Formatter();
+export class DateTime {
 
 	/**
 	 * Date object that contains the represented date converted to UTC in its
@@ -238,8 +233,11 @@ export class DateTime implements DateTimeAccess {
 			} break;
 			/* istanbul ignore next */
 			default:
+				/* istanbul ignore if */
 				/* istanbul ignore next */
-				throw new Error("DateTime.DateTime(): unexpected first argument type.");
+				if (true) {
+					throw new Error("DateTime.DateTime(): unexpected first argument type.");
+				}
 		}
 	}
 
@@ -263,12 +261,14 @@ export class DateTime implements DateTimeAccess {
 
 	/**
 	 * Zone name abbreviation at this time
+	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
+	 * @return The abbreviation
 	 */
-	public zoneAbbreviation(): string {
+	public zoneAbbreviation(dstDependent: boolean = true): string {
 		if (this.zone()) {
 			return this.zone().abbreviationForUtc(
 				this.utcYear(), this.utcMonth(), this.utcDay(),
-				this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond());
+				this.utcHour(), this.utcMinute(), this.utcSecond(), this.utcMillisecond(), dstDependent);
 		} else {
 			return "";
 		}
@@ -360,6 +360,27 @@ export class DateTime implements DateTimeAccess {
 	}
 
 	/**
+	 * The week of this month. There is no official standard for this,
+	 * but we assume the same rules for the weekNumber (i.e.
+	 * week 1 is the week that has the 4th day of the month in it)
+	 *
+	 * @return Week number [1-5]
+	 */
+	public weekOfMonth(): number {
+		return basics.weekOfMonth(this.year(), this.month(), this.day());
+	}
+
+	/**
+	 * Returns the number of seconds that have passed on the current day
+	 * Does not consider leap seconds
+	 *
+	 * @return seconds [0-86399]
+	 */
+	public secondOfDay(): number {
+		return basics.secondInDay(this.hour(), this.minute(), this.second());
+	}
+
+	/**
 	 * @return Milliseconds since 1970-01-01T00:00:00.000Z
 	 */
 	public unixUtcMillis(): number {
@@ -442,6 +463,27 @@ export class DateTime implements DateTimeAccess {
 	 */
 	public utcWeekNumber(): number {
 		return basics.weekNumber(this.utcYear(), this.utcMonth(), this.utcDay());
+	}
+
+	/**
+	 * The week of this month. There is no official standard for this,
+	 * but we assume the same rules for the weekNumber (i.e.
+	 * week 1 is the week that has the 4th day of the month in it)
+	 *
+	 * @return Week number [1-5]
+	 */
+	public utcWeekOfMonth(): number {
+		return basics.weekOfMonth(this.utcYear(), this.utcMonth(), this.utcDay());
+	}
+
+	/**
+	 * Returns the number of seconds that have passed on the current day
+	 * Does not consider leap seconds
+	 *
+	 * @return seconds [0-86399]
+	 */
+	public utcSecondOfDay(): number {
+		return basics.secondInDay(this.utcHour(), this.utcMinute(), this.utcSecond());
 	}
 
 	/**
@@ -628,8 +670,11 @@ export class DateTime implements DateTimeAccess {
 			}
 			/* istanbul ignore next */
 			default:
+				/* istanbul ignore if */
 				/* istanbul ignore next */
-				throw new Error("Unknown period unit.");
+				if (true) {
+					throw new Error("Unknown period unit.");
+				}
 		}
 	}
 
@@ -728,9 +773,7 @@ export class DateTime implements DateTimeAccess {
 	}
 
 	public format(formatString: string): string {
-		if (DateTime.formatter) {
-			return DateTime.formatter.format(this, formatString);
-		}
+		return format.format(this._zoneDate, this._utcDate, this.zone(), formatString);
 	}
 
 	/**

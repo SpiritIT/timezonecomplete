@@ -1152,11 +1152,43 @@ describe("DateTime", function () {
         });
     });
 
-    describe("weekNumber()", function () {
+    describe("utcWeekNumber()", function () {
         // note already thoroughly tested in basics.weekDay()
         it("should work on utc date", function () {
             var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone(60));
             expect(d.utcWeekNumber()).to.equal(21);
+        });
+    });
+
+    describe("weekOfMonth()", function () {
+        // note already thoroughly tested in basics.weekOfMonth()
+        it("should work", function () {
+            var d = new DateTime(2014, 8, 11, 0, 0, 0, 0, TimeZone.zone(60));
+            expect(d.weekOfMonth()).to.equal(2);
+        });
+    });
+
+    describe("utcWeekOfMonth()", function () {
+        // note already thoroughly tested in basics.weekOfMonth()
+        it("should work", function () {
+            var d = new DateTime(2014, 8, 11, 0, 0, 0, 0, TimeZone.zone(60));
+            expect(d.utcWeekOfMonth()).to.equal(1);
+        });
+    });
+
+    describe("secondOfDay()", function () {
+        // note already thoroughly tested in basics.secondOfDay()
+        it("should work", function () {
+            var d = new DateTime(2014, 1, 1, 0, 0, 3, 0, TimeZone.zone(60));
+            expect(d.secondOfDay()).to.equal(3);
+        });
+    });
+
+    describe("utcSecondOfDay()", function () {
+        // note already thoroughly tested in basics.secondOfDay()
+        it("should work", function () {
+            var d = new DateTime(2014, 1, 1, 1, 0, 0, 0, TimeZone.zone(60));
+            expect(d.utcSecondOfDay()).to.equal(0);
         });
     });
 
@@ -1169,6 +1201,13 @@ describe("DateTime", function () {
             // note already tested in test-tz-database
             var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
             expect(d.zoneAbbreviation()).to.equal("CEST");
+        });
+    });
+
+    describe("format()", function () {
+        it("should format to a user-defined string", function () {
+            var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+            expect(d.format("dd/MM/yyyy HH:mm:ss")).to.equal("26/05/2014 00:30:00");
         });
     });
 });

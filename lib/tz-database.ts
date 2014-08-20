@@ -267,8 +267,11 @@ export class RuleInfo {
 				break;
 			/* istanbul ignore next */
 			default:
+				/* istanbul ignore if */
 				/* istanbul ignore next */
-				throw new Error("unknown AtType");
+				if (true) {
+					throw new Error("unknown AtType");
+				}
 		}
 
 		return unixMillis - offset.milliseconds();
@@ -392,7 +395,11 @@ function monthNameToString(name: string): number {
 			return i;
 		}
 	}
-	throw new Error("Invalid month name \"" + name + "\"");
+	/* istanbul ignore if */
+	/* istanbul ignore next */
+	if (true) {
+		throw new Error("Invalid month name \"" + name + "\"");
+	}
 }
 
 enum TzDayNames {
@@ -721,17 +728,23 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	IANA zone name
 	 * @param utcMillis	Timestamp in UTC unix milliseconds
+	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
 	 * @return	The abbreviation of the rule that is in effect
 	 */
-	public abbreviation(zoneName: string, utcMillis: number): string {
+	public abbreviation(zoneName: string, utcMillis: number, dstDependent: boolean = true): string {
 		var zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcMillis);
 		var format: string = zoneInfo.format;
 
 		// is format dependent on DST?
 		if (format.indexOf("%s") !== -1
 			&& zoneInfo.ruleType === RuleType.RuleName) {
-			var letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+			var letter: string;
 			// place in format string
+			if (dstDependent) {
+				letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+			} else {
+				letter = "";
+			}
 			return util.format(format, letter);
 		}
 
@@ -1007,6 +1020,7 @@ export class TzDatabase {
 			}
 		}
 		/* istanbul ignore if */
+		/* istanbul ignore next */
 		if (true) {
 			throw new Error("No zone info found");
 		}
@@ -1028,8 +1042,11 @@ export class TzDatabase {
 		// FIRST validate zone name before searching cache
 		/* istanbul ignore if */
 		if (!this._data.zones.hasOwnProperty(zoneName)) {
+			/* istanbul ignore if */
 			/* istanbul ignore next */
-			throw new Error("Zone \"" + zoneName + "\" not found.");
+			if (true) {
+				throw new Error("Zone \"" + zoneName + "\" not found.");
+			}
 		}
 
 		// Take from cache
@@ -1185,8 +1202,11 @@ export class TzDatabase {
 		} else if (!isNaN(parseInt(to, 10))) {
 			return ToType.Year;
 		} else {
+			/* istanbul ignore if */
 			/* istanbul ignore next */
-			throw new Error("TO column incorrect: " + to);
+			if (true) {
+				throw new Error("TO column incorrect: " + to);
+			}
 		}
 	}
 
@@ -1217,8 +1237,11 @@ export class TzDatabase {
 			case OnType.GreqX: return parseInt(on.substr(on.indexOf(">=") + 2), 10);
 			/* istanbul ignore next */
 			default:
+				/* istanbul ignore if */
 				/* istanbul ignore next */
-				return 0;
+				if (true) {
+					return 0;
+				}
 		}
 	}
 
@@ -1231,8 +1254,11 @@ export class TzDatabase {
 				return <WeekDay>i;
 			}
 		}
+		/* istanbul ignore if */
 		/* istanbul ignore next */
-		return WeekDay.Sunday;
+		if (true) {
+			return WeekDay.Sunday;
+		}
 	}
 
 	/**
@@ -1249,8 +1275,11 @@ export class TzDatabase {
 			case "": return AtType.Wall;
 			case null: return AtType.Wall;
 			default:
+				/* istanbul ignore if */
 				/* istanbul ignore next */
-				return AtType.Wall;
+				if (true) {
+					return AtType.Wall;
+				}
 		}
 	}
 
