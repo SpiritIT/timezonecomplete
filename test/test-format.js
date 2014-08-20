@@ -524,7 +524,7 @@ describe("format", function () {
             dateTime.day = 15;
             utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
             var result = format.format(dateTime, utcTime, localZone, "O");
-            expect(result).to.equal("GMT+2");
+            expect(result).to.equal("UTC+2");
         });
         it("should get the short specific name of the timezone for format O", function () {
             localZone = new timeZone.TimeZone("Europe/Amsterdam");
@@ -533,7 +533,7 @@ describe("format", function () {
             dateTime.day = 15;
             utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (60 * 60 * 1000));
             var result = format.format(dateTime, utcTime, localZone, "O");
-            expect(result).to.equal("GMT+1");
+            expect(result).to.equal("UTC+1");
         });
         it("should get the short specific name of the timezone for format OOOO", function () {
             localZone = new timeZone.TimeZone("Europe/Amsterdam");
@@ -542,7 +542,7 @@ describe("format", function () {
             dateTime.day = 15;
             utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (120 * 60 * 1000));
             var result = format.format(dateTime, utcTime, localZone, "OOOO");
-            expect(result).to.equal("GMT+2:00");
+            expect(result).to.equal("UTC+2:00");
         });
         it("should get the short specific name of the timezone for format OOOO", function () {
             localZone = new timeZone.TimeZone("Europe/Amsterdam");
@@ -551,7 +551,7 @@ describe("format", function () {
             dateTime.day = 15;
             utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (60 * 60 * 1000));
             var result = format.format(dateTime, utcTime, localZone, "OOOO");
-            expect(result).to.equal("GMT+1:00");
+            expect(result).to.equal("UTC+1:00");
         });
 
         it("should get the short specific name of the timezone for format v", function () {
@@ -1023,7 +1023,7 @@ describe("format", function () {
             dateTime.day = 15;
             utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (150 * 60 * 1000));
             var result = format.format(dateTime, utcTime, localZone, "ZZZZ");
-            expect(result).to.equal("GMT+2:30");
+            expect(result).to.equal("UTC+2:30");
         });
         it("should get the basic ISO format for format ZZZZ with negative offset", function () {
             localZone = new timeZone.TimeZone("Europe/Amsterdam");
@@ -1032,7 +1032,7 @@ describe("format", function () {
             dateTime.day = 15;
             utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (-480 * 60 * 1000));
             var result = format.format(dateTime, utcTime, localZone, "ZZZZ");
-            expect(result).to.equal("GMT-8:00");
+            expect(result).to.equal("UTC-8:00");
         });
         it("should get the basic ISO format for format ZZZZ with 0 offset", function () {
             localZone = new timeZone.TimeZone("Europe/Amsterdam");
@@ -1041,7 +1041,7 @@ describe("format", function () {
             dateTime.day = 15;
             utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs() - (0 * 60 * 1000));
             var result = format.format(dateTime, utcTime, localZone, "ZZZZ");
-            expect(result).to.equal("GMT+0:00");
+            expect(result).to.equal("UTC+0:00");
         });
 
         it("should get the basic ISO format for format ZZZZZ with positive offset", function () {
