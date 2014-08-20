@@ -17,14 +17,14 @@ export class Tokenizer {
 		this._formatString = formatString;
 	}
 
-	tokenize(formatString?: string): void {
-		if (formatString) {
-			this._formatString = formatString;
-		}
-
-
-	}
-
+	/**
+	 * Append a new token to the current list of tokens.
+	 * 
+	 * @param tokenString The string that makes up the token
+	 * @param tokenArray The existing array of tokens
+	 * @param raw (optional) If true, don't parse the token but insert it as is
+	 * @return Token[] The resulting array of tokens.
+	 */
 	private _appendToken(tokenString: string, tokenArray: Token[], raw?: boolean): Token[] {
 		if (tokenString !== "") {
 			var token: Token = {
@@ -42,6 +42,9 @@ export class Tokenizer {
 		return tokenArray;
 	}
 
+	/**
+	 * Parse the internal string and return an array of tokens.
+	 */
 	parseTokens(): Token[] {
 		var result: Token[] = [];
 
@@ -119,6 +122,9 @@ export class Tokenizer {
 
 }
 
+/**
+ * Different types of tokens, each for a DateTime "period type" (like year, month, hour etc.)
+ */
 export enum DateTimeTokenType {
 	IDENTITY, // Special, do not "format" this, but just output what went in
 
@@ -136,10 +142,28 @@ export enum DateTimeTokenType {
 	ZONE
 }
 
+/**
+ * Basic token 
+ */
 export interface Token {
+	/**
+	 * The type of token
+	 */
 	type: DateTimeTokenType;
+
+	/**
+	 * The symbol from which the token was parsed
+	 */
 	symbol: string;
+
+	/**
+	 * The total length of the token
+	 */
 	length: number;
+
+	/**
+	 * The original string that produced this token
+	 */
 	raw: string;
 }
 

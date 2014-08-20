@@ -511,6 +511,10 @@ describe("TzDatabase", (): void => {
 		it("should work for zones that have a fixed DST offset", (): void => {
 			expect(TzDatabase.instance().abbreviation("Africa/Algiers", -1855958400001)).to.equal("PMT");
 		});
+		it("should ignore DST if required so", (): void => {
+			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 1, 0, 0, 0)).toUnixNoLeapSecs(), false)).
+				to.equal("CET");
+		});
 	});
 
 	describe("totalOffsetLocal()", (): void => {

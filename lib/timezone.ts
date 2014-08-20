@@ -395,12 +395,13 @@ export class TimeZone {
 	 * @param minute Minute 0-59
 	 * @param second Second 0-59
 	 * @param millisecond Millisecond 0-999
+	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
 	 *
 	 * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
 	 */
 	public abbreviationForUtc(year: number, month: number, day: number,
 		hour: number = 0, minute: number = 0, second: number = 0,
-		millisecond: number = 0): string {
+		millisecond: number = 0, dstDependent: boolean = true): string {
 		assert(month > 0 && month < 13, "TimeZone.offsetForUtc():  month out of range.");
 		assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
 		assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
@@ -416,7 +417,7 @@ export class TimeZone {
 			}
 			case TimeZoneKind.Proper: {
 				var tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
-				return TzDatabase.instance().abbreviation(this._name, tm.toUnixNoLeapSecs());
+				return TzDatabase.instance().abbreviation(this._name, tm.toUnixNoLeapSecs(), dstDependent);
 			}
 			/* istanbul ignore next */
 			default:

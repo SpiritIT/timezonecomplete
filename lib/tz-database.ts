@@ -712,17 +712,23 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	IANA zone name
 	 * @param utcMillis	Timestamp in UTC unix milliseconds
+	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
 	 * @return	The abbreviation of the rule that is in effect
 	 */
-	public abbreviation(zoneName: string, utcMillis: number): string {
+	public abbreviation(zoneName: string, utcMillis: number, dstDependent: boolean = true): string {
 		var zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcMillis);
 		var format: string = zoneInfo.format;
 
 		// is format dependent on DST?
 		if (format.indexOf("%s") !== -1
 			&& zoneInfo.ruleType === RuleType.RuleName) {
-			var letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+			var letter: string;
 			// place in format string
+			if (dstDependent) {
+				letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+			} else {
+				letter = "";
+			}
 			return util.format(format, letter);
 		}
 

@@ -1171,5 +1171,12 @@ describe("DateTime", function () {
             expect(d.zoneAbbreviation()).to.equal("CEST");
         });
     });
+
+    describe("format()", function () {
+        it("should format to a user-defined string", function () {
+            var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+            expect(d.format("dd/MM/yyyy HH:mm:ss")).to.equal("26/05/2014 00:30:00");
+        });
+    });
 });
 //# sourceMappingURL=test-datetime.js.map

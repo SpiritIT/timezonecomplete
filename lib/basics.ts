@@ -140,6 +140,25 @@ export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay
 }
 
 /**
+ * Returns the first instance of the given weekday in the given month
+ *
+ * @param year	The year
+ * @param month	the month 1-12
+ * @param weekDay	the desired week day
+ *
+ * @return the first occurrence of the week day in the month
+ */
+export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
+	var beginOfMonth: TimeStruct = new TimeStruct(year, month, 1);
+	var beginOfMonthMillis = timeToUnixNoLeapSecs(beginOfMonth);
+	var beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonthMillis);
+	var diff: number = weekDay - beginOfMonthWeekDay;
+	if (diff < 0) {
+		diff += 7;
+	}
+	return beginOfMonth.day + diff;
+}
+/**
  * Returns the day-of-month that is on the given weekday and which is >= the given day.
  * Throws if the month has no such day.
  */
@@ -169,6 +188,45 @@ export function weekDayOnOrBefore(year: number, month: number, day: number, week
 	}
 	assert(start.day + diff >= 1, "The given month has no such weekday");
 	return start.day + diff;
+}
+
+export function weekOfMonth(year: number, month: number, day: number): number {
+	var firstThursday = firstWeekDayOfMonth(year, month, WeekDay.Thursday);
+	var firstMonday = firstWeekDayOfMonth(year, month, WeekDay.Monday);
+	// Corner case: check if we are in week 1 or last week of previous month
+	if (day < firstMonday) {
+		if (firstThursday < firstMonday) {
+			// Week 1
+			return 1;
+		} else {
+			// Last week of previous month
+			if (month > 1) {
+				// Default case
+				return weekOfMonth(year, month - 1, 31);
+			} else {
+				// January
+				return weekOfMonth(year - 1, 12, 31);
+			}
+		}
+	}
+
+	var lastMonday = lastWeekDayOfMonth(year, month, WeekDay.Monday);
+	var lastThursday = lastWeekDayOfMonth(year, month, WeekDay.Thursday);
+	// Corner case: check if we are in last week or week 1 of previous month
+	if (day >= lastMonday) {
+		if (lastMonday > lastThursday) {
+			// Week 1 of previous month
+			return 1;
+		}
+	}
+
+	// Normal case
+	var result = Math.floor((day - firstMonday) / 7) + 1;
+	if (firstThursday < 4) {
+		result += 1;
+	}
+
+	return result;
 }
 
 /**
@@ -362,6 +420,10 @@ export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
 	var epochDay: WeekDay = WeekDay.Thursday;
 	var days = Math.floor(unixMillis / 1000 / 86400);
 	return (epochDay + days) % 7;
+}
+
+export function secondInDay(hour: number, minute: number, second: number): number {
+	return (((hour * 60) + minute) * 60) + second;
 }
 
 /**

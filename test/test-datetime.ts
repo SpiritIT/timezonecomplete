@@ -1145,6 +1145,13 @@ describe("DateTime", (): void => {
 			expect(d.zoneAbbreviation()).to.equal("CEST");
 		});
 	});
+
+	describe("format()", (): void => {
+		it("should format to a user-defined string", (): void => {
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			expect(d.format("dd/MM/yyyy HH:mm:ss")).to.equal("26/05/2014 00:30:00");
+		});
+	});
 });
 
 
