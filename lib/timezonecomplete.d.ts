@@ -7,11 +7,14 @@ declare module 'timezonecomplete' {
     export import isLeapYear = basics.isLeapYear;
     export import daysInMonth = basics.daysInMonth;
     export import daysInYear = basics.daysInYear;
-    export import dayOfYear = basics.dayOfYear;
+    export import firstWeekDayOfMonth = basics.firstWeekDayOfMonth;
     export import lastWeekDayOfMonth = basics.lastWeekDayOfMonth;
     export import weekDayOnOrAfter = basics.weekDayOnOrAfter;
     export import weekDayOnOrBefore = basics.weekDayOnOrBefore;
     export import weekNumber = basics.weekNumber;
+    export import weekOfMonth = basics.weekOfMonth;
+    export import dayOfYear = basics.dayOfYear;
+    export import secondPfDay = basics.secondPfDay;
     import datetime = require("__timezonecomplete/datetime");
     export import DateTime = datetime.DateTime;
     import duration = require("__timezonecomplete/duration");
@@ -151,7 +154,10 @@ declare module '__timezonecomplete/basics' {
      * This does NOT take leap seconds into account.
      */
     export function weekDayNoLeapSecs(unixMillis: number): WeekDay;
-    export function secondInDay(hour: number, minute: number, second: number): number;
+    /**
+     * N-th second in the day, counting from 0
+     */
+    export function secondPfDay(hour: number, minute: number, second: number): number;
     /**
      * Basic representation of a date and time
      */

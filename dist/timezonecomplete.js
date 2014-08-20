@@ -434,10 +434,13 @@ function weekDayNoLeapSecs(unixMillis) {
 }
 exports.weekDayNoLeapSecs = weekDayNoLeapSecs;
 
-function secondInDay(hour, minute, second) {
+/**
+* N-th second in the day, counting from 0
+*/
+function secondPfDay(hour, minute, second) {
     return (((hour * 60) + minute) * 60) + second;
 }
-exports.secondInDay = secondInDay;
+exports.secondPfDay = secondPfDay;
 
 /**
 * Basic representation of a date and time
@@ -998,7 +1001,7 @@ var DateTime = (function () {
     * @return seconds [0-86399]
     */
     DateTime.prototype.secondOfDay = function () {
-        return basics.secondInDay(this.hour(), this.minute(), this.second());
+        return basics.secondPfDay(this.hour(), this.minute(), this.second());
     };
 
     /**
@@ -1104,7 +1107,7 @@ var DateTime = (function () {
     * @return seconds [0-86399]
     */
     DateTime.prototype.utcSecondOfDay = function () {
-        return basics.secondInDay(this.utcHour(), this.utcMinute(), this.utcSecond());
+        return basics.secondPfDay(this.utcHour(), this.utcMinute(), this.utcSecond());
     };
 
     /**
@@ -1794,8 +1797,8 @@ var daysInMonth = basics.daysInMonth;
 exports.daysInMonth = daysInMonth;
 var daysInYear = basics.daysInYear;
 exports.daysInYear = daysInYear;
-var dayOfYear = basics.dayOfYear;
-exports.dayOfYear = dayOfYear;
+var firstWeekDayOfMonth = basics.firstWeekDayOfMonth;
+exports.firstWeekDayOfMonth = firstWeekDayOfMonth;
 var lastWeekDayOfMonth = basics.lastWeekDayOfMonth;
 exports.lastWeekDayOfMonth = lastWeekDayOfMonth;
 var weekDayOnOrAfter = basics.weekDayOnOrAfter;
@@ -1804,6 +1807,12 @@ var weekDayOnOrBefore = basics.weekDayOnOrBefore;
 exports.weekDayOnOrBefore = weekDayOnOrBefore;
 var weekNumber = basics.weekNumber;
 exports.weekNumber = weekNumber;
+var weekOfMonth = basics.weekOfMonth;
+exports.weekOfMonth = weekOfMonth;
+var dayOfYear = basics.dayOfYear;
+exports.dayOfYear = dayOfYear;
+var secondPfDay = basics.secondPfDay;
+exports.secondPfDay = secondPfDay;
 
 var datetime = require("./datetime");
 datetime;
@@ -2187,7 +2196,7 @@ function _formatSecond(dateTime, token) {
             fractionString = strings.padRight(fractionString, token.length, "0");
             return fractionString.slice(0, token.length);
         case "A":
-            return strings.padLeft(basics.secondInDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
+            return strings.padLeft(basics.secondPfDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
 
         default:
             /* istanbul ignore if */

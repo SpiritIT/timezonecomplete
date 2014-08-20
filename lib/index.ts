@@ -17,11 +17,14 @@ export import WeekDay = basics.WeekDay;
 export import isLeapYear = basics.isLeapYear;
 export import daysInMonth = basics.daysInMonth;
 export import daysInYear = basics.daysInYear;
-export import dayOfYear = basics.dayOfYear;
+export import firstWeekDayOfMonth = basics.firstWeekDayOfMonth;
 export import lastWeekDayOfMonth = basics.lastWeekDayOfMonth;
 export import weekDayOnOrAfter = basics.weekDayOnOrAfter;
 export import weekDayOnOrBefore = basics.weekDayOnOrBefore;
 export import weekNumber = basics.weekNumber;
+export import weekOfMonth = basics.weekOfMonth;
+export import dayOfYear = basics.dayOfYear;
+export import secondPfDay = basics.secondPfDay;
 
 import datetime = require("./datetime"); datetime;
 export import DateTime = datetime.DateTime;

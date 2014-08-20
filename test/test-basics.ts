@@ -488,13 +488,13 @@ describe("weekOfMonth()", (): void => {
 
 describe("secondsInDay()", (): void => {
 	it("should work", (): void => {
-		expect(basics.secondInDay(0, 0, 0)).to.equal(0);
-		expect(basics.secondInDay(0, 0, 1)).to.equal(1);
-		expect(basics.secondInDay(0, 1, 0)).to.equal(60);
-		expect(basics.secondInDay(0, 1, 1)).to.equal(61);
-		expect(basics.secondInDay(1, 0, 0)).to.equal(3600);
-		expect(basics.secondInDay(1, 0, 1)).to.equal(3601);
-		expect(basics.secondInDay(1, 1, 0)).to.equal(3660);
-		expect(basics.secondInDay(1, 1, 1)).to.equal(3661);
+		expect(basics.secondPfDay(0, 0, 0)).to.equal(0);
+		expect(basics.secondPfDay(0, 0, 1)).to.equal(1);
+		expect(basics.secondPfDay(0, 1, 0)).to.equal(60);
+		expect(basics.secondPfDay(0, 1, 1)).to.equal(61);
+		expect(basics.secondPfDay(1, 0, 0)).to.equal(3600);
+		expect(basics.secondPfDay(1, 0, 1)).to.equal(3601);
+		expect(basics.secondPfDay(1, 1, 0)).to.equal(3660);
+		expect(basics.secondPfDay(1, 1, 1)).to.equal(3661);
 	});
 });

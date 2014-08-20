@@ -377,7 +377,7 @@ export class DateTime {
 	 * @return seconds [0-86399]
 	 */
 	public secondOfDay(): number {
-		return basics.secondInDay(this.hour(), this.minute(), this.second());
+		return basics.secondPfDay(this.hour(), this.minute(), this.second());
 	}
 
 	/**
@@ -483,7 +483,7 @@ export class DateTime {
 	 * @return seconds [0-86399]
 	 */
 	public utcSecondOfDay(): number {
-		return basics.secondInDay(this.utcHour(), this.utcMinute(), this.utcSecond());
+		return basics.secondPfDay(this.utcHour(), this.utcMinute(), this.utcSecond());
 	}
 
 	/**

@@ -63,10 +63,6 @@ Timezonecomplete defines a number of utility functions.
 ```javascript
 var tc = require("timezonecomplete");
 
-// n-th day of the year, counting from 0
-tc.dayOfYear(2014, 1, 1); // returns 0
-tc.dayOfYear(2014, 2, 1); // returns 31
-
 // number of days in a month, accounting for leap years
 tc.daysInMonth(2004, 2); // returns 29
 tc.daysInMonth(2014, 2); // returns 28
@@ -79,6 +75,9 @@ tc.daysInYear(2014); // returns 365
 tc.isLeapYear(2004); // returns true
 tc.isLeapYear(2014); // returns false
 
+// first Monday of August in 2014
+tc.firstWeekDayOfMonth(2014, 8, tc.WeekDay.Monday); // returns 4
+
 // last Monday of August in 2014
 tc.lastWeekDayOfMonth(2014, 8, tc.WeekDay.Monday); // returns 25
 
@@ -90,6 +89,16 @@ tc.weekDayOnOrBefore(2014, 8, 15, tc.WeekDay.Sunday); // returns 10
 
 // Week number according to ISO 8601 (note this does NOT match American week numbers)
 tc.weekNumber(2013, 12, 30); // 1
+
+// Week of the month
+tc.weekOfMonth(2013, 12, 30); // 1 (because it's part of the first week of January)
+
+// n-th day of the year, counting from 0
+tc.dayOfYear(2014, 1, 1); // returns 0
+tc.dayOfYear(2014, 2, 1); // returns 31
+
+// n-th second of the day, counting from 0
+tc.secondOfDay(1, 0, 0); // returns 3600
 
 ```
 
@@ -207,7 +216,9 @@ amsterdamDate.second(); // 59
 amsterdamDate.millisecond(); // 0
 amsterdamDate.weekDay(); // tc.WeekDay.Wednesday = 3
 amsterdamDate.weekNumber(); // ISO week number 1-53 = 1
+amsterdamDate.weekOfMonth(); // 1
 amsterdamDate.dayOfYear(); // 0th day of year
+amsterdamDate.secondOfDay(); // 50399
 
 // UTC getters
 amsterdamDate.utcYear(); // 2014
@@ -219,7 +230,9 @@ amsterdamDate.utcSecond(); // 59
 amsterdamDate.utcMillisecond(); // 0
 amsterdamDate.utcWeekDay(); // tc.WeekDay.Wednesday = 3
 amsterdamDate.utcWeekNumber(); // ISO week number 1-53 = 1
+amsterdamDate.utcWeekOfMonth(); // 1
 amsterdamDate.utcDayOfYear(); // 0th day of year
+amsterdamDate.utcSecondOfDay(); // 46799
 
 // Unix millisecond timestamp getter
 amsterdamDate.unixUtcMillis(); // milliseconds of UTC date since 1970-01-01
@@ -397,13 +410,17 @@ The version of the included IANA time zone database is 2014e.
 * Leap second handling
 
 ### Next (already implemented, not published)
+* Add format() function to DateTime to convert a DateTime to a string with a specified format.
 * Add valueOf() method to DateTime and Duration
 * Add dayOfYear() and utcDayOfYear() to DateTime returning the n-th day of the year, starting at 0
 * Add weekNumber() utility function (ISO week number)
 * Add weekNumber() and utcWeekNumber() methods to DateTime
+* Add weekOfMonth() utility function (ISO week number)
+* Add weekOfMonth() and utcWeekOfMonth() methods to DateTime
+* Add secondOfDay() utility function (ISO week number)
+* Add secondOfDay() and utcSecondOfDay() methods to DateTime
 * Add abbreviationForUtc() to TimeZone
 * Add zoneAbbreviation() to DateTime to get time zone abbreviation at the specified datetime.
-* Add format() function to DateTime to convert a DateTime to a string with a specified format.
 
 ### 1.4.6 (2014-08-15)
 * Bugfix TypeScript .d.ts file
