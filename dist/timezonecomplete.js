@@ -437,10 +437,10 @@ exports.weekDayNoLeapSecs = weekDayNoLeapSecs;
 /**
 * N-th second in the day, counting from 0
 */
-function secondPfDay(hour, minute, second) {
+function secondOfDay(hour, minute, second) {
     return (((hour * 60) + minute) * 60) + second;
 }
-exports.secondPfDay = secondPfDay;
+exports.secondOfDay = secondOfDay;
 
 /**
 * Basic representation of a date and time
@@ -1001,7 +1001,7 @@ var DateTime = (function () {
     * @return seconds [0-86399]
     */
     DateTime.prototype.secondOfDay = function () {
-        return basics.secondPfDay(this.hour(), this.minute(), this.second());
+        return basics.secondOfDay(this.hour(), this.minute(), this.second());
     };
 
     /**
@@ -1107,7 +1107,7 @@ var DateTime = (function () {
     * @return seconds [0-86399]
     */
     DateTime.prototype.utcSecondOfDay = function () {
-        return basics.secondPfDay(this.utcHour(), this.utcMinute(), this.utcSecond());
+        return basics.secondOfDay(this.utcHour(), this.utcMinute(), this.utcSecond());
     };
 
     /**
@@ -1811,8 +1811,8 @@ var weekOfMonth = basics.weekOfMonth;
 exports.weekOfMonth = weekOfMonth;
 var dayOfYear = basics.dayOfYear;
 exports.dayOfYear = dayOfYear;
-var secondPfDay = basics.secondPfDay;
-exports.secondPfDay = secondPfDay;
+var secondOfDay = basics.secondOfDay;
+exports.secondOfDay = secondOfDay;
 
 var datetime = require("./datetime");
 datetime;
@@ -2196,7 +2196,7 @@ function _formatSecond(dateTime, token) {
             fractionString = strings.padRight(fractionString, token.length, "0");
             return fractionString.slice(0, token.length);
         case "A":
-            return strings.padLeft(basics.secondPfDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
+            return strings.padLeft(basics.secondOfDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
 
         default:
             /* istanbul ignore if */
@@ -2339,11 +2339,11 @@ function _formatZone(currentTime, utcTime, zone, token) {
 }
 //# sourceMappingURL=format.js.map
 
-},{"./basics":1,"./strings":11,"./token":15}],"Focm2+":[function(require,module,exports){
-module.exports=require(4)
-},{"./basics":1,"./datetime":2,"./duration":3,"./javascript":8,"./period":10,"./timesource":12,"./timezone":14}],"timezonecomplete":[function(require,module,exports){
+},{"./basics":1,"./strings":11,"./token":15}],"timezonecomplete":[function(require,module,exports){
 module.exports=require('Focm2+');
-},{}],8:[function(require,module,exports){
+},{}],"Focm2+":[function(require,module,exports){
+module.exports=require(4)
+},{"./basics":1,"./datetime":2,"./duration":3,"./javascript":8,"./period":10,"./timesource":12,"./timezone":14}],8:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 */

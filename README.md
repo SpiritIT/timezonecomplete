@@ -409,6 +409,9 @@ The version of the included IANA time zone database is 2014e.
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
 
+### 1.5.1 (2014-08-20)
+* Typo in function name: secondPfDay() -> secondOfDay()
+
 ### 1.5.0 (2014-08-20)
 * Add format() function to DateTime to convert a DateTime to a string with a specified format.
 * Add valueOf() method to DateTime and Duration

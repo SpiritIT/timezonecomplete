@@ -24,7 +24,7 @@ export import weekDayOnOrBefore = basics.weekDayOnOrBefore;
 export import weekNumber = basics.weekNumber;
 export import weekOfMonth = basics.weekOfMonth;
 export import dayOfYear = basics.dayOfYear;
-export import secondPfDay = basics.secondPfDay;
+export import secondOfDay = basics.secondOfDay;
 
 import datetime = require("./datetime"); datetime;
 export import DateTime = datetime.DateTime;

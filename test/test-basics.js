@@ -474,14 +474,14 @@ describe("weekOfMonth()", function () {
 
 describe("secondsInDay()", function () {
     it("should work", function () {
-        expect(basics.secondPfDay(0, 0, 0)).to.equal(0);
-        expect(basics.secondPfDay(0, 0, 1)).to.equal(1);
-        expect(basics.secondPfDay(0, 1, 0)).to.equal(60);
-        expect(basics.secondPfDay(0, 1, 1)).to.equal(61);
-        expect(basics.secondPfDay(1, 0, 0)).to.equal(3600);
-        expect(basics.secondPfDay(1, 0, 1)).to.equal(3601);
-        expect(basics.secondPfDay(1, 1, 0)).to.equal(3660);
-        expect(basics.secondPfDay(1, 1, 1)).to.equal(3661);
+        expect(basics.secondOfDay(0, 0, 0)).to.equal(0);
+        expect(basics.secondOfDay(0, 0, 1)).to.equal(1);
+        expect(basics.secondOfDay(0, 1, 0)).to.equal(60);
+        expect(basics.secondOfDay(0, 1, 1)).to.equal(61);
+        expect(basics.secondOfDay(1, 0, 0)).to.equal(3600);
+        expect(basics.secondOfDay(1, 0, 1)).to.equal(3601);
+        expect(basics.secondOfDay(1, 1, 0)).to.equal(3660);
+        expect(basics.secondOfDay(1, 1, 1)).to.equal(3661);
     });
 });
 //# sourceMappingURL=test-basics.js.map

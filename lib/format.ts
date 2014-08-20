@@ -339,7 +339,7 @@ function _formatSecond(dateTime: TimeStruct, token: Token): string {
 			fractionString = strings.padRight(fractionString, token.length, "0");
 			return fractionString.slice(0, token.length);
 		case "A":
-			return strings.padLeft(basics.secondPfDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
+			return strings.padLeft(basics.secondOfDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore if */

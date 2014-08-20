@@ -1,0 +1,31 @@
+
+
+MODULE PUBLISH
+* Adjust README.md and add examples and changelog, and possibly features
+* Adjust package.json and adjust version number
+* Run:
+gulp clean && gulp release && npm test
+* In a DOS cmd window, run:
+gulp doc
+* Correct a bug in dts-bundle. The .d.ts file is missing a reference to timesource, you can see this by diffing with the version stored in DefinitelyTyped. Add it back.
+* Commit changes and Sync with GitHub
+* In GitHub, create a release tag
+* Ensure .npmrc points to the world NPM repository, not the spirit repository
+* Run:
+npm publish
+
+DEFINITELYTYPED
+* Sync your DefenitelyTyped fork to the latest version of DefinitelyTyped
+* Make a branch timezonecomplete-X.Y.Z
+* Copy the last timezonecomplete.d.ts to timezonecomplete-<PREVIOUS_VERSION>.d.ts
+* Edit it so that the module name is timezonecomplete-<PREVIOUS_VERSION>
+* Copy the last timezonecomplete-tests.ts to timezonecomplete-<PREVIOUS_VERSION>-tests.d.ts
+* Edit it so that it refers to timezonecomplete-<PREVIOUS_VERSION>.d.ts
+* Copy the lib/timezonecomplete.d.ts over the old one
+* Add to the timezonecomplete-tests.ts
+* For EVERY -tests.ts file, run:
+tsc -m commonjs --noImplicitAny <TS_FILE>
+* Commit and sync and do a pull request
+
+
+

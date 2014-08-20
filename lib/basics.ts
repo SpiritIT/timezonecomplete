@@ -425,7 +425,7 @@ export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
 /**
  * N-th second in the day, counting from 0
  */
-export function secondPfDay(hour: number, minute: number, second: number): number {
+export function secondOfDay(hour: number, minute: number, second: number): number {
 	return (((hour * 60) + minute) * 60) + second;
 }
 
