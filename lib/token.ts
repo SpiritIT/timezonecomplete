@@ -9,10 +9,18 @@
 
 export class Tokenizer {
 
+	/**
+	 * Create a new tokenizer
+	 * @param _formatString (optional) Set the format string
+	 */
 	constructor(private _formatString?: string) {
 
 	}
 
+	/**
+	 * Set the format string
+	 * @param formatString The new string to use for formatting
+	 */
 	setFormatString(formatString: string): void {
 		this._formatString = formatString;
 	}
@@ -44,6 +52,7 @@ export class Tokenizer {
 
 	/**
 	 * Parse the internal string and return an array of tokens.
+	 * @return Token[]
 	 */
 	parseTokens(): Token[] {
 		var result: Token[] = [];
@@ -219,6 +228,13 @@ var symbolMapping: { [char: string]: DateTimeTokenType } = {
 	"x": DateTimeTokenType.ZONE
 };
 
+/**
+ * Map the given symbol to one of the DateTimeTokenTypes
+ * If there is no mapping, DateTimeTokenType.IDENTITY is used
+ *
+ * @param symbol The single-character symbol used to map the token
+ * @return DateTimeTokenType The Type of token this symbol represents
+ */
 function mapSymbolToType(symbol: string): DateTimeTokenType {
 	if (symbolMapping.hasOwnProperty(symbol)) {
 		return symbolMapping[symbol];

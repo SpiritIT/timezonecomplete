@@ -370,7 +370,7 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: timeZon
 
 	switch (token.symbol) {
 		case "O":
-			result = "GMT";
+			result = "UTC";
 			if (offset >= 0) {
 				result += "+";
 			} else {
