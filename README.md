@@ -409,7 +409,7 @@ The version of the included IANA time zone database is 2014e.
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
 
-### Next (already implemented, not published)
+### 1.5.0 (2014-08-20)
 * Add format() function to DateTime to convert a DateTime to a string with a specified format.
 * Add valueOf() method to DateTime and Duration
 * Add dayOfYear() and utcDayOfYear() to DateTime returning the n-th day of the year, starting at 0
