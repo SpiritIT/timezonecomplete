@@ -186,7 +186,8 @@ gulp.task("build", function() {
 			declaration: true,
 			target: "es5",
 			outDir: ".",
-			sourcemap: true
+			sourcemap: true,
+			noImplicitAny: true			
 		}))
 		.pipe(gulp.dest("."))
 		.on("error", trapError); // make exit code non-zero
