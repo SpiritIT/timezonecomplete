@@ -63,9 +63,11 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
-/lib/index.d.ts
-/test/test-index.d.ts
-/examples/example.d.ts
+
+
+# intermediate results
+/test/*.d.ts
+/examples/*.d.ts
 *.js.map
 bower_components
 /lib/*.d.ts
@@ -73,3 +75,7 @@ bower_components
 /temp
 /obj
 *.suo
+
+# do not ignore the combined d.ts file
+!/lib/timezonecomplete.d.ts
+
