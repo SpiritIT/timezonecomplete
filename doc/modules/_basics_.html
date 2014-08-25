@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<html class="no-js">
+<html class="default no-js">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +7,7 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script src="../assets/js/modernizr.js"></script>
 </head>
 <body>
 <header>
@@ -15,7 +16,7 @@
 			<div class="table-wrap">
 				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
 					<div class="field">
-						<label for="tsd-search-field">Search</label>
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
 					</div>
 					<ul class="results">
@@ -24,24 +25,28 @@
 					</ul>
 					<a href="../index.html" class="title">timezonecomplete</a>
 				</div>
-				<div class="table-cell" id="tsd-filter">
-					<input type="checkbox" id="tsd-filter-inherited" checked />
-					<label for="tsd-filter-inherited">Inherited</label>
-					<input type="checkbox" id="tsd-filter-private" checked />
-					<label for="tsd-filter-private">Private</label>
-					<input type="checkbox" id="tsd-filter-externals" checked />
-					<label for="tsd-filter-externals">Externals</label>
-					<input type="checkbox" id="tsd-filter-only-exported" />
-					<label for="tsd-filter-only-exported">Only exported</label>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-private" checked />
+							<label class="tsd-widget" for="tsd-filter-private">Private</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="breadcrumb">
+			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">timezonecomplete</a>
+					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
 					<a href="_basics_.html">&quot;basics&quot;</a>
@@ -53,53 +58,63 @@
 </header>
 <div class="container container-main">
 	<div class="row">
-		<div class="col-8">
-			<p>Copyright(c) 2014 Spirit IT BV</p>
-			<p>Olsen Timezone Database container</p>
-			<section class="tsd-member-index">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Copyright(c) 2014 Spirit IT BV</p>
+					</div>
+					<p>Olsen Timezone Database container</p>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
-				<section class="tsd-member-index-group ">
-					<h3>Enumerations</h3>
-					<ul class="tsd-member-index">
-						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_basics_.timeunit.html" class="tsd-kind-icon">Time<wbr>Unit</a></li>
-						<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_basics_.weekday.html" class="tsd-kind-icon">Week<wbr>Day</a></li>
-					</ul>
-				</section>
-				<section class="tsd-member-index-group ">
-					<h3>Classes</h3>
-					<ul class="tsd-member-index">
-						<li class="tsd-kind-class tsd-parent-kind-dynamic-module"><a href="../classes/_basics_.timestruct.html" class="tsd-kind-icon">Time<wbr>Struct</a></li>
-					</ul>
-				</section>
-				<section class="tsd-member-index-group ">
-					<h3>Functions</h3>
-					<ul class="tsd-member-index">
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_basics_.html#assertunixtimestamp" class="tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#firstweekdayofmonth" class="tsd-kind-icon">first<wbr>Week<wbr>Day<wbr>OfMonth</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_basics_.html#getweekonedayofyear" class="tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#lastweekdayofmonth" class="tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#secondofday" class="tsd-kind-icon">second<wbr>OfDay</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#timetounixnoleapsecs" class="tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#unixtotimenoleapsecs" class="tsd-kind-icon">unix<wbr>ToTime<wbr>NoLeap<wbr>Secs</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdayonorafter" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdayonorbefore" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weeknumber" class="tsd-kind-icon">week<wbr>Number</a></li>
-						<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekofmonth" class="tsd-kind-icon">week<wbr>OfMonth</a></li>
-					</ul>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Enumerations</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_basics_.timeunit.html" class="tsd-kind-icon">Time<wbr>Unit</a></li>
+								<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_basics_.weekday.html" class="tsd-kind-icon">Week<wbr>Day</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Classes</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-class tsd-parent-kind-dynamic-module"><a href="../classes/_basics_.timestruct.html" class="tsd-kind-icon">Time<wbr>Struct</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_basics_.html#assertunixtimestamp" class="tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#firstweekdayofmonth" class="tsd-kind-icon">first<wbr>Week<wbr>Day<wbr>OfMonth</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported"><a href="_basics_.html#getweekonedayofyear" class="tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#lastweekdayofmonth" class="tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#secondofday" class="tsd-kind-icon">second<wbr>OfDay</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#timetounixnoleapsecs" class="tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#unixtotimenoleapsecs" class="tsd-kind-icon">unix<wbr>ToTime<wbr>NoLeap<wbr>Secs</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdayonorafter" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekdayonorbefore" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weeknumber" class="tsd-kind-icon">week<wbr>Number</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_basics_.html#weekofmonth" class="tsd-kind-icon">week<wbr>OfMonth</a></li>
+							</ul>
+						</section>
+					</div>
 				</section>
 			</section>
-			<section class="tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
 					<a name="assertunixtimestamp" class="anchor"></a>
 					<h3>assert<wbr>Unix<wbr>Timestamp</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp<span class="tsd-signature-symbols">(</span>unixMillis<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp<span class="tsd-signature-symbol">(</span>unixMillis<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -107,8 +122,8 @@
 									<li>Defined in basics.ts:303</li>
 								</ul>
 							</aside>
-							<h4>Parameters</h4>
-							<ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>unixMillis: <span class="tsd-signature-type">number</span></h5>
 								</li>
@@ -116,11 +131,11 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="dayofyear" class="anchor"></a>
 					<h3>day<wbr>OfYear</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">day<wbr>OfYear<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">day<wbr>OfYear<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -128,33 +143,49 @@
 									<li>Defined in basics.ts:110</li>
 								</ul>
 							</aside>
-							<p>Returns the day of the year of the given date [0..365]. January first is 0.</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the day of the year of the given date [0..365]. January first is 0.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
-									<p>The year e.g. 1986</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The year e.g. 1986</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>month: <span class="tsd-signature-type">number</span></h5>
-									<p>Month 1-12</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Month 1-12</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>day: <span class="tsd-signature-type">number</span></h5>
-									<p>Day of month 1-31</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Day of month 1-31</p>
+										</div>
+									</div>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="daysinmonth" class="anchor"></a>
 					<h3>days<wbr>InMonth</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">days<wbr>InMonth<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">days<wbr>InMonth<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -162,29 +193,37 @@
 									<li>Defined in basics.ts:81</li>
 								</ul>
 							</aside>
-							<h4>Parameters</h4>
-							<ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
-									<p>The full year</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The full year</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>month: <span class="tsd-signature-type">number</span></h5>
-									<p>The month 1-12</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The month 1-12</p>
+										</div>
+									</div>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 							<p>The number of days in the given month</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="daysinyear" class="anchor"></a>
 					<h3>days<wbr>InYear</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">days<wbr>InYear<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">days<wbr>InYear<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -192,24 +231,28 @@
 									<li>Defined in basics.ts:72</li>
 								</ul>
 							</aside>
-							<p>The days in a given year</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The days in a given year</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="firstweekdayofmonth" class="anchor"></a>
 					<h3>first<wbr>Week<wbr>Day<wbr>OfMonth</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">first<wbr>Week<wbr>Day<wbr>OfMonth<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbols">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">first<wbr>Week<wbr>Day<wbr>OfMonth<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -217,34 +260,50 @@
 									<li>Defined in basics.ts:150</li>
 								</ul>
 							</aside>
-							<p>Returns the first instance of the given weekday in the given month</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the first instance of the given weekday in the given month</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
-									<p>The year</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The year</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>month: <span class="tsd-signature-type">number</span></h5>
-									<p>the month 1-12</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the month 1-12</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>weekDay: <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
-									<p>the desired week day</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the desired week day</p>
+										</div>
+									</div>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 							<p>the first occurrence of the week day in the month</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
 					<a name="getweekonedayofyear" class="anchor"></a>
 					<h3>get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -252,26 +311,30 @@
 									<li>Defined in basics.ts:246</li>
 								</ul>
 							</aside>
-							<p>Returns the day-of-year of the Monday of week 1 in the given year.
-								Note that the result may lie in the previous year, in which case it
-							will be (much) greater than 4</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the day-of-year of the Monday of week 1 in the given year.
+										Note that the result may lie in the previous year, in which case it
+									will be (much) greater than 4</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="isleapyear" class="anchor"></a>
 					<h3>is<wbr>Leap<wbr>Year</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Leap<wbr>Year<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Leap<wbr>Year<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -279,24 +342,24 @@
 									<li>Defined in basics.ts:52</li>
 								</ul>
 							</aside>
-							<h4>Parameters</h4>
-							<ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">boolean</span>
 							</h4>
 							<p>True iff the given year is a leap year.</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="lastweekdayofmonth" class="anchor"></a>
 					<h3>last<wbr>Week<wbr>Day<wbr>OfMonth</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbols">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -304,34 +367,50 @@
 									<li>Defined in basics.ts:130</li>
 								</ul>
 							</aside>
-							<p>Returns the last instance of the given weekday in the given month</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the last instance of the given weekday in the given month</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
-									<p>The year</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The year</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>month: <span class="tsd-signature-type">number</span></h5>
-									<p>the month 1-12</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the month 1-12</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>weekDay: <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
-									<p>the desired week day</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the desired week day</p>
+										</div>
+									</div>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 							<p>the last occurrence of the week day in the month</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="secondofday" class="anchor"></a>
 					<h3>second<wbr>OfDay</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">second<wbr>OfDay<span class="tsd-signature-symbols">(</span>hour<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">second<wbr>OfDay<span class="tsd-signature-symbol">(</span>hour<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -339,9 +418,13 @@
 									<li>Defined in basics.ts:437</li>
 								</ul>
 							</aside>
-							<p>N-th second in the day, counting from 0</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>N-th second in the day, counting from 0</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>hour: <span class="tsd-signature-type">number</span></h5>
 								</li>
@@ -352,19 +435,19 @@
 									<h5>second: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="timetounixnoleapsecs" class="anchor"></a>
 					<h3>time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbols">(</span>a<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, month<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>1, day<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>1, hour<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, minute<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, second<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0, milli<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols"> =&nbsp;</span>0<span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
-						<li class="tsd-signature tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbols">(</span>tm<span class="tsd-signature-symbols">: </span><a href="../classes/_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
-						<li class="tsd-signature tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span>, milli<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;</span>0, month<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>1, day<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>1, hour<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>0, minute<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>0, second<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>0, milli<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>0<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbol">(</span>tm<span class="tsd-signature-symbol">: </span><a href="../classes/_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, milli<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -372,8 +455,8 @@
 									<li>Defined in basics.ts:398</li>
 								</ul>
 							</aside>
-							<h4>Parameters</h4>
-							<ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>a?: <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
 								</li>
@@ -396,7 +479,7 @@
 									<h5>milli?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
@@ -405,15 +488,19 @@
 									<li>Defined in basics.ts:396</li>
 								</ul>
 							</aside>
-							<p>Convert a TimeT structure into a unix milli timestamp.
-							This does NOT take leap seconds into account.</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert a TimeT structure into a unix milli timestamp.
+									This does NOT take leap seconds into account.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>tm: <a href="../classes/_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
@@ -422,50 +509,68 @@
 									<li>Defined in basics.ts:388</li>
 								</ul>
 							</aside>
-							<p>Convert a year, month, day etc into a unix milli timestamp.
-							This does NOT take leap seconds into account.</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert a year, month, day etc into a unix milli timestamp.
+									This does NOT take leap seconds into account.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Year e.g. 1970</p>
+									<div class="tsd-comment tsd-typography">
+										<p>Year e.g. 1970</p>
+									</div>
 								</li>
 								<li>
 									<h5>month?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Month 1-12</p>
+									<div class="tsd-comment tsd-typography">
+										<p>Month 1-12</p>
+									</div>
 								</li>
 								<li>
 									<h5>day?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Day 1-31</p>
+									<div class="tsd-comment tsd-typography">
+										<p>Day 1-31</p>
+									</div>
 								</li>
 								<li>
 									<h5>hour?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Hour 0-23</p>
+									<div class="tsd-comment tsd-typography">
+										<p>Hour 0-23</p>
+									</div>
 								</li>
 								<li>
 									<h5>minute?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Minute 0-59</p>
+									<div class="tsd-comment tsd-typography">
+										<p>Minute 0-59</p>
+									</div>
 								</li>
 								<li>
 									<h5>second?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Second 0-59 (no leap seconds)</p>
+									<div class="tsd-comment tsd-typography">
+										<p>Second 0-59 (no leap seconds)</p>
+									</div>
 								</li>
 								<li>
 									<h5>milli?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<p>Millisecond 0-999</p>
+									<div class="tsd-comment tsd-typography">
+										<p>Millisecond 0-999</p>
+									</div>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="unixtotimenoleapsecs" class="anchor"></a>
 					<h3>unix<wbr>ToTime<wbr>NoLeap<wbr>Secs</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">unix<wbr>ToTime<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbols">(</span>unixMillis<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="../classes/_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
+						<li class="tsd-signature tsd-kind-icon">unix<wbr>ToTime<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbol">(</span>unixMillis<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -473,25 +578,29 @@
 									<li>Defined in basics.ts:313</li>
 								</ul>
 							</aside>
-							<p>Convert a unix milli timestamp into a TimeT structure.
-							This does NOT take leap seconds into account.</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert a unix milli timestamp into a TimeT structure.
+									This does NOT take leap seconds into account.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>unixMillis: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<a href="../classes/_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="weekdaynoleapsecs" class="anchor"></a>
 					<h3>week<wbr>Day<wbr>NoLeap<wbr>Secs</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbols">(</span>unixMillis<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></li>
+						<li class="tsd-signature tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs<span class="tsd-signature-symbol">(</span>unixMillis<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -499,25 +608,29 @@
 									<li>Defined in basics.ts:426</li>
 								</ul>
 							</aside>
-							<p>Return the day-of-week.
-							This does NOT take leap seconds into account.</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return the day-of-week.
+									This does NOT take leap seconds into account.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>unixMillis: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="weekdayonorafter" class="anchor"></a>
 					<h3>week<wbr>Day<wbr>OnOr<wbr>After</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbols">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -525,10 +638,14 @@
 									<li>Defined in basics.ts:164</li>
 								</ul>
 							</aside>
-							<p>Returns the day-of-month that is on the given weekday and which is &gt;= the given day.
-							Throws if the month has no such day.</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the day-of-month that is on the given weekday and which is &gt;= the given day.
+									Throws if the month has no such day.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
@@ -542,17 +659,17 @@
 									<h5>weekDay: <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="weekdayonorbefore" class="anchor"></a>
 					<h3>week<wbr>Day<wbr>OnOr<wbr>Before</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbols">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, weekDay<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -560,10 +677,14 @@
 									<li>Defined in basics.ts:180</li>
 								</ul>
 							</aside>
-							<p>Returns the day-of-month that is on the given weekday and which is &lt;= the given day.
-							Throws if the month has no such day.</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the day-of-month that is on the given weekday and which is &lt;= the given day.
+									Throws if the month has no such day.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
@@ -577,17 +698,17 @@
 									<h5>weekDay: <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="weeknumber" class="anchor"></a>
 					<h3>week<wbr>Number</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">week<wbr>Number<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">week<wbr>Number<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -595,36 +716,52 @@
 									<li>Defined in basics.ts:269</li>
 								</ul>
 							</aside>
-							<p>The ISO 8601 week number for the given date. Week 1 is the week
-								that has January 4th in it, and it starts on Monday.
-							See <a href="https://en.wikipedia.org/wiki/ISO_week_date">https://en.wikipedia.org/wiki/ISO_week_date</a></p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The ISO 8601 week number for the given date. Week 1 is the week
+										that has January 4th in it, and it starts on Monday.
+									See <a href="https://en.wikipedia.org/wiki/ISO_week_date">https://en.wikipedia.org/wiki/ISO_week_date</a></p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
-									<p>Year e.g. 1988</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Year e.g. 1988</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>month: <span class="tsd-signature-type">number</span></h5>
-									<p>Month 1-12</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Month 1-12</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>day: <span class="tsd-signature-type">number</span></h5>
-									<p>Day of month 1-31</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Day of month 1-31</p>
+										</div>
+									</div>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 							<p>Week number 1-53</p>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
 					<a name="weekofmonth" class="anchor"></a>
 					<h3>week<wbr>OfMonth</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">week<wbr>OfMonth<span class="tsd-signature-symbols">(</span>year<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">week<wbr>OfMonth<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -632,25 +769,41 @@
 									<li>Defined in basics.ts:202</li>
 								</ul>
 							</aside>
-							<p>The week of this month. There is no official standard for this,
-								but we assume the same rules for the weekNumber (i.e.
-							week 1 is the week that has the 4th day of the month in it)</p>
-							<h4>Parameters</h4>
-							<ul>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The week of this month. There is no official standard for this,
+										but we assume the same rules for the weekNumber (i.e.
+									week 1 is the week that has the 4th day of the month in it)</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
-									<p>The year</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The year</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>month: <span class="tsd-signature-type">number</span></h5>
-									<p>The month [1-12]</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The month [1-12]</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>day: <span class="tsd-signature-type">number</span></h5>
-									<p>The day [1-31]</p>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The day [1-31]</p>
+										</div>
+									</div>
 								</li>
 							</ul>
-							<h4>Returns 
+							<h4 class="tsd-returns-title">Returns 
 								<span class="tsd-signature-type">number</span>
 							</h4>
 							<p>Week number [1-5]</p>
@@ -659,7 +812,7 @@
 				</section>
 			</section>
 		</div>
-		<div class="offset-1 col-3">
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
@@ -706,8 +859,8 @@
 					</li>
 				</ul>
 			</nav>
-			<nav class="tsd-navigation secondary">
-				<ul>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
 						<a href="../enums/_basics_.timeunit.html" class="tsd-kind-icon">Time<wbr>Unit</a>
 					</li>
@@ -770,6 +923,63 @@
 		</div>
 	</div>
 </div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li>&nbsp;</li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>

@@ -1,12 +1,13 @@
 ﻿<!doctype html>
-<html class="no-js">
+<html class="default no-js">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>timezonecomplete | timezonecomplete</title>
+	<title>timezonecomplete</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
+	<script src="assets/js/modernizr.js"></script>
 </head>
 <body>
 <header>
@@ -15,7 +16,7 @@
 			<div class="table-wrap">
 				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
 					<div class="field">
-						<label for="tsd-search-field">Search</label>
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
 					</div>
 					<ul class="results">
@@ -24,24 +25,28 @@
 					</ul>
 					<a href="index.html" class="title">timezonecomplete</a>
 				</div>
-				<div class="table-cell" id="tsd-filter">
-					<input type="checkbox" id="tsd-filter-inherited" checked />
-					<label for="tsd-filter-inherited">Inherited</label>
-					<input type="checkbox" id="tsd-filter-private" checked />
-					<label for="tsd-filter-private">Private</label>
-					<input type="checkbox" id="tsd-filter-externals" checked />
-					<label for="tsd-filter-externals">Externals</label>
-					<input type="checkbox" id="tsd-filter-only-exported" />
-					<label for="tsd-filter-only-exported">Only exported</label>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-private" checked />
+							<label class="tsd-widget" for="tsd-filter-private">Private</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="breadcrumb">
+			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="globals.html">timezonecomplete</a>
+					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
 			<h1> timezonecomplete</h1>
@@ -50,39 +55,40 @@
 </header>
 <div class="container container-main">
 	<div class="row">
-		<div class="col-8">
-			<p>﻿# TimezoneComplete</p>
-			<p><a href="https://travis-ci.org/SpiritIT/timezonecomplete"><img src="https://travis-ci.org/SpiritIT/timezonecomplete.svg?branch=master" alt="Build Status"></a>
-			<a href="https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master"><img src="https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master" alt="Coverage Status"></a></p>
-			<h2 id="synopsis">Synopsis</h2>
-			<p>TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone&#39;s time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.</p>
-			<h2 id="difference-with-timezone-js-moment-js-and-other-date-libraries">Difference with timezone-js, Moment.js and other Date libraries</h2>
-			<p>Other libraries are great. We had different requirements, that&#39;s all.</p>
-			<ol>
-				<li>Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings. Most other libraries internally use JavaScript Date. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete does not use Date internally for this reason. Date problems include:<ul>
-						<li>The Date constructor normalizes non-existing local times (during DST forward changes) in different ways in Firefox, Chrome, IE and Node.</li>
-						<li>The Date class responds differently to the TZ environment variable on different platforms.</li>
-						<li>The conversion of a local time to a UTC value is broken by specification.</li>
-					</ul>
-				</li>
-				<li>The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project. </li>
-				<li>Timezonecomplete aims to be &quot;complete&quot;, whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:<ul>
-						<li>Naive dates (which know they have NO timezone information)</li>
-						<li>Aware dates (which have timezone information)</li>
-						<li>Proper behaviour around DST changes</li>
-						<li>Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with &quot;number&quot; type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.</li>
-						<li>Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.</li>
-						<li>Utility functions for e.g. determining leap years, determining the last Monday of the month etc.</li>
-						<li>Ability to use with NodeJS as well as in a browser.</li>
-					</ul>
-				</li>
-				<li>Timezonecomplete has 99% test coverage.</li>
-				<li>Timezonecomplete is under active development by a company who have an interest in keeping it up to date.</li>
-			</ol>
-			<h2 id="usage">Usage</h2>
-			<p>See also ./doc/modules/index.html.</p>
-			<h3 id="enums">Enums</h3>
-			<pre><code class="lang-javascript">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<p>﻿# TimezoneComplete</p>
+				<p><a href="https://travis-ci.org/SpiritIT/timezonecomplete"><img src="https://travis-ci.org/SpiritIT/timezonecomplete.svg?branch=master" alt="Build Status"></a>
+				<a href="https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master"><img src="https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master" alt="Coverage Status"></a></p>
+				<h2 id="synopsis">Synopsis</h2>
+				<p>TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone&#39;s time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.</p>
+				<h2 id="difference-with-timezone-js-moment-js-and-other-date-libraries">Difference with timezone-js, Moment.js and other Date libraries</h2>
+				<p>Other libraries are great. We had different requirements, that&#39;s all.</p>
+				<ol>
+					<li>Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings. Most other libraries internally use JavaScript Date. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete does not use Date internally for this reason. Date problems include:<ul>
+							<li>The Date constructor normalizes non-existing local times (during DST forward changes) in different ways in Firefox, Chrome, IE and Node.</li>
+							<li>The Date class responds differently to the TZ environment variable on different platforms.</li>
+							<li>The conversion of a local time to a UTC value is broken by specification.</li>
+						</ul>
+					</li>
+					<li>The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project. </li>
+					<li>Timezonecomplete aims to be &quot;complete&quot;, whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:<ul>
+							<li>Naive dates (which know they have NO timezone information)</li>
+							<li>Aware dates (which have timezone information)</li>
+							<li>Proper behaviour around DST changes</li>
+							<li>Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with &quot;number&quot; type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.</li>
+							<li>Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.</li>
+							<li>Utility functions for e.g. determining leap years, determining the last Monday of the month etc.</li>
+							<li>Ability to use with NodeJS as well as in a browser.</li>
+						</ul>
+					</li>
+					<li>Timezonecomplete has 99% test coverage.</li>
+					<li>Timezonecomplete is under active development by a company who have an interest in keeping it up to date.</li>
+				</ol>
+				<h2 id="usage">Usage</h2>
+				<p>See also ./doc/modules/index.html.</p>
+				<h3 id="enums">Enums</h3>
+				<pre><code class="lang-javascript">
 <span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
 <span class="hljs-comment">// day-of-week</span>
@@ -101,9 +107,9 @@ tc.TimeUnit.Hour;
 tc.TimeUnit.Minute;
 tc.TimeUnit.Second;
 </code></pre>
-			<h3 id="utility-functions">Utility Functions</h3>
-			<p>Timezonecomplete defines a number of utility functions.</p>
-			<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+				<h3 id="utility-functions">Utility Functions</h3>
+				<p>Timezonecomplete defines a number of utility functions.</p>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
 <span class="hljs-comment">// number of days in a month, accounting for leap years</span>
 tc.daysInMonth(<span class="hljs-number">2004</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// returns 29</span>
@@ -142,10 +148,10 @@ tc.dayOfYear(<span class="hljs-number">2014</span>, <span class="hljs-number">2<
 <span class="hljs-comment">// n-th second of the day, counting from 0</span>
 tc.secondOfDay(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// returns 3600</span>
 </code></pre>
-			<h3 id="duration">Duration</h3>
-			<p>The Duration class is a unit-aware representation of a duration in wall clock time.
-			You can create a Duration in milliseconds, seconds, minutes or hours and then query the value in another unit.</p>
-			<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+				<h3 id="duration">Duration</h3>
+				<p>The Duration class is a unit-aware representation of a duration in wall clock time.
+				You can create a Duration in milliseconds, seconds, minutes or hours and then query the value in another unit.</p>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
 <span class="hljs-comment">// a duration of 2 seconds</span>
 <span class="hljs-keyword">var</span> duration = tc.Duration.seconds(<span class="hljs-number">2</span>);
@@ -190,21 +196,21 @@ duration6.milliseconds(); <span class="hljs-comment">// 5400000</span>
 
 duration6.valueOf(); <span class="hljs-comment">// same as milliseconds()</span>
 </code></pre>
-			<h3 id="datetime">DateTime</h3>
-			<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
-				It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
-			that the local time is incremented by one hour even if the UTC date does not change.</p>
-			<p>The main differences with the JavaScript Date are: </p>
-			<ul>
-				<li>DateTime is time zone aware.</li>
-				<li>All methods are in singular form: &quot;year()&quot; not &quot;years()&quot; and &quot;hour()&quot; not &quot;hours()&quot;. The JavaScript Date class mixes these forms. </li>
-				<li>Our day-of-month is called day() not date().</li>
-				<li>We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.</li>
-				<li>With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
-				is always UTC for dates that have a time zone, and it is equal to the &quot;local&quot; date value for naive dates.</li>
-				<li>format() is a function that takes an <a href="http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns">LDML</a> formatting string and returns a formatted string.</li>
-			</ul>
-			<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+				<h3 id="datetime">DateTime</h3>
+				<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
+					It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
+				that the local time is incremented by one hour even if the UTC date does not change.</p>
+				<p>The main differences with the JavaScript Date are: </p>
+				<ul>
+					<li>DateTime is time zone aware.</li>
+					<li>All methods are in singular form: &quot;year()&quot; not &quot;years()&quot; and &quot;hour()&quot; not &quot;hours()&quot;. The JavaScript Date class mixes these forms. </li>
+					<li>Our day-of-month is called day() not date().</li>
+					<li>We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.</li>
+					<li>With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
+					is always UTC for dates that have a time zone, and it is equal to the &quot;local&quot; date value for naive dates.</li>
+					<li>format() is a function that takes an <a href="http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns">LDML</a> formatting string and returns a formatted string.</li>
+				</ul>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
 <span class="hljs-comment">// a naive timestamp: 2014-01-01 13:59:59</span>
 <span class="hljs-keyword">var</span> naiveDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>);
@@ -295,9 +301,9 @@ d.convert(tc.TimeZone.zone(<span class="hljs-string">"UTC"</span>)); <span class
 <span class="hljs-comment">// Cloning</span>
 <span class="hljs-keyword">var</span> newCopy = amsterdamDate.clone();
 </code></pre>
-			<h3 id="date-arithmetic">Date Arithmetic</h3>
-			<p>The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
-			<pre><code class="lang-javascript">
+				<h3 id="date-arithmetic">Date Arithmetic</h3>
+				<p>The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
+				<pre><code class="lang-javascript">
 <span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
 <span class="hljs-keyword">var</span> utcDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.TimeZone.utc());
@@ -335,10 +341,10 @@ d3.lessThan(d4); <span class="hljs-comment">// true</span>
 d4.lessEqual(d3); <span class="hljs-comment">// false, Amsterdam is ahead of UTC</span>
 d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 </code></pre>
-			<h3 id="periods">Periods</h3>
-			<p>We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it happen at regular intervals, shifting with DST?  The former means that the intervals are not always 12 hours. The latter means that it doesn&#39;t occur at the same time always.
-			We needed to be able to specify both.</p>
-			<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+				<h3 id="periods">Periods</h3>
+				<p>We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it happen at regular intervals, shifting with DST?  The former means that the intervals are not always 12 hours. The latter means that it doesn&#39;t occur at the same time always.
+				We needed to be able to specify both.</p>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
 <span class="hljs-comment">// Timezone with DST specified (Europe/Amsterdam)</span>
 <span class="hljs-comment">// Last argument is "RegularLocalTime"</span>
@@ -362,9 +368,9 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 <span class="hljs-comment">// "2014-05-02T08:05:00.000 Europe/Amsterdam" </span>
 <span class="hljs-keyword">var</span> occurrence2 = period.findNext(occurrence);
 </code></pre>
-			<h2 id="on-a-web-page">On a web page</h2>
-			<p>We spent some effort making timezonecomplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
-			<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span>
+				<h2 id="on-a-web-page">On a web page</h2>
+				<p>We spent some effort making timezonecomplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
+				<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Timezonecomplete test<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">body</span>&gt;</span>
     Hello world
@@ -376,18 +382,18 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 <span class="hljs-tag">&lt;/<span class="hljs-title">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-title">html</span>&gt;</span>
 </code></pre>
-			<p>In theory this bundle is also usable using module loaders like <a href="http://requirejs.org/">RequireJS</a>. However, this has not been thoroughly tested yet, this will happen in the near future.</p>
-			<h2 id="faq">FAQ</h2>
-			<h3 id="what-time-zone-names-can-i-use-">What time zone names can I use?</h3>
-			<p>See <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></p>
-			<h3 id="how-do-i-convert-a-javascript-date-object-to-a-datetime-object-">How do I convert a JavaScript Date object to a DateTime object?</h3>
-			<p>The DateTime class has a constructor that takes a date. It may seem rather complex because the constructor has three parameters. But that was necessary:</p>
-			<ol>
-				<li>The first parameter is the Date object.</li>
-				<li>The second parameter indicates which of the two values in the Date object you want to use: a Date object has a UTC value (getUtcFullYear()) and a Local value (getFullYear()). You typically use the local functions, but if you created your date from a unix timestamp then the UTC date is most accurate.</li>
-				<li>The third parameter gives us the missing info: the time zone that the given value is in. </li>
-			</ol>
-			<pre><code class="lang-javascript">
+				<p>In theory this bundle is also usable using module loaders like <a href="http://requirejs.org/">RequireJS</a>. However, this has not been thoroughly tested yet, this will happen in the near future.</p>
+				<h2 id="faq">FAQ</h2>
+				<h3 id="what-time-zone-names-can-i-use-">What time zone names can I use?</h3>
+				<p>See <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></p>
+				<h3 id="how-do-i-convert-a-javascript-date-object-to-a-datetime-object-">How do I convert a JavaScript Date object to a DateTime object?</h3>
+				<p>The DateTime class has a constructor that takes a date. It may seem rather complex because the constructor has three parameters. But that was necessary:</p>
+				<ol>
+					<li>The first parameter is the Date object.</li>
+					<li>The second parameter indicates which of the two values in the Date object you want to use: a Date object has a UTC value (getUtcFullYear()) and a Local value (getFullYear()). You typically use the local functions, but if you created your date from a unix timestamp then the UTC date is most accurate.</li>
+					<li>The third parameter gives us the missing info: the time zone that the given value is in. </li>
+				</ol>
+				<pre><code class="lang-javascript">
 <span class="hljs-comment">// construct date from separate year, month, day etc.</span>
 <span class="hljs-keyword">var</span> jsDate1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2014</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
 
@@ -400,116 +406,117 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 <span class="hljs-comment">// now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.</span>
 <span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
 </code></pre>
-			<h3 id="why-does-the-number-returned-by-weeknumber-not-correspond-to-my-calendar">Why does the number returned by weekNumber() not correspond to my calendar</h3>
-			<p>Different countries have different week number algoritms. We adhere to the ISO 8601 standard, where the first week starts on a Monday and is defined as the week having January 4th in it.
-			If you need different week numbers, please submit an issue or a pull request.</p>
-			<h3 id="does-timezonecomplete-handle-leap-seconds-">Does timezonecomplete handle leap seconds?</h3>
-			<p>Currently not. This is because most platforms don&#39;t, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren&#39;t. We do plan to add support in some form though.</p>
-			<h2 id="current-tz-database-version-">Current TZ database version:</h2>
-			<p>The version of the included IANA time zone database is 2014e.</p>
-			<h2 id="changelog">Changelog</h2>
-			<h3 id="planned">Planned</h3>
-			<ul>
-				<li>A release 2 where we polish the interface to the library a bit</li>
-				<li>Leap second handling</li>
-			</ul>
-			<h3 id="1-5-1-2014-08-20-">1.5.1 (2014-08-20)</h3>
-			<ul>
-				<li>Typo in function name: secondPfDay() -&gt; secondOfDay()</li>
-			</ul>
-			<h3 id="1-5-0-2014-08-20-">1.5.0 (2014-08-20)</h3>
-			<ul>
-				<li>Add format() function to DateTime to convert a DateTime to a string with a specified format.</li>
-				<li>Add valueOf() method to DateTime and Duration</li>
-				<li>Add dayOfYear() and utcDayOfYear() to DateTime returning the n-th day of the year, starting at 0</li>
-				<li>Add weekNumber() utility function (ISO week number)</li>
-				<li>Add weekNumber() and utcWeekNumber() methods to DateTime</li>
-				<li>Add weekOfMonth() utility function (ISO week number)</li>
-				<li>Add weekOfMonth() and utcWeekOfMonth() methods to DateTime</li>
-				<li>Add secondOfDay() utility function (ISO week number)</li>
-				<li>Add secondOfDay() and utcSecondOfDay() methods to DateTime</li>
-				<li>Add abbreviationForUtc() to TimeZone</li>
-				<li>Add zoneAbbreviation() to DateTime to get time zone abbreviation at the specified datetime.</li>
-			</ul>
-			<h3 id="1-4-6-2014-08-15-">1.4.6 (2014-08-15)</h3>
-			<ul>
-				<li>Bugfix TypeScript .d.ts file</li>
-			</ul>
-			<h3 id="1-4-5-2014-08-15-">1.4.5 (2014-08-15)</h3>
-			<ul>
-				<li>Removed Javascript Date class as much as possible because it behaves differently across platforms.</li>
-				<li>Performance improvements (caching in TzDatabase class)</li>
-				<li>Corrected HTML example in README.md now that timezone-js is gone</li>
-				<li>Bugfix in unix timestamp -&gt; datetime conversion for dates on jan 1st prior to 1970</li>
-			</ul>
-			<h3 id="1-4-4-2014-08-14-">1.4.4 (2014-08-14)</h3>
-			<ul>
-				<li>TZ database version: 2014e</li>
-				<li>Removed dependency on timezone-js</li>
-				<li>Fixed inconsistent behaviour across different platforms.</li>
-				<li>Fixed inconsistent behaviour with / without TZ environment variable setting.</li>
-				<li>Fixed behaviour with non-existing local times.</li>
-			</ul>
-			<h3 id="1-4-3-2014-07-31-">1.4.3 (2014-07-31)</h3>
-			<ul>
-				<li>Improved timezonecomplete behaviour when using browserify</li>
-			</ul>
-			<h3 id="1-4-2-2014-07-28-">1.4.2 (2014-07-28)</h3>
-			<ul>
-				<li>Ensured tests run with different TZ environment variable settings</li>
-				<li>Ensured build runs on Travis CI and the coverage is picked up by Coveralls.io</li>
-				<li>Bugfix in weekDay() for times near 00:00:00 with certain machine time zones</li>
-			</ul>
-			<h3 id="1-4-1-2014-07-24-">1.4.1 (2014-07-24)</h3>
-			<ul>
-				<li>Ensured all code is covered with tests using istanbul</li>
-				<li>Bufgix in DateTime.toIsoString(): missing space</li>
-				<li>Bufgix in DateTime.toIsoString(): local time zone not handled correctly</li>
-				<li>Bugfix in Period.findFirst() regarding regular local time periods of less than one hour</li>
-				<li>Bugfix in Period.toIsoString() which did not include the start date</li>
-				<li>Performance improvement for Period.findFirst() regarding Second periods.</li>
-			</ul>
-			<h3 id="1-4-0-2014-07-24-">1.4.0 (2014-07-24)</h3>
-			<ul>
-				<li>Enable use of timezonecomplete in browser</li>
-			</ul>
-			<h3 id="1-3-1-2014-07-09-">1.3.1 (2014-07-09)</h3>
-			<ul>
-				<li>Add inspect() methods so that console.log(myDateTime) works.</li>
-				<li>Bugfix in DateTime.toString(): missing space for datetime in local time.</li>
-			</ul>
-			<h3 id="1-3-0-2014-07-07-">1.3.0 (2014-07-07)</h3>
-			<ul>
-				<li>Add day-of-week methods to DateTime:  weekDay() and utcWeekDay()</li>
-				<li>Add .d.ts file for timezonecomplete inside the package as well as on DefinitelyTyped</li>
-			</ul>
-			<h3 id="1-2-0-2014-06-30-">1.2.0 (2014-06-30)</h3>
-			<ul>
-				<li>Add Duration.divide() method</li>
-			</ul>
-			<h3 id="1-1-0-2014-06-27-">1.1.0 (2014-06-27)</h3>
-			<ul>
-				<li>Update Time Zone Database to 2014-06-16</li>
-				<li>Add Duration.add() and Duration.sub() methods</li>
-			</ul>
-			<h3 id="1-0-1-2014-06-26-">1.0.1 (2014-06-26)</h3>
-			<ul>
-				<li>Bugfixes in package.json</li>
-			</ul>
-			<h3 id="1-0-0-2014-06-26-">1.0.0 (2014-06-26)</h3>
-			<ul>
-				<li>First released version.</li>
-			</ul>
-			<h2 id="contributors">Contributors</h2>
-			<ul>
-				<li>Rogier Schouten <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x72;&#46;&#x73;&#x63;&#104;&#x6f;&#117;&#116;&#x65;&#110;&#x40;&#x73;&#112;&#x69;&#x72;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#111;&#109;">&#x72;&#46;&#x73;&#x63;&#104;&#x6f;&#117;&#116;&#x65;&#110;&#x40;&#x73;&#112;&#x69;&#x72;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#111;&#109;</a></li>
-				<li>Daan Wissing <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#100;&#46;&#119;&#105;&#x73;&#115;&#105;&#110;&#103;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#x74;&#46;&#x63;&#111;&#x6d;">&#100;&#46;&#119;&#105;&#x73;&#115;&#105;&#110;&#103;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#x74;&#46;&#x63;&#111;&#x6d;</a></li>
-				<li>Peter Kooijmans <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x70;&#46;&#107;&#111;&#111;&#105;&#106;&#109;&#97;&#x6e;&#x73;&#64;&#x73;&#112;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#46;&#99;&#111;&#109;">&#x70;&#46;&#107;&#111;&#111;&#105;&#106;&#109;&#97;&#x6e;&#x73;&#64;&#x73;&#112;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#46;&#99;&#111;&#109;</a></li>
-			</ul>
-			<h2 id="license">License</h2>
-			<p>MIT</p>
+				<h3 id="why-does-the-number-returned-by-weeknumber-not-correspond-to-my-calendar">Why does the number returned by weekNumber() not correspond to my calendar</h3>
+				<p>Different countries have different week number algoritms. We adhere to the ISO 8601 standard, where the first week starts on a Monday and is defined as the week having January 4th in it.
+				If you need different week numbers, please submit an issue or a pull request.</p>
+				<h3 id="does-timezonecomplete-handle-leap-seconds-">Does timezonecomplete handle leap seconds?</h3>
+				<p>Currently not. This is because most platforms don&#39;t, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren&#39;t. We do plan to add support in some form though.</p>
+				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
+				<p>The version of the included IANA time zone database is 2014e.</p>
+				<h2 id="changelog">Changelog</h2>
+				<h3 id="planned">Planned</h3>
+				<ul>
+					<li>A release 2 where we polish the interface to the library a bit</li>
+					<li>Leap second handling</li>
+				</ul>
+				<h3 id="1-5-1-2014-08-20-">1.5.1 (2014-08-20)</h3>
+				<ul>
+					<li>Typo in function name: secondPfDay() -&gt; secondOfDay()</li>
+				</ul>
+				<h3 id="1-5-0-2014-08-20-">1.5.0 (2014-08-20)</h3>
+				<ul>
+					<li>Add format() function to DateTime to convert a DateTime to a string with a specified format.</li>
+					<li>Add valueOf() method to DateTime and Duration</li>
+					<li>Add dayOfYear() and utcDayOfYear() to DateTime returning the n-th day of the year, starting at 0</li>
+					<li>Add weekNumber() utility function (ISO week number)</li>
+					<li>Add weekNumber() and utcWeekNumber() methods to DateTime</li>
+					<li>Add weekOfMonth() utility function (ISO week number)</li>
+					<li>Add weekOfMonth() and utcWeekOfMonth() methods to DateTime</li>
+					<li>Add secondOfDay() utility function (ISO week number)</li>
+					<li>Add secondOfDay() and utcSecondOfDay() methods to DateTime</li>
+					<li>Add abbreviationForUtc() to TimeZone</li>
+					<li>Add zoneAbbreviation() to DateTime to get time zone abbreviation at the specified datetime.</li>
+				</ul>
+				<h3 id="1-4-6-2014-08-15-">1.4.6 (2014-08-15)</h3>
+				<ul>
+					<li>Bugfix TypeScript .d.ts file</li>
+				</ul>
+				<h3 id="1-4-5-2014-08-15-">1.4.5 (2014-08-15)</h3>
+				<ul>
+					<li>Removed Javascript Date class as much as possible because it behaves differently across platforms.</li>
+					<li>Performance improvements (caching in TzDatabase class)</li>
+					<li>Corrected HTML example in README.md now that timezone-js is gone</li>
+					<li>Bugfix in unix timestamp -&gt; datetime conversion for dates on jan 1st prior to 1970</li>
+				</ul>
+				<h3 id="1-4-4-2014-08-14-">1.4.4 (2014-08-14)</h3>
+				<ul>
+					<li>TZ database version: 2014e</li>
+					<li>Removed dependency on timezone-js</li>
+					<li>Fixed inconsistent behaviour across different platforms.</li>
+					<li>Fixed inconsistent behaviour with / without TZ environment variable setting.</li>
+					<li>Fixed behaviour with non-existing local times.</li>
+				</ul>
+				<h3 id="1-4-3-2014-07-31-">1.4.3 (2014-07-31)</h3>
+				<ul>
+					<li>Improved timezonecomplete behaviour when using browserify</li>
+				</ul>
+				<h3 id="1-4-2-2014-07-28-">1.4.2 (2014-07-28)</h3>
+				<ul>
+					<li>Ensured tests run with different TZ environment variable settings</li>
+					<li>Ensured build runs on Travis CI and the coverage is picked up by Coveralls.io</li>
+					<li>Bugfix in weekDay() for times near 00:00:00 with certain machine time zones</li>
+				</ul>
+				<h3 id="1-4-1-2014-07-24-">1.4.1 (2014-07-24)</h3>
+				<ul>
+					<li>Ensured all code is covered with tests using istanbul</li>
+					<li>Bufgix in DateTime.toIsoString(): missing space</li>
+					<li>Bufgix in DateTime.toIsoString(): local time zone not handled correctly</li>
+					<li>Bugfix in Period.findFirst() regarding regular local time periods of less than one hour</li>
+					<li>Bugfix in Period.toIsoString() which did not include the start date</li>
+					<li>Performance improvement for Period.findFirst() regarding Second periods.</li>
+				</ul>
+				<h3 id="1-4-0-2014-07-24-">1.4.0 (2014-07-24)</h3>
+				<ul>
+					<li>Enable use of timezonecomplete in browser</li>
+				</ul>
+				<h3 id="1-3-1-2014-07-09-">1.3.1 (2014-07-09)</h3>
+				<ul>
+					<li>Add inspect() methods so that console.log(myDateTime) works.</li>
+					<li>Bugfix in DateTime.toString(): missing space for datetime in local time.</li>
+				</ul>
+				<h3 id="1-3-0-2014-07-07-">1.3.0 (2014-07-07)</h3>
+				<ul>
+					<li>Add day-of-week methods to DateTime:  weekDay() and utcWeekDay()</li>
+					<li>Add .d.ts file for timezonecomplete inside the package as well as on DefinitelyTyped</li>
+				</ul>
+				<h3 id="1-2-0-2014-06-30-">1.2.0 (2014-06-30)</h3>
+				<ul>
+					<li>Add Duration.divide() method</li>
+				</ul>
+				<h3 id="1-1-0-2014-06-27-">1.1.0 (2014-06-27)</h3>
+				<ul>
+					<li>Update Time Zone Database to 2014-06-16</li>
+					<li>Add Duration.add() and Duration.sub() methods</li>
+				</ul>
+				<h3 id="1-0-1-2014-06-26-">1.0.1 (2014-06-26)</h3>
+				<ul>
+					<li>Bugfixes in package.json</li>
+				</ul>
+				<h3 id="1-0-0-2014-06-26-">1.0.0 (2014-06-26)</h3>
+				<ul>
+					<li>First released version.</li>
+				</ul>
+				<h2 id="contributors">Contributors</h2>
+				<ul>
+					<li>Rogier Schouten <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#116;&#x65;&#110;&#x40;&#x73;&#112;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#46;&#x63;&#111;&#x6d;">&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#116;&#x65;&#110;&#x40;&#x73;&#112;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#46;&#x63;&#111;&#x6d;</a></li>
+					<li>Daan Wissing <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#x64;&#46;&#x77;&#x69;&#115;&#x73;&#105;&#110;&#103;&#x40;&#x73;&#112;&#105;&#x72;&#105;&#x74;&#105;&#116;&#46;&#99;&#111;&#x6d;">&#x64;&#46;&#x77;&#x69;&#115;&#x73;&#105;&#110;&#103;&#x40;&#x73;&#112;&#105;&#x72;&#105;&#x74;&#105;&#116;&#46;&#99;&#111;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x70;&#x2e;&#107;&#111;&#111;&#x69;&#106;&#x6d;&#x61;&#x6e;&#115;&#64;&#115;&#x70;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#x2e;&#99;&#x6f;&#x6d;">&#x70;&#x2e;&#107;&#111;&#111;&#x69;&#106;&#x6d;&#x61;&#x6e;&#115;&#64;&#115;&#x70;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#x2e;&#99;&#x6f;&#x6d;</a></li>
+				</ul>
+				<h2 id="license">License</h2>
+				<p>MIT</p>
+			</div>
 		</div>
-		<div class="offset-1 col-3">
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
@@ -556,13 +563,70 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 					</li>
 				</ul>
 			</nav>
-			<nav class="tsd-navigation secondary">
-				<ul>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
 				</ul>
 			</nav>
 		</div>
 	</div>
 </div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li>&nbsp;</li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
 <script src="assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>

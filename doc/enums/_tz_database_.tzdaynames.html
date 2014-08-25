@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<html class="no-js">
+<html class="default no-js">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +7,7 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script src="../assets/js/modernizr.js"></script>
 </head>
 <body>
 <header>
@@ -15,7 +16,7 @@
 			<div class="table-wrap">
 				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
 					<div class="field">
-						<label for="tsd-search-field">Search</label>
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
 					</div>
 					<ul class="results">
@@ -24,24 +25,28 @@
 					</ul>
 					<a href="../index.html" class="title">timezonecomplete</a>
 				</div>
-				<div class="table-cell" id="tsd-filter">
-					<input type="checkbox" id="tsd-filter-inherited" checked />
-					<label for="tsd-filter-inherited">Inherited</label>
-					<input type="checkbox" id="tsd-filter-private" checked />
-					<label for="tsd-filter-private">Private</label>
-					<input type="checkbox" id="tsd-filter-externals" checked />
-					<label for="tsd-filter-externals">Externals</label>
-					<input type="checkbox" id="tsd-filter-only-exported" />
-					<label for="tsd-filter-only-exported">Only exported</label>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-private" checked />
+							<label class="tsd-widget" for="tsd-filter-private">Private</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="breadcrumb">
+			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">timezonecomplete</a>
+					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
 					<a href="../modules/_tz_database_.html">&quot;tz-database&quot;</a>
@@ -56,88 +61,92 @@
 </header>
 <div class="container container-main">
 	<div class="row">
-		<div class="col-8">
-			<section class="tsd-member-index">
+		<div class="col-8 col-content">
+			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
-				<section class="tsd-member-index-group tsd-is-not-exported">
-					<h3>Enumeration members</h3>
-					<ul class="tsd-member-index">
-						<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#fri" class="tsd-kind-icon">Fri</a></li>
-						<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#mon" class="tsd-kind-icon">Mon</a></li>
-						<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#sat" class="tsd-kind-icon">Sat</a></li>
-						<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#sun" class="tsd-kind-icon">Sun</a></li>
-						<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#thu" class="tsd-kind-icon">Thu</a></li>
-						<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#tue" class="tsd-kind-icon">Tue</a></li>
-						<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#wed" class="tsd-kind-icon">Wed</a></li>
-					</ul>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Enumeration members</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#fri" class="tsd-kind-icon">Fri</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#mon" class="tsd-kind-icon">Mon</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#sat" class="tsd-kind-icon">Sat</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#sun" class="tsd-kind-icon">Sun</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#thu" class="tsd-kind-icon">Thu</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#tue" class="tsd-kind-icon">Tue</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported"><a href="_tz_database_.tzdaynames.html#wed" class="tsd-kind-icon">Wed</a></li>
+							</ul>
+						</section>
+					</div>
 				</section>
 			</section>
-			<section class="tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Enumeration members</h2>
-				<section class="tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
 					<a name="fri" class="anchor"></a>
 					<h3>Fri</h3>
-					<div class="tsd-signature tsd-kind-icon">Fri<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
+					<div class="tsd-signature tsd-kind-icon">Fri<span class="tsd-signature-symbol">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in tz-database.ts:410</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
 					<a name="mon" class="anchor"></a>
 					<h3>Mon</h3>
-					<div class="tsd-signature tsd-kind-icon">Mon<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
+					<div class="tsd-signature tsd-kind-icon">Mon<span class="tsd-signature-symbol">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in tz-database.ts:406</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
 					<a name="sat" class="anchor"></a>
 					<h3>Sat</h3>
-					<div class="tsd-signature tsd-kind-icon">Sat<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
+					<div class="tsd-signature tsd-kind-icon">Sat<span class="tsd-signature-symbol">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in tz-database.ts:411</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
 					<a name="sun" class="anchor"></a>
 					<h3>Sun</h3>
-					<div class="tsd-signature tsd-kind-icon">Sun<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
+					<div class="tsd-signature tsd-kind-icon">Sun<span class="tsd-signature-symbol">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in tz-database.ts:405</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
 					<a name="thu" class="anchor"></a>
 					<h3>Thu</h3>
-					<div class="tsd-signature tsd-kind-icon">Thu<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
+					<div class="tsd-signature tsd-kind-icon">Thu<span class="tsd-signature-symbol">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in tz-database.ts:409</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
 					<a name="tue" class="anchor"></a>
 					<h3>Tue</h3>
-					<div class="tsd-signature tsd-kind-icon">Tue<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
+					<div class="tsd-signature tsd-kind-icon">Tue<span class="tsd-signature-symbol">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in tz-database.ts:407</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-not-exported">
 					<a name="wed" class="anchor"></a>
 					<h3>Wed</h3>
-					<div class="tsd-signature tsd-kind-icon">Wed<span class="tsd-signature-symbols">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
+					<div class="tsd-signature tsd-kind-icon">Wed<span class="tsd-signature-symbol">:</span> <a href="_tz_database_.tzdaynames.html" class="tsd-signature-type">TzDayNames</a></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in tz-database.ts:408</li>
@@ -146,7 +155,7 @@
 				</section>
 			</section>
 		</div>
-		<div class="offset-1 col-3">
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
@@ -193,8 +202,8 @@
 					</li>
 				</ul>
 			</nav>
-			<nav class="tsd-navigation secondary">
-				<ul>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
 						<a href="_tz_database_.attype.html" class="tsd-kind-icon">At<wbr>Type</a>
 					</li>
@@ -210,6 +219,8 @@
 					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
 						<a href="_tz_database_.totype.html" class="tsd-kind-icon">To<wbr>Type</a>
 					</li>
+				</ul>
+				<ul class="current">
 					<li class="current tsd-kind-enum tsd-parent-kind-dynamic-module tsd-is-not-exported">
 						<a href="_tz_database_.tzdaynames.html" class="tsd-kind-icon">Tz<wbr>Day<wbr>Names</a>
 						<ul>
@@ -236,6 +247,8 @@
 							</li>
 						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module tsd-is-not-exported">
 						<a href="_tz_database_.tzmonthnames.html" class="tsd-kind-icon">Tz<wbr>Month<wbr>Names</a>
 					</li>
@@ -271,6 +284,63 @@
 		</div>
 	</div>
 </div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li>&nbsp;</li>
+				<li>&nbsp;</li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
