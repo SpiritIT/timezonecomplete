@@ -409,7 +409,7 @@ The version of the included IANA time zone database is 2014f.
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
 
-### 1.5.2
+### 1.5.2 (2014-08-27)
 * Upgrade time zone database to 2014f
 * Upgrade typedoc documentation generator to 0.1.1
 
