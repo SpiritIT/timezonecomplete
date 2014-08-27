@@ -71,6 +71,7 @@ $RECYCLE.BIN/
 *.js.map
 bower_components
 /lib/*.d.ts
+!/lib/timezonecomplete.d.ts
 /test/*.d.ts
 /temp
 /obj

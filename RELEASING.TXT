@@ -5,8 +5,6 @@ MODULE PUBLISH
 * Adjust package.json and adjust version number
 * Run:
 gulp clean && gulp release && npm test
-* In a DOS cmd window, run:
-gulp doc
 * Correct a bug in dts-bundle. The .d.ts file is missing a reference to timesource, you can see this by diffing with the version stored in DefinitelyTyped. Add it back.
 * Commit changes and Sync with GitHub
 * In GitHub, create a release tag
