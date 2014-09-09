@@ -1,11 +1,25 @@
 
 
+NEW TZ DATABASE
+* Copy parsing code from timezone-js  (node-preparse.js and its dependencies) to maintenance/
+* Change date.js to exclude more files:
+  , EXCLUDED = new RegExp('README|Makefile|factory|CONTRIBUTING|checktab|yearistype|iso3166|leapseconds|NEWS|README|Theory|zone|zone1970|zoneinfo2tdf(\\.+)', 'i');
+* Extract TZ database in a directory, say TZ_DIR
+* Run 
+cd maintenance/
+node node-preparse.js TZ_DIR/ > timezone-data.json
+* In case of trouble, first throw away all non-zone files from the tz data directory
+* copy timezone-data.json to lib/
+* rebuild
+* Adjust README.md  to change database version number and changelog
+
+
 MODULE PUBLISH
 * Adjust README.md and add examples and changelog, and possibly features
 * Adjust package.json and adjust version number
 * Run:
 gulp clean && gulp release && npm test
-* Correct a bug in dts-bundle. The .d.ts file is missing a reference to timesource, you can see this by diffing with the version stored in DefinitelyTyped. Add it back.
+* Correct a bug in dts-bundle. The lib/timezonecomplete.d.ts file is missing a reference to timesource (near line 286), you can see this by diffing with the version stored in DefinitelyTyped. Add it back.
 * Commit changes and Sync with GitHub
 * In GitHub, create a release tag
 * Ensure .npmrc points to the world NPM repository, not the spirit repository

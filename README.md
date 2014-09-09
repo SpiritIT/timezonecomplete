@@ -401,13 +401,16 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2014f.
+The version of the included IANA time zone database is 2014g.
 
 ## Changelog
 
 ### Planned
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
+
+### 1.5.3 (2014-09-09)
+* Upgrade time zone database to 2014g
 
 ### 1.5.2 (2014-08-27)
 * Upgrade time zone database to 2014f

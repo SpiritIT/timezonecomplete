@@ -59,7 +59,7 @@ gulp.task("clean", function() {
 			"examples/**/*.map",
       "doc/"
 		], { read: false, base: "." })
-		.pipe(gulpFilter("!lib/node-preparse.js"))
+		.pipe(gulpFilter("!maintenance/**/*"))
 		.pipe(rimraf({force: true}))
 		.on("error", trapError) // make exit code non-zero
 })
