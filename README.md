@@ -25,7 +25,7 @@ Other libraries are great. We had different requirements, that's all.
   * Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
   * Utility functions for e.g. determining leap years, determining the last Monday of the month etc.
   * Ability to use with NodeJS as well as in a browser.
-4. Timezonecomplete has 99% test coverage.
+4. Timezonecomplete has at least 99% test coverage.
 5. Timezonecomplete is under active development by a company who have an interest in keeping it up to date.
 
 ## Usage
@@ -384,10 +384,10 @@ var jsDate1 = new Date(2014, 5, 6, 8, 0, 0, 0);
 var jsDate2 = new Date(jsDate1.valueOf());
 
 // now the jsDate.getYear(), jsDate.getMonth() etc are assumed to be in America/Boise zone.
-var datetime = new tc.DateTime(jsDate, tc.DateFunctions.Get, tc.TimeZone.zone("America/Boise"));
+var datetime = new tc.DateTime(jsDate1, tc.DateFunctions.Get, tc.TimeZone.zone("America/Boise"));
 
 // now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.
-var datetime2 = new tc.DateTime(jsDate, tc.DateFunctions.GetUTC, tc.TimeZone.zone("America/Boise"));
+var datetime2 = new tc.DateTime(jsDate2, tc.DateFunctions.GetUTC, tc.TimeZone.zone("America/Boise"));
 
 ```
 
