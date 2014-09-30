@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master)](https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master)
 
 [![NPM](https://nodei.co/npm/timezonecomplete.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/timezonecomplete/)
-[![NPM](https://nodei.co/npm-dl/timezonecomplete.png?months=6)](https://nodei.co/npm/timezonecomplete/)
+[![NPM](https://nodei.co/npm-dl/timezonecomplete.png?months=6&height=3)](https://nodei.co/npm/timezonecomplete/)
 
 
 ## Synopsis
