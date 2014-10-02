@@ -59,7 +59,10 @@
 			<div class="tsd-panel tsd-typography">
 				<p>﻿# TimezoneComplete</p>
 				<p><a href="https://travis-ci.org/SpiritIT/timezonecomplete"><img src="https://travis-ci.org/SpiritIT/timezonecomplete.svg?branch=master" alt="Build Status"></a>
-				<a href="https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master"><img src="https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master" alt="Coverage Status"></a></p>
+					<a href="https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master"><img src="https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master" alt="Coverage Status"></a>
+				<a href="http://badge.fury.io/js/timezonecomplete"><img src="https://badge.fury.io/js/timezonecomplete.svg" alt="NPM version"></a></p>
+				<p><a href="https://nodei.co/npm/timezonecomplete/"><img src="https://nodei.co/npm/timezonecomplete.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a>
+				<a href="https://nodei.co/npm/timezonecomplete/"><img src="https://nodei.co/npm-dl/timezonecomplete.png?months=6&amp;height=3" alt="NPM"></a></p>
 				<h2 id="synopsis">Synopsis</h2>
 				<p>TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone&#39;s time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.</p>
 				<h2 id="difference-with-timezone-js-moment-js-and-other-date-libraries">Difference with timezone-js, Moment.js and other Date libraries</h2>
@@ -367,6 +370,9 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 <span class="hljs-comment">// findNext works much faster, assuming that its parameter is on a period boundary</span>
 <span class="hljs-comment">// "2014-05-02T08:05:00.000 Europe/Amsterdam" </span>
 <span class="hljs-keyword">var</span> occurrence2 = period.findNext(occurrence);
+
+<span class="hljs-comment">// isBoundary checks whether the given DateTime is on a period boundary</span>
+period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 </code></pre>
 				<h2 id="on-a-web-page">On a web page</h2>
 				<p>We spent some effort making timezonecomplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
@@ -418,6 +424,10 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 				<ul>
 					<li>A release 2 where we polish the interface to the library a bit</li>
 					<li>Leap second handling</li>
+				</ul>
+				<h3 id="1-6-0-2014-10-02-">1.6.0 (2014-10-02)</h3>
+				<ul>
+					<li>add Period.isBoundary() method for checking that a date is on a period boundary.</li>
 				</ul>
 				<h3 id="1-5-4-2014-09-29-">1.5.4 (2014-09-29)</h3>
 				<ul>
@@ -522,9 +532,9 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x72;&#x2e;&#x73;&#x63;&#x68;&#x6f;&#x75;&#116;&#x65;&#110;&#x40;&#115;&#112;&#x69;&#x72;&#x69;&#116;&#x69;&#x74;&#46;&#x63;&#111;&#x6d;">&#x72;&#x2e;&#x73;&#x63;&#x68;&#x6f;&#x75;&#116;&#x65;&#110;&#x40;&#115;&#112;&#x69;&#x72;&#x69;&#116;&#x69;&#x74;&#46;&#x63;&#111;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#100;&#46;&#x77;&#x69;&#115;&#x73;&#x69;&#x6e;&#x67;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#x74;&#105;&#x74;&#46;&#99;&#111;&#x6d;">&#100;&#46;&#x77;&#x69;&#115;&#x73;&#x69;&#x6e;&#x67;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#x74;&#105;&#x74;&#46;&#99;&#111;&#x6d;</a></li>
-					<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#112;&#46;&#107;&#x6f;&#x6f;&#105;&#106;&#x6d;&#x61;&#x6e;&#115;&#64;&#115;&#x70;&#105;&#114;&#x69;&#x74;&#x69;&#116;&#x2e;&#x63;&#111;&#x6d;">&#112;&#46;&#107;&#x6f;&#x6f;&#105;&#106;&#x6d;&#x61;&#x6e;&#115;&#64;&#115;&#x70;&#105;&#114;&#x69;&#x74;&#x69;&#116;&#x2e;&#x63;&#111;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#114;&#x2e;&#115;&#99;&#104;&#111;&#117;&#116;&#x65;&#110;&#64;&#115;&#112;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#111;&#109;">&#114;&#x2e;&#115;&#99;&#104;&#111;&#117;&#116;&#x65;&#110;&#64;&#115;&#112;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#111;&#109;</a></li>
+					<li>Daan Wissing <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x64;&#46;&#119;&#x69;&#x73;&#115;&#105;&#x6e;&#103;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#46;&#x63;&#x6f;&#109;">&#x64;&#46;&#119;&#x69;&#x73;&#115;&#105;&#x6e;&#103;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#46;&#x63;&#x6f;&#109;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x70;&#x2e;&#x6b;&#111;&#x6f;&#105;&#x6a;&#109;&#97;&#110;&#x73;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;">&#x70;&#x2e;&#x6b;&#111;&#x6f;&#105;&#x6a;&#109;&#97;&#110;&#x73;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

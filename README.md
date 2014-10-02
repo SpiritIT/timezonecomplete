@@ -346,6 +346,9 @@ var occurrence = period.findFirst(new tc.DateTime("2014-04-30T12:00:00 Europe/Am
 // "2014-05-02T08:05:00.000 Europe/Amsterdam" 
 var occurrence2 = period.findNext(occurrence);
 
+// isBoundary checks whether the given DateTime is on a period boundary
+period.isBoundary(occurrence); // true
+
 ```
 
 ## On a web page
@@ -413,6 +416,9 @@ The version of the included IANA time zone database is 2014h.
 ### Planned
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
+
+### 1.6.0 (2014-10-02)
+* add Period.isBoundary() method for checking that a date is on a period boundary.
 
 ### 1.5.4 (2014-09-29)
 * Upgrade time zone database to 2014h

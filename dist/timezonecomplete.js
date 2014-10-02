@@ -2451,6 +2451,9 @@ sourcemapsupport.install({ handleUncaughtExceptions: true });
 var basics = require("./basics");
 var TimeUnit = basics.TimeUnit;
 
+var duration = require("./duration");
+var Duration = duration.Duration;
+
 var datetime = require("./datetime");
 var DateTime = datetime.DateTime;
 
@@ -2869,6 +2872,18 @@ var Period = (function () {
         }
     };
 
+    /**
+    * Checks whether the given date is on a period boundary
+    * (expensive!)
+    */
+    Period.prototype.isBoundary = function (occurrence) {
+        assert((this._intStart.zone() === null) === (occurrence.zone() === null), "The occurrence and startDate must both be aware or unaware");
+        if (!occurrence) {
+            return false;
+        }
+        return (this.findFirst(occurrence.sub(Duration.milliseconds(1))).equals(occurrence));
+    };
+
     Period.prototype._periodIsoString = function () {
         switch (this._unit) {
             case 0 /* Second */: {
@@ -3018,7 +3033,7 @@ var Period = (function () {
 exports.Period = Period;
 //# sourceMappingURL=period.js.map
 
-},{"./basics":1,"./datetime":2,"./timezone":14,"assert":18,"source-map-support":39}],11:[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./timezone":14,"assert":18,"source-map-support":39}],11:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *

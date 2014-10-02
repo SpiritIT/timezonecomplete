@@ -16,6 +16,9 @@ sourcemapsupport.install({ handleUncaughtExceptions: true });
 import basics = require("./basics");
 import TimeUnit = basics.TimeUnit;
 
+import duration = require("./duration");
+import Duration = duration.Duration;
+
 import datetime = require("./datetime");
 import DateTime = datetime.DateTime;
 
@@ -510,6 +513,19 @@ export class Period {
 		} else {
 			return this._correctDay(normalizedPrev.addLocal(this._intAmount * count, this._intUnit)).convert(prev.zone());
 		}
+	}
+
+	/**
+	 * Checks whether the given date is on a period boundary
+	 * (expensive!)
+	 */
+	public isBoundary(occurrence: DateTime): boolean {
+		assert((this._intStart.zone() === null) === (occurrence.zone() === null),
+			"The occurrence and startDate must both be aware or unaware");
+		if (!occurrence) {
+			return false;
+		}
+		return (this.findFirst(occurrence.sub(Duration.milliseconds(1))).equals(occurrence));
 	}
 
 	private _periodIsoString(): string {

@@ -567,6 +567,22 @@ describe("Period", (): void => {
 		});
 	});
 
+	describe("isBoundary()", (): void => {
+		it("should return true for start date", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.isBoundary(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"))).to.be.true;
+		});
+		it("should return true for boundary date", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.isBoundary(new DateTime("2014-01-02T02:00:00 Europe/Amsterdam"))).to.be.true;
+		});
+		it("should return false for non-boundary date", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.isBoundary(new DateTime("2014-01-02T02:00:01 Europe/Amsterdam"))).to.be.false;
+		});
+	});
+
+
 	describe("toString()", (): void => {
 		it("should work with naive date", (): void => {
 			var p = new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);

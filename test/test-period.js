@@ -405,6 +405,21 @@ describe("Period", function () {
         });
     });
 
+    describe("isBoundary()", function () {
+        it("should return true for start date", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.isBoundary(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"))).to.be.true;
+        });
+        it("should return true for boundary date", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.isBoundary(new DateTime("2014-01-02T02:00:00 Europe/Amsterdam"))).to.be.true;
+        });
+        it("should return false for non-boundary date", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.isBoundary(new DateTime("2014-01-02T02:00:01 Europe/Amsterdam"))).to.be.false;
+        });
+    });
+
     describe("toString()", function () {
         it("should work with naive date", function () {
             var p = new Period(new DateTime("2014-01-01T00:00:00"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);

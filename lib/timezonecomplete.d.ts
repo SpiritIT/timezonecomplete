@@ -908,6 +908,11 @@ declare module '__timezonecomplete/period' {
          */
         findNext(prev: datetime.DateTime, count?: number): datetime.DateTime;
         /**
+         * Checks whether the given date is on a period boundary
+         * (expensive!)
+         */
+        isBoundary(occurrence: datetime.DateTime): boolean;
+        /**
          * Returns an ISO duration string e.g.
          * 2014-01-01T12:00:00.000+01:00/P1H
          * 2014-01-01T12:00:00.000+01:00/PT1M   (one minute)
