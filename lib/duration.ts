@@ -191,6 +191,13 @@ export class Duration {
 	}
 
 	/**
+	 * @return True iff (this <= other)
+	 */
+	public lessEqual(other: Duration): boolean {
+		return this.milliseconds() <= other.milliseconds();
+	}
+
+	/**
 	 * @return True iff this and other represent the same time duration
 	 */
 	public equals(other: Duration): boolean {
@@ -202,6 +209,13 @@ export class Duration {
 	 */
 	public greaterThan(other: Duration): boolean {
 		return this.milliseconds() > other.milliseconds();
+	}
+
+	/**
+	 * @return True iff this >= other
+	 */
+	public greaterEqual(other: Duration): boolean {
+		return this.milliseconds() >= other.milliseconds();
 	}
 
 	/**

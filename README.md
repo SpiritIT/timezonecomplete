@@ -115,10 +115,15 @@ You can create a Duration in milliseconds, seconds, minutes or hours and then qu
 ```javascript
 var tc = require("timezonecomplete");
 
-// a duration of 2 seconds
-var duration = tc.Duration.seconds(2);
+
+var duration;
+duration = tc.Duration.milliseconds(2);	// 2 milliseconds
+duration = tc.Duration.seconds(2);	// 2 seconds
+duration = tc.Duration.minutes(2);	// 2 minutes
+duration = tc.Duration.hours(2); // 2 hours
 
 // duration to string
+duration = tc.Duration.seconds(2);
 console.log(duration.toString()); // 00:00:02
 console.log(duration.toFullString()); // 00:00:02.000
 
@@ -131,6 +136,15 @@ duration2 = duration.add(tc.Duration.hours(5)); // 5 hours and 2 seconds
 duration2 = duration.sub(tc.Duration.milliseconds(500)); // 1.5 seconds
 duration2 = duration.multiply(3); // 6 seconds
 duration2 = duration.divide(3); // two thirds of a second
+
+// comparisons
+var sixSecs = tc.Duration.seconds(6);
+var fiveSecs = tc.Duration.seconds(5);
+fiveSecs.lessThan(sixSecs); // true
+fiveSecs.lessEqual(sixSecs); // true
+fiveSecs.equals(sixSecs); // false
+fiveSecs.greaterEqual(sixSecs); // false
+fiveSecs.greaterThan(sixSecs); // false
 
 // min and max functions
 var duration3 = tc.Duration.seconds(6);
@@ -417,8 +431,11 @@ The version of the included IANA time zone database is 2014h.
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
 
+### next
+* Add Duration.greaterEqual() and Duration.lessEqual()
+
 ### 1.6.0 (2014-10-02)
-* add Period.isBoundary() method for checking that a date is on a period boundary.
+* Add Period.isBoundary() method for checking that a date is on a period boundary.
 
 ### 1.5.4 (2014-09-29)
 * Upgrade time zone database to 2014h

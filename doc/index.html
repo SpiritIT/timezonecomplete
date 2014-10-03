@@ -156,10 +156,15 @@ tc.secondOfDay(<span class="hljs-number">1</span>, <span class="hljs-number">0</
 				You can create a Duration in milliseconds, seconds, minutes or hours and then query the value in another unit.</p>
 				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
-<span class="hljs-comment">// a duration of 2 seconds</span>
-<span class="hljs-keyword">var</span> duration = tc.Duration.seconds(<span class="hljs-number">2</span>);
+
+<span class="hljs-keyword">var</span> duration;
+duration = tc.Duration.milliseconds(<span class="hljs-number">2</span>);    <span class="hljs-comment">// 2 milliseconds</span>
+duration = tc.Duration.seconds(<span class="hljs-number">2</span>);    <span class="hljs-comment">// 2 seconds</span>
+duration = tc.Duration.minutes(<span class="hljs-number">2</span>);    <span class="hljs-comment">// 2 minutes</span>
+duration = tc.Duration.hours(<span class="hljs-number">2</span>); <span class="hljs-comment">// 2 hours</span>
 
 <span class="hljs-comment">// duration to string</span>
+duration = tc.Duration.seconds(<span class="hljs-number">2</span>);
 <span class="hljs-built_in">console</span>.log(duration.toString()); <span class="hljs-comment">// 00:00:02</span>
 <span class="hljs-built_in">console</span>.log(duration.toFullString()); <span class="hljs-comment">// 00:00:02.000</span>
 
@@ -172,6 +177,15 @@ duration2 = duration.add(tc.Duration.hours(<span class="hljs-number">5</span>));
 duration2 = duration.sub(tc.Duration.milliseconds(<span class="hljs-number">500</span>)); <span class="hljs-comment">// 1.5 seconds</span>
 duration2 = duration.multiply(<span class="hljs-number">3</span>); <span class="hljs-comment">// 6 seconds</span>
 duration2 = duration.divide(<span class="hljs-number">3</span>); <span class="hljs-comment">// two thirds of a second</span>
+
+<span class="hljs-comment">// comparisons</span>
+<span class="hljs-keyword">var</span> sixSecs = tc.Duration.seconds(<span class="hljs-number">6</span>);
+<span class="hljs-keyword">var</span> fiveSecs = tc.Duration.seconds(<span class="hljs-number">5</span>);
+fiveSecs.lessThan(sixSecs); <span class="hljs-comment">// true</span>
+fiveSecs.lessEqual(sixSecs); <span class="hljs-comment">// true</span>
+fiveSecs.equals(sixSecs); <span class="hljs-comment">// false</span>
+fiveSecs.greaterEqual(sixSecs); <span class="hljs-comment">// false</span>
+fiveSecs.greaterThan(sixSecs); <span class="hljs-comment">// false</span>
 
 <span class="hljs-comment">// min and max functions</span>
 <span class="hljs-keyword">var</span> duration3 = tc.Duration.seconds(<span class="hljs-number">6</span>);
@@ -425,9 +439,13 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 					<li>A release 2 where we polish the interface to the library a bit</li>
 					<li>Leap second handling</li>
 				</ul>
+				<h3 id="next">next</h3>
+				<ul>
+					<li>Add Duration.greaterEqual() and Duration.lessEqual()</li>
+				</ul>
 				<h3 id="1-6-0-2014-10-02-">1.6.0 (2014-10-02)</h3>
 				<ul>
-					<li>add Period.isBoundary() method for checking that a date is on a period boundary.</li>
+					<li>Add Period.isBoundary() method for checking that a date is on a period boundary.</li>
 				</ul>
 				<h3 id="1-5-4-2014-09-29-">1.5.4 (2014-09-29)</h3>
 				<ul>
@@ -532,9 +550,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#114;&#x2e;&#115;&#99;&#104;&#111;&#117;&#116;&#x65;&#110;&#64;&#115;&#112;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#111;&#109;">&#114;&#x2e;&#115;&#99;&#104;&#111;&#117;&#116;&#x65;&#110;&#64;&#115;&#112;&#x69;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#111;&#109;</a></li>
-					<li>Daan Wissing <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x64;&#46;&#119;&#x69;&#x73;&#115;&#105;&#x6e;&#103;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#46;&#x63;&#x6f;&#109;">&#x64;&#46;&#119;&#x69;&#x73;&#115;&#105;&#x6e;&#103;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#116;&#46;&#x63;&#x6f;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x70;&#x2e;&#x6b;&#111;&#x6f;&#105;&#x6a;&#109;&#97;&#110;&#x73;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;">&#x70;&#x2e;&#x6b;&#111;&#x6f;&#105;&#x6a;&#109;&#97;&#110;&#x73;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
+					<li>Rogier Schouten <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#114;&#x2e;&#115;&#99;&#x68;&#111;&#117;&#116;&#x65;&#x6e;&#x40;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#105;&#116;&#46;&#99;&#111;&#x6d;">&#114;&#x2e;&#115;&#99;&#x68;&#111;&#117;&#116;&#x65;&#x6e;&#x40;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#105;&#116;&#46;&#99;&#111;&#x6d;</a></li>
+					<li>Daan Wissing <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#100;&#x2e;&#x77;&#x69;&#115;&#x73;&#x69;&#x6e;&#103;&#64;&#115;&#x70;&#x69;&#x72;&#105;&#116;&#x69;&#x74;&#x2e;&#99;&#111;&#x6d;">&#100;&#x2e;&#x77;&#x69;&#115;&#x73;&#x69;&#x6e;&#103;&#64;&#115;&#x70;&#x69;&#x72;&#105;&#116;&#x69;&#x74;&#x2e;&#99;&#111;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#112;&#x2e;&#107;&#x6f;&#111;&#105;&#x6a;&#x6d;&#97;&#110;&#x73;&#x40;&#115;&#x70;&#105;&#114;&#105;&#116;&#x69;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#112;&#x2e;&#107;&#x6f;&#111;&#105;&#x6a;&#x6d;&#97;&#110;&#x73;&#x40;&#115;&#x70;&#105;&#114;&#105;&#116;&#x69;&#116;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

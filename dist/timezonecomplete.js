@@ -1646,6 +1646,13 @@ var Duration = (function () {
     };
 
     /**
+    * @return True iff (this <= other)
+    */
+    Duration.prototype.lessEqual = function (other) {
+        return this.milliseconds() <= other.milliseconds();
+    };
+
+    /**
     * @return True iff this and other represent the same time duration
     */
     Duration.prototype.equals = function (other) {
@@ -1657,6 +1664,13 @@ var Duration = (function () {
     */
     Duration.prototype.greaterThan = function (other) {
         return this.milliseconds() > other.milliseconds();
+    };
+
+    /**
+    * @return True iff this >= other
+    */
+    Duration.prototype.greaterEqual = function (other) {
+        return this.milliseconds() >= other.milliseconds();
     };
 
     /**

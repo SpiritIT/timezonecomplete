@@ -745,6 +745,10 @@ declare module '__timezonecomplete/duration' {
          */
         lessThan(other: Duration): boolean;
         /**
+         * @return True iff (this <= other)
+         */
+        lessEqual(other: Duration): boolean;
+        /**
          * @return True iff this and other represent the same time duration
          */
         equals(other: Duration): boolean;
@@ -752,6 +756,10 @@ declare module '__timezonecomplete/duration' {
          * @return True iff this > other
          */
         greaterThan(other: Duration): boolean;
+        /**
+         * @return True iff this >= other
+         */
+        greaterEqual(other: Duration): boolean;
         /**
          * @return The minimum (most negative) of this and other
          */
