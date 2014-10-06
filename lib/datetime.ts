@@ -196,7 +196,8 @@ export class DateTime {
 				}
 			} break;
 			case "string": {
-				var ss: string[] = DateTime._splitDateFromTimeZone(<string>a1);
+				var givenString = (<string>a1).trim();
+				var ss: string[] = DateTime._splitDateFromTimeZone(givenString);
 				assert(ss.length === 2, "Invalid date string given: \"" + <string>a1 + "\"");
 				if (a2 instanceof TimeZone) {
 					this._zone = <TimeZone>(a2);
@@ -776,7 +777,7 @@ export class DateTime {
 	 * Return a string representation of the DateTime according to the
 	 * specified format. The format is implemented as the LDML standard
 	 * (http://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns)
-	 * 
+	 *
 	 * @param formatString The format specification (e.g. "dd/MM/yyyy HH:mm:ss")
 	 * @return The string representation of this DateTime
 	 */
@@ -852,36 +853,37 @@ export class DateTime {
 	/**
 	 * Split a combined ISO datetime and timezone into datetime and timezone
 	 */
-	private static _splitDateFromTimeZone(s: string): string[] {
+	private static _splitDateFromTimeZone(s: string): string[]{
+		var trimmed = s.trim();
 		var result = ["", ""];
-		var index = s.lastIndexOf(" ");
+		var index = trimmed.lastIndexOf(" ");
 		if (index > -1) {
-			result[0] = s.substr(0, index);
-			result[1] = s.substr(index + 1);
+			result[0] = trimmed.substr(0, index);
+			result[1] = trimmed.substr(index + 1);
 			return result;
 		}
-		index = s.lastIndexOf("Z");
+		index = trimmed.lastIndexOf("Z");
 		if (index > -1) {
-			result[0] = s.substr(0, index);
-			result[1] = s.substr(index, 1);
+			result[0] = trimmed.substr(0, index);
+			result[1] = trimmed.substr(index, 1);
 			return result;
 		}
-		index = s.lastIndexOf("+");
+		index = trimmed.lastIndexOf("+");
 		if (index > -1) {
-			result[0] = s.substr(0, index);
-			result[1] = s.substr(index);
+			result[0] = trimmed.substr(0, index);
+			result[1] = trimmed.substr(index);
 			return result;
 		}
-		index = s.lastIndexOf("-");
+		index = trimmed.lastIndexOf("-");
 		if (index < 8) {
 			index = -1; // any "-" we found was a date separator
 		}
 		if (index > -1) {
-			result[0] = s.substr(0, index);
-			result[1] = s.substr(index);
+			result[0] = trimmed.substr(0, index);
+			result[1] = trimmed.substr(index);
 			return result;
 		}
-		result[0] = s;
+		result[0] = trimmed;
 		return result;
 	}
 }

@@ -804,7 +804,8 @@ var DateTime = (function () {
                 break;
             case "string":
                  {
-                    var ss = DateTime._splitDateFromTimeZone(a1);
+                    var givenString = a1.trim();
+                    var ss = DateTime._splitDateFromTimeZone(givenString);
                     assert(ss.length === 2, "Invalid date string given: \"" + a1 + "\"");
                     if (a2 instanceof TimeZone) {
                         this._zone = (a2);
@@ -1449,35 +1450,36 @@ var DateTime = (function () {
     * Split a combined ISO datetime and timezone into datetime and timezone
     */
     DateTime._splitDateFromTimeZone = function (s) {
+        var trimmed = s.trim();
         var result = ["", ""];
-        var index = s.lastIndexOf(" ");
+        var index = trimmed.lastIndexOf(" ");
         if (index > -1) {
-            result[0] = s.substr(0, index);
-            result[1] = s.substr(index + 1);
+            result[0] = trimmed.substr(0, index);
+            result[1] = trimmed.substr(index + 1);
             return result;
         }
-        index = s.lastIndexOf("Z");
+        index = trimmed.lastIndexOf("Z");
         if (index > -1) {
-            result[0] = s.substr(0, index);
-            result[1] = s.substr(index, 1);
+            result[0] = trimmed.substr(0, index);
+            result[1] = trimmed.substr(index, 1);
             return result;
         }
-        index = s.lastIndexOf("+");
+        index = trimmed.lastIndexOf("+");
         if (index > -1) {
-            result[0] = s.substr(0, index);
-            result[1] = s.substr(index);
+            result[0] = trimmed.substr(0, index);
+            result[1] = trimmed.substr(index);
             return result;
         }
-        index = s.lastIndexOf("-");
+        index = trimmed.lastIndexOf("-");
         if (index < 8) {
             index = -1; // any "-" we found was a date separator
         }
         if (index > -1) {
-            result[0] = s.substr(0, index);
-            result[1] = s.substr(index);
+            result[0] = trimmed.substr(0, index);
+            result[1] = trimmed.substr(index);
             return result;
         }
-        result[0] = s;
+        result[0] = trimmed;
         return result;
     };
     DateTime.timeSource = new RealTimeSource();
@@ -1773,15 +1775,16 @@ var Duration = (function () {
     };
 
     Duration.prototype._fromString = function (s) {
-        assert(s.match(/^-?\d\d?(:\d\d?(:\d\d?(.\d\d?\d?)?)?)?$/), "Not a proper time duration string: \"" + s + "\"");
+        var trimmed = s.trim();
+        assert(trimmed.match(/^-?\d\d?(:\d\d?(:\d\d?(.\d\d?\d?)?)?)?$/), "Not a proper time duration string: \"" + trimmed + "\"");
         var sign = 1;
         var hours = 0;
         var minutes = 0;
         var seconds = 0;
         var milliseconds = 0;
-        var parts = s.split(":");
-        assert(parts.length > 0 && parts.length < 4, "Not a proper time duration string: \"" + s + "\"");
-        if (s.charAt(0) === "-") {
+        var parts = trimmed.split(":");
+        assert(parts.length > 0 && parts.length < 4, "Not a proper time duration string: \"" + trimmed + "\"");
+        if (trimmed.charAt(0) === "-") {
             sign = -1;
             parts[0] = parts[0].substr(1);
         }

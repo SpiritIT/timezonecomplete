@@ -179,6 +179,18 @@ describe("DateTime", (): void => {
 			expect(d.zone()).to.equal(TimeZone.zone("Europe/Amsterdam"));
 			expect(d.offset()).to.equal(120);
 		});
+		it("should take care of whitespace", (): void => {
+			var d = new DateTime(" \n\t2014-05-06T07:08:09.010 Europe/Amsterdam \n\t");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(7);
+			expect(d.minute()).to.equal(8);
+			expect(d.second()).to.equal(9);
+			expect(d.millisecond()).to.equal(10);
+			expect(d.zone()).to.equal(TimeZone.zone("Europe/Amsterdam"));
+			expect(d.offset()).to.equal(120);
+		});
 		it("should add given time zone", (): void => {
 			var d = new DateTime("2014-05-06", TimeZone.zone(6));
 			expect(d.year()).to.equal(2014);

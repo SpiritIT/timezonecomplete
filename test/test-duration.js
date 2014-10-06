@@ -46,6 +46,7 @@ describe("Duration()", function () {
             expect((new Duration("-1:1:1.101")).milliseconds()).to.equal(-1 * (1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000 + 101));
             expect((new Duration("25")).milliseconds()).to.equal(25 * 3600 * 1000);
             expect((new Duration("-01:02:03.004")).milliseconds()).to.equal(-1 * (1 * 3600 * 1000 + 2 * 60 * 1000 + 3 * 1000 + 4));
+            expect((new Duration(" \n\t01:01:01.101 \n\t")).milliseconds()).to.equal(1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000 + 101);
         });
 
         it("throws on invalid string", function () {

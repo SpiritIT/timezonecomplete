@@ -318,15 +318,16 @@ export class Duration {
 	}
 
 	private _fromString(s: string): void {
-		assert(s.match(/^-?\d\d?(:\d\d?(:\d\d?(.\d\d?\d?)?)?)?$/), "Not a proper time duration string: \"" + s + "\"");
+		var trimmed = s.trim();
+		assert(trimmed.match(/^-?\d\d?(:\d\d?(:\d\d?(.\d\d?\d?)?)?)?$/), "Not a proper time duration string: \"" + trimmed + "\"");
 		var sign: number = 1;
 		var hours: number = 0;
 		var minutes: number = 0;
 		var seconds: number = 0;
 		var milliseconds: number = 0;
-		var parts: string[] = s.split(":");
-		assert(parts.length > 0 && parts.length < 4, "Not a proper time duration string: \"" + s + "\"");
-		if (s.charAt(0) === "-") {
+		var parts: string[] = trimmed.split(":");
+		assert(parts.length > 0 && parts.length < 4, "Not a proper time duration string: \"" + trimmed + "\"");
+		if (trimmed.charAt(0) === "-") {
 			sign = -1;
 			parts[0] = parts[0].substr(1);
 		}
