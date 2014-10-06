@@ -431,8 +431,10 @@ The version of the included IANA time zone database is 2014h.
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
 
-### next
+### 1.7.0 (2014-10-06)
 * Add Duration.greaterEqual() and Duration.lessEqual()
+* Bugfix in DateTime-from-string constructor: leading/trailing whitespace led to date not getting parsed.
+* Bugfix in Duration-from-string constructor: leading/trailing whitespace led to duration not getting parsed.
 
 ### 1.6.0 (2014-10-02)
 * Add Period.isBoundary() method for checking that a date is on a period boundary.
