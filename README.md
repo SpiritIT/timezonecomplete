@@ -21,8 +21,7 @@ Other libraries are great. We had different requirements, that's all.
   * The Date constructor normalizes non-existing local times (during DST forward changes) in different ways in Firefox, Chrome, IE and Node.
   * The Date class responds differently to the TZ environment variable on different platforms.
   * The conversion of a local time to a UTC value is broken by specification.
-2. The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project. 
-3. Timezonecomplete aims to be "complete", whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:
+2. Timezonecomplete aims to be "complete", whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:
   * Naive dates (which know they have NO timezone information)
   * Aware dates (which have timezone information)
   * Proper behaviour around DST changes
@@ -30,8 +29,9 @@ Other libraries are great. We had different requirements, that's all.
   * Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
   * Utility functions for e.g. determining leap years, determining the last Monday of the month etc.
   * Ability to use with NodeJS as well as in a browser.
-4. Timezonecomplete has at least 99% test coverage.
-5. Timezonecomplete is under active development by a company who have an interest in keeping it up to date.
+3. Timezonecomplete has at least 99% test coverage.
+4. Timezonecomplete is under active development by a company who have an interest in keeping it up to date.
+5. The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project.
 
 ## Usage
 
@@ -105,6 +105,18 @@ tc.dayOfYear(2014, 2, 1); // returns 31
 // n-th second of the day, counting from 0
 tc.secondOfDay(1, 0, 0); // returns 3600
 
+// min and max for Duration
+var duration1 = tc.Duration.seconds(3);
+var duration2 = tc.Duration.seconds(1);
+tc.min(duration1, duration2); // returns a clone of duration2
+tc.max(duration1, duration2); // returns a clone of duration1
+
+// min and max for DateTime
+var datetime1 = new tc.DateTime("2014-01-01");
+var datetime2 = new tc.DateTime("2014-01-22");
+tc.min(datetime1, datetime2); // returns a clone of datetime1
+tc.max(datetime1, datetime2); // returns a clone of datetime2
+
 ```
 
 ### Duration
@@ -156,7 +168,7 @@ duration5 = duration3.min(duration4); // 3 seconds
 // getters
 // Note Duration has two sets of getters: singular and plural:
 // - wholeHours(), minute(), second(), millisecond(): these get the hour part, minute part 0-59, second part 0-59 etc.
-//   Note that wholeHours() may be 24 or more. 
+//   Note that wholeHours() may be 24 or more.
 // - hours(), minutes(), seconds(), milliseconds(): these return the whole duration as fractional number in hours/minutes/etc
 var duration6 = tc.Duration.hours(1.5); // 1:30:00.000
 
@@ -179,9 +191,9 @@ The DateTime class is a replacement (although not drop-in) for the Date class. I
 It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
 that the local time is incremented by one hour even if the UTC date does not change.
 
-The main differences with the JavaScript Date are: 
+The main differences with the JavaScript Date are:
 - DateTime is time zone aware.
-- All methods are in singular form: "year()" not "years()" and "hour()" not "hours()". The JavaScript Date class mixes these forms. 
+- All methods are in singular form: "year()" not "years()" and "hour()" not "hours()". The JavaScript Date class mixes these forms.
 - Our day-of-month is called day() not date().
 - We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.
 - With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
@@ -326,6 +338,11 @@ d3.lessThan(d4); // true
 d4.lessEqual(d3); // false, Amsterdam is ahead of UTC
 d4.greaterThan(d3); // true
 
+// min and max functions
+var d5 = new tc.DateTime("2014-10-17");
+var d6 = new tc.DateTime("2014-10-20");
+d5.min(d6); // returns a clone of d5
+d5.max(d6); // returns a clone of d6
 
 
 ```
@@ -353,11 +370,11 @@ var period = new tc.Period(new tc.DateTime("2014-01-01T08:05:00 Europe/Amsterdam
 var period2 = new tc.Period(new tc.DateTime("2014-01-01T08:05:00+01:00"), 1, tc.TimeUnit.Day, tc.PeriodDst.RegularLocalTime);
 
 // You can calculate the first occurrence after a given date (in any time zone)
-// "2014-05-01T08:05:00.000 Europe/Amsterdam" 
+// "2014-05-01T08:05:00.000 Europe/Amsterdam"
 var occurrence = period.findFirst(new tc.DateTime("2014-04-30T12:00:00 Europe/Amsterdam"));
 
 // findNext works much faster, assuming that its parameter is on a period boundary
-// "2014-05-02T08:05:00.000 Europe/Amsterdam" 
+// "2014-05-02T08:05:00.000 Europe/Amsterdam"
 var occurrence2 = period.findNext(occurrence);
 
 // isBoundary checks whether the given DateTime is on a period boundary
@@ -389,13 +406,16 @@ In theory this bundle is also usable using module loaders like [RequireJS](http:
 ### What time zone names can I use?
 See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+### How do I convert a DateTime object to a JavaScript Date object?
+Use new Date(myDateTime.unixUtcMillis()).
+
 ### How do I convert a JavaScript Date object to a DateTime object?
 
 The DateTime class has a constructor that takes a date. It may seem rather complex because the constructor has three parameters. But that was necessary:
 
 1. The first parameter is the Date object.
 2. The second parameter indicates which of the two values in the Date object you want to use: a Date object has a UTC value (getUtcFullYear()) and a Local value (getFullYear()). You typically use the local functions, but if you created your date from a unix timestamp then the UTC date is most accurate.
-3. The third parameter gives us the missing info: the time zone that the given value is in. 
+3. The third parameter gives us the missing info: the time zone that the given value is in.
 
 ```javascript
 
@@ -430,6 +450,10 @@ The version of the included IANA time zone database is 2014h.
 ### Planned
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
+
+### 1.8.0 (2014-10-17)
+* Add global min() and max() functions for DateTime and Duration
+* Add DateTime.min() and DateTime.max() function
 
 ### 1.7.0 (2014-10-06)
 * Add Duration.greaterEqual() and Duration.lessEqual()

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;period&quot; | timezonecomplete</title>
+	<title>&quot;globals&quot; | timezonecomplete</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -49,10 +49,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_period_.html">&quot;period&quot;</a>
+					<a href="_globals_.html">&quot;globals&quot;</a>
 				</li>
 			</ul>
-			<h1>Dynamic module &quot;period&quot;</h1>
+			<h1>Dynamic module &quot;globals&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -64,7 +64,7 @@
 					<div class="lead">
 						<p>Copyright(c) 2014 Spirit IT BV</p>
 					</div>
-					<p>Periodic interval functions</p>
+					<p>Global functions depending on DateTime/Duration etc</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -72,21 +72,10 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumerations</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum tsd-parent-kind-dynamic-module"><a href="../enums/_period_.perioddst.html" class="tsd-kind-icon">Period<wbr>Dst</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-dynamic-module"><a href="../classes/_period_.period.html" class="tsd-kind-icon">Period</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_period_.html#perioddsttostring" class="tsd-kind-icon">period<wbr>Dst<wbr>ToString</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_globals_.html#max" class="tsd-kind-icon">max</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_globals_.html#min" class="tsd-kind-icon">min</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,30 +84,137 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
-					<a name="perioddsttostring" class="anchor"></a>
-					<h3>period<wbr>Dst<wbr>ToString</h3>
+					<a name="max" class="anchor"></a>
+					<h3>max</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">period<wbr>Dst<wbr>ToString<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">max<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, d2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+						<li class="tsd-signature tsd-kind-icon">max<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
+						<li class="tsd-signature tsd-kind-icon">max<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:60</li>
+									<li>Defined in globals.ts:50</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Convert a PeriodDst to a string: &quot;regular intervals&quot; or &quot;regular local time&quot;</p>
+									<p>Returns the maximum of two DateTimes or Durations</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>p: <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a></h5>
+									<h5>d1: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>d2: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">string</span>
+								<span class="tsd-signature-type">any</span>
+							</h4>
+						</li>
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in globals.ts:46</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the maximum of two Durations</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>d1: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+								</li>
+								<li>
+									<h5>d2: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns 
+								<a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>
+							</h4>
+						</li>
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in globals.ts:42</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the maximum of two DateTimes</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>d1: <a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
+								</li>
+								<li>
+									<h5>d2: <a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns 
+								<a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
+					<a name="min" class="anchor"></a>
+					<h3>min</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
+						<li class="tsd-signature tsd-kind-icon">min<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
+						<li class="tsd-signature tsd-kind-icon">min<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in globals.ts:22</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the minimum of two DateTimes</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>d1: <a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
+								</li>
+								<li>
+									<h5>d2: <a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns 
+								<a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
+							</h4>
+						</li>
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in globals.ts:26</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the minimum of two Durations</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>d1: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+								</li>
+								<li>
+									<h5>d2: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns 
+								<a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>
 							</h4>
 						</li>
 					</ul>
@@ -143,7 +239,7 @@
 					<li class=" tsd-kind-dynamic-module">
 						<a href="_format_.html">"format"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class="current tsd-kind-dynamic-module">
 						<a href="_globals_.html">"globals"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
@@ -155,7 +251,7 @@
 					<li class=" tsd-kind-dynamic-module">
 						<a href="_math_.html">"math"</a>
 					</li>
-					<li class="current tsd-kind-dynamic-module">
+					<li class=" tsd-kind-dynamic-module">
 						<a href="_period_.html">"period"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
@@ -177,14 +273,11 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
-						<a href="../enums/_period_.perioddst.html" class="tsd-kind-icon">Period<wbr>Dst</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
-						<a href="../classes/_period_.period.html" class="tsd-kind-icon">Period</a>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="_globals_.html#max" class="tsd-kind-icon">max</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
-						<a href="_period_.html#perioddsttostring" class="tsd-kind-icon">period<wbr>Dst<wbr>ToString</a>
+						<a href="_globals_.html#min" class="tsd-kind-icon">min</a>
 					</li>
 				</ul>
 			</nav>

@@ -74,7 +74,6 @@
 							<li>The conversion of a local time to a UTC value is broken by specification.</li>
 						</ul>
 					</li>
-					<li>The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project. </li>
 					<li>Timezonecomplete aims to be &quot;complete&quot;, whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:<ul>
 							<li>Naive dates (which know they have NO timezone information)</li>
 							<li>Aware dates (which have timezone information)</li>
@@ -87,6 +86,7 @@
 					</li>
 					<li>Timezonecomplete has at least 99% test coverage.</li>
 					<li>Timezonecomplete is under active development by a company who have an interest in keeping it up to date.</li>
+					<li>The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project.</li>
 				</ol>
 				<h2 id="usage">Usage</h2>
 				<p>See also ./doc/modules/index.html.</p>
@@ -150,6 +150,18 @@ tc.dayOfYear(<span class="hljs-number">2014</span>, <span class="hljs-number">2<
 
 <span class="hljs-comment">// n-th second of the day, counting from 0</span>
 tc.secondOfDay(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// returns 3600</span>
+
+<span class="hljs-comment">// min and max for Duration</span>
+<span class="hljs-keyword">var</span> duration1 = tc.Duration.seconds(<span class="hljs-number">3</span>);
+<span class="hljs-keyword">var</span> duration2 = tc.Duration.seconds(<span class="hljs-number">1</span>);
+tc.min(duration1, duration2); <span class="hljs-comment">// returns a clone of duration2</span>
+tc.max(duration1, duration2); <span class="hljs-comment">// returns a clone of duration1</span>
+
+<span class="hljs-comment">// min and max for DateTime</span>
+<span class="hljs-keyword">var</span> datetime1 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01"</span>);
+<span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-22"</span>);
+tc.min(datetime1, datetime2); <span class="hljs-comment">// returns a clone of datetime1</span>
+tc.max(datetime1, datetime2); <span class="hljs-comment">// returns a clone of datetime2</span>
 </code></pre>
 				<h3 id="duration">Duration</h3>
 				<p>The Duration class is a unit-aware representation of a duration in wall clock time.
@@ -197,7 +209,7 @@ duration5 = duration3.min(duration4); <span class="hljs-comment">// 3 seconds</s
 <span class="hljs-comment">// getters</span>
 <span class="hljs-comment">// Note Duration has two sets of getters: singular and plural:</span>
 <span class="hljs-comment">// - wholeHours(), minute(), second(), millisecond(): these get the hour part, minute part 0-59, second part 0-59 etc.</span>
-<span class="hljs-comment">//   Note that wholeHours() may be 24 or more. </span>
+<span class="hljs-comment">//   Note that wholeHours() may be 24 or more.</span>
 <span class="hljs-comment">// - hours(), minutes(), seconds(), milliseconds(): these return the whole duration as fractional number in hours/minutes/etc</span>
 <span class="hljs-keyword">var</span> duration6 = tc.Duration.hours(<span class="hljs-number">1.5</span>); <span class="hljs-comment">// 1:30:00.000</span>
 
@@ -217,10 +229,10 @@ duration6.valueOf(); <span class="hljs-comment">// same as milliseconds()</span>
 				<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
 					It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
 				that the local time is incremented by one hour even if the UTC date does not change.</p>
-				<p>The main differences with the JavaScript Date are: </p>
+				<p>The main differences with the JavaScript Date are:</p>
 				<ul>
 					<li>DateTime is time zone aware.</li>
-					<li>All methods are in singular form: &quot;year()&quot; not &quot;years()&quot; and &quot;hour()&quot; not &quot;hours()&quot;. The JavaScript Date class mixes these forms. </li>
+					<li>All methods are in singular form: &quot;year()&quot; not &quot;years()&quot; and &quot;hour()&quot; not &quot;hours()&quot;. The JavaScript Date class mixes these forms.</li>
 					<li>Our day-of-month is called day() not date().</li>
 					<li>We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.</li>
 					<li>With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
@@ -357,6 +369,12 @@ d3.greaterEqual(d4); <span class="hljs-comment">// false, Amsterdam is ahead of 
 d3.lessThan(d4); <span class="hljs-comment">// true</span>
 d4.lessEqual(d3); <span class="hljs-comment">// false, Amsterdam is ahead of UTC</span>
 d4.greaterThan(d3); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// min and max functions</span>
+<span class="hljs-keyword">var</span> d5 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-10-17"</span>);
+<span class="hljs-keyword">var</span> d6 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-10-20"</span>);
+d5.min(d6); <span class="hljs-comment">// returns a clone of d5</span>
+d5.max(d6); <span class="hljs-comment">// returns a clone of d6</span>
 </code></pre>
 				<h3 id="periods">Periods</h3>
 				<p>We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it happen at regular intervals, shifting with DST?  The former means that the intervals are not always 12 hours. The latter means that it doesn&#39;t occur at the same time always.
@@ -378,11 +396,11 @@ d4.greaterThan(d3); <span class="hljs-comment">// true</span>
 <span class="hljs-keyword">var</span> period2 = <span class="hljs-keyword">new</span> tc.Period(<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T08:05:00+01:00"</span>), <span class="hljs-number">1</span>, tc.TimeUnit.Day, tc.PeriodDst.RegularLocalTime);
 
 <span class="hljs-comment">// You can calculate the first occurrence after a given date (in any time zone)</span>
-<span class="hljs-comment">// "2014-05-01T08:05:00.000 Europe/Amsterdam" </span>
+<span class="hljs-comment">// "2014-05-01T08:05:00.000 Europe/Amsterdam"</span>
 <span class="hljs-keyword">var</span> occurrence = period.findFirst(<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-04-30T12:00:00 Europe/Amsterdam"</span>));
 
 <span class="hljs-comment">// findNext works much faster, assuming that its parameter is on a period boundary</span>
-<span class="hljs-comment">// "2014-05-02T08:05:00.000 Europe/Amsterdam" </span>
+<span class="hljs-comment">// "2014-05-02T08:05:00.000 Europe/Amsterdam"</span>
 <span class="hljs-keyword">var</span> occurrence2 = period.findNext(occurrence);
 
 <span class="hljs-comment">// isBoundary checks whether the given DateTime is on a period boundary</span>
@@ -406,12 +424,14 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				<h2 id="faq">FAQ</h2>
 				<h3 id="what-time-zone-names-can-i-use-">What time zone names can I use?</h3>
 				<p>See <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></p>
+				<h3 id="how-do-i-convert-a-datetime-object-to-a-javascript-date-object-">How do I convert a DateTime object to a JavaScript Date object?</h3>
+				<p>Use new Date(myDateTime.unixUtcMillis()).</p>
 				<h3 id="how-do-i-convert-a-javascript-date-object-to-a-datetime-object-">How do I convert a JavaScript Date object to a DateTime object?</h3>
 				<p>The DateTime class has a constructor that takes a date. It may seem rather complex because the constructor has three parameters. But that was necessary:</p>
 				<ol>
 					<li>The first parameter is the Date object.</li>
 					<li>The second parameter indicates which of the two values in the Date object you want to use: a Date object has a UTC value (getUtcFullYear()) and a Local value (getFullYear()). You typically use the local functions, but if you created your date from a unix timestamp then the UTC date is most accurate.</li>
-					<li>The third parameter gives us the missing info: the time zone that the given value is in. </li>
+					<li>The third parameter gives us the missing info: the time zone that the given value is in.</li>
 				</ol>
 				<pre><code class="lang-javascript">
 <span class="hljs-comment">// construct date from separate year, month, day etc.</span>
@@ -439,10 +459,16 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 					<li>A release 2 where we polish the interface to the library a bit</li>
 					<li>Leap second handling</li>
 				</ul>
+				<h3 id="1-8-0-2014-10-17-">1.8.0 (2014-10-17)</h3>
+				<ul>
+					<li>Add global min() and max() functions for DateTime and Duration</li>
+					<li>Add DateTime.min() and DateTime.max() function</li>
+				</ul>
 				<h3 id="1-7-0-2014-10-06-">1.7.0 (2014-10-06)</h3>
 				<ul>
 					<li>Add Duration.greaterEqual() and Duration.lessEqual()</li>
 					<li>Bugfix in DateTime-from-string constructor: leading/trailing whitespace led to date not getting parsed.</li>
+					<li>Bugfix in Duration-from-string constructor: leading/trailing whitespace led to duration not getting parsed.</li>
 				</ul>
 				<h3 id="1-6-0-2014-10-02-">1.6.0 (2014-10-02)</h3>
 				<ul>
@@ -551,9 +577,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#114;&#46;&#x73;&#x63;&#x68;&#111;&#x75;&#x74;&#x65;&#x6e;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#46;&#x73;&#x63;&#x68;&#111;&#x75;&#x74;&#x65;&#x6e;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#x64;&#46;&#119;&#105;&#115;&#x73;&#105;&#x6e;&#x67;&#64;&#115;&#112;&#105;&#114;&#x69;&#x74;&#x69;&#116;&#x2e;&#99;&#x6f;&#109;">&#x64;&#46;&#119;&#105;&#115;&#x73;&#105;&#x6e;&#x67;&#64;&#115;&#112;&#105;&#114;&#x69;&#x74;&#x69;&#116;&#x2e;&#99;&#x6f;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x70;&#x2e;&#107;&#x6f;&#111;&#105;&#x6a;&#109;&#x61;&#110;&#x73;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#116;&#105;&#116;&#46;&#99;&#x6f;&#x6d;">&#x70;&#x2e;&#107;&#x6f;&#111;&#105;&#x6a;&#109;&#x61;&#110;&#x73;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#116;&#105;&#116;&#46;&#99;&#x6f;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#114;&#46;&#x73;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#x40;&#x73;&#x70;&#x69;&#x72;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#111;&#109;">&#114;&#46;&#x73;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#x40;&#x73;&#x70;&#x69;&#x72;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#111;&#109;</a></li>
+					<li>Daan Wissing <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#100;&#46;&#x77;&#x69;&#x73;&#115;&#105;&#x6e;&#103;&#64;&#x73;&#x70;&#x69;&#x72;&#105;&#116;&#x69;&#116;&#x2e;&#x63;&#111;&#x6d;">&#100;&#46;&#x77;&#x69;&#x73;&#115;&#105;&#x6e;&#103;&#64;&#x73;&#x70;&#x69;&#x72;&#105;&#116;&#x69;&#116;&#x2e;&#x63;&#111;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#112;&#46;&#x6b;&#x6f;&#111;&#x69;&#106;&#109;&#x61;&#x6e;&#x73;&#x40;&#115;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#116;&#46;&#x63;&#x6f;&#109;">&#112;&#46;&#x6b;&#x6f;&#111;&#x69;&#106;&#109;&#x61;&#x6e;&#x73;&#x40;&#115;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#116;&#46;&#x63;&#x6f;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>
@@ -576,6 +602,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="modules/_format_.html">"format"</a>
+					</li>
+					<li class=" tsd-kind-dynamic-module">
+						<a href="modules/_globals_.html">"globals"</a>
 					</li>
 					<li class=" tsd-kind-dynamic-module">
 						<a href="modules/_index_.html">"index"</a>

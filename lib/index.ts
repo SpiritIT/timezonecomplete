@@ -48,3 +48,8 @@ import timezone = require("./timezone"); timezone;
 export import NormalizeOption = timezone.NormalizeOption;
 export import TimeZoneKind = timezone.TimeZoneKind;
 export import TimeZone = timezone.TimeZone;
+
+import globals = require("./globals"); globals;
+export import min = globals.min;
+export import max = globals.max;
+

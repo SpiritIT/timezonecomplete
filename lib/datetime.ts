@@ -761,6 +761,26 @@ export class DateTime {
 	}
 
 	/**
+	 * @return The minimum of this and other
+	 */
+	public min(other: DateTime): DateTime {
+		if (this.lessThan(other)) {
+			return this.clone();
+		}
+		return other.clone();
+	}
+
+	/**
+	 * @return The maximum of this and other
+	 */
+	public max(other: DateTime): DateTime {
+		if (this.greaterThan(other)) {
+			return this.clone();
+		}
+		return other.clone();
+	}
+
+	/**
 	 * Proper ISO 8601 format string with any IANA zone converted to ISO offset
 	 * E.g. "2014-01-01T23:15:33+01:00" for Europe/Amsterdam
 	 */

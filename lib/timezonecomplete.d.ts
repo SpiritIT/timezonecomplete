@@ -32,6 +32,9 @@ declare module 'timezonecomplete' {
     export import NormalizeOption = timezone.NormalizeOption;
     export import TimeZoneKind = timezone.TimeZoneKind;
     export import TimeZone = timezone.TimeZone;
+    import globals = require("__timezonecomplete/globals");
+    export import min = globals.min;
+    export import max = globals.max;
 }
 
 declare module '__timezonecomplete/basics' {
@@ -613,6 +616,14 @@ declare module '__timezonecomplete/datetime' {
          */
         greaterEqual(other: DateTime): boolean;
         /**
+         * @return The minimum of this and other
+         */
+        min(other: DateTime): DateTime;
+        /**
+         * @return The maximum of this and other
+         */
+        max(other: DateTime): DateTime;
+        /**
          * Proper ISO 8601 format string with any IANA zone converted to ISO offset
          * E.g. "2014-01-01T23:15:33+01:00" for Europe/Amsterdam
          */
@@ -1150,5 +1161,26 @@ declare module '__timezonecomplete/timezone' {
          */
         static stringToOffset(s: string): number;
     }
+}
+
+declare module '__timezonecomplete/globals' {
+    import datetime = require("__timezonecomplete/datetime");
+    import duration = require("__timezonecomplete/duration");
+    /**
+     * Returns the minimum of two DateTimes
+     */
+    export function min(d1: datetime.DateTime, d2: datetime.DateTime): datetime.DateTime;
+    /**
+     * Returns the minimum of two Durations
+     */
+    export function min(d1: duration.Duration, d2: duration.Duration): duration.Duration;
+    /**
+     * Returns the maximum of two DateTimes
+     */
+    export function max(d1: datetime.DateTime, d2: datetime.DateTime): datetime.DateTime;
+    /**
+     * Returns the maximum of two Durations
+     */
+    export function max(d1: duration.Duration, d2: duration.Duration): duration.Duration;
 }
 

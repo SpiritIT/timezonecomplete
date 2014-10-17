@@ -1090,6 +1090,30 @@ describe("DateTime", function () {
         });
     });
 
+    describe("min()", function () {
+        it("should return a value equal to this if this is smaller", function () {
+            expect(new DateTime(1).min(new DateTime(2)).unixUtcMillis()).to.equal(1);
+        });
+        it("should any of the values if they are equal", function () {
+            expect(new DateTime(2).min(new DateTime(2)).unixUtcMillis()).to.equal(2);
+        });
+        it("should the other value if it is smaller", function () {
+            expect(new DateTime(2).min(new DateTime(1)).unixUtcMillis()).to.equal(1);
+        });
+    });
+
+    describe("max()", function () {
+        it("should return a value equal to other if this is smaller", function () {
+            expect(new DateTime(1).max(new DateTime(2)).unixUtcMillis()).to.equal(2);
+        });
+        it("should any of the values if they are equal", function () {
+            expect(new DateTime(2).max(new DateTime(2)).unixUtcMillis()).to.equal(2);
+        });
+        it("should this value if this is greater", function () {
+            expect(new DateTime(2).max(new DateTime(1)).unixUtcMillis()).to.equal(2);
+        });
+    });
+
     describe("toIsoString()", function () {
         it("should work for unaware date", function () {
             expect((new DateTime("2014-02-03T05:06:07.008")).toIsoString()).to.equal("2014-02-03T05:06:07.008");

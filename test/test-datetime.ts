@@ -1061,6 +1061,30 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("min()", (): void => {
+		it("should return a value equal to this if this is smaller", (): void => {
+			expect(new DateTime(1).min(new DateTime(2)).unixUtcMillis()).to.equal(1);
+		});
+		it("should any of the values if they are equal", (): void => {
+			expect(new DateTime(2).min(new DateTime(2)).unixUtcMillis()).to.equal(2);
+		});
+		it("should the other value if it is smaller", (): void => {
+			expect(new DateTime(2).min(new DateTime(1)).unixUtcMillis()).to.equal(1);
+		});
+	});
+
+	describe("max()", (): void => {
+		it("should return a value equal to other if this is smaller", (): void => {
+			expect(new DateTime(1).max(new DateTime(2)).unixUtcMillis()).to.equal(2);
+		});
+		it("should any of the values if they are equal", (): void => {
+			expect(new DateTime(2).max(new DateTime(2)).unixUtcMillis()).to.equal(2);
+		});
+		it("should this value if this is greater", (): void => {
+			expect(new DateTime(2).max(new DateTime(1)).unixUtcMillis()).to.equal(2);
+		});
+	});
+
 	describe("toIsoString()", (): void => {
 		it("should work for unaware date", (): void => {
 			expect((new DateTime("2014-02-03T05:06:07.008")).toIsoString()).to.equal("2014-02-03T05:06:07.008");
