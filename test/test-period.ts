@@ -580,6 +580,10 @@ describe("Period", (): void => {
 			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.isBoundary(new DateTime("2014-01-02T02:00:01 Europe/Amsterdam"))).to.be.false;
 		});
+		it("should return false for null date", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.isBoundary(null)).to.be.false;
+		});
 	});
 
 

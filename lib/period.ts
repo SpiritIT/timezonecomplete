@@ -520,11 +520,11 @@ export class Period {
 	 * (expensive!)
 	 */
 	public isBoundary(occurrence: DateTime): boolean {
-		assert((this._intStart.zone() === null) === (occurrence.zone() === null),
-			"The occurrence and startDate must both be aware or unaware");
 		if (!occurrence) {
 			return false;
 		}
+		assert((this._intStart.zone() === null) === (occurrence.zone() === null),
+			"The occurrence and startDate must both be aware or unaware");
 		return (this.findFirst(occurrence.sub(Duration.milliseconds(1))).equals(occurrence));
 	}
 

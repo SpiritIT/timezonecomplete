@@ -418,6 +418,10 @@ describe("Period", function () {
             var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
             expect(p.isBoundary(new DateTime("2014-01-02T02:00:01 Europe/Amsterdam"))).to.be.false;
         });
+        it("should return false for null date", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.isBoundary(null)).to.be.false;
+        });
     });
 
     describe("toString()", function () {
