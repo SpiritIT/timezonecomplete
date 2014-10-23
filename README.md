@@ -152,11 +152,18 @@ duration2 = duration.divide(3); // two thirds of a second
 // comparisons
 var sixSecs = tc.Duration.seconds(6);
 var fiveSecs = tc.Duration.seconds(5);
+
+// normal < and > work
+fiveSecs > sixSecs; // false
+fiveSecs < sixSecs; // false
+
 fiveSecs.lessThan(sixSecs); // true
 fiveSecs.lessEqual(sixSecs); // true
 fiveSecs.equals(sixSecs); // false
 fiveSecs.greaterEqual(sixSecs); // false
 fiveSecs.greaterThan(sixSecs); // false
+
+
 
 // min and max functions
 var duration3 = tc.Duration.seconds(6);
@@ -333,6 +340,11 @@ d1.identical(d2); // false - not exactly the same time zones
 // Comparison operators
 var d3 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("UTC"));
 var d4 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("Europe/Amsterdam"));
+
+// normal < and > work
+d3 < d4; // true
+d3 > d4; // false
+
 d3.greaterEqual(d4); // false, Amsterdam is ahead of UTC
 d3.lessThan(d4); // true
 d4.lessEqual(d3); // false, Amsterdam is ahead of UTC
