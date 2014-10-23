@@ -29,6 +29,7 @@
     <TypeScriptCompile Include="examples\example.ts" />
     <TypeScriptCompile Include="lib\datetime.ts" />
     <TypeScriptCompile Include="lib\duration.ts" />
+    <TypeScriptCompile Include="lib\globals.ts" />
     <TypeScriptCompile Include="lib\token.ts" />
     <TypeScriptCompile Include="lib\index.ts" />
     <TypeScriptCompile Include="lib\javascript.ts" />
@@ -52,6 +53,7 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="test\test-globals.ts" />
     <TypeScriptCompile Include="test\test-math.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>

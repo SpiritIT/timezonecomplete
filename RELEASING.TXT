@@ -1,7 +1,7 @@
 
 
 NEW TZ DATABASE
-* Copy parsing code from timezone-js  (node-preparse.js and its dependencies) to maintenance/
+* Copy parsing code from timezone-js  (node-preparse.js and its dependencies) to a temp/ dir
 * Change date.js to exclude more files:
   , EXCLUDED = new RegExp('README|Makefile|factory|CONTRIBUTING|checktab|yearistype|iso3166|leapseconds|NEWS|README|Theory|zone|zone1970|zoneinfo2tdf(\\.+)', 'i');
 * Extract TZ database in a directory, say TZ_DIR

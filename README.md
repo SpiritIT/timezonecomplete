@@ -443,13 +443,16 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2014h.
+The version of the included IANA time zone database is 2014i.
 
 ## Changelog
 
 ### Planned
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
+
+### 1.8.1 (2014-10-22)
+* Upgrade time zone database to 2014i
 
 ### 1.8.0 (2014-10-17)
 * Add global min() and max() functions for DateTime and Duration
