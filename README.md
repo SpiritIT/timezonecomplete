@@ -234,8 +234,8 @@ console.log(amsterdamDate.toString()); // "2014-01-01T13:59:59.000 Europe/Amster
 console.log(amsterdamDate.toIsoString()); // "2014-01-01T13:59:59.000+01:00", note that zone name is removed to make perfect ISO 8601
 
 // Formatting
-var formatDate = new tc.DateTime("2014-05-29T13:59:59.000 Europe/Amsterdam")
-console.log(amsterdamDate.format("dd/MM/yyy hh.mm.ss")); // 29/05/2014 13.59.59
+var formatDate = new tc.DateTime("2014-05-29T13:59:59.000 Europe/Amsterdam");
+console.log(formatDate.format("dd/MM/yyyy HH.mm.ss")); // 29/05/2014 13.59.59
 
 // Local Getters
 amsterdamDate.year(); // 2014
