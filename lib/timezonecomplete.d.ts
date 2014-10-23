@@ -286,6 +286,7 @@ declare module '__timezonecomplete/datetime' {
     import basics = require("__timezonecomplete/basics");
     import duration = require("__timezonecomplete/duration");
     import javascript = require("__timezonecomplete/javascript");
+	import timesource = require("__timezonecomplete/timesource");
     import timezone = require("__timezonecomplete/timezone");
     /**
      * DateTime class which is time zone-aware
