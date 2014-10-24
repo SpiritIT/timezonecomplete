@@ -463,6 +463,9 @@ The version of the included IANA time zone database is 2014i.
 * A release 2 where we polish the interface to the library a bit
 * Leap second handling
 
+### 1.8.3 (2014-10-24)
+* Bugfix in unixUtxMillis() for dates created with the DateTime(number) constructor.
+
 ### 1.8.2 (2014-10-24)
 * Document that < and > work out of the box on Duration / DateTime.
 * Fix in README.md for DateTime.format()

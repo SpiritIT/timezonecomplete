@@ -777,7 +777,6 @@ var DateTime = (function () {
                         }
                         this._zoneDate = TimeStruct.fromUnix(normalizedUnixTimestamp);
                         this._zoneDateToUtcDate();
-                        this._unixUtcMillisCache = normalizedUnixTimestamp;
                     } else {
                         // year month day constructor
                         assert(typeof (a1) === "number", "DateTime.DateTime(): Expect year to be a number.");
