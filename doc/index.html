@@ -193,11 +193,18 @@ duration2 = duration.divide(<span class="hljs-number">3</span>); <span class="hl
 <span class="hljs-comment">// comparisons</span>
 <span class="hljs-keyword">var</span> sixSecs = tc.Duration.seconds(<span class="hljs-number">6</span>);
 <span class="hljs-keyword">var</span> fiveSecs = tc.Duration.seconds(<span class="hljs-number">5</span>);
+
+<span class="hljs-comment">// normal &lt; and &gt; work</span>
+fiveSecs &gt; sixSecs; <span class="hljs-comment">// false</span>
+fiveSecs &lt; sixSecs; <span class="hljs-comment">// false</span>
+
 fiveSecs.lessThan(sixSecs); <span class="hljs-comment">// true</span>
 fiveSecs.lessEqual(sixSecs); <span class="hljs-comment">// true</span>
 fiveSecs.equals(sixSecs); <span class="hljs-comment">// false</span>
 fiveSecs.greaterEqual(sixSecs); <span class="hljs-comment">// false</span>
 fiveSecs.greaterThan(sixSecs); <span class="hljs-comment">// false</span>
+
+
 
 <span class="hljs-comment">// min and max functions</span>
 <span class="hljs-keyword">var</span> duration3 = tc.Duration.seconds(<span class="hljs-number">6</span>);
@@ -272,8 +279,8 @@ nd = <span class="hljs-keyword">new</span> tc.DateTime();  <span class="hljs-com
 <span class="hljs-built_in">console</span>.log(amsterdamDate.toIsoString()); <span class="hljs-comment">// "2014-01-01T13:59:59.000+01:00", note that zone name is removed to make perfect ISO 8601</span>
 
 <span class="hljs-comment">// Formatting</span>
-<span class="hljs-keyword">var</span> formatDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-05-29T13:59:59.000 Europe/Amsterdam"</span>)
-<span class="hljs-built_in">console</span>.log(amsterdamDate.format(<span class="hljs-string">"dd/MM/yyy hh.mm.ss"</span>)); <span class="hljs-comment">// 29/05/2014 13.59.59</span>
+<span class="hljs-keyword">var</span> formatDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-05-29T13:59:59.000 Europe/Amsterdam"</span>);
+<span class="hljs-built_in">console</span>.log(formatDate.format(<span class="hljs-string">"dd/MM/yyyy HH.mm.ss"</span>)); <span class="hljs-comment">// 29/05/2014 13.59.59</span>
 
 <span class="hljs-comment">// Local Getters</span>
 amsterdamDate.year(); <span class="hljs-comment">// 2014</span>
@@ -365,6 +372,11 @@ d1.identical(d2); <span class="hljs-comment">// false - not exactly the same tim
 <span class="hljs-comment">// Comparison operators</span>
 <span class="hljs-keyword">var</span> d3 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">31</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>, <span class="hljs-number">55</span>, <span class="hljs-number">45</span>, <span class="hljs-number">999</span>, tc.TimeZone.zone(<span class="hljs-string">"UTC"</span>));
 <span class="hljs-keyword">var</span> d4 = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">31</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>, <span class="hljs-number">55</span>, <span class="hljs-number">45</span>, <span class="hljs-number">999</span>, tc.TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
+
+<span class="hljs-comment">// normal &lt; and &gt; work</span>
+d3 &lt; d4; <span class="hljs-comment">// true</span>
+d3 &gt; d4; <span class="hljs-comment">// false</span>
+
 d3.greaterEqual(d4); <span class="hljs-comment">// false, Amsterdam is ahead of UTC</span>
 d3.lessThan(d4); <span class="hljs-comment">// true</span>
 d4.lessEqual(d3); <span class="hljs-comment">// false, Amsterdam is ahead of UTC</span>
@@ -458,6 +470,11 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				<ul>
 					<li>A release 2 where we polish the interface to the library a bit</li>
 					<li>Leap second handling</li>
+				</ul>
+				<h3 id="next">Next</h3>
+				<ul>
+					<li>Document that &lt; and &gt; work out of the box on Duration / DateTime.</li>
+					<li>Fix in README.md for DateTime.format()</li>
 				</ul>
 				<h3 id="1-8-1-2014-10-22-">1.8.1 (2014-10-22)</h3>
 				<ul>
@@ -581,9 +598,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#46;&#x73;&#99;&#104;&#111;&#117;&#x74;&#101;&#110;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#x74;&#x69;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#46;&#x73;&#99;&#104;&#111;&#117;&#x74;&#101;&#110;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#x74;&#x69;&#116;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#100;&#46;&#x77;&#x69;&#x73;&#115;&#105;&#x6e;&#103;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;">&#100;&#46;&#x77;&#x69;&#x73;&#115;&#105;&#x6e;&#103;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#112;&#x2e;&#x6b;&#x6f;&#x6f;&#105;&#106;&#109;&#97;&#110;&#115;&#64;&#115;&#x70;&#105;&#x72;&#105;&#116;&#105;&#116;&#x2e;&#x63;&#111;&#109;">&#112;&#x2e;&#x6b;&#x6f;&#x6f;&#105;&#106;&#109;&#97;&#110;&#115;&#64;&#115;&#x70;&#105;&#x72;&#105;&#116;&#105;&#116;&#x2e;&#x63;&#111;&#109;</a></li>
+					<li>Rogier Schouten <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#46;&#115;&#99;&#104;&#111;&#117;&#x74;&#x65;&#110;&#64;&#115;&#112;&#x69;&#114;&#x69;&#x74;&#x69;&#116;&#46;&#99;&#111;&#109;">&#114;&#46;&#115;&#99;&#104;&#111;&#117;&#x74;&#x65;&#110;&#64;&#115;&#112;&#x69;&#114;&#x69;&#x74;&#x69;&#116;&#46;&#99;&#111;&#109;</a></li>
+					<li>Daan Wissing <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#100;&#46;&#119;&#105;&#115;&#115;&#x69;&#110;&#x67;&#x40;&#x73;&#x70;&#105;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;">&#100;&#46;&#119;&#105;&#115;&#115;&#x69;&#110;&#x67;&#x40;&#x73;&#x70;&#105;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#112;&#x2e;&#107;&#111;&#111;&#105;&#106;&#109;&#x61;&#x6e;&#115;&#64;&#115;&#x70;&#x69;&#114;&#105;&#116;&#x69;&#x74;&#x2e;&#x63;&#111;&#x6d;">&#112;&#x2e;&#107;&#111;&#111;&#105;&#106;&#109;&#x61;&#x6e;&#115;&#64;&#115;&#x70;&#x69;&#114;&#105;&#116;&#x69;&#x74;&#x2e;&#x63;&#111;&#x6d;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

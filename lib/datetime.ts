@@ -48,6 +48,12 @@ export class DateTime {
 	private _utcDate: TimeStruct;
 
 	/**
+	 * Cached value for unixUtcMillis(). This is useful because valueOf() uses it and it is
+	 * likely to be called multiple times.
+	 */
+	private _unixUtcMillisCache: number = null;
+
+	/**
 	 * Date object that contains the represented date converted to this._zone in its
 	 * getUTCXxx() fields. Note that the getXxx() fields are unusable for this purpose
 	 */
@@ -158,12 +164,15 @@ export class DateTime {
 					// unix timestamp constructor
 					assert(typeof (a1) === "number", "DateTime.DateTime(): expect unixTimestamp to be a number");
 					this._zone = (typeof (a2) === "object" && a2 instanceof TimeZone ? <TimeZone>a2 : null);
+					var normalizedUnixTimestamp: number;
 					if (this._zone) {
-						this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(<number>a1));
+						normalizedUnixTimestamp = this._zone.normalizeZoneTime(<number>a1);
 					} else {
-						this._zoneDate = TimeStruct.fromUnix(<number>a1);
+						normalizedUnixTimestamp = <number>a1;
 					}
+					this._zoneDate = TimeStruct.fromUnix(normalizedUnixTimestamp);
 					this._zoneDateToUtcDate();
+					this._unixUtcMillisCache = normalizedUnixTimestamp;
 				} else {
 					// year month day constructor
 					assert(typeof (a1) === "number", "DateTime.DateTime(): Expect year to be a number.");
@@ -249,6 +258,7 @@ export class DateTime {
 		var result = new DateTime();
 		result._utcDate = this._utcDate.clone();
 		result._zoneDate = this._zoneDate.clone();
+		result._unixUtcMillisCache = this._unixUtcMillisCache;
 		result._zone = this._zone;
 		return result;
 	}
@@ -385,7 +395,10 @@ export class DateTime {
 	 * @return Milliseconds since 1970-01-01T00:00:00.000Z
 	 */
 	public unixUtcMillis(): number {
-		return this._utcDate.toUnixNoLeapSecs();
+		if (this._unixUtcMillisCache === null) {
+			this._unixUtcMillisCache = this._utcDate.toUnixNoLeapSecs();
+		}
+		return this._unixUtcMillisCache;
 	}
 
 	/**
@@ -504,6 +517,7 @@ export class DateTime {
 		} else {
 			this._zone = null;
 			this._utcDate = this._zoneDate.clone();
+			this._unixUtcMillisCache = null;
 		}
 		return this;
 	}
@@ -847,6 +861,7 @@ export class DateTime {
 	 * Calculate this._zoneDate from this._utcDate
 	 */
 	private _utcDateToZoneDate(): void {
+		this._unixUtcMillisCache = null;
 		/* istanbul ignore else */
 		if (this._zone) {
 			var offset: number = this._zone.offsetForUtc(this._utcDate.year, this._utcDate.month, this._utcDate.day,
@@ -861,6 +876,7 @@ export class DateTime {
 	 * Calculate this._utcDate from this._zoneDate
 	 */
 	private _zoneDateToUtcDate(): void {
+		this._unixUtcMillisCache = null;
 		if (this._zone) {
 			var offset: number = this._zone.offsetForZone(this._zoneDate.year, this._zoneDate.month, this._zoneDate.day,
 				this._zoneDate.hour, this._zoneDate.minute, this._zoneDate.second, this._zoneDate.milli);
