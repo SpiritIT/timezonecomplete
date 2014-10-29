@@ -114,6 +114,12 @@ tc.TimeUnit.Second;
 				<p>Timezonecomplete defines a number of utility functions.</p>
 				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
+<span class="hljs-comment">// convert a time unit to approximate milliseconds</span>
+tc.timeUnitToMilliseconds(-<span class="hljs-number">2</span>, tc.TimeUnit.Second); <span class="hljs-comment">// returns -2 * 1000 milliseconds</span>
+tc.timeUnitToMilliseconds(-<span class="hljs-number">2</span>, tc.TimeUnit.Day); <span class="hljs-comment">// returns -2 * 1000 * 3600 * 24 milliseconds</span>
+tc.timeUnitToMilliseconds(-<span class="hljs-number">2</span>, tc.TimeUnit.Month); <span class="hljs-comment">// returns -2 * 1000 * 3600 * 24 * 30 milliseconds</span>
+tc.timeUnitToMilliseconds(-<span class="hljs-number">2</span>, tc.TimeUnit.Year); <span class="hljs-comment">// returns -2 * 1000 * 3600 * 24 * 365 milliseconds</span>
+
 <span class="hljs-comment">// number of days in a month, accounting for leap years</span>
 tc.daysInMonth(<span class="hljs-number">2004</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// returns 29</span>
 tc.daysInMonth(<span class="hljs-number">2014</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// returns 28</span>
@@ -204,8 +210,6 @@ fiveSecs.equals(sixSecs); <span class="hljs-comment">// false</span>
 fiveSecs.greaterEqual(sixSecs); <span class="hljs-comment">// false</span>
 fiveSecs.greaterThan(sixSecs); <span class="hljs-comment">// false</span>
 
-
-
 <span class="hljs-comment">// min and max functions</span>
 <span class="hljs-keyword">var</span> duration3 = tc.Duration.seconds(<span class="hljs-number">6</span>);
 <span class="hljs-keyword">var</span> duration4 = tc.Duration.seconds(<span class="hljs-number">3</span>);
@@ -231,6 +235,15 @@ duration6.seconds(); <span class="hljs-comment">// 5400</span>
 duration6.milliseconds(); <span class="hljs-comment">// 5400000</span>
 
 duration6.valueOf(); <span class="hljs-comment">// same as milliseconds()</span>
+
+<span class="hljs-comment">// create duration from string</span>
+<span class="hljs-keyword">var</span> duration7 = <span class="hljs-keyword">new</span> tc.Duration(<span class="hljs-string">"00:01"</span>); <span class="hljs-comment">// one minute</span>
+
+<span class="hljs-comment">// create approximate duration from amount of time units</span>
+<span class="hljs-keyword">var</span> duration8 = <span class="hljs-keyword">new</span> tc.Duration(<span class="hljs-number">4</span>, tc.TimeUnit.Month); <span class="hljs-comment">// 4 months of 30 days</span>
+
+<span class="hljs-comment">// create duration from number of milliseconds</span>
+<span class="hljs-keyword">var</span> duration9 = <span class="hljs-keyword">new</span> tc.Duration(-<span class="hljs-number">500</span>); <span class="hljs-comment">// -500 milliseconds</span>
 </code></pre>
 				<h3 id="datetime">DateTime</h3>
 				<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
@@ -458,7 +471,7 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 <span class="hljs-comment">// now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.</span>
 <span class="hljs-keyword">var</span> datetime2 = <span class="hljs-keyword">new</span> tc.DateTime(jsDate2, tc.DateFunctions.GetUTC, tc.TimeZone.zone(<span class="hljs-string">"America/Boise"</span>));
 </code></pre>
-				<h3 id="why-does-the-number-returned-by-weeknumber-not-correspond-to-my-calendar">Why does the number returned by weekNumber() not correspond to my calendar</h3>
+				<h3 id="why-does-the-number-returned-by-weeknumber-not-correspond-to-my-calendar-">Why does the number returned by weekNumber() not correspond to my calendar?</h3>
 				<p>Different countries have different week number algoritms. We adhere to the ISO 8601 standard, where the first week starts on a Monday and is defined as the week having January 4th in it.
 				If you need different week numbers, please submit an issue or a pull request.</p>
 				<h3 id="does-timezonecomplete-handle-leap-seconds-">Does timezonecomplete handle leap seconds?</h3>
@@ -466,10 +479,11 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 				<p>The version of the included IANA time zone database is 2014i.</p>
 				<h2 id="changelog">Changelog</h2>
-				<h3 id="planned">Planned</h3>
+				<h3 id="1-9-0-2014-10-29-">1.9.0 (2014-10-29)</h3>
 				<ul>
-					<li>A release 2 where we polish the interface to the library a bit</li>
-					<li>Leap second handling</li>
+					<li>Add function timeUnitToMilliseconds()</li>
+					<li>Add Duration constructor for an amount of time units.</li>
+					<li>Documented missing Duration constructors.</li>
 				</ul>
 				<h3 id="1-8-3-2014-10-24-">1.8.3 (2014-10-24)</h3>
 				<ul>
@@ -603,9 +617,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#114;&#x2e;&#115;&#x63;&#x68;&#x6f;&#117;&#x74;&#101;&#x6e;&#x40;&#x73;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#111;&#x6d;">&#114;&#x2e;&#115;&#x63;&#x68;&#x6f;&#117;&#x74;&#101;&#x6e;&#x40;&#x73;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#111;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x64;&#x2e;&#x77;&#105;&#x73;&#x73;&#105;&#x6e;&#x67;&#x40;&#115;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#x6d;">&#x64;&#x2e;&#x77;&#105;&#x73;&#x73;&#105;&#x6e;&#x67;&#x40;&#115;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#x6d;</a></li>
-					<li>Peter Kooijmans <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#112;&#46;&#107;&#x6f;&#111;&#105;&#106;&#109;&#x61;&#110;&#115;&#64;&#x73;&#112;&#x69;&#114;&#x69;&#116;&#105;&#116;&#x2e;&#99;&#111;&#x6d;">&#112;&#46;&#107;&#x6f;&#111;&#105;&#106;&#109;&#x61;&#110;&#115;&#64;&#x73;&#112;&#x69;&#114;&#x69;&#116;&#105;&#116;&#x2e;&#99;&#111;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#46;&#115;&#99;&#104;&#x6f;&#117;&#116;&#101;&#x6e;&#x40;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#109;">&#x72;&#46;&#115;&#99;&#104;&#x6f;&#117;&#116;&#101;&#x6e;&#x40;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#109;</a></li>
+					<li>Daan Wissing <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#100;&#x2e;&#x77;&#x69;&#x73;&#115;&#x69;&#110;&#103;&#x40;&#115;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#100;&#x2e;&#x77;&#x69;&#x73;&#115;&#x69;&#110;&#103;&#x40;&#115;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x70;&#x2e;&#107;&#x6f;&#x6f;&#105;&#106;&#109;&#x61;&#x6e;&#x73;&#64;&#x73;&#x70;&#105;&#x72;&#x69;&#x74;&#105;&#116;&#x2e;&#99;&#111;&#x6d;">&#x70;&#x2e;&#107;&#x6f;&#x6f;&#105;&#106;&#109;&#x61;&#x6e;&#x73;&#64;&#x73;&#x70;&#105;&#x72;&#x69;&#x74;&#105;&#116;&#x2e;&#99;&#111;&#x6d;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

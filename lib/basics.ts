@@ -48,6 +48,33 @@ export enum TimeUnit {
 }
 
 /**
+ * Approximate number of milliseconds for a time unit.
+ * A day is assumed to have 24 hours, a month is assumed to equal 30 days
+ * and a year is set to 365 days.
+ *
+ * @param unit	Time unit e.g. TimeUnit.Month
+ * @returns	The number of milliseconds.
+ */
+export function timeUnitToMilliseconds(unit: TimeUnit): number {
+	switch (unit) {
+		case TimeUnit.Second: return 1000;
+		case TimeUnit.Minute: return 60000;
+		case TimeUnit.Hour: return 3600000;
+		case TimeUnit.Day: return 86400000;
+		case TimeUnit.Week: return 604800000;
+		case TimeUnit.Month: return 2592000000;
+		case TimeUnit.Year: return 31536000000;
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore if */
+			/* istanbul ignore next */
+			if (true) {
+				throw new Error("Unknown time unit");
+			}
+	}
+}
+
+/**
  * @return True iff the given year is a leap year.
  */
 export function isLeapYear(year: number): boolean {
@@ -397,7 +424,7 @@ export function timeToUnixNoLeapSecs(
 export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
 
 export function timeToUnixNoLeapSecs(
-	a: any = 0, month: number = 1, day: number = 1,
+	a: any = 1970, month: number = 1, day: number = 1,
 	hour: number = 0, minute: number = 0, second: number = 0, milli: number = 0): number {
 	assert(typeof (a) === "object" || typeof (a) === "number", "Please give either a TimeStruct or a number as first argument.");
 

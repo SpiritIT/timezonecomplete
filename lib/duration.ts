@@ -10,6 +10,9 @@
 
 import assert = require("assert");
 
+import basics = require("./basics");
+import TimeUnit = basics.TimeUnit;
+
 import strings = require("./strings");
 
 /**
@@ -84,12 +87,24 @@ export class Duration {
 	constructor(input: string);
 
 	/**
+	 * Construct a duration from an amount and a time unit.
+	 * @param amount	Number of units
+	 * @param unit	A time unit i.e. TimeUnit.Second, TimeUnit.Hour etc.
+	 */
+	constructor(amount: number, unit: TimeUnit);
+
+	/**
 	 * Constructor implementation
 	 */
-	constructor(i1?: any) {
+	constructor(i1?: any, unit?: TimeUnit) {
 		if (typeof (i1) === "number") {
-			this._milliseconds = Math.round(Math.abs(i1));
-			this._sign = (i1 < 0 ? -1 : 1);
+			if (typeof (unit) === "number") {
+				this._milliseconds = Math.round(Math.abs(basics.timeUnitToMilliseconds(unit) * i1));
+				this._sign = (i1 < 0 ? -1 : 1);
+			} else {
+				this._milliseconds = Math.round(Math.abs(i1));
+				this._sign = (i1 < 0 ? -1 : 1);
+			}
 		} else {
 			if (typeof (i1) === "string") {
 				this._fromString(i1);

@@ -4,6 +4,7 @@ import assert = require("assert");
 import chai = require("chai");
 import expect = chai.expect;
 
+import basics = require("../lib/basics");
 import duration = require("../lib/duration");
 
 import Duration = duration.Duration;
@@ -63,6 +64,18 @@ describe("Duration()", (): void => {
 			assert.throws(function (): void { new Duration(":01:01"); });
 			/* tslint:enable:no-unused-expression */
 		});
+
+		it("construct from time unit", (): void => {
+			expect((new Duration(1, basics.TimeUnit.Second)).seconds()).to.equal(1);
+			expect((new Duration(1, basics.TimeUnit.Minute)).minutes()).to.equal(1);
+			expect((new Duration(1, basics.TimeUnit.Hour)).hours()).to.equal(1);
+			expect((new Duration(1, basics.TimeUnit.Day)).hours()).to.equal(24);
+			expect((new Duration(1, basics.TimeUnit.Week)).hours()).to.equal(7 * 24);
+			expect((new Duration(1, basics.TimeUnit.Month)).hours()).to.equal(30 * 24);
+			expect((new Duration(1, basics.TimeUnit.Year)).hours()).to.equal(365 * 24);
+			expect((new Duration(-2.5, basics.TimeUnit.Second)).seconds()).to.equal(-2.5);
+		});
+
 	});
 
 	describe("clone", (): void => {

@@ -99,8 +99,8 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#equals" class="tsd-kind-icon">equals</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#greaterequal" class="tsd-kind-icon">greater<wbr>Equal</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#greaterthan" class="tsd-kind-icon">greater<wbr>Than</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_duration_.duration.html#static-hours" class="tsd-kind-icon">hours</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#hours" class="tsd-kind-icon">hours</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_duration_.duration.html#static-hours" class="tsd-kind-icon">hours</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#inspect" class="tsd-kind-icon">inspect</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#lessequal" class="tsd-kind-icon">less<wbr>Equal</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#lessthan" class="tsd-kind-icon">less<wbr>Than</a></li>
@@ -114,8 +114,8 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#minutes" class="tsd-kind-icon">minutes</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#multiply" class="tsd-kind-icon">multiply</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#second" class="tsd-kind-icon">second</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#seconds" class="tsd-kind-icon">seconds</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_duration_.duration.html#static-seconds" class="tsd-kind-icon">seconds</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#seconds" class="tsd-kind-icon">seconds</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#sign" class="tsd-kind-icon">sign</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#sub" class="tsd-kind-icon">sub</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_duration_.duration.html#tofullstring" class="tsd-kind-icon">to<wbr>Full<wbr>String</a></li>
@@ -133,7 +133,8 @@
 					<a name="constructor" class="anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>i1<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>i1<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, unit<span class="tsd-signature-symbol">?: </span><a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, unit<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
 						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
 						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>milliseconds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
 						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
@@ -141,7 +142,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:88</li>
+									<li>Defined in duration.ts:98</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -154,6 +155,9 @@
 								<li>
 									<h5>i1?: <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
 								</li>
+								<li>
+									<h5>unit?: <a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns 
 								<a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>
@@ -161,7 +165,36 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:83</li>
+									<li>Defined in duration.ts:93</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Construct a duration from an amount and a time unit.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>amount: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Number of units</p>
+									</div>
+								</li>
+								<li>
+									<h5>unit: <a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A time unit i.e. TimeUnit.Second, TimeUnit.Hour etc.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns 
+								<a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>
+							</h4>
+						</li>
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in duration.ts:86</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -182,7 +215,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:77</li>
+									<li>Defined in duration.ts:80</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -202,7 +235,7 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:72</li>
+									<li>Defined in duration.ts:75</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -225,7 +258,7 @@
 					<div class="tsd-signature tsd-kind-icon">_milliseconds<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in duration.ts:26</li>
+							<li>Defined in duration.ts:29</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -242,7 +275,7 @@
 					<div class="tsd-signature tsd-kind-icon">_sign<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in duration.ts:31</li>
+							<li>Defined in duration.ts:34</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -263,7 +296,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:319</li>
+									<li>Defined in duration.ts:334</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -284,7 +317,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:305</li>
+									<li>Defined in duration.ts:320</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -308,7 +341,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:263</li>
+									<li>Defined in duration.ts:278</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -338,7 +371,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:105</li>
+									<li>Defined in duration.ts:120</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns 
@@ -357,7 +390,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:252</li>
+									<li>Defined in duration.ts:267</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -387,7 +420,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:202</li>
+									<li>Defined in duration.ts:217</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -412,7 +445,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:216</li>
+									<li>Defined in duration.ts:231</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -437,7 +470,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:209</li>
+									<li>Defined in duration.ts:224</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -453,6 +486,30 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="hours" class="anchor"></a>
+					<h3>hours</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">hours<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in duration.ts:175</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The entire duration in hours (negative or positive, fractional)</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+							<p>e.g. 1.5 for a 5400000 milliseconds duration</p>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="static-hours" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagstatic">static</span> hours</h3>
@@ -462,7 +519,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:38</li>
+									<li>Defined in duration.ts:41</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -489,30 +546,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="hours" class="anchor"></a>
-					<h3>hours</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">hours<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in duration.ts:160</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The entire duration in hours (negative or positive, fractional)</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">number</span>
-							</h4>
-							<p>e.g. 1.5 for a 5400000 milliseconds duration</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="inspect" class="anchor"></a>
 					<h3>inspect</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -521,7 +554,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:294</li>
+									<li>Defined in duration.ts:309</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -544,7 +577,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:195</li>
+									<li>Defined in duration.ts:210</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -569,7 +602,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:188</li>
+									<li>Defined in duration.ts:203</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -594,7 +627,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:233</li>
+									<li>Defined in duration.ts:248</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -619,7 +652,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:120</li>
+									<li>Defined in duration.ts:135</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -643,7 +676,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:65</li>
+									<li>Defined in duration.ts:68</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -678,7 +711,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:112</li>
+									<li>Defined in duration.ts:127</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -701,7 +734,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:223</li>
+									<li>Defined in duration.ts:238</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -726,7 +759,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:152</li>
+									<li>Defined in duration.ts:167</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -750,7 +783,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:47</li>
+									<li>Defined in duration.ts:50</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -785,7 +818,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:144</li>
+									<li>Defined in duration.ts:159</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -809,7 +842,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:244</li>
+									<li>Defined in duration.ts:259</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -839,7 +872,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:136</li>
+									<li>Defined in duration.ts:151</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -854,30 +887,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="seconds" class="anchor"></a>
-					<h3>seconds</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">seconds<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in duration.ts:128</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The entire duration in seconds (negative or positive, fractional)</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">number</span>
-							</h4>
-							<p>e.g. 1.5 for a 1500 milliseconds duration</p>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="static-seconds" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagstatic">static</span> seconds</h3>
@@ -887,7 +896,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:56</li>
+									<li>Defined in duration.ts:59</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -914,6 +923,30 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="seconds" class="anchor"></a>
+					<h3>seconds</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">seconds<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in duration.ts:143</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The entire duration in seconds (negative or positive, fractional)</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns 
+								<span class="tsd-signature-type">number</span>
+							</h4>
+							<p>e.g. 1.5 for a 1500 milliseconds duration</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="sign" class="anchor"></a>
 					<h3>sign</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -922,7 +955,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:181</li>
+									<li>Defined in duration.ts:196</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -946,7 +979,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:271</li>
+									<li>Defined in duration.ts:286</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -976,7 +1009,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:279</li>
+									<li>Defined in duration.ts:294</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1000,7 +1033,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:287</li>
+									<li>Defined in duration.ts:302</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1024,7 +1057,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:301</li>
+									<li>Defined in duration.ts:316</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1047,7 +1080,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in duration.ts:170</li>
+									<li>Defined in duration.ts:185</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1156,11 +1189,11 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_duration_.duration.html#greaterthan" class="tsd-kind-icon">greater<wbr>Than</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_duration_.duration.html#static-hours" class="tsd-kind-icon">hours</a>
-							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_duration_.duration.html#hours" class="tsd-kind-icon">hours</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_duration_.duration.html#static-hours" class="tsd-kind-icon">hours</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_duration_.duration.html#inspect" class="tsd-kind-icon">inspect</a>
@@ -1201,11 +1234,11 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_duration_.duration.html#second" class="tsd-kind-icon">second</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_duration_.duration.html#seconds" class="tsd-kind-icon">seconds</a>
-							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_duration_.duration.html#static-seconds" class="tsd-kind-icon">seconds</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_duration_.duration.html#seconds" class="tsd-kind-icon">seconds</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_duration_.duration.html#sign" class="tsd-kind-icon">sign</a>

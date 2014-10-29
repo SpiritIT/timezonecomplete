@@ -63,6 +63,41 @@ var WeekDay = exports.WeekDay;
 var TimeUnit = exports.TimeUnit;
 
 /**
+* Approximate number of milliseconds for a time unit.
+* A day is assumed to have 24 hours, a month is assumed to equal 30 days
+* and a year is set to 365 days.
+*
+* @param unit	Time unit e.g. TimeUnit.Month
+* @returns	The number of milliseconds.
+*/
+function timeUnitToMilliseconds(unit) {
+    switch (unit) {
+        case 0 /* Second */:
+            return 1000;
+        case 1 /* Minute */:
+            return 60000;
+        case 2 /* Hour */:
+            return 3600000;
+        case 3 /* Day */:
+            return 86400000;
+        case 4 /* Week */:
+            return 604800000;
+        case 5 /* Month */:
+            return 2592000000;
+        case 6 /* Year */:
+            return 31536000000;
+
+        default:
+            /* istanbul ignore if */
+            /* istanbul ignore next */
+            if (true) {
+                throw new Error("Unknown time unit");
+            }
+    }
+}
+exports.timeUnitToMilliseconds = timeUnitToMilliseconds;
+
+/**
 * @return True iff the given year is a leap year.
 */
 function isLeapYear(year) {
@@ -405,7 +440,7 @@ exports.unixToTimeNoLeapSecs = unixToTimeNoLeapSecs;
 
 
 function timeToUnixNoLeapSecs(a, month, day, hour, minute, second, milli) {
-    if (typeof a === "undefined") { a = 0; }
+    if (typeof a === "undefined") { a = 1970; }
     if (typeof month === "undefined") { month = 1; }
     if (typeof day === "undefined") { day = 1; }
     if (typeof hour === "undefined") { hour = 0; }
@@ -1533,6 +1568,8 @@ exports.DateTime = DateTime;
 "use strict";
 var assert = require("assert");
 
+var basics = require("./basics");
+
 var strings = require("./strings");
 
 /**
@@ -1544,10 +1581,15 @@ var Duration = (function () {
     /**
     * Constructor implementation
     */
-    function Duration(i1) {
+    function Duration(i1, unit) {
         if (typeof (i1) === "number") {
-            this._milliseconds = Math.round(Math.abs(i1));
-            this._sign = (i1 < 0 ? -1 : 1);
+            if (typeof (unit) === "number") {
+                this._milliseconds = Math.round(Math.abs(basics.timeUnitToMilliseconds(unit) * i1));
+                this._sign = (i1 < 0 ? -1 : 1);
+            } else {
+                this._milliseconds = Math.round(Math.abs(i1));
+                this._sign = (i1 < 0 ? -1 : 1);
+            }
         } else {
             if (typeof (i1) === "string") {
                 this._fromString(i1);
@@ -1845,7 +1887,7 @@ exports.Duration = Duration;
 ;
 //# sourceMappingURL=duration.js.map
 
-},{"./strings":12,"assert":19}],4:[function(require,module,exports){
+},{"./basics":1,"./strings":12,"assert":19}],4:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *
@@ -1861,6 +1903,8 @@ exports.TimeUnit = TimeUnit;
 var WeekDay = basics.WeekDay;
 exports.WeekDay = WeekDay;
 
+var timeUnitToMilliseconds = basics.timeUnitToMilliseconds;
+exports.timeUnitToMilliseconds = timeUnitToMilliseconds;
 var isLeapYear = basics.isLeapYear;
 exports.isLeapYear = isLeapYear;
 var daysInMonth = basics.daysInMonth;

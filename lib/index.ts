@@ -14,6 +14,7 @@ import basics = require("./basics"); basics;
 export import TimeUnit = basics.TimeUnit;
 export import WeekDay = basics.WeekDay;
 
+export import timeUnitToMilliseconds = basics.timeUnitToMilliseconds;
 export import isLeapYear = basics.isLeapYear;
 export import daysInMonth = basics.daysInMonth;
 export import daysInYear = basics.daysInYear;

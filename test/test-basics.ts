@@ -377,6 +377,9 @@ describe("unixToTimeNoLeapSecs()", (): void => {
 });
 
 describe("timeToUnixNoLeapSecs()", (): void => {
+	it("should work without arguments", (): void => {
+		expect(basics.timeToUnixNoLeapSecs()).to.equal(0);
+	});
 	it("should work for post-1970", (): void => {
 		expect(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 8, 12, 16, 0, 3, 10))).to.equal(1407859203010);
 		expect(basics.timeToUnixNoLeapSecs(new TimeStruct(2014, 1, 1, 0, 0, 0, 0))).to.equal(1388534400000);

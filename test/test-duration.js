@@ -3,6 +3,7 @@ var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
 
+var basics = require("../lib/basics");
 var duration = require("../lib/duration");
 
 var Duration = duration.Duration;
@@ -73,6 +74,17 @@ describe("Duration()", function () {
                 new Duration(":01:01");
             });
             /* tslint:enable:no-unused-expression */
+        });
+
+        it("construct from time unit", function () {
+            expect((new Duration(1, 0 /* Second */)).seconds()).to.equal(1);
+            expect((new Duration(1, 1 /* Minute */)).minutes()).to.equal(1);
+            expect((new Duration(1, 2 /* Hour */)).hours()).to.equal(1);
+            expect((new Duration(1, 3 /* Day */)).hours()).to.equal(24);
+            expect((new Duration(1, 4 /* Week */)).hours()).to.equal(7 * 24);
+            expect((new Duration(1, 5 /* Month */)).hours()).to.equal(30 * 24);
+            expect((new Duration(1, 6 /* Year */)).hours()).to.equal(365 * 24);
+            expect((new Duration(-2.5, 0 /* Second */)).seconds()).to.equal(-2.5);
         });
     });
 

@@ -68,6 +68,12 @@ Timezonecomplete defines a number of utility functions.
 ```javascript
 var tc = require("timezonecomplete");
 
+// convert a time unit to approximate milliseconds
+tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Second); // returns -2 * 1000 milliseconds
+tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Day); // returns -2 * 1000 * 3600 * 24 milliseconds
+tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Month); // returns -2 * 1000 * 3600 * 24 * 30 milliseconds
+tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Year); // returns -2 * 1000 * 3600 * 24 * 365 milliseconds
+
 // number of days in a month, accounting for leap years
 tc.daysInMonth(2004, 2); // returns 29
 tc.daysInMonth(2014, 2); // returns 28
@@ -163,8 +169,6 @@ fiveSecs.equals(sixSecs); // false
 fiveSecs.greaterEqual(sixSecs); // false
 fiveSecs.greaterThan(sixSecs); // false
 
-
-
 // min and max functions
 var duration3 = tc.Duration.seconds(6);
 var duration4 = tc.Duration.seconds(3);
@@ -190,6 +194,16 @@ duration6.seconds(); // 5400
 duration6.milliseconds(); // 5400000
 
 duration6.valueOf(); // same as milliseconds()
+
+// create duration from string
+var duration7 = new tc.Duration("00:01"); // one minute
+
+// create approximate duration from amount of time units
+var duration8 = new tc.Duration(4, tc.TimeUnit.Month); // 4 months of 30 days
+
+// create duration from number of milliseconds
+var duration9 = new tc.Duration(-500); // -500 milliseconds
+
 
 ```
 
@@ -445,7 +459,7 @@ var datetime2 = new tc.DateTime(jsDate2, tc.DateFunctions.GetUTC, tc.TimeZone.zo
 
 ```
 
-### Why does the number returned by weekNumber() not correspond to my calendar
+### Why does the number returned by weekNumber() not correspond to my calendar?
 Different countries have different week number algoritms. We adhere to the ISO 8601 standard, where the first week starts on a Monday and is defined as the week having January 4th in it.
 If you need different week numbers, please submit an issue or a pull request.
 
@@ -459,9 +473,10 @@ The version of the included IANA time zone database is 2014i.
 
 ## Changelog
 
-### Planned
-* A release 2 where we polish the interface to the library a bit
-* Leap second handling
+### 1.9.0 (2014-10-29)
+* Add function timeUnitToMilliseconds()
+* Add Duration constructor for an amount of time units.
+* Documented missing Duration constructors.
 
 ### 1.8.3 (2014-10-24)
 * Bugfix in unixUtxMillis() for dates created with the DateTime(number) constructor.
