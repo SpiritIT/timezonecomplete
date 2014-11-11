@@ -205,20 +205,13 @@ function browserifyTask(packageName) {
 	var template = fs.readFileSync("./umd-template/umd-require.jst");
 	return gulp.src("lib/index.js", {base: "."})
 		.pipe(browserify({
-			exclude: "timezone-js",
 			require: [
 				["./index.js", {expose: packageName}]
 			]
 		}))
 		.pipe(wrapUmd({
 			namespace: "timezonecomplete",
-			deps: [{
-				name: "timezone-js",
-				globalName: "timezoneJS",
-				paramName: "timezoneJS",
-				amdName: "timezone-js",
-				cjsName: "timezone-js"
-			}],
+			deps: [],
 			exports: packageName,
 			template: template
 		}))
