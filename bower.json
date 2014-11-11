@@ -27,7 +27,6 @@
     "tests"
   ],
   "dependencies": {
-    "timezone-js": "~0.4.11",
     "jquery": "~2.1.1"
   }
 }

@@ -13,9 +13,6 @@
     },
     "chai/chai.d.ts": {
       "commit": "500f6cc1a29a9858cd9fe1e08981025feba65496"
-    },
-    "timezone-js/timezone-js.d.ts": {
-      "commit": "1770632c10e91ad86208508d135c9050a0f3dd68"
     }
   }
 }
