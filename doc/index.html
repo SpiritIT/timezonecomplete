@@ -60,7 +60,8 @@
 				<p>﻿# TimezoneComplete</p>
 				<p><a href="https://travis-ci.org/SpiritIT/timezonecomplete"><img src="https://travis-ci.org/SpiritIT/timezonecomplete.svg?branch=master" alt="Build Status"></a>
 					<a href="https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master"><img src="https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master" alt="Coverage Status"></a>
-				<a href="http://badge.fury.io/js/timezonecomplete"><img src="https://badge.fury.io/js/timezonecomplete.svg" alt="NPM version"></a></p>
+					<a href="http://badge.fury.io/js/timezonecomplete"><img src="https://badge.fury.io/js/timezonecomplete.svg" alt="NPM version"></a>
+				<img src="http://img.shields.io/npm/l/timezonecomplete.svg" alt="license"></p>
 				<p><a href="https://nodei.co/npm/timezonecomplete/"><img src="https://nodei.co/npm/timezonecomplete.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a>
 				<a href="https://nodei.co/npm/timezonecomplete/"><img src="https://nodei.co/npm-dl/timezonecomplete.png?months=6&amp;height=3" alt="NPM"></a></p>
 				<h2 id="synopsis">Synopsis</h2>
@@ -477,8 +478,12 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				<h3 id="does-timezonecomplete-handle-leap-seconds-">Does timezonecomplete handle leap seconds?</h3>
 				<p>Currently not. This is because most platforms don&#39;t, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren&#39;t. We do plan to add support in some form though.</p>
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
-				<p>The version of the included IANA time zone database is 2014i.</p>
+				<p>The version of the included IANA time zone database is 2014j.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-9-1-2014-11-11-">1.9.1 (2014-11-11)</h3>
+				<ul>
+					<li>Upgrade time zone database to 2014j</li>
+				</ul>
 				<h3 id="1-9-0-2014-10-29-">1.9.0 (2014-10-29)</h3>
 				<ul>
 					<li>Add function timeUnitToMilliseconds()</li>
@@ -617,9 +622,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#46;&#115;&#99;&#104;&#x6f;&#117;&#116;&#101;&#x6e;&#x40;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#109;">&#x72;&#46;&#115;&#99;&#104;&#x6f;&#117;&#116;&#101;&#x6e;&#x40;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#109;</a></li>
-					<li>Daan Wissing <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#100;&#x2e;&#x77;&#x69;&#x73;&#115;&#x69;&#110;&#103;&#x40;&#115;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#100;&#x2e;&#x77;&#x69;&#x73;&#115;&#x69;&#110;&#103;&#x40;&#115;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
-					<li>Peter Kooijmans <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x70;&#x2e;&#107;&#x6f;&#x6f;&#105;&#106;&#109;&#x61;&#x6e;&#x73;&#64;&#x73;&#x70;&#105;&#x72;&#x69;&#x74;&#105;&#116;&#x2e;&#99;&#111;&#x6d;">&#x70;&#x2e;&#107;&#x6f;&#x6f;&#105;&#106;&#109;&#x61;&#x6e;&#x73;&#64;&#x73;&#x70;&#105;&#x72;&#x69;&#x74;&#105;&#116;&#x2e;&#99;&#111;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x72;&#x2e;&#x73;&#99;&#104;&#111;&#x75;&#116;&#101;&#x6e;&#x40;&#x73;&#x70;&#x69;&#114;&#x69;&#116;&#x69;&#116;&#x2e;&#99;&#x6f;&#109;">&#x72;&#x2e;&#x73;&#99;&#104;&#111;&#x75;&#116;&#101;&#x6e;&#x40;&#x73;&#x70;&#x69;&#114;&#x69;&#116;&#x69;&#116;&#x2e;&#99;&#x6f;&#109;</a></li>
+					<li>Daan Wissing <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#100;&#46;&#119;&#105;&#x73;&#x73;&#x69;&#x6e;&#x67;&#64;&#115;&#x70;&#105;&#114;&#105;&#x74;&#105;&#x74;&#x2e;&#x63;&#111;&#109;">&#100;&#46;&#119;&#105;&#x73;&#x73;&#x69;&#x6e;&#x67;&#64;&#115;&#x70;&#105;&#114;&#105;&#x74;&#105;&#x74;&#x2e;&#x63;&#111;&#109;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x70;&#46;&#107;&#111;&#x6f;&#105;&#106;&#109;&#x61;&#110;&#115;&#64;&#x73;&#x70;&#105;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#x70;&#46;&#107;&#111;&#x6f;&#105;&#106;&#109;&#x61;&#110;&#115;&#64;&#x73;&#x70;&#105;&#x72;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

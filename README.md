@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/SpiritIT/timezonecomplete.svg?branch=master)](https://travis-ci.org/SpiritIT/timezonecomplete)
 [![Coverage Status](https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master)](https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master)
 [![NPM version](https://badge.fury.io/js/timezonecomplete.svg)](http://badge.fury.io/js/timezonecomplete)
+![license](http://img.shields.io/npm/l/timezonecomplete.svg)
 
 [![NPM](https://nodei.co/npm/timezonecomplete.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/timezonecomplete/)
 [![NPM](https://nodei.co/npm-dl/timezonecomplete.png?months=6&height=3)](https://nodei.co/npm/timezonecomplete/)
@@ -469,9 +470,12 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2014i.
+The version of the included IANA time zone database is 2014j.
 
 ## Changelog
+
+### 1.9.1 (2014-11-11)
+* Upgrade time zone database to 2014j
 
 ### 1.9.0 (2014-10-29)
 * Add function timeUnitToMilliseconds()
