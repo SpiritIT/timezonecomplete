@@ -386,5 +386,20 @@ describe("TimeZone", function () {
             expect(TimeZone.zone("Europe/Amsterdam").abbreviationForUtc(2014, 7, 1)).to.equal("CEST");
         });
     });
+
+    describe("toString()", function () {
+        it("should append 'no dst' for iana zone with false DST flag", function () {
+            expect(TimeZone.zone("Europe/Amsterdam", false).toString()).to.equal("Europe/Amsterdam without DST");
+        });
+        it("should not append 'no dst' for iana zone with true DST flag", function () {
+            expect(TimeZone.zone("Europe/Amsterdam", true).toString()).to.equal("Europe/Amsterdam");
+        });
+        it("should not append 'no dst' for iana zone that never has DST", function () {
+            expect(TimeZone.zone("Etc/GMT", false).toString()).to.equal("Etc/GMT");
+        });
+        it("should not append 'no dst' for fixed offset", function () {
+            expect(TimeZone.zone("+01:00", false).toString()).to.equal("+01:00");
+        });
+    });
 });
 //# sourceMappingURL=test-timezone.js.map

@@ -282,7 +282,12 @@ var localdate = new tc.DateTime("2014-01-01T12:00:00.001", tc.local());
 
 // a fully aware time
 var utcDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.utc());
+
+// a fully aware time that has Daylight Saving Time
 var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Europe/Amsterdam"));
+
+// aware time that does NOT apply Daylight Saving Time
+var amsterdamDateNoDst = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Europe/Amsterdam", false));
 
 // date from ISO 8601 string
 var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");

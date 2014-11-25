@@ -550,7 +550,13 @@ export class TimeZone {
 	 * Either "localtime", IANA name, or "+hh:mm" offset.
 	 */
 	public toString(): string {
-		return this._name;
+		var result = this.name();
+		if (this.kind() === TimeZoneKind.Proper) {
+			if (this.hasDst() && !this.dst()) {
+				result += " without DST";
+			}
+		}
+		return result;
 	}
 
 	/**

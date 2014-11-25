@@ -3826,7 +3826,13 @@ var TimeZone = (function () {
     * Either "localtime", IANA name, or "+hh:mm" offset.
     */
     TimeZone.prototype.toString = function () {
-        return this._name;
+        var result = this.name();
+        if (this.kind() === 2 /* Proper */) {
+            if (this.hasDst() && !this.dst()) {
+                result += " without DST";
+            }
+        }
+        return result;
     };
 
     /**

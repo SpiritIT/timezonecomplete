@@ -285,10 +285,12 @@ z <span class="hljs-subst">=</span> tc<span class="hljs-built_in">.</span>zone(<
 z<span class="hljs-built_in">.</span>name(); <span class="hljs-comment">// returns "Europe/Amsterdam";</span>
 z<span class="hljs-built_in">.</span>dst(); <span class="hljs-comment">// The DST flag: returns false</span>
 z<span class="hljs-built_in">.</span>hasDst(); <span class="hljs-comment">// true: returns whether the IANA zone has DST somewhere, not whether this object has DST</span>
+z<span class="hljs-built_in">.</span>isUtc(); <span class="hljs-comment">// true if the zone is equivalent to UTC, e.g. an offset of 0, +00:00, or Etc/GMT</span>
 
 <span class="hljs-comment">// Calculate time zone offsets</span>
-z<span class="hljs-built_in">.</span>offsetForUtc(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// offset for a time specified in UTC- returns a Duration object</span>
-z<span class="hljs-built_in">.</span>offsetForZone(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// offset for a time specified in Local time- returns a Duration object</span>
+z <span class="hljs-subst">=</span> tc<span class="hljs-built_in">.</span>zone(<span class="hljs-string">"Europe/Amsterdam"</span>);
+z<span class="hljs-built_in">.</span>offsetForUtc(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// offset for a time specified in UTC; returns a Duration object</span>
+z<span class="hljs-built_in">.</span>offsetForZone(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// offset for a time specified in Europe/Amsterdam time; returns a Duration object</span>
 </code></pre><h3 id="datetime">DateTime</h3>
 				<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
 					It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
@@ -313,7 +315,12 @@ z<span class="hljs-built_in">.</span>offsetForZone(<span class="hljs-number">201
 
 <span class="hljs-comment">// a fully aware time</span>
 <span class="hljs-keyword">var</span> utcDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.utc());
+
+<span class="hljs-comment">// a fully aware time that has Daylight Saving Time</span>
 <span class="hljs-keyword">var</span> amsterdamDate = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
+
+<span class="hljs-comment">// aware time that does NOT apply Daylight Saving Time</span>
+<span class="hljs-keyword">var</span> amsterdamDateNoDst = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">13</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>, tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-literal">false</span>));
 
 <span class="hljs-comment">// date from ISO 8601 string</span>
 <span class="hljs-keyword">var</span> amsterdamDateFromString = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000 Europe/Amsterdam"</span>);
@@ -684,9 +691,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#114;&#46;&#115;&#99;&#104;&#x6f;&#117;&#116;&#x65;&#x6e;&#x40;&#x73;&#x70;&#105;&#x72;&#x69;&#x74;&#x69;&#116;&#46;&#99;&#x6f;&#x6d;">&#114;&#46;&#115;&#99;&#104;&#x6f;&#117;&#116;&#x65;&#x6e;&#x40;&#x73;&#x70;&#105;&#x72;&#x69;&#x74;&#x69;&#116;&#46;&#99;&#x6f;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x64;&#x2e;&#x77;&#105;&#115;&#115;&#x69;&#x6e;&#x67;&#64;&#115;&#112;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#x6d;">&#x64;&#x2e;&#x77;&#105;&#115;&#115;&#x69;&#x6e;&#x67;&#64;&#115;&#112;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#x6d;</a></li>
-					<li>Peter Kooijmans <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#112;&#46;&#x6b;&#111;&#111;&#105;&#x6a;&#109;&#x61;&#110;&#x73;&#x40;&#x73;&#112;&#105;&#114;&#105;&#116;&#105;&#116;&#46;&#x63;&#x6f;&#x6d;">&#112;&#46;&#x6b;&#111;&#111;&#105;&#x6a;&#109;&#x61;&#110;&#x73;&#x40;&#x73;&#112;&#105;&#114;&#105;&#116;&#105;&#116;&#46;&#x63;&#x6f;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#64;&#x73;&#x70;&#x69;&#114;&#105;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#x6d;">&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#64;&#x73;&#x70;&#x69;&#114;&#105;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#x6d;</a></li>
+					<li>Daan Wissing <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#100;&#x2e;&#x77;&#x69;&#115;&#x73;&#x69;&#x6e;&#103;&#64;&#115;&#112;&#x69;&#114;&#105;&#116;&#105;&#116;&#x2e;&#x63;&#111;&#109;">&#100;&#x2e;&#x77;&#x69;&#115;&#x73;&#x69;&#x6e;&#103;&#64;&#115;&#112;&#x69;&#114;&#105;&#116;&#105;&#116;&#x2e;&#x63;&#111;&#109;</a></li>
+					<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#112;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#97;&#110;&#115;&#64;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#116;&#46;&#99;&#111;&#109;">&#112;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#97;&#110;&#115;&#64;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#116;&#46;&#99;&#111;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>
