@@ -540,9 +540,27 @@ The version of the included IANA time zone database is 2014j.
   * tc.milliseconds() for tc.Duration.milliseconds()
   * tc.local() for tc.TimeZone.local()
   * tc.utc() for tc.TimeZone.utc()
-  * tc.zone() for tc.TimeZone.zone()
+  * tc.zone() for tc.TimeZone.zone() 
+```
+// old code:
+var d  = tc.Duration.seconds(20);
+var dt = tc.DateTime.now()
+
+// new code:
+var d  = tc.seconds(20);
+var dt = tc.now()
+```
+  
 * The tc.now() or tc.DateTime.now() method now has its zone argument optional, default value is UTC.
 * You can now choose whether timezonecomplete applies Daylight Saving Time for an IANA time zone: the tc.zone() and tc.TimeZone.zone() methods now accept an extra Boolean parameter that indicates whether DST should be applied. For backward compatibility the default value is true.
+
+```
+// Europe/Amsterdam time with DST
+var dt = new DateTime(2014, 1, 1, 23, 59, 59, 999, tc.zone("Europe/Amsterdam"));
+
+// Europe/Amsterdam time WITHOUT DST
+var dt = new DateTime(2014, 1, 1, 23, 59, 59, 999, tc.zone("Europe/Amsterdam", false));
+```
 
 ### 1.9.1 (2014-11-11)
 * Upgrade time zone database to 2014j
