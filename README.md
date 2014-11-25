@@ -113,8 +113,8 @@ tc.dayOfYear(2014, 2, 1); // returns 31
 tc.secondOfDay(1, 0, 0); // returns 3600
 
 // min and max for Duration
-var duration1 = tc.Duration.seconds(3);
-var duration2 = tc.Duration.seconds(1);
+var duration1 = tc.seconds(3);
+var duration2 = tc.seconds(1);
 tc.min(duration1, duration2); // returns a clone of duration2
 tc.max(duration1, duration2); // returns a clone of duration1
 
@@ -135,14 +135,21 @@ You can create a Duration in milliseconds, seconds, minutes or hours and then qu
 var tc = require("timezonecomplete");
 
 
+// creating durations
 var duration;
+duration = tc.milliseconds(2);	// 2 milliseconds
+duration = tc.seconds(2);	// 2 seconds
+duration = tc.minutes(2);	// 2 minutes
+duration = tc.hours(-2.5); // -2.5 hours
+
+// old (more verbose) method for creating:
 duration = tc.Duration.milliseconds(2);	// 2 milliseconds
 duration = tc.Duration.seconds(2);	// 2 seconds
 duration = tc.Duration.minutes(2);	// 2 minutes
 duration = tc.Duration.hours(2); // 2 hours
 
 // duration to string
-duration = tc.Duration.seconds(2);
+duration = tc.seconds(2);
 console.log(duration.toString()); // 00:00:02
 console.log(duration.toFullString()); // 00:00:02.000
 
@@ -151,14 +158,14 @@ console.log(duration.milliseconds()); // 2000
 
 // arithmetic
 var duration2;
-duration2 = duration.add(tc.Duration.hours(5)); // 5 hours and 2 seconds
-duration2 = duration.sub(tc.Duration.milliseconds(500)); // 1.5 seconds
+duration2 = duration.add(tc.hours(5)); // 5 hours and 2 seconds
+duration2 = duration.sub(tc.milliseconds(500)); // 1.5 seconds
 duration2 = duration.multiply(3); // 6 seconds
 duration2 = duration.divide(3); // two thirds of a second
 
 // comparisons
-var sixSecs = tc.Duration.seconds(6);
-var fiveSecs = tc.Duration.seconds(5);
+var sixSecs = tc.seconds(6);
+var fiveSecs = tc.seconds(5);
 
 // normal < and > work
 fiveSecs > sixSecs; // false
@@ -171,8 +178,8 @@ fiveSecs.greaterEqual(sixSecs); // false
 fiveSecs.greaterThan(sixSecs); // false
 
 // min and max functions
-var duration3 = tc.Duration.seconds(6);
-var duration4 = tc.Duration.seconds(3);
+var duration3 = tc.seconds(6);
+var duration4 = tc.seconds(3);
 var duration5;
 duration5 = duration3.max(duration4); // 6 seconds
 duration5 = duration3.min(duration4); // 3 seconds
@@ -182,7 +189,7 @@ duration5 = duration3.min(duration4); // 3 seconds
 // - wholeHours(), minute(), second(), millisecond(): these get the hour part, minute part 0-59, second part 0-59 etc.
 //   Note that wholeHours() may be 24 or more.
 // - hours(), minutes(), seconds(), milliseconds(): these return the whole duration as fractional number in hours/minutes/etc
-var duration6 = tc.Duration.hours(1.5); // 1:30:00.000
+var duration6 = tc.hours(1.5); // 1:30:00.000
 
 duration6.wholeHours(); // 1
 duration6.minute(); // 30
@@ -207,6 +214,46 @@ var duration9 = new tc.Duration(-500); // -500 milliseconds
 
 
 ```
+### TimeZone
+A TimeZone object defines a time zone. This can be a fixed UTC offset (e.g. +01:30), the OS time zone (localtime), or an IANA time zone (e.g. Europe/Amsterdam).
+For an IANA time zone, you can choose whether Daylight Saving Time should be applied or not. Time zone objects are cached - if you ask for the same zone twice you
+may get the very same object back. For this reason, time zone objects are immutable.
+
+```
+var z;
+
+// local time
+z = tc.local(); // Local time zone as specified by your OS
+z = tc.zone("localtime"); // Local time zone as specified by your OS
+
+// UTC
+z = tc.utc();  // UTC time zone
+z = tc.zone("Z"); // UTC
+
+// Fixed offsets
+z = tc.zone(60); // Fixed offset in minutes: UTC+01:00
+z = tc.zone("-01:30"); // Fixed offset: UTC-01:30
+
+// IANA time zones
+z = tc.zone("Europe/Amsterdam"); // Europe/Amsterdam time zone with DST applied
+z = tc.zone("Europe/Amsterdam", false); // Europe/Amsterdam time zone DST not applied
+
+// Note that the Daylight Saving Time flag is irrelevant for these cases
+z = tc.zone("+01:00", true); // fixed offset has no DST
+z = tc.zone("Etc/UTC", true); // UTC has no DST
+z = tc.zone("localtime", true); // OS settings apply, not the DST flag
+
+// Getters
+z = tc.zone("Europe/Amsterdam", false);
+z.name(); // returns "Europe/Amsterdam";
+z.dst(); // The DST flag: returns false
+z.hasDst(); // true: returns whether the IANA zone has DST somewhere, not whether this object has DST
+
+// Calculate time zone offsets
+z.offsetForUtc(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in UTC- returns a Duration object
+z.offsetForZone(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in Local time- returns a Duration object
+
+```
 
 ### DateTime
 The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
@@ -229,11 +276,11 @@ var tc = require("timezonecomplete");
 var naiveDate = new tc.DateTime(2014, 1, 1, 13, 59, 59);
 
 // a local time in the time zone of your computer
-var localdate = new tc.DateTime("2014-01-01T12:00:00.001", tc.TimeZone.local());
+var localdate = new tc.DateTime("2014-01-01T12:00:00.001", tc.local());
 
 // a fully aware time
-var utcDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.utc());
-var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.zone("Europe/Amsterdam"));
+var utcDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.utc());
+var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Europe/Amsterdam"));
 
 // date from ISO 8601 string
 var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
@@ -241,13 +288,14 @@ var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Am
 // a fully aware time without Daylight Saving Time: a fixed offset from UTC of 2 hours
 var fixedOffset;
 fixedOffset = new tc.DateTime("2014-01-01T13:59:59.000+02:00");
-fixedOffset = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.zone(2));
+fixedOffset = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone(2));
 
 // Current time
 var nd;
-nd = tc.DateTime.nowLocal(); // computer-local current time
-nd = tc.DateTime.nowUtc(); // current time in UTC
-nd = tc.DateTime.now(tc.TimeZone.zone("Africa/Algiers")); // local time in given zone
+nd = tc.now(); // current time in UTC
+nd = tc.now(tc.zone("Africa/Algiers")); // current local time in given zone
+nd = tc.nowLocal(); // computer-local current time
+nd = tc.nowUtc(); // current time in UTC
 nd = new tc.DateTime();  // computer-local current time
 
 // To string
@@ -292,7 +340,7 @@ amsterdamDate.unixUtcMillis(); // milliseconds of UTC date since 1970-01-01
 amsterdamDate.valueOf(); // same
 
 // Zone getter
-amsterdamDate.zone(); // TimeZone.zone("Europe/Amsterdam");
+amsterdamDate.zone(); // tc.TimeZone.zone("Europe/Amsterdam");
 
 // Zone abbreviation getter (note that zone abbreviation depends on the date,
 // many zones have a different abbreviation during summer time)
@@ -309,7 +357,7 @@ var ok = amsterdamDate.toZone(null); // returns naive date
 
 // In-place time zone conversion
 var d = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
-d.convert(tc.TimeZone.zone("UTC")); // now d has changed to UTC
+d.convert(tc.zone("UTC")); // now d has changed to UTC
 
 // Cloning
 var newCopy = amsterdamDate.clone();
@@ -325,8 +373,8 @@ The DateTime class allows date arithmetic. The diff() method returns the differe
 
 var tc = require("timezonecomplete");
 
-var utcDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.utc());
-var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.TimeZone.zone("Europe/Amsterdam"));
+var utcDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.utc());
+var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Europe/Amsterdam"));
 
 // Difference between dates (may be in different zones).
 // Returns a Duration
@@ -336,7 +384,7 @@ console.log(difference.hours()); // 1
 // Add an hour (3600 seconds) to a time. It may be that
 // local time does not increase because of a DST change.
 var added;
-added = localdate.add(tc.Duration.hours(1));
+added = localdate.add(tc.hours(1));
 
 // Add a LOCAL hour to a time (ensure the hour() field increments by 1)
 // Note this DOES account for DST
@@ -347,14 +395,14 @@ added = localdate.addLocal(1, tc.TimeUnit.Hour);
 added = localdate.add(1, tc.TimeUnit.Hour);
 
 // Equality operators
-var d1 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("UTC"));
-var d2 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("GMT"));
+var d1 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.zone("UTC"));
+var d2 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.zone("GMT"));
 d1.equals(d2); // true - equivalent time zones
 d1.identical(d2); // false - not exactly the same time zones
 
 // Comparison operators
-var d3 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("UTC"));
-var d4 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.TimeZone.zone("Europe/Amsterdam"));
+var d3 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.zone("UTC"));
+var d4 = new tc.DateTime(2014, 31, 12, 13, 55, 45, 999, tc.zone("Europe/Amsterdam"));
 
 // normal < and > work
 d3 < d4; // true
@@ -453,10 +501,10 @@ var jsDate1 = new Date(2014, 5, 6, 8, 0, 0, 0);
 var jsDate2 = new Date(jsDate1.valueOf());
 
 // now the jsDate.getYear(), jsDate.getMonth() etc are assumed to be in America/Boise zone.
-var datetime = new tc.DateTime(jsDate1, tc.DateFunctions.Get, tc.TimeZone.zone("America/Boise"));
+var datetime = new tc.DateTime(jsDate1, tc.DateFunctions.Get, tc.zone("America/Boise"));
 
 // now the jsDate.getUTCYear(), jsDate.getUTCMonth() etc are assumed to be in America/Boise zone.
-var datetime2 = new tc.DateTime(jsDate2, tc.DateFunctions.GetUTC, tc.TimeZone.zone("America/Boise"));
+var datetime2 = new tc.DateTime(jsDate2, tc.DateFunctions.GetUTC, tc.zone("America/Boise"));
 
 ```
 
@@ -473,6 +521,21 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2014j.
 
 ## Changelog
+
+### 1.10.0 (2014-11-25)
+* Added global functions for most static functions:
+  * tc.now() for tc.DateTime.now()
+  * tc.nowLocal() for tc.DateTime.nowLocal()
+  * tc.nowUtc() for tc.DateTime.nowUtc()
+  * tc.hours() for tc.Duration.hours()
+  * tc.minutes() for tc.Duration.minutes()
+  * tc.seconds() for tc.Duration.seconds()
+  * tc.milliseconds() for tc.Duration.milliseconds()
+  * tc.local() for tc.TimeZone.local()
+  * tc.utc() for tc.TimeZone.utc()
+  * tc.zone() for tc.TimeZone.zone()
+* The tc.now() or tc.DateTime.now() method now has its zone argument optional, default value is UTC.
+* You can now choose whether timezonecomplete applies Daylight Saving Time for an IANA time zone: the tc.zone() and tc.TimeZone.zone() methods now accept an extra Boolean parameter that indicates whether DST should be applied. For backward compatibility the default value is true.
 
 ### 1.9.1 (2014-11-11)
 * Upgrade time zone database to 2014j

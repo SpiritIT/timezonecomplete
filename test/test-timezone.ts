@@ -24,6 +24,51 @@ class TestTimeSource implements TimeSource {
 var testTimeSource: TestTimeSource = new TestTimeSource();
 DateTime.timeSource = testTimeSource;
 
+describe("timezone loose", (): void => {
+	describe("local()", (): void => {
+		it("should create a local time zone", (): void => {
+			var t: TimeZone = datetimeFuncs.local();
+			var localOffset: number = (testTimeSource.now()).getTimezoneOffset();
+			expect(t.offsetForZoneDate(testTimeSource.now(), DateFunctions.Get)).to.equal(-1 * localOffset);
+			expect(t.offsetForUtcDate(testTimeSource.now(), DateFunctions.GetUTC)).to.equal(-1 * localOffset);
+		});
+		it("should cache the time zone objects", (): void => {
+			var t: TimeZone = datetimeFuncs.local();
+			var u: TimeZone = datetimeFuncs.local();
+			expect(t).to.equal(u);
+		});
+	});
+
+	describe("utc()", (): void => {
+		it("should create a UTC zone", (): void => {
+			var t: TimeZone = datetimeFuncs.utc();
+			expect(t.offsetForZone(2014, 2, 3, 4, 5, 6, 7)).to.equal(0);
+			expect(t.offsetForUtc(2014, 2, 3, 4, 5, 6, 7)).to.equal(0);
+		});
+		it("should cache the time zone objects", (): void => {
+			var t: TimeZone = datetimeFuncs.utc();
+			var u: TimeZone = datetimeFuncs.utc();
+			expect(t).to.equal(u);
+		});
+	});
+
+	describe("zone(number)", (): void => {
+		it("should create a time zone for a whole number", (): void => {
+			var t: TimeZone = datetimeFuncs.zone(60);
+			expect(t.offsetForZone(2014, 7, 1, 2, 3, 4, 5)).to.equal(60);
+			expect(t.offsetForUtc(2014, 7, 1, 2, 3, 4, 5)).to.equal(60);
+		});
+	});
+
+	describe("zone(string)", (): void => {
+		it("should create a time zone for a positive ISO offset", (): void => {
+			var t: TimeZone = datetimeFuncs.zone("+01:30");
+			expect(t.offsetForUtc(2014, 1, 1, 1, 2, 3, 4)).to.equal(90);
+		});
+	});
+
+});
+
 describe("TimeZone", (): void => {
 
 	describe("local()", (): void => {
@@ -107,14 +152,27 @@ describe("TimeZone", (): void => {
 			var t: TimeZone = TimeZone.zone("Africa/Asmara");
 			expect(t.offsetForZone(2014, 1, 1, 1, 2, 3, 4)).to.equal(180);
 		});
+		it("should apply DST by default", (): void => {
+			var t: TimeZone = TimeZone.zone("Europe/Amsterdam");
+			expect(t.offsetForZone(2014, 7, 1, 1, 2, 3, 4)).to.equal(120);
+		});
+		it("should not apply DST if asked", (): void => {
+			var t: TimeZone = TimeZone.zone("Europe/Amsterdam", false);
+			expect(t.offsetForZone(2014, 7, 1, 1, 2, 3, 4)).to.equal(60);
+		});
 		it("should return a time zone for local time", (): void => {
 			var t: TimeZone = TimeZone.zone("localtime");
-			expect(t.equals(TimeZone.local())).to.be.true;
+			expect(t.equals(TimeZone.local())).to.equal(true);
 		});
 		it("should cache the time zone objects", (): void => {
 			var t: TimeZone = TimeZone.zone("-01:30");
 			var u: TimeZone = TimeZone.zone("-01:30");
 			expect(t).to.equal(u);
+		});
+		it("should cache the time zone objects with/without DST separately", (): void => {
+			var t: TimeZone = TimeZone.zone("Europe/Amsterdam", true);
+			var u: TimeZone = TimeZone.zone("Europe/Amsterdam", false);
+			expect(t).not.to.equal(u);
 		});
 		it("should cache the time zone objects even when different formats given", (): void => {
 			var t: TimeZone = TimeZone.zone("Z");
@@ -143,6 +201,10 @@ describe("TimeZone", (): void => {
 		it("should work for around DST", (): void => {
 			var t = TimeZone.zone("Europe/Amsterdam");
 			expect(t.offsetForUtc(2014, 10, 26, 1, 59, 59, 0)).to.equal(60);
+		});
+		it("should work for IANA zone without DST", (): void => {
+			var t = TimeZone.zone("Europe/Amsterdam", false);
+			expect(t.offsetForUtc(2014, 8, 26, 1, 59, 59, 0)).to.equal(60);
 		});
 		it("should work for fixed offset", (): void => {
 			var t = TimeZone.zone("+0130");
@@ -189,10 +251,13 @@ describe("TimeZone", (): void => {
 			expect(t.offsetForZone(2014, 1, 1, 1, 2, 3, 4)).to.equal(-7 * 60);
 			expect(t.offsetForZone(2014, 7, 1, 1, 2, 3, 4)).to.equal(-6 * 60);
 		});
+		it("should work for IANA zone wihtout DST", (): void => {
+			var t = TimeZone.zone("America/Edmonton", false);
+			// check DST changes
+			expect(t.offsetForZone(2014, 1, 1, 1, 2, 3, 4)).to.equal(-7 * 60);
+			expect(t.offsetForZone(2014, 7, 1, 1, 2, 3, 4)).to.equal(-7 * 60);
+		});
 
-		// skipped because Date.getHours() is inconsistent at this moment:
-		// if TZ environment variable is set to Europe/Amsterdam then that is different
-		// from when the PC time zone is set to Europe/Amsterdam
 		it("should work for non-existing DST forward time", (): void => {
 			var t = TimeZone.zone("America/Edmonton");
 			// check DST changes
@@ -233,26 +298,32 @@ describe("TimeZone", (): void => {
 
 	describe("equals()", (): void => {
 		it("should handle local zone", (): void => {
-			expect(TimeZone.local().equals(TimeZone.local())).to.be.true;
-			expect(TimeZone.local().equals(TimeZone.utc())).to.be.false;
-			expect(TimeZone.local().equals(TimeZone.zone(6))).to.be.false;
+			expect(TimeZone.local().equals(TimeZone.local())).to.equal(true);
+			expect(TimeZone.local().equals(TimeZone.zone("localtime"))).to.equal(true);
+			expect(TimeZone.local().equals(TimeZone.zone("localtime", false))).to.equal(true);
+			expect(TimeZone.local().equals(TimeZone.utc())).to.equal(false);
+			expect(TimeZone.local().equals(TimeZone.zone(6))).to.equal(false);
 		});
 		it("should handle offset zone", (): void => {
-			expect(TimeZone.zone(3).equals(TimeZone.zone(3))).to.be.true;
-			expect(TimeZone.zone(3).equals(TimeZone.utc())).to.be.false;
-			expect(TimeZone.zone(3).equals(TimeZone.local())).to.be.false;
-			expect(TimeZone.zone(3).equals(TimeZone.zone(-1))).to.be.false;
+			expect(TimeZone.zone(3).equals(TimeZone.zone(3))).to.equal(true);
+			expect(TimeZone.zone(3).equals(TimeZone.utc())).to.equal(false);
+			expect(TimeZone.zone(3).equals(TimeZone.local())).to.equal(false);
+			expect(TimeZone.zone(3).equals(TimeZone.zone(-1))).to.equal(false);
+			expect(TimeZone.zone("+03:00", false).equals(TimeZone.zone("+03:00", true))).to.equal(true);
+			expect(TimeZone.zone("+03:00", false).equals(TimeZone.zone(180))).to.equal(true);
 		});
 		it("should handle proper zone", (): void => {
-			expect(TimeZone.zone("Europe/Amsterdam").equals(TimeZone.zone("Europe/Amsterdam"))).to.be.true;
-			expect(TimeZone.zone("Europe/Amsterdam").equals(TimeZone.utc())).to.be.false;
-			expect(TimeZone.zone("Europe/Amsterdam").equals(TimeZone.local())).to.be.false;
-			expect(TimeZone.zone("Europe/Amsterdam").equals(TimeZone.zone(-1))).to.be.false;
+			expect(TimeZone.zone("Europe/Amsterdam").equals(TimeZone.zone("Europe/Amsterdam"))).to.equal(true);
+			expect(TimeZone.zone("Europe/Amsterdam", false).equals(TimeZone.zone("Europe/Amsterdam", false))).to.equal(true);
+			expect(TimeZone.zone("Europe/Amsterdam", true).equals(TimeZone.zone("Europe/Amsterdam", false))).to.equal(false);
+			expect(TimeZone.zone("Europe/Amsterdam").equals(TimeZone.utc())).to.equal(false);
+			expect(TimeZone.zone("Europe/Amsterdam").equals(TimeZone.local())).to.equal(false);
+			expect(TimeZone.zone("Europe/Amsterdam").equals(TimeZone.zone(-1))).to.equal(false);
 		});
 		it("should handle UTC in different forms", (): void => {
-			expect(TimeZone.utc().equals(TimeZone.zone("GMT"))).to.be.true;
-			expect(TimeZone.utc().equals(TimeZone.zone("UTC"))).to.be.true;
-			expect(TimeZone.utc().equals(TimeZone.zone(0))).to.be.true;
+			expect(TimeZone.utc().equals(TimeZone.zone("GMT"))).to.equal(true);
+			expect(TimeZone.utc().equals(TimeZone.zone("UTC"))).to.equal(true);
+			expect(TimeZone.utc().equals(TimeZone.zone(0))).to.equal(true);
 		});
 	});
 
@@ -271,18 +342,25 @@ describe("TimeZone", (): void => {
 		});
 	});
 
+	describe("dst()", (): void => {
+		it("should work", (): void => {
+			expect(TimeZone.zone("Europe/Amsterdam", true).dst()).to.equal(true);
+			expect(TimeZone.zone("Europe/Amsterdam", false).dst()).to.equal(false);
+		});
+	});
+
 	describe("hasDst()", (): void => {
 		it("should work for local timezone", (): void => {
-			expect(TimeZone.local().hasDst()).to.be.false;
+			expect(TimeZone.local().hasDst()).to.equal(false);
 		});
 		it("should work for offset timezone", (): void => {
-			expect(TimeZone.zone(3).hasDst()).to.be.false;
+			expect(TimeZone.zone(3).hasDst()).to.equal(false);
 		});
 		it("should work for named zone without DST", (): void => {
-			expect(TimeZone.zone("UTC").hasDst()).to.be.false;
+			expect(TimeZone.zone("UTC").hasDst()).to.equal(false);
 		});
 		it("should work for named zone with DST", (): void => {
-			expect(TimeZone.zone("Europe/Amsterdam").hasDst()).to.be.true;
+			expect(TimeZone.zone("Europe/Amsterdam").hasDst()).to.equal(true);
 		});
 	});
 

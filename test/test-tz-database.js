@@ -62,26 +62,26 @@ describe("RuleInfo", function () {
         it("should work for different from", function () {
             var ri1 = new RuleInfo(1968, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveLess(ri2)).to.be.true;
-            expect(ri2.effectiveLess(ri1)).to.be.false;
+            expect(ri1.effectiveLess(ri2)).to.equal(true);
+            expect(ri2.effectiveLess(ri1)).to.equal(false);
         });
         it("should work for different inMonth", function () {
             var ri1 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 2, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveLess(ri2)).to.be.true;
-            expect(ri2.effectiveLess(ri1)).to.be.false;
+            expect(ri1.effectiveLess(ri2)).to.equal(true);
+            expect(ri2.effectiveLess(ri1)).to.equal(false);
         });
         it("should work for different effective date", function () {
             var ri1 = new RuleInfo(2014, 0 /* Year */, 2014, "-", 3, 0 /* DayNum */, 15, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(2014, 0 /* Year */, 2014, "-", 3, 2 /* GreqX */, 15, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveLess(ri2)).to.be.true;
-            expect(ri2.effectiveLess(ri1)).to.be.false;
+            expect(ri1.effectiveLess(ri2)).to.equal(true);
+            expect(ri2.effectiveLess(ri1)).to.equal(false);
         });
         it("should work for equal", function () {
             var ri1 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveLess(ri2)).to.be.false;
-            expect(ri2.effectiveLess(ri1)).to.be.false;
+            expect(ri1.effectiveLess(ri2)).to.equal(false);
+            expect(ri2.effectiveLess(ri1)).to.equal(false);
         });
     });
 
@@ -89,32 +89,32 @@ describe("RuleInfo", function () {
         it("should work for different from", function () {
             var ri1 = new RuleInfo(1968, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveEqual(ri2)).to.be.false;
-            expect(ri2.effectiveEqual(ri1)).to.be.false;
+            expect(ri1.effectiveEqual(ri2)).to.equal(false);
+            expect(ri2.effectiveEqual(ri1)).to.equal(false);
         });
         it("should work for different inMonth", function () {
             var ri1 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 2, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveEqual(ri2)).to.be.false;
-            expect(ri2.effectiveEqual(ri1)).to.be.false;
+            expect(ri1.effectiveEqual(ri2)).to.equal(false);
+            expect(ri2.effectiveEqual(ri1)).to.equal(false);
         });
         it("should work for different effective date", function () {
             var ri1 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 25, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(1969, 0 /* Year */, 1977, "-", 3, 0 /* DayNum */, 26, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveEqual(ri2)).to.be.false;
-            expect(ri2.effectiveEqual(ri1)).to.be.false;
+            expect(ri1.effectiveEqual(ri2)).to.equal(false);
+            expect(ri2.effectiveEqual(ri1)).to.equal(false);
         });
         it("should work for equal objects", function () {
             var ri1 = new RuleInfo(2014, 0 /* Year */, 2014, "-", 3, 0 /* DayNum */, 17, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(2014, 0 /* Year */, 2014, "-", 3, 0 /* DayNum */, 17, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveEqual(ri2)).to.be.true;
-            expect(ri2.effectiveEqual(ri1)).to.be.true;
+            expect(ri1.effectiveEqual(ri2)).to.equal(true);
+            expect(ri2.effectiveEqual(ri1)).to.equal(true);
         });
         it("should work for equivalent effective date specified differently", function () {
             var ri1 = new RuleInfo(2014, 0 /* Year */, 2014, "-", 8, 0 /* DayNum */, 17, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
             var ri2 = new RuleInfo(2014, 0 /* Year */, 2014, "-", 8, 2 /* GreqX */, 15, 0 /* Sunday */, 0, 0, 0, 2 /* Utc */, Duration.hours(0), "S");
-            expect(ri1.effectiveEqual(ri2)).to.be.true;
-            expect(ri2.effectiveEqual(ri1)).to.be.true;
+            expect(ri1.effectiveEqual(ri2)).to.equal(true);
+            expect(ri2.effectiveEqual(ri1)).to.equal(true);
         });
     });
 });
@@ -270,24 +270,24 @@ describe("TzDatabase", function () {
 
     describe("zoneIsUtc()", function () {
         it("should return true for equivalent zones", function () {
-            expect(TzDatabase.instance().zoneIsUtc("Etc/GMT")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("Etc/GMT+0")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("Etc/UCT")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("Etc/Universal")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("Etc/UTC")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("Etc/Zulu")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("GMT")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("GMT+0")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("GMT0")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("GMT-0")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("Greenwich")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("Universal")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("UTC")).to.be.true;
-            expect(TzDatabase.instance().zoneIsUtc("Zulu")).to.be.true;
+            expect(TzDatabase.instance().zoneIsUtc("Etc/GMT")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("Etc/GMT+0")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("Etc/UCT")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("Etc/Universal")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("Etc/UTC")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("Etc/Zulu")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("GMT")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("GMT+0")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("GMT0")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("GMT-0")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("Greenwich")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("Universal")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("UTC")).to.equal(true);
+            expect(TzDatabase.instance().zoneIsUtc("Zulu")).to.equal(true);
         });
         it("should return false for non-utc zones", function () {
-            expect(TzDatabase.instance().zoneIsUtc("Europe/Amsterdam")).to.be.false;
-            expect(TzDatabase.instance().zoneIsUtc("W-SU")).to.be.false;
+            expect(TzDatabase.instance().zoneIsUtc("Europe/Amsterdam")).to.equal(false);
+            expect(TzDatabase.instance().zoneIsUtc("W-SU")).to.equal(false);
         });
     });
 
@@ -424,6 +424,25 @@ describe("TzDatabase", function () {
         });
     });
 
+    describe("standardOffsetLocal()", function () {
+        it("should work", function () {
+            // before first zone info (note that timestamps are LOCAL now)
+            expect(TzDatabase.instance().standardOffsetLocal("Europe/Amsterdam", -4228762772401).minutes()).to.be.within(19.5, 19.6);
+
+            // at until of first zone info (return next)
+            expect(TzDatabase.instance().standardOffsetLocal("Europe/Amsterdam", -4228762772400).minutes()).to.be.within(19.5, 19.6);
+
+            // before until of third zone info
+            expect(TzDatabase.instance().standardOffsetLocal("Europe/Amsterdam", -935019600001).minutes()).to.equal(20);
+
+            // at until of third zone info (return fourth)
+            expect(TzDatabase.instance().standardOffsetLocal("Europe/Amsterdam", -935019600000).hours()).to.equal(1);
+
+            // after last zone info
+            expect(TzDatabase.instance().standardOffsetLocal("Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 0, 59, 59, 999)).toUnixNoLeapSecs()).hours()).to.equal(1);
+        });
+    });
+
     describe("minDstSave()", function () {
         it("should return the minimum for the entire database", function () {
             expect(TzDatabase.instance().minDstSave().minutes()).to.equal(20);
@@ -456,10 +475,10 @@ describe("TzDatabase", function () {
 
     describe("hasDst()", function () {
         it("should return true for zone with DST", function () {
-            expect(TzDatabase.instance().hasDst("Europe/Amsterdam")).to.be.true;
+            expect(TzDatabase.instance().hasDst("Europe/Amsterdam")).to.equal(true);
         });
         it("should return false for zone with DST", function () {
-            expect(TzDatabase.instance().hasDst("Etc/GMT")).to.be.false;
+            expect(TzDatabase.instance().hasDst("Etc/GMT")).to.equal(false);
         });
     });
 

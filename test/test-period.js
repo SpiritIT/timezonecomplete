@@ -408,19 +408,19 @@ describe("Period", function () {
     describe("isBoundary()", function () {
         it("should return true for start date", function () {
             var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
-            expect(p.isBoundary(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"))).to.be.true;
+            expect(p.isBoundary(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"))).to.equal(true);
         });
         it("should return true for boundary date", function () {
             var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
-            expect(p.isBoundary(new DateTime("2014-01-02T02:00:00 Europe/Amsterdam"))).to.be.true;
+            expect(p.isBoundary(new DateTime("2014-01-02T02:00:00 Europe/Amsterdam"))).to.equal(true);
         });
         it("should return false for non-boundary date", function () {
             var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
-            expect(p.isBoundary(new DateTime("2014-01-02T02:00:01 Europe/Amsterdam"))).to.be.false;
+            expect(p.isBoundary(new DateTime("2014-01-02T02:00:01 Europe/Amsterdam"))).to.equal(false);
         });
         it("should return false for null date", function () {
             var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
-            expect(p.isBoundary(null)).to.be.false;
+            expect(p.isBoundary(null)).to.equal(false);
         });
     });
 

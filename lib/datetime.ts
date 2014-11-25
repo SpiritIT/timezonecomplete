@@ -36,6 +36,28 @@ import TimeZoneKind = timezone.TimeZoneKind;
 import format = require("./format");
 
 /**
+ * Current date+time in local time
+ */
+export function nowLocal(): DateTime {
+	return DateTime.nowLocal();
+}
+
+/**
+ * Current date+time in UTC time
+ */
+export function nowUtc(): DateTime {
+	return DateTime.nowUtc();
+}
+
+/**
+ * Current date+time in the given time zone
+ * @param timeZone	The desired time zone (optional, defaults to UTC).
+ */
+export function now(timeZone: TimeZone = TimeZone.utc()): DateTime {
+	return DateTime.now(timeZone);
+}
+
+/**
  * DateTime class which is time zone-aware
  * and which can be mocked for testing purposes.
  */
@@ -73,7 +95,7 @@ export class DateTime {
 	public static timeSource: TimeSource = new RealTimeSource();
 
 	/**
-	 * Current date+time in local time (derived from DateTime.timeSource.now()).
+	 * Current date+time in local time
 	 */
 	public static nowLocal(): DateTime {
 		var n = DateTime.timeSource.now();
@@ -81,17 +103,17 @@ export class DateTime {
 	}
 
 	/**
-	 * Current date+time in UTC time (derived from DateTime.timeSource.now()).
+	 * Current date+time in UTC time
 	 */
 	public static nowUtc(): DateTime {
 		return new DateTime(DateTime.timeSource.now(), DateFunctions.GetUTC, TimeZone.utc());
 	}
 
 	/**
-	 * Current date+time in the given time zone (derived from DateTime.timeSource.now()).
-	 * @param timeZone	The desired time zone.
+	 * Current date+time in the given time zone
+	 * @param timeZone	The desired time zone (optional, defaults to UTC).
 	 */
-	public static now(timeZone: TimeZone): DateTime {
+	public static now(timeZone: TimeZone = TimeZone.utc()): DateTime {
 		return new DateTime(DateTime.timeSource.now(), DateFunctions.GetUTC, TimeZone.utc()).toZone(timeZone);
 	}
 

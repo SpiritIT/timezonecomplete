@@ -64,26 +64,26 @@ describe("RuleInfo", (): void => {
 		it("should work for different from", (): void => {
 			var ri1 = new RuleInfo(1968, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(1969, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveLess(ri2)).to.be.true;
-			expect(ri2.effectiveLess(ri1)).to.be.false;
+			expect(ri1.effectiveLess(ri2)).to.equal(true);
+			expect(ri2.effectiveLess(ri1)).to.equal(false);
 		});
 		it("should work for different inMonth", (): void => {
 			var ri1 = new RuleInfo(1969, ToType.Year, 1977, "-", 2, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(1969, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveLess(ri2)).to.be.true;
-			expect(ri2.effectiveLess(ri1)).to.be.false;
+			expect(ri1.effectiveLess(ri2)).to.equal(true);
+			expect(ri2.effectiveLess(ri1)).to.equal(false);
 		});
 		it("should work for different effective date", (): void => {
 			var ri1 = new RuleInfo(2014, ToType.Year, 2014, "-", 3, OnType.DayNum, 15, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(2014, ToType.Year, 2014, "-", 3, OnType.GreqX, 15, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveLess(ri2)).to.be.true;
-			expect(ri2.effectiveLess(ri1)).to.be.false;
+			expect(ri1.effectiveLess(ri2)).to.equal(true);
+			expect(ri2.effectiveLess(ri1)).to.equal(false);
 		});
 		it("should work for equal", (): void => {
 			var ri1 = new RuleInfo(1969, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(1969, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveLess(ri2)).to.be.false;
-			expect(ri2.effectiveLess(ri1)).to.be.false;
+			expect(ri1.effectiveLess(ri2)).to.equal(false);
+			expect(ri2.effectiveLess(ri1)).to.equal(false);
 		});
 	});
 
@@ -91,32 +91,32 @@ describe("RuleInfo", (): void => {
 		it("should work for different from", (): void => {
 			var ri1 = new RuleInfo(1968, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(1969, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveEqual(ri2)).to.be.false;
-			expect(ri2.effectiveEqual(ri1)).to.be.false;
+			expect(ri1.effectiveEqual(ri2)).to.equal(false);
+			expect(ri2.effectiveEqual(ri1)).to.equal(false);
 		});
 		it("should work for different inMonth", (): void => {
 			var ri1 = new RuleInfo(1969, ToType.Year, 1977, "-", 2, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(1969, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveEqual(ri2)).to.be.false;
-			expect(ri2.effectiveEqual(ri1)).to.be.false;
+			expect(ri1.effectiveEqual(ri2)).to.equal(false);
+			expect(ri2.effectiveEqual(ri1)).to.equal(false);
 		});
 		it("should work for different effective date", (): void => {
 			var ri1 = new RuleInfo(1969, ToType.Year, 1977, "-", 3, OnType.DayNum, 25, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(1969, ToType.Year, 1977, "-", 3, OnType.DayNum, 26, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveEqual(ri2)).to.be.false;
-			expect(ri2.effectiveEqual(ri1)).to.be.false;
+			expect(ri1.effectiveEqual(ri2)).to.equal(false);
+			expect(ri2.effectiveEqual(ri1)).to.equal(false);
 		});
 		it("should work for equal objects", (): void => {
 			var ri1 = new RuleInfo(2014, ToType.Year, 2014, "-", 3, OnType.DayNum, 17, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(2014, ToType.Year, 2014, "-", 3, OnType.DayNum, 17, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveEqual(ri2)).to.be.true;
-			expect(ri2.effectiveEqual(ri1)).to.be.true;
+			expect(ri1.effectiveEqual(ri2)).to.equal(true);
+			expect(ri2.effectiveEqual(ri1)).to.equal(true);
 		});
 		it("should work for equivalent effective date specified differently", (): void => {
 			var ri1 = new RuleInfo(2014, ToType.Year, 2014, "-", 8, OnType.DayNum, 17, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
 			var ri2 = new RuleInfo(2014, ToType.Year, 2014, "-", 8, OnType.GreqX, 15, WeekDay.Sunday, 0, 0, 0, AtType.Utc, Duration.hours(0), "S");
-			expect(ri1.effectiveEqual(ri2)).to.be.true;
-			expect(ri2.effectiveEqual(ri1)).to.be.true;
+			expect(ri1.effectiveEqual(ri2)).to.equal(true);
+			expect(ri2.effectiveEqual(ri1)).to.equal(true);
 		});
 	});
 });
@@ -395,24 +395,24 @@ describe("TzDatabase", (): void => {
 
 	describe("zoneIsUtc()", (): void => {
 		it("should return true for equivalent zones", (): void => {
-			expect(TzDatabase.instance().zoneIsUtc("Etc/GMT")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("Etc/GMT+0")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("Etc/UCT")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("Etc/Universal")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("Etc/UTC")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("Etc/Zulu")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("GMT")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("GMT+0")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("GMT0")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("GMT-0")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("Greenwich")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("Universal")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("UTC")).to.be.true;
-			expect(TzDatabase.instance().zoneIsUtc("Zulu")).to.be.true;
+			expect(TzDatabase.instance().zoneIsUtc("Etc/GMT")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("Etc/GMT+0")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("Etc/UCT")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("Etc/Universal")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("Etc/UTC")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("Etc/Zulu")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("GMT")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("GMT+0")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("GMT0")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("GMT-0")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("Greenwich")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("Universal")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("UTC")).to.equal(true);
+			expect(TzDatabase.instance().zoneIsUtc("Zulu")).to.equal(true);
 		});
 		it("should return false for non-utc zones", (): void => {
-			expect(TzDatabase.instance().zoneIsUtc("Europe/Amsterdam")).to.be.false;
-			expect(TzDatabase.instance().zoneIsUtc("W-SU")).to.be.false;
+			expect(TzDatabase.instance().zoneIsUtc("Europe/Amsterdam")).to.equal(false);
+			expect(TzDatabase.instance().zoneIsUtc("W-SU")).to.equal(false);
 		});
 	});
 
@@ -591,6 +591,26 @@ describe("TzDatabase", (): void => {
 		});
 	});
 
+	describe("standardOffsetLocal()", (): void => {
+		it("should work", (): void => {
+			// before first zone info (note that timestamps are LOCAL now)
+			expect(TzDatabase.instance().standardOffsetLocal(
+				"Europe/Amsterdam", -4228762772401).minutes()).to.be.within(19.5, 19.6);
+			// at until of first zone info (return next)
+			expect(TzDatabase.instance().standardOffsetLocal(
+				"Europe/Amsterdam", -4228762772400).minutes()).to.be.within(19.5, 19.6);
+			// before until of third zone info
+			expect(TzDatabase.instance().standardOffsetLocal(
+				"Europe/Amsterdam", -935019600001).minutes()).to.equal(20);
+			// at until of third zone info (return fourth)
+			expect(TzDatabase.instance().standardOffsetLocal(
+				"Europe/Amsterdam", -935019600000).hours()).to.equal(1);
+			// after last zone info
+			expect(TzDatabase.instance().standardOffsetLocal(
+				"Europe/Amsterdam", (new TimeStruct(2014, 3, 30, 0, 59, 59, 999)).toUnixNoLeapSecs()).hours()).to.equal(1);
+		});
+	});
+
 	describe("minDstSave()", (): void => {
 		it("should return the minimum for the entire database", (): void => {
 			expect(TzDatabase.instance().minDstSave().minutes()).to.equal(20);
@@ -623,10 +643,10 @@ describe("TzDatabase", (): void => {
 
 	describe("hasDst()", (): void => {
 		it("should return true for zone with DST", (): void => {
-			expect(TzDatabase.instance().hasDst("Europe/Amsterdam")).to.be.true;
+			expect(TzDatabase.instance().hasDst("Europe/Amsterdam")).to.equal(true);
 		});
 		it("should return false for zone with DST", (): void => {
-			expect(TzDatabase.instance().hasDst("Etc/GMT")).to.be.false;
+			expect(TzDatabase.instance().hasDst("Etc/GMT")).to.equal(false);
 		});
 	});
 

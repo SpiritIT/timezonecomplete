@@ -15,6 +15,43 @@ import TimeUnit = basics.TimeUnit;
 
 import strings = require("./strings");
 
+
+/**
+ * Construct a time duration
+ * @param n	Number of hours (may be fractional or negative)
+ * @return A duration of n hours
+ */
+export function hours(n: number): Duration {
+	return Duration.hours(n);
+}
+
+/**
+ * Construct a time duration
+ * @param n	Number of minutes (may be fractional or negative)
+ * @return A duration of n minutes
+ */
+export function minutes(n: number): Duration {
+	return Duration.minutes(n);
+}
+
+/**
+ * Construct a time duration
+ * @param n	Number of seconds (may be fractional or negative)
+ * @return A duration of n seconds
+ */
+export function seconds(n: number): Duration {
+	return Duration.seconds(n);
+}
+
+/**
+ * Construct a time duration
+ * @param n	Number of milliseconds (may be fractional or negative)
+ * @return A duration of n milliseconds
+ */
+export function milliseconds(n: number): Duration {
+	return Duration.milliseconds(n);
+}
+
 /**
  * Time duration. Create one e.g. like this: var d = Duration.hours(1).
  * Note that time durations do not take leap seconds etc. into account:
@@ -36,7 +73,7 @@ export class Duration {
 
 	/**
 	 * Construct a time duration
-	 * @param n	Number of hours
+	 * @param n	Number of hours (may be fractional or negative)
 	 * @return A duration of n hours
 	 */
 	public static hours(n: number): Duration {
@@ -45,7 +82,7 @@ export class Duration {
 
 	/**
 	 * Construct a time duration
-	 * @param n	Number of minutes
+	 * @param n	Number of minutes (may be fractional or negative)
 	 * @return A duration of n minutes
 	 */
 	public static minutes(n: number): Duration {
@@ -54,7 +91,7 @@ export class Duration {
 
 	/**
 	 * Construct a time duration
-	 * @param n	Number of seconds
+	 * @param n	Number of seconds (may be fractional or negative)
 	 * @return A duration of n seconds
 	 */
 	public static seconds(n: number): Duration {
@@ -63,7 +100,7 @@ export class Duration {
 
 	/**
 	 * Construct a time duration
-	 * @param n	Number of milliseconds
+	 * @param n	Number of milliseconds (may be fractional or negative)
 	 * @return A duration of n milliseconds
 	 */
 	public static milliseconds(n: number): Duration {

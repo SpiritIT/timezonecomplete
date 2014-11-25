@@ -13,10 +13,10 @@ import WeekDay = basics.WeekDay;
 
 describe("isLeapYear()", (): void => {
 	it("should work", (): void => {
-		expect(basics.isLeapYear(2001)).to.be.false; // normal non-leap year
-		expect(basics.isLeapYear(2004)).to.be.true; // normal leap year
-		expect(basics.isLeapYear(2200)).to.be.false; // divisible by 100 but not 400
-		expect(basics.isLeapYear(2000)).to.be.true; // divisible by 400
+		expect(basics.isLeapYear(2001)).to.equal(false); // normal non-leap year
+		expect(basics.isLeapYear(2004)).to.equal(true); // normal leap year
+		expect(basics.isLeapYear(2200)).to.equal(false); // divisible by 100 but not 400
+		expect(basics.isLeapYear(2000)).to.equal(true); // divisible by 400
 	});
 });
 
@@ -236,40 +236,40 @@ describe("TimeStruct", (): void => {
 
 	describe("validate()", (): void => {
 		it("should work for valid dates", (): void => {
-			expect((new TimeStruct()).validate()).to.be.true;
-			expect((new TimeStruct(2014, 1, 1, 2, 2, 4)).validate()).to.be.true;
+			expect((new TimeStruct()).validate()).to.equal(true);
+			expect((new TimeStruct(2014, 1, 1, 2, 2, 4)).validate()).to.equal(true);
 		});
 		it("should return false for non-numbers", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct();
 			t.hour = NaN;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 		});
 		it("should return false for non-integers", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct();
 			t.hour = 1.5;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 		});
 		it("should return false for invalid month", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct();
 			t.month = 0;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 			t.month = 13;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 		});
 		it("should return false for invalid day", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct();
 			t.day = 0;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 			t.day = 32;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 			t.year = 2014;
 			t.month = 2;
 			t.day = 29;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 		});
 		it("should return true for valid leap day", (): void => {
 			var t: TimeStruct;
@@ -277,47 +277,47 @@ describe("TimeStruct", (): void => {
 			t.year = 2008;
 			t.month = 2;
 			t.day = 29;
-			expect(t.validate()).to.be.true;
+			expect(t.validate()).to.equal(true);
 		});
 		it("should return false for invalid hour", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct();
 			t.hour = -1;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 			t.hour = 24;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 		});
 		it("should return false for invalid minute", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct();
 			t.minute = -1;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 			t.minute = 60;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 		});
 		it("should return false for invalid second", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct();
 			t.second = -1;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 			t.second = 62;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 		});
 		/* todo use this when implementing leap seconds
 		it("should return true for valid leap second", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct(1976, 6, 30, 23, 59, 59);
 			t.second = 60;
-			expect(t.validate()).to.be.true;
+			expect(t.validate()).to.equal(true);
 		});
 		*/
 		it("should return false for invalid milli", (): void => {
 			var t: TimeStruct;
 			t = new TimeStruct();
 			t.milli = -1;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 			t.milli = 1000;
-			expect(t.validate()).to.be.false;
+			expect(t.validate()).to.equal(false);
 		});
 	});
 

@@ -752,6 +752,33 @@ export class TzDatabase {
 	}
 
 	/**
+	 * Returns the standard time zone offset from UTC, excluding DST, at
+	 * the given LOCAL timestamp, again excluding DST.
+	 *
+	 * If the local timestamp exists twice (as can occur very rarely due to zone changes)
+	 * then the first occurrence is returned.
+	 *
+	 * Throws if zone info not found.
+	 *
+	 * @param zoneName	IANA time zone name
+	 * @param localMillis	Timestamp in time zone time
+	 */
+	public standardOffsetLocal(zoneName: string, localMillis: number): Duration {
+		var zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+		for (var i = 0; i < zoneInfos.length; ++i) {
+			var zoneInfo = zoneInfos[i];
+			if (zoneInfo.until === null || zoneInfo.until + zoneInfo.gmtoff.milliseconds() > localMillis) {
+				return zoneInfo.gmtoff.clone();
+			}
+		}
+		/* istanbul ignore if */
+		/* istanbul ignore next */
+		if (true) {
+			throw new Error("No zone info found");
+		}
+	}
+
+	/**
 	 * Returns the total time zone offset from UTC, including DST, at
 	 * the given LOCAL timestamp. Non-existing local time is normalized out.
 	 * There can be multiple UTC times and therefore multiple offsets for a local time

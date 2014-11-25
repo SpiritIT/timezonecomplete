@@ -8,6 +8,24 @@ var duration = require("../lib/duration");
 
 var Duration = duration.Duration;
 
+describe("duration loose", function () {
+    it("construct by hour", function () {
+        expect(duration.hours(2).milliseconds()).to.equal(2 * 60 * 60 * 1000);
+    });
+
+    it("construct by minute", function () {
+        expect(duration.minutes(2).milliseconds()).to.equal(2 * 60 * 1000);
+    });
+
+    it("construct by second", function () {
+        expect(duration.seconds(2).milliseconds()).to.equal(2 * 1000);
+    });
+
+    it("construct by milliseconds", function () {
+        expect(duration.milliseconds(2).milliseconds()).to.equal(2);
+    });
+});
+
 describe("Duration()", function () {
     describe("constructor", function () {
         it("construct by hour", function () {
@@ -95,7 +113,7 @@ describe("Duration()", function () {
         });
         it("should return a new object", function () {
             var d = new Duration("01:00:00.000");
-            expect(d.clone() === d).to.be.false;
+            expect(d.clone() === d).to.equal(false);
         });
     });
 
@@ -118,116 +136,116 @@ describe("Duration()", function () {
 
     describe("lessThan()", function () {
         it("should return true for a greater other", function () {
-            expect(Duration.milliseconds(-1).lessThan(Duration.milliseconds(0))).to.be.true;
-            expect(Duration.milliseconds(-1).lessThan(Duration.milliseconds(1))).to.be.true;
-            expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(2))).to.be.true;
-            expect(Duration.seconds(1).lessThan(Duration.seconds(2))).to.be.true;
-            expect(Duration.seconds(1).lessThan(Duration.hours(1))).to.be.true;
-            expect(Duration.hours(-1).lessThan(Duration.seconds(1))).to.be.true;
+            expect(Duration.milliseconds(-1).lessThan(Duration.milliseconds(0))).to.equal(true);
+            expect(Duration.milliseconds(-1).lessThan(Duration.milliseconds(1))).to.equal(true);
+            expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(2))).to.equal(true);
+            expect(Duration.seconds(1).lessThan(Duration.seconds(2))).to.equal(true);
+            expect(Duration.seconds(1).lessThan(Duration.hours(1))).to.equal(true);
+            expect(Duration.hours(-1).lessThan(Duration.seconds(1))).to.equal(true);
         });
         it("should return false for an equal other", function () {
-            expect(Duration.milliseconds(60000).lessThan(Duration.milliseconds(60000))).to.be.false;
-            expect(Duration.milliseconds(60000).lessThan(Duration.minutes(1))).to.be.false;
+            expect(Duration.milliseconds(60000).lessThan(Duration.milliseconds(60000))).to.equal(false);
+            expect(Duration.milliseconds(60000).lessThan(Duration.minutes(1))).to.equal(false);
         });
         it("should return false for a lesser other", function () {
-            expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(-1))).to.be.false;
-            expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(-1))).to.be.false;
-            expect(Duration.milliseconds(2).lessThan(Duration.milliseconds(1))).to.be.false;
-            expect(Duration.seconds(2).lessThan(Duration.seconds(1))).to.be.false;
-            expect(Duration.hours(1).lessThan(Duration.seconds(1))).to.be.false;
-            expect(Duration.seconds(1).lessThan(Duration.hours(-1))).to.be.false;
+            expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(-1))).to.equal(false);
+            expect(Duration.milliseconds(1).lessThan(Duration.milliseconds(-1))).to.equal(false);
+            expect(Duration.milliseconds(2).lessThan(Duration.milliseconds(1))).to.equal(false);
+            expect(Duration.seconds(2).lessThan(Duration.seconds(1))).to.equal(false);
+            expect(Duration.hours(1).lessThan(Duration.seconds(1))).to.equal(false);
+            expect(Duration.seconds(1).lessThan(Duration.hours(-1))).to.equal(false);
         });
     });
 
     describe("lessEqual()", function () {
         it("should return true for a greater other", function () {
-            expect(Duration.milliseconds(-1).lessEqual(Duration.milliseconds(0))).to.be.true;
-            expect(Duration.milliseconds(-1).lessEqual(Duration.milliseconds(1))).to.be.true;
-            expect(Duration.milliseconds(1).lessEqual(Duration.milliseconds(2))).to.be.true;
-            expect(Duration.seconds(1).lessEqual(Duration.seconds(2))).to.be.true;
-            expect(Duration.seconds(1).lessEqual(Duration.hours(1))).to.be.true;
-            expect(Duration.hours(-1).lessEqual(Duration.seconds(1))).to.be.true;
+            expect(Duration.milliseconds(-1).lessEqual(Duration.milliseconds(0))).to.equal(true);
+            expect(Duration.milliseconds(-1).lessEqual(Duration.milliseconds(1))).to.equal(true);
+            expect(Duration.milliseconds(1).lessEqual(Duration.milliseconds(2))).to.equal(true);
+            expect(Duration.seconds(1).lessEqual(Duration.seconds(2))).to.equal(true);
+            expect(Duration.seconds(1).lessEqual(Duration.hours(1))).to.equal(true);
+            expect(Duration.hours(-1).lessEqual(Duration.seconds(1))).to.equal(true);
         });
         it("should return true for an equal other", function () {
-            expect(Duration.milliseconds(60000).lessEqual(Duration.milliseconds(60000))).to.be.true;
-            expect(Duration.milliseconds(60000).lessEqual(Duration.minutes(1))).to.be.true;
+            expect(Duration.milliseconds(60000).lessEqual(Duration.milliseconds(60000))).to.equal(true);
+            expect(Duration.milliseconds(60000).lessEqual(Duration.minutes(1))).to.equal(true);
         });
         it("should return false for a lesser other", function () {
-            expect(Duration.milliseconds(1).lessEqual(Duration.milliseconds(-1))).to.be.false;
-            expect(Duration.milliseconds(1).lessEqual(Duration.milliseconds(-1))).to.be.false;
-            expect(Duration.milliseconds(2).lessEqual(Duration.milliseconds(1))).to.be.false;
-            expect(Duration.seconds(2).lessEqual(Duration.seconds(1))).to.be.false;
-            expect(Duration.hours(1).lessEqual(Duration.seconds(1))).to.be.false;
-            expect(Duration.seconds(1).lessEqual(Duration.hours(-1))).to.be.false;
+            expect(Duration.milliseconds(1).lessEqual(Duration.milliseconds(-1))).to.equal(false);
+            expect(Duration.milliseconds(1).lessEqual(Duration.milliseconds(-1))).to.equal(false);
+            expect(Duration.milliseconds(2).lessEqual(Duration.milliseconds(1))).to.equal(false);
+            expect(Duration.seconds(2).lessEqual(Duration.seconds(1))).to.equal(false);
+            expect(Duration.hours(1).lessEqual(Duration.seconds(1))).to.equal(false);
+            expect(Duration.seconds(1).lessEqual(Duration.hours(-1))).to.equal(false);
         });
     });
 
     describe("equals()", function () {
         it("should return false for a greater other", function () {
-            expect(Duration.milliseconds(-1).equals(Duration.milliseconds(0))).to.be.false;
-            expect(Duration.milliseconds(-1).equals(Duration.milliseconds(1))).to.be.false;
-            expect(Duration.milliseconds(1).equals(Duration.milliseconds(2))).to.be.false;
-            expect(Duration.seconds(1).equals(Duration.seconds(2))).to.be.false;
-            expect(Duration.seconds(1).equals(Duration.hours(1))).to.be.false;
-            expect(Duration.hours(-1).equals(Duration.seconds(1))).to.be.false;
+            expect(Duration.milliseconds(-1).equals(Duration.milliseconds(0))).to.equal(false);
+            expect(Duration.milliseconds(-1).equals(Duration.milliseconds(1))).to.equal(false);
+            expect(Duration.milliseconds(1).equals(Duration.milliseconds(2))).to.equal(false);
+            expect(Duration.seconds(1).equals(Duration.seconds(2))).to.equal(false);
+            expect(Duration.seconds(1).equals(Duration.hours(1))).to.equal(false);
+            expect(Duration.hours(-1).equals(Duration.seconds(1))).to.equal(false);
         });
         it("should return true for an equal other", function () {
-            expect(Duration.milliseconds(60000).equals(Duration.milliseconds(60000))).to.be.true;
-            expect(Duration.milliseconds(60000).equals(Duration.minutes(1))).to.be.true;
+            expect(Duration.milliseconds(60000).equals(Duration.milliseconds(60000))).to.equal(true);
+            expect(Duration.milliseconds(60000).equals(Duration.minutes(1))).to.equal(true);
         });
         it("should return false for a lesser other", function () {
-            expect(Duration.milliseconds(1).equals(Duration.milliseconds(-1))).to.be.false;
-            expect(Duration.milliseconds(1).equals(Duration.milliseconds(-1))).to.be.false;
-            expect(Duration.milliseconds(2).equals(Duration.milliseconds(1))).to.be.false;
-            expect(Duration.seconds(2).equals(Duration.seconds(1))).to.be.false;
-            expect(Duration.hours(1).equals(Duration.seconds(1))).to.be.false;
-            expect(Duration.seconds(1).equals(Duration.hours(-1))).to.be.false;
+            expect(Duration.milliseconds(1).equals(Duration.milliseconds(-1))).to.equal(false);
+            expect(Duration.milliseconds(1).equals(Duration.milliseconds(-1))).to.equal(false);
+            expect(Duration.milliseconds(2).equals(Duration.milliseconds(1))).to.equal(false);
+            expect(Duration.seconds(2).equals(Duration.seconds(1))).to.equal(false);
+            expect(Duration.hours(1).equals(Duration.seconds(1))).to.equal(false);
+            expect(Duration.seconds(1).equals(Duration.hours(-1))).to.equal(false);
         });
     });
 
     describe("greaterThan()", function () {
         it("should return false for a greater other", function () {
-            expect(Duration.milliseconds(-1).greaterThan(Duration.milliseconds(0))).to.be.false;
-            expect(Duration.milliseconds(-1).greaterThan(Duration.milliseconds(1))).to.be.false;
-            expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(2))).to.be.false;
-            expect(Duration.seconds(1).greaterThan(Duration.seconds(2))).to.be.false;
-            expect(Duration.seconds(1).greaterThan(Duration.hours(1))).to.be.false;
-            expect(Duration.hours(-1).greaterThan(Duration.seconds(1))).to.be.false;
+            expect(Duration.milliseconds(-1).greaterThan(Duration.milliseconds(0))).to.equal(false);
+            expect(Duration.milliseconds(-1).greaterThan(Duration.milliseconds(1))).to.equal(false);
+            expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(2))).to.equal(false);
+            expect(Duration.seconds(1).greaterThan(Duration.seconds(2))).to.equal(false);
+            expect(Duration.seconds(1).greaterThan(Duration.hours(1))).to.equal(false);
+            expect(Duration.hours(-1).greaterThan(Duration.seconds(1))).to.equal(false);
         });
         it("should return false for an equal other", function () {
-            expect(Duration.milliseconds(60000).greaterThan(Duration.milliseconds(60000))).to.be.false;
-            expect(Duration.milliseconds(60000).greaterThan(Duration.minutes(1))).to.be.false;
+            expect(Duration.milliseconds(60000).greaterThan(Duration.milliseconds(60000))).to.equal(false);
+            expect(Duration.milliseconds(60000).greaterThan(Duration.minutes(1))).to.equal(false);
         });
         it("should return true for a lesser other", function () {
-            expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(-1))).to.be.true;
-            expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(-1))).to.be.true;
-            expect(Duration.milliseconds(2).greaterThan(Duration.milliseconds(1))).to.be.true;
-            expect(Duration.seconds(2).greaterThan(Duration.seconds(1))).to.be.true;
-            expect(Duration.hours(1).greaterThan(Duration.seconds(1))).to.be.true;
-            expect(Duration.seconds(1).greaterThan(Duration.hours(-1))).to.be.true;
+            expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(-1))).to.equal(true);
+            expect(Duration.milliseconds(1).greaterThan(Duration.milliseconds(-1))).to.equal(true);
+            expect(Duration.milliseconds(2).greaterThan(Duration.milliseconds(1))).to.equal(true);
+            expect(Duration.seconds(2).greaterThan(Duration.seconds(1))).to.equal(true);
+            expect(Duration.hours(1).greaterThan(Duration.seconds(1))).to.equal(true);
+            expect(Duration.seconds(1).greaterThan(Duration.hours(-1))).to.equal(true);
         });
     });
 
     describe("greaterEqual()", function () {
         it("should return false for a greater other", function () {
-            expect(Duration.milliseconds(-1).greaterEqual(Duration.milliseconds(0))).to.be.false;
-            expect(Duration.milliseconds(-1).greaterEqual(Duration.milliseconds(1))).to.be.false;
-            expect(Duration.milliseconds(1).greaterEqual(Duration.milliseconds(2))).to.be.false;
-            expect(Duration.seconds(1).greaterEqual(Duration.seconds(2))).to.be.false;
-            expect(Duration.seconds(1).greaterEqual(Duration.hours(1))).to.be.false;
-            expect(Duration.hours(-1).greaterEqual(Duration.seconds(1))).to.be.false;
+            expect(Duration.milliseconds(-1).greaterEqual(Duration.milliseconds(0))).to.equal(false);
+            expect(Duration.milliseconds(-1).greaterEqual(Duration.milliseconds(1))).to.equal(false);
+            expect(Duration.milliseconds(1).greaterEqual(Duration.milliseconds(2))).to.equal(false);
+            expect(Duration.seconds(1).greaterEqual(Duration.seconds(2))).to.equal(false);
+            expect(Duration.seconds(1).greaterEqual(Duration.hours(1))).to.equal(false);
+            expect(Duration.hours(-1).greaterEqual(Duration.seconds(1))).to.equal(false);
         });
         it("should return true for an equal other", function () {
-            expect(Duration.milliseconds(60000).greaterEqual(Duration.milliseconds(60000))).to.be.true;
-            expect(Duration.milliseconds(60000).greaterEqual(Duration.minutes(1))).to.be.true;
+            expect(Duration.milliseconds(60000).greaterEqual(Duration.milliseconds(60000))).to.equal(true);
+            expect(Duration.milliseconds(60000).greaterEqual(Duration.minutes(1))).to.equal(true);
         });
         it("should return true for a lesser other", function () {
-            expect(Duration.milliseconds(1).greaterEqual(Duration.milliseconds(-1))).to.be.true;
-            expect(Duration.milliseconds(1).greaterEqual(Duration.milliseconds(-1))).to.be.true;
-            expect(Duration.milliseconds(2).greaterEqual(Duration.milliseconds(1))).to.be.true;
-            expect(Duration.seconds(2).greaterEqual(Duration.seconds(1))).to.be.true;
-            expect(Duration.hours(1).greaterEqual(Duration.seconds(1))).to.be.true;
-            expect(Duration.seconds(1).greaterEqual(Duration.hours(-1))).to.be.true;
+            expect(Duration.milliseconds(1).greaterEqual(Duration.milliseconds(-1))).to.equal(true);
+            expect(Duration.milliseconds(1).greaterEqual(Duration.milliseconds(-1))).to.equal(true);
+            expect(Duration.milliseconds(2).greaterEqual(Duration.milliseconds(1))).to.equal(true);
+            expect(Duration.seconds(2).greaterEqual(Duration.seconds(1))).to.equal(true);
+            expect(Duration.hours(1).greaterEqual(Duration.seconds(1))).to.equal(true);
+            expect(Duration.seconds(1).greaterEqual(Duration.hours(-1))).to.equal(true);
         });
     });
 
@@ -294,8 +312,8 @@ describe("Duration()", function () {
         it("should return a new object always", function () {
             var d = Duration.milliseconds(2);
             var e = Duration.milliseconds(0);
-            expect(d.add(e) === d).to.be.false;
-            expect(d.add(e) === e).to.be.false;
+            expect(d.add(e) === d).to.equal(false);
+            expect(d.add(e) === e).to.equal(false);
         });
     });
 
@@ -312,8 +330,8 @@ describe("Duration()", function () {
         it("should return a new object always", function () {
             var d = Duration.milliseconds(2);
             var e = Duration.milliseconds(0);
-            expect(d.sub(e) === d).to.be.false;
-            expect(d.sub(e) === e).to.be.false;
+            expect(d.sub(e) === d).to.equal(false);
+            expect(d.sub(e) === e).to.equal(false);
         });
     });
 

@@ -29,9 +29,16 @@ export import secondOfDay = basics.secondOfDay;
 
 import datetime = require("./datetime"); datetime;
 export import DateTime = datetime.DateTime;
+export import now = datetime.now;
+export import nowLocal = datetime.nowLocal;
+export import nowUtc = datetime.nowUtc;
 
 import duration = require("./duration"); duration;
 export import Duration = duration.Duration;
+export import hours = duration.hours;
+export import minutes = duration.minutes;
+export import seconds = duration.seconds;
+export import milliseconds = duration.milliseconds;
 
 import javascript = require("./javascript"); javascript;
 export import DateFunctions = javascript.DateFunctions;
@@ -49,6 +56,9 @@ import timezone = require("./timezone"); timezone;
 export import NormalizeOption = timezone.NormalizeOption;
 export import TimeZoneKind = timezone.TimeZoneKind;
 export import TimeZone = timezone.TimeZone;
+export import local = timezone.local;
+export import utc = timezone.utc;
+export import zone = timezone.zone;
 
 import globals = require("./globals"); globals;
 export import min = globals.min;

@@ -89,6 +89,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_timezone_.timezone.html#static-_cache" class="tsd-kind-icon">_cache</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_timezone_.timezone.html#_dst" class="tsd-kind-icon">_dst</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_timezone_.timezone.html#_kind" class="tsd-kind-icon">_kind</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_timezone_.timezone.html#_name" class="tsd-kind-icon">_name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_timezone_.timezone.html#_offset" class="tsd-kind-icon">_offset</a></li>
@@ -98,8 +99,10 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_timezone_.timezone.html#static-_findorcreate" class="tsd-kind-icon">_find<wbr>OrCreate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_timezone_.timezone.html#static-_isoffsetstring" class="tsd-kind-icon">_is<wbr>Offset<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_timezone_.timezone.html#static-_normalizestring" class="tsd-kind-icon">_normalize<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#abbreviationforutc" class="tsd-kind-icon">abbreviation<wbr>For<wbr>Utc</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#dst" class="tsd-kind-icon">dst</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#equals" class="tsd-kind-icon">equals</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#hasdst" class="tsd-kind-icon">has<wbr>Dst</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_timezone_.timezone.html#inspect" class="tsd-kind-icon">inspect</a></li>
@@ -128,12 +131,12 @@
 					<a name="constructor" class="anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a></li>
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;</span>true<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:152</li>
+									<li>Defined in timezone.ts:207</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -149,6 +152,14 @@
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>NORMALIZED name, assumed to be correct</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>dst?: <span class="tsd-signature-type">boolean</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Adhere to Daylight Saving Time if applicable, ignored for local time and fixed offsets</p>
 										</div>
 									</div>
 								</li>
@@ -168,7 +179,7 @@
 					<div class="tsd-signature tsd-kind-icon">_cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in timezone.ts:533</li>
+							<li>Defined in timezone.ts:603</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -185,7 +196,7 @@
 						<ul class="tsd-descriptions">
 							<li class="tsd-description"><aside class="tsd-sources">
 									<ul>
-										<li>Defined in timezone.ts:533</li>
+										<li>Defined in timezone.ts:603</li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -202,12 +213,27 @@
 					</section>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_dst" class="anchor"></a>
+					<h3><span class="tsd-flag ts-flagprivate">private</span> _dst</h3>
+					<div class="tsd-signature tsd-kind-icon">_dst<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in timezone.ts:124</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Adhere to Daylight Saving Time if applicable</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_kind" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagprivate">private</span> _kind</h3>
 					<div class="tsd-signature tsd-kind-icon">_kind<span class="tsd-signature-symbol">:</span> <a href="../enums/_timezone_.timezonekind.html" class="tsd-signature-type">TimeZoneKind</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in timezone.ts:80</li>
+							<li>Defined in timezone.ts:129</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -222,7 +248,7 @@
 					<div class="tsd-signature tsd-kind-icon">_name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in timezone.ts:75</li>
+							<li>Defined in timezone.ts:119</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -240,7 +266,7 @@
 					<div class="tsd-signature tsd-kind-icon">_offset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in timezone.ts:85</li>
+							<li>Defined in timezone.ts:134</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -256,12 +282,12 @@
 					<a name="static-_findorcreate" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagprivate">private</span> <span class="tsd-flag ts-flagstatic">static</span> _find<wbr>OrCreate</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">_find<wbr>OrCreate<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a></li>
+						<li class="tsd-signature tsd-kind-icon">_find<wbr>OrCreate<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dst<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:539</li>
+									<li>Defined in timezone.ts:610</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -279,9 +305,41 @@
 										</div>
 									</div>
 								</li>
+								<li>
+									<h5>dst: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Adhere to Daylight Saving Time?</p>
+										</div>
+									</div>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns 
 								<a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+					<a name="static-_isoffsetstring" class="anchor"></a>
+					<h3><span class="tsd-flag ts-flagprivate">private</span> <span class="tsd-flag ts-flagstatic">static</span> _is<wbr>Offset<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">_is<wbr>Offset<wbr>String<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in timezone.ts:642</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>s: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns 
+								<span class="tsd-signature-type">boolean</span>
 							</h4>
 						</li>
 					</ul>
@@ -295,7 +353,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:553</li>
+									<li>Defined in timezone.ts:625</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -325,7 +383,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:425</li>
+									<li>Defined in timezone.ts:495</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -408,6 +466,24 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="dst" class="anchor"></a>
+					<h3>dst</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">dst<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in timezone.ts:229</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns 
+								<span class="tsd-signature-type">boolean</span>
+							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="equals" class="anchor"></a>
 					<h3>equals</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -416,7 +492,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:184</li>
+									<li>Defined in timezone.ts:244</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -446,7 +522,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:224</li>
+									<li>Defined in timezone.ts:286</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -469,7 +545,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:488</li>
+									<li>Defined in timezone.ts:558</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -492,7 +568,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:205</li>
+									<li>Defined in timezone.ts:267</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -515,7 +591,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:176</li>
+									<li>Defined in timezone.ts:236</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -538,7 +614,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:92</li>
+									<li>Defined in timezone.ts:141</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -563,7 +639,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:169</li>
+									<li>Defined in timezone.ts:225</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -588,7 +664,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:467</li>
+									<li>Defined in timezone.ts:537</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -635,7 +711,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:253</li>
+									<li>Defined in timezone.ts:315</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -718,7 +794,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:338</li>
+									<li>Defined in timezone.ts:408</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -752,7 +828,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:296</li>
+									<li>Defined in timezone.ts:362</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -835,7 +911,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:379</li>
+									<li>Defined in timezone.ts:449</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -869,7 +945,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:497</li>
+									<li>Defined in timezone.ts:567</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -904,7 +980,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:509</li>
+									<li>Defined in timezone.ts:579</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -939,7 +1015,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:481</li>
+									<li>Defined in timezone.ts:551</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -963,7 +1039,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:99</li>
+									<li>Defined in timezone.ts:148</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -981,24 +1057,40 @@
 					<a name="static-zone" class="anchor"></a>
 					<h3><span class="tsd-flag ts-flagstatic">static</span> zone</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">zone<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a></li>
+						<li class="tsd-signature tsd-kind-icon">zone<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a></li>
 						<li class="tsd-signature tsd-kind-icon">zone<span class="tsd-signature-symbol">(</span>offset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:116</li>
+									<li>Defined in timezone.ts:170</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a time zone object from the cache. If it does not exist, it is created.</p>
+									<p>Time zone for an offset string or an IANA time zone string. Note that time zones are cached
+									so you don&#39;t necessarily get a new object each time.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>s: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Empty string for no time zone (null is returned),
+											&quot;localtime&quot; for local time,
+											a TZ database time zone name (e.g. Europe/Amsterdam),
+											or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
+										<a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></p>
+									</div>
+								</li>
+								<li>
+									<h5>dst?: <span class="tsd-signature-type">boolean</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optional, default true: adhere to Daylight Saving Time if applicable. Note for
+											&quot;localtime&quot;, timezonecomplete will adhere to the computer settings, the DST flag
+										does not have any effect.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns 
@@ -1007,24 +1099,26 @@
 						</li>
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in timezone.ts:108</li>
+									<li>Defined in timezone.ts:156</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a time zone object from the cache. If it does not exist, it is created.</p>
+									<p>Time zone with a fixed offset</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>offset: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>offset w.r.t. UTC in minutes, e.g. 90 for +01:30</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns 
 								<a href="_timezone_.timezone.html" class="tsd-signature-type">TimeZone</a>
 							</h4>
-							<p>The time zone with the given offset w.r.t. UTC in minutes, e.g. 90 for +01:30</p>
 						</li>
 					</ul>
 				</section>
@@ -1100,6 +1194,9 @@
 								<a href="_timezone_.timezone.html#static-_cache" class="tsd-kind-icon">_cache</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_timezone_.timezone.html#_dst" class="tsd-kind-icon">_dst</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_timezone_.timezone.html#_kind" class="tsd-kind-icon">_kind</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
@@ -1112,10 +1209,16 @@
 								<a href="_timezone_.timezone.html#static-_findorcreate" class="tsd-kind-icon">_find<wbr>OrCreate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
+								<a href="_timezone_.timezone.html#static-_isoffsetstring" class="tsd-kind-icon">_is<wbr>Offset<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
 								<a href="_timezone_.timezone.html#static-_normalizestring" class="tsd-kind-icon">_normalize<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_timezone_.timezone.html#abbreviationforutc" class="tsd-kind-icon">abbreviation<wbr>For<wbr>Utc</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_timezone_.timezone.html#dst" class="tsd-kind-icon">dst</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_timezone_.timezone.html#equals" class="tsd-kind-icon">equals</a>
@@ -1172,6 +1275,15 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_timezone_.html#local" class="tsd-kind-icon">local</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_timezone_.html#utc" class="tsd-kind-icon">utc</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+						<a href="../modules/_timezone_.html#zone" class="tsd-kind-icon">zone</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

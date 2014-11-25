@@ -21,6 +21,51 @@ import strings = require("./strings");
 import tzDatabase = require("./tz-database");
 import TzDatabase = tzDatabase.TzDatabase;
 
+
+/**
+ * The local time zone for a given date as per OS settings. Note that time zones are cached
+ * so you don't necessarily get a new object each time.
+ */
+export function local(): TimeZone {
+	return TimeZone.local();
+}
+
+/**
+ * Coordinated Universal Time zone. Note that time zones are cached
+ * so you don't necessarily get a new object each time.
+ */
+export function utc(): TimeZone {
+	return TimeZone.utc();
+}
+
+/**
+ * @param offset offset w.r.t. UTC in minutes, e.g. 90 for +01:30. Note that time zones are cached
+ * so you don't necessarily get a new object each time.
+ * @returns a time zone with the given fixed offset
+ */
+export function zone(offset: number): TimeZone;
+
+/**
+ * Time zone for an offset string or an IANA time zone string. Note that time zones are cached
+ * so you don't necessarily get a new object each time.
+ * @param s Empty string for no time zone (null is returned),
+ *          "localtime" for local time,
+ *          a TZ database time zone name (e.g. Europe/Amsterdam),
+ *          or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
+ *          https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+ * @param dst	Optional, default true: adhere to Daylight Saving Time if applicable. Note for
+ *              "localtime", timezonecomplete will adhere to the computer settings, the DST flag
+ *              does not have any effect.
+ */
+export function zone(name: string, dst?: boolean): TimeZone;
+
+/**
+ * See the descriptions for the other zone() method signatures.
+ */
+export function zone(a: any, dst?: boolean): TimeZone {
+	return TimeZone.zone(a, dst);
+}
+
 /**
  * The type of time zone
  */
@@ -54,7 +99,6 @@ export enum NormalizeOption {
 	Down
 }
 
-
 /**
  * Time zone. The object is immutable because it is cached:
  * requesting a time zone twice yields the very same object.
@@ -76,6 +120,11 @@ export class TimeZone {
 	private _name: string;
 
 	/**
+	 * Adhere to Daylight Saving Time if applicable
+	 */
+	private _dst: boolean;
+
+	/**
 	 * The kind of time zone specified by _name
 	 */
 	private _kind: TimeZoneKind;
@@ -91,35 +140,40 @@ export class TimeZone {
 	 * 2014-01-01 is +01:00 and amsterdam time for 2014-07-01 is +02:00
 	 */
 	public static local(): TimeZone {
-		return TimeZone._findOrCreate("localtime");
+		return TimeZone._findOrCreate("localtime", true);
 	}
 
 	/**
 	 * The UTC time zone.
 	 */
 	public static utc(): TimeZone {
-		return TimeZone._findOrCreate("UTC");
+		return TimeZone._findOrCreate("UTC", false);
 	}
 
-
 	/**
-	 * Returns a time zone object from the cache. If it does not exist, it is created.
-	 * @return The time zone with the given offset w.r.t. UTC in minutes, e.g. 90 for +01:30
+	 * Time zone with a fixed offset
+	 * @param offset	offset w.r.t. UTC in minutes, e.g. 90 for +01:30
 	 */
 	public static zone(offset: number): TimeZone;
 
 	/**
-	 * Returns a time zone object from the cache. If it does not exist, it is created.
-	 * @param s: Empty string for local time, a TZ database time zone name (e.g. Europe/Amsterdam)
-	 *			 or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
-	 *			 https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+	 * Time zone for an offset string or an IANA time zone string. Note that time zones are cached
+	 * so you don't necessarily get a new object each time.
+	 * @param s Empty string for no time zone (null is returned),
+	 *          "localtime" for local time,
+	 *          a TZ database time zone name (e.g. Europe/Amsterdam),
+	 *          or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
+	 *          https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+	 * @param dst	Optional, default true: adhere to Daylight Saving Time if applicable. Note for
+	 *              "localtime", timezonecomplete will adhere to the computer settings, the DST flag
+	 *              does not have any effect.
 	 */
-	public static zone(s: string): TimeZone;
+	public static zone(s: string, dst?: boolean): TimeZone;
 
 	/**
 	 * Zone implementations
 	 */
-	public static zone(a?: any): TimeZone {
+	public static zone(a: any, dst: boolean = true): TimeZone {
 		var name = "";
 		switch (typeof (a)) {
 			case "string": {
@@ -142,16 +196,18 @@ export class TimeZone {
 					throw new Error("TimeZone.zone(): Unexpected argument type \"" + typeof (a) + "\"");
 				}
 		}
-		return TimeZone._findOrCreate(name);
+		return TimeZone._findOrCreate(name, dst);
 	}
 
 	/**
 	 * Do not use this constructor, use the static
 	 * TimeZone.zone() method instead.
 	 * @param name NORMALIZED name, assumed to be correct
+	 * @param dst	Adhere to Daylight Saving Time if applicable, ignored for local time and fixed offsets
 	 */
-	constructor(name: string) {
+	constructor(name: string, dst: boolean = true) {
 		this._name = name;
+		this._dst = dst;
 		if (name === "localtime") {
 			this._kind = TimeZoneKind.Local;
 		} else if (name.charAt(0) === "+" || name.charAt(0) === "-" || name.charAt(0).match(/\d/) || name === "Z") {
@@ -169,6 +225,10 @@ export class TimeZone {
 	 */
 	public name(): string {
 		return this._name;
+	}
+
+	public dst(): boolean {
+		return this._dst;
 	}
 
 	/**
@@ -189,7 +249,9 @@ export class TimeZone {
 		switch (this._kind) {
 			case TimeZoneKind.Local: return (other.kind() === TimeZoneKind.Local);
 			case TimeZoneKind.Offset: return (other.kind() === TimeZoneKind.Offset && this._offset === other._offset);
-			case TimeZoneKind.Proper: return (other.kind() === TimeZoneKind.Proper && this._name === other._name);
+			case TimeZoneKind.Proper: return (other.kind() === TimeZoneKind.Proper
+				&& this._name === other._name
+				&& (this._dst === other._dst || !this.hasDst()));
 			/* istanbul ignore next */
 			default:
 				/* istanbul ignore if */
@@ -271,7 +333,11 @@ export class TimeZone {
 			}
 			case TimeZoneKind.Proper: {
 				var tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
-				return TzDatabase.instance().totalOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
+				if (this._dst) {
+					return TzDatabase.instance().totalOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
+				} else {
+					return TzDatabase.instance().standardOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
+				}
 			}
 			/* istanbul ignore next */
 			default:
@@ -315,7 +381,11 @@ export class TimeZone {
 			case TimeZoneKind.Proper: {
 				// note that TzDatabase normalizes the given date so we don't have to do it
 				var tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
-				return TzDatabase.instance().totalOffsetLocal(this._name, tm.toUnixNoLeapSecs()).minutes();
+				if (this._dst) {
+					return TzDatabase.instance().totalOffsetLocal(this._name, tm.toUnixNoLeapSecs()).minutes();
+				} else {
+					return TzDatabase.instance().standardOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
+				}
 			}
 			/* istanbul ignore next */
 			default:
@@ -536,13 +606,15 @@ export class TimeZone {
 	/**
 	 * Find in cache or create zone
 	 * @param name	Time zone name
+	 * @param dst	Adhere to Daylight Saving Time?
 	 */
-	private static _findOrCreate(name: string): TimeZone {
-		if (name in TimeZone._cache) {
-			return TimeZone._cache[name];
+	private static _findOrCreate(name: string, dst: boolean): TimeZone {
+		var key = name + (dst ? "_DST" : "_NO-DST");
+		if (key in TimeZone._cache) {
+			return TimeZone._cache[key];
 		} else {
-			var t = new TimeZone(name);
-			TimeZone._cache[name] = t;
+			var t = new TimeZone(name, dst);
+			TimeZone._cache[key] = t;
 			return t;
 		}
 	}
@@ -558,7 +630,7 @@ export class TimeZone {
 			return t;
 		} else if (t === "Z") {
 			return "+00:00";
-		} else if (t.charAt(0) === "+" || t.charAt(0) === "-" || t === "Z") {
+		} else if (TimeZone._isOffsetString(t)) {
 			// offset string
 			// normalize by converting back and forth
 			return TimeZone.offsetToString(TimeZone.stringToOffset(t));
@@ -568,6 +640,10 @@ export class TimeZone {
 		}
 	}
 
+	private static _isOffsetString(s: string): boolean {
+		var t = s.trim();
+		return (t.charAt(0) === "+" || t.charAt(0) === "-" || t === "Z");
+	}
 }
 
 
