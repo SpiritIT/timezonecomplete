@@ -248,10 +248,12 @@ z = tc.zone("Europe/Amsterdam", false);
 z.name(); // returns "Europe/Amsterdam";
 z.dst(); // The DST flag: returns false
 z.hasDst(); // true: returns whether the IANA zone has DST somewhere, not whether this object has DST
+z.isUtc(); // true if the zone is equivalent to UTC, e.g. an offset of 0, +00:00, or Etc/GMT
 
 // Calculate time zone offsets
-z.offsetForUtc(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in UTC- returns a Duration object
-z.offsetForZone(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in Local time- returns a Duration object
+z = tc.zone("Europe/Amsterdam");
+z.offsetForUtc(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in UTC; returns a Duration object
+z.offsetForZone(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in Europe/Amsterdam time; returns a Duration object
 
 ```
 
