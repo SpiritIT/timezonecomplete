@@ -401,6 +401,9 @@ d.convert(tc.zone(<span class="hljs-string">"UTC"</span>)); <span class="hljs-co
 
 <span class="hljs-comment">// Cloning</span>
 <span class="hljs-keyword">var</span> newCopy = amsterdamDate.clone();
+
+<span class="hljs-comment">// Truncate a DateTime to a date @ 00:00:00.000</span>
+<span class="hljs-keyword">var</span> newDateTime = d.startOfDay();
 </code></pre>
 				<h3 id="date-arithmetic">Date Arithmetic</h3>
 				<p>The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
@@ -531,9 +534,13 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 				<p>The version of the included IANA time zone database is 2014j.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-11-0-2014-12-09-">1.11.0 (2014-12-09)</h3>
+				<ul>
+					<li>Add function startOfDay() to truncate a DateTime down to a date (00:00:00.000 on the same day).</li>
+				</ul>
 				<h3 id="1-10-0-2014-11-25-">1.10.0 (2014-11-25)</h3>
 				<ul>
-					<li>Added global functions for most static functions:<ul>
+					<li>Added global functions for most static functions (the old ones will remain):<ul>
 							<li>tc.now() for tc.DateTime.now()</li>
 							<li>tc.nowLocal() for tc.DateTime.nowLocal()</li>
 							<li>tc.nowUtc() for tc.DateTime.nowUtc()</li>
@@ -543,13 +550,26 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 							<li>tc.milliseconds() for tc.Duration.milliseconds()</li>
 							<li>tc.local() for tc.TimeZone.local()</li>
 							<li>tc.utc() for tc.TimeZone.utc()</li>
-							<li>tc.zone() for tc.TimeZone.zone()</li>
+							<li>tc.zone() for tc.TimeZone.zone() </li>
 						</ul>
 					</li>
 					<li>The tc.now() or tc.DateTime.now() method now has its zone argument optional, default value is UTC.</li>
 					<li>You can now choose whether timezonecomplete applies Daylight Saving Time for an IANA time zone: the tc.zone() and tc.TimeZone.zone() methods now accept an extra Boolean parameter that indicates whether DST should be applied. For backward compatibility the default value is true.</li>
 				</ul>
-				<h3 id="1-9-1-2014-11-11-">1.9.1 (2014-11-11)</h3>
+				<pre><code><span class="hljs-comment">// old code (still works):</span>
+<span class="hljs-keyword">var</span> d  = tc.<span class="hljs-built_in">Duration</span>.seconds(<span class="hljs-number">20</span>);
+<span class="hljs-keyword">var</span> dt = tc.<span class="hljs-built_in">DateTime</span>.now();
+
+<span class="hljs-comment">// new code:</span>
+<span class="hljs-keyword">var</span> d  = tc.seconds(<span class="hljs-number">20</span>);
+<span class="hljs-keyword">var</span> dt = tc.now();
+
+<span class="hljs-comment">// Europe/Amsterdam time with DST</span>
+<span class="hljs-keyword">var</span> dt = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DateTime</span>(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
+
+<span class="hljs-comment">// Europe/Amsterdam time WITHOUT DST</span>
+<span class="hljs-keyword">var</span> dt = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DateTime</span>(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-keyword">false</span>));
+</code></pre><h3 id="1-9-1-2014-11-11-">1.9.1 (2014-11-11)</h3>
 				<ul>
 					<li>Upgrade time zone database to 2014j</li>
 				</ul>
@@ -691,9 +711,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#64;&#x73;&#x70;&#x69;&#114;&#105;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#x6d;">&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#64;&#x73;&#x70;&#x69;&#114;&#105;&#x74;&#x69;&#116;&#x2e;&#99;&#111;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#100;&#x2e;&#x77;&#x69;&#115;&#x73;&#x69;&#x6e;&#103;&#64;&#115;&#112;&#x69;&#114;&#105;&#116;&#105;&#116;&#x2e;&#x63;&#111;&#109;">&#100;&#x2e;&#x77;&#x69;&#115;&#x73;&#x69;&#x6e;&#103;&#64;&#115;&#112;&#x69;&#114;&#105;&#116;&#105;&#116;&#x2e;&#x63;&#111;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#112;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#97;&#110;&#115;&#64;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#116;&#46;&#99;&#111;&#109;">&#112;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#97;&#110;&#115;&#64;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#116;&#46;&#99;&#111;&#109;</a></li>
+					<li>Rogier Schouten <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#46;&#x73;&#x63;&#x68;&#x6f;&#x75;&#x74;&#x65;&#110;&#x40;&#x73;&#112;&#105;&#114;&#105;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;">&#x72;&#46;&#x73;&#x63;&#x68;&#x6f;&#x75;&#x74;&#x65;&#110;&#x40;&#x73;&#112;&#105;&#114;&#105;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
+					<li>Daan Wissing <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x64;&#x2e;&#119;&#105;&#115;&#115;&#105;&#x6e;&#x67;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#116;&#105;&#x74;&#46;&#99;&#x6f;&#x6d;">&#x64;&#x2e;&#119;&#105;&#115;&#115;&#105;&#x6e;&#x67;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#116;&#105;&#x74;&#46;&#99;&#x6f;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#112;&#x2e;&#107;&#x6f;&#x6f;&#x69;&#x6a;&#x6d;&#97;&#110;&#115;&#x40;&#x73;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#109;">&#112;&#x2e;&#107;&#x6f;&#x6f;&#x69;&#x6a;&#x6d;&#97;&#110;&#115;&#x40;&#x73;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

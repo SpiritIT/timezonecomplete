@@ -749,6 +749,14 @@ export class DateTime {
 		return new Duration(this._utcDate.toUnixNoLeapSecs() - other._utcDate.toUnixNoLeapSecs());
 	}
 
+  /**
+   * Chops off the time part, yields the same date at 00:00:00.000
+   * @return a new DateTime
+   */
+  public startOfDay(): DateTime {
+    return new DateTime(this.year(), this.month(), this.day(), 0, 0, 0, 0, this.zone());
+  }
+
 	/**
 	 * @return True iff (this < other)
 	 */

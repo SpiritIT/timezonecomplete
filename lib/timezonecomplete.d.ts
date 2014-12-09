@@ -305,7 +305,7 @@ declare module '__timezonecomplete/basics' {
 declare module '__timezonecomplete/datetime' {
     import basics = require("__timezonecomplete/basics");
     import duration = require("__timezonecomplete/duration");
-	import timesource = require("__timezonecomplete/timesource");
+    import timesource = require("__timezonecomplete/timesource");
     import javascript = require("__timezonecomplete/javascript");
     import timezone = require("__timezonecomplete/timezone");
     /**
@@ -623,6 +623,11 @@ declare module '__timezonecomplete/datetime' {
          * @return this - other
          */
         diff(other: DateTime): duration.Duration;
+        /**
+         * Chops off the time part, yields the same date at 00:00:00.000
+         * @return a new DateTime
+         */
+        startOfDay(): DateTime;
         /**
          * @return True iff (this < other)
          */

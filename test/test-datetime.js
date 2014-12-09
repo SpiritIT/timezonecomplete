@@ -1038,6 +1038,22 @@ describe("DateTime", function () {
         });
     });
 
+    describe("startOfDay()", function () {
+        it("should work for a date with a zone", function () {
+            expect((new DateTime(2014, 1, 1, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"))).startOfDay().toString()).to.equal("2014-01-01T00:00:00.000 Europe/Amsterdam");
+        });
+        it("should work for a date without a zone", function () {
+            expect((new DateTime(2014, 1, 24, 23, 59, 59, 999)).startOfDay().toString()).to.equal("2014-01-24T00:00:00.000");
+        });
+        it("should work for already truncated date", function () {
+            expect((new DateTime(2014, 1, 1)).startOfDay().toString()).to.equal("2014-01-01T00:00:00.000");
+        });
+        it("should return a fresh clone", function () {
+            var d = new DateTime(2014, 1, 1);
+            expect(d.startOfDay()).not.to.equal(d);
+        });
+    });
+
     describe("lessThan()", function () {
         it("should return true for a greater other", function () {
             expect(new DateTime("2014-02-02T02:02:02.002").lessThan(new DateTime("2014-02-02T02:02:02.003"))).to.equal(true);

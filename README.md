@@ -369,6 +369,9 @@ d.convert(tc.zone("UTC")); // now d has changed to UTC
 // Cloning
 var newCopy = amsterdamDate.clone();
 
+// Truncate a DateTime to a date @ 00:00:00.000
+var newDateTime = d.startOfDay();
+
 ```
 
 ### Date Arithmetic
@@ -529,8 +532,11 @@ The version of the included IANA time zone database is 2014j.
 
 ## Changelog
 
+### 1.11.0 (2014-12-09)
+* Add function startOfDay() to truncate a DateTime down to a date (00:00:00.000 on the same day).
+
 ### 1.10.0 (2014-11-25)
-* Added global functions for most static functions:
+* Added global functions for most static functions (the old ones will remain):
   * tc.now() for tc.DateTime.now()
   * tc.nowLocal() for tc.DateTime.nowLocal()
   * tc.nowUtc() for tc.DateTime.nowUtc()
@@ -545,7 +551,7 @@ The version of the included IANA time zone database is 2014j.
 * You can now choose whether timezonecomplete applies Daylight Saving Time for an IANA time zone: the tc.zone() and tc.TimeZone.zone() methods now accept an extra Boolean parameter that indicates whether DST should be applied. For backward compatibility the default value is true.
   
 ```
-// old code:
+// old code (still works):
 var d  = tc.Duration.seconds(20);
 var dt = tc.DateTime.now();
 
