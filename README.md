@@ -169,7 +169,7 @@ var fiveSecs = tc.seconds(5);
 
 // normal < and > work
 fiveSecs > sixSecs; // false
-fiveSecs < sixSecs; // false
+fiveSecs < sixSecs; // true
 
 fiveSecs.lessThan(sixSecs); // true
 fiveSecs.lessEqual(sixSecs); // true
