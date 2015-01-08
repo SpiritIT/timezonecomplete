@@ -772,6 +772,8 @@ var Duration = duration.Duration;
 var javascript = require("./javascript");
 var DateFunctions = javascript.DateFunctions;
 
+var math = require("./math");
+
 var timesource = require("./timesource");
 
 var RealTimeSource = timesource.RealTimeSource;
@@ -1333,8 +1335,13 @@ var DateTime = (function () {
             }
             case 5 /* Month */: {
                 // keep the day-of-month the same (clamp to end-of-month)
-                targetYear = amount >= 0 ? (tm.year + Math.floor((tm.month - 1 + amount) / 12)) : (tm.year + Math.ceil((tm.month - 1 + amount) / 12));
-                targetMonth = 1 + (amount >= 0 ? Math.floor((tm.month - 1 + amount) % 12) : Math.ceil((tm.month - 1 + amount) % 12));
+                if (amount >= 0) {
+                    targetYear = tm.year + Math.ceil((amount - (12 - tm.month)) / 12);
+                    targetMonth = 1 + math.positiveModulo((tm.month - 1 + Math.floor(amount)), 12);
+                } else {
+                    targetYear = tm.year + Math.floor((amount + (tm.month - 1)) / 12);
+                    targetMonth = 1 + math.positiveModulo((tm.month - 1 + Math.ceil(amount)), 12);
+                }
                 targetDay = Math.min(tm.day, basics.daysInMonth(targetYear, targetMonth));
                 targetHours = tm.hour;
                 targetMinutes = tm.minute;
@@ -1593,7 +1600,7 @@ var DateTime = (function () {
 exports.DateTime = DateTime;
 //# sourceMappingURL=datetime.js.map
 
-},{"./basics":1,"./duration":3,"./format":5,"./javascript":9,"./timesource":13,"./timezone":15,"assert":19,"source-map-support":38}],3:[function(require,module,exports){
+},{"./basics":1,"./duration":3,"./format":5,"./javascript":9,"./math":10,"./timesource":13,"./timezone":15,"assert":19,"source-map-support":38}],3:[function(require,module,exports){
 /**
 * Copyright(c) 2014 Spirit IT BV
 *

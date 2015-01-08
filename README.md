@@ -532,6 +532,9 @@ The version of the included IANA time zone database is 2014j.
 
 ## Changelog
 
+### 1.11.1 (2015-01-08)
+* Bugfix in DateTime#sub() and DateTime#add()
+
 ### 1.11.0 (2014-12-09)
 * Add function startOfDay() to truncate a DateTime down to a date (00:00:00.000 on the same day).
 

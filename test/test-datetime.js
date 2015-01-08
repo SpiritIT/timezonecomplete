@@ -1012,6 +1012,26 @@ describe("DateTime", function () {
             d = (new DateTime(2014, 10, 26, 2, 0, 0, 0, TimeZone.zone("UTC"))).toZone(TimeZone.zone("Europe/Amsterdam"));
             expect(d.sub(1, 2 /* Hour */).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T01:00:00.000 UTC");
         });
+        it("should handle subtracting from january", function () {
+            var d = new DateTime(2014, 1, 15, 0, 0, 0, 0, TimeZone.zone("UTC"));
+            var e = d.sub(1, 5 /* Month */);
+            expect(e.toString()).to.equal("2013-12-15T00:00:00.000 UTC");
+        });
+        it("should handle adding to december", function () {
+            var d = new DateTime(2013, 12, 15, 0, 0, 0, 0, TimeZone.zone("UTC"));
+            var e = d.sub(-1, 5 /* Month */);
+            expect(e.toString()).to.equal("2014-01-15T00:00:00.000 UTC");
+        });
+        it("should handle adding more than a year in months", function () {
+            var d = new DateTime(2013, 9, 15, 0, 0, 0, 0, TimeZone.zone("UTC"));
+            var e = d.sub(-24, 5 /* Month */);
+            expect(e.toString()).to.equal("2015-09-15T00:00:00.000 UTC");
+        });
+        it("should handle subtracting more than a year in months", function () {
+            var d = new DateTime(2013, 9, 15, 0, 0, 0, 0, TimeZone.zone("UTC"));
+            var e = d.sub(24, 5 /* Month */);
+            expect(e.toString()).to.equal("2011-09-15T00:00:00.000 UTC");
+        });
     });
 
     describe("diff()", function () {

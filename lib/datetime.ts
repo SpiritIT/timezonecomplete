@@ -24,6 +24,8 @@ import Duration = duration.Duration;
 import javascript = require("./javascript");
 import DateFunctions = javascript.DateFunctions;
 
+import math = require("./math");
+
 import timesource = require("./timesource");
 import TimeSource = timesource.TimeSource;
 import RealTimeSource = timesource.RealTimeSource;
@@ -683,10 +685,13 @@ export class DateTime {
 			}
 			case TimeUnit.Month: {
 				// keep the day-of-month the same (clamp to end-of-month)
-				targetYear = amount >= 0 ? (tm.year + Math.floor((tm.month - 1 + amount) / 12))
-				: (tm.year + Math.ceil((tm.month - 1 + amount) / 12));
-				targetMonth = 1 + (amount >= 0 ? Math.floor((tm.month - 1 + amount) % 12)
-				: Math.ceil((tm.month - 1 + amount) % 12));
+				if (amount >= 0) {
+					targetYear = tm.year + Math.ceil((amount - (12 - tm.month)) / 12);
+					targetMonth = 1 + math.positiveModulo((tm.month - 1 + Math.floor(amount)), 12);
+				} else {
+					targetYear = tm.year + Math.floor((amount + (tm.month - 1)) / 12);
+					targetMonth = 1 + math.positiveModulo((tm.month - 1 + Math.ceil(amount)), 12);
+				}
 				targetDay = Math.min(tm.day, basics.daysInMonth(targetYear, targetMonth));
 				targetHours = tm.hour;
 				targetMinutes = tm.minute;
