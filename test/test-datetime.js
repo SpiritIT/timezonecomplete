@@ -1,12 +1,12 @@
 /// <reference path="../typings/test.d.ts" />
-var assert = require("assert");
-var chai = require("chai");
-var expect = chai.expect;
-
 var sourcemapsupport = require("source-map-support");
 
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
-sourcemapsupport.install({ handleUncaughtExceptions: true });
+sourcemapsupport.install({ handleUncaughtExceptions: false });
+
+var assert = require("assert");
+var chai = require("chai");
+var expect = chai.expect;
 
 var basics = require("../lib/basics");
 var datetimeFuncs = require("../lib/index");

@@ -111,24 +111,33 @@
 						</section>
 					</div>
 				</section>
-				</section>            <section class="tsd-panel-group tsd-member-group ">
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructor methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-constructor-method tsd-parent-kind-class">
-					<a name="constructor" class="tsd-anchor"></a>
+					<a name="constructor" class="anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, toType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a>, toYear<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, inMonth<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, onType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a>, onDay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, onWeekDay<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a>, atHour<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atMinute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atSecond<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a>, save<span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, letter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></li>
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>onWeekDay<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a>, from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, toYear<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, inMonth<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, onType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a>, onDay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, toType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a>, atHour<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atMinute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atSecond<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a>, save<span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, letter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L91">tz-database.ts:91</a></li>
+									<li>Defined in tz-database.ts:86</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>from:         <span class="tsd-signature-type">number</span></h5>
+									<h5>onWeekDay: <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>If onType is not DayNum, the weekday</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>from: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>FROM column year number.
@@ -137,15 +146,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>toType:         <a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>TO column type: Year for year numbers and &quot;only&quot; values, Max for &quot;max&quot; value.</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>toYear:         <span class="tsd-signature-type">number</span></h5>
+									<h5>toYear: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>If TO column is a year, the year number. If TO column is &quot;only&quot;, the FROM year.</p>
@@ -153,7 +154,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>type:         <span class="tsd-signature-type">string</span></h5>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>TYPE column, not used so far</p>
@@ -161,7 +162,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>inMonth:         <span class="tsd-signature-type">number</span></h5>
+									<h5>inMonth: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>IN column month number 1-12</p>
@@ -169,7 +170,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>onType:         <a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a></h5>
+									<h5>onType: <a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>ON column type</p>
@@ -177,7 +178,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>onDay:         <span class="tsd-signature-type">number</span></h5>
+									<h5>onDay: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>If onType is DayNum, the day number</p>
@@ -185,15 +186,15 @@
 									</div>
 								</li>
 								<li>
-									<h5>onWeekDay:         <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
+									<h5>toType: <a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>If onType is not DayNum, the weekday</p>
+											<p>TO column type: Year for year numbers and &quot;only&quot; values, Max for &quot;max&quot; value.</p>
 										</div>
 									</div>
 								</li>
 								<li>
-									<h5>atHour:         <span class="tsd-signature-type">number</span></h5>
+									<h5>atHour: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>AT column hour</p>
@@ -201,7 +202,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>atMinute:         <span class="tsd-signature-type">number</span></h5>
+									<h5>atMinute: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>AT column minute</p>
@@ -209,7 +210,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>atSecond:         <span class="tsd-signature-type">number</span></h5>
+									<h5>atSecond: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>AT column second</p>
@@ -217,7 +218,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>atType:         <a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a></h5>
+									<h5>atType: <a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>AT column type</p>
@@ -225,7 +226,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>save:         <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+									<h5>save: <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>DST offset from local standard time (NOT from UTC!)</p>
@@ -233,7 +234,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>letter:         <span class="tsd-signature-type">string</span></h5>
+									<h5>letter: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>Character to insert in %s for time zone abbreviation
@@ -242,200 +243,232 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a>
+							<h4 class="tsd-returns-title">Returns 
+								<a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a>
 							</h4>
 						</li>
 					</ul>
-				</section></section>        <section class="tsd-panel-group tsd-member-group ">
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="athour" class="tsd-anchor"></a>
+					<a name="athour" class="anchor"></a>
 					<h3>at<wbr>Hour</h3>
-					<div class="tsd-signature tsd-kind-icon">at<wbr>Hour<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">at<wbr>Hour<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L128">tz-database.ts:128</a></li>
+							<li>Defined in tz-database.ts:123</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>AT column hour</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="atminute" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="atminute" class="anchor"></a>
 					<h3>at<wbr>Minute</h3>
-					<div class="tsd-signature tsd-kind-icon">at<wbr>Minute<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">at<wbr>Minute<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L132">tz-database.ts:132</a></li>
+							<li>Defined in tz-database.ts:127</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>AT column minute</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="atsecond" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="atsecond" class="anchor"></a>
 					<h3>at<wbr>Second</h3>
-					<div class="tsd-signature tsd-kind-icon">at<wbr>Second<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">at<wbr>Second<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L136">tz-database.ts:136</a></li>
+							<li>Defined in tz-database.ts:131</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>AT column second</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="attype" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="attype" class="anchor"></a>
 					<h3>at<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">at<wbr>Type<span class="tsd-signature-symbol">:</span>         <a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a></div>
+					<div class="tsd-signature tsd-kind-icon">at<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L140">tz-database.ts:140</a></li>
+							<li>Defined in tz-database.ts:135</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>AT column type</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="from" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="from" class="anchor"></a>
 					<h3>from</h3>
-					<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L96">tz-database.ts:96</a></li>
+							<li>Defined in tz-database.ts:91</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>FROM column year number.
 							Note, can be -10000 for NaN value (e.g. for &quot;SystemV&quot; rules)</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="inmonth" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="inmonth" class="anchor"></a>
 					<h3>in<wbr>Month</h3>
-					<div class="tsd-signature tsd-kind-icon">in<wbr>Month<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">in<wbr>Month<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L112">tz-database.ts:112</a></li>
+							<li>Defined in tz-database.ts:107</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>IN column month number 1-12</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="letter" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="letter" class="anchor"></a>
 					<h3>letter</h3>
-					<div class="tsd-signature tsd-kind-icon">letter<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">letter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L149">tz-database.ts:149</a></li>
+							<li>Defined in tz-database.ts:144</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Character to insert in %s for time zone abbreviation
 							Note if TZ database indicates &quot;-&quot; this is the empty string</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="onday" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="onday" class="anchor"></a>
 					<h3>on<wbr>Day</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Day<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Day<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L120">tz-database.ts:120</a></li>
+							<li>Defined in tz-database.ts:115</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>If onType is DayNum, the day number</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="ontype" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="ontype" class="anchor"></a>
 					<h3>on<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Type<span class="tsd-signature-symbol">:</span>         <a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L116">tz-database.ts:116</a></li>
+							<li>Defined in tz-database.ts:111</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>ON column type</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="onweekday" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="onweekday" class="anchor"></a>
 					<h3>on<wbr>Week<wbr>Day</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Week<wbr>Day<span class="tsd-signature-symbol">:</span>         <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Week<wbr>Day<span class="tsd-signature-symbol">:</span> <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L124">tz-database.ts:124</a></li>
+							<li>Defined in tz-database.ts:119</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>If onType is not DayNum, the weekday</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="save" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="save" class="anchor"></a>
 					<h3>save</h3>
-					<div class="tsd-signature tsd-kind-icon">save<span class="tsd-signature-symbol">:</span>         <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></div>
+					<div class="tsd-signature tsd-kind-icon">save<span class="tsd-signature-symbol">:</span> <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L144">tz-database.ts:144</a></li>
+							<li>Defined in tz-database.ts:139</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>DST offset from local standard time (NOT from UTC!)</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="totype" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="totype" class="anchor"></a>
 					<h3>to<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">to<wbr>Type<span class="tsd-signature-symbol">:</span>         <a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a></div>
+					<div class="tsd-signature tsd-kind-icon">to<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L100">tz-database.ts:100</a></li>
+							<li>Defined in tz-database.ts:95</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>TO column type: Year for year numbers and &quot;only&quot; values, Max for &quot;max&quot; value.</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="toyear" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="toyear" class="anchor"></a>
 					<h3>to<wbr>Year</h3>
-					<div class="tsd-signature tsd-kind-icon">to<wbr>Year<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">to<wbr>Year<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L104">tz-database.ts:104</a></li>
+							<li>Defined in tz-database.ts:99</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>If TO column is a year, the year number. If TO column is &quot;only&quot;, the FROM year.</p>
 						</div>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="type" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="type" class="anchor"></a>
 					<h3>type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L108">tz-database.ts:108</a></li>
+							<li>Defined in tz-database.ts:103</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>TYPE column, not used so far</p>
 						</div>
 					</div>
-				</section></section>        <section class="tsd-panel-group tsd-member-group ">
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="applicable" class="tsd-anchor"></a>
+					<a name="applicable" class="anchor"></a>
 					<h3>applicable</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">applicable<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
@@ -443,9 +476,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L156">tz-database.ts:156</a></li>
+									<li>Defined in tz-database.ts:151</li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Returns true iff this rule is applicable in the year</p>
 								</div>
@@ -453,15 +487,17 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>year:         <span class="tsd-signature-type">number</span></h5>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">boolean</span>
+							<h4 class="tsd-returns-title">Returns 
+								<span class="tsd-signature-type">boolean</span>
 							</h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="effectivedate" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="effectivedate" class="anchor"></a>
 					<h3>effective<wbr>Date</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">effective<wbr>Date<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
@@ -469,9 +505,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L211">tz-database.ts:211</a></li>
+									<li>Defined in tz-database.ts:206</li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Returns the date that the rule takes effect. Note that the time
 										is NOT adjusted for wall clock time or standard time, i.e. this.atType is
@@ -481,15 +518,17 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>year:         <span class="tsd-signature-type">number</span></h5>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
+							<h4 class="tsd-returns-title">Returns 
+								<a href="_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
 							</h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="effectiveequal" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="effectiveequal" class="anchor"></a>
 					<h3>effective<wbr>Equal</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">effective<wbr>Equal<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
@@ -497,9 +536,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L193">tz-database.ts:193</a></li>
+									<li>Defined in tz-database.ts:188</li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Sort comparison</p>
 								</div>
@@ -507,16 +547,18 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>other:         <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
+									<h5>other: <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">boolean</span>
+							<h4 class="tsd-returns-title">Returns 
+								<span class="tsd-signature-type">boolean</span>
 							</h4>
 							<p>(first effective date is equal to other&#39;s first effective date)</p>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="effectiveless" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="effectiveless" class="anchor"></a>
 					<h3>effective<wbr>Less</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">effective<wbr>Less<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
@@ -524,9 +566,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L170">tz-database.ts:170</a></li>
+									<li>Defined in tz-database.ts:165</li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Sort comparison</p>
 								</div>
@@ -534,16 +577,18 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>other:         <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
+									<h5>other: <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">boolean</span>
+							<h4 class="tsd-returns-title">Returns 
+								<span class="tsd-signature-type">boolean</span>
 							</h4>
 							<p>(first effective date is less than other&#39;s first effective date)</p>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="transitiontimeutc" class="tsd-anchor"></a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="transitiontimeutc" class="anchor"></a>
 					<h3>transition<wbr>Time<wbr>Utc</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">transition<wbr>Time<wbr>Utc<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, standardOffset<span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, prevRule<span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
@@ -551,9 +596,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/master/lib/tz-database.ts#L248">tz-database.ts:248</a></li>
+									<li>Defined in tz-database.ts:243</li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Returns the transition moment in UTC in the given year</p>
 								</div>
@@ -561,7 +607,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>year:         <span class="tsd-signature-type">number</span></h5>
+									<h5>year: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The year for which to return the transition</p>
@@ -569,7 +615,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>standardOffset:         <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+									<h5>standardOffset: <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The standard offset for the timezone without DST</p>
@@ -577,7 +623,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>prevRule:         <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
+									<h5>prevRule: <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The previous rule</p>
@@ -585,11 +631,13 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">number</span>
+							<h4 class="tsd-returns-title">Returns 
+								<span class="tsd-signature-type">number</span>
 							</h4>
 						</li>
 					</ul>
-			</section></section>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">

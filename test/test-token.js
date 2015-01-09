@@ -1,3 +1,9 @@
+/// <reference path="../typings/test.d.ts" />
+var sourcemapsupport = require("source-map-support");
+
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: false });
+
 var chai = require("chai");
 var expect = chai.expect;
 

@@ -532,6 +532,9 @@ The version of the included IANA time zone database is 2014j.
 
 ## Changelog
 
+### 1.11.2 (2015-01-09)
+* Remove dependency on source-map-support outside of tests.
+
 ### 1.11.1 (2015-01-08)
 * Bugfix in DateTime#sub() and DateTime#add()
 

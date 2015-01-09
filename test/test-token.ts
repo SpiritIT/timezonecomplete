@@ -1,4 +1,10 @@
-﻿import chai = require("chai");
+﻿/// <reference path="../typings/test.d.ts" />
+
+import sourcemapsupport = require("source-map-support");
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: false });
+
+import chai = require("chai");
 import expect = chai.expect;
 
 import token = require("../lib/token");

@@ -13,10 +13,6 @@
 import assert = require("assert");
 import util = require("util");
 
-import sourcemapsupport = require("source-map-support");
-// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
-sourcemapsupport.install({ handleUncaughtExceptions: true });
-
 import basics = require("./basics");
 import duration = require("./duration");
 import math = require("./math");
