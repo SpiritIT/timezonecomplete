@@ -263,6 +263,24 @@ export class TimeZone {
 	}
 
 	/**
+	 * Returns true iff the constructor arguments were identical, so UTC !== GMT
+	 */
+	public identical(other: TimeZone): boolean {
+		switch (this._kind) {
+			case TimeZoneKind.Local: return (other.kind() === TimeZoneKind.Local);
+			case TimeZoneKind.Offset: return (other.kind() === TimeZoneKind.Offset && this._offset === other._offset);
+			case TimeZoneKind.Proper: return (other.kind() === TimeZoneKind.Proper && this._name === other._name && this._dst === other._dst);
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore if */
+				/* istanbul ignore next */
+				if (true) {
+					throw new Error("Unknown time zone kind.");
+				}
+		}
+	}
+
+	/**
 	 * Is this zone equivalent to UTC?
 	 */
 	public isUtc(): boolean {

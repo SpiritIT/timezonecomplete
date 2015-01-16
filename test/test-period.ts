@@ -591,6 +591,101 @@ describe("Period", (): void => {
 		});
 	});
 
+	describe("equals()", (): void => {
+		it("should return false for periods with different start", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:01 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(false);
+		});
+		it("should return false for periods with equal start but different time zone effect", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(false);
+		});
+		it("should return false for periods with different amount", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 2, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(false);
+		});
+		it("should return false for periods with different unit", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Minute, PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(false);
+		});
+		it("should return false for periods with different DST setting that matters", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
+			expect(p.equals(q)).to.equal(false);
+		});
+		it("should return true for periods different DST setting that does not matter", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
+			expect(p.equals(q)).to.equal(true);
+		});
+		it("should return true for identical periods", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(true);
+		});
+		it("should return true for periods with equal but not identical start", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 GMT"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(true);
+		});
+		it("should return true for periods with different unit and amount that adds up to same", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 60, TimeUnit.Minute, PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(true);
+		});
+	});
+
+	describe("identical()", (): void => {
+		it("should return false for periods with different start", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:01 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.identical(q)).to.equal(false);
+		});
+		it("should return false for periods with equal start but different time zone effect", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.identical(q)).to.equal(false);
+		});
+		it("should return false for periods with different amount", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 2, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.identical(q)).to.equal(false);
+		});
+		it("should return false for periods with different unit", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Minute, PeriodDst.RegularLocalTime);
+			expect(p.identical(q)).to.equal(false);
+		});
+		it("should return false for periods with different DST setting that matters", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
+			expect(p.identical(q)).to.equal(false);
+		});
+		it("should return false for periods different DST setting that does not matter", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
+			expect(p.identical(q)).to.equal(false);
+		});
+		it("should return false for periods with equal but not identical start", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 GMT"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.identical(q)).to.equal(false);
+		});
+		it("should return false for periods with different unit and amount that adds up to same", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 60, TimeUnit.Minute, PeriodDst.RegularLocalTime);
+			expect(p.identical(q)).to.equal(false);
+		});
+		it("should return true for identical periods", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.identical(q)).to.equal(true);
+		});
+	});
 
 	describe("toString()", (): void => {
 		it("should work with naive date", (): void => {

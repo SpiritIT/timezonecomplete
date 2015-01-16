@@ -1,6 +1,6 @@
 {
   "name": "timezonecomplete",
-  "version": "1.11.2",
+  "version": "1.12.0",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": [
     "Date",

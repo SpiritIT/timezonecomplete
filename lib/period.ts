@@ -131,13 +131,14 @@ export class Period {
 	 * @param amount	The amount of units.
 	 * @param unit	The unit.
 	 * @param dst	Specifies how to handle Daylight Saving Time. Not relevant
-	 *				if the time zone of the start datetime does not have DST.
+	 *              if the time zone of the start datetime does not have DST.
+	 *              Defaults to RegularLocalTime.
 	 */
 	constructor(
 		start: DateTime,
 		amount: number,
 		unit: TimeUnit,
-		dst: PeriodDst) {
+		dst: PeriodDst = PeriodDst.RegularLocalTime) {
 		assert(start !== null, "Start time may not be null");
 		assert(amount > 0, "Amount must be positive non-zero.");
 		assert(Math.floor(amount) === amount, "Amount must be a whole number");
@@ -559,6 +560,29 @@ export class Period {
 	}
 
 	/**
+	 * Returns true iff this period has the same effect as the given one.
+	 * i.e. a period of 24 hours is equal to one of 1 day if they have the same UTC start moment
+	 * and same dst.
+	 */
+	public equals(other: Period): boolean {
+		// note we take the non-normalized start() because this has an influence on the outcome
+		return (this.start().equals(other.start())
+			&& this._intAmount === other._intAmount
+			&& this._intUnit === other._intUnit
+			&& this._intDst === other._intDst);
+	}
+
+	/**
+	 * Returns true iff this period was constructed with identical arguments to the other one.
+	 */
+	public identical(other: Period): boolean {
+		return (this.start().identical(other.start())
+			&& this.amount() === other.amount()
+			&& this.unit() === other.unit()
+			&& this.dst() === other.dst());
+	}
+
+	/**
 	 * Returns an ISO duration string e.g.
 	 * 2014-01-01T12:00:00.000+01:00/P1H
 	 * 2014-01-01T12:00:00.000+01:00/PT1M   (one minute)
@@ -586,7 +610,7 @@ export class Period {
 	/**
 	 * Used by util.inspect()
 	 */
-	inspect(): string {
+	public inspect(): string {
 		return "[Period: " + this.toString() + "]";
 	}
 

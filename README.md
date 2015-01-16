@@ -465,6 +465,12 @@ var occurrence2 = period.findNext(occurrence);
 // isBoundary checks whether the given DateTime is on a period boundary
 period.isBoundary(occurrence); // true
 
+// Equality checking
+var p = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), 1, tc.TimeUnit.Hour, tc.PeriodDst.RegularIntervals);
+var q = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), 60, tc.TimeUnit.Minutes, tc.PeriodDst.RegularIntervals);
+p.equals(q); // true, same results
+p.identical(q); // false, not same constructor arguments
+
 ```
 
 ## On a web page
@@ -531,6 +537,13 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2014j.
 
 ## Changelog
+
+### 1.12.0 (2015-01-16)
+* Add Period#equals() which checks whether two periods have the same net effect.
+* Add Period#identical() which checks whether two periods were constructed in the same way.
+* Add TimeZone#identical() which checks whether two time zones were constructed the same way.
+* Adjust DateTime#identical() to no longer allow equal-but-not-identical time zone.
+* Made last Period constructor argument optional (default: regular local time)
 
 ### 1.11.2 (2015-01-09)
 * Remove dependency on source-map-support outside of tests.

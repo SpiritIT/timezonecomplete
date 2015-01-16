@@ -751,57 +751,56 @@ export class DateTime {
 		return new Duration(this._utcDate.toUnixNoLeapSecs() - other._utcDate.toUnixNoLeapSecs());
 	}
 
-  /**
-   * Chops off the time part, yields the same date at 00:00:00.000
-   * @return a new DateTime
-   */
-  public startOfDay(): DateTime {
-    return new DateTime(this.year(), this.month(), this.day(), 0, 0, 0, 0, this.zone());
-  }
+	/**
+	* Chops off the time part, yields the same date at 00:00:00.000
+	* @return a new DateTime
+	*/
+	public startOfDay(): DateTime {
+		return new DateTime(this.year(), this.month(), this.day(), 0, 0, 0, 0, this.zone());
+	}
 
 	/**
 	 * @return True iff (this < other)
 	 */
-	lessThan(other: DateTime): boolean {
+	public lessThan(other: DateTime): boolean {
 		return this._utcDate.toUnixNoLeapSecs() < other._utcDate.toUnixNoLeapSecs();
 	}
 
 	/**
 	 * @return True iff (this <= other)
 	 */
-	lessEqual(other: DateTime): boolean {
+	public lessEqual(other: DateTime): boolean {
 		return this._utcDate.toUnixNoLeapSecs() <= other._utcDate.toUnixNoLeapSecs();
 	}
 
 	/**
-	 * @return True iff this and other represent the same time in UTC
+	 * @return True iff this and other represent the same moment in time in UTC
 	 */
-	equals(other: DateTime): boolean {
+	public equals(other: DateTime): boolean {
 		return this._utcDate.equals(other._utcDate);
 	}
 
 	/**
-	 * @return True iff this and other represent the same time and
-	 * have the same zone
+	 * @return True iff this and other represent the same time and the same zone
 	 */
-	identical(other: DateTime): boolean {
+	public identical(other: DateTime): boolean {
 		return (this._zoneDate.equals(other._zoneDate)
 			&& (this._zone === null) === (other._zone === null)
-			&& (this._zone === null || this._zone.equals(other._zone))
+			&& (this._zone === null || this._zone.identical(other._zone))
 			);
 	}
 
 	/**
 	 * @return True iff this > other
 	 */
-	greaterThan(other: DateTime): boolean {
+	public greaterThan(other: DateTime): boolean {
 		return this._utcDate.toUnixNoLeapSecs() > other._utcDate.toUnixNoLeapSecs();
 	}
 
 	/**
 	 * @return True iff this >= other
 	 */
-	greaterEqual(other: DateTime): boolean {
+	public greaterEqual(other: DateTime): boolean {
 		return this._utcDate.toUnixNoLeapSecs() >= other._utcDate.toUnixNoLeapSecs();
 	}
 

@@ -1410,18 +1410,17 @@ var DateTime = (function () {
     };
 
     /**
-    * @return True iff this and other represent the same time in UTC
+    * @return True iff this and other represent the same moment in time in UTC
     */
     DateTime.prototype.equals = function (other) {
         return this._utcDate.equals(other._utcDate);
     };
 
     /**
-    * @return True iff this and other represent the same time and
-    * have the same zone
+    * @return True iff this and other represent the same time and the same zone
     */
     DateTime.prototype.identical = function (other) {
-        return (this._zoneDate.equals(other._zoneDate) && (this._zone === null) === (other._zone === null) && (this._zone === null || this._zone.equals(other._zone)));
+        return (this._zoneDate.equals(other._zoneDate) && (this._zone === null) === (other._zone === null) && (this._zone === null || this._zone.identical(other._zone)));
     };
 
     /**
@@ -2766,9 +2765,11 @@ var Period = (function () {
     * @param amount	The amount of units.
     * @param unit	The unit.
     * @param dst	Specifies how to handle Daylight Saving Time. Not relevant
-    *				if the time zone of the start datetime does not have DST.
+    *              if the time zone of the start datetime does not have DST.
+    *              Defaults to RegularLocalTime.
     */
     function Period(start, amount, unit, dst) {
+        if (typeof dst === "undefined") { dst = 1 /* RegularLocalTime */; }
         assert(start !== null, "Start time may not be null");
         assert(amount > 0, "Amount must be positive non-zero.");
         assert(Math.floor(amount) === amount, "Amount must be a whole number");
@@ -3154,6 +3155,23 @@ var Period = (function () {
                     throw new Error("Unknown period unit.");
                 }
         }
+    };
+
+    /**
+    * Returns true iff this period has the same effect as the given one.
+    * i.e. a period of 24 hours is equal to one of 1 day if they have the same UTC start moment
+    * and same dst.
+    */
+    Period.prototype.equals = function (other) {
+        // note we take the non-normalized start() because this has an influence on the outcome
+        return (this.start().equals(other.start()) && this._intAmount === other._intAmount && this._intUnit === other._intUnit && this._intDst === other._intDst);
+    };
+
+    /**
+    * Returns true iff this period was constructed with identical arguments to the other one.
+    */
+    Period.prototype.identical = function (other) {
+        return (this.start().identical(other.start()) && this.amount() === other.amount() && this.unit() === other.unit() && this.dst() === other.dst());
     };
 
     /**
@@ -3549,6 +3567,27 @@ var TimeZone = (function () {
                 return (other.kind() === 1 /* Offset */ && this._offset === other._offset);
             case 2 /* Proper */:
                 return (other.kind() === 2 /* Proper */ && this._name === other._name && (this._dst === other._dst || !this.hasDst()));
+
+            default:
+                /* istanbul ignore if */
+                /* istanbul ignore next */
+                if (true) {
+                    throw new Error("Unknown time zone kind.");
+                }
+        }
+    };
+
+    /**
+    * Returns true iff the constructor arguments were identical, so UTC !== GMT
+    */
+    TimeZone.prototype.identical = function (other) {
+        switch (this._kind) {
+            case 0 /* Local */:
+                return (other.kind() === 0 /* Local */);
+            case 1 /* Offset */:
+                return (other.kind() === 1 /* Offset */ && this._offset === other._offset);
+            case 2 /* Proper */:
+                return (other.kind() === 2 /* Proper */ && this._name === other._name && this._dst === other._dst);
 
             default:
                 /* istanbul ignore if */

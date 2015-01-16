@@ -485,6 +485,12 @@ d5.max(d6); <span class="hljs-comment">// returns a clone of d6</span>
 
 <span class="hljs-comment">// isBoundary checks whether the given DateTime is on a period boundary</span>
 period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// Equality checking</span>
+<span class="hljs-keyword">var</span> p = <span class="hljs-keyword">new</span> tc.Period(<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T00:00:00"</span>), <span class="hljs-number">1</span>, tc.TimeUnit.Hour, tc.PeriodDst.RegularIntervals);
+<span class="hljs-keyword">var</span> q = <span class="hljs-keyword">new</span> tc.Period(<span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T00:00:00"</span>), <span class="hljs-number">60</span>, tc.TimeUnit.Minutes, tc.PeriodDst.RegularIntervals);
+p.equals(q); <span class="hljs-comment">// true, same results</span>
+p.identical(q); <span class="hljs-comment">// false, not same constructor arguments</span>
 </code></pre>
 				<h2 id="on-a-web-page">On a web page</h2>
 				<p>We spent some effort making timezonecomplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
@@ -534,6 +540,14 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 				<p>The version of the included IANA time zone database is 2014j.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-12-0-2015-01-16-">1.12.0 (2015-01-16)</h3>
+				<ul>
+					<li>Add Period#equals() which checks whether two periods have the same net effect.</li>
+					<li>Add Period#identical() which checks whether two periods were constructed in the same way.</li>
+					<li>Add TimeZone#identical() which checks whether two time zones were constructed the same way.</li>
+					<li>Adjust DateTime#identical() to no longer allow equal-but-not-identical time zone.</li>
+					<li>Made last Period constructor argument optional (default: regular local time)</li>
+				</ul>
 				<h3 id="1-11-2-2015-01-09-">1.11.2 (2015-01-09)</h3>
 				<ul>
 					<li>Remove dependency on source-map-support outside of tests.</li>
@@ -719,9 +733,9 @@ period.isBoundary(occurrence); <span class="hljs-comment">// true</span>
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x72;&#46;&#x73;&#99;&#104;&#x6f;&#117;&#x74;&#x65;&#x6e;&#64;&#x73;&#x70;&#105;&#x72;&#105;&#x74;&#x69;&#116;&#46;&#x63;&#x6f;&#x6d;">&#x72;&#46;&#x73;&#99;&#104;&#x6f;&#117;&#x74;&#x65;&#x6e;&#64;&#x73;&#x70;&#105;&#x72;&#105;&#x74;&#x69;&#116;&#46;&#x63;&#x6f;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x64;&#x2e;&#x77;&#x69;&#x73;&#115;&#105;&#x6e;&#x67;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#111;&#x6d;">&#x64;&#x2e;&#x77;&#x69;&#x73;&#115;&#105;&#x6e;&#x67;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#111;&#x6d;</a></li>
-					<li>Peter Kooijmans <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#112;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#97;&#110;&#x73;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#116;&#46;&#99;&#111;&#109;">&#112;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#97;&#110;&#x73;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#116;&#46;&#99;&#111;&#109;</a></li>
+					<li>Rogier Schouten <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#x2e;&#115;&#x63;&#x68;&#111;&#117;&#116;&#x65;&#x6e;&#64;&#115;&#x70;&#x69;&#x72;&#105;&#x74;&#105;&#x74;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#x2e;&#115;&#x63;&#x68;&#111;&#117;&#116;&#x65;&#x6e;&#64;&#115;&#x70;&#x69;&#x72;&#105;&#x74;&#105;&#x74;&#x2e;&#x63;&#x6f;&#109;</a></li>
+					<li>Daan Wissing <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#x2e;&#119;&#105;&#115;&#x73;&#x69;&#110;&#x67;&#64;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#109;">&#100;&#x2e;&#119;&#105;&#115;&#x73;&#x69;&#110;&#x67;&#64;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#109;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#x70;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#x61;&#110;&#x73;&#64;&#115;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#109;">&#x70;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#x61;&#110;&#x73;&#64;&#115;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

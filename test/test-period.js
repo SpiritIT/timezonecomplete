@@ -429,6 +429,102 @@ describe("Period", function () {
         });
     });
 
+    describe("equals()", function () {
+        it("should return false for periods with different start", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:01 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.equals(q)).to.equal(false);
+        });
+        it("should return false for periods with equal start but different time zone effect", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.equals(q)).to.equal(false);
+        });
+        it("should return false for periods with different amount", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 2, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.equals(q)).to.equal(false);
+        });
+        it("should return false for periods with different unit", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 1 /* Minute */, 1 /* RegularLocalTime */);
+            expect(p.equals(q)).to.equal(false);
+        });
+        it("should return false for periods with different DST setting that matters", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 0 /* RegularIntervals */);
+            expect(p.equals(q)).to.equal(false);
+        });
+        it("should return true for periods different DST setting that does not matter", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 0 /* RegularIntervals */);
+            expect(p.equals(q)).to.equal(true);
+        });
+        it("should return true for identical periods", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.equals(q)).to.equal(true);
+        });
+        it("should return true for periods with equal but not identical start", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 GMT"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.equals(q)).to.equal(true);
+        });
+        it("should return true for periods with different unit and amount that adds up to same", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 60, 1 /* Minute */, 1 /* RegularLocalTime */);
+            expect(p.equals(q)).to.equal(true);
+        });
+    });
+
+    describe("identical()", function () {
+        it("should return false for periods with different start", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:01 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.identical(q)).to.equal(false);
+        });
+        it("should return false for periods with equal start but different time zone effect", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.identical(q)).to.equal(false);
+        });
+        it("should return false for periods with different amount", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 2, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.identical(q)).to.equal(false);
+        });
+        it("should return false for periods with different unit", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 1 /* Minute */, 1 /* RegularLocalTime */);
+            expect(p.identical(q)).to.equal(false);
+        });
+        it("should return false for periods with different DST setting that matters", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, 2 /* Hour */, 0 /* RegularIntervals */);
+            expect(p.identical(q)).to.equal(false);
+        });
+        it("should return false for periods different DST setting that does not matter", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 0 /* RegularIntervals */);
+            expect(p.identical(q)).to.equal(false);
+        });
+        it("should return false for periods with equal but not identical start", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 GMT"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.identical(q)).to.equal(false);
+        });
+        it("should return false for periods with different unit and amount that adds up to same", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 60, 1 /* Minute */, 1 /* RegularLocalTime */);
+            expect(p.identical(q)).to.equal(false);
+        });
+        it("should return true for identical periods", function () {
+            var p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            var q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);
+            expect(p.identical(q)).to.equal(true);
+        });
+    });
+
     describe("toString()", function () {
         it("should work with naive date", function () {
             var p = new Period(new DateTime("2014-01-01T00:00:00"), 1, 2 /* Hour */, 1 /* RegularLocalTime */);

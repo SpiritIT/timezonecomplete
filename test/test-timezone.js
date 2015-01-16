@@ -339,6 +339,36 @@ describe("TimeZone", function () {
         });
     });
 
+    describe("identical()", function () {
+        it("should handle local zone", function () {
+            expect(TimeZone.local().identical(TimeZone.local())).to.equal(true);
+            expect(TimeZone.local().identical(TimeZone.zone("localtime"))).to.equal(true);
+            expect(TimeZone.local().identical(TimeZone.zone("localtime", false))).to.equal(true);
+            expect(TimeZone.local().identical(TimeZone.utc())).to.equal(false);
+            expect(TimeZone.local().identical(TimeZone.zone(6))).to.equal(false);
+        });
+        it("should handle offset zone", function () {
+            expect(TimeZone.zone(3).identical(TimeZone.zone(3))).to.equal(true);
+            expect(TimeZone.zone(3).identical(TimeZone.utc())).to.equal(false);
+            expect(TimeZone.zone(3).identical(TimeZone.local())).to.equal(false);
+            expect(TimeZone.zone(3).identical(TimeZone.zone(-1))).to.equal(false);
+            expect(TimeZone.zone("+03:00", false).identical(TimeZone.zone("+03:00", true))).to.equal(true);
+            expect(TimeZone.zone("+03:00", false).identical(TimeZone.zone(180))).to.equal(true);
+        });
+        it("should handle proper zone", function () {
+            expect(TimeZone.zone("Europe/Amsterdam").identical(TimeZone.zone("Europe/Amsterdam"))).to.equal(true);
+            expect(TimeZone.zone("Europe/Amsterdam", false).identical(TimeZone.zone("Europe/Amsterdam", false))).to.equal(true);
+            expect(TimeZone.zone("Europe/Amsterdam", true).identical(TimeZone.zone("Europe/Amsterdam", false))).to.equal(false);
+            expect(TimeZone.zone("Europe/Amsterdam").identical(TimeZone.utc())).to.equal(false);
+            expect(TimeZone.zone("Europe/Amsterdam").identical(TimeZone.local())).to.equal(false);
+            expect(TimeZone.zone("Europe/Amsterdam").identical(TimeZone.zone(-1))).to.equal(false);
+        });
+        it("should handle UTC in different forms", function () {
+            expect(TimeZone.zone("UTC").identical(TimeZone.zone("GMT"))).to.equal(false);
+            expect(TimeZone.utc().identical(TimeZone.zone(0))).to.equal(false);
+        });
+    });
+
     describe("inspect()", function () {
         it("should work", function () {
             expect(TimeZone.zone("Europe/Amsterdam").inspect()).to.equal("[TimeZone: Europe/Amsterdam]");
