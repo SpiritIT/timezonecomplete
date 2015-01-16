@@ -305,6 +305,7 @@ declare module '__timezonecomplete/basics' {
 declare module '__timezonecomplete/datetime' {
     import basics = require("__timezonecomplete/basics");
     import duration = require("__timezonecomplete/duration");
+	import timesource = require("__timezonecomplete/timesource");
     import javascript = require("__timezonecomplete/javascript");
     import timezone = require("__timezonecomplete/timezone");
     /**
