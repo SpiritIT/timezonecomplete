@@ -8,7 +8,6 @@ NEW TZ DATABASE
 * Extract TZ database in a directory, say TZ_DIR
   NOTE: no other files (like the tar file itself) may be in the directory
 * Run 
-cd maintenance/
 node node-preparse.js TZ_DIR/ > timezone-data.json
 * In case of trouble, first throw away all non-zone files from the tz data directory
 * copy timezone-data.json to lib/

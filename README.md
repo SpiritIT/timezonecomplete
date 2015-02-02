@@ -534,9 +534,12 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2014j.
+The version of the included IANA time zone database is 2015a.
 
 ## Changelog
+
+### 1.12.1
+* Upgrade TZ database to 2015a
 
 ### 1.12.0 (2015-01-16)
 * Add Period#equals() which checks whether two periods have the same net effect.
