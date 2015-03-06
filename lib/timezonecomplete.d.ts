@@ -346,6 +346,11 @@ declare module '__timezonecomplete/datetime' {
          */
         static now(timeZone?: timezone.TimeZone): DateTime;
         /**
+         * Create a DateTime from a Lotus 123 / Microsoft Excel date-time value
+         * i.e. a double representing days since 1-1-1900 where 1900 is incorrectly seen as leap year
+         */
+        static fromExcel(n: number, timeZone?: timezone.TimeZone): DateTime;
+        /**
          * Constructor. Creates current time in local timezone.
          */
         constructor();

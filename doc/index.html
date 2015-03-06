@@ -325,6 +325,9 @@ z<span class="hljs-built_in">.</span>offsetForZone(<span class="hljs-number">201
 <span class="hljs-comment">// date from ISO 8601 string</span>
 <span class="hljs-keyword">var</span> amsterdamDateFromString = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000 Europe/Amsterdam"</span>);
 
+<span class="hljs-comment">// date from an Excel datetime number</span>
+<span class="hljs-keyword">var</span> excelDate = tc.DateTime.fromExcel(<span class="hljs-number">42005.5430555556</span>); <span class="hljs-comment">// 2015-01-01T13:02:00</span>
+
 <span class="hljs-comment">// a fully aware time without Daylight Saving Time: a fixed offset from UTC of 2 hours</span>
 <span class="hljs-keyword">var</span> fixedOffset;
 fixedOffset = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">"2014-01-01T13:59:59.000+02:00"</span>);
@@ -538,8 +541,18 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				<h3 id="does-timezonecomplete-handle-leap-seconds-">Does timezonecomplete handle leap seconds?</h3>
 				<p>Currently not. This is because most platforms don&#39;t, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren&#39;t. We do plan to add support in some form though.</p>
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
-				<p>The version of the included IANA time zone database is 2014j.</p>
+				<p>The version of the included IANA time zone database is 2015a.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-13-0">1.13.0</h3>
+				<ul>
+					<li>Add static DateTime.fromExcel() function to convert a Microsoft Excel / ODF timestamp number to a datetime
+						<a href="https://stackoverflow.com/questions/981655/how-to-represent-a-datetime-in-excel">https://stackoverflow.com/questions/981655/how-to-represent-a-datetime-in-excel</a>
+					<a href="https://en.wikipedia.org/wiki/Leap_year_bug">https://en.wikipedia.org/wiki/Leap_year_bug</a></li>
+				</ul>
+				<h3 id="1-12-1">1.12.1</h3>
+				<ul>
+					<li>Upgrade TZ database to 2015a</li>
+				</ul>
 				<h3 id="1-12-0-2015-01-16-">1.12.0 (2015-01-16)</h3>
 				<ul>
 					<li>Add Period#equals() which checks whether two periods have the same net effect.</li>
@@ -572,7 +585,7 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 							<li>tc.milliseconds() for tc.Duration.milliseconds()</li>
 							<li>tc.local() for tc.TimeZone.local()</li>
 							<li>tc.utc() for tc.TimeZone.utc()</li>
-							<li>tc.zone() for tc.TimeZone.zone() </li>
+							<li>tc.zone() for tc.TimeZone.zone()</li>
 						</ul>
 					</li>
 					<li>The tc.now() or tc.DateTime.now() method now has its zone argument optional, default value is UTC.</li>
@@ -733,9 +746,9 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#x2e;&#115;&#x63;&#x68;&#111;&#117;&#116;&#x65;&#x6e;&#64;&#115;&#x70;&#x69;&#x72;&#105;&#x74;&#105;&#x74;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#x2e;&#115;&#x63;&#x68;&#111;&#117;&#116;&#x65;&#x6e;&#64;&#115;&#x70;&#x69;&#x72;&#105;&#x74;&#105;&#x74;&#x2e;&#x63;&#x6f;&#109;</a></li>
-					<li>Daan Wissing <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#x2e;&#119;&#105;&#115;&#x73;&#x69;&#110;&#x67;&#64;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#109;">&#100;&#x2e;&#119;&#105;&#115;&#x73;&#x69;&#110;&#x67;&#64;&#x73;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#x70;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#x61;&#110;&#x73;&#64;&#115;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#109;">&#x70;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#x6d;&#x61;&#110;&#x73;&#64;&#115;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#x74;&#46;&#99;&#x6f;&#109;</a></li>
+					<li>Rogier Schouten <a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#x72;&#46;&#115;&#x63;&#104;&#111;&#117;&#116;&#101;&#x6e;&#x40;&#x73;&#112;&#105;&#114;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#111;&#x6d;">&#x72;&#46;&#115;&#x63;&#104;&#111;&#117;&#116;&#101;&#x6e;&#x40;&#x73;&#112;&#105;&#114;&#x69;&#116;&#105;&#x74;&#x2e;&#x63;&#111;&#x6d;</a></li>
+					<li>Daan Wissing <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#100;&#46;&#x77;&#105;&#x73;&#115;&#x69;&#x6e;&#103;&#64;&#115;&#x70;&#105;&#x72;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#100;&#46;&#x77;&#105;&#x73;&#115;&#x69;&#x6e;&#103;&#64;&#115;&#x70;&#105;&#x72;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x70;&#46;&#x6b;&#x6f;&#x6f;&#105;&#106;&#x6d;&#97;&#x6e;&#x73;&#64;&#x73;&#x70;&#105;&#114;&#x69;&#116;&#x69;&#116;&#x2e;&#99;&#111;&#109;">&#x70;&#46;&#x6b;&#x6f;&#x6f;&#105;&#106;&#x6d;&#97;&#x6e;&#x73;&#64;&#x73;&#x70;&#105;&#114;&#x69;&#116;&#x69;&#116;&#x2e;&#99;&#111;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

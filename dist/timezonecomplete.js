@@ -940,6 +940,15 @@ var DateTime = (function () {
     };
 
     /**
+    * Create a DateTime from a Lotus 123 / Microsoft Excel date-time value
+    * i.e. a double representing days since 1-1-1900 where 1900 is incorrectly seen as leap year
+    */
+    DateTime.fromExcel = function (n, timeZone) {
+        var unixTimestamp = Math.round((n - 25569) * 24 * 60 * 60 * 1000);
+        return new DateTime(unixTimestamp, timeZone);
+    };
+
+    /**
     * @return a copy of this object
     */
     DateTime.prototype.clone = function () {

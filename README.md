@@ -292,6 +292,9 @@ var amsterdamDateNoDst = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Eur
 // date from ISO 8601 string
 var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
 
+// date from an Excel datetime number
+var excelDate = tc.DateTime.fromExcel(42005.5430555556); // 2015-01-01T13:02:00
+
 // a fully aware time without Daylight Saving Time: a fixed offset from UTC of 2 hours
 var fixedOffset;
 fixedOffset = new tc.DateTime("2014-01-01T13:59:59.000+02:00");
@@ -538,6 +541,11 @@ The version of the included IANA time zone database is 2015a.
 
 ## Changelog
 
+### 1.13.0
+* Add static DateTime.fromExcel() function to convert a Microsoft Excel / ODF timestamp number to a datetime
+  https://stackoverflow.com/questions/981655/how-to-represent-a-datetime-in-excel
+  https://en.wikipedia.org/wiki/Leap_year_bug
+
 ### 1.12.1
 * Upgrade TZ database to 2015a
 
@@ -568,10 +576,10 @@ The version of the included IANA time zone database is 2015a.
   * tc.milliseconds() for tc.Duration.milliseconds()
   * tc.local() for tc.TimeZone.local()
   * tc.utc() for tc.TimeZone.utc()
-  * tc.zone() for tc.TimeZone.zone() 
+  * tc.zone() for tc.TimeZone.zone()
 * The tc.now() or tc.DateTime.now() method now has its zone argument optional, default value is UTC.
 * You can now choose whether timezonecomplete applies Daylight Saving Time for an IANA time zone: the tc.zone() and tc.TimeZone.zone() methods now accept an extra Boolean parameter that indicates whether DST should be applied. For backward compatibility the default value is true.
-  
+
 ```
 // old code (still works):
 var d  = tc.Duration.seconds(20);
