@@ -131,6 +131,15 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("fromExcelDate()", (): void => {
+		it("should perform correct conversion", (): void => {
+			expect(DateTime.fromExcel(42005.5430555556).toString()).to.equal("2015-01-01T13:02:00.000");
+		});
+		it("should add timezone if given", (): void => {
+			expect(DateTime.fromExcel(42005.5430555556, TimeZone.zone("+03:00")).toString()).to.equal("2015-01-01T13:02:00.000+03:00");
+		});
+	});
+
 	describe("constructor()", (): void => {
 		it("should return something with a local time zone", (): void => {
 			expect((new DateTime()).offset()).to.equal(-1 * testTimeSource.now().getTimezoneOffset());

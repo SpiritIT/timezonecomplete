@@ -1,24 +1,18 @@
 /// <reference path="../typings/test.d.ts" />
 var sourcemapsupport = require("source-map-support");
-
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: false });
-
 var assert = require("assert");
 var chai = require("chai");
 var expect = chai.expect;
-
 var basics = require("../lib/basics");
 var datetimeFuncs = require("../lib/index");
-
 var DateFunctions = datetimeFuncs.DateFunctions;
 var DateTime = datetimeFuncs.DateTime;
 var Duration = datetimeFuncs.Duration;
-
 var TimeUnit = datetimeFuncs.TimeUnit;
 var TimeZone = datetimeFuncs.TimeZone;
 var WeekDay = datetimeFuncs.WeekDay;
-
 // Fake time source
 var TestTimeSource = (function () {
     function TestTimeSource() {
@@ -29,18 +23,15 @@ var TestTimeSource = (function () {
     };
     return TestTimeSource;
 })();
-
 // Insert fake time source so that now() is stable
 var testTimeSource = new TestTimeSource();
 DateTime.timeSource = testTimeSource;
-
 describe("datetime loose", function () {
     // ensure time faked
     beforeEach(function () {
         testTimeSource.currentTime = new Date("2014-01-03T04:05:06.007Z");
         DateTime.timeSource = testTimeSource;
     });
-
     describe("nowLocal()", function () {
         it("should return something with a local time zone", function () {
             expect(datetimeFuncs.nowLocal().offset()).to.equal(-1 * testTimeSource.now().getTimezoneOffset());
@@ -55,7 +46,6 @@ describe("datetime loose", function () {
             expect(datetimeFuncs.nowLocal().millisecond()).to.equal(testTimeSource.currentTime.getMilliseconds());
         });
     });
-
     describe("nowUtc()", function () {
         it("should return something with a local time zone", function () {
             expect(datetimeFuncs.nowUtc().zone()).to.equal(TimeZone.utc());
@@ -70,7 +60,6 @@ describe("datetime loose", function () {
             expect(datetimeFuncs.nowUtc().millisecond()).to.equal(testTimeSource.currentTime.getUTCMilliseconds());
         });
     });
-
     describe("now", function () {
         it("should return something with the given zone", function () {
             expect(datetimeFuncs.now(TimeZone.zone("+03:00")).zone()).to.equal(TimeZone.zone("+03:00"));
@@ -83,14 +72,12 @@ describe("datetime loose", function () {
         });
     });
 });
-
 describe("DateTime", function () {
     // ensure time faked
     beforeEach(function () {
         testTimeSource.currentTime = new Date("2014-01-03T04:05:06.007Z");
         DateTime.timeSource = testTimeSource;
     });
-
     describe("nowLocal()", function () {
         it("should return something with a local time zone", function () {
             expect(DateTime.nowLocal().offset()).to.equal(-1 * testTimeSource.now().getTimezoneOffset());
@@ -105,7 +92,6 @@ describe("DateTime", function () {
             expect(DateTime.nowLocal().millisecond()).to.equal(testTimeSource.currentTime.getMilliseconds());
         });
     });
-
     describe("nowUtc()", function () {
         it("should return something with a local time zone", function () {
             expect(DateTime.nowUtc().zone()).to.equal(TimeZone.utc());
@@ -120,7 +106,6 @@ describe("DateTime", function () {
             expect(DateTime.nowUtc().millisecond()).to.equal(testTimeSource.currentTime.getUTCMilliseconds());
         });
     });
-
     describe("now", function () {
         it("should return something with the given zone", function () {
             expect(DateTime.now(TimeZone.zone("+03:00")).zone()).to.equal(TimeZone.zone("+03:00"));
@@ -132,7 +117,14 @@ describe("DateTime", function () {
             expect(DateTime.now().hour()).to.equal(testTimeSource.currentTime.getUTCHours());
         });
     });
-
+    describe("fromExcelDate()", function () {
+        it("should perform correct conversion", function () {
+            expect(DateTime.fromExcel(42005.5430555556).toString()).to.equal("2015-01-01T13:02:00.000");
+        });
+        it("should add timezone if given", function () {
+            expect(DateTime.fromExcel(42005.5430555556, TimeZone.zone("+03:00")).toString()).to.equal("2015-01-01T13:02:00.000+03:00");
+        });
+    });
     describe("constructor()", function () {
         it("should return something with a local time zone", function () {
             expect((new DateTime()).offset()).to.equal(-1 * testTimeSource.now().getTimezoneOffset());
@@ -147,7 +139,6 @@ describe("DateTime", function () {
             expect((new DateTime()).millisecond()).to.equal(testTimeSource.currentTime.getMilliseconds());
         });
     });
-
     describe("constructor(string)", function () {
         it("should parse unaware date", function () {
             var d = new DateTime("2014-05-06T07:08:09.010");
@@ -270,11 +261,10 @@ describe("DateTime", function () {
             expect(d.offset()).to.equal(6);
         });
     });
-
     describe("constructor(date: Date, dateKind: DateFunctions, timeZone?: TimeZone)", function () {
         it("should parse date as local,unaware (winter time)", function () {
             var date = new Date("2014-01-02T03:04:05.006Z");
-            var d = new DateTime(date, 0 /* Get */, null);
+            var d = new DateTime(date, DateFunctions.Get, null);
             expect(d.year()).to.equal(date.getFullYear());
             expect(d.month()).to.equal(date.getMonth() + 1);
             expect(d.day()).to.equal(date.getDate());
@@ -286,7 +276,7 @@ describe("DateTime", function () {
         });
         it("should parse date as utc,unaware (winter time)", function () {
             var date = new Date("2014-01-02T03:04:05.006Z");
-            var d = new DateTime(date, 1 /* GetUTC */, null);
+            var d = new DateTime(date, DateFunctions.GetUTC, null);
             expect(d.year()).to.equal(date.getUTCFullYear());
             expect(d.month()).to.equal(date.getUTCMonth() + 1);
             expect(d.day()).to.equal(date.getUTCDate());
@@ -298,7 +288,7 @@ describe("DateTime", function () {
         });
         it("should parse date as local,unaware (summer time)", function () {
             var date = new Date("2014-07-02T03:04:05.006Z");
-            var d = new DateTime(date, 0 /* Get */, null);
+            var d = new DateTime(date, DateFunctions.Get, null);
             expect(d.year()).to.equal(date.getFullYear());
             expect(d.month()).to.equal(date.getMonth() + 1);
             expect(d.day()).to.equal(date.getDate());
@@ -310,7 +300,7 @@ describe("DateTime", function () {
         });
         it("should parse date as utc,unaware (summer time)", function () {
             var date = new Date("2014-07-02T03:04:05.006Z");
-            var d = new DateTime(date, 1 /* GetUTC */, null);
+            var d = new DateTime(date, DateFunctions.GetUTC, null);
             expect(d.year()).to.equal(date.getUTCFullYear());
             expect(d.month()).to.equal(date.getUTCMonth() + 1);
             expect(d.day()).to.equal(date.getUTCDate());
@@ -322,7 +312,7 @@ describe("DateTime", function () {
         });
         it("should parse date local,aware", function () {
             var date = new Date("2014-01-02T03:04:05.006Z");
-            var d = new DateTime(date, 0 /* Get */, TimeZone.zone(90));
+            var d = new DateTime(date, DateFunctions.Get, TimeZone.zone(90));
             expect(d.year()).to.equal(date.getFullYear());
             expect(d.month()).to.equal(date.getMonth() + 1);
             expect(d.day()).to.equal(date.getDate());
@@ -334,7 +324,7 @@ describe("DateTime", function () {
         });
         it("should parse date utc,aware", function () {
             var date = new Date("2014-01-02T03:04:05.006Z");
-            var d = new DateTime(date, 1 /* GetUTC */, TimeZone.zone(90));
+            var d = new DateTime(date, DateFunctions.GetUTC, TimeZone.zone(90));
             expect(d.year()).to.equal(date.getUTCFullYear());
             expect(d.month()).to.equal(date.getUTCMonth() + 1);
             expect(d.day()).to.equal(date.getUTCDate());
@@ -345,7 +335,6 @@ describe("DateTime", function () {
             expect(d.offset()).to.equal(90);
         });
     });
-
     describe("constructor(year, month, ..., millisecond, timeZone?: TimeZone)", function () {
         it("full entries, unaware", function () {
             var d = new DateTime(2014, 1, 2, 3, 4, 5, 6, null);
@@ -380,9 +369,8 @@ describe("DateTime", function () {
             expect(d.millisecond()).to.equal(6);
             expect(d.zone()).to.equal(TimeZone.zone(90));
         });
-
         it("should normalize around DST", function () {
-            var d = new DateTime(2014, 3, 30, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+            var d = new DateTime(2014, 3, 30, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam")); // non-existing due to DST forward
             expect(d.hour()).to.equal(3); // should be normalized to 3AM
         });
         it("should throw on wrong input", function () {
@@ -426,7 +414,6 @@ describe("DateTime", function () {
             /* tslint:enable:no-unused-expression */
         });
     });
-
     describe("constructor(utcUnixTime: number, timeZone?: TimeZone)", function () {
         it("unaware", function () {
             var d = new DateTime(1);
@@ -467,7 +454,6 @@ describe("DateTime", function () {
             expect(d.hour()).to.equal(3); // should be normalized to 3AM
         });
     });
-
     describe("clone", function () {
         it("should return an object with the same value", function () {
             var d = new DateTime(2015, 2, 3, 4, 5, 6, 7, TimeZone.zone("+03"));
@@ -478,7 +464,6 @@ describe("DateTime", function () {
             expect(d.clone() === d).to.equal(false);
         });
     });
-
     describe("convert()", function () {
         it("unaware to aware", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -502,7 +487,6 @@ describe("DateTime", function () {
             expect(d.equals(new DateTime(2014, 1, 1, 12, 0, 0, 0))).to.equal(true);
         });
     });
-
     describe("toZone()", function () {
         it("unaware to aware", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -532,7 +516,7 @@ describe("DateTime", function () {
             expect(d.toZone(TimeZone.utc()).toString()).to.equal("2014-03-30T01:00:00.000 UTC");
         });
         it("Europe/Amsterdam DST forward to UTC (nonexisting)", function () {
-            var d = new DateTime(2014, 3, 30, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+            var d = new DateTime(2014, 3, 30, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam")); // non-existing date
             expect(d.toZone(TimeZone.utc()).toString()).to.equal("2014-03-30T01:00:00.000 UTC");
         });
         it("Europe/Amsterdam DST backward to UTC", function () {
@@ -571,7 +555,6 @@ describe("DateTime", function () {
             expect(d.toString()).to.equal("2014-10-26T02:00:00.000 UTC");
         });
     });
-
     describe("toDate()", function () {
         it("unaware", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -596,7 +579,6 @@ describe("DateTime", function () {
             expect(date.getMilliseconds()).to.equal(0);
         });
     });
-
     // todo check normalization
     describe("add(duration)", function () {
         it("should add zero", function () {
@@ -636,102 +618,101 @@ describe("DateTime", function () {
             });
         });
     });
-
     describe("add(amount, unit)", function () {
         it("should add 0", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            expect(d.add(0, 0 /* Second */).toString()).to.equal(d.toString());
-            expect(d.add(0, 1 /* Minute */).toString()).to.equal(d.toString());
-            expect(d.add(0, 2 /* Hour */).toString()).to.equal(d.toString());
-            expect(d.add(0, 3 /* Day */).toString()).to.equal(d.toString());
-            expect(d.add(0, 4 /* Week */).toString()).to.equal(d.toString());
-            expect(d.add(0, 5 /* Month */).toString()).to.equal(d.toString());
-            expect(d.add(0, 6 /* Year */).toString()).to.equal(d.toString());
+            expect(d.add(0, TimeUnit.Second).toString()).to.equal(d.toString());
+            expect(d.add(0, TimeUnit.Minute).toString()).to.equal(d.toString());
+            expect(d.add(0, TimeUnit.Hour).toString()).to.equal(d.toString());
+            expect(d.add(0, TimeUnit.Day).toString()).to.equal(d.toString());
+            expect(d.add(0, TimeUnit.Week).toString()).to.equal(d.toString());
+            expect(d.add(0, TimeUnit.Month).toString()).to.equal(d.toString());
+            expect(d.add(0, TimeUnit.Year).toString()).to.equal(d.toString());
         });
         it("should add seconds", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(23, 0 /* Second */);
+            var e = d.add(23, TimeUnit.Second);
             expect(e.toString()).to.equal("2014-01-01T00:00:23.000 Europe/Amsterdam");
         });
         it("should add more than 60 seconds", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(61, 0 /* Second */);
+            var e = d.add(61, TimeUnit.Second);
             expect(e.toString()).to.equal("2014-01-01T00:01:01.000 Europe/Amsterdam");
         });
         it("should add minutes", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(23, 1 /* Minute */);
+            var e = d.add(23, TimeUnit.Minute);
             expect(e.toString()).to.equal("2014-01-01T00:23:00.000 Europe/Amsterdam");
         });
         it("should add more than 60 minutes", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(61, 1 /* Minute */);
+            var e = d.add(61, TimeUnit.Minute);
             expect(e.toString()).to.equal("2014-01-01T01:01:00.000 Europe/Amsterdam");
         });
         it("should add hours", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(23, 2 /* Hour */);
+            var e = d.add(23, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-01-01T23:00:00.000 Europe/Amsterdam");
         });
         it("should add more than 24 hours", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(25, 2 /* Hour */);
+            var e = d.add(25, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-01-02T01:00:00.000 Europe/Amsterdam");
         });
         it("should add days", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(23, 3 /* Day */);
+            var e = d.add(23, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-01-24T00:00:00.000 Europe/Amsterdam");
         });
         it("should add more than 30 days", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(31, 3 /* Day */);
+            var e = d.add(31, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-02-01T00:00:00.000 Europe/Amsterdam");
         });
         it("should add weeks", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(2, 4 /* Week */);
+            var e = d.add(2, TimeUnit.Week);
             expect(e.toString()).to.equal("2014-01-15T00:00:00.000 Europe/Amsterdam");
         });
         it("should add months", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(2, 5 /* Month */);
+            var e = d.add(2, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-03-01T00:00:00.000 Europe/Amsterdam");
         });
         it("should add months across year boundary", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(12, 5 /* Month */);
+            var e = d.add(12, TimeUnit.Month);
             expect(e.toString()).to.equal("2015-01-01T00:00:00.000 Europe/Amsterdam");
         });
         it("should add years", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(2, 6 /* Year */);
+            var e = d.add(2, TimeUnit.Year);
             expect(e.toString()).to.equal("2016-01-01T00:00:00.000 Europe/Amsterdam");
         });
         it("should add negative numbers", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(-2, 3 /* Day */);
+            var e = d.add(-2, TimeUnit.Day);
             expect(e.toString()).to.equal("2013-12-30T00:00:00.000 Europe/Amsterdam");
         });
         it("should add to unaware", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, null);
-            var e = d.add(1, 2 /* Hour */);
+            var e = d.add(1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-03-30T02:59:59.000");
         });
         it("should add to UTC", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, TimeZone.utc());
-            var e = d.add(1, 2 /* Hour */);
+            var e = d.add(1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-03-30T02:59:59.000 UTC");
         });
         it("should account for DST forward", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(1, 2 /* Hour */);
+            var e = d.add(1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-03-30T03:59:59.000 Europe/Amsterdam");
         });
         it("should account for DST backward", function () {
             // this could mean either of two UTC times
             var d = new DateTime(2014, 10, 26, 2, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(1, 2 /* Hour */);
+            var e = d.add(1, TimeUnit.Hour);
             expect(e.toString()).to.satisfy(function (s) {
                 return (s === "2014-10-26T02:59:59.000 Europe/Amsterdam" || s === "2014-10-26T03:59:59.000 Europe/Amsterdam");
             });
@@ -739,228 +720,223 @@ describe("DateTime", function () {
         it("should keep incrementing UTC even if local time does not increase", function () {
             // check that UTC moves forward even though local date is not deterministic
             var d = (new DateTime(2014, 10, 26, 0, 0, 0, 0, TimeZone.zone("UTC"))).toZone(TimeZone.zone("Europe/Amsterdam"));
-            expect(d.add(1, 2 /* Hour */).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T01:00:00.000 UTC");
-
+            expect(d.add(1, TimeUnit.Hour).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T01:00:00.000 UTC");
             d = (new DateTime(2014, 10, 26, 1, 0, 0, 0, TimeZone.zone("UTC"))).toZone(TimeZone.zone("Europe/Amsterdam"));
-            expect(d.add(1, 2 /* Hour */).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T02:00:00.000 UTC");
+            expect(d.add(1, TimeUnit.Hour).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T02:00:00.000 UTC");
         });
         it("should shift local time when adding days across DST fw", function () {
             var d = new DateTime(2014, 3, 29, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(1, 3 /* Day */);
+            var e = d.add(1, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-03-30T09:00:00.000 Europe/Amsterdam");
         });
         it("should shift local time when adding days across DST bw", function () {
             var d = new DateTime(2014, 10, 25, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(1, 3 /* Day */);
+            var e = d.add(1, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-10-26T07:00:00.000 Europe/Amsterdam");
         });
         it("should shift local time when adding negative days across DST fw", function () {
             var d = new DateTime(2014, 3, 30, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(-1, 3 /* Day */);
+            var e = d.add(-1, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-03-29T07:00:00.000 Europe/Amsterdam");
         });
         it("should shift local time when adding negative days across DST bw", function () {
             var d = new DateTime(2014, 10, 26, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(-1, 3 /* Day */);
+            var e = d.add(-1, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-10-25T09:00:00.000 Europe/Amsterdam");
         });
         it("should keep local time when adding year across 2 DSTs", function () {
             var d = new DateTime(2014, 1, 29, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(1, 6 /* Year */);
+            var e = d.add(1, TimeUnit.Year);
             expect(e.toString()).to.equal("2015-01-29T08:00:00.000 Europe/Amsterdam");
         });
         it("should keep local time when adding negative year across 2 DSTs", function () {
             var d = new DateTime(2014, 1, 29, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(-1, 6 /* Year */);
+            var e = d.add(-1, TimeUnit.Year);
             expect(e.toString()).to.equal("2013-01-29T08:00:00.000 Europe/Amsterdam");
         });
         it("should shift local time when adding year across 1 DSTs", function () {
             var d = new DateTime(2014, 3, 29, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(1, 6 /* Year */);
+            var e = d.add(1, TimeUnit.Year); // note in 2015 DST shift is on march 29 iso march 30
             expect(e.toString()).to.equal("2015-03-29T09:00:00.000 Europe/Amsterdam");
         });
         it("should shift local time when adding month across 1 DST", function () {
             var d = new DateTime(2014, 3, 3, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.add(1, 5 /* Month */);
+            var e = d.add(1, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-04-03T09:00:00.000 Europe/Amsterdam");
             d = new DateTime(2014, 9, 26, 3, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            e = d.add(1, 5 /* Month */);
+            e = d.add(1, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-10-26T02:00:00.000 Europe/Amsterdam");
         });
         it("should shift remote zone time when adding month across 1 DST", function () {
             var d = new DateTime(2014, 3, 3, 8, 0, 0, 0, TimeZone.zone("Asia/Gaza"));
-            var e = d.add(1, 5 /* Month */);
+            var e = d.add(1, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-04-03T09:00:00.000 Asia/Gaza");
         });
         it("should not shift remote zone time when adding month across 1 local DST ", function () {
             // this is already in summer time Gaza but winter time Europe/Amsterdam
             var d = new DateTime(2014, 3, 29, 8, 0, 0, 0, TimeZone.zone("Asia/Gaza"));
-            var e = d.add(1, 5 /* Month */);
+            var e = d.add(1, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-04-29T08:00:00.000 Asia/Gaza");
         });
     });
-
     describe("addLocal(amount, unit)", function () {
         it("should add 0", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            expect(d.addLocal(0, 0 /* Second */).toString()).to.equal(d.toString());
-            expect(d.addLocal(0, 1 /* Minute */).toString()).to.equal(d.toString());
-            expect(d.addLocal(0, 2 /* Hour */).toString()).to.equal(d.toString());
-            expect(d.addLocal(0, 3 /* Day */).toString()).to.equal(d.toString());
-            expect(d.addLocal(0, 4 /* Week */).toString()).to.equal(d.toString());
-            expect(d.addLocal(0, 5 /* Month */).toString()).to.equal(d.toString());
-            expect(d.addLocal(0, 6 /* Year */).toString()).to.equal(d.toString());
+            expect(d.addLocal(0, TimeUnit.Second).toString()).to.equal(d.toString());
+            expect(d.addLocal(0, TimeUnit.Minute).toString()).to.equal(d.toString());
+            expect(d.addLocal(0, TimeUnit.Hour).toString()).to.equal(d.toString());
+            expect(d.addLocal(0, TimeUnit.Day).toString()).to.equal(d.toString());
+            expect(d.addLocal(0, TimeUnit.Week).toString()).to.equal(d.toString());
+            expect(d.addLocal(0, TimeUnit.Month).toString()).to.equal(d.toString());
+            expect(d.addLocal(0, TimeUnit.Year).toString()).to.equal(d.toString());
         });
         it("should add seconds", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(23, 0 /* Second */);
+            var e = d.addLocal(23, TimeUnit.Second);
             expect(e.toString()).to.equal("2014-01-01T00:00:23.000 Europe/Amsterdam");
         });
         it("should add more than 60 seconds", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(61, 0 /* Second */);
+            var e = d.addLocal(61, TimeUnit.Second);
             expect(e.toString()).to.equal("2014-01-01T00:01:01.000 Europe/Amsterdam");
         });
         it("should add minutes", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(23, 1 /* Minute */);
+            var e = d.addLocal(23, TimeUnit.Minute);
             expect(e.toString()).to.equal("2014-01-01T00:23:00.000 Europe/Amsterdam");
         });
         it("should add more than 60 minutes", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(61, 1 /* Minute */);
+            var e = d.addLocal(61, TimeUnit.Minute);
             expect(e.toString()).to.equal("2014-01-01T01:01:00.000 Europe/Amsterdam");
         });
         it("should add hours", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(23, 2 /* Hour */);
+            var e = d.addLocal(23, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-01-01T23:00:00.000 Europe/Amsterdam");
         });
         it("should add more than 24 hours", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(25, 2 /* Hour */);
+            var e = d.addLocal(25, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-01-02T01:00:00.000 Europe/Amsterdam");
         });
         it("should add days", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(23, 3 /* Day */);
+            var e = d.addLocal(23, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-01-24T00:00:00.000 Europe/Amsterdam");
         });
         it("should add more than 30 days", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(31, 3 /* Day */);
+            var e = d.addLocal(31, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-02-01T00:00:00.000 Europe/Amsterdam");
         });
         it("should add weeks", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(2, 4 /* Week */);
+            var e = d.addLocal(2, TimeUnit.Week);
             expect(e.toString()).to.equal("2014-01-15T00:00:00.000 Europe/Amsterdam");
         });
         it("should add months", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(2, 5 /* Month */);
+            var e = d.addLocal(2, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-03-01T00:00:00.000 Europe/Amsterdam");
         });
         it("should clamp end-of-month", function () {
             var d = new DateTime(2014, 1, 31, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(1, 5 /* Month */);
+            var e = d.addLocal(1, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-02-28T00:00:00.000 Europe/Amsterdam");
         });
         it("should clamp end-of-month (leap year)", function () {
             var d = new DateTime(2004, 1, 31, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(1, 5 /* Month */);
+            var e = d.addLocal(1, TimeUnit.Month);
             expect(e.toString()).to.equal("2004-02-29T00:00:00.000 Europe/Amsterdam");
         });
         it("should add months across year boundary", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(12, 5 /* Month */);
+            var e = d.addLocal(12, TimeUnit.Month);
             expect(e.toString()).to.equal("2015-01-01T00:00:00.000 Europe/Amsterdam");
         });
         it("should add years", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(2, 6 /* Year */);
+            var e = d.addLocal(2, TimeUnit.Year);
             expect(e.toString()).to.equal("2016-01-01T00:00:00.000 Europe/Amsterdam");
         });
         it("should clamp end-of-month (leap year)", function () {
             var d = new DateTime(2004, 2, 29, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(1, 6 /* Year */);
+            var e = d.addLocal(1, TimeUnit.Year);
             expect(e.toString()).to.equal("2005-02-28T00:00:00.000 Europe/Amsterdam");
         });
         it("should add negative numbers", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(-2, 3 /* Day */);
+            var e = d.addLocal(-2, TimeUnit.Day);
             expect(e.toString()).to.equal("2013-12-30T00:00:00.000 Europe/Amsterdam");
         });
         it("should add to unaware", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, null);
-            var e = d.addLocal(1, 2 /* Hour */);
+            var e = d.addLocal(1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-03-30T02:59:59.000");
         });
         it("should add to UTC", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, TimeZone.utc());
-            var e = d.addLocal(1, 2 /* Hour */);
+            var e = d.addLocal(1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-03-30T02:59:59.000 UTC");
         });
         it("should account for DST forward", function () {
             var d = new DateTime(2014, 3, 30, 1, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(1, 2 /* Hour */);
+            var e = d.addLocal(1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-03-30T03:59:59.000 Europe/Amsterdam");
         });
         it("should account for DST forward, -1", function () {
             // it should skip over 02:59 since that does not exist
             var d = new DateTime(2014, 3, 30, 3, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(-1, 2 /* Hour */);
+            var e = d.addLocal(-1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-03-30T01:59:59.000 Europe/Amsterdam");
         });
         it("should account for DST backward", function () {
             // this could mean either of two UTC times
             var d = new DateTime(2014, 10, 26, 2, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
-
             // but addLocal should increment the local hour field regardless
-            var e = d.addLocal(1, 2 /* Hour */);
+            var e = d.addLocal(1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-10-26T03:59:59.000 Europe/Amsterdam");
-
             // similar with subtraction: local hour field should decrease
-            e = d.addLocal(-1, 2 /* Hour */);
+            e = d.addLocal(-1, TimeUnit.Hour);
             expect(e.toString()).to.equal("2014-10-26T01:59:59.000 Europe/Amsterdam");
         });
         it("should keep local time same when adding days across DST fw", function () {
             var d = new DateTime(2014, 3, 29, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(1, 3 /* Day */);
+            var e = d.addLocal(1, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-03-30T08:00:00.000 Europe/Amsterdam");
         });
         it("should keep local time same when adding days across DST bw", function () {
             var d = new DateTime(2014, 10, 25, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(1, 3 /* Day */);
+            var e = d.addLocal(1, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-10-26T08:00:00.000 Europe/Amsterdam");
         });
         it("should keep local time same when adding negative days across DST fw", function () {
             var d = new DateTime(2014, 3, 30, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(-1, 3 /* Day */);
+            var e = d.addLocal(-1, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-03-29T08:00:00.000 Europe/Amsterdam");
         });
         it("should keep local time same when adding negative days across DST bw", function () {
             var d = new DateTime(2014, 10, 26, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(-1, 3 /* Day */);
+            var e = d.addLocal(-1, TimeUnit.Day);
             expect(e.toString()).to.equal("2014-10-25T08:00:00.000 Europe/Amsterdam");
         });
         it("should keep local time same when adding year across 2 DSTs", function () {
             var d = new DateTime(2014, 3, 29, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(1, 6 /* Year */);
+            var e = d.addLocal(1, TimeUnit.Year);
             expect(e.toString()).to.equal("2015-03-29T08:00:00.000 Europe/Amsterdam");
         });
         it("should keep local time same when adding negative year across 2 DSTs", function () {
             var d = new DateTime(2014, 3, 29, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(-1, 6 /* Year */);
+            var e = d.addLocal(-1, TimeUnit.Year);
             expect(e.toString()).to.equal("2013-03-29T08:00:00.000 Europe/Amsterdam");
         });
         it("should keep local time when adding month across 1 DST", function () {
             var d = new DateTime(2014, 3, 3, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.addLocal(1, 5 /* Month */);
+            var e = d.addLocal(1, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-04-03T08:00:00.000 Europe/Amsterdam");
         });
     });
-
     describe("sub(Duration)", function () {
         it("should subtract zero", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -987,19 +963,18 @@ describe("DateTime", function () {
             expect(e.day()).to.equal(31);
         });
     });
-
     describe("sub(amount, unit)", function () {
         // not thoroughly tested since implementation is routed to add(-amount, unit)
         it("should account for DST forward", function () {
             var d = new DateTime(2014, 3, 30, 3, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
             expect(d.toZone(TimeZone.utc()).toString()).to.equal("2014-03-30T01:59:59.000 UTC");
-            var e = d.sub(1, 2 /* Hour */);
+            var e = d.sub(1, TimeUnit.Hour);
             expect(e.toZone(TimeZone.utc()).toString()).to.equal("2014-03-30T00:59:59.000 UTC");
             expect(e.toString()).to.equal("2014-03-30T01:59:59.000 Europe/Amsterdam");
         });
         it("should account for DST backward", function () {
             var d = new DateTime(2014, 10, 26, 2, 59, 59, 0, TimeZone.zone("Europe/Amsterdam"));
-            var e = d.sub(1, 2 /* Hour */);
+            var e = d.sub(1, TimeUnit.Hour);
             expect(e.toString()).to.satisfy(function (s) {
                 return (s === "2014-10-26T02:59:59.000 Europe/Amsterdam" || s === "2014-10-26T01:59:59.000 Europe/Amsterdam");
             });
@@ -1007,33 +982,31 @@ describe("DateTime", function () {
         it("should keep decrementing UTC even if local time does not decrease", function () {
             // check that UTC moves forward even though local date is not deterministic
             var d = (new DateTime(2014, 10, 26, 1, 0, 0, 0, TimeZone.zone("UTC"))).toZone(TimeZone.zone("Europe/Amsterdam"));
-            expect(d.sub(1, 2 /* Hour */).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T00:00:00.000 UTC");
-
+            expect(d.sub(1, TimeUnit.Hour).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T00:00:00.000 UTC");
             d = (new DateTime(2014, 10, 26, 2, 0, 0, 0, TimeZone.zone("UTC"))).toZone(TimeZone.zone("Europe/Amsterdam"));
-            expect(d.sub(1, 2 /* Hour */).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T01:00:00.000 UTC");
+            expect(d.sub(1, TimeUnit.Hour).toZone(TimeZone.utc()).toString()).to.equal("2014-10-26T01:00:00.000 UTC");
         });
         it("should handle subtracting from january", function () {
             var d = new DateTime(2014, 1, 15, 0, 0, 0, 0, TimeZone.zone("UTC"));
-            var e = d.sub(1, 5 /* Month */);
+            var e = d.sub(1, TimeUnit.Month);
             expect(e.toString()).to.equal("2013-12-15T00:00:00.000 UTC");
         });
         it("should handle adding to december", function () {
             var d = new DateTime(2013, 12, 15, 0, 0, 0, 0, TimeZone.zone("UTC"));
-            var e = d.sub(-1, 5 /* Month */);
+            var e = d.sub(-1, TimeUnit.Month);
             expect(e.toString()).to.equal("2014-01-15T00:00:00.000 UTC");
         });
         it("should handle adding more than a year in months", function () {
             var d = new DateTime(2013, 9, 15, 0, 0, 0, 0, TimeZone.zone("UTC"));
-            var e = d.sub(-24, 5 /* Month */);
+            var e = d.sub(-24, TimeUnit.Month);
             expect(e.toString()).to.equal("2015-09-15T00:00:00.000 UTC");
         });
         it("should handle subtracting more than a year in months", function () {
             var d = new DateTime(2013, 9, 15, 0, 0, 0, 0, TimeZone.zone("UTC"));
-            var e = d.sub(24, 5 /* Month */);
+            var e = d.sub(24, TimeUnit.Month);
             expect(e.toString()).to.equal("2011-09-15T00:00:00.000 UTC");
         });
     });
-
     describe("diff()", function () {
         it("should diff identical dates zero", function () {
             var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -1057,7 +1030,6 @@ describe("DateTime", function () {
             expect(diff.milliseconds()).to.equal(Duration.hours(-2).milliseconds());
         });
     });
-
     describe("startOfDay()", function () {
         it("should work for a date with a zone", function () {
             expect((new DateTime(2014, 1, 1, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"))).startOfDay().toString()).to.equal("2014-01-01T00:00:00.000 Europe/Amsterdam");
@@ -1073,7 +1045,6 @@ describe("DateTime", function () {
             expect(d.startOfDay()).not.to.equal(d);
         });
     });
-
     describe("lessThan()", function () {
         it("should return true for a greater other", function () {
             expect(new DateTime("2014-02-02T02:02:02.002").lessThan(new DateTime("2014-02-02T02:02:02.003"))).to.equal(true);
@@ -1091,7 +1062,6 @@ describe("DateTime", function () {
             expect(new DateTime("2014-02-02T02:02:02.002+00").lessThan(new DateTime("2014-02-02T02:02:02.002+01"))).to.equal(false);
         });
     });
-
     describe("lessEqual()", function () {
         it("should return true for a greater other", function () {
             expect(new DateTime("2014-02-02T02:02:02.002").lessEqual(new DateTime("2014-02-02T02:02:02.003"))).to.equal(true);
@@ -1109,7 +1079,6 @@ describe("DateTime", function () {
             expect(new DateTime("2014-02-02T02:02:02.002+00").lessEqual(new DateTime("2014-02-02T02:02:02.002+01"))).to.equal(false);
         });
     });
-
     describe("equals()", function () {
         it("should return false for a greater other", function () {
             expect(new DateTime("2014-02-02T02:02:02.002").equals(new DateTime("2014-02-02T02:02:02.003"))).to.equal(false);
@@ -1127,7 +1096,6 @@ describe("DateTime", function () {
             expect(new DateTime("2014-02-02T02:02:02.002+00").equals(new DateTime("2014-02-02T02:02:02.002+01"))).to.equal(false);
         });
     });
-
     describe("identical()", function () {
         it("should return false if time zone differs", function () {
             expect(new DateTime("2014-02-02T02:02:02.002").identical(new DateTime("2014-02-02T02:02:02.002+01:00"))).to.equal(false);
@@ -1144,7 +1112,6 @@ describe("DateTime", function () {
             expect(new DateTime("2014-02-02T02:02:02.002 GMT").identical(new DateTime("2014-02-02T02:02:02.002 UTC"))).to.equal(false);
         });
     });
-
     describe("greaterThan()", function () {
         it("should return false for a greater other", function () {
             expect(new DateTime("2014-02-02T02:02:02.002").greaterThan(new DateTime("2014-02-02T02:02:02.003"))).to.equal(false);
@@ -1162,7 +1129,6 @@ describe("DateTime", function () {
             expect(new DateTime("2014-02-02T02:02:02.002+00").greaterThan(new DateTime("2014-02-02T02:02:02.002+01"))).to.equal(true);
         });
     });
-
     describe("greaterEqual()", function () {
         it("should return false for a greater other", function () {
             expect(new DateTime("2014-02-02T02:02:02.002").greaterEqual(new DateTime("2014-02-02T02:02:02.003"))).to.equal(false);
@@ -1180,7 +1146,6 @@ describe("DateTime", function () {
             expect(new DateTime("2014-02-02T02:02:02.002+00").greaterEqual(new DateTime("2014-02-02T02:02:02.002+01"))).to.equal(true);
         });
     });
-
     describe("min()", function () {
         it("should return a value equal to this if this is smaller", function () {
             expect(new DateTime(1).min(new DateTime(2)).unixUtcMillis()).to.equal(1);
@@ -1192,7 +1157,6 @@ describe("DateTime", function () {
             expect(new DateTime(2).min(new DateTime(1)).unixUtcMillis()).to.equal(1);
         });
     });
-
     describe("max()", function () {
         it("should return a value equal to other if this is smaller", function () {
             expect(new DateTime(1).max(new DateTime(2)).unixUtcMillis()).to.equal(2);
@@ -1204,7 +1168,6 @@ describe("DateTime", function () {
             expect(new DateTime(2).max(new DateTime(1)).unixUtcMillis()).to.equal(2);
         });
     });
-
     describe("toIsoString()", function () {
         it("should work for unaware date", function () {
             expect((new DateTime("2014-02-03T05:06:07.008")).toIsoString()).to.equal("2014-02-03T05:06:07.008");
@@ -1219,7 +1182,6 @@ describe("DateTime", function () {
             expect((new DateTime("2014-02-03T05:06:07.008 localtime")).toIsoString()).to.equal("2014-02-03T05:06:07.008" + TimeZone.offsetToString(TimeZone.local().offsetForZone(2014, 2, 3, 5, 6, 7, 8)));
         });
     });
-
     describe("toUtcString()", function () {
         it("should work for unaware date", function () {
             expect((new DateTime("2014-02-03T05:06:07.008")).toUtcString()).to.equal("2014-02-03T05:06:07.008");
@@ -1231,46 +1193,39 @@ describe("DateTime", function () {
             expect((new DateTime("2014-02-03T05:06:07.008 Europe/Amsterdam")).toUtcString()).to.equal("2014-02-03T04:06:07.008");
         });
     });
-
     describe("inspect()", function () {
         it("should work", function () {
             expect((new DateTime("2014-02-03T05:06:07.008")).inspect()).to.equal("[DateTime: " + (new DateTime("2014-02-03T05:06:07.008")).toString() + "]");
         });
     });
-
     describe("valueOf()", function () {
         it("should work", function () {
             expect((new DateTime("2014-02-03T05:06:07.008")).valueOf()).to.equal((new DateTime("2014-02-03T05:06:07.008")).unixUtcMillis());
         });
     });
-
     describe("weekDay()", function () {
         it("should return a local week day", function () {
-            expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(1 /* Monday */);
-            expect(new DateTime("2014-07-07T23:59:59.999 Europe/Amsterdam").weekDay()).to.equal(1 /* Monday */);
+            expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
+            expect(new DateTime("2014-07-07T23:59:59.999 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
         });
     });
-
     describe("utcWeekDay()", function () {
         it("should return a UTC week day", function () {
-            expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").utcWeekDay()).to.equal(0 /* Sunday */);
+            expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").utcWeekDay()).to.equal(WeekDay.Sunday);
         });
     });
-
     describe("dayOfYear()", function () {
         it("should return a local dayOfYear", function () {
             expect(new DateTime("2014-01-01T00:00:00.00 Europe/Amsterdam").dayOfYear()).to.equal(0);
             expect(new DateTime("2014-12-31T23:59:59.999 Europe/Amsterdam").dayOfYear()).to.equal(364);
         });
     });
-
     describe("utcDayOfYear()", function () {
         it("should return a UTC week day", function () {
             // note this is still january 1st in utc
             expect(new DateTime("2014-01-02T00:00:00.00 Europe/Amsterdam").utcDayOfYear()).to.equal(0);
         });
     });
-
     describe("weekNumber()", function () {
         // note already thoroughly tested in basics.weekDay()
         it("should work on local date", function () {
@@ -1278,7 +1233,6 @@ describe("DateTime", function () {
             expect(d.weekNumber()).to.equal(22);
         });
     });
-
     describe("utcWeekNumber()", function () {
         // note already thoroughly tested in basics.weekDay()
         it("should work on utc date", function () {
@@ -1286,7 +1240,6 @@ describe("DateTime", function () {
             expect(d.utcWeekNumber()).to.equal(21);
         });
     });
-
     describe("weekOfMonth()", function () {
         // note already thoroughly tested in basics.weekOfMonth()
         it("should work", function () {
@@ -1294,7 +1247,6 @@ describe("DateTime", function () {
             expect(d.weekOfMonth()).to.equal(2);
         });
     });
-
     describe("utcWeekOfMonth()", function () {
         // note already thoroughly tested in basics.weekOfMonth()
         it("should work", function () {
@@ -1302,7 +1254,6 @@ describe("DateTime", function () {
             expect(d.utcWeekOfMonth()).to.equal(1);
         });
     });
-
     describe("secondOfDay()", function () {
         // note already thoroughly tested in basics.secondOfDay()
         it("should work", function () {
@@ -1310,7 +1261,6 @@ describe("DateTime", function () {
             expect(d.secondOfDay()).to.equal(3);
         });
     });
-
     describe("utcSecondOfDay()", function () {
         // note already thoroughly tested in basics.secondOfDay()
         it("should work", function () {
@@ -1318,7 +1268,6 @@ describe("DateTime", function () {
             expect(d.utcSecondOfDay()).to.equal(0);
         });
     });
-
     describe("zoneAbbreviation()", function () {
         it("should return nothing for naive date", function () {
             var d = new DateTime(2014, 5, 26, 0, 30, 0, 0);
@@ -1330,7 +1279,6 @@ describe("DateTime", function () {
             expect(d.zoneAbbreviation()).to.equal("CEST");
         });
     });
-
     describe("format()", function () {
         it("should format to a user-defined string", function () {
             var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
