@@ -1,4 +1,5 @@
 
+var eventStream = require("event-stream");
 var browserify = require("gulp-browserify");
 var debug = require("gulp-debug");
 var dtsBundle = require("dts-bundle");
@@ -7,9 +8,10 @@ var gulp = require("gulp");
 var gulpFilter = require("gulp-filter");
 var rename = require("gulp-rename");
 var rimraf = require("gulp-rimraf");
+var sourcemaps = require("gulp-sourcemaps");
 var tslint = require("gulp-tslint");
 var typedoc = require("gulp-typedoc");
-var typescript = require("gulp-tsc");
+var typescript = require("gulp-typescript");
 var wrapUmd = require("gulp-wrap-umd");
 
 process.chdir(__dirname);
@@ -123,7 +125,7 @@ gulp.task("doc", function() {
 		"no-trailing-comma": true,
 		"no-trailing-whitespace": true,
 		"no-unused-expression": true,
-		"no-unused-variable": true,
+		"no-unused-variable": false, // re-enable when they've fixed all the false positives
 		"no-unreachable": true,
 		"no-use-before-declare": true,
 		"no-var-requires": true,
@@ -169,30 +171,41 @@ gulp.task("doc", function() {
 
 	}
 
-gulp.task("build", function() {
-	 return gulp.src([
-			"lib/*.ts",
-			"test/*.ts",
-		], {base: "."})
+gulp.task("build", function () {
+	var tsResult = gulp.src([
+		"lib/*.ts",
+		"test/*.ts",
+	], { base: "." })
 		.pipe(gulpFilter("!**/*.d.ts"))
 		.pipe(tslint({
 			configuration: tslintOpts
 		}))
 		.pipe(tslint.report('verbose', {
 			emitError: true
-        }))
+		}))
+		.pipe(sourcemaps.init())
 		.pipe(typescript({
 			module: "commonjs",
-			declaration: true,
+			declarationFiles: true,
+			sourceRoot: "",
 			target: "es5",
-			outDir: ".",
+			//outDir: ".",
 			sourcemap: true,
-			noImplicitAny: true			
-		}))
-		.pipe(gulp.dest("."))
-		.on("error", trapError); // make exit code non-zero
+			noImplicitAny: true
+		}));
+	tsResult.on("error", function (err) {
+		result.emit("error", err);
 	});
+	var jsStream = tsResult.js
+		.pipe(sourcemaps.write());
+	var dtsStream = tsResult.dts;
+	var streamEnd = eventStream.merge(jsStream, dtsStream);
 
+	var result = streamEnd
+		.pipe(gulp.dest("."))
+	result.on("error", trapError); // make exit code non-zero
+	return result;
+});
 
 	// note "doc" not part of release because we must call that separately in a DOS window due typedoc bug
 gulp.task("release", ["build", "browser_package", "bundle", "doc"]);

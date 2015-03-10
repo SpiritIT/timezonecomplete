@@ -70,6 +70,11 @@ describe("timezone loose", (): void => {
 			var t: TimeZone = datetimeFuncs.zone("+01:30");
 			expect(t.offsetForUtc(2014, 1, 1, 1, 2, 3, 4)).to.equal(90);
 		});
+		it("should throw for nonexisting name", (): void => {
+			assert.throws((): void => {
+				datetimeFuncs.zone("Nederland/Lutjebroek");
+			});
+		});
 	});
 
 });

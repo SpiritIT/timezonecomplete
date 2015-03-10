@@ -496,6 +496,10 @@ export class TzDatabase {
 		this._minmax = validateData(data);
 	}
 
+	public exists(zoneName: string): boolean {
+		return this._data.zones.hasOwnProperty(zoneName);
+	}
+
 	/**
 	 * Minimum non-zero DST offset (which excludes standard offset) of all rules in the database.
 	 * Note that DST offsets need not be whole hours.
@@ -907,7 +911,7 @@ export class TzDatabase {
 	 *
 	 * @return Transitions, with DST offsets (no standard offset included)
 	 */
-	public getTransitionsDstOffsets(ruleName: string, fromYear: number, toYear: number, standardOffset: Duration): Transition[]{
+	public getTransitionsDstOffsets(ruleName: string, fromYear: number, toYear: number, standardOffset: Duration): Transition[] {
 		assert(fromYear <= toYear, "fromYear must be <= toYear");
 
 		var ruleInfos: RuleInfo[] = this.getRuleInfos(ruleName);
@@ -941,7 +945,7 @@ export class TzDatabase {
 	 * @param fromYear	First year to include
 	 * @param toYear	Last year to include
 	 */
-	public getTransitionsTotalOffsets(zoneName: string, fromYear: number, toYear: number): Transition[]{
+	public getTransitionsTotalOffsets(zoneName: string, fromYear: number, toYear: number): Transition[] {
 		assert(fromYear <= toYear, "fromYear must be <= toYear");
 
 		var startMillis: number = basics.timeToUnixNoLeapSecs(fromYear);
@@ -1061,7 +1065,7 @@ export class TzDatabase {
 	 * @param zoneName	IANA zone name like "Pacific/Efate"
 	 * @return Array of zone infos. Do not change, this is a cached value.
 	 */
-	public getZoneInfos(zoneName: string): ZoneInfo[]{
+	public getZoneInfos(zoneName: string): ZoneInfo[] {
 		// FIRST validate zone name before searching cache
 		/* istanbul ignore if */
 		if (!this._data.zones.hasOwnProperty(zoneName)) {
@@ -1140,7 +1144,7 @@ export class TzDatabase {
 	 * @param ruleName	Name of rule set
 	 * @return RuleInfo array. Do not change, this is a cached value.
 	 */
-	public getRuleInfos(ruleName: string): RuleInfo[]{
+	public getRuleInfos(ruleName: string): RuleInfo[] {
 		// validate name BEFORE searching cache
 		if (!this._data.rules.hasOwnProperty(ruleName)) {
 			throw new Error("Rule set \"" + ruleName + "\" not found.");

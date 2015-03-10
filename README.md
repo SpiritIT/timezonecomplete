@@ -541,6 +541,9 @@ The version of the included IANA time zone database is 2015a.
 
 ## Changelog
 
+### 1.13.1 (2015-03-10)
+* Check time zone name in TimeZone constructor.
+
 ### 1.13.0
 * Add static DateTime.fromExcel() function to convert a Microsoft Excel / ODF timestamp number to a datetime
   https://stackoverflow.com/questions/981655/how-to-represent-a-datetime-in-excel

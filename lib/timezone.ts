@@ -9,6 +9,7 @@
 "use strict";
 
 import assert = require("assert");
+import util = require("util");
 
 import basics = require("./basics");
 import TimeStruct = basics.TimeStruct;
@@ -215,6 +216,7 @@ export class TimeZone {
 			this._offset = TimeZone.stringToOffset(name);
 		} else {
 			this._kind = TimeZoneKind.Proper;
+			assert(TzDatabase.instance().exists(name), util.format("Non-existing time zone name '%s'", name));
 		}
 	}
 

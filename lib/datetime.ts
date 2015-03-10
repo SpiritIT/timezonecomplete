@@ -928,7 +928,7 @@ export class DateTime {
 	/**
 	 * Split a combined ISO datetime and timezone into datetime and timezone
 	 */
-	private static _splitDateFromTimeZone(s: string): string[]{
+	private static _splitDateFromTimeZone(s: string): string[] {
 		var trimmed = s.trim();
 		var result = ["", ""];
 		var index = trimmed.lastIndexOf(" ");
