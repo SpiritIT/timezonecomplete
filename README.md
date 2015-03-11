@@ -541,6 +541,9 @@ The version of the included IANA time zone database is 2015a.
 
 ## Changelog
 
+### 1.13.2 (2015-03-11)
+* Allow "without DST" suffix in time zone name.
+
 ### 1.13.1 (2015-03-10)
 * Check time zone name in TimeZone constructor.
 

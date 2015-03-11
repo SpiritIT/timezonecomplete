@@ -170,6 +170,12 @@ describe("TimeZone", (): void => {
 			var t: TimeZone = TimeZone.zone("Europe/Amsterdam", false);
 			expect(t.offsetForZone(2014, 7, 1, 1, 2, 3, 4)).to.equal(60);
 		});
+		it("should not apply DST if asked with string suffix 'without DST'", (): void => {
+			var t: TimeZone = TimeZone.zone("Europe/Amsterdam without DST", true);
+			var u: TimeZone = TimeZone.zone("Europe/Amsterdam without DST", false);
+			expect(t).to.equal(u);
+			expect(t.dst()).to.equal(false);
+		});
 		it("should return a time zone for local time", (): void => {
 			var t: TimeZone = TimeZone.zone("localtime");
 			expect(t.equals(TimeZone.local())).to.equal(true);

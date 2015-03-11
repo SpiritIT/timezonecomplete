@@ -165,6 +165,8 @@ export class TimeZone {
 	 *          a TZ database time zone name (e.g. Europe/Amsterdam),
 	 *          or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
 	 *          https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+	 *          TZ database zone name may be suffixed with " without DST" to indicate no DST should be applied.
+	 *          In that case, the dst parameter is ignored.
 	 * @param dst	Optional, default true: adhere to Daylight Saving Time if applicable. Note for
 	 *              "localtime", timezonecomplete will adhere to the computer settings, the DST flag
 	 *              does not have any effect.
@@ -178,10 +180,15 @@ export class TimeZone {
 		var name = "";
 		switch (typeof (a)) {
 			case "string": {
-				if ((<string>a).trim().length === 0) {
+				var s = <string>a;
+				if (s.trim().length === 0) {
 					return null; // no time zone
 				} else {
-					name = TimeZone._normalizeString(<string>a);
+					if (s.indexOf("without DST") >= 0) {
+						dst = false;
+						s = s.slice(0, s.indexOf("without DST") - 1);
+					}
+					name = TimeZone._normalizeString(s);
 				}
 			} break;
 			case "number": {

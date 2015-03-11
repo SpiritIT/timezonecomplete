@@ -1168,6 +1168,8 @@ declare module '__timezonecomplete/timezone' {
                 *          a TZ database time zone name (e.g. Europe/Amsterdam),
                 *          or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
                 *          https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+                *          TZ database zone name may be suffixed with " without DST" to indicate no DST should be applied.
+                *          In that case, the dst parameter is ignored.
                 * @param dst	Optional, default true: adhere to Daylight Saving Time if applicable. Note for
                 *              "localtime", timezonecomplete will adhere to the computer settings, the DST flag
                 *              does not have any effect.

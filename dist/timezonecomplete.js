@@ -3236,11 +3236,16 @@ var TimeZone = (function () {
         switch (typeof (a)) {
             case "string":
                 {
-                    if (a.trim().length === 0) {
+                    var s = a;
+                    if (s.trim().length === 0) {
                         return null; // no time zone
                     }
                     else {
-                        name = TimeZone._normalizeString(a);
+                        if (s.indexOf("without DST") >= 0) {
+                            dst = false;
+                            s = s.slice(0, s.indexOf("without DST") - 1);
+                        }
+                        name = TimeZone._normalizeString(s);
                     }
                 }
                 break;
