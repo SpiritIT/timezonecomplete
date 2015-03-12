@@ -1753,6 +1753,17 @@ var Duration = (function () {
         return new Duration(this.milliseconds() - value.milliseconds());
     };
     /**
+     * Return the absolute value of the duration i.e. remove the sign.
+     */
+    Duration.prototype.abs = function () {
+        if (this._sign >= 0) {
+            return this.clone();
+        }
+        else {
+            return this.multiply(-1);
+        }
+    };
+    /**
      * String in [-]hh:mm:ss.nnn notation. All fields are
      * always present except the sign.
      */
@@ -2379,6 +2390,15 @@ function max(d1, d2) {
     return d1.max(d2);
 }
 exports.max = max;
+/**
+ * Returns the absolute value of a Duration
+ */
+function abs(d) {
+    assert(d, "first argument is null");
+    assert(d instanceof Duration, "first argument is not a Duration");
+    return d.abs();
+}
+exports.abs = abs;
 
 
 },{"./datetime":2,"./duration":3,"assert":18}],"Focm2+":[function(require,module,exports){

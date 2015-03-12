@@ -184,6 +184,12 @@ var duration5;
 duration5 = duration3.max(duration4); // 6 seconds
 duration5 = duration3.min(duration4); // 3 seconds
 
+// absolute value
+var negativeDuration = tc.seconds(-1);
+negativeDuration.abs(); // 1 second
+tc.abs(negativeDuration); // 1 second
+
+
 // getters
 // Note Duration has two sets of getters: singular and plural:
 // - wholeHours(), minute(), second(), millisecond(): these get the hour part, minute part 0-59, second part 0-59 etc.
@@ -540,6 +546,9 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015a.
 
 ## Changelog
+
+### 1.14.0 (2015-03-12)
+* Add Duration.abs() function and global abs() function
 
 ### 1.13.2 (2015-03-11)
 * Allow "without DST" suffix in time zone name.

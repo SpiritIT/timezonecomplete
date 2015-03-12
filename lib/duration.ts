@@ -326,6 +326,17 @@ export class Duration {
 	}
 
 	/**
+	 * Return the absolute value of the duration i.e. remove the sign.
+	 */
+	public abs(): Duration {
+		if (this._sign >= 0) {
+			return this.clone();
+		} else {
+			return this.multiply(-1);
+		}
+	}
+
+	/**
 	 * String in [-]hh:mm:ss.nnn notation. All fields are
 	 * always present except the sign.
 	 */

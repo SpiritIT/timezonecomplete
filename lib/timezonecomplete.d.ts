@@ -888,6 +888,10 @@ declare module '__timezonecomplete/duration' {
                 */
             sub(value: Duration): Duration;
             /**
+                * Return the absolute value of the duration i.e. remove the sign.
+                */
+            abs(): Duration;
+            /**
                 * String in [-]hh:mm:ss.nnn notation. All fields are
                 * always present except the sign.
                 */
@@ -1329,5 +1333,9 @@ declare module '__timezonecomplete/globals' {
         * Returns the maximum of two Durations
         */
     export function max(d1: Duration, d2: Duration): Duration;
+    /**
+        * Returns the absolute value of a Duration
+        */
+    export function abs(d: Duration): Duration;
 }
 

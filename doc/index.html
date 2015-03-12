@@ -225,6 +225,12 @@ fiveSecs.greaterThan(sixSecs); <span class="hljs-comment">// false</span>
 duration5 = duration3.max(duration4); <span class="hljs-comment">// 6 seconds</span>
 duration5 = duration3.min(duration4); <span class="hljs-comment">// 3 seconds</span>
 
+<span class="hljs-comment">// absolute value</span>
+<span class="hljs-keyword">var</span> negativeDuration = tc.seconds(-<span class="hljs-number">1</span>);
+negativeDuration.abs(); <span class="hljs-comment">// 1 second</span>
+tc.abs(negativeDuration); <span class="hljs-comment">// 1 second</span>
+
+
 <span class="hljs-comment">// getters</span>
 <span class="hljs-comment">// Note Duration has two sets of getters: singular and plural:</span>
 <span class="hljs-comment">// - wholeHours(), minute(), second(), millisecond(): these get the hour part, minute part 0-59, second part 0-59 etc.</span>
@@ -543,6 +549,10 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 				<p>The version of the included IANA time zone database is 2015a.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-14-0-2015-03-12-">1.14.0 (2015-03-12)</h3>
+				<ul>
+					<li>Add Duration.abs() function and global abs() function</li>
+				</ul>
 				<h3 id="1-13-2-2015-03-11-">1.13.2 (2015-03-11)</h3>
 				<ul>
 					<li>Allow &quot;without DST&quot; suffix in time zone name.</li>
@@ -754,9 +764,9 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x72;&#x2e;&#x73;&#99;&#x68;&#x6f;&#x75;&#x74;&#x65;&#110;&#x40;&#x73;&#112;&#x69;&#114;&#x69;&#116;&#105;&#x74;&#46;&#99;&#x6f;&#x6d;">&#x72;&#x2e;&#x73;&#99;&#x68;&#x6f;&#x75;&#x74;&#x65;&#110;&#x40;&#x73;&#112;&#x69;&#114;&#x69;&#116;&#105;&#x74;&#46;&#99;&#x6f;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x64;&#46;&#x77;&#x69;&#115;&#115;&#x69;&#110;&#103;&#64;&#x73;&#x70;&#105;&#x72;&#105;&#x74;&#105;&#116;&#x2e;&#99;&#111;&#109;">&#x64;&#46;&#x77;&#x69;&#115;&#115;&#x69;&#110;&#103;&#64;&#x73;&#x70;&#105;&#x72;&#105;&#x74;&#105;&#116;&#x2e;&#99;&#111;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#112;&#46;&#107;&#111;&#x6f;&#x69;&#x6a;&#109;&#x61;&#110;&#x73;&#x40;&#x73;&#x70;&#x69;&#114;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#112;&#46;&#107;&#111;&#x6f;&#x69;&#x6a;&#109;&#x61;&#110;&#x73;&#x40;&#x73;&#x70;&#x69;&#114;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#114;&#46;&#x73;&#x63;&#104;&#111;&#x75;&#116;&#101;&#x6e;&#x40;&#115;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#x6d;">&#114;&#46;&#x73;&#x63;&#104;&#111;&#x75;&#116;&#101;&#x6e;&#x40;&#115;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#x6d;</a></li>
+					<li>Daan Wissing <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x64;&#46;&#x77;&#x69;&#x73;&#x73;&#105;&#x6e;&#x67;&#x40;&#115;&#112;&#x69;&#x72;&#105;&#x74;&#x69;&#116;&#x2e;&#x63;&#111;&#109;">&#x64;&#46;&#x77;&#x69;&#x73;&#x73;&#105;&#x6e;&#x67;&#x40;&#115;&#112;&#x69;&#x72;&#105;&#x74;&#x69;&#116;&#x2e;&#x63;&#111;&#109;</a></li>
+					<li>Peter Kooijmans <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#112;&#x2e;&#107;&#x6f;&#111;&#105;&#x6a;&#109;&#x61;&#110;&#115;&#64;&#x73;&#112;&#x69;&#x72;&#105;&#116;&#x69;&#x74;&#x2e;&#99;&#x6f;&#109;">&#112;&#x2e;&#107;&#x6f;&#111;&#105;&#x6a;&#109;&#x61;&#110;&#115;&#64;&#x73;&#112;&#x69;&#x72;&#105;&#116;&#x69;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

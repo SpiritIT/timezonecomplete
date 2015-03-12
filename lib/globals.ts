@@ -57,3 +57,12 @@ export function max(d1: any, d2: any): any {
 	return d1.max(d2);
 }
 
+/**
+ * Returns the absolute value of a Duration
+ */
+export function abs(d: Duration): Duration {
+	assert(d, "first argument is null");
+	assert(d instanceof Duration, "first argument is not a Duration");
+	return d.abs();
+}
+

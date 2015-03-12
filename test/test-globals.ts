@@ -49,4 +49,21 @@ describe("globals", (): void => {
 			});
 		});
 	});
+
+	describe("abs()", (): void => {
+		it("should return the same value for a positive duration", (): void => {
+			expect(globals.abs(Duration.milliseconds(2)).milliseconds()).to.equal(2);
+		});
+		it("should return the same value for a zero duration", (): void => {
+			expect(globals.abs(Duration.milliseconds(0)).milliseconds()).to.equal(0);
+		});
+		it("should return the inverted value for a negative duration", (): void => {
+			expect(globals.abs(Duration.milliseconds(-2)).milliseconds()).to.equal(2);
+		});
+		it("should return a clone", (): void => {
+			var d: Duration = Duration.milliseconds(2);
+			expect(globals.abs(d)).not.to.equal(d);
+		});
+	});
+
 });

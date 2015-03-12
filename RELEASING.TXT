@@ -20,7 +20,6 @@ MODULE PUBLISH
 * Adjust package.json and adjust version number
 * Run:
 gulp clean && gulp release && npm test
-* Correct a bug in dts-bundle. The lib/timezonecomplete.d.ts file is missing a reference to timesource (near line 286), you can see this by diffing with the version stored in DefinitelyTyped. Add it back.
 * Commit changes and Sync with GitHub
 * In GitHub, create a release tag
 * Ensure .npmrc points to the world NPM repository, not the spirit repository
