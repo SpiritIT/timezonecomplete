@@ -41,13 +41,17 @@ export enum TimeUnit {
 	Day,
 	Week,
 	Month,
-	Year
+	Year,
+	/**
+	 * End-of-enum marker, do not use
+	 */
+	MAX
 }
 
 /**
  * Approximate number of milliseconds for a time unit.
  * A day is assumed to have 24 hours, a month is assumed to equal 30 days
- * and a year is set to 365 days.
+ * and a year is set to 360 days (because 12 months of 30 days).
  *
  * @param unit	Time unit e.g. TimeUnit.Month
  * @returns	The number of milliseconds.
@@ -56,12 +60,12 @@ export function timeUnitToMilliseconds(unit: TimeUnit): number {
 	switch (unit) {
 		case TimeUnit.Millisecond: return 1;
 		case TimeUnit.Second: return 1000;
-		case TimeUnit.Minute: return 60000;
-		case TimeUnit.Hour: return 3600000;
+		case TimeUnit.Minute: return 60 * 1000;
+		case TimeUnit.Hour: return 60 * 60 * 1000;
 		case TimeUnit.Day: return 86400000;
-		case TimeUnit.Week: return 604800000;
-		case TimeUnit.Month: return 2592000000;
-		case TimeUnit.Year: return 31536000000;
+		case TimeUnit.Week: return 7 * 86400000;
+		case TimeUnit.Month: return 30 * 86400000;
+		case TimeUnit.Year: return 12 * 30 * 86400000;
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore if */
@@ -70,6 +74,32 @@ export function timeUnitToMilliseconds(unit: TimeUnit): number {
 				throw new Error("Unknown time unit");
 			}
 	}
+}
+
+/**
+ * Time unit to lowercase string. If amount is specified, then the string is put in plural form
+ * if necessary.
+ * @param unit The unit
+ * @param amount If this is unequal to -1 and 1, then the result is pluralized
+ */
+export function timeUnitToString(unit: TimeUnit, amount: number = 1): string {
+	var result = TimeUnit[unit].toLowerCase();
+	if (amount === 1 || amount === -1) {
+		return result;
+	} else {
+		return result + "s";
+	}
+}
+
+export function stringToTimeUnit(s: string): TimeUnit {
+	var trimmed = s.trim().toLowerCase();
+	for (var i = 0; i < TimeUnit.MAX; ++i) {
+		var other = timeUnitToString(i, 1);
+		if (other === trimmed || (other + "s") === trimmed) {
+			return i;
+		}
+	}
+	throw new Error("Unknown time unit string '" + s + "'");
 }
 
 /**
@@ -597,9 +627,6 @@ export class TimeStruct {
 					} break;
 					case TimeUnit.Second: {
 						fractionMillis = 1000 * fraction;
-					} break;
-					case TimeUnit.Millisecond: {
-						fractionMillis = fraction;
 					} break;
 				}
 			}

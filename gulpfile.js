@@ -183,6 +183,9 @@ gulp.task("build", function () {
 		.pipe(tslint.report('verbose', {
 			emitError: true
 		}))
+		.on("error", function (err) {
+			result.emit("error", err);
+		})
 		.pipe(sourcemaps.init())
 		.pipe(typescript({
 			module: "commonjs",

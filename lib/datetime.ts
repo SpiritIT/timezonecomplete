@@ -586,9 +586,7 @@ export class DateTime {
 	}
 
 	/**
-	 * Add a time duration relative to UTC. Note that this simply adds a number
-	 * of milliseconds to UTC and converts back to zone(),
-	 * There is not DST handling.
+	 * Add a time duration relative to UTC.
 	 * @return this + duration
 	 */
 	public add(duration: Duration): DateTime;
@@ -612,21 +610,20 @@ export class DateTime {
 	 * Implementation.
 	 */
 	public add(a1: any, unit?: TimeUnit): DateTime {
-		if (typeof (a1) === "object" && a1 instanceof Duration) {
+		var amount: number;
+		var u: TimeUnit;
+		if (typeof (a1) === "object") {
 			var duration: Duration = <Duration>(a1);
-			var newMillis: number = this._utcDate.toUnixNoLeapSecs() + duration.milliseconds();
-			if (this._zone) {
-				var tm: TimeStruct = TimeStruct.fromUnix(newMillis);
-				newMillis += this._zone.offsetForUtc(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second, tm.milli) * 60000;
-			}
-			return new DateTime(newMillis, this.zone());
+			amount = duration.amount();
+			u = duration.unit();
 		} else {
 			assert(typeof (a1) === "number", "expect number as first argument");
 			assert(typeof (unit) === "number", "expect number as second argument");
-			var amount: number = <number>(a1);
-			var utcTm = this._addToTimeStruct(this._utcDate, amount, unit);
-			return new DateTime(utcTm.toUnixNoLeapSecs(), TimeZone.utc()).toZone(this._zone);
+			amount = <number>(a1);
+			u = unit;
 		}
+		var utcTm = this._addToTimeStruct(this._utcDate, amount, u);
+		return new DateTime(utcTm.toUnixNoLeapSecs(), TimeZone.utc()).toZone(this._zone);
 	}
 
 	/**
@@ -644,8 +641,22 @@ export class DateTime {
 	 * the start date was at the end of a month, i.e. contrary to JavaScript
 	 * Date#setUTCMonth() it will not overflow into the next month
 	 */
-	public addLocal(amount: number, unit: TimeUnit): DateTime {
-		var localTm = this._addToTimeStruct(this._zoneDate, amount, unit);
+	public addLocal(duration: Duration): DateTime;
+	public addLocal(amount: number, unit: TimeUnit): DateTime;
+	public addLocal(a1: any, unit?: TimeUnit): DateTime {
+		var amount: number;
+		var u: TimeUnit;
+		if (typeof (a1) === "object") {
+			var duration: Duration = <Duration>(a1);
+			amount = duration.amount();
+			u = duration.unit();
+		} else {
+			assert(typeof (a1) === "number", "expect number as first argument");
+			assert(typeof (unit) === "number", "expect number as second argument");
+			amount = <number>(a1);
+			u = unit;
+		}
+		var localTm = this._addToTimeStruct(this._zoneDate, amount, u);
 		if (this._zone) {
 			var direction: NormalizeOption = (amount >= 0 ? NormalizeOption.Up : NormalizeOption.Down);
 			var normalized = this._zone.normalizeZoneTime(localTm.toUnixNoLeapSecs(), direction);
@@ -751,8 +762,14 @@ export class DateTime {
 	/**
 	 * Same as addLocal(-1*amount, unit);
 	 */
-	public subLocal(amount: number, unit: TimeUnit): DateTime {
-		return this.addLocal(-1 * amount, unit);
+	public subLocal(duration: Duration): DateTime;
+	public subLocal(amount: number, unit: TimeUnit): DateTime;
+	public subLocal(a1: any, unit?: TimeUnit): DateTime {
+		if (typeof a1 === "object") {
+			return this.addLocal((<Duration>a1).multiply(-1));
+		} else {
+			return this.addLocal(-1 * <number>a1, unit);
+		}
 	}
 
 	/**

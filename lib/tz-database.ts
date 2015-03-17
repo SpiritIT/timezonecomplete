@@ -144,6 +144,10 @@ export class RuleInfo {
 		 */
 		public letter: string
 		) {
+
+		if (this.save) {
+			this.save = this.save.convert(basics.TimeUnit.Hour);
+		}
 	}
 
 	/**
@@ -366,6 +370,9 @@ export class ZoneInfo {
 		 */
 		public until: number
 	) {
+		if (this.ruleOffset) {
+			this.ruleOffset = this.ruleOffset.convert(basics.TimeUnit.Hour);
+		}
 	}
 }
 
@@ -436,6 +443,9 @@ export class Transition {
 		public letter: string
 
 		) {
+		if (this.offset) {
+			this.offset = this.offset.convert(basics.TimeUnit.Hour);
+		}
 	}
 }
 

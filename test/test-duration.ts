@@ -9,59 +9,63 @@ import chai = require("chai");
 import expect = chai.expect;
 
 import basics = require("../lib/basics");
-import duration = require("../lib/duration");
+import TimeUnit = basics.TimeUnit;
 
+import duration = require("../lib/duration");
 import Duration = duration.Duration;
 
 
 describe("duration loose", (): void => {
-	it("construct by hour", (): void => {
-		expect(duration.hours(2).milliseconds()).to.equal(2 * 60 * 60 * 1000);
+	it("milliseconds()", (): void => {
+		var d = duration.milliseconds(2);
+		expect(d.amount()).to.equal(2);
+		expect(d.unit()).to.equal(TimeUnit.Millisecond);
 	});
-
-	it("construct by minute", (): void => {
-		expect(duration.minutes(2).milliseconds()).to.equal(2 * 60 * 1000);
+	it("seconds()", (): void => {
+		var d = duration.seconds(2);
+		expect(d.amount()).to.equal(2);
+		expect(d.unit()).to.equal(TimeUnit.Second);
 	});
-
-	it("construct by second", (): void => {
-		expect(duration.seconds(2).milliseconds()).to.equal(2 * 1000);
+	it("minutes()", (): void => {
+		var d = duration.minutes(2);
+		expect(d.amount()).to.equal(2);
+		expect(d.unit()).to.equal(TimeUnit.Minute);
 	});
-
-	it("construct by milliseconds", (): void => {
-		expect(duration.milliseconds(2).milliseconds()).to.equal(2);
+	it("hours()", (): void => {
+		var d = duration.hours(2);
+		expect(d.amount()).to.equal(2);
+		expect(d.unit()).to.equal(TimeUnit.Hour);
+	});
+	it("days()", (): void => {
+		var d = duration.days(2);
+		expect(d.amount()).to.equal(2);
+		expect(d.unit()).to.equal(TimeUnit.Day);
+	});
+	it("months()", (): void => {
+		var d = duration.months(2);
+		expect(d.amount()).to.equal(2);
+		expect(d.unit()).to.equal(TimeUnit.Month);
+	});
+	it("years()", (): void => {
+		var d = duration.years(2);
+		expect(d.amount()).to.equal(2);
+		expect(d.unit()).to.equal(TimeUnit.Year);
 	});
 });
 
 describe("Duration()", (): void => {
 
 	describe("constructor", (): void => {
-
-		it("construct by hour", (): void => {
-			expect(Duration.hours(2).milliseconds()).to.equal(2 * 60 * 60 * 1000);
+		it("default constructor", (): void => {
+			var d = new Duration();
+			expect(d.amount()).to.equal(0);
+			expect(d.unit()).to.equal(TimeUnit.Millisecond);
 		});
-
-		it("construct by minute", (): void => {
-			expect(Duration.minutes(2).milliseconds()).to.equal(2 * 60 * 1000);
-		});
-
-		it("construct by second", (): void => {
-			expect(Duration.seconds(2).milliseconds()).to.equal(2 * 1000);
-		});
-
-		it("construct by milliseconds", (): void => {
-			expect(Duration.milliseconds(2).milliseconds()).to.equal(2);
-		});
-
-		it("construct no args", (): void => {
-			expect((new Duration()).milliseconds()).to.equal(0);
-		});
-
 		it("construct from number", (): void => {
 			expect((new Duration(1)).milliseconds()).to.equal(1);
 			expect((new Duration(-1)).milliseconds()).to.equal(-1);
 		});
-
-		it("construct from string", (): void => {
+		it("construct from HMS string", (): void => {
 			expect((new Duration("0")).milliseconds()).to.equal(0);
 			expect((new Duration("1")).milliseconds()).to.equal(1 * 3600 * 1000);
 			expect((new Duration("01")).milliseconds()).to.equal(1 * 3600 * 1000);
@@ -74,6 +78,12 @@ describe("Duration()", (): void => {
 			expect((new Duration("25")).milliseconds()).to.equal(25 * 3600 * 1000);
 			expect((new Duration("-01:02:03.004")).milliseconds()).to.equal(-1 * (1 * 3600 * 1000 + 2 * 60 * 1000 + 3 * 1000 + 4));
 			expect((new Duration(" \n\t01:01:01.101 \n\t")).milliseconds()).to.equal(1 * 3600 * 1000 + 1 * 60 * 1000 + 1 * 1000 + 101);
+		});
+		it("construct from amount+unit string", (): void => {
+			expect((new Duration("1 hour")).hours()).to.equal(1);
+			expect((new Duration("1 HoUr")).hours()).to.equal(1);
+			expect((new Duration("2 hours")).hours()).to.equal(2);
+			expect((new Duration("   1 hour  ")).hours()).to.equal(1);
 		});
 
 		it("throws on invalid string", (): void => {
@@ -96,7 +106,7 @@ describe("Duration()", (): void => {
 			expect((new Duration(1, basics.TimeUnit.Day)).hours()).to.equal(24);
 			expect((new Duration(1, basics.TimeUnit.Week)).hours()).to.equal(7 * 24);
 			expect((new Duration(1, basics.TimeUnit.Month)).hours()).to.equal(30 * 24);
-			expect((new Duration(1, basics.TimeUnit.Year)).hours()).to.equal(365 * 24);
+			expect((new Duration(1, basics.TimeUnit.Year)).hours()).to.equal(360 * 24);
 			expect((new Duration(-2.5, basics.TimeUnit.Second)).seconds()).to.equal(-2.5);
 		});
 
@@ -114,11 +124,16 @@ describe("Duration()", (): void => {
 	});
 
 	describe("getters", (): void => {
-		it("getters", (): void => {
-			var duration = new Duration("-01:02:03.004");
-			var millis = -1 * (1 * 3600 * 1000 + 2 * 60 * 1000 + 3 * 1000 + 4);
+		it("time getters", (): void => {
+			var duration = new Duration("-25:02:03.004");
+			var millis = -1 * (25 * 3600 * 1000 + 2 * 60 * 1000 + 3 * 1000 + 4);
 			expect(duration.sign()).to.equal("-");
+
+			expect(duration.days()).to.equal(millis / (24 * 60 * 60 * 1000));
+			expect(duration.day()).to.equal(1);
 			expect(duration.hours()).to.equal(millis / 3600000);
+			expect(duration.hour()).to.equal(1);
+			expect(duration.wholeHours()).to.equal(25);
 			expect(duration.minutes()).to.equal(millis / 60000);
 			expect(duration.minute()).to.equal(2);
 			expect(duration.seconds()).to.equal(millis / 1000);
@@ -127,6 +142,21 @@ describe("Duration()", (): void => {
 			expect(duration.millisecond()).to.equal(4);
 			var duration2 = new Duration("01:02:03.004");
 			expect(duration2.sign()).to.equal("");
+		});
+		it("date getters", (): void => {
+			var duration = new Duration("2.75 years");
+			expect(duration.sign()).to.equal("");
+
+			expect(duration.days()).to.equal(360 * 2.75);
+			expect(duration.day()).to.equal(0);
+			expect(duration.months()).to.equal(12 * 2.75);
+			expect(duration.month()).to.equal(9);
+			expect(duration.years()).to.equal(2.75);
+			expect(duration.wholeYears()).to.equal(2);
+		});
+		it("wholeYears", (): void => {
+			expect(Duration.months(25).wholeYears()).to.equal(2);
+			expect(Duration.days(722).wholeYears()).to.equal(2);
 		});
 	});
 
@@ -138,6 +168,7 @@ describe("Duration()", (): void => {
 			expect(Duration.seconds(1).lessThan(Duration.seconds(2))).to.equal(true);
 			expect(Duration.seconds(1).lessThan(Duration.hours(1))).to.equal(true);
 			expect(Duration.hours(-1).lessThan(Duration.seconds(1))).to.equal(true);
+			expect(Duration.months(-1).lessThan(Duration.seconds(1))).to.equal(true);
 		});
 		it("should return false for an equal other", (): void => {
 			expect(Duration.milliseconds(60000).lessThan(Duration.milliseconds(60000))).to.equal(false);
@@ -188,6 +219,8 @@ describe("Duration()", (): void => {
 		it("should return true for an equal other", (): void => {
 			expect(Duration.milliseconds(60000).equals(Duration.milliseconds(60000))).to.equal(true);
 			expect(Duration.milliseconds(60000).equals(Duration.minutes(1))).to.equal(true);
+			expect(Duration.hours(24).equals(Duration.days(1))).to.equal(true);
+			expect(Duration.days(30).equals(Duration.months(1))).to.equal(true);
 		});
 		it("should return false for a lesser other", (): void => {
 			expect(Duration.milliseconds(1).equals(Duration.milliseconds(-1))).to.equal(false);
@@ -196,6 +229,30 @@ describe("Duration()", (): void => {
 			expect(Duration.seconds(2).equals(Duration.seconds(1))).to.equal(false);
 			expect(Duration.hours(1).equals(Duration.seconds(1))).to.equal(false);
 			expect(Duration.seconds(1).equals(Duration.hours(-1))).to.equal(false);
+		});
+	});
+
+	describe("identical()", (): void => {
+		it("should return false for equal other with different unit", (): void => {
+			expect(Duration.seconds(60).identical(Duration.minutes(1))).to.equal(false);
+			expect(Duration.hours(24).identical(Duration.days(1))).to.equal(false);
+			expect(Duration.days(30).identical(Duration.months(1))).to.equal(false);
+		});
+		it("should return true for an identical other", (): void => {
+			expect(Duration.seconds(60).identical(Duration.seconds(60))).to.equal(true);
+		});
+	});
+
+	describe("equalsExact()", (): void => {
+		it("should return false approximately equal units", (): void => {
+			expect(Duration.hours(24).equalsExact(Duration.days(1))).to.equal(false);
+			expect(Duration.days(30).equalsExact(Duration.months(1))).to.equal(false);
+		});
+		it("should return true for an exactly equal other with different unit", (): void => {
+			expect(Duration.seconds(60).equalsExact(Duration.seconds(60))).to.equal(true);
+			expect(Duration.seconds(60).equalsExact(Duration.minutes(1))).to.equal(true);
+			expect(Duration.seconds(3600).equalsExact(Duration.hours(1))).to.equal(true);
+			expect(Duration.months(12).equalsExact(Duration.years(1))).to.equal(true);
 		});
 	});
 
@@ -356,19 +413,19 @@ describe("Duration()", (): void => {
 		});
 	});
 
-	describe("toString()", (): void => {
+	describe("toHmsString()", (): void => {
 		it("should handle hours above 23", (): void => {
-			expect((new Duration("-30:02:03.004")).toString()).to.equal("-30:02:03.004");
+			expect((new Duration("-30:02:03.004")).toHmsString()).to.equal("-30:02:03.004");
 		});
 		it("should handle hours below 24", (): void => {
-			expect((new Duration("-01:02:03.004")).toString()).to.equal("-01:02:03.004");
+			expect((new Duration("-01:02:03.004")).toHmsString()).to.equal("-01:02:03.004");
 		});
 		it("should shorten the string if possible", (): void => {
-			expect((new Duration("-01:02:03.4")).toString()).to.equal("-01:02:03.400");
-			expect((new Duration("01")).toString()).to.equal("01");
-			expect((new Duration("01:02")).toString()).to.equal("01:02");
-			expect((new Duration("01:02:03")).toString()).to.equal("01:02:03");
-			expect((new Duration("01:02:03.000")).toString()).to.equal("01:02:03");
+			expect((new Duration("-01:02:03.4")).toHmsString()).to.equal("-01:02:03.400");
+			expect((new Duration("01")).toHmsString()).to.equal("01");
+			expect((new Duration("01:02")).toHmsString()).to.equal("01:02");
+			expect((new Duration("01:02:03")).toHmsString()).to.equal("01:02:03");
+			expect((new Duration("01:02:03.000")).toHmsString()).to.equal("01:02:03");
 		});
 	});
 

@@ -77,6 +77,17 @@ tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Day); // returns -2 * 1000 * 3600 * 24
 tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Month); // returns -2 * 1000 * 3600 * 24 * 30 milliseconds
 tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Year); // returns -2 * 1000 * 3600 * 24 * 365 milliseconds
 
+// time unit to string function takes an optional amount and pluralizes the outcome
+tc.timeUnitToString(tc.TimeUnit.Day); // "day"
+tc.timeUnitToString(tc.TimeUnit.Day, 1); // "day"
+tc.timeUnitToString(tc.TimeUnit.Day, -1); // "day"
+tc.timeUnitToString(tc.TimeUnit.Day, 5); // "days"
+
+// time unit from string function
+tc.stringToTimeUnit("days"); // tc.TimeUnit.Day
+tc.stringToTimeUnit("day"); // tc.TimeUnit.Day
+tc.stringToTimeUnit("DAY"); // tc.TimeUnit.Day
+
 // number of days in a month, accounting for leap years
 tc.daysInMonth(2004, 2); // returns 29
 tc.daysInMonth(2014, 2); // returns 28
@@ -143,6 +154,14 @@ duration = tc.milliseconds(2);	// 2 milliseconds
 duration = tc.seconds(2);	// 2 seconds
 duration = tc.minutes(2);	// 2 minutes
 duration = tc.hours(-2.5); // -2.5 hours
+duration = tc.days(-2.5); // -2.5 days
+duration = tc.months(-2.5); // -2.5 months
+duration = tc.years(-2.5); // -2.5 years
+
+// getters
+duration = tc.years(-2.5); // -2.5 years
+duration.amount(); // -2.5
+duration.unit(); // tc.TimeUnit.Year
 
 // old (more verbose) method for creating:
 duration = tc.Duration.milliseconds(2);	// 2 milliseconds
@@ -155,15 +174,26 @@ duration = tc.seconds(2);
 console.log(duration.toString()); // 00:00:02
 console.log(duration.toFullString()); // 00:00:02.000
 
-// convert to different unit
+// value expressed as different unit
 console.log(duration.milliseconds()); // 2000
 
-// arithmetic
+// duration converted to new duration in different unit
+duration.convert(tc.TimeUnit.Millisecond); // returns new duration of 2000 milliseconds
+duration.as(tc.TimeUnit.Millisecond); // returns number 2000
+
+
+// arithmetic - preserves the original unit
 var duration2;
-duration2 = duration.add(tc.hours(5)); // 5 hours and 2 seconds
+duration = tc.seconds(2); // 2 seconds
+duration2 = duration.add(tc.hours(5)); // 18002 seconds
 duration2 = duration.sub(tc.milliseconds(500)); // 1.5 seconds
 duration2 = duration.multiply(3); // 6 seconds
-duration2 = duration.divide(3); // two thirds of a second
+duration2 = duration.divide(3); // 0.67 seconds
+
+// note that e.g. adding hours to months gives an approximate value
+// as not all months are equally long
+duration = tc.hours(2);
+duration2 = duration.add(tc.months(1)); // 2 + (30 * 24) hours = 722 hours
 
 // comparisons
 var sixSecs = tc.seconds(6);
@@ -178,6 +208,17 @@ fiveSecs.lessEqual(sixSecs); // true
 fiveSecs.equals(sixSecs); // false
 fiveSecs.greaterEqual(sixSecs); // false
 fiveSecs.greaterThan(sixSecs); // false
+
+// different equality functions:
+tc.seconds(60).equals(tc.minutes(1)); // true, we don't handle leap seconds so 60 seconds is 1 minute
+tc.days(30).equals(tc.months(1)); // true, 1 month is approx 30 days
+
+tc.seconds(60).identical(tc.seconds(60)); // true: same unit same amount
+tc.seconds(60).identical(tc.minutes(1)); // false, needs identical amount and identical unit
+
+tc.days(30).equalsExact(tc.months(1)); // false, we don't know whether a month is 30 days exactly
+tc.seconds(60).equalsExact(tc.minutes(1)); // true, we don't handle leap seconds so 60 seconds is 1 minute
+
 
 // min and max functions
 var duration3 = tc.seconds(6);
@@ -213,12 +254,29 @@ duration6.valueOf(); // same as milliseconds()
 
 // create duration from string
 var duration7 = new tc.Duration("00:01"); // one minute
+duration7 = new tc.Duration("00:00:00.001"); // one millisecond
+duration7 = new tc.Duration("1 day"); // one day
+duration7 = new tc.Duration("5 months"); // 5 months
+
+// duration to string (note pluralized)
+tc.seconds(1).toString(); // "1 second"
+tc.seconds(2).toString(); // "2 seconds"
+
+// duration to time string hhhh:mm:ss.nnn in abbreviated and full forms
+tc.seconds(1).toHmsString(); // "00:00:01"
+tc.seconds(1).toHmsString(true); // "00:00:01.000"
+
+// duration to ISO 8601 duration string
+tc.minutes(1).toIsoString(); // "PT1M"
+tc.months(1).toIsoString(); // "P1M"
+tc.milliseconds(500).toIsoString(); // "P0.5S"
 
 // create approximate duration from amount of time units
 var duration8 = new tc.Duration(4, tc.TimeUnit.Month); // 4 months of 30 days
 
 // create duration from number of milliseconds
 var duration9 = new tc.Duration(-500); // -500 milliseconds
+
 
 
 ```
@@ -402,14 +460,14 @@ var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Europe/A
 var difference = utcDate.diff(amsterdamDate);
 console.log(difference.hours()); // 1
 
-// Add an hour (3600 seconds) to a time. It may be that
+// Add an hour to a time. It may be that
 // local time does not increase because of a DST change.
 var added;
 added = localdate.add(tc.hours(1));
 
 // Add a LOCAL hour to a time (ensure the hour() field increments by 1)
 // Note this DOES account for DST
-added = localdate.addLocal(1, tc.TimeUnit.Hour);
+added = localdate.addLocal(tc.hours(1));
 
 // Add a UTC hour to a time. (ensure the utcHour() increments by 1,
 // due to DST changes the local hour might not change or change 2 hours)
@@ -551,7 +609,18 @@ The version of the included IANA time zone database is 2015a.
 
 ### 1.15.0
  * Add TimeUnit.Millisecond enum value and make it work everywhere
-
+ * Duration class now remembers its unit and it can be used to store Days/Months/Years precisely now too
+ * Add members Duration.amount(), Duration.unit() to get at stored value
+ * Add members Duration.identical(), Duration.equalsExact() next to already-existing Duration.equals()
+ * Add members Duration.wholeYears(), Duration.year(), Duration.months(), Duration.month(), Duration.days(), Duration.day() analogous to existing functions for hours, minutes, seconds etc
+ * Add functions for converting time units from/to string like "1 day" or "2 months"
+ * Add member Duration.toString() for converting duration to "2 months"-type string
+ * Add member Duration.toIsoString() for an ISO 8601 duration string e.g. "P2H3.5S" for 2 hours and 3.5 seconds
+ * Period now accepts Duration objects where it accepted an amount and a unit e.g. in its constructor
+ * DateTime now accepts Duration objects where it accepted an amount and a unit e.g. in addLocal() and subLocal()
+ * Add static functions for creating durations for higher units i.e. tc.months(), tc.years(), tc.days()
+ * BREAKING CHANGE: Moved function for converting duration to "hhhh:mm:ss.nnn"-type string from Duration.toString() to Duration.toHmsString()
+ * BREAKING CHANGE: for approximate calculations, a year is now seen as 360 days iso 365 (because a month was already seen as 30 days)
 
 ### 1.14.0 (2015-03-12)
 * Add Duration.abs() function and global abs() function

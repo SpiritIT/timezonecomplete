@@ -12,6 +12,7 @@ import expect = chai.expect;
 import datetimeFuncs = require("../lib/index");
 
 import DateTime = datetimeFuncs.DateTime;
+import Duration = datetimeFuncs.Duration;
 import Period = datetimeFuncs.Period;
 import PeriodDst = datetimeFuncs.PeriodDst;
 import TimeSource = datetimeFuncs.TimeSource;
@@ -33,6 +34,29 @@ DateTime.timeSource = testTimeSource;
 
 
 describe("Period", (): void => {
+
+	describe("constructor()", (): void => {
+		it("should work with a Duration", (): void => {
+			var p = new Period(new DateTime("2014-01-31T12:00:00.000 UTC"), new Duration(2, TimeUnit.Month), PeriodDst.RegularIntervals);
+			expect(p.amount()).to.equal(2);
+			expect(p.unit()).to.equal(TimeUnit.Month);
+			expect(p.dst()).to.equal(PeriodDst.RegularIntervals);
+		});
+		it("should work with a Duration and provide default DST", (): void => {
+			var p = new Period(new DateTime("2014-01-31T12:00:00.000 UTC"), new Duration(2, TimeUnit.Month));
+			expect(p.dst()).to.equal(PeriodDst.RegularLocalTime);
+		});
+		it("should work with an amount and unit", (): void => {
+			var p = new Period(new DateTime("2014-01-31T12:00:00.000 UTC"), 2, TimeUnit.Month, PeriodDst.RegularIntervals);
+			expect(p.amount()).to.equal(2);
+			expect(p.unit()).to.equal(TimeUnit.Month);
+			expect(p.dst()).to.equal(PeriodDst.RegularIntervals);
+		});
+		it("should work with an amount and unit and provide default DST", (): void => {
+			var p = new Period(new DateTime("2014-01-31T12:00:00.000 UTC"), 2, TimeUnit.Month);
+			expect(p.dst()).to.equal(PeriodDst.RegularLocalTime);
+		});
+	});
 
 	describe("start()", (): void => {
 		expect((new Period(new DateTime("2014-01-31T12:00:00.000 UTC"), 2, TimeUnit.Month, PeriodDst.RegularIntervals))
@@ -458,6 +482,17 @@ describe("Period", (): void => {
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 2000, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
 				.findFirst(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-01T00:00:02.000 Europe/Amsterdam");
+			// check reset on day boundary for non-factor of 24h
+			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 2666, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.findFirst(new DateTime("2014-01-01T23:59:57.334 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-01T23:59:59.728 Europe/Amsterdam");
+			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 2666, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.findFirst(new DateTime("2014-01-01T23:59:59.728 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-02T00:00:00.000 Europe/Amsterdam");
+			// half a day offset
+			expect((new Period(new DateTime("2014-01-01T12:00:00.000 Europe/Amsterdam"), 2666, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.findFirst(new DateTime("2014-01-02T11:59:59.728 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-02T12:00:00.000 Europe/Amsterdam");
 		});
 		it("should handle >60 Second", (): void => {
 			// check that twice a unit works

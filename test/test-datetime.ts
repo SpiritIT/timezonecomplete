@@ -792,7 +792,12 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	describe("addLocal(amount, unit)", (): void => {
+	describe("addLocal()", (): void => {
+		it("should work with a Duration object", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.addLocal(Duration.minutes(23));
+			expect(e.toString()).to.equal("2014-01-01T00:23:00.000 Europe/Amsterdam");
+		});
 		it("should add 0", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			expect(d.addLocal(0, TimeUnit.Millisecond).toString()).to.equal(d.toString());
@@ -959,6 +964,20 @@ describe("DateTime", (): void => {
 			var d = new DateTime(2014, 3, 3, 8, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			var e = d.addLocal(1, TimeUnit.Month);
 			expect(e.toString()).to.equal("2014-04-03T08:00:00.000 Europe/Amsterdam");
+		});
+	});
+
+	describe("subLocal()", (): void => {
+		// this calls addLocal(-duration) so we rely on the addLocal tests
+		it("should work with a Duration object", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.subLocal(Duration.minutes(-23));
+			expect(e.toString()).to.equal("2014-01-01T00:23:00.000 Europe/Amsterdam");
+		});
+		it("should work with amount & unit", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.subLocal(-23, TimeUnit.Minute);
+			expect(e.toString()).to.equal("2014-01-01T00:23:00.000 Europe/Amsterdam");
 		});
 	});
 

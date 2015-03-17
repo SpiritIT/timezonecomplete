@@ -9,6 +9,8 @@ import chai = require("chai");
 import expect = chai.expect;
 
 import basics = require("../lib/basics");
+import TimeUnit = basics.TimeUnit;
+
 import javascript = require("../lib/javascript");
 
 import DateFunctions = javascript.DateFunctions;
@@ -145,6 +147,53 @@ describe("weekDayOnOrBefore()", (): void => {
 		expect(basics.weekDayOnOrBefore(2014, 8, 17, WeekDay.Friday)).to.equal(15);
 		expect(basics.weekDayOnOrBefore(2014, 8, 17, WeekDay.Saturday)).to.equal(16);
 		expect(basics.weekDayOnOrBefore(2014, 8, 17, WeekDay.Sunday)).to.equal(17);
+	});
+});
+
+describe("timeUnitToString()", (): void => {
+	it("should return singular form by default", (): void => {
+		expect(basics.timeUnitToString(TimeUnit.Millisecond)).to.equal("millisecond");
+		expect(basics.timeUnitToString(TimeUnit.Second)).to.equal("second");
+		expect(basics.timeUnitToString(TimeUnit.Minute)).to.equal("minute");
+		expect(basics.timeUnitToString(TimeUnit.Day)).to.equal("day");
+		expect(basics.timeUnitToString(TimeUnit.Month)).to.equal("month");
+		expect(basics.timeUnitToString(TimeUnit.Week)).to.equal("week");
+		expect(basics.timeUnitToString(TimeUnit.Year)).to.equal("year");
+	});
+	it("should return singular form for 1", (): void => {
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, 1)).to.equal("millisecond");
+	});
+	it("should return singular form for -1", (): void => {
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, -1)).to.equal("millisecond");
+	});
+	it("should return plural form for other numbers", (): void => {
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, 0)).to.equal("milliseconds");
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, 0.5)).to.equal("milliseconds");
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, -0.5)).to.equal("milliseconds");
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, 1.5)).to.equal("milliseconds");
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, -1.5)).to.equal("milliseconds");
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, 2)).to.equal("milliseconds");
+		expect(basics.timeUnitToString(TimeUnit.Millisecond, -2)).to.equal("milliseconds");
+	});
+});
+
+describe("stringToTimeUnit()", (): void => {
+	it("should throw for invalid string", (): void => {
+		assert.throws((): void => {
+			basics.stringToTimeUnit("");
+		});
+		assert.throws((): void => {
+			basics.stringToTimeUnit("epochs");
+		});
+	});
+	it("should handle singular form", (): void => {
+		expect(basics.stringToTimeUnit("day")).to.equal(TimeUnit.Day);
+	});
+	it("should handle plural form", (): void => {
+		expect(basics.stringToTimeUnit("days")).to.equal(TimeUnit.Day);
+	});
+	it("should be case insensitive", (): void => {
+		expect(basics.stringToTimeUnit("DaY")).to.equal(TimeUnit.Day);
 	});
 });
 

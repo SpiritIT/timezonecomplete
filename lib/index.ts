@@ -26,6 +26,8 @@ export import weekNumber = basics.weekNumber;
 export import weekOfMonth = basics.weekOfMonth;
 export import dayOfYear = basics.dayOfYear;
 export import secondOfDay = basics.secondOfDay;
+export import timeUnitToString = basics.timeUnitToString;
+export import stringToTimeUnit = basics.stringToTimeUnit;
 
 import datetime = require("./datetime"); datetime;
 export import DateTime = datetime.DateTime;
@@ -35,6 +37,9 @@ export import nowUtc = datetime.nowUtc;
 
 import duration = require("./duration"); duration;
 export import Duration = duration.Duration;
+export import years = duration.years;
+export import months = duration.months;
+export import days = duration.days;
 export import hours = duration.hours;
 export import minutes = duration.minutes;
 export import seconds = duration.seconds;
