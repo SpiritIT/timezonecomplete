@@ -512,16 +512,16 @@ var tc = require("timezonecomplete");
 // Timezone with DST specified (Europe/Amsterdam)
 // Last argument is "RegularLocalTime"
 // Repeating daily period at 8:05 local Amsterdam time (moves with Daylight Saving Time so it is always at 8:05 locally)
-var period = new tc.Period(new tc.DateTime("2014-01-01T08:05:00 Europe/Amsterdam"), 1, tc.TimeUnit.Day, tc.PeriodDst.RegularLocalTime);
+var period = new tc.Period(new tc.DateTime("2014-01-01T08:05:00 Europe/Amsterdam"), tc.days(1), tc.PeriodDst.RegularLocalTime);
 
 // Timezone with DST specified (Europe/Amsterdam)
 // Last argument is "RegularIntervals"
 // Repeating daily period at 8:05 OR 9:05 local Amsterdam time (which is always 7:05 UTC)
-var period = new tc.Period(new tc.DateTime("2014-01-01T08:05:00 Europe/Amsterdam"), 1, tc.TimeUnit.Day, tc.PeriodDst.RegularIntervals);
+var period = new tc.Period(new tc.DateTime("2014-01-01T08:05:00 Europe/Amsterdam"), tc.days(1), tc.PeriodDst.RegularIntervals);
 
 // Timezone without DST specified (+01:00)
 // Repeating daily period at 7:05 UTC
-var period2 = new tc.Period(new tc.DateTime("2014-01-01T08:05:00+01:00"), 1, tc.TimeUnit.Day, tc.PeriodDst.RegularLocalTime);
+var period2 = new tc.Period(new tc.DateTime("2014-01-01T08:05:00+01:00"), tc.days(1), tc.PeriodDst.RegularLocalTime);
 
 // You can calculate the first occurrence after a given date (in any time zone)
 // "2014-05-01T08:05:00.000 Europe/Amsterdam"
@@ -535,10 +535,16 @@ var occurrence2 = period.findNext(occurrence);
 period.isBoundary(occurrence); // true
 
 // Equality checking
-var p = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), 1, tc.TimeUnit.Hour, tc.PeriodDst.RegularIntervals);
-var q = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), 60, tc.TimeUnit.Minutes, tc.PeriodDst.RegularIntervals);
+var p = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), tc.hours(1), tc.PeriodDst.RegularIntervals);
+var q = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), tc.minutes(60), tc.PeriodDst.RegularIntervals);
 p.equals(q); // true, same results
 p.identical(q); // false, not same constructor arguments
+
+var r = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), tc.days(30), tc.PeriodDst.RegularIntervals);
+var s = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), tc.months(1), tc.PeriodDst.RegularIntervals);
+p.equals(q); // false, not same results
+p.identical(q); // false, not same constructor arguments
+
 
 ```
 
