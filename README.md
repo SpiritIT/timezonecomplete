@@ -55,10 +55,12 @@ tc.WeekDay.Saturday;
 // time units, used e.g. when adding to DateTime
 tc.TimeUnit.Year;
 tc.TimeUnit.Month;
+tc.TimeUnit.Week;
 tc.TimeUnit.Day;
 tc.TimeUnit.Hour;
 tc.TimeUnit.Minute;
 tc.TimeUnit.Second;
+tc.TimeUnit.Millisecond;
 
 ```
 
@@ -546,6 +548,10 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015a.
 
 ## Changelog
+
+### 1.15.0
+ * Add TimeUnit.Millisecond enum value and make it work everywhere
+
 
 ### 1.14.0 (2015-03-12)
 * Add Duration.abs() function and global abs() function

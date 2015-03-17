@@ -34,6 +34,7 @@ export enum WeekDay {
  * Time units
  */
 export enum TimeUnit {
+	Millisecond,
 	Second,
 	Minute,
 	Hour,
@@ -53,6 +54,7 @@ export enum TimeUnit {
  */
 export function timeUnitToMilliseconds(unit: TimeUnit): number {
 	switch (unit) {
+		case TimeUnit.Millisecond: return 1;
 		case TimeUnit.Second: return 1000;
 		case TimeUnit.Minute: return 60000;
 		case TimeUnit.Hour: return 3600000;
@@ -595,6 +597,9 @@ export class TimeStruct {
 					} break;
 					case TimeUnit.Second: {
 						fractionMillis = 1000 * fraction;
+					} break;
+					case TimeUnit.Millisecond: {
+						fractionMillis = fraction;
 					} break;
 				}
 			}

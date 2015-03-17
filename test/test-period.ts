@@ -77,6 +77,17 @@ describe("Period", (): void => {
 	});
 
 	describe("Period(X, 1, X, RegularInterval).findFirst()", (): void => {
+		it("should handle 1 millisecond", (): void => {
+			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 1, TimeUnit.Millisecond, PeriodDst.RegularIntervals))
+				.findFirst(new DateTime("2014-03-30T01:59:59.999 Europe/Amsterdam")).toString())
+				.to.equal("2014-03-30T03:00:00.000 Europe/Amsterdam");
+
+			// note the target time is 2AM during DST backward, so 2AM exists twice.
+			// Because we want to increase utc time, we expect to go from the FIRST 02:59:59 to 02:00:00
+			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 1, TimeUnit.Millisecond, PeriodDst.RegularIntervals))
+				.findFirst(new DateTime("2014-10-26T00:59:59.999 UTC")).toString())
+				.to.equal("2014-10-26T01:00:00.000 UTC");
+		});
 		it("should handle 1 Second", (): void => {
 			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 1, TimeUnit.Second, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-03-30T01:59:59.000 Europe/Amsterdam")).toString())
@@ -142,6 +153,13 @@ describe("Period", (): void => {
 	});
 
 	describe("Period(X, 1, X, RegularLocalTime).findFirst()", (): void => {
+		it("should handle 1 Millisecond", (): void => {
+			// note the target time is 2AM during DST backward, so 2AM exists twice.
+			// Because we want to increase local time, we expect to go from the FIRST 02:59:59 to 03:00:00, skippint the second 02:00:00
+			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 1, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.findFirst(new DateTime("2014-10-26T00:59:59.999 UTC")).toString())
+				.to.equal("2014-10-26T02:00:00.000 UTC");
+		});
 		it("should handle 1 Second", (): void => {
 			// note the target time is 2AM during DST backward, so 2AM exists twice.
 			// Because we want to increase local time, we expect to go from the FIRST 02:59:59 to 03:00:00, skippint the second 02:00:00
@@ -203,6 +221,17 @@ describe("Period", (): void => {
 	});
 
 	describe("Period(X, 2, X, RegularInterval).findFirst()", (): void => {
+		it("should handle 2 Millisecond", (): void => {
+			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 2, TimeUnit.Millisecond, PeriodDst.RegularIntervals))
+				.findFirst(new DateTime("2014-03-30T01:59:59.998 Europe/Amsterdam")).toString())
+				.to.equal("2014-03-30T03:00:00.000 Europe/Amsterdam");
+
+			// note the target time is 2AM during DST backward, so 2AM exists twice.
+			// Because we want to increase utc time, we expect to go from the FIRST 02:59:59 to 02:00:00
+			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 2, TimeUnit.Millisecond, PeriodDst.RegularIntervals))
+				.findFirst(new DateTime("2014-10-26T00:59:59.998 UTC")).toString())
+				.to.equal("2014-10-26T01:00:00.000 UTC");
+		});
 		it("should handle 2 Second", (): void => {
 			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 2, TimeUnit.Second, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-03-30T01:59:58.000 Europe/Amsterdam")).toString())
@@ -278,6 +307,22 @@ describe("Period", (): void => {
 	});
 
 	describe("Period(X, 2, X, RegularLocalTime).findFirst()", (): void => {
+		it("should handle 2 Millisecond", function (): void {
+			this.timeout(30 * 1000);
+			// note the target time is 2AM during DST backward, so 2AM exists twice.
+			// Because we want to increase local time, we expect to go from the FIRST 02:59:59 to 03:00:00, skippint the second 02:00:00
+			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 2, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.findFirst(new DateTime("2014-10-26T00:59:59.998 UTC")).toString())
+				.to.equal("2014-10-26T02:00:00.000 UTC");
+
+			// check reset on day boundary for non-factor of 24h
+			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 666, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.findFirst(new DateTime("2014-01-01T23:59:59.514 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-02T00:00:00.000 Europe/Amsterdam");
+			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 666, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.findFirst(new DateTime("2014-01-01T23:59:58.848 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-01T23:59:59.514 Europe/Amsterdam");
+		});
 		it("should handle 2 Second", (): void => {
 			// note the target time is 2AM during DST backward, so 2AM exists twice.
 			// Because we want to increase local time, we expect to go from the FIRST 02:59:59 to 03:00:00, skippint the second 02:00:00
@@ -345,6 +390,16 @@ describe("Period", (): void => {
 	});
 
 	describe("Period(X, >X, X, RegularInterval).findFirst()", (): void => {
+		it("should handle >1000 Millisecond", (): void => {
+			// check that twice a unit works
+			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 2000, TimeUnit.Millisecond, PeriodDst.RegularIntervals))
+				.findFirst(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-01T00:00:02.000 Europe/Amsterdam");
+			// check no effect on day boundary for non-factor of 24h
+			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 666, TimeUnit.Millisecond, PeriodDst.RegularIntervals))
+				.findFirst(new DateTime("2014-01-01T23:59:59.514 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-02T00:00:00.180 Europe/Amsterdam");
+		});
 		it("should handle >60 Second", (): void => {
 			// check that twice a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 120, TimeUnit.Second, PeriodDst.RegularIntervals))
@@ -398,6 +453,12 @@ describe("Period", (): void => {
 	});
 
 	describe("Period(X, >X, X, RegularLocalTime).findFirst()", (): void => {
+		it("should handle >1000 Millisecond", (): void => {
+			// check that twice a unit works
+			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 2000, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.findFirst(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-01T00:00:02.000 Europe/Amsterdam");
+		});
 		it("should handle >60 Second", (): void => {
 			// check that twice a unit works
 			expect((new Period(new DateTime("2014-01-01T00:00:00.000 Europe/Amsterdam"), 120, TimeUnit.Second, PeriodDst.RegularLocalTime))
@@ -708,6 +769,9 @@ describe("Period", (): void => {
 
 	describe("toIsoString()", (): void => {
 		it("should work", (): void => {
+			expect((new Period(new DateTime("2014-01-01T00:00:00"), 60, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
+				.toIsoString())
+				.to.equal("2014-01-01T00:00:00.000/P0.060S");
 			expect((new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Second, PeriodDst.RegularLocalTime))
 				.toIsoString())
 				.to.equal("2014-01-01T00:00:00.000/P1S");

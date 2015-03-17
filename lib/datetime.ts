@@ -670,6 +670,9 @@ export class DateTime {
 		var targetMilliseconds: number;
 
 		switch (unit) {
+			case TimeUnit.Millisecond: {
+				return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount);
+			}
 			case TimeUnit.Second: {
 				return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 1000);
 			}

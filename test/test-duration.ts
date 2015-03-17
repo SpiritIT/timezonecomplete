@@ -89,6 +89,7 @@ describe("Duration()", (): void => {
 		});
 
 		it("construct from time unit", (): void => {
+			expect((new Duration(1, basics.TimeUnit.Millisecond)).milliseconds()).to.equal(1);
 			expect((new Duration(1, basics.TimeUnit.Second)).seconds()).to.equal(1);
 			expect((new Duration(1, basics.TimeUnit.Minute)).minutes()).to.equal(1);
 			expect((new Duration(1, basics.TimeUnit.Hour)).hours()).to.equal(1);

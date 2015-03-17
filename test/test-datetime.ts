@@ -621,6 +621,7 @@ describe("DateTime", (): void => {
 	describe("add(amount, unit)", (): void => {
 		it("should add 0", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			expect(d.add(0, TimeUnit.Millisecond).toString()).to.equal(d.toString());
 			expect(d.add(0, TimeUnit.Second).toString()).to.equal(d.toString());
 			expect(d.add(0, TimeUnit.Minute).toString()).to.equal(d.toString());
 			expect(d.add(0, TimeUnit.Hour).toString()).to.equal(d.toString());
@@ -628,6 +629,16 @@ describe("DateTime", (): void => {
 			expect(d.add(0, TimeUnit.Week).toString()).to.equal(d.toString());
 			expect(d.add(0, TimeUnit.Month).toString()).to.equal(d.toString());
 			expect(d.add(0, TimeUnit.Year).toString()).to.equal(d.toString());
+		});
+		it("should add milliseconds", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.add(23, TimeUnit.Millisecond);
+			expect(e.toString()).to.equal("2014-01-01T00:00:00.023 Europe/Amsterdam");
+		});
+		it("should add more than 1000 milliseconds", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.add(1001, TimeUnit.Millisecond);
+			expect(e.toString()).to.equal("2014-01-01T00:00:01.001 Europe/Amsterdam");
 		});
 		it("should add seconds", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
@@ -784,6 +795,7 @@ describe("DateTime", (): void => {
 	describe("addLocal(amount, unit)", (): void => {
 		it("should add 0", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			expect(d.addLocal(0, TimeUnit.Millisecond).toString()).to.equal(d.toString());
 			expect(d.addLocal(0, TimeUnit.Second).toString()).to.equal(d.toString());
 			expect(d.addLocal(0, TimeUnit.Minute).toString()).to.equal(d.toString());
 			expect(d.addLocal(0, TimeUnit.Hour).toString()).to.equal(d.toString());
@@ -791,6 +803,16 @@ describe("DateTime", (): void => {
 			expect(d.addLocal(0, TimeUnit.Week).toString()).to.equal(d.toString());
 			expect(d.addLocal(0, TimeUnit.Month).toString()).to.equal(d.toString());
 			expect(d.addLocal(0, TimeUnit.Year).toString()).to.equal(d.toString());
+		});
+		it("should add milliseconds", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.addLocal(23, TimeUnit.Millisecond);
+			expect(e.toString()).to.equal("2014-01-01T00:00:00.023 Europe/Amsterdam");
+		});
+		it("should add more than 1000 milliseconds", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.addLocal(1001, TimeUnit.Millisecond);
+			expect(e.toString()).to.equal("2014-01-01T00:00:01.001 Europe/Amsterdam");
 		});
 		it("should add seconds", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));

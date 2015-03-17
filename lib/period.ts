@@ -154,19 +154,24 @@ export class Period {
 		// the input is a multiple of one day.
 		if (this._dstRelevant() && dst === PeriodDst.RegularLocalTime) {
 			switch (this._intUnit) {
+				case TimeUnit.Millisecond:
+					assert(this._intAmount < 86400000,
+						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
+						"then the amount must be either less than a day or a multiple of the next unit.");
+					break;
 				case TimeUnit.Second:
 					assert(this._intAmount < 86400,
-						"When using Hour, Minute or Second units, with Regular Local Times, " +
+						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
 						"then the amount must be either less than a day or a multiple of the next unit.");
 					break;
 				case TimeUnit.Minute:
 					assert(this._intAmount < 1440,
-						"When using Hour, Minute or Second units, with Regular Local Times, " +
+						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
 						"then the amount must be either less than a day or a multiple of the next unit.");
 					break;
 				case TimeUnit.Hour:
 					assert(this._intAmount < 24,
-						"When using Hour, Minute or Second units, with Regular Local Times, " +
+						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
 						"then the amount must be either less than a day or a multiple of the next unit.");
 					break;
 			}
@@ -213,11 +218,16 @@ export class Period {
 		assert((this._intStart.zone() === null) === (fromDate.zone() === null),
 			"The fromDate and startDate must both be aware or unaware");
 		var approx: DateTime;
+		var approx2: DateTime;
+		var approxMin: DateTime;
 		var periods: number;
 		var diff: number;
 		var newYear: number;
 		var newMonth: number;
 		var remainder: number;
+		var imax: number;
+		var imin: number;
+		var imid: number;
 
 		var normalFrom = this._normalizeDay(fromDate.toZone(this._intStart.zone()));
 
@@ -232,6 +242,10 @@ export class Period {
 			if (this._intDst === PeriodDst.RegularIntervals) {
 				// apply to UTC time
 				switch (this._intUnit) {
+					case TimeUnit.Millisecond:
+						approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
+							normalFrom.utcHour(), normalFrom.utcMinute(), normalFrom.utcSecond(), normalFrom.utcMillisecond(), TimeZone.utc());
+						break;
 					case TimeUnit.Second:
 						approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
 							normalFrom.utcHour(), normalFrom.utcMinute(), normalFrom.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
@@ -270,6 +284,10 @@ export class Period {
 			} else {
 				// Try to keep regular local intervals
 				switch (this._intUnit) {
+					case TimeUnit.Millisecond:
+						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
+							normalFrom.hour(), normalFrom.minute(), normalFrom.second(), normalFrom.millisecond(), this._intStart.zone());
+						break;
 					case TimeUnit.Second:
 						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
 							normalFrom.hour(), normalFrom.minute(), normalFrom.second(), this._intStart.millisecond(), this._intStart.zone());
@@ -311,6 +329,11 @@ export class Period {
 			if (this._intDst === PeriodDst.RegularIntervals) {
 				// apply to UTC time
 				switch (this._intUnit) {
+					case TimeUnit.Millisecond:
+						diff = normalFrom.diff(this._intStart).milliseconds();
+						periods = Math.floor(diff / this._intAmount);
+						approx = this._intStart.add(periods * this._intAmount, this._intUnit);
+						break;
 					case TimeUnit.Second:
 						diff = normalFrom.diff(this._intStart).seconds();
 						periods = Math.floor(diff / this._intAmount);
@@ -357,6 +380,52 @@ export class Period {
 			} else {
 				// Try to keep regular local times. If the unit is less than a day, we start each day anew
 				switch (this._intUnit) {
+					case TimeUnit.Millisecond:
+						if (this._intAmount < 1000 && (1000 % this._intAmount) === 0) {
+							// optimization: same millisecond each second, so just take the fromDate minus one second with the this._intStart milliseconds
+							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
+								normalFrom.hour(), normalFrom.minute(), normalFrom.second(), this._intStart.millisecond(), this._intStart.zone())
+								.subLocal(1, TimeUnit.Second);
+						} else {
+							// per constructor assert, the seconds are less than a day, so just go the fromDate start-of-day
+							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
+								this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+
+							// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
+							remainder = Math.floor((24 * 3600 * 1000) % this._intAmount);
+							if (approx.greaterThan(normalFrom)) {
+								if (approx.subLocal(remainder, TimeUnit.Millisecond).greaterThan(normalFrom)) {
+									// normalFrom lies outside the boundary period before the start date
+									approx = approx.subLocal(1, TimeUnit.Day);
+								}
+							} else {
+								if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Millisecond).lessEqual(normalFrom)) {
+									// normalFrom lies in the boundary period, move to the next day
+									approx = approx.addLocal(1, TimeUnit.Day);
+								}
+							}
+
+							// optimization: binary search
+							imax = Math.floor((24 * 3600 * 1000) / this._intAmount);
+							imin = 0;
+							while (imax >= imin) {
+								// calculate the midpoint for roughly equal partition
+								imid = Math.floor((imin + imax) / 2);
+								approx2 = approx.addLocal(imid * this._intAmount, TimeUnit.Millisecond);
+								approxMin = approx2.subLocal(this._intAmount, TimeUnit.Millisecond);
+								if (approx2.greaterThan(normalFrom) && approxMin.lessEqual(normalFrom)) {
+									approx = approx2;
+									break;
+								} else if (approx2.lessEqual(normalFrom)) {
+									// change min index to search upper subarray
+									imin = imid + 1;
+								} else {
+									// change max index to search lower subarray
+									imax = imid - 1;
+								}
+							}
+						}
+						break;
 					case TimeUnit.Second:
 						if (this._intAmount < 60 && (60 % this._intAmount) === 0) {
 							// optimization: same second each minute, so just take the fromDate minus one minute with the this._intStart seconds
@@ -383,13 +452,13 @@ export class Period {
 							}
 
 							// optimization: binary search
-							var imax: number = Math.floor((24 * 3600) / this._intAmount);
-							var imin: number = 0;
+							imax = Math.floor((24 * 3600) / this._intAmount);
+							imin = 0;
 							while (imax >= imin) {
 								// calculate the midpoint for roughly equal partition
-								var imid = Math.floor((imin + imax) / 2);
-								var approx2 = approx.addLocal(imid * this._intAmount, TimeUnit.Second);
-								var approxMin = approx2.subLocal(this._intAmount, TimeUnit.Second);
+								imid = Math.floor((imin + imax) / 2);
+								approx2 = approx.addLocal(imid * this._intAmount, TimeUnit.Second);
+								approxMin = approx2.subLocal(this._intAmount, TimeUnit.Second);
 								if (approx2.greaterThan(normalFrom) && approxMin.lessEqual(normalFrom)) {
 									approx = approx2;
 									break;
@@ -528,6 +597,9 @@ export class Period {
 
 	private _periodIsoString(): string {
 		switch (this._unit) {
+			case TimeUnit.Millisecond: {
+				return "P" + (this._amount / 1000).toFixed(3) + "S";
+			}
 			case TimeUnit.Second: {
 				return "P" + this._amount.toString(10) + "S";
 			}
@@ -667,10 +739,13 @@ export class Period {
 		this._intAmount = this._amount;
 		this._intUnit = this._unit;
 
-		if (this._intUnit === TimeUnit.Second && this._intAmount >= 60 && this._intAmount % 60 === 0
-			&& this._dstRelevant() && this._dst === PeriodDst.RegularLocalTime) {
-			// cannot convert seconds to minutes if regular intervals are required due to
-			// leap seconds, but for regular local time it does not matter
+		if (this._intUnit === TimeUnit.Millisecond && this._intAmount >= 1000 && this._intAmount % 1000 === 0) {
+			// note this won't work if we account for leap seconds
+			this._intAmount = this._intAmount / 1000;
+			this._intUnit = TimeUnit.Second;
+		}
+		if (this._intUnit === TimeUnit.Second && this._intAmount >= 60 && this._intAmount % 60 === 0) {
+			// note this won't work if we account for leap seconds
 			this._intAmount = this._intAmount / 60;
 			this._intUnit = TimeUnit.Minute;
 		}
@@ -682,7 +757,7 @@ export class Period {
 			this._intAmount = this._intAmount / 24;
 			this._intUnit = TimeUnit.Day;
 		}
-		// now remove weeks as they are not a concept in datetime
+		// now remove weeks so we have one less case to worry about
 		if (this._intUnit === TimeUnit.Week) {
 			this._intAmount = this._intAmount * 7;
 			this._intUnit = TimeUnit.Day;
