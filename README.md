@@ -609,9 +609,12 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2015a.
+The version of the included IANA time zone database is 2015b.
 
 ## Changelog
+
+### 1.15.1 (2015-03-23)
+* Upgrade TZ database to 2015b
 
 ### 1.15.0
  * Add TimeUnit.Millisecond enum value and make it work everywhere
