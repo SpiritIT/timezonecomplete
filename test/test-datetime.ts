@@ -462,6 +462,28 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("withZone()", (): void => {
+		it("should allow changing naive date to aware date", (): void => {
+			var d = new DateTime(2014, 1, 1, 12, 0, 0, 0, null);
+			var e = d.withZone(TimeZone.zone(1));
+			expect(e.equals(new DateTime(2014, 1, 1, 12, 0, 0, 0, TimeZone.zone(1)))).to.equal(true);
+		});
+		it("should allow changing aware date to naive date", (): void => {
+			var d = new DateTime(2014, 1, 1, 12, 0, 0, 0, TimeZone.zone(1));
+			var e = d.withZone(null);
+			expect(e.equals(new DateTime(2014, 1, 1, 12, 0, 0, 0, null))).to.equal(true);
+		});
+		it("should allow changing aware date to aware date", (): void => {
+			var d = new DateTime(2014, 1, 1, 12, 0, 0, 0, TimeZone.zone(1));
+			var e = d.withZone(TimeZone.zone("America/Chicago"));
+			expect(e.equals(new DateTime(2014, 1, 1, 12, 0, 0, 0, TimeZone.zone("America/Chicago")))).to.equal(true);
+		});
+		it("should return a new object", (): void => {
+			var d: DateTime = new DateTime(2015, 2, 3, 4, 5, 6, 7, TimeZone.zone("+03"));
+			expect(d.withZone(d.zone()) === d).to.equal(false);
+		});
+	});
+
 	describe("convert()", (): void => {
 		it("unaware to aware", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0);

@@ -18,11 +18,11 @@ TimezoneComplete is a library of date/time utilities, all of which are aware of 
 
 Other libraries are great. We had different requirements, that's all.
 
-1. Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings. Most other libraries internally use JavaScript Date. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete does not use Date internally for this reason. Date problems include:
+* Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings. Most other libraries internally use JavaScript Date. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete does not use Date internally for this reason. Date problems include:
   * The Date constructor normalizes non-existing local times (during DST forward changes) in different ways in Firefox, Chrome, IE and Node.
   * The Date class responds differently to the TZ environment variable on different platforms.
   * The conversion of a local time to a UTC value is broken by specification.
-2. Timezonecomplete aims to be "complete", whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:
+* Timezonecomplete aims to be "complete", whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:
   * Naive dates (which know they have NO timezone information)
   * Aware dates (which have timezone information)
   * Proper behaviour around DST changes
@@ -30,9 +30,9 @@ Other libraries are great. We had different requirements, that's all.
   * Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
   * Utility functions for e.g. determining leap years, determining the last Monday of the month etc.
   * Ability to use with NodeJS as well as in a browser.
-3. Timezonecomplete has at least 99% test coverage.
-4. Timezonecomplete is under active development by a company who have an interest in keeping it up to date.
-5. The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project.
+* Timezonecomplete has at least 99% test coverage.
+* Timezonecomplete is under active development by a company who have an interest in keeping it up to date.
+* The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project.
 
 ## Usage
 
@@ -433,7 +433,11 @@ var ok = amsterdamDate.toZone(null); // returns naive date
 
 // In-place time zone conversion
 var d = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
-d.convert(tc.zone("UTC")); // now d has changed to UTC
+d.convert(tc.zone("UTC")); // 2014-01-01T12:59:59.000 UTC
+
+// Reinterpreting as different time zone
+d = new tc.DateTime("2014-01-01T13:59:59.000");
+var reinterpreted = d.withZone(tc.zone("UTC")); // 2014-01-01T13:59:59.000 UTC  (note: different moment in time!)
 
 // Cloning
 var newCopy = amsterdamDate.clone();
@@ -612,6 +616,10 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015b.
 
 ## Changelog
+
+
+### 1.16.0 (2015-03-26)
+* Add DateTime#withZone() method to add/replace the time zone of an existing datetime
 
 ### 1.15.1 (2015-03-23)
 * Upgrade TZ database to 2015b
