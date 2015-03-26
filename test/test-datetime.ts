@@ -168,6 +168,10 @@ describe("DateTime", (): void => {
 			expect(d.zone()).to.be.null;
 			expect(d.offset()).to.equal(0);
 		});
+		it("should round the milliseconds", (): void => {
+			var d = new DateTime("2014-05-06T07:08:09.0105");
+			expect(d.millisecond()).to.equal(11);
+		});
 		it("should parse only date", (): void => {
 			var d = new DateTime("2014-05-06");
 			expect(d.year()).to.equal(2014);
@@ -365,6 +369,17 @@ describe("DateTime", (): void => {
 			expect(d.millisecond()).to.equal(6);
 			expect(d.zone()).to.be.null;
 		});
+		it("should round the numbers", (): void => {
+			var d = new DateTime(2014.1, 1.1, 2.1, 3.1, 4.1, 5.1, 6.1);
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(1);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(3);
+			expect(d.minute()).to.equal(4);
+			expect(d.second()).to.equal(5);
+			expect(d.millisecond()).to.equal(6);
+			expect(d.zone()).to.be.null;
+		});
 		it("missing entries, unaware", (): void => {
 			var d = new DateTime(2014, 1, 2);
 			expect(d.year()).to.equal(2014);
@@ -420,6 +435,28 @@ describe("DateTime", (): void => {
 			expect(d.minute()).to.equal(0);
 			expect(d.second()).to.equal(0);
 			expect(d.millisecond()).to.equal(1);
+			expect(d.zone()).to.be.null;
+		});
+		it("should round to millisecs", (): void => {
+			var d = new DateTime(1.1);
+			expect(d.year()).to.equal(1970);
+			expect(d.month()).to.equal(1);
+			expect(d.day()).to.equal(1);
+			expect(d.hour()).to.equal(0);
+			expect(d.minute()).to.equal(0);
+			expect(d.second()).to.equal(0);
+			expect(d.millisecond()).to.equal(1);
+			expect(d.zone()).to.be.null;
+		});
+		it("should round to millisecs, negative", (): void => {
+			var d = new DateTime(-1.5);
+			expect(d.year()).to.equal(1969);
+			expect(d.month()).to.equal(12);
+			expect(d.day()).to.equal(31);
+			expect(d.hour()).to.equal(23);
+			expect(d.minute()).to.equal(59);
+			expect(d.second()).to.equal(59);
+			expect(d.millisecond()).to.equal(998);
 			expect(d.zone()).to.be.null;
 		});
 		it("UTC", (): void => {
@@ -667,6 +704,11 @@ describe("DateTime", (): void => {
 			var e = d.add(23, TimeUnit.Second);
 			expect(e.toString()).to.equal("2014-01-01T00:00:23.000 Europe/Amsterdam");
 		});
+		it("should add fractional seconds", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			var e = d.add(23.5, TimeUnit.Second);
+			expect(e.toString()).to.equal("2014-01-01T00:00:23.500 Europe/Amsterdam");
+		});
 		it("should add more than 60 seconds", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			var e = d.add(61, TimeUnit.Second);
@@ -712,6 +754,12 @@ describe("DateTime", (): void => {
 			var e = d.add(2, TimeUnit.Month);
 			expect(e.toString()).to.equal("2014-03-01T00:00:00.000 Europe/Amsterdam");
 		});
+		it("should throw on adding fractional months", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			assert.throws((): void => {
+				d.add(2.1, TimeUnit.Month);
+			});
+		});
 		it("should add months across year boundary", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			var e = d.add(12, TimeUnit.Month);
@@ -721,6 +769,12 @@ describe("DateTime", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			var e = d.add(2, TimeUnit.Year);
 			expect(e.toString()).to.equal("2016-01-01T00:00:00.000 Europe/Amsterdam");
+		});
+		it("should throw on adding fractional years", (): void => {
+			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			assert.throws((): void => {
+				d.add(2.1, TimeUnit.Year);
+			});
 		});
 		it("should add negative numbers", (): void => {
 			var d = new DateTime(2014, 1, 1, 0, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"));

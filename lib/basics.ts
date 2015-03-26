@@ -359,7 +359,7 @@ export function weekNumber(year: number, month: number, day: number): number {
 function assertUnixTimestamp(unixMillis: number): void {
 	assert(typeof (unixMillis) === "number", "number input expected");
 	assert(!isNaN(unixMillis), "NaN not expected as input");
-	assert(math.isInt(unixMillis), "integer number expected");
+	assert(math.isInt(unixMillis), "Expect integer number for unix UTC timestamp");
 }
 
 /**
@@ -632,8 +632,14 @@ export class TimeStruct {
 			}
 
 			// combine main and fractional part
+			year = math.roundSym(year);
+			month = math.roundSym(month);
+			day = math.roundSym(day);
+			hour = math.roundSym(hour);
+			minute = math.roundSym(minute);
+			second = math.roundSym(second);
 			var unixMillis: number = timeToUnixNoLeapSecs(year, month, day, hour, minute, second);
-			unixMillis = Math.floor(unixMillis + fractionMillis);
+			unixMillis = math.roundSym(unixMillis + fractionMillis);
 			return unixToTimeNoLeapSecs(unixMillis);
 		} catch (e) {
 			throw new Error("Invalid ISO 8601 string: \"" + s + "\": " + e.message);

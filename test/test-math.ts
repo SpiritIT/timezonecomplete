@@ -31,6 +31,19 @@ describe("isInt()", (): void => {
 	});
 });
 
+describe("roundSym()", (): void => {
+	it("should round positive numbers", (): void => {
+		expect(math.roundSym(0)).to.equal(0);
+		expect(math.roundSym(0.4)).to.equal(0);
+		expect(math.roundSym(0.5)).to.equal(1);
+	});
+	it("should round positive numbers", (): void => {
+		expect(math.roundSym(0)).to.equal(0);
+		expect(math.roundSym(-0.4)).to.equal(0);
+		expect(math.roundSym(-0.5)).to.equal(-1);
+	});
+});
+
 describe("filterFloat()", (): void => {
 	it("should return a number for valid input", (): void => {
 		expect(math.filterFloat("1")).to.equal(1);

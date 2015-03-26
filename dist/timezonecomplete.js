@@ -367,7 +367,7 @@ exports.weekNumber = weekNumber;
 function assertUnixTimestamp(unixMillis) {
     assert(typeof (unixMillis) === "number", "number input expected");
     assert(!isNaN(unixMillis), "NaN not expected as input");
-    assert(math.isInt(unixMillis), "integer number expected");
+    assert(math.isInt(unixMillis), "Expect integer number for unix UTC timestamp");
 }
 /**
  * Convert a unix milli timestamp into a TimeT structure.
@@ -666,8 +666,14 @@ var TimeStruct = (function () {
                 }
             }
             // combine main and fractional part
+            year = math.roundSym(year);
+            month = math.roundSym(month);
+            day = math.roundSym(day);
+            hour = math.roundSym(hour);
+            minute = math.roundSym(minute);
+            second = math.roundSym(second);
             var unixMillis = timeToUnixNoLeapSecs(year, month, day, hour, minute, second);
-            unixMillis = Math.floor(unixMillis + fractionMillis);
+            unixMillis = math.roundSym(unixMillis + fractionMillis);
             return unixToTimeNoLeapSecs(unixMillis);
         }
         catch (e) {
@@ -797,10 +803,10 @@ var DateTime = (function () {
                         this._zone = (typeof (a2) === "object" && a2 instanceof TimeZone ? a2 : null);
                         var normalizedUnixTimestamp;
                         if (this._zone) {
-                            normalizedUnixTimestamp = this._zone.normalizeZoneTime(a1);
+                            normalizedUnixTimestamp = this._zone.normalizeZoneTime(math.roundSym(a1));
                         }
                         else {
-                            normalizedUnixTimestamp = a1;
+                            normalizedUnixTimestamp = math.roundSym(a1);
                         }
                         this._zoneDate = TimeStruct.fromUnix(normalizedUnixTimestamp);
                         this._zoneDateToUtcDate();
@@ -823,6 +829,13 @@ var DateTime = (function () {
                         assert(minute >= 0 && minute < 60, "DateTime.DateTime(): minute out of range.");
                         assert(second >= 0 && second < 60, "DateTime.DateTime(): second out of range.");
                         assert(millisecond >= 0 && millisecond < 1000, "DateTime.DateTime(): millisecond out of range.");
+                        year = math.roundSym(year);
+                        month = math.roundSym(month);
+                        day = math.roundSym(day);
+                        hour = math.roundSym(hour);
+                        minute = math.roundSym(minute);
+                        second = math.roundSym(second);
+                        millisecond = math.roundSym(millisecond);
                         this._zone = (typeof (timeZone) === "object" && timeZone instanceof TimeZone ? timeZone : null);
                         // normalize local time (remove non-existing local time)
                         if (this._zone) {
@@ -1137,7 +1150,7 @@ var DateTime = (function () {
         return basics.secondOfDay(this.utcHour(), this.utcMinute(), this.utcSecond());
     };
     /**
-     * UNSAFE: returns a new DateTime which is the date+time reinterpreted as
+     * Returns a new DateTime which is the date+time reinterpreted as
      * in the new zone. So e.g. 08:00 America/Chicago can be set to 08:00 Europe/Brussels.
      * No conversion is done, the value is just assumed to be in a different zone.
      * Works for naive and aware dates. The new zone may be null.
@@ -1262,28 +1275,29 @@ var DateTime = (function () {
         var targetMilliseconds;
         switch (unit) {
             case 0 /* Millisecond */: {
-                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount);
+                return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount));
             }
             case 1 /* Second */: {
-                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 1000);
+                return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 1000));
             }
             case 2 /* Minute */: {
                 // todo more intelligent approach needed when implementing leap seconds
-                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 60000);
+                return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 60000));
             }
             case 3 /* Hour */: {
                 // todo more intelligent approach needed when implementing leap seconds
-                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 3600000);
+                return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 3600000));
             }
             case 4 /* Day */: {
                 // todo more intelligent approach needed when implementing leap seconds
-                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 86400000);
+                return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 86400000));
             }
             case 5 /* Week */: {
                 // todo more intelligent approach needed when implementing leap seconds
-                return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 7 * 86400000);
+                return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 7 * 86400000));
             }
             case 6 /* Month */: {
+                assert(math.isInt(amount), "Cannot add/sub a non-integer amount of months");
                 // keep the day-of-month the same (clamp to end-of-month)
                 if (amount >= 0) {
                     targetYear = tm.year + Math.ceil((amount - (12 - tm.month)) / 12);
@@ -1301,6 +1315,7 @@ var DateTime = (function () {
                 return new TimeStruct(targetYear, targetMonth, targetDay, targetHours, targetMinutes, targetSeconds, targetMilliseconds);
             }
             case 7 /* Year */: {
+                assert(math.isInt(amount), "Cannot add/sub a non-integer amount of years");
                 targetYear = tm.year + amount;
                 targetMonth = tm.month;
                 targetDay = Math.min(tm.day, basics.daysInMonth(targetYear, targetMonth));
@@ -2796,6 +2811,19 @@ function isInt(n) {
     return (Math.floor(n) === n);
 }
 exports.isInt = isInt;
+/**
+ * Rounds -1.5 to -2 instead of -1
+ * Rounds +1.5 to +2
+ */
+function roundSym(n) {
+    if (n < 0) {
+        return -1 * Math.round(-1 * n);
+    }
+    else {
+        return Math.round(n);
+    }
+}
+exports.roundSym = roundSym;
 /**
  * Stricter variant of parseFloat().
  * @param value	Input string

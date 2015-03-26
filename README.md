@@ -618,6 +618,10 @@ The version of the included IANA time zone database is 2015b.
 ## Changelog
 
 
+### 1.16.1 (2015-03-26)
+* Make DateTime constructor robust with respect to fractional numbers (it rounds to nearest millisecond)
+* Make DateTime#add() / addLocal() / sub() / subLocal() robust to fractional amounts (works for millis through weeks, throws for months/years)
+
 ### 1.16.0 (2015-03-26)
 * Add DateTime#withZone() method to add/replace the time zone of an existing datetime
 

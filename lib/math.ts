@@ -23,6 +23,17 @@ export function isInt(n: number): boolean {
 	return (Math.floor(n) === n);
 }
 
+/**
+ * Rounds -1.5 to -2 instead of -1
+ * Rounds +1.5 to +2
+ */
+export function roundSym(n: number): number {
+	if (n < 0) {
+		return -1 * Math.round(-1 * n);
+	} else {
+		return Math.round(n);
+	}
+}
 
 /**
  * Stricter variant of parseFloat().

@@ -196,9 +196,9 @@ export class DateTime {
 					this._zone = (typeof (a2) === "object" && a2 instanceof TimeZone ? <TimeZone>a2 : null);
 					var normalizedUnixTimestamp: number;
 					if (this._zone) {
-						normalizedUnixTimestamp = this._zone.normalizeZoneTime(<number>a1);
+						normalizedUnixTimestamp = this._zone.normalizeZoneTime(math.roundSym(<number>a1));
 					} else {
-						normalizedUnixTimestamp = <number>a1;
+						normalizedUnixTimestamp = math.roundSym(<number>a1);
 					}
 					this._zoneDate = TimeStruct.fromUnix(normalizedUnixTimestamp);
 					this._zoneDateToUtcDate();
@@ -220,6 +220,13 @@ export class DateTime {
 					assert(minute >= 0 && minute < 60, "DateTime.DateTime(): minute out of range.");
 					assert(second >= 0 && second < 60, "DateTime.DateTime(): second out of range.");
 					assert(millisecond >= 0 && millisecond < 1000, "DateTime.DateTime(): millisecond out of range.");
+					year = math.roundSym(year);
+					month = math.roundSym(month);
+					day = math.roundSym(day);
+					hour = math.roundSym(hour);
+					minute = math.roundSym(minute);
+					second = math.roundSym(second);
+					millisecond = math.roundSym(millisecond);
 
 					this._zone = (typeof (timeZone) === "object" && timeZone instanceof TimeZone ? timeZone : null);
 
@@ -530,7 +537,7 @@ export class DateTime {
 	}
 
 	/**
-	 * UNSAFE: returns a new DateTime which is the date+time reinterpreted as
+	 * Returns a new DateTime which is the date+time reinterpreted as
 	 * in the new zone. So e.g. 08:00 America/Chicago can be set to 08:00 Europe/Brussels.
 	 * No conversion is done, the value is just assumed to be in a different zone.
 	 * Works for naive and aware dates. The new zone may be null.
@@ -698,28 +705,29 @@ export class DateTime {
 
 		switch (unit) {
 			case TimeUnit.Millisecond: {
-				return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount);
+				return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount));
 			}
 			case TimeUnit.Second: {
-				return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 1000);
+				return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 1000));
 			}
 			case TimeUnit.Minute: {
 				// todo more intelligent approach needed when implementing leap seconds
-				return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 60000);
+				return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 60000));
 			}
 			case TimeUnit.Hour: {
 				// todo more intelligent approach needed when implementing leap seconds
-				return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 3600000);
+				return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 3600000));
 			}
 			case TimeUnit.Day: {
 				// todo more intelligent approach needed when implementing leap seconds
-				return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 86400000);
+				return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 86400000));
 			}
 			case TimeUnit.Week: {
 				// todo more intelligent approach needed when implementing leap seconds
-				return TimeStruct.fromUnix(tm.toUnixNoLeapSecs() + amount * 7 * 86400000);
+				return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 7 * 86400000));
 			}
 			case TimeUnit.Month: {
+				assert(math.isInt(amount), "Cannot add/sub a non-integer amount of months");
 				// keep the day-of-month the same (clamp to end-of-month)
 				if (amount >= 0) {
 					targetYear = tm.year + Math.ceil((amount - (12 - tm.month)) / 12);
@@ -736,6 +744,7 @@ export class DateTime {
 				return new TimeStruct(targetYear, targetMonth, targetDay, targetHours, targetMinutes, targetSeconds, targetMilliseconds);
 			}
 			case TimeUnit.Year: {
+				assert(math.isInt(amount), "Cannot add/sub a non-integer amount of years");
 				targetYear = tm.year + amount;
 				targetMonth = tm.month;
 				targetDay = Math.min(tm.day, basics.daysInMonth(targetYear, targetMonth));

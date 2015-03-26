@@ -583,7 +583,7 @@ declare module '__timezonecomplete/datetime' {
                 */
             utcSecondOfDay(): number;
             /**
-                * UNSAFE: returns a new DateTime which is the date+time reinterpreted as
+                * Returns a new DateTime which is the date+time reinterpreted as
                 * in the new zone. So e.g. 08:00 America/Chicago can be set to 08:00 Europe/Brussels.
                 * No conversion is done, the value is just assumed to be in a different zone.
                 * Works for naive and aware dates. The new zone may be null.
