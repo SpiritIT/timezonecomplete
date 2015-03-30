@@ -380,8 +380,25 @@ declare module '__timezonecomplete/datetime' {
             /**
                 * Create a DateTime from a Lotus 123 / Microsoft Excel date-time value
                 * i.e. a double representing days since 1-1-1900 where 1900 is incorrectly seen as leap year
+                * Does not work for dates < 1900
+                * @param n excel date/time number
+                * @param timeZone Time zone to assume that the excel value is in
+                * @returns a DateTime
                 */
             static fromExcel(n: number, timeZone?: TimeZone): DateTime;
+            /**
+                * Create an Excel timestamp for this datetime converted to the given zone.
+                * Does not work for dates < 1900
+                * @param timeZone Optional. Zone to convert to, default the zone the datetime is already in.
+                * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+                */
+            toExcel(timeZone?: TimeZone): number;
+            /**
+                * Create an Excel timestamp for this datetime converted to UTC
+                * Does not work for dates < 1900
+                * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+                */
+            toUtcExcel(): number;
             /**
                 * Constructor. Creates current time in local timezone.
                 */

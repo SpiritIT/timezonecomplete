@@ -6,7 +6,7 @@
 ![license](http://img.shields.io/npm/l/timezonecomplete.svg)
 
 [![NPM](https://nodei.co/npm/timezonecomplete.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/timezonecomplete/)
-[![NPM](https://nodei.co/npm-dl/timezonecomplete.png?months=6&height=3)](https://nodei.co/npm/timezonecomplete/)
+[![NPM](https://nodei.co/npm-dl/timezonecomplete.png?months=9&height=3)](https://nodei.co/npm/timezonecomplete/)
 
 
 ## Synopsis
@@ -359,7 +359,12 @@ var amsterdamDateNoDst = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Eur
 var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
 
 // date from an Excel datetime number
-var excelDate = tc.DateTime.fromExcel(42005.5430555556); // 2015-01-01T13:02:00
+var dt = tc.DateTime.fromExcel(42005.5430555556); // 2015-01-01T13:02:00
+
+// Excel datetime number from a data
+var dt = new tc.DateTime("2015-01-01T13:02:00 Europe/Amsterdam");
+var excelAmsterdam = dt.toExcel(); // 42005.5430555556
+var excelUtc = dt.toUtcExcel(); // 42005.501388888933333333333333333 (one hour earlier)
 
 // a fully aware time without Daylight Saving Time: a fixed offset from UTC of 2 hours
 var fixedOffset;
@@ -617,6 +622,8 @@ The version of the included IANA time zone database is 2015b.
 
 ## Changelog
 
+### 1.17.0 (2015-03-30)
+* Add DateTime#toExcel() and DateTime#toUtcExcel() functions to convert a DateTime to a Microsoft Excel date/time number.
 
 ### 1.16.1 (2015-03-26)
 * Make DateTime constructor robust with respect to fractional numbers (it rounds to nearest millisecond)

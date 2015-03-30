@@ -131,12 +131,38 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	describe("fromExcelDate()", (): void => {
+	describe("fromExcel()", (): void => {
 		it("should perform correct conversion", (): void => {
 			expect(DateTime.fromExcel(42005.5430555556).toString()).to.equal("2015-01-01T13:02:00.000");
 		});
 		it("should add timezone if given", (): void => {
 			expect(DateTime.fromExcel(42005.5430555556, TimeZone.zone("+03:00")).toString()).to.equal("2015-01-01T13:02:00.000+03:00");
+		});
+	});
+
+	describe("toExcel()", (): void => {
+		var oneMsec = (1 / 86400000);
+		it("should perform correct conversion", (): void => {
+			expect((new DateTime("2015-01-01T13:02:00.000")).toExcel()).to.be.within(42005.5430555556 - oneMsec, 42005.5430555556 + oneMsec);
+		});
+		it("should add timezone if given", (): void => {
+			expect((new DateTime("2015-01-01T13:02:00.000 UTC")).toExcel(TimeZone.zone("+01:00")))
+				.to.be.within(42005.5430555556 + 1 / 24 - oneMsec, 42005.5430555556 + 1 / 24 + oneMsec);
+		});
+		it("should add timezone if given", (): void => {
+			expect((new DateTime("2015-01-01T13:02:00.000 UTC")).toExcel(TimeZone.zone("+01:00")))
+				.to.be.within(42005.5430555556 + 1 / 24 - oneMsec, 42005.5430555556 + 1 / 24 + oneMsec);
+		});
+	});
+
+	describe("toUtcExcel()", (): void => {
+		var oneMsec = (1 / 86400000);
+		it("should perform correct conversion", (): void => {
+			expect((new DateTime("2015-01-01T13:02:00.000")).toUtcExcel()).to.be.within(42005.5430555556 - oneMsec, 42005.5430555556 + oneMsec);
+		});
+		it("should use the UTC value", (): void => {
+			expect((new DateTime("2015-01-01T13:02:00.000+01:00")).toUtcExcel()).
+				to.be.within(42005.5430555556 - 1 / 24 - oneMsec, 42005.5430555556 - 1 / 24 + oneMsec);
 		});
 	});
 

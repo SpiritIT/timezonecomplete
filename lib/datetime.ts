@@ -119,6 +119,10 @@ export class DateTime {
 	/**
 	 * Create a DateTime from a Lotus 123 / Microsoft Excel date-time value
 	 * i.e. a double representing days since 1-1-1900 where 1900 is incorrectly seen as leap year
+	 * Does not work for dates < 1900
+	 * @param n excel date/time number
+	 * @param timeZone Time zone to assume that the excel value is in
+	 * @returns a DateTime
 	 */
 	public static fromExcel(n: number, timeZone?: TimeZone): DateTime {
 		var unixTimestamp = Math.round((n - 25569) * 24 * 60 * 60 * 1000);
@@ -607,6 +611,40 @@ export class DateTime {
 		return new Date(this.year(), this.month() - 1, this.day(),
 			this.hour(), this.minute(), this.second(), this.millisecond());
 	}
+
+	/**
+	 * Create an Excel timestamp for this datetime converted to the given zone.
+	 * Does not work for dates < 1900
+	 * @param timeZone Optional. Zone to convert to, default the zone the datetime is already in.
+	 * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+	 */
+	public toExcel(timeZone?: TimeZone): number {
+		var dt = this;
+		if (timeZone && !timeZone.equals(this.zone())) {
+			dt = this.toZone(timeZone);
+		}
+		var offsetMillis = dt.offset() * 60 * 1000;
+		var unixTimestamp = dt.unixUtcMillis();
+		return this._unixTimeStampToExcel(unixTimestamp + offsetMillis);
+	}
+
+	/**
+	 * Create an Excel timestamp for this datetime converted to UTC
+	 * Does not work for dates < 1900
+	 * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+	 */
+	public toUtcExcel(): number {
+		var unixTimestamp = this.unixUtcMillis();
+		return this._unixTimeStampToExcel(unixTimestamp);
+	}
+
+	private _unixTimeStampToExcel(n: number): number {
+		var result = ((n) / (24 * 60 * 60 * 1000)) + 25569;
+		// round to nearest millisecond
+		var msecs = result / (1 / 86400000);
+		return Math.round(msecs) * (1 / 86400000);
+	}
+
 
 	/**
 	 * Add a time duration relative to UTC.
