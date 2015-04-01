@@ -29,10 +29,16 @@
 					<div id="tsd-filter">
 						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
 						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-private" checked />
-							<label class="tsd-widget" for="tsd-filter-private">Private</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -70,14 +76,22 @@
 					<p>See <a href="http://www.cstdbill.com/tzdb/tz-how-to.html">http://www.cstdbill.com/tzdb/tz-how-to.html</a></p>
 				</div>
 			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">RuleInfo</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Constructor methods</h3>
+							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor-method tsd-parent-kind-class"><a href="_tz_database_.ruleinfo.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_tz_database_.ruleinfo.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -113,139 +127,66 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructor methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor-method tsd-parent-kind-class">
-					<a name="constructor" class="anchor"></a>
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>onWeekDay<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a>, from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, toYear<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, inMonth<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, onType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a>, onDay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, toType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a>, atHour<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atMinute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atSecond<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a>, save<span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, letter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Rule<wbr>Info<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, toType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a>, toYear<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, inMonth<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, onType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a>, onDay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, onWeekDay<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a>, atHour<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atMinute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atSecond<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, atType<span class="tsd-signature-symbol">: </span><a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a>, save<span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, letter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:86</li>
+									<li>Defined in tz-database.ts:85</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>onWeekDay: <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>If onType is not DayNum, the weekday</p>
-										</div>
-									</div>
-								</li>
-								<li>
 									<h5>from: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>FROM column year number.
-											Note, can be -10000 for NaN value (e.g. for &quot;SystemV&quot; rules)</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>toYear: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>If TO column is a year, the year number. If TO column is &quot;only&quot;, the FROM year.</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>type: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>TYPE column, not used so far</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>inMonth: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>IN column month number 1-12</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>onType: <a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>ON column type</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>onDay: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>If onType is DayNum, the day number</p>
-										</div>
-									</div>
 								</li>
 								<li>
 									<h5>toType: <a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>TO column type: Year for year numbers and &quot;only&quot; values, Max for &quot;max&quot; value.</p>
-										</div>
-									</div>
+								</li>
+								<li>
+									<h5>toYear: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>inMonth: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>onType: <a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a></h5>
+								</li>
+								<li>
+									<h5>onDay: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>onWeekDay: <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></h5>
 								</li>
 								<li>
 									<h5>atHour: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>AT column hour</p>
-										</div>
-									</div>
 								</li>
 								<li>
 									<h5>atMinute: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>AT column minute</p>
-										</div>
-									</div>
 								</li>
 								<li>
 									<h5>atSecond: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>AT column second</p>
-										</div>
-									</div>
 								</li>
 								<li>
 									<h5>atType: <a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>AT column type</p>
-										</div>
-									</div>
 								</li>
 								<li>
 									<h5>save: <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>DST offset from local standard time (NOT from UTC!)</p>
-										</div>
-									</div>
 								</li>
 								<li>
 									<h5>letter: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Character to insert in %s for time zone abbreviation
-											Note if TZ database indicates &quot;-&quot; this is the empty string</p>
-										</div>
-									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -253,12 +194,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="athour" class="anchor"></a>
+					<a name="athour" class="tsd-anchor"></a>
 					<h3>at<wbr>Hour</h3>
 					<div class="tsd-signature tsd-kind-icon">at<wbr>Hour<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:123</li>
+							<li>Defined in tz-database.ts:124</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -268,12 +209,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="atminute" class="anchor"></a>
+					<a name="atminute" class="tsd-anchor"></a>
 					<h3>at<wbr>Minute</h3>
 					<div class="tsd-signature tsd-kind-icon">at<wbr>Minute<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:127</li>
+							<li>Defined in tz-database.ts:128</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -283,12 +224,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="atsecond" class="anchor"></a>
+					<a name="atsecond" class="tsd-anchor"></a>
 					<h3>at<wbr>Second</h3>
 					<div class="tsd-signature tsd-kind-icon">at<wbr>Second<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:131</li>
+							<li>Defined in tz-database.ts:132</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -298,12 +239,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="attype" class="anchor"></a>
+					<a name="attype" class="tsd-anchor"></a>
 					<h3>at<wbr>Type</h3>
 					<div class="tsd-signature tsd-kind-icon">at<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/_tz_database_.attype.html" class="tsd-signature-type">AtType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:135</li>
+							<li>Defined in tz-database.ts:136</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -313,12 +254,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="from" class="anchor"></a>
+					<a name="from" class="tsd-anchor"></a>
 					<h3>from</h3>
 					<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:91</li>
+							<li>Defined in tz-database.ts:92</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -329,12 +270,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="inmonth" class="anchor"></a>
+					<a name="inmonth" class="tsd-anchor"></a>
 					<h3>in<wbr>Month</h3>
 					<div class="tsd-signature tsd-kind-icon">in<wbr>Month<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:107</li>
+							<li>Defined in tz-database.ts:108</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -344,12 +285,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="letter" class="anchor"></a>
+					<a name="letter" class="tsd-anchor"></a>
 					<h3>letter</h3>
 					<div class="tsd-signature tsd-kind-icon">letter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:144</li>
+							<li>Defined in tz-database.ts:145</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -360,12 +301,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="onday" class="anchor"></a>
+					<a name="onday" class="tsd-anchor"></a>
 					<h3>on<wbr>Day</h3>
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Day<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:115</li>
+							<li>Defined in tz-database.ts:116</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -375,12 +316,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="ontype" class="anchor"></a>
+					<a name="ontype" class="tsd-anchor"></a>
 					<h3>on<wbr>Type</h3>
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/_tz_database_.ontype.html" class="tsd-signature-type">OnType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:111</li>
+							<li>Defined in tz-database.ts:112</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -390,12 +331,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="onweekday" class="anchor"></a>
+					<a name="onweekday" class="tsd-anchor"></a>
 					<h3>on<wbr>Week<wbr>Day</h3>
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Week<wbr>Day<span class="tsd-signature-symbol">:</span> <a href="../enums/_basics_.weekday.html" class="tsd-signature-type">WeekDay</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:119</li>
+							<li>Defined in tz-database.ts:120</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -405,12 +346,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="save" class="anchor"></a>
+					<a name="save" class="tsd-anchor"></a>
 					<h3>save</h3>
 					<div class="tsd-signature tsd-kind-icon">save<span class="tsd-signature-symbol">:</span> <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:139</li>
+							<li>Defined in tz-database.ts:140</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -420,12 +361,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="totype" class="anchor"></a>
+					<a name="totype" class="tsd-anchor"></a>
 					<h3>to<wbr>Type</h3>
 					<div class="tsd-signature tsd-kind-icon">to<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/_tz_database_.totype.html" class="tsd-signature-type">ToType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:95</li>
+							<li>Defined in tz-database.ts:96</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -435,12 +376,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="toyear" class="anchor"></a>
+					<a name="toyear" class="tsd-anchor"></a>
 					<h3>to<wbr>Year</h3>
 					<div class="tsd-signature tsd-kind-icon">to<wbr>Year<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:99</li>
+							<li>Defined in tz-database.ts:100</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -450,12 +391,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="type" class="anchor"></a>
+					<a name="type" class="tsd-anchor"></a>
 					<h3>type</h3>
 					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:103</li>
+							<li>Defined in tz-database.ts:104</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -468,15 +409,16 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="applicable" class="anchor"></a>
+					<a name="applicable" class="tsd-anchor"></a>
 					<h3>applicable</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">applicable<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:155</li>
+									<li>Defined in tz-database.ts:156</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -490,22 +432,21 @@
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="effectivedate" class="anchor"></a>
+					<a name="effectivedate" class="tsd-anchor"></a>
 					<h3>effective<wbr>Date</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">effective<wbr>Date<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:210</li>
+									<li>Defined in tz-database.ts:211</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -521,22 +462,21 @@
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_basics_.timestruct.html" class="tsd-signature-type">TimeStruct</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="effectiveequal" class="anchor"></a>
+					<a name="effectiveequal" class="tsd-anchor"></a>
 					<h3>effective<wbr>Equal</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">effective<wbr>Equal<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:192</li>
+									<li>Defined in tz-database.ts:193</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -550,23 +490,22 @@
 									<h5>other: <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 							<p>(first effective date is equal to other&#39;s first effective date)</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="effectiveless" class="anchor"></a>
+					<a name="effectiveless" class="tsd-anchor"></a>
 					<h3>effective<wbr>Less</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">effective<wbr>Less<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:169</li>
+									<li>Defined in tz-database.ts:170</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -580,23 +519,22 @@
 									<h5>other: <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 							<p>(first effective date is less than other&#39;s first effective date)</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="transitiontimeutc" class="anchor"></a>
+					<a name="transitiontimeutc" class="tsd-anchor"></a>
 					<h3>transition<wbr>Time<wbr>Utc</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">transition<wbr>Time<wbr>Utc<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, standardOffset<span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, prevRule<span class="tsd-signature-symbol">: </span><a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:247</li>
+									<li>Defined in tz-database.ts:248</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -609,31 +547,23 @@
 								<li>
 									<h5>year: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The year for which to return the transition</p>
-										</div>
+										<p>The year for which to return the transition</p>
 									</div>
 								</li>
 								<li>
 									<h5>standardOffset: <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The standard offset for the timezone without DST</p>
-										</div>
+										<p>The standard offset for the timezone without DST</p>
 									</div>
 								</li>
 								<li>
 									<h5>prevRule: <a href="_tz_database_.ruleinfo.html" class="tsd-signature-type">RuleInfo</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The previous rule</p>
-										</div>
+										<p>The previous rule</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">number</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -645,82 +575,79 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_basics_.html">"basics"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_datetime_.html">"datetime"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_duration_.html">"duration"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_format_.html">"format"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_globals_.html">"globals"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_javascript_.html">"javascript"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_math_.html">"math"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_period_.html">"period"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_strings_.html">"strings"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_timesource_.html">"timesource"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_timezone_.html">"timezone"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_token_.html">"token"</a>
 					</li>
-					<li class="current tsd-kind-dynamic-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_tz_database_.html">"tz-<wbr>database"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/_tz_database_.attype.html" class="tsd-kind-icon">At<wbr>Type</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/_tz_database_.normalizeoption.html" class="tsd-kind-icon">Normalize<wbr>Option</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/_tz_database_.ontype.html" class="tsd-kind-icon">On<wbr>Type</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/_tz_database_.ruletype.html" class="tsd-kind-icon">Rule<wbr>Type</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/_tz_database_.totype.html" class="tsd-kind-icon">To<wbr>Type</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../enums/_tz_database_.tzdaynames.html" class="tsd-kind-icon">Tz<wbr>Day<wbr>Names</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../enums/_tz_database_.tzmonthnames.html" class="tsd-kind-icon">Tz<wbr>Month<wbr>Names</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-dynamic-module tsd-is-not-exported">
-						<a href="../interfaces/_tz_database_.minmaxinfo.html" class="tsd-kind-icon">Min<wbr>Max<wbr>Info</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-dynamic-module">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_tz_database_.ruleinfo.html" class="tsd-kind-icon">Rule<wbr>Info</a>
 						<ul>
-							<li class=" tsd-kind-constructor-method tsd-parent-kind-class">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="_tz_database_.ruleinfo.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
@@ -784,26 +711,29 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_tz_database_.transition.html" class="tsd-kind-icon">Transition</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_tz_database_.tzdatabase.html" class="tsd-kind-icon">Tz<wbr>Database</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_tz_database_.zoneinfo.html" class="tsd-kind-icon">Zone<wbr>Info</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/_tz_database_.minmaxinfo.html" class="tsd-kind-icon">Min<wbr>Max<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_tz_database_.html#data" class="tsd-kind-icon">data</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_tz_database_.html#isvalidoffsetstring" class="tsd-kind-icon">is<wbr>Valid<wbr>Offset<wbr>String</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/_tz_database_.html#monthnametostring" class="tsd-kind-icon">month<wbr>Name<wbr>ToString</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/_tz_database_.html#validatedata" class="tsd-kind-icon">validate<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-dynamic-module tsd-is-not-exported">
-						<a href="../modules/_tz_database_.html#data" class="tsd-kind-icon">data</a>
 					</li>
 				</ul>
 			</nav>
@@ -815,50 +745,56 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li>&nbsp;</li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

@@ -29,10 +29,16 @@
 					<div id="tsd-filter">
 						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
 						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-private" checked />
-							<label class="tsd-widget" for="tsd-filter-private">Private</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -70,17 +76,25 @@
 					<p>Functionality to parse a DateTime object to a string</p>
 				</div>
 			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">Tokenizer</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Constructor methods</h3>
+							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor-method tsd-parent-kind-class"><a href="_token_.tokenizer.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_token_.tokenizer.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-private">
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_token_.tokenizer.html#_formatstring" class="tsd-kind-icon">_format<wbr>String</a></li>
@@ -98,17 +112,18 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructor methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor-method tsd-parent-kind-class">
-					<a name="constructor" class="anchor"></a>
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>_formatString<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_token_.tokenizer.html" class="tsd-signature-type">Tokenizer</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Tokenizer<span class="tsd-signature-symbol">(</span>_formatString<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_token_.tokenizer.html" class="tsd-signature-type">Tokenizer</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in token.ts:15</li>
+									<li>Defined in token.ts:10</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -119,7 +134,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>_formatString?: <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> _formatString: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>(optional) Set the format string</p>
@@ -127,38 +142,42 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_token_.tokenizer.html" class="tsd-signature-type">Tokenizer</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_token_.tokenizer.html" class="tsd-signature-type">Tokenizer</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_formatstring" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _format<wbr>String</h3>
+					<a name="_formatstring" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagOptional">Optional</span> _format<wbr>String</h3>
 					<div class="tsd-signature tsd-kind-icon">_format<wbr>String<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in token.ts:15</li>
+							<li>Defined in token.ts:16</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>(optional) Set the format string</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_appendtoken" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _append<wbr>Token</h3>
+					<a name="_appendtoken" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _append<wbr>Token</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
 						<li class="tsd-signature tsd-kind-icon">_append<wbr>Token<span class="tsd-signature-symbol">(</span>tokenString<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, tokenArray<span class="tsd-signature-symbol">: </span><a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span>, raw<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in token.ts:35</li>
+									<li>Defined in token.ts:36</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -171,45 +190,38 @@
 								<li>
 									<h5>tokenString: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The string that makes up the token</p>
-										</div>
+										<p>The string that makes up the token</p>
 									</div>
 								</li>
 								<li>
 									<h5>tokenArray: <a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The existing array of tokens</p>
-										</div>
+										<p>The existing array of tokens</p>
 									</div>
 								</li>
 								<li>
-									<h5>raw?: <span class="tsd-signature-type">boolean</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> raw: <span class="tsd-signature-type">boolean</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>(optional) If true, don&#39;t parse the token but insert it as is</p>
-										</div>
+										<p>(optional) If true, don&#39;t parse the token but insert it as is</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></h4>
 							<p>Token[] The resulting array of tokens.</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="parsetokens" class="anchor"></a>
+					<a name="parsetokens" class="tsd-anchor"></a>
 					<h3>parse<wbr>Tokens</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">parse<wbr>Tokens<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in token.ts:56</li>
+									<li>Defined in token.ts:57</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -217,23 +229,22 @@
 									<p>Parse the internal string and return an array of tokens.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></h4>
 							<p>Token[]</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="setformatstring" class="anchor"></a>
+					<a name="setformatstring" class="tsd-anchor"></a>
 					<h3>set<wbr>Format<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Format<wbr>String<span class="tsd-signature-symbol">(</span>formatString<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Format<wbr>String<span class="tsd-signature-symbol">(</span>formatString<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in token.ts:23</li>
+									<li>Defined in token.ts:24</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -246,12 +257,11 @@
 								<li>
 									<h5>formatString: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The new string to use for formatting</p>
-										</div>
+										<p>The new string to use for formatting</p>
 									</div>
 								</li>
 							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -263,64 +273,61 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_basics_.html">"basics"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_datetime_.html">"datetime"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_duration_.html">"duration"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_format_.html">"format"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_globals_.html">"globals"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_javascript_.html">"javascript"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_math_.html">"math"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_period_.html">"period"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_strings_.html">"strings"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_timesource_.html">"timesource"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_timezone_.html">"timezone"</a>
 					</li>
-					<li class="current tsd-kind-dynamic-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_token_.html">"token"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_tz_database_.html">"tz-<wbr>database"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/_token_.datetimetokentype.html" class="tsd-kind-icon">Date<wbr>Time<wbr>Token<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-dynamic-module">
-						<a href="../interfaces/_token_.token.html" class="tsd-kind-icon">Token</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-dynamic-module">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_token_.tokenizer.html" class="tsd-kind-icon">Tokenizer</a>
 						<ul>
-							<li class=" tsd-kind-constructor-method tsd-parent-kind-class">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="_token_.tokenizer.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
@@ -339,11 +346,14 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-object-literal tsd-parent-kind-dynamic-module tsd-is-not-exported">
-						<a href="../objects/_token_.symbolmapping.html" class="tsd-kind-icon">symbol<wbr>Mapping</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_token_.token.html" class="tsd-kind-icon">Token</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/_token_.html#mapsymboltotype" class="tsd-kind-icon">map<wbr>Symbol<wbr>ToType</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_token_.html#symbolmapping" class="tsd-kind-icon">symbol<wbr>Mapping</a>
 					</li>
 				</ul>
 			</nav>
@@ -355,50 +365,56 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li>&nbsp;</li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

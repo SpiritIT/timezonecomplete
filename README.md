@@ -540,6 +540,9 @@ var occurrence = period.findFirst(new tc.DateTime("2014-04-30T12:00:00 Europe/Am
 // "2014-05-02T08:05:00.000 Europe/Amsterdam"
 var occurrence2 = period.findNext(occurrence);
 
+// findPrev also assumes that the given time is on a boundary
+var occurrence1 = period.findPrev(occurrence);
+
 // isBoundary checks whether the given DateTime is on a period boundary
 period.isBoundary(occurrence); // true
 
@@ -621,6 +624,12 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015b.
 
 ## Changelog
+
+### 1.18.0 (2015-04-01)
+* Add DateTime#startOfMonth() which returns the date truncated to the first day of the month at 00:00:00
+* Add DateTime#startOfYear() which returns the date truncated to the first day of the year at 00:00:00
+* Add Period#findPrev() analogous to findNext()
+* Allow count parameter <= 0 in Period#findNext() / Period#findPrev() i.e. findNext(dt, -1) === findPrev(dt, 1)
 
 ### 1.17.0 (2015-03-30)
 * Add DateTime#toExcel() and DateTime#toUtcExcel() functions to convert a DateTime to a Microsoft Excel date/time number.

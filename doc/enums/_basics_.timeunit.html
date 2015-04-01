@@ -29,10 +29,16 @@
 					<div id="tsd-filter">
 						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
 						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-private" checked />
-							<label class="tsd-widget" for="tsd-filter-private">Private</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -93,9 +99,19 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="day" class="anchor"></a>
+					<a name="day" class="tsd-anchor"></a>
 					<h3>Day</h3>
-					<div class="tsd-signature tsd-kind-icon">Day<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
+					<div class="tsd-signature tsd-kind-icon">Day<span class="tsd-signature-symbol">:</span> </div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in basics.ts:41</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="hour" class="tsd-anchor"></a>
+					<h3>Hour</h3>
+					<div class="tsd-signature tsd-kind-icon">Hour<span class="tsd-signature-symbol">:</span> </div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in basics.ts:40</li>
@@ -103,22 +119,12 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="hour" class="anchor"></a>
-					<h3>Hour</h3>
-					<div class="tsd-signature tsd-kind-icon">Hour<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in basics.ts:39</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="max" class="anchor"></a>
+					<a name="max" class="tsd-anchor"></a>
 					<h3>MAX</h3>
-					<div class="tsd-signature tsd-kind-icon">MAX<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
+					<div class="tsd-signature tsd-kind-icon">MAX<span class="tsd-signature-symbol">:</span> </div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in basics.ts:47</li>
+							<li>Defined in basics.ts:48</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -128,39 +134,9 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="millisecond" class="anchor"></a>
+					<a name="millisecond" class="tsd-anchor"></a>
 					<h3>Millisecond</h3>
-					<div class="tsd-signature tsd-kind-icon">Millisecond<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in basics.ts:36</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="minute" class="anchor"></a>
-					<h3>Minute</h3>
-					<div class="tsd-signature tsd-kind-icon">Minute<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in basics.ts:38</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="month" class="anchor"></a>
-					<h3>Month</h3>
-					<div class="tsd-signature tsd-kind-icon">Month<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in basics.ts:42</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="second" class="anchor"></a>
-					<h3>Second</h3>
-					<div class="tsd-signature tsd-kind-icon">Second<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
+					<div class="tsd-signature tsd-kind-icon">Millisecond<span class="tsd-signature-symbol">:</span> </div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in basics.ts:37</li>
@@ -168,22 +144,52 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="week" class="anchor"></a>
-					<h3>Week</h3>
-					<div class="tsd-signature tsd-kind-icon">Week<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
+					<a name="minute" class="tsd-anchor"></a>
+					<h3>Minute</h3>
+					<div class="tsd-signature tsd-kind-icon">Minute<span class="tsd-signature-symbol">:</span> </div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in basics.ts:41</li>
+							<li>Defined in basics.ts:39</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="year" class="anchor"></a>
-					<h3>Year</h3>
-					<div class="tsd-signature tsd-kind-icon">Year<span class="tsd-signature-symbol">:</span> <a href="_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></div>
+					<a name="month" class="tsd-anchor"></a>
+					<h3>Month</h3>
+					<div class="tsd-signature tsd-kind-icon">Month<span class="tsd-signature-symbol">:</span> </div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in basics.ts:43</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="second" class="tsd-anchor"></a>
+					<h3>Second</h3>
+					<div class="tsd-signature tsd-kind-icon">Second<span class="tsd-signature-symbol">:</span> </div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in basics.ts:38</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="week" class="tsd-anchor"></a>
+					<h3>Week</h3>
+					<div class="tsd-signature tsd-kind-icon">Week<span class="tsd-signature-symbol">:</span> </div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in basics.ts:42</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="year" class="tsd-anchor"></a>
+					<h3>Year</h3>
+					<div class="tsd-signature tsd-kind-icon">Year<span class="tsd-signature-symbol">:</span> </div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in basics.ts:44</li>
 						</ul>
 					</aside>
 				</section>
@@ -195,46 +201,46 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-dynamic-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_basics_.html">"basics"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_datetime_.html">"datetime"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_duration_.html">"duration"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_format_.html">"format"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_globals_.html">"globals"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_javascript_.html">"javascript"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_math_.html">"math"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_period_.html">"period"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_strings_.html">"strings"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_timesource_.html">"timesource"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_timezone_.html">"timezone"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_token_.html">"token"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_tz_database_.html">"tz-<wbr>database"</a>
 					</li>
 				</ul>
@@ -243,7 +249,7 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class="current tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="_basics_.timeunit.html" class="tsd-kind-icon">Time<wbr>Unit</a>
 						<ul>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
@@ -277,67 +283,67 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="_basics_.weekday.html" class="tsd-kind-icon">Week<wbr>Day</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/_basics_.timestruct.html" class="tsd-kind-icon">Time<wbr>Struct</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/_basics_.html#assertunixtimestamp" class="tsd-kind-icon">assert<wbr>Unix<wbr>Timestamp</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#firstweekdayofmonth" class="tsd-kind-icon">first<wbr>Week<wbr>Day<wbr>OfMonth</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module tsd-is-not-exported">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/_basics_.html#getweekonedayofyear" class="tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#lastweekdayofmonth" class="tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#secondofday" class="tsd-kind-icon">second<wbr>OfDay</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#stringtotimeunit" class="tsd-kind-icon">string<wbr>ToTime<wbr>Unit</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#timetounixnoleapsecs" class="tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#timeunittomilliseconds" class="tsd-kind-icon">time<wbr>Unit<wbr>ToMilliseconds</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#timeunittostring" class="tsd-kind-icon">time<wbr>Unit<wbr>ToString</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#unixtotimenoleapsecs" class="tsd-kind-icon">unix<wbr>ToTime<wbr>NoLeap<wbr>Secs</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#weekdayonorafter" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#weekdayonorbefore" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#weeknumber" class="tsd-kind-icon">week<wbr>Number</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_basics_.html#weekofmonth" class="tsd-kind-icon">week<wbr>OfMonth</a>
 					</li>
 				</ul>
@@ -350,50 +356,56 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li>&nbsp;</li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

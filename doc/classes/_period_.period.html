@@ -29,10 +29,16 @@
 					<div id="tsd-filter">
 						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
 						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-private" checked />
-							<label class="tsd-widget" for="tsd-filter-private">Private</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -70,17 +76,25 @@
 					</div>
 				</div>
 			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">Period</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Constructor methods</h3>
+							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor-method tsd-parent-kind-class"><a href="_period_.period.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_period_.period.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-private">
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_period_.period.html#_dst" class="tsd-kind-icon">_dst</a></li>
@@ -103,6 +117,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_period_.period.html#equals" class="tsd-kind-icon">equals</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_period_.period.html#findfirst" class="tsd-kind-icon">find<wbr>First</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_period_.period.html#findnext" class="tsd-kind-icon">find<wbr>Next</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_period_.period.html#findprev" class="tsd-kind-icon">find<wbr>Prev</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_period_.period.html#identical" class="tsd-kind-icon">identical</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_period_.period.html#inspect" class="tsd-kind-icon">inspect</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_period_.period.html#interval" class="tsd-kind-icon">interval</a></li>
@@ -117,48 +132,19 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructor methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor-method tsd-parent-kind-class">
-					<a name="constructor" class="anchor"></a>
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, amountOrInterval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, unitOrDst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, givenDst<span class="tsd-signature-symbol">?: </span><a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_period_.period.html" class="tsd-signature-type">Period</a></li>
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, unit<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a>, dst<span class="tsd-signature-symbol">?: </span><a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_period_.period.html" class="tsd-signature-type">Period</a></li>
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, interval<span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, dst<span class="tsd-signature-symbol">?: </span><a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_period_.period.html" class="tsd-signature-type">Period</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Period<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, interval<span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>, dst<span class="tsd-signature-symbol">?: </span><a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_period_.period.html" class="tsd-signature-type">Period</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Period<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, unit<span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a>, dst<span class="tsd-signature-symbol">?: </span><a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_period_.period.html" class="tsd-signature-type">Period</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:157</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Constructor implementation. See other constructors for explanation.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>start: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
-								</li>
-								<li>
-									<h5>amountOrInterval: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>unitOrDst?: <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-								</li>
-								<li>
-									<h5>givenDst?: <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_period_.period.html" class="tsd-signature-type">Period</a>
-							</h4>
-						</li>
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in period.ts:149</li>
+									<li>Defined in period.ts:114</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -175,89 +161,100 @@
 								<li>
 									<h5>start: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The start of the period. If the period is in Months or Years, and
-										the day is 29 or 30 or 31, the results are maximised to end-of-month.</p>
-									</div>
-								</li>
-								<li>
-									<h5>amount: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The amount of units.</p>
-									</div>
-								</li>
-								<li>
-									<h5>unit: <a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The unit.</p>
-									</div>
-								</li>
-								<li>
-									<h5>dst?: <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Specifies how to handle Daylight Saving Time. Not relevant
-											if the time zone of the start datetime does not have DST.
-										Defaults to RegularLocalTime.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_period_.period.html" class="tsd-signature-type">Period</a>
-							</h4>
-						</li>
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in period.ts:130</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Constructor
-										LIMITATION: if dst equals RegularLocalTime, and unit is Second, Minute or Hour,
-										then the amount must be a factor of 24. So 120 seconds is allowed while 121 seconds is not.
-										This is due to the enormous processing power required by these cases. They are not
-									implemented and you will get an assert.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>start: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The start of the period. If the period is in Months or Years, and
-										the day is 29 or 30 or 31, the results are maximised to end-of-month.</p>
+										<div class="lead">
+											<p>The start of the period. If the period is in Months or Years, and
+											the day is 29 or 30 or 31, the results are maximised to end-of-month.</p>
+										</div>
 									</div>
 								</li>
 								<li>
 									<h5>interval: <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The interval of the period</p>
+										<div class="lead">
+											<p>The interval of the period</p>
+										</div>
 									</div>
 								</li>
 								<li>
-									<h5>dst?: <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> dst: <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Specifies how to handle Daylight Saving Time. Not relevant
-											if the time zone of the start datetime does not have DST.
-										Defaults to RegularLocalTime.</p>
+										<div class="lead">
+											<p>Specifies how to handle Daylight Saving Time. Not relevant
+												if the time zone of the start datetime does not have DST.
+											Defaults to RegularLocalTime.</p>
+										</div>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_period_.period.html" class="tsd-signature-type">Period</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_period_.period.html" class="tsd-signature-type">Period</a></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in period.ts:134</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Constructor
+										LIMITATION: if dst equals RegularLocalTime, and unit is Second, Minute or Hour,
+										then the amount must be a factor of 24. So 120 seconds is allowed while 121 seconds is not.
+										This is due to the enormous processing power required by these cases. They are not
+									implemented and you will get an assert.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>start: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The start of the period. If the period is in Months or Years, and
+											the day is 29 or 30 or 31, the results are maximised to end-of-month.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>amount: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The amount of units.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>unit: <a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The unit.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> dst: <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Specifies how to handle Daylight Saving Time. Not relevant
+												if the time zone of the start datetime does not have DST.
+											Defaults to RegularLocalTime.</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_period_.period.html" class="tsd-signature-type">Period</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_dst" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _dst</h3>
+					<a name="_dst" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _dst</h3>
 					<div class="tsd-signature tsd-kind-icon">_dst<span class="tsd-signature-symbol">:</span> <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in period.ts:95</li>
+							<li>Defined in period.ts:96</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -267,12 +264,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_intdst" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _int<wbr>Dst</h3>
+					<a name="_intdst" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _int<wbr>Dst</h3>
 					<div class="tsd-signature tsd-kind-icon">_int<wbr>Dst<span class="tsd-signature-symbol">:</span> <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in period.ts:113</li>
+							<li>Defined in period.ts:114</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -284,12 +281,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_intinterval" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _int<wbr>Interval</h3>
+					<a name="_intinterval" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _int<wbr>Interval</h3>
 					<div class="tsd-signature tsd-kind-icon">_int<wbr>Interval<span class="tsd-signature-symbol">:</span> <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in period.ts:106</li>
+							<li>Defined in period.ts:107</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -299,12 +296,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_intstart" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _int<wbr>Start</h3>
+					<a name="_intstart" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _int<wbr>Start</h3>
 					<div class="tsd-signature tsd-kind-icon">_int<wbr>Start<span class="tsd-signature-symbol">:</span> <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in period.ts:101</li>
+							<li>Defined in period.ts:102</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -315,12 +312,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_interval" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _interval</h3>
+					<a name="_interval" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _interval</h3>
 					<div class="tsd-signature tsd-kind-icon">_interval<span class="tsd-signature-symbol">:</span> <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in period.ts:90</li>
+							<li>Defined in period.ts:91</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -330,12 +327,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_start" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _start</h3>
+					<a name="_start" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _start</h3>
 					<div class="tsd-signature tsd-kind-icon">_start<span class="tsd-signature-symbol">:</span> <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in period.ts:85</li>
+							<li>Defined in period.ts:86</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -348,15 +345,16 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_calcinternalvalues" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _calc<wbr>Internal<wbr>Values</h3>
+					<a name="_calcinternalvalues" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _calc<wbr>Internal<wbr>Values</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_calc<wbr>Internal<wbr>Values<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">_calc<wbr>Internal<wbr>Values<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:743</li>
+									<li>Defined in period.ts:758</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -368,19 +366,21 @@
 									Weeks are converted back to days.</p>
 								</div>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_correctday" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _correct<wbr>Day</h3>
+					<a name="_correctday" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _correct<wbr>Day</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
 						<li class="tsd-signature tsd-kind-icon">_correct<wbr>Day<span class="tsd-signature-symbol">(</span>d<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:698</li>
+									<li>Defined in period.ts:713</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -394,22 +394,21 @@
 									<h5>d: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_dstrelevant" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _dst<wbr>Relevant</h3>
+					<a name="_dstrelevant" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _dst<wbr>Relevant</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
 						<li class="tsd-signature tsd-kind-icon">_dst<wbr>Relevant<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:730</li>
+									<li>Defined in period.ts:745</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -418,22 +417,21 @@
 									(i.e. if the start time zone has DST)</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_normalizeday" class="anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _normalize<wbr>Day</h3>
+					<a name="_normalizeday" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _normalize<wbr>Day</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_normalize<wbr>Day<span class="tsd-signature-symbol">(</span>d<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, anymonth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;</span>true<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
+						<li class="tsd-signature tsd-kind-icon">_normalize<wbr>Day<span class="tsd-signature-symbol">(</span>d<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, anymonth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:713</li>
+									<li>Defined in period.ts:728</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -448,26 +446,25 @@
 									<h5>d: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
 								</li>
 								<li>
-									<h5>anymonth?: <span class="tsd-signature-type">boolean</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> anymonth: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h4>
 							<p>a new date if different, otherwise the exact same object (no clone!)</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="amount" class="anchor"></a>
+					<a name="amount" class="tsd-anchor"></a>
 					<h3>amount</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">amount<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:234</li>
+									<li>Defined in period.ts:235</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -476,22 +473,21 @@
 									The amount of units of the interval</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">number</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="dst" class="anchor"></a>
+					<a name="dst" class="tsd-anchor"></a>
 					<h3>dst</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">dst<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:249</li>
+									<li>Defined in period.ts:250</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -499,22 +495,21 @@
 									<p>The dst handling mode</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/_period_.perioddst.html" class="tsd-signature-type">PeriodDst</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="equals" class="anchor"></a>
+					<a name="equals" class="tsd-anchor"></a>
 					<h3>equals</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">equals<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="_period_.period.html" class="tsd-signature-type">Period</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:649</li>
+									<li>Defined in period.ts:664</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -530,22 +525,21 @@
 									<h5>other: <a href="_period_.period.html" class="tsd-signature-type">Period</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="findfirst" class="anchor"></a>
+					<a name="findfirst" class="tsd-anchor"></a>
 					<h3>find<wbr>First</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">find<wbr>First<span class="tsd-signature-symbol">(</span>fromDate<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:261</li>
+									<li>Defined in period.ts:262</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -561,24 +555,23 @@
 									<h5>fromDate: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h4>
 							<p>the first date matching the period after fromDate, given
 							in the same zone as the fromDate.</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="findnext" class="anchor"></a>
+					<a name="findnext" class="tsd-anchor"></a>
 					<h3>find<wbr>Next</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>Next<span class="tsd-signature-symbol">(</span>prev<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, count<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>1<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Next<span class="tsd-signature-symbol">(</span>prev<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, count<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:616</li>
+									<li>Defined in period.ts:617</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -594,37 +587,69 @@
 								<li>
 									<h5>prev: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Boundary date. Must have a time zone (any time zone) iff the period start date has one.</p>
-										</div>
+										<p>Boundary date. Must have a time zone (any time zone) iff the period start date has one.</p>
 									</div>
 								</li>
 								<li>
-									<h5>count?: <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> count: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Optional, must be &gt;= 1 and whole.</p>
-										</div>
+										<p>Number of periods to add. Optional. Must be an integer number.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h4>
 							<p>(prev + count * period), in the same timezone as prev.</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="identical" class="anchor"></a>
+					<a name="findprev" class="tsd-anchor"></a>
+					<h3>find<wbr>Prev</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Prev<span class="tsd-signature-symbol">(</span>next<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, count<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in period.ts:642</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the previous timestamp in the period. The given timestamp must
+										be at a period boundary, otherwise the answer is incorrect.
+									Returns NULL if the previous occurrence is before the start date</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>next: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> count: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Number of periods to subtract. Optional. Must be an integer number.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h4>
+							<p>(next - count * period), in the same timezone as next.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="identical" class="tsd-anchor"></a>
 					<h3>identical</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">identical<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="_period_.period.html" class="tsd-signature-type">Period</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:659</li>
+									<li>Defined in period.ts:674</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -638,22 +663,21 @@
 									<h5>other: <a href="_period_.period.html" class="tsd-signature-type">Period</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="inspect" class="anchor"></a>
+					<a name="inspect" class="tsd-anchor"></a>
 					<h3>inspect</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">inspect<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:691</li>
+									<li>Defined in period.ts:706</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -661,22 +685,21 @@
 									<p>Used by util.inspect()</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">string</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="interval" class="anchor"></a>
+					<a name="interval" class="tsd-anchor"></a>
 					<h3>interval</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">interval<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:226</li>
+									<li>Defined in period.ts:227</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -684,22 +707,21 @@
 									<p>The interval</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_duration_.duration.html" class="tsd-signature-type">Duration</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_duration_.duration.html" class="tsd-signature-type">Duration</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="isboundary" class="anchor"></a>
+					<a name="isboundary" class="tsd-anchor"></a>
 					<h3>is<wbr>Boundary</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Boundary<span class="tsd-signature-symbol">(</span>occurrence<span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:635</li>
+									<li>Defined in period.ts:650</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -714,22 +736,21 @@
 									<h5>occurrence: <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">boolean</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="start" class="anchor"></a>
+					<a name="start" class="tsd-anchor"></a>
 					<h3>start</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:219</li>
+									<li>Defined in period.ts:220</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -737,22 +758,21 @@
 									<p>The start date</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="toisostring" class="anchor"></a>
+					<a name="toisostring" class="tsd-anchor"></a>
 					<h3>to<wbr>Iso<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">to<wbr>Iso<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:671</li>
+									<li>Defined in period.ts:686</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -763,22 +783,21 @@
 									2014-01-01T12:00:00.000+01:00/P1M   (one month)</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">string</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="tostring" class="anchor"></a>
+					<a name="tostring" class="tsd-anchor"></a>
 					<h3>to<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">to<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:679</li>
+									<li>Defined in period.ts:694</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -787,22 +806,21 @@
 									&quot;10 years, starting at 2014-03-01T12:00:00 Europe/Amsterdam, keeping regular intervals&quot;.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">string</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="unit" class="anchor"></a>
+					<a name="unit" class="tsd-anchor"></a>
 					<h3>unit</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">unit<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in period.ts:242</li>
+									<li>Defined in period.ts:243</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -811,9 +829,7 @@
 									The unit of the interval</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/_basics_.timeunit.html" class="tsd-signature-type">TimeUnit</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -825,61 +841,61 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_basics_.html">"basics"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_datetime_.html">"datetime"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_duration_.html">"duration"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_format_.html">"format"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_globals_.html">"globals"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_javascript_.html">"javascript"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_math_.html">"math"</a>
 					</li>
-					<li class="current tsd-kind-dynamic-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_period_.html">"period"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_strings_.html">"strings"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_timesource_.html">"timesource"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_timezone_.html">"timezone"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_token_.html">"token"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_tz_database_.html">"tz-<wbr>database"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/_period_.perioddst.html" class="tsd-kind-icon">Period<wbr>Dst</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-dynamic-module">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_period_.period.html" class="tsd-kind-icon">Period</a>
 						<ul>
-							<li class=" tsd-kind-constructor-method tsd-parent-kind-class">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="_period_.period.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
@@ -928,6 +944,9 @@
 								<a href="_period_.period.html#findnext" class="tsd-kind-icon">find<wbr>Next</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_period_.period.html#findprev" class="tsd-kind-icon">find<wbr>Prev</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_period_.period.html#identical" class="tsd-kind-icon">identical</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -955,7 +974,7 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_period_.html#perioddsttostring" class="tsd-kind-icon">period<wbr>Dst<wbr>ToString</a>
 					</li>
 				</ul>
@@ -968,50 +987,56 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li>&nbsp;</li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

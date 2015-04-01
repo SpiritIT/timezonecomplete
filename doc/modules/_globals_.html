@@ -29,10 +29,16 @@
 					<div id="tsd-filter">
 						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
 						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-private" checked />
-							<label class="tsd-widget" for="tsd-filter-private">Private</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -52,21 +58,13 @@
 					<a href="_globals_.html">&quot;globals&quot;</a>
 				</li>
 			</ul>
-			<h1>Dynamic module &quot;globals&quot;</h1>
+			<h1>External module &quot;globals&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Copyright(c) 2014 Spirit IT BV</p>
-					</div>
-					<p>Global functions depending on DateTime/Duration etc</p>
-				</div>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -74,9 +72,9 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_globals_.html#abs" class="tsd-kind-icon">abs</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_globals_.html#max" class="tsd-kind-icon">max</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-dynamic-module"><a href="_globals_.html#min" class="tsd-kind-icon">min</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_globals_.html#abs" class="tsd-kind-icon">abs</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_globals_.html#max" class="tsd-kind-icon">max</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_globals_.html#min" class="tsd-kind-icon">min</a></li>
 							</ul>
 						</section>
 					</div>
@@ -84,16 +82,17 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
-					<a name="abs" class="anchor"></a>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="abs" class="tsd-anchor"></a>
 					<h3>abs</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
 						<li class="tsd-signature tsd-kind-icon">abs<span class="tsd-signature-symbol">(</span>d<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in globals.ts:62</li>
+									<li>Defined in globals.ts:63</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -107,70 +106,22 @@
 									<h5>d: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
-					<a name="max" class="anchor"></a>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="max" class="tsd-anchor"></a>
 					<h3>max</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">max<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, d2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
-						<li class="tsd-signature tsd-kind-icon">max<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
 						<li class="tsd-signature tsd-kind-icon">max<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
+						<li class="tsd-signature tsd-kind-icon">max<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in globals.ts:50</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns the maximum of two DateTimes or Durations</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>d1: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>d2: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<span class="tsd-signature-type">any</span>
-							</h4>
-						</li>
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in globals.ts:46</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns the maximum of two Durations</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>d1: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
-								</li>
-								<li>
-									<h5>d2: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>
-							</h4>
-						</li>
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in globals.ts:42</li>
+									<li>Defined in globals.ts:43</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -187,28 +138,17 @@
 									<h5>d2: <a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h4>
 						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-dynamic-module">
-					<a name="min" class="anchor"></a>
-					<h3>min</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-dynamic-module">
-						<li class="tsd-signature tsd-kind-icon">min<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
-						<li class="tsd-signature tsd-kind-icon">min<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in globals.ts:26</li>
+									<li>Defined in globals.ts:47</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns the minimum of two Durations</p>
+									<p>Returns the maximum of two Durations</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -220,13 +160,22 @@
 									<h5>d2: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h4>
 						</li>
-						<li class="tsd-description"><aside class="tsd-sources">
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="min" class="tsd-anchor"></a>
+					<h3>min</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">min<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></li>
+						<li class="tsd-signature tsd-kind-icon">min<span class="tsd-signature-symbol">(</span>d1<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a>, d2<span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in globals.ts:22</li>
+									<li>Defined in globals.ts:23</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -243,9 +192,29 @@
 									<h5>d2: <a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns 
-								<a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_datetime_.datetime.html" class="tsd-signature-type">DateTime</a></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in globals.ts:27</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the minimum of two Durations</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>d1: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+								</li>
+								<li>
+									<h5>d2: <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_duration_.duration.html" class="tsd-signature-type">Duration</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -257,59 +226,59 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_basics_.html">"basics"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_datetime_.html">"datetime"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_duration_.html">"duration"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_format_.html">"format"</a>
 					</li>
-					<li class="current tsd-kind-dynamic-module">
+					<li class="current tsd-kind-external-module">
 						<a href="_globals_.html">"globals"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_index_.html">"index"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_javascript_.html">"javascript"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_math_.html">"math"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_period_.html">"period"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_strings_.html">"strings"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_timesource_.html">"timesource"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_timezone_.html">"timezone"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_token_.html">"token"</a>
 					</li>
-					<li class=" tsd-kind-dynamic-module">
+					<li class=" tsd-kind-external-module">
 						<a href="_tz_database_.html">"tz-<wbr>database"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_globals_.html#abs" class="tsd-kind-icon">abs</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_globals_.html#max" class="tsd-kind-icon">max</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-dynamic-module">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_globals_.html#min" class="tsd-kind-icon">min</a>
 					</li>
 				</ul>
@@ -322,50 +291,56 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li>&nbsp;</li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

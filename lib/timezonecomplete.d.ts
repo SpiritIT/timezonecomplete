@@ -387,19 +387,6 @@ declare module '__timezonecomplete/datetime' {
                 */
             static fromExcel(n: number, timeZone?: TimeZone): DateTime;
             /**
-                * Create an Excel timestamp for this datetime converted to the given zone.
-                * Does not work for dates < 1900
-                * @param timeZone Optional. Zone to convert to, default the zone the datetime is already in.
-                * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
-                */
-            toExcel(timeZone?: TimeZone): number;
-            /**
-                * Create an Excel timestamp for this datetime converted to UTC
-                * Does not work for dates < 1900
-                * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
-                */
-            toUtcExcel(): number;
-            /**
                 * Constructor. Creates current time in local timezone.
                 */
             constructor();
@@ -632,6 +619,19 @@ declare module '__timezonecomplete/datetime' {
                 */
             toDate(): Date;
             /**
+                * Create an Excel timestamp for this datetime converted to the given zone.
+                * Does not work for dates < 1900
+                * @param timeZone Optional. Zone to convert to, default the zone the datetime is already in.
+                * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+                */
+            toExcel(timeZone?: TimeZone): number;
+            /**
+                * Create an Excel timestamp for this datetime converted to UTC
+                * Does not work for dates < 1900
+                * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+                */
+            toUtcExcel(): number;
+            /**
                 * Add a time duration relative to UTC.
                 * @return this + duration
                 */
@@ -692,6 +692,16 @@ declare module '__timezonecomplete/datetime' {
              * @return a new DateTime
              */
             startOfDay(): DateTime;
+            /**
+                * Returns the first day of the month at 00:00:00
+                * @return a new DateTime
+                */
+            startOfMonth(): DateTime;
+            /**
+                * Returns the first day of the year at 00:00:00
+                * @return a new DateTime
+                */
+            startOfYear(): DateTime;
             /**
                 * @return True iff (this < other)
                 */
@@ -1220,10 +1230,19 @@ declare module '__timezonecomplete/period' {
                 * This function has MUCH better performance than findFirst.
                 * Returns the datetime "count" times away from the given datetime.
                 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
-                * @param count	Optional, must be >= 1 and whole.
+                * @param count	Number of periods to add. Optional. Must be an integer number.
                 * @return (prev + count * period), in the same timezone as prev.
                 */
             findNext(prev: DateTime, count?: number): DateTime;
+            /**
+                * Returns the previous timestamp in the period. The given timestamp must
+                * be at a period boundary, otherwise the answer is incorrect.
+                * Returns NULL if the previous occurrence is before the start date
+                * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
+                * @param count	Number of periods to subtract. Optional. Must be an integer number.
+                * @return (next - count * period), in the same timezone as next.
+                */
+            findPrev(next: DateTime, count?: number): DateTime;
             /**
                 * Checks whether the given date is on a period boundary
                 * (expensive!)

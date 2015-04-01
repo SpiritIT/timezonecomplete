@@ -934,30 +934,6 @@ var DateTime = (function () {
         return new DateTime(unixTimestamp, timeZone);
     };
     /**
-     * Create an Excel timestamp for this datetime converted to the given zone.
-     * Does not work for dates < 1900
-     * @param timeZone Optional. Zone to convert to, default the zone the datetime is already in.
-     * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
-     */
-    DateTime.prototype.toExcel = function (timeZone) {
-        var dt = this;
-        if (timeZone && !timeZone.equals(this.zone())) {
-            dt = this.toZone(timeZone);
-        }
-        var offsetMillis = dt.offset() * 60 * 1000;
-        var unixTimestamp = dt.unixUtcMillis();
-        return ((unixTimestamp + offsetMillis) / (24 * 60 * 60 * 1000)) + 25569;
-    };
-    /**
-     * Create an Excel timestamp for this datetime converted to UTC
-     * Does not work for dates < 1900
-     * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
-     */
-    DateTime.prototype.toUtcExcel = function () {
-        var unixTimestamp = this.unixUtcMillis();
-        return ((unixTimestamp) / (24 * 60 * 60 * 1000)) + 25569;
-    };
-    /**
      * @return a copy of this object
      */
     DateTime.prototype.clone = function () {
@@ -1245,6 +1221,36 @@ var DateTime = (function () {
         return new Date(this.year(), this.month() - 1, this.day(), this.hour(), this.minute(), this.second(), this.millisecond());
     };
     /**
+     * Create an Excel timestamp for this datetime converted to the given zone.
+     * Does not work for dates < 1900
+     * @param timeZone Optional. Zone to convert to, default the zone the datetime is already in.
+     * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+     */
+    DateTime.prototype.toExcel = function (timeZone) {
+        var dt = this;
+        if (timeZone && !timeZone.equals(this.zone())) {
+            dt = this.toZone(timeZone);
+        }
+        var offsetMillis = dt.offset() * 60 * 1000;
+        var unixTimestamp = dt.unixUtcMillis();
+        return this._unixTimeStampToExcel(unixTimestamp + offsetMillis);
+    };
+    /**
+     * Create an Excel timestamp for this datetime converted to UTC
+     * Does not work for dates < 1900
+     * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+     */
+    DateTime.prototype.toUtcExcel = function () {
+        var unixTimestamp = this.unixUtcMillis();
+        return this._unixTimeStampToExcel(unixTimestamp);
+    };
+    DateTime.prototype._unixTimeStampToExcel = function (n) {
+        var result = ((n) / (24 * 60 * 60 * 1000)) + 25569;
+        // round to nearest millisecond
+        var msecs = result / (1 / 86400000);
+        return Math.round(msecs) * (1 / 86400000);
+    };
+    /**
      * Implementation.
      */
     DateTime.prototype.add = function (a1, unit) {
@@ -1394,6 +1400,20 @@ var DateTime = (function () {
     */
     DateTime.prototype.startOfDay = function () {
         return new DateTime(this.year(), this.month(), this.day(), 0, 0, 0, 0, this.zone());
+    };
+    /**
+     * Returns the first day of the month at 00:00:00
+     * @return a new DateTime
+     */
+    DateTime.prototype.startOfMonth = function () {
+        return new DateTime(this.year(), this.month(), 1, 0, 0, 0, 0, this.zone());
+    };
+    /**
+     * Returns the first day of the year at 00:00:00
+     * @return a new DateTime
+     */
+    DateTime.prototype.startOfYear = function () {
+        return new DateTime(this.year(), 1, 1, 0, 0, 0, 0, this.zone());
     };
     /**
      * @return True iff (this < other)
@@ -3353,7 +3373,7 @@ var Period = (function () {
      * This function has MUCH better performance than findFirst.
      * Returns the datetime "count" times away from the given datetime.
      * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
-     * @param count	Optional, must be >= 1 and whole.
+     * @param count	Number of periods to add. Optional. Must be an integer number.
      * @return (prev + count * period), in the same timezone as prev.
      */
     Period.prototype.findNext = function (prev, count) {
@@ -3361,7 +3381,10 @@ var Period = (function () {
         assert(prev !== null, "Prev must be non-null");
         assert((this._intStart.zone() === null) === (prev.zone() === null), "The fromDate and startDate must both be aware or unaware");
         assert(typeof (count) === "number", "Count must be a number");
-        assert(count >= 1 && Math.floor(count) === count, "Count must be an integer >= 1");
+        assert(Math.floor(count) === count, "Count must be an integer");
+        if (count < 0 && prev.lessEqual(this.start())) {
+            return null;
+        }
         var normalizedPrev = this._normalizeDay(prev.toZone(this._start.zone()));
         if (this._intDst === 0 /* RegularIntervals */) {
             return this._correctDay(normalizedPrev.add(this._intInterval.amount() * count, this._intInterval.unit())).convert(prev.zone());
@@ -3369,6 +3392,18 @@ var Period = (function () {
         else {
             return this._correctDay(normalizedPrev.addLocal(this._intInterval.amount() * count, this._intInterval.unit())).convert(prev.zone());
         }
+    };
+    /**
+     * Returns the previous timestamp in the period. The given timestamp must
+     * be at a period boundary, otherwise the answer is incorrect.
+     * Returns NULL if the previous occurrence is before the start date
+     * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
+     * @param count	Number of periods to subtract. Optional. Must be an integer number.
+     * @return (next - count * period), in the same timezone as next.
+     */
+    Period.prototype.findPrev = function (next, count) {
+        if (count === void 0) { count = 1; }
+        return this.findNext(next, -1 * count);
     };
     /**
      * Checks whether the given date is on a period boundary
@@ -4145,7 +4180,7 @@ var TimeZone = (function () {
 exports.TimeZone = TimeZone;
 
 
-},{"./basics":1,"./javascript":9,"./strings":12,"./tz-database":17,"assert":18,"util":24}],16:[function(require,module,exports){
+},{"./basics":1,"./javascript":9,"./strings":12,"./tz-database":17,"assert":18,"util":22}],16:[function(require,module,exports){
 /**
  * Copyright(c) 2014 Spirit IT BV
  *
@@ -5715,7 +5750,7 @@ function validateData(data) {
 }
 
 
-},{"./basics":1,"./duration":3,"./math":10,"./timezone-data.json":14,"assert":18,"util":24}],18:[function(require,module,exports){
+},{"./basics":1,"./duration":3,"./math":10,"./timezone-data.json":14,"assert":18,"util":22}],18:[function(require,module,exports){
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
 // THIS IS NOT TESTED NOR LIKELY TO WORK OUTSIDE V8!
@@ -6077,14 +6112,104 @@ var objectKeys = Object.keys || function (obj) {
   return keys;
 };
 
-},{"util/":20}],19:[function(require,module,exports){
+},{"util/":22}],19:[function(require,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+},{}],20:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+
+process.nextTick = (function () {
+    var canSetImmediate = typeof window !== 'undefined'
+    && window.setImmediate;
+    var canPost = typeof window !== 'undefined'
+    && window.postMessage && window.addEventListener
+    ;
+
+    if (canSetImmediate) {
+        return function (f) { return window.setImmediate(f) };
+    }
+
+    if (canPost) {
+        var queue = [];
+        window.addEventListener('message', function (ev) {
+            var source = ev.source;
+            if ((source === window || source === null) && ev.data === 'process-tick') {
+                ev.stopPropagation();
+                if (queue.length > 0) {
+                    var fn = queue.shift();
+                    fn();
+                }
+            }
+        }, true);
+
+        return function nextTick(fn) {
+            queue.push(fn);
+            window.postMessage('process-tick', '*');
+        };
+    }
+
+    return function nextTick(fn) {
+        setTimeout(fn, 0);
+    };
+})();
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+}
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+
+},{}],21:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -6674,101 +6799,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require("VCmEsw"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":19,"VCmEsw":22,"inherits":21}],21:[function(require,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-},{}],22:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-
-process.nextTick = (function () {
-    var canSetImmediate = typeof window !== 'undefined'
-    && window.setImmediate;
-    var canPost = typeof window !== 'undefined'
-    && window.postMessage && window.addEventListener
-    ;
-
-    if (canSetImmediate) {
-        return function (f) { return window.setImmediate(f) };
-    }
-
-    if (canPost) {
-        var queue = [];
-        window.addEventListener('message', function (ev) {
-            var source = ev.source;
-            if ((source === window || source === null) && ev.data === 'process-tick') {
-                ev.stopPropagation();
-                if (queue.length > 0) {
-                    var fn = queue.shift();
-                    fn();
-                }
-            }
-        }, true);
-
-        return function nextTick(fn) {
-            queue.push(fn);
-            window.postMessage('process-tick', '*');
-        };
-    }
-
-    return function nextTick(fn) {
-        setTimeout(fn, 0);
-    };
-})();
-
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-}
-
-// TODO(shtylman)
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-
-},{}],23:[function(require,module,exports){
-module.exports=require(19)
-},{}],24:[function(require,module,exports){
-module.exports=require(20)
-},{"./support/isBuffer":23,"VCmEsw":22,"inherits":21}]},{},[4]);
+},{"./support/isBuffer":21,"VCmEsw":20,"inherits":19}]},{},[4]);
 return require("timezonecomplete");
 
 }));
