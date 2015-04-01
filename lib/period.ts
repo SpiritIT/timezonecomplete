@@ -611,7 +611,7 @@ export class Period {
 	 * This function has MUCH better performance than findFirst.
 	 * Returns the datetime "count" times away from the given datetime.
 	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
-	 * @param count	Optional, must be >= 1 and whole.
+	 * @param count	Number of periods to add. Optional. Must be an integer number.
 	 * @return (prev + count * period), in the same timezone as prev.
 	 */
 	public findNext(prev: DateTime, count: number = 1): DateTime {
@@ -619,14 +619,28 @@ export class Period {
 		assert((this._intStart.zone() === null) === (prev.zone() === null),
 			"The fromDate and startDate must both be aware or unaware");
 		assert(typeof (count) === "number", "Count must be a number");
-		assert(count >= 1 && Math.floor(count) === count, "Count must be an integer >= 1");
-
+		assert(Math.floor(count) === count, "Count must be an integer");
+		if (count < 0 && prev.lessEqual(this.start())) {
+			return null;
+		}
 		var normalizedPrev = this._normalizeDay(prev.toZone(this._start.zone()));
 		if (this._intDst === PeriodDst.RegularIntervals) {
 			return this._correctDay(normalizedPrev.add(this._intInterval.amount() * count, this._intInterval.unit())).convert(prev.zone());
 		} else {
 			return this._correctDay(normalizedPrev.addLocal(this._intInterval.amount() * count, this._intInterval.unit())).convert(prev.zone());
 		}
+	}
+
+	/**
+	 * Returns the previous timestamp in the period. The given timestamp must
+	 * be at a period boundary, otherwise the answer is incorrect.
+	 * Returns NULL if the previous occurrence is before the start date
+	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
+	 * @param count	Number of periods to subtract. Optional. Must be an integer number.
+	 * @return (next - count * period), in the same timezone as next.
+	 */
+	public findPrev(next: DateTime, count: number = 1): DateTime {
+		return this.findNext(next, -1 * count);
 	}
 
 	/**

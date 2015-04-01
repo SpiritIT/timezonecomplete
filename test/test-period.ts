@@ -82,7 +82,7 @@ describe("Period", (): void => {
 			.to.equal(PeriodDst.RegularIntervals);
 	});
 
-	describe("next(<=start)", (): void => {
+	describe("findFirst(<=start)", (): void => {
 		it("should return start date in fromDate zone", (): void => {
 			expect((new Period(new DateTime("2014-01-01T12:00:00.000 UTC"), 2, TimeUnit.Month, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2013-01-01T12:00:00.00+02")).toString())
@@ -599,15 +599,6 @@ describe("Period", (): void => {
 				p.findNext(null);
 			});
 		});
-		it("Should throw on <1 count", (): void => {
-			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
-			assert.throws(function (): void {
-				p.findNext(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 0);
-			});
-			assert.throws(function (): void {
-				p.findNext(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), -1);
-			});
-		});
 		it("Should throw on non-integer count", (): void => {
 			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
 			assert.throws(function (): void {
@@ -665,6 +656,49 @@ describe("Period", (): void => {
 				.to.equal("2014-04-30T00:00:00.000 Europe/Amsterdam");
 			expect(p.findNext(new DateTime("2014-01-29T00:00:00 Europe/Amsterdam"), 25).toString())
 				.to.equal("2016-02-29T00:00:00.000 Europe/Amsterdam");
+		});
+	});
+
+	describe("findPrev()", (): void => {
+		it("should return null for start date", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.findPrev(new DateTime("2013-12-31T23:00:00 UTC"))).to.equal(null);
+		});
+		it("should return null for before start date", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.findPrev(new DateTime("2013-12-31T23:00:00 UTC"))).to.equal(null);
+		});
+		it("should return the start date for first period", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.findPrev(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam")).toString())
+				.to.equal("2014-01-01T00:00:00.000 Europe/Amsterdam");
+		});
+		it("should return the date in the zone of the given time", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.findPrev(new DateTime("2014-01-01T01:00:00 UTC")).toString())
+				.to.equal("2014-01-01T00:00:00.000 UTC");
+		});
+		it("Should handle end-of-month", (): void => {
+			var p = new Period(new DateTime("2014-01-31T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Month, PeriodDst.RegularLocalTime);
+			expect(p.findPrev(new DateTime("2014-02-28T00:00:00 Europe/Amsterdam"), 1).toString())
+				.to.equal("2014-01-31T00:00:00.000 Europe/Amsterdam");
+			expect(p.findPrev(new DateTime("2014-03-31T00:00:00 Europe/Amsterdam"), 2).toString())
+				.to.equal("2014-01-31T00:00:00.000 Europe/Amsterdam");
+		});
+		it("Should handle regular local time", (): void => {
+			var p = new Period(new DateTime("2014-01-01T08:00:00 Europe/Amsterdam"), 1, TimeUnit.Day, PeriodDst.RegularLocalTime);
+			expect(p.findPrev(new DateTime("2014-03-30T08:00:00 Europe/Amsterdam")).toString())
+				.to.equal("2014-03-29T08:00:00.000 Europe/Amsterdam");
+		});
+		it("Should handle regular intervals", (): void => {
+			var p = new Period(new DateTime("2014-01-01T08:00:00 Europe/Amsterdam"), 1, TimeUnit.Day, PeriodDst.RegularIntervals);
+			expect(p.findPrev(new DateTime("2014-03-30T07:00:00 UTC")).toString())
+				.to.equal("2014-03-29T07:00:00.000 UTC");
+		});
+		it("Should handle count > 1", (): void => {
+			var p = new Period(new DateTime("2014-01-01T08:00:00 Europe/Amsterdam"), 1, TimeUnit.Day, PeriodDst.RegularIntervals);
+			expect(p.findPrev(new DateTime("2014-03-30T07:00:00 UTC"), 2).toString())
+				.to.equal("2014-03-28T07:00:00.000 UTC");
 		});
 	});
 
