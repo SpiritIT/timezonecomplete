@@ -1180,24 +1180,56 @@ describe("DateTime", (): void => {
 		});
 	});
 
-  describe("startOfDay()", (): void => {
-    it("should work for a date with a zone", (): void => {
-      expect((new DateTime(2014, 1, 1, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam")))
-        .startOfDay().toString()).to.equal("2014-01-01T00:00:00.000 Europe/Amsterdam");
-    });
-    it("should work for a date without a zone", (): void => {
-      expect((new DateTime(2014, 1, 24, 23, 59, 59, 999))
-        .startOfDay().toString()).to.equal("2014-01-24T00:00:00.000");
-    });
-    it("should work for already truncated date", (): void => {
-      expect((new DateTime(2014, 1, 1))
-        .startOfDay().toString()).to.equal("2014-01-01T00:00:00.000");
-    });
-    it("should return a fresh clone", (): void => {
-      var d = new DateTime(2014, 1, 1);
-      expect(d.startOfDay()).not.to.equal(d);
-    });
-  });
+	describe("startOfDay()", (): void => {
+		it("should work for a date with a zone", (): void => {
+			expect((new DateTime(2014, 1, 1, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam")))
+				.startOfDay().toString()).to.equal("2014-01-01T00:00:00.000 Europe/Amsterdam");
+		});
+		it("should work for a date without a zone", (): void => {
+			expect((new DateTime(2014, 1, 24, 23, 59, 59, 999)).startOfDay().toString()).to.equal("2014-01-24T00:00:00.000");
+		});
+		it("should work for already truncated date", (): void => {
+			expect((new DateTime(2014, 1, 1)).startOfDay().toString()).to.equal("2014-01-01T00:00:00.000");
+		});
+		it("should return a fresh clone", (): void => {
+			var d = new DateTime(2014, 1, 1);
+			expect(d.startOfDay()).not.to.equal(d);
+		});
+	});
+
+	describe("startOfMonth()", (): void => {
+		it("should work for a date with a zone", (): void => {
+			expect((new DateTime(2014, 1, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam")))
+				.startOfMonth().toString()).to.equal("2014-01-01T00:00:00.000 Europe/Amsterdam");
+		});
+		it("should work for a date without a zone", (): void => {
+			expect((new DateTime(2014, 1, 24, 23, 59, 59, 999)).startOfMonth().toString()).to.equal("2014-01-01T00:00:00.000");
+		});
+		it("should work for already truncated date", (): void => {
+			expect((new DateTime(2014, 1, 1)).startOfMonth().toString()).to.equal("2014-01-01T00:00:00.000");
+		});
+		it("should return a fresh clone", (): void => {
+			var d = new DateTime(2014, 1, 1);
+			expect(d.startOfMonth()).not.to.equal(d);
+		});
+	});
+
+	describe("startOfYear()", (): void => {
+		it("should work for a date with a zone", (): void => {
+			expect((new DateTime(2014, 2, 28, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam")))
+				.startOfYear().toString()).to.equal("2014-01-01T00:00:00.000 Europe/Amsterdam");
+		});
+		it("should work for a date without a zone", (): void => {
+			expect((new DateTime(2014, 2, 24, 23, 59, 59, 999)).startOfYear().toString()).to.equal("2014-01-01T00:00:00.000");
+		});
+		it("should work for already truncated date", (): void => {
+			expect((new DateTime(2014, 1, 1)).startOfYear().toString()).to.equal("2014-01-01T00:00:00.000");
+		});
+		it("should return a fresh clone", (): void => {
+			var d = new DateTime(2014, 1, 1);
+			expect(d.startOfYear()).not.to.equal(d);
+		});
+	});
 
 	describe("lessThan()", (): void => {
 		it("should return true for a greater other", (): void => {

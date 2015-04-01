@@ -852,6 +852,22 @@ export class DateTime {
 	}
 
 	/**
+	 * Returns the first day of the month at 00:00:00
+	 * @return a new DateTime
+	 */
+	public startOfMonth(): DateTime {
+		return new DateTime(this.year(), this.month(), 1, 0, 0, 0, 0, this.zone());
+	}
+
+	/**
+	 * Returns the first day of the year at 00:00:00
+	 * @return a new DateTime
+	 */
+	public startOfYear(): DateTime {
+		return new DateTime(this.year(), 1, 1, 0, 0, 0, 0, this.zone());
+	}
+
+	/**
 	 * @return True iff (this < other)
 	 */
 	public lessThan(other: DateTime): boolean {
