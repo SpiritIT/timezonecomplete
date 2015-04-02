@@ -125,6 +125,9 @@ export class DateTime {
 	 * @returns a DateTime
 	 */
 	public static fromExcel(n: number, timeZone?: TimeZone): DateTime {
+		assert(typeof n === "number", "fromExcel(): first parameter must be a number");
+		assert(!isNaN(n), "fromExcel(): first parameter must not be NaN");
+		assert(isFinite(n), "fromExcel(): first parameter must not be NaN");
 		var unixTimestamp = Math.round((n - 25569) * 24 * 60 * 60 * 1000);
 		return new DateTime(unixTimestamp, timeZone);
 	}
