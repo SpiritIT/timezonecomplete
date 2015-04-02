@@ -1194,6 +1194,10 @@ declare module '__timezonecomplete/period' {
                 */
             constructor(start: DateTime, amount: number, unit: TimeUnit, dst?: PeriodDst);
             /**
+                * Return a fresh copy of the period
+                */
+            clone(): Period;
+            /**
                 * The start date
                 */
             start(): DateTime;
@@ -1408,6 +1412,11 @@ declare module '__timezonecomplete/timezone' {
                 * @param dst	Adhere to Daylight Saving Time if applicable, ignored for local time and fixed offsets
                 */
             constructor(name: string, dst?: boolean);
+            /**
+                * Makes this class appear clonable. NOTE as time zone objects are cached you will NOT
+                * actually get a clone but the same object.
+                */
+            clone(): TimeZone;
             /**
                 * The time zone identifier. Can be an offset "-01:30" or an
                 * IANA time zone name "Europe/Amsterdam", or "localtime" for

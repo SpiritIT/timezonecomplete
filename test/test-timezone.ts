@@ -440,5 +440,13 @@ describe("TimeZone", (): void => {
 			expect(TimeZone.zone("+01:00", false).toString()).to.equal("+01:00");
 		});
 	});
+
+	describe("clone()", (): void => {
+		it("should NOT ACTUALLY CLONE because time zones are cached", (): void => {
+			var p = TimeZone.zone("Europe/Amsterdam");
+			var q = p.clone();
+			expect(p).to.equal(q);
+		});
+	});
 });
 

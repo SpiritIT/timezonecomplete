@@ -625,6 +625,9 @@ The version of the included IANA time zone database is 2015b.
 
 ## Changelog
 
+### 1.19.0 (2015-04-02)
+* Made Period cloneable by adding a clone() method
+
 ### 1.18.0 (2015-04-01)
 * Add DateTime#startOfMonth() which returns the date truncated to the first day of the month at 00:00:00
 * Add DateTime#startOfYear() which returns the date truncated to the first day of the year at 00:00:00

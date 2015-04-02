@@ -215,6 +215,13 @@ export class Period {
 	}
 
 	/**
+	 * Return a fresh copy of the period
+	 */
+	public clone(): Period {
+		return new Period(this._start, this._interval, this._dst);
+	}
+
+	/**
 	 * The start date
 	 */
 	public start(): DateTime {

@@ -228,6 +228,14 @@ export class TimeZone {
 	}
 
 	/**
+	 * Makes this class appear clonable. NOTE as time zone objects are cached you will NOT
+	 * actually get a clone but the same object.
+	 */
+	public clone(): TimeZone {
+		return this;
+	}
+
+	/**
 	 * The time zone identifier. Can be an offset "-01:30" or an
 	 * IANA time zone name "Europe/Amsterdam", or "localtime" for
 	 * the local time zone.

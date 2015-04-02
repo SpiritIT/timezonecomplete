@@ -872,6 +872,15 @@ describe("Period", (): void => {
 		});
 	});
 
+	describe("clone()", (): void => {
+		it("should work", (): void => {
+			var p = new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			var q = p.clone();
+			expect(p).not.to.equal(q);
+			expect(p.identical(q)).to.equal(true);
+		});
+	});
+
 });
 // todo test DST zone where DST save is not a whole hour (20 or 40 minutes)
 // todo test zone with two DSTs

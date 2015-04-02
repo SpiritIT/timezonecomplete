@@ -3013,6 +3013,12 @@ var Period = (function () {
         }
     }
     /**
+     * Return a fresh copy of the period
+     */
+    Period.prototype.clone = function () {
+        return new Period(this._start, this._interval, this._dst);
+    };
+    /**
      * The start date
      */
     Period.prototype.start = function () {
@@ -3773,6 +3779,13 @@ var TimeZone = (function () {
                 }
         }
         return TimeZone._findOrCreate(name, dst);
+    };
+    /**
+     * Makes this class appear clonable. NOTE as time zone objects are cached you will NOT
+     * actually get a clone but the same object.
+     */
+    TimeZone.prototype.clone = function () {
+        return this;
     };
     /**
      * The time zone identifier. Can be an offset "-01:30" or an
