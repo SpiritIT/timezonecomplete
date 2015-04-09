@@ -148,7 +148,7 @@ export class TimeZone {
 	 * The UTC time zone.
 	 */
 	public static utc(): TimeZone {
-		return TimeZone._findOrCreate("UTC", false);
+		return TimeZone._findOrCreate("UTC", true); // use 'true' for DST because we want it to display as "UTC", not "UTC without DST"
 	}
 
 	/**

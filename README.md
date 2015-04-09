@@ -625,6 +625,9 @@ The version of the included IANA time zone database is 2015b.
 
 ## Changelog
 
+### 1.19.1 (2015-04-09)
+* Minor adjustment to tc.utc() so that tc.utc().identical(tc.zone("UTC")) === true  (they had a different DST flag)
+
 ### 1.19.0 (2015-04-02)
 * Made Period cloneable by adding a clone() method
 

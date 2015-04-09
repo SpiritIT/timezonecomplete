@@ -930,6 +930,9 @@ var DateTime = (function () {
      * @returns a DateTime
      */
     DateTime.fromExcel = function (n, timeZone) {
+        assert(typeof n === "number", "fromExcel(): first parameter must be a number");
+        assert(!isNaN(n), "fromExcel(): first parameter must not be NaN");
+        assert(isFinite(n), "fromExcel(): first parameter must not be NaN");
         var unixTimestamp = Math.round((n - 25569) * 24 * 60 * 60 * 1000);
         return new DateTime(unixTimestamp, timeZone);
     };
@@ -3740,7 +3743,7 @@ var TimeZone = (function () {
      * The UTC time zone.
      */
     TimeZone.utc = function () {
-        return TimeZone._findOrCreate("UTC", false);
+        return TimeZone._findOrCreate("UTC", true); // use 'true' for DST because we want it to display as "UTC", not "UTC without DST"
     };
     /**
      * Zone implementations
