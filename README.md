@@ -621,9 +621,12 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2015b.
+The version of the included IANA time zone database is 2015c.
 
 ## Changelog
+
+### 1.19.2 (2015-04-14)
+* Upgrade TZ database to 2015c
 
 ### 1.19.1 (2015-04-09)
 * Minor adjustment to tc.utc() so that tc.utc().identical(tc.zone("UTC")) === true  (they had a different DST flag)
