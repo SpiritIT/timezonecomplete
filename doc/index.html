@@ -629,8 +629,12 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				<h3 id="does-timezonecomplete-handle-leap-seconds-">Does timezonecomplete handle leap seconds?</h3>
 				<p>Currently not. This is because most platforms don&#39;t, especially when converting from and to unix timestamps. If we were to introduce leap seconds, you would have to keep very close track of which of your unix timestamps are adjusted for leap seconds and which aren&#39;t. We do plan to add support in some form though.</p>
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
-				<p>The version of the included IANA time zone database is 2015c.</p>
+				<p>The version of the included IANA time zone database is 2015d.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-19-3-2015-04-28-">1.19.3 (2015-04-28)</h3>
+				<ul>
+					<li>Upgrade TZ database to 2015d</li>
+				</ul>
 				<h3 id="1-19-2-2015-04-14-">1.19.2 (2015-04-14)</h3>
 				<ul>
 					<li>Upgrade TZ database to 2015c</li>
@@ -898,9 +902,9 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#x2e;&#115;&#x63;&#x68;&#111;&#117;&#x74;&#x65;&#x6e;&#x40;&#115;&#112;&#105;&#114;&#x69;&#x74;&#x69;&#x74;&#46;&#x63;&#111;&#109;">&#x72;&#x2e;&#115;&#x63;&#x68;&#111;&#117;&#x74;&#x65;&#x6e;&#x40;&#115;&#112;&#105;&#114;&#x69;&#x74;&#x69;&#x74;&#46;&#x63;&#111;&#109;</a></li>
-					<li>Daan Wissing <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x64;&#46;&#x77;&#x69;&#x73;&#115;&#105;&#110;&#103;&#x40;&#x73;&#112;&#x69;&#x72;&#105;&#116;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#109;">&#x64;&#46;&#x77;&#x69;&#x73;&#115;&#105;&#110;&#103;&#x40;&#x73;&#112;&#x69;&#x72;&#105;&#116;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#112;&#x2e;&#107;&#x6f;&#111;&#x69;&#x6a;&#109;&#97;&#x6e;&#x73;&#x40;&#115;&#112;&#105;&#114;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#111;&#109;">&#112;&#x2e;&#107;&#x6f;&#111;&#x69;&#x6a;&#109;&#97;&#x6e;&#x73;&#x40;&#115;&#112;&#105;&#114;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#111;&#109;</a></li>
+					<li>Rogier Schouten <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#x3a;&#114;&#46;&#115;&#x63;&#104;&#x6f;&#117;&#x74;&#x65;&#x6e;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#x74;&#x2e;&#x63;&#111;&#x6d;">&#114;&#46;&#115;&#x63;&#104;&#x6f;&#117;&#x74;&#x65;&#x6e;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#x74;&#x2e;&#x63;&#111;&#x6d;</a></li>
+					<li>Daan Wissing <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x64;&#x2e;&#119;&#x69;&#115;&#115;&#x69;&#110;&#x67;&#x40;&#x73;&#112;&#x69;&#x72;&#105;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#x64;&#x2e;&#119;&#x69;&#115;&#115;&#x69;&#110;&#x67;&#x40;&#x73;&#112;&#x69;&#x72;&#105;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#x70;&#x2e;&#107;&#111;&#x6f;&#x69;&#x6a;&#109;&#97;&#x6e;&#x73;&#64;&#115;&#x70;&#x69;&#114;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#109;">&#x70;&#x2e;&#107;&#111;&#x6f;&#x69;&#x6a;&#109;&#97;&#x6e;&#x73;&#64;&#115;&#x70;&#x69;&#114;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>
