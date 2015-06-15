@@ -621,9 +621,12 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2015d.
+The version of the included IANA time zone database is 2015e.
 
 ## Changelog
+
+### 1.19.4 (2015-06-15)
+* Upgrade TZ database to 2015e
 
 ### 1.19.3 (2015-04-28)
 * Upgrade TZ database to 2015d
