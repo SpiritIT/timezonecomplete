@@ -65,6 +65,17 @@ export import local = timezone.local;
 export import utc = timezone.utc;
 export import zone = timezone.zone;
 
+import tzDatabase = require("./tz-database"); tzDatabase;
+export import AtType = tzDatabase.AtType;
+export import isValidOffsetString = tzDatabase.isValidOffsetString;
+export import OnType = tzDatabase.OnType;
+export import RuleInfo = tzDatabase.RuleInfo;
+export import ToType = tzDatabase.ToType;
+export import Transition = tzDatabase.Transition;
+export import TzDatabase = tzDatabase.TzDatabase;
+export import ZoneInfo = tzDatabase.ZoneInfo;
+
+
 import globals = require("./globals"); globals;
 export import min = globals.min;
 export import max = globals.max;

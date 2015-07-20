@@ -322,6 +322,25 @@ z.offsetForUtc(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in UTC
 z.offsetForZone(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in Europe/Amsterdam time; returns a Duration object
 
 ```
+### TzDatabase
+The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like 'what is the maximum Daylight Saving Time shift of all zones in the database'?
+
+```javascript
+var tc = require("timezonecomplete");
+
+// TzDatabase is a singleton, get at it using the instance() method
+var db = tc.TzDatabase.instance();
+
+var duration = db.maxDst(); // maximum DST offet in the database
+
+// Does the zone have daylight saving time
+var bool1 = db.hasDst("Europe/Amsterdam"); // true
+var bool2 = db.hasDst("UTC"); // false
+
+// For more features, see the docs.
+
+```
+
 
 ### DateTime
 The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
@@ -624,6 +643,9 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015e.
 
 ## Changelog
+
+### 1.20.0 (2015-07-20)
+* Make a TzDatabase class available with general info on all time zones
 
 ### 1.19.4 (2015-06-15)
 * Upgrade TZ database to 2015e
