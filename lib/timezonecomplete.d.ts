@@ -48,6 +48,15 @@ declare module 'timezonecomplete' {
     export import local = timezone.local;
     export import utc = timezone.utc;
     export import zone = timezone.zone;
+    import tzDatabase = require("__timezonecomplete/tz-database");
+    export import AtType = tzDatabase.AtType;
+    export import isValidOffsetString = tzDatabase.isValidOffsetString;
+    export import OnType = tzDatabase.OnType;
+    export import RuleInfo = tzDatabase.RuleInfo;
+    export import ToType = tzDatabase.ToType;
+    export import Transition = tzDatabase.Transition;
+    export import TzDatabase = tzDatabase.TzDatabase;
+    export import ZoneInfo = tzDatabase.ZoneInfo;
     import globals = require("__timezonecomplete/globals");
     export import min = globals.min;
     export import max = globals.max;
@@ -1540,6 +1549,584 @@ declare module '__timezonecomplete/timezone' {
                 * @return offset w.r.t. UTC in minutes
                 */
             static stringToOffset(s: string): number;
+    }
+}
+
+declare module '__timezonecomplete/tz-database' {
+    import basics = require("__timezonecomplete/basics");
+    import duration = require("__timezonecomplete/duration");
+    import Duration = duration.Duration;
+    import TimeStruct = basics.TimeStruct;
+    import WeekDay = basics.WeekDay;
+    /**
+        * Type of rule TO column value
+        */
+    export enum ToType {
+            /**
+                * Either a year number or "only"
+                */
+            Year = 0,
+            /**
+                * "max"
+                */
+            Max = 1,
+    }
+    /**
+        * Type of rule ON column value
+        */
+    export enum OnType {
+            /**
+                * Day-of-month number
+                */
+            DayNum = 0,
+            /**
+                * "lastSun" or "lastWed" etc
+                */
+            LastX = 1,
+            /**
+                * e.g. "Sun>=8"
+                */
+            GreqX = 2,
+            /**
+                * e.g. "Sun<=8"
+                */
+            LeqX = 3,
+    }
+    export enum AtType {
+            /**
+                * Local time (no DST)
+                */
+            Standard = 0,
+            /**
+                * Wall clock time (local time with DST)
+                */
+            Wall = 1,
+            /**
+                * Utc time
+                */
+            Utc = 2,
+    }
+    /**
+        * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+        *
+        * See http://www.cstdbill.com/tzdb/tz-how-to.html
+        */
+    export class RuleInfo {
+            /**
+                * FROM column year number.
+                * Note, can be -10000 for NaN value (e.g. for "SystemV" rules)
+                */
+            from: number;
+            /**
+                * TO column type: Year for year numbers and "only" values, Max for "max" value.
+                */
+            toType: ToType;
+            /**
+                * If TO column is a year, the year number. If TO column is "only", the FROM year.
+                */
+            toYear: number;
+            /**
+                * TYPE column, not used so far
+                */
+            type: string;
+            /**
+                * IN column month number 1-12
+                */
+            inMonth: number;
+            /**
+                * ON column type
+                */
+            onType: OnType;
+            /**
+                * If onType is DayNum, the day number
+                */
+            onDay: number;
+            /**
+                * If onType is not DayNum, the weekday
+                */
+            onWeekDay: WeekDay;
+            /**
+                * AT column hour
+                */
+            atHour: number;
+            /**
+                * AT column minute
+                */
+            atMinute: number;
+            /**
+                * AT column second
+                */
+            atSecond: number;
+            /**
+                * AT column type
+                */
+            atType: AtType;
+            /**
+                * DST offset from local standard time (NOT from UTC!)
+                */
+            save: Duration;
+            /**
+                * Character to insert in %s for time zone abbreviation
+                * Note if TZ database indicates "-" this is the empty string
+                */
+            letter: string;
+            constructor(
+                    /**
+                        * FROM column year number.
+                        * Note, can be -10000 for NaN value (e.g. for "SystemV" rules)
+                        */
+                    from: number, 
+                    /**
+                        * TO column type: Year for year numbers and "only" values, Max for "max" value.
+                        */
+                    toType: ToType, 
+                    /**
+                        * If TO column is a year, the year number. If TO column is "only", the FROM year.
+                        */
+                    toYear: number, 
+                    /**
+                        * TYPE column, not used so far
+                        */
+                    type: string, 
+                    /**
+                        * IN column month number 1-12
+                        */
+                    inMonth: number, 
+                    /**
+                        * ON column type
+                        */
+                    onType: OnType, 
+                    /**
+                        * If onType is DayNum, the day number
+                        */
+                    onDay: number, 
+                    /**
+                        * If onType is not DayNum, the weekday
+                        */
+                    onWeekDay: WeekDay, 
+                    /**
+                        * AT column hour
+                        */
+                    atHour: number, 
+                    /**
+                        * AT column minute
+                        */
+                    atMinute: number, 
+                    /**
+                        * AT column second
+                        */
+                    atSecond: number, 
+                    /**
+                        * AT column type
+                        */
+                    atType: AtType, 
+                    /**
+                        * DST offset from local standard time (NOT from UTC!)
+                        */
+                    save: Duration, 
+                    /**
+                        * Character to insert in %s for time zone abbreviation
+                        * Note if TZ database indicates "-" this is the empty string
+                        */
+                    letter: string);
+            /**
+                * Returns true iff this rule is applicable in the year
+                */
+            applicable(year: number): boolean;
+            /**
+                * Sort comparison
+                * @return (first effective date is less than other's first effective date)
+                */
+            effectiveLess(other: RuleInfo): boolean;
+            /**
+                * Sort comparison
+                * @return (first effective date is equal to other's first effective date)
+                */
+            effectiveEqual(other: RuleInfo): boolean;
+            /**
+                * Returns the date that the rule takes effect. Note that the time
+                * is NOT adjusted for wall clock time or standard time, i.e. this.atType is
+                * not taken into account
+                */
+            effectiveDate(year: number): TimeStruct;
+            /**
+                * Returns the transition moment in UTC in the given year
+                *
+                * @param year	The year for which to return the transition
+                * @param standardOffset	The standard offset for the timezone without DST
+                * @param prevRule	The previous rule
+                */
+            transitionTimeUtc(year: number, standardOffset: Duration, prevRule: RuleInfo): number;
+    }
+    /**
+        * Type of reference from zone to rule
+        */
+    export enum RuleType {
+            /**
+                * No rule applies
+                */
+            None = 0,
+            /**
+                * Fixed given offset
+                */
+            Offset = 1,
+            /**
+                * Reference to a named set of rules
+                */
+            RuleName = 2,
+    }
+    /**
+        * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+        *
+        * See http://www.cstdbill.com/tzdb/tz-how-to.html
+        * First, and somewhat trivially, whereas Rules are considered to contain one or more records, a Zone is considered to
+        * be a single record with zero or more continuation lines. Thus, the keyword, “Zone,” and the zone name are not repeated.
+        * The last line is the one without anything in the [UNTIL] column.
+        * Second, and more fundamentally, each line of a Zone represents a steady state, not a transition between states.
+        * The state exists from the date and time in the previous line’s [UNTIL] column up to the date and time in the current line’s
+        * [UNTIL] column. In other words, the date and time in the [UNTIL] column is the instant that separates this state from the next.
+        * Where that would be ambiguous because we’re setting our clocks back, the [UNTIL] column specifies the first occurrence of the instant.
+        * The state specified by the last line, the one without anything in the [UNTIL] column, continues to the present.
+        * The first line typically specifies the mean solar time observed before the introduction of standard time. Since there’s no line before
+        * that, it has no beginning. 8-) For some places near the International Date Line, the first two lines will show solar times differing by
+        * 24 hours; this corresponds to a movement of the Date Line. For example:
+        * # Zone	NAME		GMTOFF	RULES	FORMAT	[UNTIL]
+        * Zone America/Juneau	 15:02:19 -	LMT	1867 Oct 18
+        * 			 -8:57:41 -	LMT	...
+        * When Alaska was purchased from Russia in 1867, the Date Line moved from the Alaska/Canada border to the Bering Strait; and the time in
+        * Alaska was then 24 hours earlier than it had been. <aside>(6 October in the Julian calendar, which Russia was still using then for
+        * religious reasons, was followed by a second instance of the same day with a different name, 18 October in the Gregorian calendar.
+        * Isn’t civil time wonderful? 8-))</aside>
+        * The abbreviation, “LMT,” stands for “local mean time,” which is an invention of the tz database and was probably never actually
+        * used during the period. Furthermore, the value is almost certainly wrong except in the archetypal place after which the zone is named.
+        * (The tz database usually doesn’t provide a separate Zone record for places where nothing significant happened after 1970.)
+        */
+    export class ZoneInfo {
+            /**
+                * GMT offset in fractional minutes, POSITIVE to UTC (note JavaScript.Date gives offsets
+                * contrary to what you might expect).  E.g. Europe/Amsterdam has +60 minutes in this field because
+                * it is one hour ahead of UTC
+                */
+            gmtoff: Duration;
+            /**
+                * The RULES column tells us whether daylight saving time is being observed:
+                * A hyphen, a kind of null value, means that we have not set our clocks ahead of standard time.
+                * An amount of time (usually but not necessarily “1:00” meaning one hour) means that we have set our clocks ahead by that amount.
+                * Some alphabetic string means that we might have set our clocks ahead; and we need to check the rule
+                * the name of which is the given alphabetic string.
+                */
+            ruleType: RuleType;
+            /**
+                * If the rule column is an offset, this is the offset
+                */
+            ruleOffset: Duration;
+            /**
+                * If the rule column is a rule name, this is the rule name
+                */
+            ruleName: string;
+            /**
+                * The FORMAT column specifies the usual abbreviation of the time zone name. It can have one of four forms:
+                * the string, “zzz,” which is a kind of null value (don’t ask)
+                * a single alphabetic string other than “zzz,” in which case that’s the abbreviation
+                * a pair of strings separated by a slash (‘/’), in which case the first string is the abbreviation
+                * for the standard time name and the second string is the abbreviation for the daylight saving time name
+                * a string containing “%s,” in which case the “%s” will be replaced by the text in the appropriate Rule’s LETTER column
+                */
+            format: string;
+            /**
+                * Until timestamp in unix utc millis. The zone info is valid up to
+                * and excluding this timestamp.
+                * Note this value can be NULL (for the first rule)
+                */
+            until: number;
+            constructor(
+                    /**
+                        * GMT offset in fractional minutes, POSITIVE to UTC (note JavaScript.Date gives offsets
+                        * contrary to what you might expect).  E.g. Europe/Amsterdam has +60 minutes in this field because
+                        * it is one hour ahead of UTC
+                        */
+                    gmtoff: Duration, 
+                    /**
+                        * The RULES column tells us whether daylight saving time is being observed:
+                        * A hyphen, a kind of null value, means that we have not set our clocks ahead of standard time.
+                        * An amount of time (usually but not necessarily “1:00” meaning one hour) means that we have set our clocks ahead by that amount.
+                        * Some alphabetic string means that we might have set our clocks ahead; and we need to check the rule
+                        * the name of which is the given alphabetic string.
+                        */
+                    ruleType: RuleType, 
+                    /**
+                        * If the rule column is an offset, this is the offset
+                        */
+                    ruleOffset: Duration, 
+                    /**
+                        * If the rule column is a rule name, this is the rule name
+                        */
+                    ruleName: string, 
+                    /**
+                        * The FORMAT column specifies the usual abbreviation of the time zone name. It can have one of four forms:
+                        * the string, “zzz,” which is a kind of null value (don’t ask)
+                        * a single alphabetic string other than “zzz,” in which case that’s the abbreviation
+                        * a pair of strings separated by a slash (‘/’), in which case the first string is the abbreviation
+                        * for the standard time name and the second string is the abbreviation for the daylight saving time name
+                        * a string containing “%s,” in which case the “%s” will be replaced by the text in the appropriate Rule’s LETTER column
+                        */
+                    format: string, 
+                    /**
+                        * Until timestamp in unix utc millis. The zone info is valid up to
+                        * and excluding this timestamp.
+                        * Note this value can be NULL (for the first rule)
+                        */
+                    until: number);
+    }
+    /**
+        * Returns true if the given string is a valid offset string i.e.
+        * 1, -1, +1, 01, 1:00, 1:23:25.143
+        */
+    export function isValidOffsetString(s: string): boolean;
+    /**
+        * Defines a moment at which the given rule becomes valid
+        */
+    export class Transition {
+            /**
+                * Transition time in UTC millis
+                */
+            at: number;
+            /**
+                * New offset (type of offset depends on the function)
+                */
+            offset: Duration;
+            /**
+                * New timzone abbreviation letter
+                */
+            letter: string;
+            constructor(
+                    /**
+                        * Transition time in UTC millis
+                        */
+                    at: number, 
+                    /**
+                        * New offset (type of offset depends on the function)
+                        */
+                    offset: Duration, 
+                    /**
+                        * New timzone abbreviation letter
+                        */
+                    letter: string);
+    }
+    /**
+        * Option for TzDatabase#normalizeLocal()
+        */
+    export enum NormalizeOption {
+            /**
+                * Normalize non-existing times by ADDING the DST offset
+                */
+            Up = 0,
+            /**
+                * Normalize non-existing times by SUBTRACTING the DST offset
+                */
+            Down = 1,
+    }
+    /**
+        * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
+        *
+        * This class typescriptifies reading the TZ data
+        */
+    export class TzDatabase {
+            /**
+                * Single instance of this database
+                */
+            static instance(): TzDatabase;
+            /**
+                * Inject test timezone data for unittests
+                */
+            static inject(data: any): void;
+            constructor(data: any);
+            exists(zoneName: string): boolean;
+            /**
+                * Minimum non-zero DST offset (which excludes standard offset) of all rules in the database.
+                * Note that DST offsets need not be whole hours.
+                *
+                * Does return zero if a zoneName is given and there is no DST at all for the zone.
+                *
+                * @param zoneName	(optional) if given, the result for the given zone is returned
+                */
+            minDstSave(zoneName?: string): Duration;
+            /**
+                * Maximum DST offset (which excludes standard offset) of all rules in the database.
+                * Note that DST offsets need not be whole hours.
+                *
+                * Returns 0 if zoneName given and no DST observed.
+                *
+                * @param zoneName	(optional) if given, the result for the given zone is returned
+                */
+            maxDstSave(zoneName?: string): Duration;
+            /**
+                * Checks whether the zone has DST at all
+                */
+            hasDst(zoneName: string): boolean;
+            /**
+                * Returns true iff the given zone name eventually links to
+                * "Etc/UTC", "Etc/GMT" or "Etc/UCT" in the TZ database. This is true e.g. for
+                * "UTC", "GMT", "Etc/GMT" etc.
+                *
+                * @param zoneName	IANA time zone name.
+                */
+            zoneIsUtc(zoneName: string): boolean;
+            /**
+                * Normalizes non-existing local times by adding/subtracting a forward offset change.
+                * During a forward standard offset change or DST offset change, some amount of
+                * local time is skipped. Therefore, this amount of local time does not exist.
+                * This function adds the amount of forward change to any non-existing time. After all,
+                * this is probably what the user meant.
+                *
+                * @param zoneName	IANA time zone name
+                * @param localTime	A local time, either as a TimeStruct or as a unix millisecond value
+                * @param opt	(optional) Round up or down? Default: up.
+                *
+                * @return	The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)
+                */
+            normalizeLocal(zoneName: string, localTime: TimeStruct, opt?: NormalizeOption): TimeStruct;
+            normalizeLocal(zoneName: string, localTime: number, opt?: NormalizeOption): number;
+            /**
+                * Returns the standard time zone offset from UTC, without DST.
+                * Throws if info not found.
+                * @param zoneName	IANA time zone name
+                * @param utcMillis	Timestamp in UTC
+                */
+            standardOffset(zoneName: string, utcMillis: number): Duration;
+            /**
+                * Returns the total time zone offset from UTC, including DST, at
+                * the given UTC timestamp.
+                * Throws if zone info not found.
+                *
+                * @param zoneName	IANA time zone name
+                * @param utcMillis	Timestamp in UTC
+                */
+            totalOffset(zoneName: string, utcMillis: number): Duration;
+            /**
+                * The time zone rule abbreviation, e.g. CEST for Central European Summer Time.
+                * Note this is dependent on the time, because with time different rules are in effect
+                * and therefore different abbreviations. They also change with DST: e.g. CEST or CET.
+                *
+                * @param zoneName	IANA zone name
+                * @param utcMillis	Timestamp in UTC unix milliseconds
+                * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
+                * @return	The abbreviation of the rule that is in effect
+                */
+            abbreviation(zoneName: string, utcMillis: number, dstDependent?: boolean): string;
+            /**
+                * Returns the standard time zone offset from UTC, excluding DST, at
+                * the given LOCAL timestamp, again excluding DST.
+                *
+                * If the local timestamp exists twice (as can occur very rarely due to zone changes)
+                * then the first occurrence is returned.
+                *
+                * Throws if zone info not found.
+                *
+                * @param zoneName	IANA time zone name
+                * @param localMillis	Timestamp in time zone time
+                */
+            standardOffsetLocal(zoneName: string, localMillis: number): Duration;
+            /**
+                * Returns the total time zone offset from UTC, including DST, at
+                * the given LOCAL timestamp. Non-existing local time is normalized out.
+                * There can be multiple UTC times and therefore multiple offsets for a local time
+                * namely during a backward DST change. This returns the FIRST such offset.
+                * Throws if zone info not found.
+                *
+                * @param zoneName	IANA time zone name
+                * @param localMillis	Timestamp in time zone time
+                */
+            totalOffsetLocal(zoneName: string, localMillis: number): Duration;
+            /**
+                * Returns the DST offset (WITHOUT the standard zone offset) for the given
+                * ruleset and the given UTC timestamp
+                *
+                * @param ruleName	name of ruleset
+                * @param utcMillis	UTC timestamp
+                * @param standardOffset	Standard offset without DST for the time zone
+                */
+            dstOffsetForRule(ruleName: string, utcMillis: number, standardOffset: Duration): Duration;
+            /**
+                * Returns the time zone letter for the given
+                * ruleset and the given UTC timestamp
+                *
+                * @param ruleName	name of ruleset
+                * @param utcMillis	UTC timestamp
+                * @param standardOffset	Standard offset without DST for the time zone
+                */
+            letterForRule(ruleName: string, utcMillis: number, standardOffset: Duration): string;
+            /**
+                * Return a list of all transitions in [fromYear..toYear] sorted by effective date
+                *
+                * @param ruleName	Name of the rule set
+                * @param fromYear	first year to return transitions for
+                * @param toYear	Last year to return transitions for
+                * @param standardOffset	Standard offset without DST for the time zone
+                *
+                * @return Transitions, with DST offsets (no standard offset included)
+                */
+            getTransitionsDstOffsets(ruleName: string, fromYear: number, toYear: number, standardOffset: Duration): Transition[];
+            /**
+                * Return both zone and rule changes as total (std + dst) offsets.
+                * Adds an initial transition if there is no zone change within the range.
+                *
+                * @param zoneName	IANA zone name
+                * @param fromYear	First year to include
+                * @param toYear	Last year to include
+                */
+            getTransitionsTotalOffsets(zoneName: string, fromYear: number, toYear: number): Transition[];
+            /**
+                * Get the zone info for the given UTC timestamp. Throws if not found.
+                * @param zoneName	IANA time zone name
+                * @param utcMillis	UTC time stamp
+                * @returns	ZoneInfo object. Do not change, we cache this object.
+                */
+            getZoneInfo(zoneName: string, utcMillis: number): ZoneInfo;
+            /**
+                * Return the zone records for a given zone name, after
+                * following any links.
+                *
+                * @param zoneName	IANA zone name like "Pacific/Efate"
+                * @return Array of zone infos. Do not change, this is a cached value.
+                */
+            getZoneInfos(zoneName: string): ZoneInfo[];
+            /**
+                * Returns the rule set with the given rule name,
+                * sorted by first effective date (uncompensated for "w" or "s" AtTime)
+                *
+                * @param ruleName	Name of rule set
+                * @return RuleInfo array. Do not change, this is a cached value.
+                */
+            getRuleInfos(ruleName: string): RuleInfo[];
+            /**
+                * Parse the RULES column of a zone info entry
+                * and see what kind of entry it is.
+                */
+            parseRuleType(rule: string): RuleType;
+            /**
+                * Parse the TO column of a rule info entry
+                * and see what kind of entry it is.
+                */
+            parseToType(to: string): ToType;
+            /**
+                * Parse the ON column of a rule info entry
+                * and see what kind of entry it is.
+                */
+            parseOnType(on: string): OnType;
+            /**
+                * Get the day number from an ON column string, 0 if no day.
+                */
+            parseOnDay(on: string, onType: OnType): number;
+            /**
+                * Get the day-of-week from an ON column string, Sunday if not present.
+                */
+            parseOnWeekDay(on: string): WeekDay;
+            /**
+                * Parse the AT column of a rule info entry
+                * and see what kind of entry it is.
+                */
+            parseAtType(at: any): AtType;
     }
 }
 

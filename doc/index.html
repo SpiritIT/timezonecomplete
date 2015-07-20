@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html class="default no-js">
 <head>
 	<meta charset="utf-8">
@@ -39,6 +39,8 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -362,7 +364,22 @@ z.isUtc<span class="hljs-params">()</span>; <span class="hljs-comment">// true i
 z = tc.zone<span class="hljs-params">(<span class="hljs-string">"Europe/Amsterdam"</span>)</span>;
 z.offsetForUtc<span class="hljs-params">(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>)</span>; <span class="hljs-comment">// offset for a time specified in UTC; returns a Duration object</span>
 z.offsetForZone<span class="hljs-params">(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>)</span>; <span class="hljs-comment">// offset for a time specified in Europe/Amsterdam time; returns a Duration object</span>
-</code></pre><h3 id="datetime">DateTime</h3>
+</code></pre><h3 id="tzdatabase">TzDatabase</h3>
+				<p>The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like &#39;what is the maximum Daylight Saving Time shift of all zones in the database&#39;?</p>
+				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
+
+<span class="hljs-comment">// TzDatabase is a singleton, get at it using the instance() method</span>
+<span class="hljs-keyword">var</span> db = tc.TzDatabase.instance();
+
+<span class="hljs-keyword">var</span> duration = db.maxDst(); <span class="hljs-comment">// maximum DST offet in the database</span>
+
+<span class="hljs-comment">// Does the zone have daylight saving time</span>
+<span class="hljs-keyword">var</span> bool1 = db.hasDst(<span class="hljs-string">"Europe/Amsterdam"</span>); <span class="hljs-comment">// true</span>
+<span class="hljs-keyword">var</span> bool2 = db.hasDst(<span class="hljs-string">"UTC"</span>); <span class="hljs-comment">// false</span>
+
+<span class="hljs-comment">// For more features, see the docs.</span>
+</code></pre>
+				<h3 id="datetime">DateTime</h3>
 				<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
 					It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
 				that the local time is incremented by one hour even if the UTC date does not change.</p>
@@ -631,6 +648,10 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 				<p>The version of the included IANA time zone database is 2015e.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-20-0-2015-07-20-">1.20.0 (2015-07-20)</h3>
+				<ul>
+					<li>Make a TzDatabase class available with general info on all time zones</li>
+				</ul>
 				<h3 id="1-19-4-2015-06-15-">1.19.4 (2015-06-15)</h3>
 				<ul>
 					<li>Upgrade TZ database to 2015e</li>
@@ -906,9 +927,9 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x72;&#46;&#115;&#x63;&#x68;&#111;&#x75;&#116;&#x65;&#110;&#x40;&#x73;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;">&#x72;&#46;&#115;&#x63;&#x68;&#111;&#x75;&#116;&#x65;&#110;&#x40;&#x73;&#112;&#x69;&#114;&#x69;&#x74;&#105;&#x74;&#x2e;&#99;&#x6f;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x64;&#46;&#x77;&#x69;&#115;&#115;&#x69;&#110;&#103;&#64;&#115;&#112;&#x69;&#x72;&#105;&#x74;&#105;&#116;&#46;&#x63;&#111;&#x6d;">&#x64;&#46;&#x77;&#x69;&#115;&#115;&#x69;&#110;&#103;&#64;&#115;&#112;&#x69;&#x72;&#105;&#x74;&#105;&#116;&#46;&#x63;&#111;&#x6d;</a></li>
-					<li>Peter Kooijmans <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x70;&#x2e;&#x6b;&#x6f;&#x6f;&#105;&#106;&#109;&#97;&#x6e;&#x73;&#x40;&#115;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#x63;&#111;&#x6d;">&#x70;&#x2e;&#x6b;&#x6f;&#x6f;&#105;&#106;&#109;&#97;&#x6e;&#x73;&#x40;&#115;&#x70;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#x63;&#111;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#64;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#x69;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#x2e;&#115;&#x63;&#x68;&#111;&#x75;&#x74;&#101;&#110;&#64;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#x69;&#116;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+					<li>Daan Wissing <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#100;&#x2e;&#119;&#x69;&#x73;&#115;&#105;&#x6e;&#x67;&#x40;&#115;&#112;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#x2e;&#99;&#x6f;&#109;">&#100;&#x2e;&#119;&#x69;&#x73;&#115;&#105;&#x6e;&#x67;&#x40;&#115;&#112;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
+					<li>Peter Kooijmans <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x70;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#109;&#97;&#110;&#x73;&#x40;&#x73;&#112;&#105;&#x72;&#x69;&#116;&#x69;&#x74;&#x2e;&#99;&#x6f;&#109;">&#x70;&#x2e;&#107;&#111;&#111;&#x69;&#x6a;&#109;&#97;&#110;&#x73;&#x40;&#x73;&#112;&#105;&#x72;&#x69;&#116;&#x69;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

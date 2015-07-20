@@ -2306,13 +2306,23 @@ exports.TimeZone = timezone.TimeZone;
 exports.local = timezone.local;
 exports.utc = timezone.utc;
 exports.zone = timezone.zone;
+var tzDatabase = require("./tz-database");
+tzDatabase;
+exports.AtType = tzDatabase.AtType;
+exports.isValidOffsetString = tzDatabase.isValidOffsetString;
+exports.OnType = tzDatabase.OnType;
+exports.RuleInfo = tzDatabase.RuleInfo;
+exports.ToType = tzDatabase.ToType;
+exports.Transition = tzDatabase.Transition;
+exports.TzDatabase = tzDatabase.TzDatabase;
+exports.ZoneInfo = tzDatabase.ZoneInfo;
 var globals = require("./globals");
 globals;
 exports.min = globals.min;
 exports.max = globals.max;
 
 
-},{"./basics":1,"./datetime":2,"./duration":3,"./globals":6,"./javascript":9,"./period":11,"./timesource":13,"./timezone":15}],5:[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./globals":6,"./javascript":9,"./period":11,"./timesource":13,"./timezone":15,"./tz-database":17}],5:[function(require,module,exports){
 /**
  * Copyright(c) 2014 Spirit IT BV
  *
@@ -2814,7 +2824,7 @@ exports.abs = abs;
 
 },{"./datetime":2,"./duration":3,"assert":18}],"Focm2+":[function(require,module,exports){
 module.exports=require(4)
-},{"./basics":1,"./datetime":2,"./duration":3,"./globals":6,"./javascript":9,"./period":11,"./timesource":13,"./timezone":15}],"timezonecomplete":[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./globals":6,"./javascript":9,"./period":11,"./timesource":13,"./timezone":15,"./tz-database":17}],"timezonecomplete":[function(require,module,exports){
 module.exports=require('Focm2+');
 },{}],9:[function(require,module,exports){
 /**
