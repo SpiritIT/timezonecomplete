@@ -1965,6 +1965,10 @@ declare module '__timezonecomplete/tz-database' {
                 */
             hasDst(zoneName: string): boolean;
             /**
+                * First DST change moment AFTER the given UTC date in UTC milliseconds, within one year
+                */
+            nextDstChange(zoneName: string, utcMillis: number): number;
+            /**
                 * Returns true iff the given zone name eventually links to
                 * "Etc/UTC", "Etc/GMT" or "Etc/UCT" in the TZ database. This is true e.g. for
                 * "UTC", "GMT", "Etc/GMT" etc.

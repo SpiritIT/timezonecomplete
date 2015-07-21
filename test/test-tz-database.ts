@@ -654,6 +654,15 @@ describe("TzDatabase", (): void => {
 		});
 	});
 
+	describe("nextDstChange()", (): void => {
+		it("should return the next winter to summer time change", (): void => {
+			expect(TzDatabase.instance().nextDstChange("Europe/Amsterdam", 1427590799999)).to.equal(1427590800000);
+		});
+		it("should return the next summer to winter time change", (): void => {
+			expect(TzDatabase.instance().nextDstChange("Europe/Amsterdam", 1445734799999)).to.equal(1445734800000);
+		});
+	});
+
 	describe("normalizeLocal()", (): void => {
 		it("should not change dates outside DST changes", (): void => {
 			expect(TzDatabase.instance().normalizeLocal(

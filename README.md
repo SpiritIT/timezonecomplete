@@ -337,6 +337,9 @@ var duration = db.maxDst(); // maximum DST offet in the database
 var bool1 = db.hasDst("Europe/Amsterdam"); // true
 var bool2 = db.hasDst("UTC"); // false
 
+// Next daylight saving time change in unix utc milliseconds
+var unixUtcMillis = db.nextDstChange("Europe/Amsterdam", 1427590799999); // 1427590800000
+
 // For more features, see the docs.
 
 ```
@@ -643,6 +646,9 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015e.
 
 ## Changelog
+
+### 1.21.0 (2015-07-21)
+* Add a method to TzDatabase to get the next DST transition moment after a given date
 
 ### 1.20.0 (2015-07-20)
 * Make a TzDatabase class available with general info on all time zones

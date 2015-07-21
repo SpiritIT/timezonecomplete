@@ -121,6 +121,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#letterforrule" class="tsd-kind-icon">letter<wbr>For<wbr>Rule</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#maxdstsave" class="tsd-kind-icon">max<wbr>Dst<wbr>Save</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#mindstsave" class="tsd-kind-icon">min<wbr>Dst<wbr>Save</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#nextdstchange" class="tsd-kind-icon">next<wbr>Dst<wbr>Change</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#normalizelocal" class="tsd-kind-icon">normalize<wbr>Local</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#parseattype" class="tsd-kind-icon">parse<wbr>AtType</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_tz_database_.tzdatabase.html#parseonday" class="tsd-kind-icon">parse<wbr>OnDay</a></li>
@@ -199,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">_rule<wbr>Info<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:1148</li>
+							<li>Defined in tz-database.ts:1194</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -222,7 +223,7 @@
 					<div class="tsd-signature tsd-kind-icon">_zone<wbr>Info<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in tz-database.ts:1069</li>
+							<li>Defined in tz-database.ts:1115</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -267,7 +268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:744</li>
+									<li>Defined in tz-database.ts:790</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -313,7 +314,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:858</li>
+									<li>Defined in tz-database.ts:904</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -380,7 +381,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1157</li>
+									<li>Defined in tz-database.ts:1203</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -413,7 +414,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:924</li>
+									<li>Defined in tz-database.ts:970</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -463,7 +464,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:958</li>
+									<li>Defined in tz-database.ts:1004</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -507,7 +508,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1051</li>
+									<li>Defined in tz-database.ts:1097</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -545,7 +546,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1078</li>
+									<li>Defined in tz-database.ts:1124</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -606,7 +607,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:890</li>
+									<li>Defined in tz-database.ts:936</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -707,6 +708,37 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="nextdstchange" class="tsd-anchor"></a>
+					<h3>next<wbr>Dst<wbr>Change</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">next<wbr>Dst<wbr>Change<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcMillis<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in tz-database.ts:605</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>First DST change moment AFTER the given UTC date in UTC milliseconds, within one year</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>utcMillis: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="normalizelocal" class="tsd-anchor"></a>
 					<h3>normalize<wbr>Local</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -717,7 +749,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:638</li>
+									<li>Defined in tz-database.ts:684</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -756,7 +788,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:639</li>
+									<li>Defined in tz-database.ts:685</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -785,7 +817,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1305</li>
+									<li>Defined in tz-database.ts:1351</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -814,7 +846,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1270</li>
+									<li>Defined in tz-database.ts:1316</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -845,7 +877,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1254</li>
+									<li>Defined in tz-database.ts:1300</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -874,7 +906,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1288</li>
+									<li>Defined in tz-database.ts:1334</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -902,7 +934,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1220</li>
+									<li>Defined in tz-database.ts:1266</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -931,7 +963,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:1234</li>
+									<li>Defined in tz-database.ts:1280</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -960,7 +992,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:702</li>
+									<li>Defined in tz-database.ts:748</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -998,7 +1030,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:776</li>
+									<li>Defined in tz-database.ts:822</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1039,7 +1071,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:715</li>
+									<li>Defined in tz-database.ts:761</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1078,7 +1110,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:801</li>
+									<li>Defined in tz-database.ts:847</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1119,7 +1151,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in tz-database.ts:609</li>
+									<li>Defined in tz-database.ts:655</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1331,6 +1363,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_tz_database_.tzdatabase.html#mindstsave" class="tsd-kind-icon">min<wbr>Dst<wbr>Save</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_tz_database_.tzdatabase.html#nextdstchange" class="tsd-kind-icon">next<wbr>Dst<wbr>Change</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_tz_database_.tzdatabase.html#normalizelocal" class="tsd-kind-icon">normalize<wbr>Local</a>

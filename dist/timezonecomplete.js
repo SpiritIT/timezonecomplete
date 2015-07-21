@@ -4994,6 +4994,48 @@ var TzDatabase = (function () {
         return (this.maxDstSave(zoneName).milliseconds() !== 0);
     };
     /**
+     * First DST change moment AFTER the given UTC date in UTC milliseconds, within one year
+     */
+    TzDatabase.prototype.nextDstChange = function (zoneName, utcMillis) {
+        var tm = basics.unixToTimeNoLeapSecs(utcMillis);
+        var zoneInfo;
+        var i;
+        // get all zone infos for [date, date+1year)
+        var allZoneInfos = this.getZoneInfos(zoneName);
+        var relevantZoneInfos = [];
+        var rangeStart = utcMillis;
+        var rangeEnd = utcMillis + 365 * 24 * 3600 * 1000;
+        var prevEnd = null;
+        for (i = 0; i < allZoneInfos.length; ++i) {
+            zoneInfo = allZoneInfos[i];
+            if ((prevEnd === null || prevEnd < rangeEnd) && (zoneInfo.until === null || zoneInfo.until > rangeStart)) {
+                relevantZoneInfos.push(zoneInfo);
+            }
+            prevEnd = zoneInfo.until;
+        }
+        // collect all transitions in the zones for the year
+        var transitions = [];
+        for (i = 0; i < relevantZoneInfos.length; ++i) {
+            zoneInfo = relevantZoneInfos[i];
+            // find applicable transition moments
+            transitions = transitions.concat(this.getTransitionsDstOffsets(zoneInfo.ruleName, tm.year - 1, tm.year + 1, zoneInfo.gmtoff));
+        }
+        transitions.sort(function (a, b) {
+            return a.at - b.at;
+        });
+        // find the first after the given date that has a different offset
+        var prevSave = null;
+        for (i = 0; i < transitions.length; ++i) {
+            var transition = transitions[i];
+            if (!prevSave || !prevSave.equals(transition.offset)) {
+                if (transition.at > utcMillis) {
+                    return transition.at;
+                }
+            }
+            prevSave = transition.offset;
+        }
+    };
+    /**
      * Returns true iff the given zone name eventually links to
      * "Etc/UTC", "Etc/GMT" or "Etc/UCT" in the TZ database. This is true e.g. for
      * "UTC", "GMT", "Etc/GMT" etc.

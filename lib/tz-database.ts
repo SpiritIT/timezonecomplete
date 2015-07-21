@@ -600,6 +600,52 @@ export class TzDatabase {
 	}
 
 	/**
+	 * First DST change moment AFTER the given UTC date in UTC milliseconds, within one year
+	 */
+	public nextDstChange(zoneName: string, utcMillis: number): number {
+		var tm: TimeStruct = basics.unixToTimeNoLeapSecs(utcMillis);
+		var zoneInfo: ZoneInfo;
+		var i: number;
+
+		// get all zone infos for [date, date+1year)
+		var allZoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+		var relevantZoneInfos: ZoneInfo[] = [];
+		var rangeStart: number = utcMillis;
+		var rangeEnd: number = utcMillis + 365 * 24 * 3600 * 1000;
+		var prevEnd: number = null;
+		for (i = 0; i < allZoneInfos.length; ++i) {
+			zoneInfo = allZoneInfos[i];
+			if ((prevEnd === null || prevEnd < rangeEnd) && (zoneInfo.until === null || zoneInfo.until > rangeStart)) {
+				relevantZoneInfos.push(zoneInfo);
+			}
+			prevEnd = zoneInfo.until;
+		}
+
+		// collect all transitions in the zones for the year
+		var transitions: Transition[] = [];
+		for (i = 0; i < relevantZoneInfos.length; ++i) {
+			zoneInfo = relevantZoneInfos[i];
+			// find applicable transition moments
+			transitions = transitions.concat(this.getTransitionsDstOffsets(zoneInfo.ruleName, tm.year - 1, tm.year + 1, zoneInfo.gmtoff));
+		}
+		transitions.sort((a: Transition, b: Transition): number => {
+			return a.at - b.at;
+		});
+
+		// find the first after the given date that has a different offset
+		var prevSave: Duration = null;
+		for (i = 0; i < transitions.length; ++i) {
+			var transition = transitions[i];
+			if (!prevSave || !prevSave.equals(transition.offset)) {
+				if (transition.at > utcMillis) {
+					return transition.at;
+				}
+			}
+			prevSave = transition.offset;
+		}
+	}
+
+	/**
 	 * Returns true iff the given zone name eventually links to
 	 * "Etc/UTC", "Etc/GMT" or "Etc/UCT" in the TZ database. This is true e.g. for
 	 * "UTC", "GMT", "Etc/GMT" etc.
