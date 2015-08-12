@@ -643,9 +643,12 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2015e.
+The version of the included IANA time zone database is 2015f.
 
 ## Changelog
+
+### 1.21.1 (2015-08-12)
+* Upgrade TZ database to 2015f
 
 ### 1.21.0 (2015-07-21)
 * Add a method to TzDatabase to get the next DST transition moment after a given date
