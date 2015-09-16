@@ -500,10 +500,23 @@ export class TzDatabase {
 
 	private _data: any;
 
+	private _zoneNames: string[];
+
 	constructor(data: any) {
 		assert(!TzDatabase._instance, "You should not create an instance of the TzDatabase class yourself. Use TzDatabase.instance()");
 		this._data = data;
 		this._minmax = validateData(data);
+	}
+
+	/**
+	 * Returns a sorted list of all zone names
+	 */
+	public zoneNames(): string[] {
+		if (!this._zoneNames) {
+			this._zoneNames = Object.keys(this._data.zones);
+			this._zoneNames.sort();
+		}
+		return this._zoneNames;
 	}
 
 	public exists(zoneName: string): boolean {

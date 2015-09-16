@@ -6,6 +6,7 @@ var dtsBundle = require("dts-bundle");
 var fs = require("fs");
 var gulp = require("gulp");
 var gulpFilter = require("gulp-filter");
+var gutil = require("gulp-util");
 var rename = require("gulp-rename");
 var rimraf = require("gulp-rimraf");
 var sourcemaps = require("gulp-sourcemaps");
@@ -190,10 +191,7 @@ gulp.task("build", function () {
 		.pipe(typescript({
 			module: "commonjs",
 			declarationFiles: true,
-			sourceRoot: "",
 			target: "es5",
-			//outDir: ".",
-			sourcemap: true,
 			noImplicitAny: true
 		}));
 	tsResult.on("error", function (err) {
@@ -253,5 +251,4 @@ function trapError(e) {
 	console.log("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\||||||||////////////////////");
 	console.log(">>>>>>>>>>>>>>>>> FAILED <<<<<<<<<<<<<<<<<<<<");
 	console.log("/////////////////||||||||\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
-	exitCode++;
 }

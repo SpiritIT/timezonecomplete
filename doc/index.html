@@ -333,43 +333,46 @@ tc.milliseconds(<span class="hljs-number">500</span>).toIsoString(); <span class
 				<pre><code>var z;
 
 <span class="hljs-comment">// local time</span>
-z = tc.local<span class="hljs-params">()</span>; <span class="hljs-comment">// Local time zone as specified by your OS</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"localtime"</span>)</span>; <span class="hljs-comment">// Local time zone as specified by your OS</span>
+z = tc.local(); <span class="hljs-comment">// Local time zone as specified by your OS</span>
+z = tc.zone(<span class="hljs-string">"localtime"</span>); <span class="hljs-comment">// Local time zone as specified by your OS</span>
 
 <span class="hljs-comment">// UTC</span>
-z = tc.utc<span class="hljs-params">()</span>;  <span class="hljs-comment">// UTC time zone</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"Z"</span>)</span>; <span class="hljs-comment">// UTC</span>
+z = tc.utc();  <span class="hljs-comment">// UTC time zone</span>
+z = tc.zone(<span class="hljs-string">"Z"</span>); <span class="hljs-comment">// UTC</span>
 
 <span class="hljs-comment">// Fixed offsets</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-number">60</span>)</span>; <span class="hljs-comment">// Fixed offset in minutes: UTC+01:00</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"-01:30"</span>)</span>; <span class="hljs-comment">// Fixed offset: UTC-01:30</span>
+z = tc.zone(<span class="hljs-number">60</span>); <span class="hljs-comment">// Fixed offset in minutes: UTC+01:00</span>
+z = tc.zone(<span class="hljs-string">"-01:30"</span>); <span class="hljs-comment">// Fixed offset: UTC-01:30</span>
 
 <span class="hljs-comment">// IANA time zones</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"Europe/Amsterdam"</span>)</span>; <span class="hljs-comment">// Europe/Amsterdam time zone with DST applied</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-literal">false</span>)</span>; <span class="hljs-comment">// Europe/Amsterdam time zone DST not applied</span>
+z = tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>); <span class="hljs-comment">// Europe/Amsterdam time zone with DST applied</span>
+z = tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-literal">false</span>); <span class="hljs-comment">// Europe/Amsterdam time zone DST not applied</span>
 
 <span class="hljs-comment">// Note that the Daylight Saving Time flag is irrelevant for these cases</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"+01:00"</span>, <span class="hljs-literal">true</span>)</span>; <span class="hljs-comment">// fixed offset has no DST</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"Etc/UTC"</span>, <span class="hljs-literal">true</span>)</span>; <span class="hljs-comment">// UTC has no DST</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"localtime"</span>, <span class="hljs-literal">true</span>)</span>; <span class="hljs-comment">// OS settings apply, not the DST flag</span>
+z = tc.zone(<span class="hljs-string">"+01:00"</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// fixed offset has no DST</span>
+z = tc.zone(<span class="hljs-string">"Etc/UTC"</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// UTC has no DST</span>
+z = tc.zone(<span class="hljs-string">"localtime"</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// OS settings apply, not the DST flag</span>
 
 <span class="hljs-comment">// Getters</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-literal">false</span>)</span>;
-z.name<span class="hljs-params">()</span>; <span class="hljs-comment">// returns "Europe/Amsterdam";</span>
-z.dst<span class="hljs-params">()</span>; <span class="hljs-comment">// The DST flag: returns false</span>
-z.hasDst<span class="hljs-params">()</span>; <span class="hljs-comment">// true: returns whether the IANA zone has DST somewhere, not whether this object has DST</span>
-z.isUtc<span class="hljs-params">()</span>; <span class="hljs-comment">// true if the zone is equivalent to UTC, e.g. an offset of 0, +00:00, or Etc/GMT</span>
+z = tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-literal">false</span>);
+z.name(); <span class="hljs-comment">// returns "Europe/Amsterdam";</span>
+z.dst(); <span class="hljs-comment">// The DST flag: returns false</span>
+z.hasDst(); <span class="hljs-comment">// true: returns whether the IANA zone has DST somewhere, not whether this object has DST</span>
+z.isUtc(); <span class="hljs-comment">// true if the zone is equivalent to UTC, e.g. an offset of 0, +00:00, or Etc/GMT</span>
 
 <span class="hljs-comment">// Calculate time zone offsets</span>
-z = tc.zone<span class="hljs-params">(<span class="hljs-string">"Europe/Amsterdam"</span>)</span>;
-z.offsetForUtc<span class="hljs-params">(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>)</span>; <span class="hljs-comment">// offset for a time specified in UTC; returns a Duration object</span>
-z.offsetForZone<span class="hljs-params">(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>)</span>; <span class="hljs-comment">// offset for a time specified in Europe/Amsterdam time; returns a Duration object</span>
+z = tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>);
+z.offsetForUtc(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// offset for a time specified in UTC; returns a Duration object</span>
+z.offsetForZone(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// offset for a time specified in Europe/Amsterdam time; returns a Duration object</span>
 </code></pre><h3 id="tzdatabase">TzDatabase</h3>
 				<p>The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like &#39;what is the maximum Daylight Saving Time shift of all zones in the database&#39;?</p>
 				<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);
 
 <span class="hljs-comment">// TzDatabase is a singleton, get at it using the instance() method</span>
 <span class="hljs-keyword">var</span> db = tc.TzDatabase.instance();
+
+<span class="hljs-comment">// Get a sorted array of all zone names</span>
+<span class="hljs-keyword">var</span> zoneNames = db.zoneNames();
 
 <span class="hljs-keyword">var</span> duration = db.maxDst(); <span class="hljs-comment">// maximum DST offet in the database</span>
 
@@ -379,8 +382,6 @@ z.offsetForZone<span class="hljs-params">(<span class="hljs-number">2014</span>,
 
 <span class="hljs-comment">// Next daylight saving time change in unix utc milliseconds</span>
 <span class="hljs-keyword">var</span> unixUtcMillis = db.nextDstChange(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-number">1427590799999</span>); <span class="hljs-comment">// 1427590800000</span>
-
-<span class="hljs-comment">// For more features, see the docs.</span>
 </code></pre>
 				<h3 id="datetime">DateTime</h3>
 				<p>The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
@@ -611,8 +612,8 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
     Hello world
 <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"timezonecomplete.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span> <span class="hljs-comment">&lt;!-- This is the javascript bundle from ./dist/ --&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-title">script</span>&gt;</span><span class="lisp">
-        alert<span class="hljs-list">(<span class="hljs-keyword">timezonecomplete</span>.isLeapYear<span class="hljs-list">(<span class="hljs-number">2012</span>)</span>)</span><span class="hljs-comment">;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">script</span>&gt;</span><span class="undefined">
+        alert(timezonecomplete.isLeapYear(2012));
     </span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-title">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-title">html</span>&gt;</span>
@@ -651,6 +652,10 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 				<p>The version of the included IANA time zone database is 2015f.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-22-0-2015-09-16-">1.22.0 (2015-09-16)</h3>
+				<ul>
+					<li>Add a method to TzDatabase to get a list of all zone names</li>
+				</ul>
 				<h3 id="1-21-1-2015-08-12-">1.21.1 (2015-08-12)</h3>
 				<ul>
 					<li>Upgrade TZ database to 2015f</li>
@@ -784,18 +789,18 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 					<li>You can now choose whether timezonecomplete applies Daylight Saving Time for an IANA time zone: the tc.zone() and tc.TimeZone.zone() methods now accept an extra Boolean parameter that indicates whether DST should be applied. For backward compatibility the default value is true.</li>
 				</ul>
 				<pre><code><span class="hljs-comment">// old code (still works):</span>
-<span class="hljs-keyword">var</span> d  = tc.<span class="hljs-built_in">Duration</span>.seconds(<span class="hljs-number">20</span>);
-<span class="hljs-keyword">var</span> dt = tc.<span class="hljs-built_in">DateTime</span>.now();
+var d  = tc.Duration.seconds(<span class="hljs-number">20</span>);
+var dt = tc.DateTime.now();
 
 <span class="hljs-comment">// new code:</span>
-<span class="hljs-keyword">var</span> d  = tc.seconds(<span class="hljs-number">20</span>);
-<span class="hljs-keyword">var</span> dt = tc.now();
+var d  = tc.seconds(<span class="hljs-number">20</span>);
+var dt = tc.now();
 
 <span class="hljs-comment">// Europe/Amsterdam time with DST</span>
-<span class="hljs-keyword">var</span> dt = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DateTime</span>(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
+var dt = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>));
 
 <span class="hljs-comment">// Europe/Amsterdam time WITHOUT DST</span>
-<span class="hljs-keyword">var</span> dt = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DateTime</span>(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-keyword">false</span>));
+var dt = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2014</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, tc.zone(<span class="hljs-string">"Europe/Amsterdam"</span>, <span class="hljs-literal">false</span>));
 </code></pre><h3 id="1-9-1-2014-11-11-">1.9.1 (2014-11-11)</h3>
 				<ul>
 					<li>Upgrade time zone database to 2014j</li>
@@ -938,9 +943,9 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#114;&#x2e;&#x73;&#99;&#x68;&#x6f;&#x75;&#116;&#x65;&#x6e;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#109;">&#114;&#x2e;&#x73;&#99;&#x68;&#x6f;&#x75;&#116;&#x65;&#x6e;&#x40;&#x73;&#x70;&#105;&#114;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#111;&#109;</a></li>
-					<li>Daan Wissing <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#100;&#x2e;&#119;&#x69;&#115;&#115;&#x69;&#110;&#103;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#116;&#x69;&#116;&#46;&#x63;&#111;&#109;">&#100;&#x2e;&#119;&#x69;&#115;&#115;&#x69;&#110;&#103;&#64;&#x73;&#112;&#105;&#x72;&#x69;&#116;&#x69;&#116;&#46;&#x63;&#111;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#112;&#46;&#107;&#111;&#x6f;&#x69;&#106;&#109;&#x61;&#110;&#x73;&#64;&#115;&#112;&#105;&#x72;&#105;&#x74;&#x69;&#x74;&#x2e;&#x63;&#111;&#x6d;">&#112;&#46;&#107;&#111;&#x6f;&#x69;&#106;&#109;&#x61;&#110;&#x73;&#64;&#115;&#112;&#105;&#x72;&#105;&#x74;&#x69;&#x74;&#x2e;&#x63;&#111;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x72;&#46;&#x73;&#99;&#104;&#x6f;&#117;&#x74;&#101;&#110;&#x40;&#115;&#x70;&#105;&#114;&#x69;&#116;&#x69;&#116;&#x2e;&#x63;&#111;&#109;">&#x72;&#46;&#x73;&#99;&#104;&#x6f;&#117;&#x74;&#101;&#110;&#x40;&#115;&#x70;&#105;&#114;&#x69;&#116;&#x69;&#116;&#x2e;&#x63;&#111;&#109;</a></li>
+					<li>Daan Wissing <a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x64;&#46;&#119;&#105;&#115;&#115;&#x69;&#x6e;&#103;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#116;&#x2e;&#x63;&#111;&#x6d;">&#x64;&#46;&#119;&#105;&#115;&#115;&#x69;&#x6e;&#103;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#116;&#x69;&#116;&#x2e;&#x63;&#111;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#112;&#46;&#107;&#111;&#x6f;&#x69;&#x6a;&#x6d;&#x61;&#110;&#115;&#x40;&#115;&#112;&#105;&#x72;&#x69;&#x74;&#105;&#x74;&#x2e;&#x63;&#111;&#109;">&#112;&#46;&#107;&#111;&#x6f;&#x69;&#x6a;&#x6d;&#x61;&#110;&#115;&#x40;&#115;&#112;&#105;&#x72;&#x69;&#x74;&#105;&#x74;&#x2e;&#x63;&#111;&#109;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

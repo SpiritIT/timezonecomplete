@@ -1,6 +1,6 @@
 {
   "name": "timezonecomplete",
-  "version": "1.21.1",
+  "version": "1.22.0",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": [
     "Date",
@@ -41,7 +41,13 @@
   "scripts": {
     "test": "node runtests.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-typedoc": "^1.2.1",
+    "gulp-typescript": "^2.8.3",
+    "gulp-util": "^3.0.6",
+    "typescript": "^1.5.3"
+  },
   "devDependencies": {
     "chai": "^1.9.1",
     "coveralls": "^2.11.1",

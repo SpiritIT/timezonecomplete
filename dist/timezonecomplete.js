@@ -67,14 +67,15 @@ var TimeUnit = exports.TimeUnit;
  */
 function timeUnitToMilliseconds(unit) {
     switch (unit) {
-        case 0 /* Millisecond */: return 1;
-        case 1 /* Second */: return 1000;
-        case 2 /* Minute */: return 60 * 1000;
-        case 3 /* Hour */: return 60 * 60 * 1000;
-        case 4 /* Day */: return 86400000;
-        case 5 /* Week */: return 7 * 86400000;
-        case 6 /* Month */: return 30 * 86400000;
-        case 7 /* Year */: return 12 * 30 * 86400000;
+        case TimeUnit.Millisecond: return 1;
+        case TimeUnit.Second: return 1000;
+        case TimeUnit.Minute: return 60 * 1000;
+        case TimeUnit.Hour: return 60 * 60 * 1000;
+        case TimeUnit.Day: return 86400000;
+        case TimeUnit.Week: return 7 * 86400000;
+        case TimeUnit.Month: return 30 * 86400000;
+        case TimeUnit.Year: return 12 * 30 * 86400000;
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -103,7 +104,7 @@ function timeUnitToString(unit, amount) {
 exports.timeUnitToString = timeUnitToString;
 function stringToTimeUnit(s) {
     var trimmed = s.trim().toLowerCase();
-    for (var i = 0; i < 8 /* MAX */; ++i) {
+    for (var i = 0; i < TimeUnit.MAX; ++i) {
         var other = timeUnitToString(i, 1);
         if (other === trimmed || (other + "s") === trimmed) {
             return i;
@@ -270,8 +271,8 @@ exports.weekDayOnOrBefore = weekDayOnOrBefore;
  * @return Week number [1-5]
  */
 function weekOfMonth(year, month, day) {
-    var firstThursday = firstWeekDayOfMonth(year, month, 4 /* Thursday */);
-    var firstMonday = firstWeekDayOfMonth(year, month, 1 /* Monday */);
+    var firstThursday = firstWeekDayOfMonth(year, month, WeekDay.Thursday);
+    var firstMonday = firstWeekDayOfMonth(year, month, WeekDay.Monday);
     // Corner case: check if we are in week 1 or last week of previous month
     if (day < firstMonday) {
         if (firstThursday < firstMonday) {
@@ -290,8 +291,8 @@ function weekOfMonth(year, month, day) {
             }
         }
     }
-    var lastMonday = lastWeekDayOfMonth(year, month, 1 /* Monday */);
-    var lastThursday = lastWeekDayOfMonth(year, month, 4 /* Thursday */);
+    var lastMonday = lastWeekDayOfMonth(year, month, WeekDay.Monday);
+    var lastThursday = lastWeekDayOfMonth(year, month, WeekDay.Thursday);
     // Corner case: check if we are in last week or week 1 of previous month
     if (day >= lastMonday) {
         if (lastMonday > lastThursday) {
@@ -314,7 +315,7 @@ exports.weekOfMonth = weekOfMonth;
  */
 function getWeekOneDayOfYear(year) {
     // first monday of January, minus one because we want day-of-year
-    var result = weekDayOnOrAfter(year, 1, 1, 1 /* Monday */) - 1;
+    var result = weekDayOnOrAfter(year, 1, 1, WeekDay.Monday) - 1;
     if (result > 3) {
         result -= 7;
         if (result < 0) {
@@ -452,7 +453,9 @@ function timeToUnixNoLeapSecs(a, month, day, hour, minute, second, milli) {
         assert(minute >= 0 && minute <= 59, "minute out of range");
         assert(second >= 0 && second <= 59, "second out of range");
         assert(milli >= 0 && milli <= 999, "milli out of range");
-        return milli + 1000 * (second + minute * 60 + hour * 3600 + dayOfYear(year, month, day) * 86400 + (year - 1970) * 31536000 + Math.floor((year - 1969) / 4) * 86400 - Math.floor((year - 1901) / 100) * 86400 + Math.floor((year - 1900 + 299) / 400) * 86400);
+        return milli + 1000 * (second + minute * 60 + hour * 3600 + dayOfYear(year, month, day) * 86400 +
+            (year - 1970) * 31536000 + Math.floor((year - 1969) / 4) * 86400 -
+            Math.floor((year - 1901) / 100) * 86400 + Math.floor((year - 1900 + 299) / 400) * 86400);
     }
 }
 exports.timeToUnixNoLeapSecs = timeToUnixNoLeapSecs;
@@ -462,7 +465,7 @@ exports.timeToUnixNoLeapSecs = timeToUnixNoLeapSecs;
  */
 function weekDayNoLeapSecs(unixMillis) {
     assertUnixTimestamp(unixMillis);
-    var epochDay = 4 /* Thursday */;
+    var epochDay = WeekDay.Thursday;
     var days = Math.floor(unixMillis / 1000 / 86400);
     return (epochDay + days) % 7;
 }
@@ -547,7 +550,7 @@ var TimeStruct = (function () {
      * @param df	Which functions to take (getX() or getUTCX())
      */
     TimeStruct.fromDate = function (d, df) {
-        if (df === 0 /* Get */) {
+        if (df === DateFunctions.Get) {
             return new TimeStruct(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
         }
         else {
@@ -566,7 +569,7 @@ var TimeStruct = (function () {
             var minute = 0;
             var second = 0;
             var fractionMillis = 0;
-            var lastUnit = 7 /* Year */;
+            var lastUnit = TimeUnit.Year;
             // separate any fractional part
             var split = s.trim().split(".");
             assert(split.length >= 1 && split.length <= 2, "Empty string or multiple dots.");
@@ -579,24 +582,24 @@ var TimeStruct = (function () {
                 assert([4, 8, 10, 12, 14].indexOf(split[0].length) !== -1, "Padding or required components are missing. Note that YYYYMM is not valid per ISO 8601");
                 if (split[0].length >= 4) {
                     year = parseInt(split[0].substr(0, 4), 10);
-                    lastUnit = 7 /* Year */;
+                    lastUnit = TimeUnit.Year;
                 }
                 if (split[0].length >= 8) {
                     month = parseInt(split[0].substr(4, 2), 10);
                     day = parseInt(split[0].substr(6, 2), 10); // note that YYYYMM format is disallowed so if month is present, day is too
-                    lastUnit = 4 /* Day */;
+                    lastUnit = TimeUnit.Day;
                 }
                 if (split[0].length >= 10) {
                     hour = parseInt(split[0].substr(8, 2), 10);
-                    lastUnit = 3 /* Hour */;
+                    lastUnit = TimeUnit.Hour;
                 }
                 if (split[0].length >= 12) {
                     minute = parseInt(split[0].substr(10, 2), 10);
-                    lastUnit = 2 /* Minute */;
+                    lastUnit = TimeUnit.Minute;
                 }
                 if (split[0].length >= 14) {
                     second = parseInt(split[0].substr(12, 2), 10);
-                    lastUnit = 1 /* Second */;
+                    lastUnit = TimeUnit.Second;
                 }
             }
             else {
@@ -614,51 +617,51 @@ var TimeStruct = (function () {
                 assert([4, 10].indexOf(dateAndTime[0].length) !== -1, "Padding or required components are missing. Note that YYYYMM is not valid per ISO 8601");
                 if (dateAndTime[0].length >= 4) {
                     year = parseInt(dateAndTime[0].substr(0, 4), 10);
-                    lastUnit = 7 /* Year */;
+                    lastUnit = TimeUnit.Year;
                 }
                 if (dateAndTime[0].length >= 10) {
                     month = parseInt(dateAndTime[0].substr(5, 2), 10);
                     day = parseInt(dateAndTime[0].substr(8, 2), 10); // note that YYYYMM format is disallowed so if month is present, day is too
-                    lastUnit = 4 /* Day */;
+                    lastUnit = TimeUnit.Day;
                 }
                 if (dateAndTime[1].length >= 2) {
                     hour = parseInt(dateAndTime[1].substr(0, 2), 10);
-                    lastUnit = 3 /* Hour */;
+                    lastUnit = TimeUnit.Hour;
                 }
                 if (dateAndTime[1].length >= 5) {
                     minute = parseInt(dateAndTime[1].substr(3, 2), 10);
-                    lastUnit = 2 /* Minute */;
+                    lastUnit = TimeUnit.Minute;
                 }
                 if (dateAndTime[1].length >= 8) {
                     second = parseInt(dateAndTime[1].substr(6, 2), 10);
-                    lastUnit = 1 /* Second */;
+                    lastUnit = TimeUnit.Second;
                 }
             }
             // parse fractional part
             if (split.length > 1 && split[1].length > 0) {
                 var fraction = parseFloat("0." + split[1]);
                 switch (lastUnit) {
-                    case 7 /* Year */:
+                    case TimeUnit.Year:
                         {
                             fractionMillis = daysInYear(year) * 86400000 * fraction;
                         }
                         break;
-                    case 4 /* Day */:
+                    case TimeUnit.Day:
                         {
                             fractionMillis = 86400000 * fraction;
                         }
                         break;
-                    case 3 /* Hour */:
+                    case TimeUnit.Hour:
                         {
                             fractionMillis = 3600000 * fraction;
                         }
                         break;
-                    case 2 /* Minute */:
+                    case TimeUnit.Minute:
                         {
                             fractionMillis = 60000 * fraction;
                         }
                         break;
-                    case 1 /* Second */:
+                    case TimeUnit.Second:
                         {
                             fractionMillis = 1000 * fraction;
                         }
@@ -684,7 +687,15 @@ var TimeStruct = (function () {
      * Validate a TimeStruct, returns false if invalid.
      */
     TimeStruct.prototype.validate = function () {
-        return (typeof (this.year) === "number" && !isNaN(this.year) && math.isInt(this.year) && this.year >= -10000 && this.year < 10000 && typeof (this.month) === "number" && !isNaN(this.month) && math.isInt(this.month) && this.month >= 1 && this.month <= 12 && typeof (this.day) === "number" && !isNaN(this.day) && math.isInt(this.day) && this.day >= 1 && this.day <= daysInMonth(this.year, this.month) && typeof (this.hour) === "number" && !isNaN(this.hour) && math.isInt(this.hour) && this.hour >= 0 && this.hour <= 23 && typeof (this.minute) === "number" && !isNaN(this.minute) && math.isInt(this.minute) && this.minute >= 0 && this.minute <= 59 && typeof (this.second) === "number" && !isNaN(this.second) && math.isInt(this.second) && this.second >= 0 && this.second <= 59 && typeof (this.milli) === "number" && !isNaN(this.milli) && math.isInt(this.milli) && this.milli >= 0 && this.milli <= 999);
+        return (typeof (this.year) === "number" && !isNaN(this.year) && math.isInt(this.year) && this.year >= -10000 && this.year < 10000
+            && typeof (this.month) === "number" && !isNaN(this.month) && math.isInt(this.month) && this.month >= 1 && this.month <= 12
+            && typeof (this.day) === "number" && !isNaN(this.day) && math.isInt(this.day) && this.day >= 1
+            && this.day <= daysInMonth(this.year, this.month)
+            && typeof (this.hour) === "number" && !isNaN(this.hour) && math.isInt(this.hour) && this.hour >= 0 && this.hour <= 23
+            && typeof (this.minute) === "number" && !isNaN(this.minute) && math.isInt(this.minute) && this.minute >= 0 && this.minute <= 59
+            && typeof (this.second) === "number" && !isNaN(this.second) && math.isInt(this.second) && this.second >= 0 && this.second <= 59
+            && typeof (this.milli) === "number" && !isNaN(this.milli) && math.isInt(this.milli) && this.milli >= 0
+            && this.milli <= 999);
     };
     /**
      * The day-of-year 0-365
@@ -705,7 +716,13 @@ var TimeStruct = (function () {
      * Deep equals
      */
     TimeStruct.prototype.equals = function (other) {
-        return (this.year === other.year && this.month === other.month && this.day === other.day && this.hour === other.hour && this.minute === other.minute && this.second === other.second && this.milli === other.milli);
+        return (this.year === other.year
+            && this.month === other.month
+            && this.day === other.day
+            && this.hour === other.hour
+            && this.minute === other.minute
+            && this.second === other.second
+            && this.milli === other.milli);
     };
     /**
      * < operator
@@ -723,7 +740,13 @@ var TimeStruct = (function () {
      * ISO 8601 string YYYY-MM-DDThh:mm:ss.nnn
      */
     TimeStruct.prototype.toString = function () {
-        return strings.padLeft(this.year.toString(10), 4, "0") + "-" + strings.padLeft(this.month.toString(10), 2, "0") + "-" + strings.padLeft(this.day.toString(10), 2, "0") + "T" + strings.padLeft(this.hour.toString(10), 2, "0") + ":" + strings.padLeft(this.minute.toString(10), 2, "0") + ":" + strings.padLeft(this.second.toString(10), 2, "0") + "." + strings.padLeft(this.milli.toString(10), 3, "0");
+        return strings.padLeft(this.year.toString(10), 4, "0")
+            + "-" + strings.padLeft(this.month.toString(10), 2, "0")
+            + "-" + strings.padLeft(this.day.toString(10), 2, "0")
+            + "T" + strings.padLeft(this.hour.toString(10), 2, "0")
+            + ":" + strings.padLeft(this.minute.toString(10), 2, "0")
+            + ":" + strings.padLeft(this.second.toString(10), 2, "0")
+            + "." + strings.padLeft(this.milli.toString(10), 3, "0");
     };
     TimeStruct.prototype.inspect = function () {
         return "[TimeStruct: " + this.toString() + "]";
@@ -888,10 +911,11 @@ var DateTime = (function () {
                 {
                     // nothing given, make local datetime
                     this._zone = TimeZone.local();
-                    this._utcDate = TimeStruct.fromDate(DateTime.timeSource.now(), 1 /* GetUTC */);
+                    this._utcDate = TimeStruct.fromDate(DateTime.timeSource.now(), DateFunctions.GetUTC);
                     this._utcDateToZoneDate();
                 }
                 break;
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -905,13 +929,13 @@ var DateTime = (function () {
      */
     DateTime.nowLocal = function () {
         var n = DateTime.timeSource.now();
-        return new DateTime(n, 0 /* Get */, TimeZone.local());
+        return new DateTime(n, DateFunctions.Get, TimeZone.local());
     };
     /**
      * Current date+time in UTC time
      */
     DateTime.nowUtc = function () {
-        return new DateTime(DateTime.timeSource.now(), 1 /* GetUTC */, TimeZone.utc());
+        return new DateTime(DateTime.timeSource.now(), DateFunctions.GetUTC, TimeZone.utc());
     };
     /**
      * Current date+time in the given time zone
@@ -919,7 +943,7 @@ var DateTime = (function () {
      */
     DateTime.now = function (timeZone) {
         if (timeZone === void 0) { timeZone = TimeZone.utc(); }
-        return new DateTime(DateTime.timeSource.now(), 1 /* GetUTC */, TimeZone.utc()).toZone(timeZone);
+        return new DateTime(DateTime.timeSource.now(), DateFunctions.GetUTC, TimeZone.utc()).toZone(timeZone);
     };
     /**
      * Create a DateTime from a Lotus 123 / Microsoft Excel date-time value
@@ -1289,7 +1313,7 @@ var DateTime = (function () {
         }
         var localTm = this._addToTimeStruct(this._zoneDate, amount, u);
         if (this._zone) {
-            var direction = (amount >= 0 ? 0 /* Up */ : 1 /* Down */);
+            var direction = (amount >= 0 ? NormalizeOption.Up : NormalizeOption.Down);
             var normalized = this._zone.normalizeZoneTime(localTm.toUnixNoLeapSecs(), direction);
             return new DateTime(normalized, this._zone);
         }
@@ -1311,29 +1335,29 @@ var DateTime = (function () {
         var targetSeconds;
         var targetMilliseconds;
         switch (unit) {
-            case 0 /* Millisecond */: {
+            case TimeUnit.Millisecond: {
                 return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount));
             }
-            case 1 /* Second */: {
+            case TimeUnit.Second: {
                 return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 1000));
             }
-            case 2 /* Minute */: {
+            case TimeUnit.Minute: {
                 // todo more intelligent approach needed when implementing leap seconds
                 return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 60000));
             }
-            case 3 /* Hour */: {
+            case TimeUnit.Hour: {
                 // todo more intelligent approach needed when implementing leap seconds
                 return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 3600000));
             }
-            case 4 /* Day */: {
+            case TimeUnit.Day: {
                 // todo more intelligent approach needed when implementing leap seconds
                 return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 86400000));
             }
-            case 5 /* Week */: {
+            case TimeUnit.Week: {
                 // todo more intelligent approach needed when implementing leap seconds
                 return TimeStruct.fromUnix(math.roundSym(tm.toUnixNoLeapSecs() + amount * 7 * 86400000));
             }
-            case 6 /* Month */: {
+            case TimeUnit.Month: {
                 assert(math.isInt(amount), "Cannot add/sub a non-integer amount of months");
                 // keep the day-of-month the same (clamp to end-of-month)
                 if (amount >= 0) {
@@ -1351,7 +1375,7 @@ var DateTime = (function () {
                 targetMilliseconds = tm.milli;
                 return new TimeStruct(targetYear, targetMonth, targetDay, targetHours, targetMinutes, targetSeconds, targetMilliseconds);
             }
-            case 7 /* Year */: {
+            case TimeUnit.Year: {
                 assert(math.isInt(amount), "Cannot add/sub a non-integer amount of years");
                 targetYear = tm.year + amount;
                 targetMonth = tm.month;
@@ -1362,6 +1386,7 @@ var DateTime = (function () {
                 targetMilliseconds = tm.milli;
                 return new TimeStruct(targetYear, targetMonth, targetDay, targetHours, targetMinutes, targetSeconds, targetMilliseconds);
             }
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -1440,7 +1465,9 @@ var DateTime = (function () {
      * @return True iff this and other represent the same time and the same zone
      */
     DateTime.prototype.identical = function (other) {
-        return (this._zoneDate.equals(other._zoneDate) && (this._zone === null) === (other._zone === null) && (this._zone === null || this._zone.identical(other._zone)));
+        return (this._zoneDate.equals(other._zoneDate)
+            && (this._zone === null) === (other._zone === null)
+            && (this._zone === null || this._zone.identical(other._zone)));
     };
     /**
      * @return True iff this > other
@@ -1503,7 +1530,7 @@ var DateTime = (function () {
     DateTime.prototype.toString = function () {
         var s = this._zoneDate.toString();
         if (this._zone) {
-            if (this._zone.kind() !== 1 /* Offset */) {
+            if (this._zone.kind() !== TimeZoneKind.Offset) {
                 return s + " " + this._zone.toString(); // separate IANA name or "localtime" with a space
             }
             else {
@@ -1699,7 +1726,7 @@ var Duration = (function () {
             // amount+unit constructor
             var amount = i1;
             this._amount = amount;
-            this._unit = (typeof unit === "number" ? unit : 0 /* Millisecond */);
+            this._unit = (typeof unit === "number" ? unit : TimeUnit.Millisecond);
         }
         else if (typeof (i1) === "string") {
             // string constructor
@@ -1708,7 +1735,7 @@ var Duration = (function () {
         else {
             // default constructor
             this._amount = 0;
-            this._unit = 0 /* Millisecond */;
+            this._unit = TimeUnit.Millisecond;
         }
     }
     /**
@@ -1717,7 +1744,7 @@ var Duration = (function () {
      * @return A duration of n years
      */
     Duration.years = function (n) {
-        return new Duration(n, 7 /* Year */);
+        return new Duration(n, TimeUnit.Year);
     };
     /**
      * Construct a time duration
@@ -1725,7 +1752,7 @@ var Duration = (function () {
      * @return A duration of n months
      */
     Duration.months = function (n) {
-        return new Duration(n, 6 /* Month */);
+        return new Duration(n, TimeUnit.Month);
     };
     /**
      * Construct a time duration
@@ -1733,7 +1760,7 @@ var Duration = (function () {
      * @return A duration of n days
      */
     Duration.days = function (n) {
-        return new Duration(n, 4 /* Day */);
+        return new Duration(n, TimeUnit.Day);
     };
     /**
      * Construct a time duration
@@ -1741,7 +1768,7 @@ var Duration = (function () {
      * @return A duration of n hours
      */
     Duration.hours = function (n) {
-        return new Duration(n, 3 /* Hour */);
+        return new Duration(n, TimeUnit.Hour);
     };
     /**
      * Construct a time duration
@@ -1749,7 +1776,7 @@ var Duration = (function () {
      * @return A duration of n minutes
      */
     Duration.minutes = function (n) {
-        return new Duration(n, 2 /* Minute */);
+        return new Duration(n, TimeUnit.Minute);
     };
     /**
      * Construct a time duration
@@ -1757,7 +1784,7 @@ var Duration = (function () {
      * @return A duration of n seconds
      */
     Duration.seconds = function (n) {
-        return new Duration(n, 1 /* Second */);
+        return new Duration(n, TimeUnit.Second);
     };
     /**
      * Construct a time duration
@@ -1765,7 +1792,7 @@ var Duration = (function () {
      * @return A duration of n milliseconds
      */
     Duration.milliseconds = function (n) {
-        return new Duration(n, 0 /* Millisecond */);
+        return new Duration(n, TimeUnit.Millisecond);
     };
     /**
      * @return another instance of Duration with the same value.
@@ -1782,9 +1809,9 @@ var Duration = (function () {
         if (this._unit === unit) {
             return this._amount;
         }
-        else if (this._unit >= 6 /* Month */ && unit >= 6 /* Month */) {
-            var thisMonths = (this._unit === 7 /* Year */ ? 12 : 1);
-            var reqMonths = (unit === 7 /* Year */ ? 12 : 1);
+        else if (this._unit >= TimeUnit.Month && unit >= TimeUnit.Month) {
+            var thisMonths = (this._unit === TimeUnit.Year ? 12 : 1);
+            var reqMonths = (unit === TimeUnit.Year ? 12 : 1);
             return this._amount * thisMonths / reqMonths;
         }
         else {
@@ -1807,7 +1834,7 @@ var Duration = (function () {
      * For Day/Month/Year durations, this is approximate!
      */
     Duration.prototype.milliseconds = function () {
-        return this.as(0 /* Millisecond */);
+        return this.as(TimeUnit.Millisecond);
     };
     /**
      * The millisecond part of the duration (always positive)
@@ -1815,7 +1842,7 @@ var Duration = (function () {
      * @return e.g. 400 for a -01:02:03.400 duration
      */
     Duration.prototype.millisecond = function () {
-        return this._part(0 /* Millisecond */);
+        return this._part(TimeUnit.Millisecond);
     };
     /**
      * The entire duration in seconds (negative or positive, fractional)
@@ -1823,7 +1850,7 @@ var Duration = (function () {
      * @return e.g. 1.5 for a 1500 milliseconds duration
      */
     Duration.prototype.seconds = function () {
-        return this.as(1 /* Second */);
+        return this.as(TimeUnit.Second);
     };
     /**
      * The second part of the duration (always positive)
@@ -1831,7 +1858,7 @@ var Duration = (function () {
      * @return e.g. 3 for a -01:02:03.400 duration
      */
     Duration.prototype.second = function () {
-        return this._part(1 /* Second */);
+        return this._part(TimeUnit.Second);
     };
     /**
      * The entire duration in minutes (negative or positive, fractional)
@@ -1839,7 +1866,7 @@ var Duration = (function () {
      * @return e.g. 1.5 for a 90000 milliseconds duration
      */
     Duration.prototype.minutes = function () {
-        return this.as(2 /* Minute */);
+        return this.as(TimeUnit.Minute);
     };
     /**
      * The minute part of the duration (always positive)
@@ -1847,7 +1874,7 @@ var Duration = (function () {
      * @return e.g. 2 for a -01:02:03.400 duration
      */
     Duration.prototype.minute = function () {
-        return this._part(2 /* Minute */);
+        return this._part(TimeUnit.Minute);
     };
     /**
      * The entire duration in hours (negative or positive, fractional)
@@ -1855,14 +1882,14 @@ var Duration = (function () {
      * @return e.g. 1.5 for a 5400000 milliseconds duration
      */
     Duration.prototype.hours = function () {
-        return this.as(3 /* Hour */);
+        return this.as(TimeUnit.Hour);
     };
     /**
      * The hour part of a duration. This assumes that a day has 24 hours (which is not the case
      * during DST changes).
      */
     Duration.prototype.hour = function () {
-        return this._part(3 /* Hour */);
+        return this._part(TimeUnit.Hour);
     };
     /**
      * DEPRECATED
@@ -1880,46 +1907,47 @@ var Duration = (function () {
      * This is approximate if this duration is not in days!
      */
     Duration.prototype.days = function () {
-        return this.as(4 /* Day */);
+        return this.as(TimeUnit.Day);
     };
     /**
      * The day part of a duration. This assumes that a month has 30 days.
      */
     Duration.prototype.day = function () {
-        return this._part(4 /* Day */);
+        return this._part(TimeUnit.Day);
     };
     /**
      * The entire duration in days (negative or positive, fractional)
      * This is approximate if this duration is not in Months or Years!
      */
     Duration.prototype.months = function () {
-        return this.as(6 /* Month */);
+        return this.as(TimeUnit.Month);
     };
     /**
      * The month part of a duration.
      */
     Duration.prototype.month = function () {
-        return this._part(6 /* Month */);
+        return this._part(TimeUnit.Month);
     };
     /**
      * The entire duration in years (negative or positive, fractional)
      * This is approximate if this duration is not in Months or Years!
      */
     Duration.prototype.years = function () {
-        return this.as(7 /* Year */);
+        return this.as(TimeUnit.Year);
     };
     /**
      * Non-fractional positive years
      */
     Duration.prototype.wholeYears = function () {
-        if (this._unit === 7 /* Year */) {
+        if (this._unit === TimeUnit.Year) {
             return Math.floor(Math.abs(this._amount));
         }
-        else if (this._unit === 6 /* Month */) {
+        else if (this._unit === TimeUnit.Month) {
             return Math.floor(Math.abs(this._amount) / 12);
         }
         else {
-            return Math.floor(basics.timeUnitToMilliseconds(this._unit) * Math.abs(this._amount) / basics.timeUnitToMilliseconds(7 /* Year */));
+            return Math.floor(basics.timeUnitToMilliseconds(this._unit) * Math.abs(this._amount) /
+                basics.timeUnitToMilliseconds(TimeUnit.Year));
         }
     };
     /**
@@ -1972,10 +2000,10 @@ var Duration = (function () {
      * @return True iff this and other represent the same time duration
      */
     Duration.prototype.equalsExact = function (other) {
-        if (this._unit >= 6 /* Month */ && other.unit() >= 6 /* Month */) {
+        if (this._unit >= TimeUnit.Month && other.unit() >= TimeUnit.Month) {
             return this.equals(other);
         }
-        else if (this._unit <= 4 /* Day */ && other.unit() < 4 /* Day */) {
+        else if (this._unit <= TimeUnit.Day && other.unit() < TimeUnit.Day) {
             return this.equals(other);
         }
         else {
@@ -2098,30 +2126,31 @@ var Duration = (function () {
      */
     Duration.prototype.toIsoString = function () {
         switch (this._unit) {
-            case 0 /* Millisecond */: {
+            case TimeUnit.Millisecond: {
                 return "P" + (this._amount / 1000).toFixed(3) + "S";
             }
-            case 1 /* Second */: {
+            case TimeUnit.Second: {
                 return "P" + this._amount.toString(10) + "S";
             }
-            case 2 /* Minute */: {
+            case TimeUnit.Minute: {
                 return "PT" + this._amount.toString(10) + "M"; // note the "T" to disambiguate the "M"
             }
-            case 3 /* Hour */: {
+            case TimeUnit.Hour: {
                 return "P" + this._amount.toString(10) + "H";
             }
-            case 4 /* Day */: {
+            case TimeUnit.Day: {
                 return "P" + this._amount.toString(10) + "D";
             }
-            case 5 /* Week */: {
+            case TimeUnit.Week: {
                 return "P" + this._amount.toString(10) + "W";
             }
-            case 6 /* Month */: {
+            case TimeUnit.Month: {
                 return "P" + this._amount.toString(10) + "M";
             }
-            case 7 /* Year */: {
+            case TimeUnit.Year: {
                 return "P" + this._amount.toString(10) + "Y";
             }
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -2153,28 +2182,29 @@ var Duration = (function () {
      */
     Duration.prototype._part = function (unit) {
         /* istanbul ignore if */
-        if (unit === 7 /* Year */) {
-            return Math.floor(Math.abs(this.as(7 /* Year */)));
+        if (unit === TimeUnit.Year) {
+            return Math.floor(Math.abs(this.as(TimeUnit.Year)));
         }
         var nextUnit;
+        // note not all units are used here: Weeks and Years are ruled out
         switch (unit) {
-            case 0 /* Millisecond */:
-                nextUnit = 1 /* Second */;
+            case TimeUnit.Millisecond:
+                nextUnit = TimeUnit.Second;
                 break;
-            case 1 /* Second */:
-                nextUnit = 2 /* Minute */;
+            case TimeUnit.Second:
+                nextUnit = TimeUnit.Minute;
                 break;
-            case 2 /* Minute */:
-                nextUnit = 3 /* Hour */;
+            case TimeUnit.Minute:
+                nextUnit = TimeUnit.Hour;
                 break;
-            case 3 /* Hour */:
-                nextUnit = 4 /* Day */;
+            case TimeUnit.Hour:
+                nextUnit = TimeUnit.Day;
                 break;
-            case 4 /* Day */:
-                nextUnit = 6 /* Month */;
+            case TimeUnit.Day:
+                nextUnit = TimeUnit.Month;
                 break;
-            case 6 /* Month */:
-                nextUnit = 7 /* Year */;
+            case TimeUnit.Month:
+                nextUnit = TimeUnit.Year;
                 break;
         }
         var msecs = (basics.timeUnitToMilliseconds(this._unit) * Math.abs(this._amount)) % basics.timeUnitToMilliseconds(nextUnit);
@@ -2210,19 +2240,19 @@ var Duration = (function () {
             var amountMsec = sign * Math.round(milliseconds + 1000 * seconds + 60000 * minutes + 3600000 * hours);
             // find lowest non-zero number and take that as unit
             if (milliseconds !== 0) {
-                this._unit = 0 /* Millisecond */;
+                this._unit = TimeUnit.Millisecond;
             }
             else if (seconds !== 0) {
-                this._unit = 1 /* Second */;
+                this._unit = TimeUnit.Second;
             }
             else if (minutes !== 0) {
-                this._unit = 2 /* Minute */;
+                this._unit = TimeUnit.Minute;
             }
             else if (hours !== 0) {
-                this._unit = 3 /* Hour */;
+                this._unit = TimeUnit.Hour;
             }
             else {
-                this._unit = 0 /* Millisecond */;
+                this._unit = TimeUnit.Millisecond;
             }
             this._amount = amountMsec / basics.timeUnitToMilliseconds(this._unit);
         }
@@ -2350,44 +2380,44 @@ function format(dateTime, utcTime, localZone, formatString) {
     tokens.forEach(function (token) {
         var tokenResult;
         switch (token.type) {
-            case 1 /* ERA */:
+            case TokenType.ERA:
                 tokenResult = _formatEra(dateTime, token);
                 break;
-            case 2 /* YEAR */:
+            case TokenType.YEAR:
                 tokenResult = _formatYear(dateTime, token);
                 break;
-            case 3 /* QUARTER */:
+            case TokenType.QUARTER:
                 tokenResult = _formatQuarter(dateTime, token);
                 break;
-            case 4 /* MONTH */:
+            case TokenType.MONTH:
                 tokenResult = _formatMonth(dateTime, token);
                 break;
-            case 6 /* DAY */:
+            case TokenType.DAY:
                 tokenResult = _formatDay(dateTime, token);
                 break;
-            case 7 /* WEEKDAY */:
+            case TokenType.WEEKDAY:
                 tokenResult = _formatWeekday(dateTime, token);
                 break;
-            case 8 /* DAYPERIOD */:
+            case TokenType.DAYPERIOD:
                 tokenResult = _formatDayPeriod(dateTime, token);
                 break;
-            case 9 /* HOUR */:
+            case TokenType.HOUR:
                 tokenResult = _formatHour(dateTime, token);
                 break;
-            case 10 /* MINUTE */:
+            case TokenType.MINUTE:
                 tokenResult = _formatMinute(dateTime, token);
                 break;
-            case 11 /* SECOND */:
+            case TokenType.SECOND:
                 tokenResult = _formatSecond(dateTime, token);
                 break;
-            case 12 /* ZONE */:
+            case TokenType.ZONE:
                 tokenResult = _formatZone(dateTime, utcTime, localZone, token);
                 break;
-            case 5 /* WEEK */:
+            case TokenType.WEEK:
                 tokenResult = _formatWeek(dateTime, token);
                 break;
             default:
-            case 0 /* IDENTITY */:
+            case TokenType.IDENTITY:
                 tokenResult = token.raw;
                 break;
         }
@@ -2435,6 +2465,7 @@ function _formatYear(dateTime, token) {
                 yearValue = yearValue.slice(-2);
             }
             return yearValue;
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2463,6 +2494,7 @@ function _formatQuarter(dateTime, token) {
             return quarterAbbr[quarter - 1] + " quarter";
         case 5:
             return quarter.toString();
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2479,7 +2511,8 @@ function _formatQuarter(dateTime, token) {
  * @return string
  */
 function _formatMonth(dateTime, token) {
-    var monthStrings = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var monthStrings = ["January", "February", "March", "April", "May",
+        "June", "July", "August", "September", "October", "November", "December"];
     var monthString = monthStrings[dateTime.month - 1];
     switch (token.length) {
         case 1:
@@ -2491,6 +2524,7 @@ function _formatMonth(dateTime, token) {
             return monthString;
         case 5:
             return monthString.slice(0, 1);
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2528,6 +2562,7 @@ function _formatDay(dateTime, token) {
         case "D":
             var dayOfYear = basics.dayOfYear(dateTime.year, dateTime.month, dateTime.day) + 1;
             return strings.padLeft(dayOfYear.toString(), token.length, "0");
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2550,7 +2585,7 @@ function _formatWeekday(dateTime, token) {
         case 2:
             if (token.symbol === "e") {
                 return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs()).toString(), token.length, "0");
-            }
+            } // No break, this is intentional fallthrough!
         case 3:
             return weekDay.slice(0, 3);
         case 4:
@@ -2559,6 +2594,7 @@ function _formatWeekday(dateTime, token) {
             return weekDay.slice(0, 1);
         case 6:
             return weekDay.slice(0, 2);
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2605,6 +2641,7 @@ function _formatHour(dateTime, token) {
             }
             ;
             return strings.padLeft(hour.toString(), token.length, "0");
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2641,6 +2678,7 @@ function _formatSecond(dateTime, token) {
             return fractionString.slice(0, token.length);
         case "A":
             return strings.padLeft(basics.secondOfDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2690,11 +2728,12 @@ function _formatZone(currentTime, utcTime, zone, token) {
                         length: 4,
                         raw: "OOOO",
                         symbol: "O",
-                        type: 12 /* ZONE */
+                        type: TokenType.ZONE
                     };
                     return _formatZone(currentTime, utcTime, zone, newToken);
                 case 5:
                     return offsetHoursString + ":" + offsetMinutesString;
+                /* istanbul ignore next */
                 default:
                     /* istanbul ignore if */
                     /* istanbul ignore next */
@@ -2710,6 +2749,7 @@ function _formatZone(currentTime, utcTime, zone, token) {
                     return zone.abbreviationForUtc(currentTime.year, currentTime.month, currentTime.day, currentTime.hour, currentTime.minute, currentTime.second, currentTime.milli, true);
                 case 4:
                     return zone.toString();
+                /* istanbul ignore next */
                 default:
                     /* istanbul ignore if */
                     /* istanbul ignore next */
@@ -2734,6 +2774,7 @@ function _formatZone(currentTime, utcTime, zone, token) {
                 case 3:
                 case 4:
                     return "Unknown";
+                /* istanbul ignore next */
                 default:
                     /* istanbul ignore if */
                     /* istanbul ignore next */
@@ -2759,6 +2800,7 @@ function _formatZone(currentTime, utcTime, zone, token) {
                 case 3:
                 case 5:
                     return offsetHoursString + ":" + offsetMinutesString;
+                /* istanbul ignore next */
                 default:
                     /* istanbul ignore if */
                     /* istanbul ignore next */
@@ -2766,6 +2808,7 @@ function _formatZone(currentTime, utcTime, zone, token) {
                         throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
                     }
             }
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2963,8 +3006,9 @@ var PeriodDst = exports.PeriodDst;
  */
 function periodDstToString(p) {
     switch (p) {
-        case 0 /* RegularIntervals */: return "regular intervals";
-        case 1 /* RegularLocalTime */: return "regular local time";
+        case PeriodDst.RegularIntervals: return "regular intervals";
+        case PeriodDst.RegularLocalTime: return "regular local time";
+        /* istanbul ignore next */
         default:
             /* istanbul ignore if */
             /* istanbul ignore next */
@@ -2984,20 +3028,20 @@ var Period = (function () {
      */
     function Period(start, amountOrInterval, unitOrDst, givenDst) {
         var interval;
-        var dst = 1 /* RegularLocalTime */;
+        var dst = PeriodDst.RegularLocalTime;
         if (typeof (amountOrInterval) === "object") {
             interval = amountOrInterval;
             dst = unitOrDst;
         }
         else {
-            assert(typeof unitOrDst === "number" && unitOrDst >= 0 && unitOrDst < 8 /* MAX */, "Invalid unit");
+            assert(typeof unitOrDst === "number" && unitOrDst >= 0 && unitOrDst < TimeUnit.MAX, "Invalid unit");
             interval = new Duration(amountOrInterval, unitOrDst);
             dst = givenDst;
         }
         if (typeof dst !== "number") {
-            dst = 1 /* RegularLocalTime */;
+            dst = PeriodDst.RegularLocalTime;
         }
-        assert(dst >= 0 && dst < 2 /* MAX */, "Invalid PeriodDst setting");
+        assert(dst >= 0 && dst < PeriodDst.MAX, "Invalid PeriodDst setting");
         assert(start !== null, "Start time may not be null");
         assert(interval.amount() > 0, "Amount must be positive non-zero.");
         assert(Math.floor(interval.amount()) === interval.amount(), "Amount must be a whole number");
@@ -3008,19 +3052,23 @@ var Period = (function () {
         // regular local time keeping is only supported if we can reset each day
         // Note we use internal amounts to decide this because actually it is supported if
         // the input is a multiple of one day.
-        if (this._dstRelevant() && dst === 1 /* RegularLocalTime */) {
+        if (this._dstRelevant() && dst === PeriodDst.RegularLocalTime) {
             switch (this._intInterval.unit()) {
-                case 0 /* Millisecond */:
-                    assert(this._intInterval.amount() < 86400000, "When using Hour, Minute or (Milli)Second units, with Regular Local Times, " + "then the amount must be either less than a day or a multiple of the next unit.");
+                case TimeUnit.Millisecond:
+                    assert(this._intInterval.amount() < 86400000, "When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
+                        "then the amount must be either less than a day or a multiple of the next unit.");
                     break;
-                case 1 /* Second */:
-                    assert(this._intInterval.amount() < 86400, "When using Hour, Minute or (Milli)Second units, with Regular Local Times, " + "then the amount must be either less than a day or a multiple of the next unit.");
+                case TimeUnit.Second:
+                    assert(this._intInterval.amount() < 86400, "When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
+                        "then the amount must be either less than a day or a multiple of the next unit.");
                     break;
-                case 2 /* Minute */:
-                    assert(this._intInterval.amount() < 1440, "When using Hour, Minute or (Milli)Second units, with Regular Local Times, " + "then the amount must be either less than a day or a multiple of the next unit.");
+                case TimeUnit.Minute:
+                    assert(this._intInterval.amount() < 1440, "When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
+                        "then the amount must be either less than a day or a multiple of the next unit.");
                     break;
-                case 3 /* Hour */:
-                    assert(this._intInterval.amount() < 24, "When using Hour, Minute or (Milli)Second units, with Regular Local Times, " + "then the amount must be either less than a day or a multiple of the next unit.");
+                case TimeUnit.Hour:
+                    assert(this._intInterval.amount() < 24, "When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
+                        "then the amount must be either less than a day or a multiple of the next unit.");
                     break;
             }
         }
@@ -3092,29 +3140,31 @@ var Period = (function () {
         }
         if (this._intInterval.amount() === 1) {
             // simple cases: amount equals 1 (eliminates need for searching for starting point)
-            if (this._intDst === 0 /* RegularIntervals */) {
+            if (this._intDst === PeriodDst.RegularIntervals) {
+                // apply to UTC time
                 switch (this._intInterval.unit()) {
-                    case 0 /* Millisecond */:
+                    case TimeUnit.Millisecond:
                         approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(), normalFrom.utcHour(), normalFrom.utcMinute(), normalFrom.utcSecond(), normalFrom.utcMillisecond(), TimeZone.utc());
                         break;
-                    case 1 /* Second */:
+                    case TimeUnit.Second:
                         approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(), normalFrom.utcHour(), normalFrom.utcMinute(), normalFrom.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
                         break;
-                    case 2 /* Minute */:
+                    case TimeUnit.Minute:
                         approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(), normalFrom.utcHour(), normalFrom.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
                         break;
-                    case 3 /* Hour */:
+                    case TimeUnit.Hour:
                         approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(), normalFrom.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
                         break;
-                    case 4 /* Day */:
+                    case TimeUnit.Day:
                         approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(), this._intStart.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
                         break;
-                    case 6 /* Month */:
+                    case TimeUnit.Month:
                         approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), this._intStart.utcDay(), this._intStart.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
                         break;
-                    case 7 /* Year */:
+                    case TimeUnit.Year:
                         approx = new DateTime(normalFrom.utcYear(), this._intStart.utcMonth(), this._intStart.utcDay(), this._intStart.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
                         break;
+                    /* istanbul ignore next */
                     default:
                         /* istanbul ignore if */
                         /* istanbul ignore next */
@@ -3127,28 +3177,30 @@ var Period = (function () {
                 }
             }
             else {
+                // Try to keep regular local intervals
                 switch (this._intInterval.unit()) {
-                    case 0 /* Millisecond */:
+                    case TimeUnit.Millisecond:
                         approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), normalFrom.minute(), normalFrom.second(), normalFrom.millisecond(), this._intStart.zone());
                         break;
-                    case 1 /* Second */:
+                    case TimeUnit.Second:
                         approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), normalFrom.minute(), normalFrom.second(), this._intStart.millisecond(), this._intStart.zone());
                         break;
-                    case 2 /* Minute */:
+                    case TimeUnit.Minute:
                         approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), normalFrom.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
                         break;
-                    case 3 /* Hour */:
+                    case TimeUnit.Hour:
                         approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
                         break;
-                    case 4 /* Day */:
+                    case TimeUnit.Day:
                         approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
                         break;
-                    case 6 /* Month */:
+                    case TimeUnit.Month:
                         approx = new DateTime(normalFrom.year(), normalFrom.month(), this._intStart.day(), this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
                         break;
-                    case 7 /* Year */:
+                    case TimeUnit.Year:
                         approx = new DateTime(normalFrom.year(), this._intStart.month(), this._intStart.day(), this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
                         break;
+                    /* istanbul ignore next */
                     default:
                         /* istanbul ignore if */
                         /* istanbul ignore next */
@@ -3163,45 +3215,47 @@ var Period = (function () {
         }
         else {
             // Amount is not 1,
-            if (this._intDst === 0 /* RegularIntervals */) {
+            if (this._intDst === PeriodDst.RegularIntervals) {
+                // apply to UTC time
                 switch (this._intInterval.unit()) {
-                    case 0 /* Millisecond */:
+                    case TimeUnit.Millisecond:
                         diff = normalFrom.diff(this._intStart).milliseconds();
                         periods = Math.floor(diff / this._intInterval.amount());
                         approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
                         break;
-                    case 1 /* Second */:
+                    case TimeUnit.Second:
                         diff = normalFrom.diff(this._intStart).seconds();
                         periods = Math.floor(diff / this._intInterval.amount());
                         approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
                         break;
-                    case 2 /* Minute */:
+                    case TimeUnit.Minute:
                         // only 25 leap seconds have ever been added so this should still be OK.
                         diff = normalFrom.diff(this._intStart).minutes();
                         periods = Math.floor(diff / this._intInterval.amount());
                         approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
                         break;
-                    case 3 /* Hour */:
+                    case TimeUnit.Hour:
                         diff = normalFrom.diff(this._intStart).hours();
                         periods = Math.floor(diff / this._intInterval.amount());
                         approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
                         break;
-                    case 4 /* Day */:
+                    case TimeUnit.Day:
                         diff = normalFrom.diff(this._intStart).hours() / 24;
                         periods = Math.floor(diff / this._intInterval.amount());
                         approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
                         break;
-                    case 6 /* Month */:
+                    case TimeUnit.Month:
                         diff = (normalFrom.utcYear() - this._intStart.utcYear()) * 12 + (normalFrom.utcMonth() - this._intStart.utcMonth()) - 1;
                         periods = Math.floor(Math.max(0, diff) / this._intInterval.amount());
                         approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
                         break;
-                    case 7 /* Year */:
+                    case TimeUnit.Year:
                         // The -1 below is because the day-of-month of start date may be after the day of the fromDate
                         diff = normalFrom.year() - this._intStart.year() - 1;
                         periods = Math.floor(Math.max(0, diff) / this._intInterval.amount()); // max needed due to -1 above
-                        approx = this._intStart.add(periods * this._intInterval.amount(), 7 /* Year */);
+                        approx = this._intStart.add(periods * this._intInterval.amount(), TimeUnit.Year);
                         break;
+                    /* istanbul ignore next */
                     default:
                         /* istanbul ignore if */
                         /* istanbul ignore next */
@@ -3214,11 +3268,13 @@ var Period = (function () {
                 }
             }
             else {
+                // Try to keep regular local times. If the unit is less than a day, we start each day anew
                 switch (this._intInterval.unit()) {
-                    case 0 /* Millisecond */:
+                    case TimeUnit.Millisecond:
                         if (this._intInterval.amount() < 1000 && (1000 % this._intInterval.amount()) === 0) {
                             // optimization: same millisecond each second, so just take the fromDate minus one second with the this._intStart milliseconds
-                            approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), normalFrom.minute(), normalFrom.second(), this._intStart.millisecond(), this._intStart.zone()).subLocal(1, 1 /* Second */);
+                            approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), normalFrom.minute(), normalFrom.second(), this._intStart.millisecond(), this._intStart.zone())
+                                .subLocal(1, TimeUnit.Second);
                         }
                         else {
                             // per constructor assert, the seconds are less than a day, so just go the fromDate start-of-day
@@ -3228,15 +3284,15 @@ var Period = (function () {
                             if (approx.greaterThan(normalFrom)) {
                                 // todo
                                 /* istanbul ignore if */
-                                if (approx.subLocal(remainder, 0 /* Millisecond */).greaterThan(normalFrom)) {
+                                if (approx.subLocal(remainder, TimeUnit.Millisecond).greaterThan(normalFrom)) {
                                     // normalFrom lies outside the boundary period before the start date
-                                    approx = approx.subLocal(1, 4 /* Day */);
+                                    approx = approx.subLocal(1, TimeUnit.Day);
                                 }
                             }
                             else {
-                                if (approx.addLocal(1, 4 /* Day */).subLocal(remainder, 0 /* Millisecond */).lessEqual(normalFrom)) {
+                                if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Millisecond).lessEqual(normalFrom)) {
                                     // normalFrom lies in the boundary period, move to the next day
-                                    approx = approx.addLocal(1, 4 /* Day */);
+                                    approx = approx.addLocal(1, TimeUnit.Day);
                                 }
                             }
                             // optimization: binary search
@@ -3245,8 +3301,8 @@ var Period = (function () {
                             while (imax >= imin) {
                                 // calculate the midpoint for roughly equal partition
                                 imid = Math.floor((imin + imax) / 2);
-                                approx2 = approx.addLocal(imid * this._intInterval.amount(), 0 /* Millisecond */);
-                                approxMin = approx2.subLocal(this._intInterval.amount(), 0 /* Millisecond */);
+                                approx2 = approx.addLocal(imid * this._intInterval.amount(), TimeUnit.Millisecond);
+                                approxMin = approx2.subLocal(this._intInterval.amount(), TimeUnit.Millisecond);
                                 if (approx2.greaterThan(normalFrom) && approxMin.lessEqual(normalFrom)) {
                                     approx = approx2;
                                     break;
@@ -3262,10 +3318,11 @@ var Period = (function () {
                             }
                         }
                         break;
-                    case 1 /* Second */:
+                    case TimeUnit.Second:
                         if (this._intInterval.amount() < 60 && (60 % this._intInterval.amount()) === 0) {
                             // optimization: same second each minute, so just take the fromDate minus one minute with the this._intStart seconds
-                            approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), normalFrom.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone()).subLocal(1, 2 /* Minute */);
+                            approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), normalFrom.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone())
+                                .subLocal(1, TimeUnit.Minute);
                         }
                         else {
                             // per constructor assert, the seconds are less than a day, so just go the fromDate start-of-day
@@ -3273,15 +3330,15 @@ var Period = (function () {
                             // since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
                             remainder = Math.floor((24 * 3600) % this._intInterval.amount());
                             if (approx.greaterThan(normalFrom)) {
-                                if (approx.subLocal(remainder, 1 /* Second */).greaterThan(normalFrom)) {
+                                if (approx.subLocal(remainder, TimeUnit.Second).greaterThan(normalFrom)) {
                                     // normalFrom lies outside the boundary period before the start date
-                                    approx = approx.subLocal(1, 4 /* Day */);
+                                    approx = approx.subLocal(1, TimeUnit.Day);
                                 }
                             }
                             else {
-                                if (approx.addLocal(1, 4 /* Day */).subLocal(remainder, 1 /* Second */).lessEqual(normalFrom)) {
+                                if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Second).lessEqual(normalFrom)) {
                                     // normalFrom lies in the boundary period, move to the next day
-                                    approx = approx.addLocal(1, 4 /* Day */);
+                                    approx = approx.addLocal(1, TimeUnit.Day);
                                 }
                             }
                             // optimization: binary search
@@ -3290,8 +3347,8 @@ var Period = (function () {
                             while (imax >= imin) {
                                 // calculate the midpoint for roughly equal partition
                                 imid = Math.floor((imin + imax) / 2);
-                                approx2 = approx.addLocal(imid * this._intInterval.amount(), 1 /* Second */);
-                                approxMin = approx2.subLocal(this._intInterval.amount(), 1 /* Second */);
+                                approx2 = approx.addLocal(imid * this._intInterval.amount(), TimeUnit.Second);
+                                approxMin = approx2.subLocal(this._intInterval.amount(), TimeUnit.Second);
                                 if (approx2.greaterThan(normalFrom) && approxMin.lessEqual(normalFrom)) {
                                     approx = approx2;
                                     break;
@@ -3307,11 +3364,12 @@ var Period = (function () {
                             }
                         }
                         break;
-                    case 2 /* Minute */:
+                    case TimeUnit.Minute:
                         if (this._intInterval.amount() < 60 && (60 % this._intInterval.amount()) === 0) {
                             // optimization: same hour this._intStartary each time, so just take the fromDate minus one hour
                             // with the this._intStart minutes, seconds
-                            approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone()).subLocal(1, 3 /* Hour */);
+                            approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), normalFrom.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone())
+                                .subLocal(1, TimeUnit.Hour);
                         }
                         else {
                             // per constructor assert, the seconds fit in a day, so just go the fromDate previous day
@@ -3319,43 +3377,43 @@ var Period = (function () {
                             // since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
                             remainder = Math.floor((24 * 60) % this._intInterval.amount());
                             if (approx.greaterThan(normalFrom)) {
-                                if (approx.subLocal(remainder, 2 /* Minute */).greaterThan(normalFrom)) {
+                                if (approx.subLocal(remainder, TimeUnit.Minute).greaterThan(normalFrom)) {
                                     // normalFrom lies outside the boundary period before the start date
-                                    approx = approx.subLocal(1, 4 /* Day */);
+                                    approx = approx.subLocal(1, TimeUnit.Day);
                                 }
                             }
                             else {
-                                if (approx.addLocal(1, 4 /* Day */).subLocal(remainder, 2 /* Minute */).lessEqual(normalFrom)) {
+                                if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Minute).lessEqual(normalFrom)) {
                                     // normalFrom lies in the boundary period, move to the next day
-                                    approx = approx.addLocal(1, 4 /* Day */);
+                                    approx = approx.addLocal(1, TimeUnit.Day);
                                 }
                             }
                         }
                         break;
-                    case 3 /* Hour */:
+                    case TimeUnit.Hour:
                         approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(), this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
                         // since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
                         remainder = Math.floor(24 % this._intInterval.amount());
                         if (approx.greaterThan(normalFrom)) {
-                            if (approx.subLocal(remainder, 3 /* Hour */).greaterThan(normalFrom)) {
+                            if (approx.subLocal(remainder, TimeUnit.Hour).greaterThan(normalFrom)) {
                                 // normalFrom lies outside the boundary period before the start date
-                                approx = approx.subLocal(1, 4 /* Day */);
+                                approx = approx.subLocal(1, TimeUnit.Day);
                             }
                         }
                         else {
-                            if (approx.addLocal(1, 4 /* Day */).subLocal(remainder, 3 /* Hour */).lessEqual(normalFrom)) {
+                            if (approx.addLocal(1, TimeUnit.Day).subLocal(remainder, TimeUnit.Hour).lessEqual(normalFrom)) {
                                 // normalFrom lies in the boundary period, move to the next day
-                                approx = approx.addLocal(1, 4 /* Day */);
+                                approx = approx.addLocal(1, TimeUnit.Day);
                             }
                         }
                         break;
-                    case 4 /* Day */:
+                    case TimeUnit.Day:
                         // we don't have leap days, so we can approximate by calculating with UTC timestamps
                         diff = normalFrom.diff(this._intStart).hours() / 24;
                         periods = Math.floor(diff / this._intInterval.amount());
                         approx = this._intStart.addLocal(periods * this._intInterval.amount(), this._intInterval.unit());
                         break;
-                    case 6 /* Month */:
+                    case TimeUnit.Month:
                         // we don't have leap days, so we can approximate by calculating with UTC timestamps
                         // The -1 below is because the day-of-month of start date may be after the day of the fromDate
                         diff = (normalFrom.year() - this._intStart.year()) * 12 + (normalFrom.month() - this._intStart.month()) - 1;
@@ -3365,13 +3423,14 @@ var Period = (function () {
                         // note that newYear-newMonth-this._intStart.day() is a valid date due to our start day normalization
                         approx = new DateTime(newYear, newMonth, this._intStart.day(), this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
                         break;
-                    case 7 /* Year */:
+                    case TimeUnit.Year:
                         // The -1 below is because the day-of-month of start date may be after the day of the fromDate
                         diff = normalFrom.year() - this._intStart.year() - 1;
                         periods = Math.floor(Math.max(0, diff) / this._intInterval.amount()); // max needed due to -1 above
                         newYear = this._intStart.year() + periods * this._intInterval.amount();
                         approx = new DateTime(newYear, this._intStart.month(), this._intStart.day(), this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
                         break;
+                    /* istanbul ignore next */
                     default:
                         /* istanbul ignore if */
                         /* istanbul ignore next */
@@ -3405,7 +3464,7 @@ var Period = (function () {
             return null;
         }
         var normalizedPrev = this._normalizeDay(prev.toZone(this._start.zone()));
-        if (this._intDst === 0 /* RegularIntervals */) {
+        if (this._intDst === PeriodDst.RegularIntervals) {
             return this._correctDay(normalizedPrev.add(this._intInterval.amount() * count, this._intInterval.unit())).convert(prev.zone());
         }
         else {
@@ -3442,13 +3501,17 @@ var Period = (function () {
      */
     Period.prototype.equals = function (other) {
         // note we take the non-normalized start() because this has an influence on the outcome
-        return (this._start.equals(other.start()) && this._intInterval.equalsExact(other.interval()) && this._intDst === other._intDst);
+        return (this._start.equals(other.start())
+            && this._intInterval.equalsExact(other.interval())
+            && this._intDst === other._intDst);
     };
     /**
      * Returns true iff this period was constructed with identical arguments to the other one.
      */
     Period.prototype.identical = function (other) {
-        return (this._start.identical(other.start()) && this._interval.identical(other.interval()) && this.dst() === other.dst());
+        return (this._start.identical(other.start())
+            && this._interval.identical(other.interval())
+            && this.dst() === other.dst());
     };
     /**
      * Returns an ISO duration string e.g.
@@ -3495,7 +3558,8 @@ var Period = (function () {
      */
     Period.prototype._normalizeDay = function (d, anymonth) {
         if (anymonth === void 0) { anymonth = true; }
-        if ((this._intInterval.unit() === 6 /* Month */ && d.day() > 28) || (this._intInterval.unit() === 7 /* Year */ && (d.month() === 2 || anymonth) && d.day() > 28)) {
+        if ((this._intInterval.unit() === TimeUnit.Month && d.day() > 28)
+            || (this._intInterval.unit() === TimeUnit.Year && (d.month() === 2 || anymonth) && d.day() > 28)) {
             return new DateTime(d.year(), d.month(), 28, d.hour(), d.minute(), d.second(), d.millisecond(), d.zone());
         }
         else {
@@ -3507,7 +3571,9 @@ var Period = (function () {
      * (i.e. if the start time zone has DST)
      */
     Period.prototype._dstRelevant = function () {
-        return (this._start.zone() != null && this._start.zone().kind() === 2 /* Proper */ && this._start.zone().hasDst());
+        return (this._start.zone() != null
+            && this._start.zone().kind() === TimeZoneKind.Proper
+            && this._start.zone().hasDst());
     };
     /**
      * Normalize the values where possible - not all values
@@ -3520,32 +3586,32 @@ var Period = (function () {
         // normalize any above-unit values
         var intAmount = this._interval.amount();
         var intUnit = this._interval.unit();
-        if (intUnit === 0 /* Millisecond */ && intAmount >= 1000 && intAmount % 1000 === 0) {
+        if (intUnit === TimeUnit.Millisecond && intAmount >= 1000 && intAmount % 1000 === 0) {
             // note this won't work if we account for leap seconds
             intAmount = intAmount / 1000;
-            intUnit = 1 /* Second */;
+            intUnit = TimeUnit.Second;
         }
-        if (intUnit === 1 /* Second */ && intAmount >= 60 && intAmount % 60 === 0) {
+        if (intUnit === TimeUnit.Second && intAmount >= 60 && intAmount % 60 === 0) {
             // note this won't work if we account for leap seconds
             intAmount = intAmount / 60;
-            intUnit = 2 /* Minute */;
+            intUnit = TimeUnit.Minute;
         }
-        if (intUnit === 2 /* Minute */ && intAmount >= 60 && intAmount % 60 === 0) {
+        if (intUnit === TimeUnit.Minute && intAmount >= 60 && intAmount % 60 === 0) {
             intAmount = intAmount / 60;
-            intUnit = 3 /* Hour */;
+            intUnit = TimeUnit.Hour;
         }
-        if (intUnit === 3 /* Hour */ && intAmount >= 24 && intAmount % 24 === 0) {
+        if (intUnit === TimeUnit.Hour && intAmount >= 24 && intAmount % 24 === 0) {
             intAmount = intAmount / 24;
-            intUnit = 4 /* Day */;
+            intUnit = TimeUnit.Day;
         }
         // now remove weeks so we have one less case to worry about
-        if (intUnit === 5 /* Week */) {
+        if (intUnit === TimeUnit.Week) {
             intAmount = intAmount * 7;
-            intUnit = 4 /* Day */;
+            intUnit = TimeUnit.Day;
         }
-        if (intUnit === 6 /* Month */ && intAmount >= 12 && intAmount % 12 === 0) {
+        if (intUnit === TimeUnit.Month && intAmount >= 12 && intAmount % 12 === 0) {
             intAmount = intAmount / 12;
-            intUnit = 7 /* Year */;
+            intUnit = TimeUnit.Year;
         }
         this._intInterval = new Duration(intAmount, intUnit);
         // normalize dst handling
@@ -3553,7 +3619,7 @@ var Period = (function () {
             this._intDst = this._dst;
         }
         else {
-            this._intDst = 0 /* RegularIntervals */;
+            this._intDst = PeriodDst.RegularIntervals;
         }
         // normalize start day
         this._intStart = this._normalizeDay(this._start, false);
@@ -3730,14 +3796,14 @@ var TimeZone = (function () {
         this._name = name;
         this._dst = dst;
         if (name === "localtime") {
-            this._kind = 0 /* Local */;
+            this._kind = TimeZoneKind.Local;
         }
         else if (name.charAt(0) === "+" || name.charAt(0) === "-" || name.charAt(0).match(/\d/) || name === "Z") {
-            this._kind = 1 /* Offset */;
+            this._kind = TimeZoneKind.Offset;
             this._offset = TimeZone.stringToOffset(name);
         }
         else {
-            this._kind = 2 /* Proper */;
+            this._kind = TimeZoneKind.Proper;
             assert(TzDatabase.instance().exists(name), util.format("Non-existing time zone name '%s'", name));
         }
     }
@@ -3784,6 +3850,7 @@ var TimeZone = (function () {
                     name = TimeZone.offsetToString(offset);
                 }
                 break;
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -3826,9 +3893,12 @@ var TimeZone = (function () {
             return true;
         }
         switch (this._kind) {
-            case 0 /* Local */: return (other.kind() === 0 /* Local */);
-            case 1 /* Offset */: return (other.kind() === 1 /* Offset */ && this._offset === other._offset);
-            case 2 /* Proper */: return (other.kind() === 2 /* Proper */ && this._name === other._name && (this._dst === other._dst || !this.hasDst()));
+            case TimeZoneKind.Local: return (other.kind() === TimeZoneKind.Local);
+            case TimeZoneKind.Offset: return (other.kind() === TimeZoneKind.Offset && this._offset === other._offset);
+            case TimeZoneKind.Proper: return (other.kind() === TimeZoneKind.Proper
+                && this._name === other._name
+                && (this._dst === other._dst || !this.hasDst()));
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -3842,9 +3912,10 @@ var TimeZone = (function () {
      */
     TimeZone.prototype.identical = function (other) {
         switch (this._kind) {
-            case 0 /* Local */: return (other.kind() === 0 /* Local */);
-            case 1 /* Offset */: return (other.kind() === 1 /* Offset */ && this._offset === other._offset);
-            case 2 /* Proper */: return (other.kind() === 2 /* Proper */ && this._name === other._name && this._dst === other._dst);
+            case TimeZoneKind.Local: return (other.kind() === TimeZoneKind.Local);
+            case TimeZoneKind.Offset: return (other.kind() === TimeZoneKind.Offset && this._offset === other._offset);
+            case TimeZoneKind.Proper: return (other.kind() === TimeZoneKind.Proper && this._name === other._name && this._dst === other._dst);
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -3858,9 +3929,10 @@ var TimeZone = (function () {
      */
     TimeZone.prototype.isUtc = function () {
         switch (this._kind) {
-            case 0 /* Local */: return false;
-            case 1 /* Offset */: return (this._offset === 0);
-            case 2 /* Proper */: return (TzDatabase.instance().zoneIsUtc(this._name));
+            case TimeZoneKind.Local: return false;
+            case TimeZoneKind.Offset: return (this._offset === 0);
+            case TimeZoneKind.Proper: return (TzDatabase.instance().zoneIsUtc(this._name));
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -3874,9 +3946,10 @@ var TimeZone = (function () {
      */
     TimeZone.prototype.hasDst = function () {
         switch (this._kind) {
-            case 0 /* Local */: return false;
-            case 1 /* Offset */: return false;
-            case 2 /* Proper */: return (TzDatabase.instance().hasDst(this._name));
+            case TimeZoneKind.Local: return false;
+            case TimeZoneKind.Offset: return false;
+            case TimeZoneKind.Proper: return (TzDatabase.instance().hasDst(this._name));
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -3910,14 +3983,14 @@ var TimeZone = (function () {
         assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  second out of range.");
         assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
         switch (this._kind) {
-            case 0 /* Local */: {
+            case TimeZoneKind.Local: {
                 var date = new Date(Date.UTC(year, month - 1, day, hour, minute, second, millisecond));
                 return -1 * date.getTimezoneOffset();
             }
-            case 1 /* Offset */: {
+            case TimeZoneKind.Offset: {
                 return this._offset;
             }
-            case 2 /* Proper */: {
+            case TimeZoneKind.Proper: {
                 var tm = new TimeStruct(year, month, day, hour, minute, second, millisecond);
                 if (this._dst) {
                     return TzDatabase.instance().totalOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
@@ -3926,6 +3999,7 @@ var TimeZone = (function () {
                     return TzDatabase.instance().standardOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
                 }
             }
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -3957,14 +4031,14 @@ var TimeZone = (function () {
         assert(second >= 0 && second < 60, "TimeZone.offsetForZone():  second out of range.");
         assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForZone():  millisecond out of range.");
         switch (this._kind) {
-            case 0 /* Local */: {
+            case TimeZoneKind.Local: {
                 var date = new Date(year, month - 1, day, hour, minute, second, millisecond);
                 return -1 * date.getTimezoneOffset();
             }
-            case 1 /* Offset */: {
+            case TimeZoneKind.Offset: {
                 return this._offset;
             }
-            case 2 /* Proper */: {
+            case TimeZoneKind.Proper: {
                 // note that TzDatabase normalizes the given date so we don't have to do it
                 var tm = new TimeStruct(year, month, day, hour, minute, second, millisecond);
                 if (this._dst) {
@@ -3974,6 +4048,7 @@ var TimeZone = (function () {
                     return TzDatabase.instance().standardOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
                 }
             }
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -3993,12 +4068,13 @@ var TimeZone = (function () {
      */
     TimeZone.prototype.offsetForUtcDate = function (date, funcs) {
         switch (funcs) {
-            case 0 /* Get */: {
+            case DateFunctions.Get: {
                 return this.offsetForUtc(date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
             }
-            case 1 /* GetUTC */: {
+            case DateFunctions.GetUTC: {
                 return this.offsetForUtc(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
             }
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -4018,12 +4094,13 @@ var TimeZone = (function () {
      */
     TimeZone.prototype.offsetForZoneDate = function (date, funcs) {
         switch (funcs) {
-            case 0 /* Get */: {
+            case DateFunctions.Get: {
                 return this.offsetForZone(date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
             }
-            case 1 /* GetUTC */: {
+            case DateFunctions.GetUTC: {
                 return this.offsetForZone(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
             }
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -4059,16 +4136,17 @@ var TimeZone = (function () {
         assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  second out of range.");
         assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
         switch (this._kind) {
-            case 0 /* Local */: {
+            case TimeZoneKind.Local: {
                 return "local";
             }
-            case 1 /* Offset */: {
+            case TimeZoneKind.Offset: {
                 return this.toString();
             }
-            case 2 /* Proper */: {
+            case TimeZoneKind.Proper: {
                 var tm = new TimeStruct(year, month, day, hour, minute, second, millisecond);
                 return TzDatabase.instance().abbreviation(this._name, tm.toUnixNoLeapSecs(), dstDependent);
             }
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -4090,9 +4168,9 @@ var TimeZone = (function () {
      * @returns	Unix timestamp in zone time, normalized.
      */
     TimeZone.prototype.normalizeZoneTime = function (localUnixMillis, opt) {
-        if (opt === void 0) { opt = 0 /* Up */; }
-        if (this.kind() === 2 /* Proper */) {
-            var tzopt = (opt === 1 /* Down */ ? 1 /* Down */ : 0 /* Up */);
+        if (opt === void 0) { opt = NormalizeOption.Up; }
+        if (this.kind() === TimeZoneKind.Proper) {
+            var tzopt = (opt === NormalizeOption.Down ? tzDatabase.NormalizeOption.Down : tzDatabase.NormalizeOption.Up);
             return TzDatabase.instance().normalizeLocal(this._name, localUnixMillis, tzopt);
         }
         else {
@@ -4105,7 +4183,7 @@ var TimeZone = (function () {
      */
     TimeZone.prototype.toString = function () {
         var result = this.name();
-        if (this.kind() === 2 /* Proper */) {
+        if (this.kind() === TimeZoneKind.Proper) {
             if (this.hasDst() && !this.dst()) {
                 result += " without DST";
             }
@@ -4242,7 +4320,7 @@ var Tokenizer = (function () {
                 length: tokenString.length,
                 raw: tokenString,
                 symbol: tokenString[0],
-                type: 0 /* IDENTITY */
+                type: DateTimeTokenType.IDENTITY
             };
             if (!raw) {
                 token.type = mapSymbolToType(token.symbol);
@@ -4348,44 +4426,44 @@ exports.Tokenizer = Tokenizer;
 })(exports.DateTimeTokenType || (exports.DateTimeTokenType = {}));
 var DateTimeTokenType = exports.DateTimeTokenType;
 var symbolMapping = {
-    "G": 1 /* ERA */,
-    "y": 2 /* YEAR */,
-    "Y": 2 /* YEAR */,
-    "u": 2 /* YEAR */,
-    "U": 2 /* YEAR */,
-    "r": 2 /* YEAR */,
-    "Q": 3 /* QUARTER */,
-    "q": 3 /* QUARTER */,
-    "M": 4 /* MONTH */,
-    "L": 4 /* MONTH */,
-    "l": 4 /* MONTH */,
-    "w": 5 /* WEEK */,
-    "W": 5 /* WEEK */,
-    "d": 6 /* DAY */,
-    "D": 6 /* DAY */,
-    "F": 6 /* DAY */,
-    "g": 6 /* DAY */,
-    "E": 7 /* WEEKDAY */,
-    "e": 7 /* WEEKDAY */,
-    "c": 7 /* WEEKDAY */,
-    "a": 8 /* DAYPERIOD */,
-    "h": 9 /* HOUR */,
-    "H": 9 /* HOUR */,
-    "k": 9 /* HOUR */,
-    "K": 9 /* HOUR */,
-    "j": 9 /* HOUR */,
-    "J": 9 /* HOUR */,
-    "m": 10 /* MINUTE */,
-    "s": 11 /* SECOND */,
-    "S": 11 /* SECOND */,
-    "A": 11 /* SECOND */,
-    "z": 12 /* ZONE */,
-    "Z": 12 /* ZONE */,
-    "O": 12 /* ZONE */,
-    "v": 12 /* ZONE */,
-    "V": 12 /* ZONE */,
-    "X": 12 /* ZONE */,
-    "x": 12 /* ZONE */
+    "G": DateTimeTokenType.ERA,
+    "y": DateTimeTokenType.YEAR,
+    "Y": DateTimeTokenType.YEAR,
+    "u": DateTimeTokenType.YEAR,
+    "U": DateTimeTokenType.YEAR,
+    "r": DateTimeTokenType.YEAR,
+    "Q": DateTimeTokenType.QUARTER,
+    "q": DateTimeTokenType.QUARTER,
+    "M": DateTimeTokenType.MONTH,
+    "L": DateTimeTokenType.MONTH,
+    "l": DateTimeTokenType.MONTH,
+    "w": DateTimeTokenType.WEEK,
+    "W": DateTimeTokenType.WEEK,
+    "d": DateTimeTokenType.DAY,
+    "D": DateTimeTokenType.DAY,
+    "F": DateTimeTokenType.DAY,
+    "g": DateTimeTokenType.DAY,
+    "E": DateTimeTokenType.WEEKDAY,
+    "e": DateTimeTokenType.WEEKDAY,
+    "c": DateTimeTokenType.WEEKDAY,
+    "a": DateTimeTokenType.DAYPERIOD,
+    "h": DateTimeTokenType.HOUR,
+    "H": DateTimeTokenType.HOUR,
+    "k": DateTimeTokenType.HOUR,
+    "K": DateTimeTokenType.HOUR,
+    "j": DateTimeTokenType.HOUR,
+    "J": DateTimeTokenType.HOUR,
+    "m": DateTimeTokenType.MINUTE,
+    "s": DateTimeTokenType.SECOND,
+    "S": DateTimeTokenType.SECOND,
+    "A": DateTimeTokenType.SECOND,
+    "z": DateTimeTokenType.ZONE,
+    "Z": DateTimeTokenType.ZONE,
+    "O": DateTimeTokenType.ZONE,
+    "v": DateTimeTokenType.ZONE,
+    "V": DateTimeTokenType.ZONE,
+    "X": DateTimeTokenType.ZONE,
+    "x": DateTimeTokenType.ZONE
 };
 /**
  * Map the given symbol to one of the DateTimeTokenTypes
@@ -4399,7 +4477,7 @@ function mapSymbolToType(symbol) {
         return symbolMapping[symbol];
     }
     else {
-        return 0 /* IDENTITY */;
+        return DateTimeTokenType.IDENTITY;
     }
 }
 
@@ -4556,7 +4634,7 @@ var RuleInfo = (function () {
         this.save = save;
         this.letter = letter;
         if (this.save) {
-            this.save = this.save.convert(3 /* Hour */);
+            this.save = this.save.convert(basics.TimeUnit.Hour);
         }
     }
     /**
@@ -4567,8 +4645,8 @@ var RuleInfo = (function () {
             return false;
         }
         switch (this.toType) {
-            case 1 /* Max */: return true;
-            case 0 /* Year */: return (year <= this.toYear);
+            case ToType.Max: return true;
+            case ToType.Year: return (year <= this.toYear);
         }
     };
     /**
@@ -4618,23 +4696,24 @@ var RuleInfo = (function () {
         assert(this.applicable(year), "Rule is not applicable in " + year.toString(10));
         // year and month are given
         var tm = new TimeStruct(year, this.inMonth);
+        // calculate day
         switch (this.onType) {
-            case 0 /* DayNum */:
+            case OnType.DayNum:
                 {
                     tm.day = this.onDay;
                 }
                 break;
-            case 2 /* GreqX */:
+            case OnType.GreqX:
                 {
                     tm.day = basics.weekDayOnOrAfter(year, this.inMonth, this.onDay, this.onWeekDay);
                 }
                 break;
-            case 3 /* LeqX */:
+            case OnType.LeqX:
                 {
                     tm.day = basics.weekDayOnOrBefore(year, this.inMonth, this.onDay, this.onWeekDay);
                 }
                 break;
-            case 1 /* LastX */:
+            case OnType.LastX:
                 {
                     tm.day = basics.lastWeekDayOfMonth(year, this.inMonth, this.onWeekDay);
                 }
@@ -4659,13 +4738,13 @@ var RuleInfo = (function () {
         // adjust for given offset
         var offset;
         switch (this.atType) {
-            case 2 /* Utc */:
+            case AtType.Utc:
                 offset = Duration.hours(0);
                 break;
-            case 0 /* Standard */:
+            case AtType.Standard:
                 offset = standardOffset;
                 break;
-            case 1 /* Wall */:
+            case AtType.Wall:
                 if (prevRule) {
                     offset = standardOffset.add(prevRule.save);
                 }
@@ -4673,6 +4752,7 @@ var RuleInfo = (function () {
                     offset = standardOffset;
                 }
                 break;
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -4775,7 +4855,7 @@ var ZoneInfo = (function () {
         this.format = format;
         this.until = until;
         if (this.ruleOffset) {
-            this.ruleOffset = this.ruleOffset.convert(3 /* Hour */);
+            this.ruleOffset = this.ruleOffset.convert(basics.TimeUnit.Hour);
         }
     }
     return ZoneInfo;
@@ -4847,7 +4927,7 @@ var Transition = (function () {
         this.offset = offset;
         this.letter = letter;
         if (this.offset) {
-            this.offset = this.offset.convert(3 /* Hour */);
+            this.offset = this.offset.convert(basics.TimeUnit.Hour);
         }
     }
     return Transition;
@@ -4902,6 +4982,16 @@ var TzDatabase = (function () {
         TzDatabase._instance = null; // circumvent constructor check on duplicate instances
         TzDatabase._instance = new TzDatabase(data);
     };
+    /**
+     * Returns a sorted list of all zone names
+     */
+    TzDatabase.prototype.zoneNames = function () {
+        if (!this._zoneNames) {
+            this._zoneNames = Object.keys(this._data.zones);
+            this._zoneNames.sort();
+        }
+        return this._zoneNames;
+    };
     TzDatabase.prototype.exists = function (zoneName) {
         return this._data.zones.hasOwnProperty(zoneName);
     };
@@ -4920,14 +5010,15 @@ var TzDatabase = (function () {
             var result = null;
             var ruleNames = [];
             zoneInfos.forEach(function (zoneInfo) {
-                if (zoneInfo.ruleType === 1 /* Offset */) {
+                if (zoneInfo.ruleType === RuleType.Offset) {
                     if (!result || result.greaterThan(zoneInfo.ruleOffset)) {
                         if (zoneInfo.ruleOffset.milliseconds() !== 0) {
                             result = zoneInfo.ruleOffset;
                         }
                     }
                 }
-                if (zoneInfo.ruleType === 2 /* RuleName */ && ruleNames.indexOf(zoneInfo.ruleName) === -1) {
+                if (zoneInfo.ruleType === RuleType.RuleName
+                    && ruleNames.indexOf(zoneInfo.ruleName) === -1) {
                     ruleNames.push(zoneInfo.ruleName);
                     var temp = _this.getRuleInfos(zoneInfo.ruleName);
                     temp.forEach(function (ruleInfo) {
@@ -4963,12 +5054,13 @@ var TzDatabase = (function () {
             var result = null;
             var ruleNames = [];
             zoneInfos.forEach(function (zoneInfo) {
-                if (zoneInfo.ruleType === 1 /* Offset */) {
+                if (zoneInfo.ruleType === RuleType.Offset) {
                     if (!result || result.lessThan(zoneInfo.ruleOffset)) {
                         result = zoneInfo.ruleOffset;
                     }
                 }
-                if (zoneInfo.ruleType === 2 /* RuleName */ && ruleNames.indexOf(zoneInfo.ruleName) === -1) {
+                if (zoneInfo.ruleType === RuleType.RuleName
+                    && ruleNames.indexOf(zoneInfo.ruleName) === -1) {
                     ruleNames.push(zoneInfo.ruleName);
                     var temp = _this.getRuleInfos(zoneInfo.ruleName);
                     temp.forEach(function (ruleInfo) {
@@ -5045,10 +5137,12 @@ var TzDatabase = (function () {
     TzDatabase.prototype.zoneIsUtc = function (zoneName) {
         var actualZoneName = zoneName;
         var zoneEntries = this._data.zones[zoneName];
+        // follow links
         while (typeof (zoneEntries) === "string") {
             /* istanbul ignore if */
             if (!this._data.zones.hasOwnProperty(zoneEntries)) {
-                throw new Error("Zone \"" + zoneEntries + "\" not found (referred to in link from \"" + zoneName + "\" via \"" + actualZoneName + "\"");
+                throw new Error("Zone \"" + zoneEntries + "\" not found (referred to in link from \""
+                    + zoneName + "\" via \"" + actualZoneName + "\"");
             }
             actualZoneName = zoneEntries;
             zoneEntries = this._data.zones[actualZoneName];
@@ -5056,7 +5150,7 @@ var TzDatabase = (function () {
         return (actualZoneName === "Etc/UTC" || actualZoneName === "Etc/GMT" || actualZoneName === "Etc/UCT");
     };
     TzDatabase.prototype.normalizeLocal = function (zoneName, a, opt) {
-        if (opt === void 0) { opt = 0 /* Up */; }
+        if (opt === void 0) { opt = NormalizeOption.Up; }
         assert(typeof (a) === "number" || typeof (a) === "object", "number or object expected");
         assert(typeof (a) !== "object" || a, "a is null");
         if (this.hasDst(zoneName)) {
@@ -5090,7 +5184,7 @@ var TzDatabase = (function () {
                     if (unixMillis >= localBefore && unixMillis < localAfter) {
                         var forwardChange = transition.offset.sub(prev);
                         // non-existing time
-                        var factor = (opt === 0 /* Up */ ? 1 : -1);
+                        var factor = (opt === NormalizeOption.Up ? 1 : -1);
                         if (typeof a === "object") {
                             return basics.unixToTimeNoLeapSecs(unixMillis + factor * forwardChange.milliseconds());
                         }
@@ -5131,17 +5225,17 @@ var TzDatabase = (function () {
         var zoneInfo = this.getZoneInfo(zoneName, utcMillis);
         var dstOffset = null;
         switch (zoneInfo.ruleType) {
-            case 0 /* None */:
+            case RuleType.None:
                 {
                     dstOffset = Duration.minutes(0);
                 }
                 break;
-            case 1 /* Offset */:
+            case RuleType.Offset:
                 {
                     dstOffset = zoneInfo.ruleOffset;
                 }
                 break;
-            case 2 /* RuleName */: {
+            case RuleType.RuleName: {
                 dstOffset = this.dstOffsetForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
             }
         }
@@ -5162,7 +5256,8 @@ var TzDatabase = (function () {
         var zoneInfo = this.getZoneInfo(zoneName, utcMillis);
         var format = zoneInfo.format;
         // is format dependent on DST?
-        if (format.indexOf("%s") !== -1 && zoneInfo.ruleType === 2 /* RuleName */) {
+        if (format.indexOf("%s") !== -1
+            && zoneInfo.ruleType === RuleType.RuleName) {
             var letter;
             // place in format string
             if (dstDependent) {
@@ -5227,6 +5322,7 @@ var TzDatabase = (function () {
         for (var i = 0; i < transitions.length; ++i) {
             var transition = transitions[i];
             if (transition.at + transition.offset.milliseconds() > normalized) {
+                // found offset: prev.offset applies
                 break;
             }
             prevPrev = prev;
@@ -5238,7 +5334,8 @@ var TzDatabase = (function () {
             if (prevPrev && prevPrev.offset.greaterThan(prev.offset)) {
                 // backward change
                 var diff = prevPrev.offset.sub(prev.offset);
-                if (normalized >= prev.at + prev.offset.milliseconds() && normalized < prev.at + prev.offset.milliseconds() + diff.milliseconds()) {
+                if (normalized >= prev.at + prev.offset.milliseconds()
+                    && normalized < prev.at + prev.offset.milliseconds() + diff.milliseconds()) {
                     // within duplicate range
                     return prevPrev.offset.clone();
                 }
@@ -5366,18 +5463,19 @@ var TzDatabase = (function () {
             var dstOffset = prevDstOffset;
             var letter = prevLetter;
             // zone applicable?
-            if ((prevZone === null || prevZone.until < endMillis - 1) && (zoneInfo.until === null || zoneInfo.until >= startMillis)) {
+            if ((prevZone === null || prevZone.until < endMillis - 1)
+                && (zoneInfo.until === null || zoneInfo.until >= startMillis)) {
                 stdOffset = zoneInfo.gmtoff;
                 switch (zoneInfo.ruleType) {
-                    case 0 /* None */:
+                    case RuleType.None:
                         dstOffset = Duration.hours(0);
                         letter = "";
                         break;
-                    case 1 /* Offset */:
+                    case RuleType.Offset:
                         dstOffset = zoneInfo.ruleOffset;
                         letter = "";
                         break;
-                    case 2 /* RuleName */:
+                    case RuleType.RuleName:
                         // check whether the first rule takes effect immediately on the zone transition
                         // (e.g. Lybia)
                         if (prevZone) {
@@ -5397,7 +5495,7 @@ var TzDatabase = (function () {
                 var at = (prevZone ? prevZone.until : startMillis);
                 result.push(new Transition(at, stdOffset.add(dstOffset), letter));
                 // add transitions for the zone rules in the range
-                if (zoneInfo.ruleType === 2 /* RuleName */) {
+                if (zoneInfo.ruleType === RuleType.RuleName) {
                     var dstTransitions = this.getTransitionsDstOffsets(zoneInfo.ruleName, prevUntilTm ? Math.max(prevUntilTm.year, fromYear) : fromYear, Math.min(untilTm.year, toYear), stdOffset);
                     dstTransitions.forEach(function (transition) {
                         letter = transition.letter;
@@ -5461,14 +5559,17 @@ var TzDatabase = (function () {
         var result = [];
         var actualZoneName = zoneName;
         var zoneEntries = this._data.zones[zoneName];
+        // follow links
         while (typeof (zoneEntries) === "string") {
             /* istanbul ignore if */
             if (!this._data.zones.hasOwnProperty(zoneEntries)) {
-                throw new Error("Zone \"" + zoneEntries + "\" not found (referred to in link from \"" + zoneName + "\" via \"" + actualZoneName + "\"");
+                throw new Error("Zone \"" + zoneEntries + "\" not found (referred to in link from \""
+                    + zoneName + "\" via \"" + actualZoneName + "\"");
             }
             actualZoneName = zoneEntries;
             zoneEntries = this._data.zones[actualZoneName];
         }
+        // final zone info found
         for (var i = 0; i < zoneEntries.length; ++i) {
             var zoneEntry = zoneEntries[i];
             var ruleType = this.parseRuleType(zoneEntry[1]);
@@ -5476,7 +5577,7 @@ var TzDatabase = (function () {
             if (isNaN(until)) {
                 until = null;
             }
-            result.push(new ZoneInfo(Duration.minutes(-1 * math.filterFloat(zoneEntry[0])), ruleType, ruleType === 1 /* Offset */ ? new Duration(zoneEntry[1]) : new Duration(), ruleType === 2 /* RuleName */ ? zoneEntry[1] : "", zoneEntry[2], until));
+            result.push(new ZoneInfo(Duration.minutes(-1 * math.filterFloat(zoneEntry[0])), ruleType, ruleType === RuleType.Offset ? new Duration(zoneEntry[1]) : new Duration(), ruleType === RuleType.RuleName ? zoneEntry[1] : "", zoneEntry[2], until));
         }
         result.sort(function (a, b) {
             // sort null last
@@ -5517,7 +5618,7 @@ var TzDatabase = (function () {
             var rule = ruleSet[i];
             var fromYear = (rule[0] === "NaN" ? -10000 : parseInt(rule[0], 10));
             var toType = this.parseToType(rule[1]);
-            var toYear = (toType === 1 /* Max */ ? 0 : (rule[1] === "only" ? fromYear : parseInt(rule[1], 10)));
+            var toYear = (toType === ToType.Max ? 0 : (rule[1] === "only" ? fromYear : parseInt(rule[1], 10)));
             var onType = this.parseOnType(rule[4]);
             var onDay = this.parseOnDay(rule[4], onType);
             var onWeekDay = this.parseOnWeekDay(rule[4]);
@@ -5546,13 +5647,13 @@ var TzDatabase = (function () {
      */
     TzDatabase.prototype.parseRuleType = function (rule) {
         if (rule === "-") {
-            return 0 /* None */;
+            return RuleType.None;
         }
         else if (isValidOffsetString(rule)) {
-            return 1 /* Offset */;
+            return RuleType.Offset;
         }
         else {
-            return 2 /* RuleName */;
+            return RuleType.RuleName;
         }
     };
     /**
@@ -5561,13 +5662,13 @@ var TzDatabase = (function () {
      */
     TzDatabase.prototype.parseToType = function (to) {
         if (to === "max") {
-            return 1 /* Max */;
+            return ToType.Max;
         }
         else if (to === "only") {
-            return 0 /* Year */; // yes we return Year for only
+            return ToType.Year; // yes we return Year for only
         }
         else if (!isNaN(parseInt(to, 10))) {
-            return 0 /* Year */;
+            return ToType.Year;
         }
         else {
             /* istanbul ignore if */
@@ -5583,24 +5684,25 @@ var TzDatabase = (function () {
      */
     TzDatabase.prototype.parseOnType = function (on) {
         if (on.length > 4 && on.substr(0, 4) === "last") {
-            return 1 /* LastX */;
+            return OnType.LastX;
         }
         if (on.indexOf("<=") !== -1) {
-            return 3 /* LeqX */;
+            return OnType.LeqX;
         }
         if (on.indexOf(">=") !== -1) {
-            return 2 /* GreqX */;
+            return OnType.GreqX;
         }
-        return 0 /* DayNum */;
+        return OnType.DayNum;
     };
     /**
      * Get the day number from an ON column string, 0 if no day.
      */
     TzDatabase.prototype.parseOnDay = function (on, onType) {
         switch (onType) {
-            case 0 /* DayNum */: return parseInt(on, 10);
-            case 3 /* LeqX */: return parseInt(on.substr(on.indexOf("<=") + 2), 10);
-            case 2 /* GreqX */: return parseInt(on.substr(on.indexOf(">=") + 2), 10);
+            case OnType.DayNum: return parseInt(on, 10);
+            case OnType.LeqX: return parseInt(on.substr(on.indexOf("<=") + 2), 10);
+            case OnType.GreqX: return parseInt(on.substr(on.indexOf(">=") + 2), 10);
+            /* istanbul ignore next */
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
@@ -5621,7 +5723,7 @@ var TzDatabase = (function () {
         /* istanbul ignore if */
         /* istanbul ignore next */
         if (true) {
-            return 0 /* Sunday */;
+            return WeekDay.Sunday;
         }
     };
     /**
@@ -5630,18 +5732,18 @@ var TzDatabase = (function () {
      */
     TzDatabase.prototype.parseAtType = function (at) {
         switch (at) {
-            case "s": return 0 /* Standard */;
-            case "u": return 2 /* Utc */;
-            case "g": return 2 /* Utc */;
-            case "z": return 2 /* Utc */;
-            case "w": return 1 /* Wall */;
-            case "": return 1 /* Wall */;
-            case null: return 1 /* Wall */;
+            case "s": return AtType.Standard;
+            case "u": return AtType.Utc;
+            case "g": return AtType.Utc;
+            case "z": return AtType.Utc;
+            case "w": return AtType.Wall;
+            case "": return AtType.Wall;
+            case null: return AtType.Wall;
             default:
                 /* istanbul ignore if */
                 /* istanbul ignore next */
                 if (true) {
-                    return 1 /* Wall */;
+                    return AtType.Wall;
                 }
         }
     };
@@ -5675,6 +5777,7 @@ function validateData(data) {
     if (!data.hasOwnProperty("zones")) {
         throw new Error("data has no zones property");
     }
+    // validate zones
     for (var zoneName in data.zones) {
         if (data.zones.hasOwnProperty(zoneName)) {
             var zoneArr = data.zones[zoneName];
@@ -5735,6 +5838,7 @@ function validateData(data) {
             }
         }
     }
+    // validate rules
     for (var ruleName in data.rules) {
         if (data.rules.hasOwnProperty(ruleName)) {
             var ruleArr = data.rules[ruleName];
@@ -5771,7 +5875,8 @@ function validateData(data) {
                     throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][3] is not a month name");
                 }
                 /* istanbul ignore if */
-                if (rule[4].substr(0, 4) !== "last" && rule[4].indexOf(">=") === -1 && rule[4].indexOf("<=") === -1 && isNaN(parseInt(rule[4], 10))) {
+                if (rule[4].substr(0, 4) !== "last" && rule[4].indexOf(">=") === -1
+                    && rule[4].indexOf("<=") === -1 && isNaN(parseInt(rule[4], 10))) {
                     throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][4] is not a known type of expression");
                 }
                 /* istanbul ignore if */
@@ -5795,7 +5900,8 @@ function validateData(data) {
                     throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][2] is not a number");
                 }
                 /* istanbul ignore if */
-                if (rule[5][3] !== "" && rule[5][3] !== "s" && rule[5][3] !== "w" && rule[5][3] !== "g" && rule[5][3] !== "u" && rule[5][3] !== "z" && rule[5][3] !== null) {
+                if (rule[5][3] !== "" && rule[5][3] !== "s" && rule[5][3] !== "w"
+                    && rule[5][3] !== "g" && rule[5][3] !== "u" && rule[5][3] !== "z" && rule[5][3] !== null) {
                     throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][3] is not empty, g, z, s, w, u or null");
                 }
                 var save = parseInt(rule[6], 10);

@@ -331,6 +331,9 @@ var tc = require("timezonecomplete");
 // TzDatabase is a singleton, get at it using the instance() method
 var db = tc.TzDatabase.instance();
 
+// Get a sorted array of all zone names
+var zoneNames = db.zoneNames();
+
 var duration = db.maxDst(); // maximum DST offet in the database
 
 // Does the zone have daylight saving time
@@ -340,7 +343,6 @@ var bool2 = db.hasDst("UTC"); // false
 // Next daylight saving time change in unix utc milliseconds
 var unixUtcMillis = db.nextDstChange("Europe/Amsterdam", 1427590799999); // 1427590800000
 
-// For more features, see the docs.
 
 ```
 
@@ -646,6 +648,9 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015f.
 
 ## Changelog
+
+### 1.22.0 (2015-09-16)
+* Add a method to TzDatabase to get a list of all zone names
 
 ### 1.21.1 (2015-08-12)
 * Upgrade TZ database to 2015f

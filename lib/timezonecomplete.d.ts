@@ -1941,6 +1941,10 @@ declare module '__timezonecomplete/tz-database' {
                 */
             static inject(data: any): void;
             constructor(data: any);
+            /**
+                * Returns a sorted list of all zone names
+                */
+            zoneNames(): string[];
             exists(zoneName: string): boolean;
             /**
                 * Minimum non-zero DST offset (which excludes standard offset) of all rules in the database.

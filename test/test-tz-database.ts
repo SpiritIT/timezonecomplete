@@ -127,6 +127,13 @@ describe("RuleInfo", (): void => {
 
 describe("TzDatabase", (): void => {
 
+	describe("zoneNames()", (): void => {
+		it("should contain zone names", (): void => {
+			expect(TzDatabase.instance().zoneNames().indexOf("America/Chicago")).to.be.greaterThan(-1);
+			expect(TzDatabase.instance().zoneNames().indexOf("UTC")).to.be.greaterThan(-1);
+		});
+	});
+
 	describe("parseRuleType()", (): void => {
 		it("should work for hyphens", (): void => {
 			expect(TzDatabase.instance().parseRuleType("-")).to.equal(RuleType.None);
