@@ -649,6 +649,9 @@ The version of the included IANA time zone database is 2015f.
 
 ## Changelog
 
+### 1.22.1 (2015-09-21)
+* Bugfix: dev-dependencies were listed as dependencies
+
 ### 1.22.0 (2015-09-16)
 * Add a method to TzDatabase to get a list of all zone names
 
