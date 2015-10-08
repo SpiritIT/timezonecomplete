@@ -133,6 +133,37 @@ export class DateTime {
 	}
 
 	/**
+	 * Check whether a given date exists in the given time zone.
+	 * E.g. 2015-02-29 returns false (not a leap year)
+	 * and 2015-03-29T02:30:00 returns false (daylight saving time missing hour)
+	 * and 2015-04-31 returns false (April has 30 days).
+	 * By default, pre-1970 dates also return false since the time zone database does not contain accurate info
+	 * before that. You can change that with the allowPre1970 flag.
+	 *
+	 * @param allowPre1970 (optional, default false): return true for pre-1970 dates
+	 */
+	public static exists(
+		year: number, month: number = 1, day: number = 1,
+		hour: number = 0, minute: number = 0, second: number = 0, millisecond: number = 0,
+		zone: TimeZone = null, allowPre1970: boolean = false
+	): boolean {
+		if (!isFinite(year) || !isFinite(month) || !isFinite(day)
+			|| !isFinite(hour) || !isFinite(minute) || !isFinite(second) || !isFinite(millisecond)) {
+			return false;
+		}
+		if (!allowPre1970 && year < 1970) {
+			return false;
+		}
+		try {
+			var dt = new DateTime(year, month, day, hour, minute, second, millisecond, zone);
+			return (year === dt.year() && month === dt.month() && day === dt.day()
+				&& hour === dt.hour() && minute === dt.minute() && second === dt.second() && millisecond === dt.millisecond());
+		} catch (e) {
+			return false;
+		}
+	}
+
+	/**
 	 * Constructor. Creates current time in local timezone.
 	 */
 	constructor();

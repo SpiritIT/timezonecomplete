@@ -474,6 +474,28 @@ var newCopy = amsterdamDate.clone();
 // Truncate a DateTime to a date @ 00:00:00.000
 var newDateTime = d.startOfDay();
 
+// Check if a date exists
+
+// leap years (2012 is a leap year)
+tc.DateTime.exists(2012, 2, 29); // true
+tc.DateTime.exists(2013, 2, 29); // false
+
+// # days in month (April has 30 days)
+tc.DateTime.exists(2012, 4, 30); // true
+tc.DateTime.exists(2012, 4, 31); // false
+
+// Daylight saving time skips hours
+tc.DateTime.exists(2015, 3, 29, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam")); // false
+tc.DateTime.exists(2015, 3, 29, 1, 59, 59, 999, TimeZone.zone("Europe/Amsterdam")); // true
+tc.DateTime.exists(2015, 3, 29, 3, 0, 0, 0, TimeZone.zone("Europe/Amsterdam")); // true
+
+// Pre-1970 dates: you can allow or disallow them with the last boolean parameter
+// as the IANA time zone database is not reliable prior to 1970
+tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, null, false); // false
+tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, null, true); // true
+tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), false); // false
+tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), true); // true
+
 ```
 
 ### Date Arithmetic
@@ -648,6 +670,9 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015g.
 
 ## Changelog
+
+### 1.23.0 (2015-10-02)
+* Add a static method DateTime.exists() to see whether a given date exists in its time zone
 
 ### 1.22.2 (2015-10-02)
 * Upgrade TZ database to 2015g

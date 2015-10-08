@@ -508,6 +508,28 @@ d = <span class="hljs-keyword">new</span> tc.DateTime(<span class="hljs-string">
 
 <span class="hljs-comment">// Truncate a DateTime to a date @ 00:00:00.000</span>
 <span class="hljs-keyword">var</span> newDateTime = d.startOfDay();
+
+<span class="hljs-comment">// Check if a date exists</span>
+
+<span class="hljs-comment">// leap years (2012 is a leap year)</span>
+tc.DateTime.exists(<span class="hljs-number">2012</span>, <span class="hljs-number">2</span>, <span class="hljs-number">29</span>); <span class="hljs-comment">// true</span>
+tc.DateTime.exists(<span class="hljs-number">2013</span>, <span class="hljs-number">2</span>, <span class="hljs-number">29</span>); <span class="hljs-comment">// false</span>
+
+<span class="hljs-comment">// # days in month (April has 30 days)</span>
+tc.DateTime.exists(<span class="hljs-number">2012</span>, <span class="hljs-number">4</span>, <span class="hljs-number">30</span>); <span class="hljs-comment">// true</span>
+tc.DateTime.exists(<span class="hljs-number">2012</span>, <span class="hljs-number">4</span>, <span class="hljs-number">31</span>); <span class="hljs-comment">// false</span>
+
+<span class="hljs-comment">// Daylight saving time skips hours</span>
+tc.DateTime.exists(<span class="hljs-number">2015</span>, <span class="hljs-number">3</span>, <span class="hljs-number">29</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>)); <span class="hljs-comment">// false</span>
+tc.DateTime.exists(<span class="hljs-number">2015</span>, <span class="hljs-number">3</span>, <span class="hljs-number">29</span>, <span class="hljs-number">1</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>)); <span class="hljs-comment">// true</span>
+tc.DateTime.exists(<span class="hljs-number">2015</span>, <span class="hljs-number">3</span>, <span class="hljs-number">29</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>)); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// Pre-1970 dates: you can allow or disallow them with the last boolean parameter</span>
+<span class="hljs-comment">// as the IANA time zone database is not reliable prior to 1970</span>
+tc.DateTime.exists(<span class="hljs-number">1969</span>, <span class="hljs-number">12</span>, <span class="hljs-number">31</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>); <span class="hljs-comment">// false</span>
+tc.DateTime.exists(<span class="hljs-number">1969</span>, <span class="hljs-number">12</span>, <span class="hljs-number">31</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// true</span>
+tc.DateTime.exists(<span class="hljs-number">1969</span>, <span class="hljs-number">12</span>, <span class="hljs-number">31</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>), <span class="hljs-literal">false</span>); <span class="hljs-comment">// false</span>
+tc.DateTime.exists(<span class="hljs-number">1969</span>, <span class="hljs-number">12</span>, <span class="hljs-number">31</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>, <span class="hljs-number">999</span>, TimeZone.zone(<span class="hljs-string">"Europe/Amsterdam"</span>), <span class="hljs-literal">true</span>); <span class="hljs-comment">// true</span>
 </code></pre>
 				<h3 id="date-arithmetic">Date Arithmetic</h3>
 				<p>The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.</p>
@@ -652,6 +674,10 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 				<p>The version of the included IANA time zone database is 2015g.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-23-0-2015-10-02-">1.23.0 (2015-10-02)</h3>
+				<ul>
+					<li>Add a static method DateTime.exists() to see whether a given date exists in its time zone</li>
+				</ul>
 				<h3 id="1-22-2-2015-10-02-">1.22.2 (2015-10-02)</h3>
 				<ul>
 					<li>Upgrade TZ database to 2015g</li>
@@ -951,9 +977,9 @@ var dt = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#46;&#115;&#x63;&#x68;&#111;&#117;&#116;&#x65;&#x6e;&#64;&#115;&#112;&#105;&#114;&#x69;&#x74;&#105;&#116;&#x2e;&#99;&#x6f;&#x6d;">&#x72;&#46;&#115;&#x63;&#x68;&#111;&#117;&#116;&#x65;&#x6e;&#64;&#115;&#112;&#105;&#114;&#x69;&#x74;&#105;&#116;&#x2e;&#99;&#x6f;&#x6d;</a></li>
-					<li>Daan Wissing <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x64;&#46;&#x77;&#x69;&#x73;&#x73;&#x69;&#110;&#103;&#64;&#x73;&#112;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#x63;&#111;&#109;">&#x64;&#46;&#x77;&#x69;&#x73;&#x73;&#x69;&#110;&#103;&#64;&#x73;&#112;&#105;&#114;&#105;&#x74;&#x69;&#x74;&#46;&#x63;&#111;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#112;&#x2e;&#107;&#x6f;&#x6f;&#x69;&#x6a;&#x6d;&#97;&#110;&#115;&#64;&#115;&#x70;&#x69;&#114;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#109;">&#112;&#x2e;&#107;&#x6f;&#x6f;&#x69;&#x6a;&#x6d;&#97;&#110;&#115;&#64;&#115;&#x70;&#x69;&#114;&#x69;&#x74;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#109;</a></li>
+					<li>Rogier Schouten <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#114;&#x2e;&#x73;&#99;&#104;&#x6f;&#x75;&#116;&#101;&#x6e;&#x40;&#115;&#x70;&#105;&#114;&#105;&#116;&#105;&#116;&#x2e;&#99;&#111;&#x6d;">&#114;&#x2e;&#x73;&#99;&#104;&#x6f;&#x75;&#116;&#101;&#x6e;&#x40;&#115;&#x70;&#105;&#114;&#105;&#116;&#105;&#116;&#x2e;&#99;&#111;&#x6d;</a></li>
+					<li>Daan Wissing <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x64;&#46;&#x77;&#x69;&#115;&#x73;&#x69;&#110;&#103;&#x40;&#x73;&#x70;&#x69;&#114;&#105;&#116;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#x64;&#46;&#x77;&#x69;&#115;&#x73;&#x69;&#110;&#103;&#x40;&#x73;&#x70;&#x69;&#114;&#105;&#116;&#x69;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+					<li>Peter Kooijmans <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x70;&#46;&#x6b;&#x6f;&#x6f;&#x69;&#x6a;&#x6d;&#97;&#x6e;&#x73;&#64;&#115;&#112;&#x69;&#114;&#105;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;">&#x70;&#46;&#x6b;&#x6f;&#x6f;&#x69;&#x6a;&#x6d;&#97;&#x6e;&#x73;&#64;&#115;&#112;&#x69;&#114;&#105;&#116;&#105;&#x74;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

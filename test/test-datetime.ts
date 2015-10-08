@@ -166,6 +166,28 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("exists", (): void => {
+		it("should handle leap years", (): void => {
+			expect(DateTime.exists(2012, 2, 29)).to.equal(true);
+			expect(DateTime.exists(2013, 2, 29)).to.equal(false);
+		});
+		it("should handle # days in month", (): void => {
+			expect(DateTime.exists(2012, 4, 30)).to.equal(true);
+			expect(DateTime.exists(2012, 4, 31)).to.equal(false);
+		});
+		it("should handle DST changes", (): void => {
+			expect(DateTime.exists(2015, 3, 29, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"))).to.equal(false);
+			expect(DateTime.exists(2015, 3, 29, 1, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"))).to.equal(true);
+			expect(DateTime.exists(2015, 3, 29, 3, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"))).to.equal(true);
+		});
+		it("should handle pre-1970 dates", (): void => {
+			expect(DateTime.exists(1969, 12, 31, 23, 59, 59, 999, null, false)).to.equal(false);
+			expect(DateTime.exists(1969, 12, 31, 23, 59, 59, 999, null, true)).to.equal(true);
+			expect(DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), false)).to.equal(false);
+			expect(DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), true)).to.equal(true);
+		});
+	});
+
 	describe("constructor()", (): void => {
 		it("should return something with a local time zone", (): void => {
 			expect((new DateTime()).offset()).to.equal(-1 * testTimeSource.now().getTimezoneOffset());

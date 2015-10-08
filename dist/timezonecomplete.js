@@ -962,6 +962,41 @@ var DateTime = (function () {
         return new DateTime(unixTimestamp, timeZone);
     };
     /**
+     * Check whether a given date exists in the given time zone.
+     * E.g. 2015-02-29 returns false (not a leap year)
+     * and 2015-03-29T02:30:00 returns false (daylight saving time missing hour)
+     * and 2015-04-31 returns false (April has 30 days).
+     * By default, pre-1970 dates also return false since the time zone database does not contain accurate info
+     * before that. You can change that with the allowPre1970 flag.
+     *
+     * @param allowPre1970 (optional, default false): return true for pre-1970 dates
+     */
+    DateTime.exists = function (year, month, day, hour, minute, second, millisecond, zone, allowPre1970) {
+        if (month === void 0) { month = 1; }
+        if (day === void 0) { day = 1; }
+        if (hour === void 0) { hour = 0; }
+        if (minute === void 0) { minute = 0; }
+        if (second === void 0) { second = 0; }
+        if (millisecond === void 0) { millisecond = 0; }
+        if (zone === void 0) { zone = null; }
+        if (allowPre1970 === void 0) { allowPre1970 = false; }
+        if (!isFinite(year) || !isFinite(month) || !isFinite(day)
+            || !isFinite(hour) || !isFinite(minute) || !isFinite(second) || !isFinite(millisecond)) {
+            return false;
+        }
+        if (!allowPre1970 && year < 1970) {
+            return false;
+        }
+        try {
+            var dt = new DateTime(year, month, day, hour, minute, second, millisecond, zone);
+            return (year === dt.year() && month === dt.month() && day === dt.day()
+                && hour === dt.hour() && minute === dt.minute() && second === dt.second() && millisecond === dt.millisecond());
+        }
+        catch (e) {
+            return false;
+        }
+    };
+    /**
      * @return a copy of this object
      */
     DateTime.prototype.clone = function () {

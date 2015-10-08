@@ -396,6 +396,17 @@ declare module '__timezonecomplete/datetime' {
                 */
             static fromExcel(n: number, timeZone?: TimeZone): DateTime;
             /**
+                * Check whether a given date exists in the given time zone.
+                * E.g. 2015-02-29 returns false (not a leap year)
+                * and 2015-03-29T02:30:00 returns false (daylight saving time missing hour)
+                * and 2015-04-31 returns false (April has 30 days).
+                * By default, pre-1970 dates also return false since the time zone database does not contain accurate info
+                * before that. You can change that with the allowPre1970 flag.
+                *
+                * @param allowPre1970 (optional, default false): return true for pre-1970 dates
+                */
+            static exists(year: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, millisecond?: number, zone?: TimeZone, allowPre1970?: boolean): boolean;
+            /**
                 * Constructor. Creates current time in local timezone.
                 */
             constructor();
