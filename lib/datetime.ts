@@ -33,6 +33,7 @@ import TimeZone = timezone.TimeZone;
 import TimeZoneKind = timezone.TimeZoneKind;
 
 import format = require("./format");
+import parseFuncs = require("./parse");
 
 /**
  * Current date+time in local time
@@ -168,7 +169,7 @@ export class DateTime {
 	 */
 	constructor();
 	/**
-	 * Constructor
+	 * Constructor. Parses ISO timestamp string.
 	 * Non-existing local times are normalized by rounding up to the next DST offset.
 	 *
 	 * @param isoString	String in ISO 8601 format. Instead of ISO time zone,
@@ -182,6 +183,18 @@ export class DateTime {
 	 *					for strings without a time zone
 	 */
 	constructor(isoString: string, timeZone?: TimeZone);
+	/**
+	 * Constructor. Parses string in given LDML format.
+	 * NOTE: does not handle eras/quarters/weeks/weekdays.
+	 * Non-existing local times are normalized by rounding up to the next DST offset.
+	 *
+	 * @param dateString	Date+Time string.
+	 * @param format The LDML format that the string is assumed to be in
+	 * @param timeZone	if given, the date in the string is assumed to be in this time zone.
+	 *					Note that it is NOT CONVERTED to the time zone. Useful
+	 *					for strings without a time zone
+	 */
+	constructor(dateString: string, format: string, timeZone?: TimeZone);
 	/**
 	 * Constructor. You provide a date, then you say whether to take the
 	 * date.getYear()/getXxx methods or the date.getUTCYear()/date.getUTCXxx methods,
@@ -279,19 +292,32 @@ export class DateTime {
 				}
 			} break;
 			case "string": {
-				var givenString = (<string>a1).trim();
-				var ss: string[] = DateTime._splitDateFromTimeZone(givenString);
-				assert(ss.length === 2, "Invalid date string given: \"" + <string>a1 + "\"");
-				if (a2 instanceof TimeZone) {
-					this._zone = <TimeZone>(a2);
+				if (typeof a2 === "string") {
+					// format string given
+					var dateString: string = <string>a1;
+					var formatString: string = <string>a2;
+					var zone: TimeZone = null;
+					if (typeof a3 === "object" && a3 instanceof TimeZone) {
+						zone = <TimeZone>(a3);
+					}
+					var parsed = parseFuncs.parse(dateString, formatString, zone);
+					this._zoneDate = parsed.time;
+					this._zone = parsed.zone;
 				} else {
-					this._zone = TimeZone.zone(ss[1]);
-				}
-				// use our own ISO parsing because that it platform independent
-				// (free of Date quirks)
-				this._zoneDate = TimeStruct.fromString(ss[0]);
-				if (this._zone) {
-					this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(this._zoneDate.toUnixNoLeapSecs()));
+					var givenString = (<string>a1).trim();
+					var ss: string[] = DateTime._splitDateFromTimeZone(givenString);
+					assert(ss.length === 2, "Invalid date string given: \"" + <string>a1 + "\"");
+					if (a2 instanceof TimeZone) {
+						this._zone = <TimeZone>(a2);
+					} else {
+						this._zone = TimeZone.zone(ss[1]);
+					}
+					// use our own ISO parsing because that it platform independent
+					// (free of Date quirks)
+					this._zoneDate = TimeStruct.fromString(ss[0]);
+					if (this._zone) {
+						this._zoneDate = TimeStruct.fromUnix(this._zone.normalizeZoneTime(this._zoneDate.toUnixNoLeapSecs()));
+					}
 				}
 				this._zoneDateToUtcDate();
 			} break;
@@ -989,6 +1015,20 @@ export class DateTime {
 	 */
 	public format(formatString: string): string {
 		return format.format(this._zoneDate, this._utcDate, this.zone(), formatString);
+	}
+
+	/**
+	 * Parse a date in a given format
+	 * @param s the string to parse
+	 * @param format the format the string is in
+	 * @param zone Optional, the zone to add (if no zone is given in the string)
+	 */
+	public static parse(s: string, format: string, zone?: TimeZone): DateTime {
+		var parsed = parseFuncs.parse(s, format, zone);
+		return new DateTime(parsed.time.year, parsed.time.month, parsed.time.day,
+			parsed.time.hour, parsed.time.minute, parsed.time.second, parsed.time.milli,
+			parsed.zone
+		);
 	}
 
 	/**

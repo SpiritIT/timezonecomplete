@@ -411,7 +411,7 @@ declare module '__timezonecomplete/datetime' {
                 */
             constructor();
             /**
-                * Constructor
+                * Constructor. Parses ISO timestamp string.
                 * Non-existing local times are normalized by rounding up to the next DST offset.
                 *
                 * @param isoString	String in ISO 8601 format. Instead of ISO time zone,
@@ -425,6 +425,18 @@ declare module '__timezonecomplete/datetime' {
                 *					for strings without a time zone
                 */
             constructor(isoString: string, timeZone?: TimeZone);
+            /**
+                * Constructor. Parses string in given LDML format.
+                * NOTE: does not handle eras/quarters/weeks/weekdays.
+                * Non-existing local times are normalized by rounding up to the next DST offset.
+                *
+                * @param dateString	Date+Time string.
+                * @param format The LDML format that the string is assumed to be in
+                * @param timeZone	if given, the date in the string is assumed to be in this time zone.
+                *					Note that it is NOT CONVERTED to the time zone. Useful
+                *					for strings without a time zone
+                */
+            constructor(dateString: string, format: string, timeZone?: TimeZone);
             /**
                 * Constructor. You provide a date, then you say whether to take the
                 * date.getYear()/getXxx methods or the date.getUTCYear()/date.getUTCXxx methods,
@@ -768,6 +780,13 @@ declare module '__timezonecomplete/datetime' {
                 * @return The string representation of this DateTime
                 */
             format(formatString: string): string;
+            /**
+                * Parse a date in a given format
+                * @param s the string to parse
+                * @param format the format the string is in
+                * @param zone Optional, the zone to add (if no zone is given in the string)
+                */
+            static parse(s: string, format: string, zone?: TimeZone): DateTime;
             /**
                 * Modified ISO 8601 format string with IANA name if applicable.
                 * E.g. "2014-01-01T23:15:33.000 Europe/Amsterdam"

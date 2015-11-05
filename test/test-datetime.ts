@@ -330,6 +330,86 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("constructor(string, string, zone?)", (): void => {
+		it("should parse ISO date", (): void => {
+			var d = new DateTime("2015-03-02T23:44:12.233", "yyyy-MM-ddTHH:mm:ss.SSS");
+			expect(d.year()).to.equal(2015);
+			expect(d.month()).to.equal(3);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(23);
+			expect(d.minute()).to.equal(44);
+			expect(d.second()).to.equal(12);
+			expect(d.millisecond()).to.equal(233);
+			expect(d.zone()).to.be.null;
+		});
+		it("should parse unaware NL date", (): void => {
+			var d = new DateTime("02-03-2015 23:44:12.233", "dd-MM-yyyy HH:mm:ss.SSS");
+			expect(d.year()).to.equal(2015);
+			expect(d.month()).to.equal(3);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(23);
+			expect(d.minute()).to.equal(44);
+			expect(d.second()).to.equal(12);
+			expect(d.millisecond()).to.equal(233);
+			expect(d.zone()).to.be.null;
+		});
+		it("should parse unaware NL date without leading zeroes", (): void => {
+			var d = new DateTime("2-3-2015 23:44:12.233", "dd-MM-yyyy HH:mm:ss.SSS");
+			expect(d.year()).to.equal(2015);
+			expect(d.month()).to.equal(3);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(23);
+			expect(d.minute()).to.equal(44);
+			expect(d.second()).to.equal(12);
+			expect(d.millisecond()).to.equal(233);
+			expect(d.zone()).to.be.null;
+		});
+		it("should parse unaware US date", (): void => {
+			var d = new DateTime("3/2/2015 23:44:12.233", "MM/dd/yyyy HH:mm:ss.SSS");
+			expect(d.year()).to.equal(2015);
+			expect(d.month()).to.equal(3);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(23);
+			expect(d.minute()).to.equal(44);
+			expect(d.second()).to.equal(12);
+			expect(d.millisecond()).to.equal(233);
+			expect(d.zone()).to.be.null;
+		});
+		it("should add given zone", (): void => {
+			var d = new DateTime("3/2/2015 23:44:12.233", "MM/dd/yyyy HH:mm:ss.SSS", TimeZone.utc());
+			expect(d.year()).to.equal(2015);
+			expect(d.month()).to.equal(3);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(23);
+			expect(d.minute()).to.equal(44);
+			expect(d.second()).to.equal(12);
+			expect(d.millisecond()).to.equal(233);
+			expect(d.zone().identical(TimeZone.utc())).to.equal(true);
+		});
+		it("should parse date with offset", (): void => {
+			var d = new DateTime("3/2/2015 23:44:12.233+02:30", "MM/dd/yyyy HH:mm:ss.SSSzzzz");
+			expect(d.year()).to.equal(2015);
+			expect(d.month()).to.equal(3);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(23);
+			expect(d.minute()).to.equal(44);
+			expect(d.second()).to.equal(12);
+			expect(d.millisecond()).to.equal(233);
+			expect(d.zone().identical(TimeZone.zone("+02:30"))).to.equal(true);
+		});
+		it("should parse date with zone name", (): void => {
+			var d = new DateTime("3/2/2015 23:44:12.233 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS zzzz");
+			expect(d.year()).to.equal(2015);
+			expect(d.month()).to.equal(3);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(23);
+			expect(d.minute()).to.equal(44);
+			expect(d.second()).to.equal(12);
+			expect(d.millisecond()).to.equal(233);
+			expect(d.zone().identical(TimeZone.zone("America/Chicago"))).to.equal(true);
+		});
+	});
+
 	describe("constructor(date: Date, dateKind: DateFunctions, timeZone?: TimeZone)", (): void => {
 		it("should parse date as local,unaware (winter time)", (): void => {
 			var date = new Date("2014-01-02T03:04:05.006Z");

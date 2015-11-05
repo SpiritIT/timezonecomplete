@@ -5,7 +5,7 @@ var debug = require("gulp-debug");
 var dtsBundle = require("dts-bundle");
 var fs = require("fs");
 var gulp = require("gulp");
-var gulpFilter = require("gulp-filter");
+var gulpIgnore = require("gulp-ignore");
 var gutil = require("gulp-util");
 var rename = require("gulp-rename");
 var rimraf = require("gulp-rimraf");
@@ -62,7 +62,7 @@ gulp.task("clean", function() {
 			"examples/**/*.map",
       "doc/"
 		], { read: false, base: "." })
-		.pipe(gulpFilter("!maintenance/**/*"))
+		.pipe(gulpIgnore.exclude("**/maintenance/**"))
 		.pipe(rimraf({force: true}))
 		.on("error", trapError) // make exit code non-zero
 })
@@ -76,9 +76,9 @@ gulp.task("bundle", ["build"], function() {
 	});
 })
 
-gulp.task("doc", function() {
+gulp.task("doc", ["build"], function() {
 	return gulp.src(["lib/**.ts"], {base: "."})
-		.pipe(gulpFilter("!**/*.d.ts"))
+		.pipe(gulpIgnore.exclude("**/*.d.ts"))
 		.pipe(typedoc({
 			module: "commonjs",
 			out: "./doc",
@@ -89,8 +89,8 @@ gulp.task("doc", function() {
 		.on("error", trapError);
 });
 
-	var tslintOpts = {
-	  "rules": {
+var tslintOpts = {
+	"rules": {
 		"ban": [true,
 			["_", "extend"],
 			["_", "isNull"],
@@ -168,16 +168,15 @@ gulp.task("doc", function() {
 			"check-separator",
 			"check-type"
 		],
-	  }
-
 	}
+};
 
 gulp.task("build", function () {
 	var tsResult = gulp.src([
 		"lib/*.ts",
 		"test/*.ts",
 	], { base: "." })
-		.pipe(gulpFilter("!**/*.d.ts"))
+		.pipe(gulpIgnore.exclude("**/*.d.ts"))
 		.pipe(tslint({
 			configuration: tslintOpts
 		}))

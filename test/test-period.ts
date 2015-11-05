@@ -33,7 +33,8 @@ var testTimeSource: TestTimeSource = new TestTimeSource();
 DateTime.timeSource = testTimeSource;
 
 
-describe("Period", (): void => {
+describe("Period", function(): void {
+	this.timeout(30000); // under istanbul these are a little slow
 
 	describe("constructor()", (): void => {
 		it("should work with a Duration", (): void => {

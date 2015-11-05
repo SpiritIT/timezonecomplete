@@ -382,6 +382,9 @@ var amsterdamDateNoDst = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Eur
 // date from ISO 8601 string
 var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
 
+// date from other string format
+var unitedStatesDate = new tc.DateTime("12/31/2015 23:44:55.123 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS zzzz");
+
 // date from an Excel datetime number
 var dt = tc.DateTime.fromExcel(42005.5430555556); // 2015-01-01T13:02:00
 
@@ -670,6 +673,10 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015g.
 
 ## Changelog
+
+### 1.24.0 (2015-11-05)
+* Add new DateTime constructor that accepts a date string and a format string to parse dates in a given format
+* Add new static method DateTime.parse() that does the same.
 
 ### 1.23.0 (2015-10-02)
 * Add a static method DateTime.exists() to see whether a given date exists in its time zone
