@@ -3151,7 +3151,7 @@ function stripNumber(s) {
         result.remaining = result.remaining.substr(1);
     }
     // remove leading zeroes
-    while (numberString.charAt(0) === "0") {
+    while (numberString.charAt(0) === "0" && numberString.length > 1) {
         numberString = numberString.substr(1);
     }
     result.n = parseInt(numberString, 10);

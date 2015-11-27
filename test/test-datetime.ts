@@ -408,6 +408,17 @@ describe("DateTime", (): void => {
 			expect(d.millisecond()).to.equal(233);
 			expect(d.zone().identical(TimeZone.zone("America/Chicago"))).to.equal(true);
 		});
+		it("should parse date with zeroes", (): void => {
+			var d = new DateTime("3/2/2015 06:00:00.000 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS zzzz");
+			expect(d.year()).to.equal(2015);
+			expect(d.month()).to.equal(3);
+			expect(d.day()).to.equal(2);
+			expect(d.hour()).to.equal(6);
+			expect(d.minute()).to.equal(0);
+			expect(d.second()).to.equal(0);
+			expect(d.millisecond()).to.equal(0);
+			expect(d.zone().identical(TimeZone.zone("America/Chicago"))).to.equal(true);
+		});
 	});
 
 	describe("constructor(date: Date, dateKind: DateFunctions, timeZone?: TimeZone)", (): void => {

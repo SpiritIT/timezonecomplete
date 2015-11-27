@@ -674,6 +674,9 @@ The version of the included IANA time zone database is 2015g.
 
 ## Changelog
 
+### 1.24.1 (2015-11-27)
+* Bugfix parsing times with zeroes.
+
 ### 1.24.0 (2015-11-05)
 * Add new DateTime constructor that accepts a date string and a format string to parse dates in a given format
 * Add new static method DateTime.parse() that does the same.
