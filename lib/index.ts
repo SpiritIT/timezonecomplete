@@ -34,6 +34,7 @@ export import DateTime = datetime.DateTime;
 export import now = datetime.now;
 export import nowLocal = datetime.nowLocal;
 export import nowUtc = datetime.nowUtc;
+export import UTC_MILLIS_CACHE = datetime.UTC_MILLIS_CACHE;
 
 import duration = require("./duration"); duration;
 export import Duration = duration.Duration;

@@ -674,6 +674,9 @@ The version of the included IANA time zone database is 2015g.
 
 ## Changelog
 
+### 1.25.0 (2015-12-03)
+* Removed private DateTime member _unixUtcMillisCache to facilitate simple comparison of date objects by their members. There is now a global cache of unix milliseconds.
+
 ### 1.24.1 (2015-11-27)
 * Bugfix parsing times with zeroes.
 

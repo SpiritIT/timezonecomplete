@@ -554,3 +554,19 @@ describe("secondsInDay()", (): void => {
 		expect(basics.secondOfDay(1, 1, 1)).to.equal(3661);
 	});
 });
+
+describe("binaryInsertionIndex", (): void => {
+	var compare = (n: number): number => {
+		return (n < 5 ? -1 : (n > 5 ? 1 : 0));
+	};
+	it("should work", (): void => {
+		expect(basics.binaryInsertionIndex([], compare)).to.equal(0);
+		expect(basics.binaryInsertionIndex([4], compare)).to.equal(1);
+		expect(basics.binaryInsertionIndex([5], compare)).to.equal(0);
+		expect(basics.binaryInsertionIndex([6], compare)).to.equal(0);
+		expect(basics.binaryInsertionIndex([1, 2, 3, 4], compare)).to.equal(4);
+		expect(basics.binaryInsertionIndex([1, 2, 3, 4, 5, 6], compare)).to.equal(4);
+		expect(basics.binaryInsertionIndex([1, 2, 3, 4, 5, 5, 6], compare)).to.equal(5);
+		expect(basics.binaryInsertionIndex([1, 5, 10], compare)).to.equal(1);
+	});
+});

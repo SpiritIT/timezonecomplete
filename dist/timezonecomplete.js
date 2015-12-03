@@ -754,6 +754,48 @@ var TimeStruct = (function () {
     return TimeStruct;
 })();
 exports.TimeStruct = TimeStruct;
+/**
+ * Binary search
+ * @param array Array to search
+ * @param compare Function that should return < 0 if given element is less than searched element etc
+ * @return {Number} The insertion index of the element to look for
+ */
+function binaryInsertionIndex(arr, compare) {
+    var minIndex = 0;
+    var maxIndex = arr.length - 1;
+    var currentIndex;
+    var currentElement;
+    // no array / empty array
+    if (!arr) {
+        return 0;
+    }
+    if (arr.length === 0) {
+        return 0;
+    }
+    // out of bounds
+    if (compare(arr[0]) > 0) {
+        return 0;
+    }
+    if (compare(arr[maxIndex]) < 0) {
+        return maxIndex + 1;
+    }
+    // element in range
+    while (minIndex <= maxIndex) {
+        currentIndex = Math.floor((minIndex + maxIndex) / 2);
+        currentElement = arr[currentIndex];
+        if (compare(currentElement) < 0) {
+            minIndex = currentIndex + 1;
+        }
+        else if (compare(currentElement) > 0) {
+            maxIndex = currentIndex - 1;
+        }
+        else {
+            return currentIndex;
+        }
+    }
+    return maxIndex;
+}
+exports.binaryInsertionIndex = binaryInsertionIndex;
 
 
 
@@ -806,6 +848,64 @@ function now(timeZone) {
 }
 exports.now = now;
 /**
+ * Cache for timestruct -> utc millis conversion
+ */
+var UtcMillisCache = (function () {
+    function UtcMillisCache() {
+        this.MAX_CACHE_SIZE = 1000;
+        this._lastSeqNo = 0;
+        this._cache = [];
+    }
+    /**
+     * Returns the unix milliseconds for a given time struct
+     */
+    UtcMillisCache.prototype.timeStruct2UtcMillis = function (timeStruct) {
+        var _this = this;
+        var cacheElement;
+        var isoString = timeStruct.toString();
+        var index = basics.binaryInsertionIndex(this._cache, function (a) {
+            return (a.isoString < isoString ? -1 : (a.isoString > isoString ? 1 : 0));
+        });
+        // element found in cache?
+        if (index >= 0 && index < this._cache.length && this._cache[index].isoString === isoString) {
+            cacheElement = this._cache[index];
+            // mark cache element as recently used
+            if (cacheElement.seqNo < this._lastSeqNo) {
+                this._lastSeqNo++;
+                cacheElement.seqNo = this._lastSeqNo;
+            }
+            return cacheElement.unixUtcMillis;
+        }
+        else {
+            // if oversized, trim cache by throwing away elements not recently used
+            if (this._cache.length >= this.MAX_CACHE_SIZE) {
+                this._cache = this._cache.filter(function (element) {
+                    return (element.seqNo >= _this._lastSeqNo - _this.MAX_CACHE_SIZE / 2);
+                });
+            }
+            // add element to cache
+            var unixUtcMillis = timeStruct.toUnixNoLeapSecs();
+            this._lastSeqNo++;
+            cacheElement = {
+                isoString: isoString,
+                unixUtcMillis: unixUtcMillis,
+                seqNo: this._lastSeqNo
+            };
+            this._cache.splice(index, 0, cacheElement);
+            return unixUtcMillis;
+        }
+    };
+    /**
+     * The current cache size, for testing purposes
+     */
+    UtcMillisCache.prototype.size = function () {
+        return this._cache.length;
+    };
+    return UtcMillisCache;
+})();
+exports.UtcMillisCache = UtcMillisCache;
+exports.UTC_MILLIS_CACHE = new UtcMillisCache();
+/**
  * DateTime class which is time zone-aware
  * and which can be mocked for testing purposes.
  */
@@ -814,11 +914,6 @@ var DateTime = (function () {
      * Constructor implementation, do not call
      */
     function DateTime(a1, a2, a3, h, m, s, ms, timeZone) {
-        /**
-         * Cached value for unixUtcMillis(). This is useful because valueOf() uses it and it is
-         * likely to be called multiple times.
-         */
-        this._unixUtcMillisCache = null;
         switch (typeof (a1)) {
             case "number":
                 {
@@ -1018,7 +1113,6 @@ var DateTime = (function () {
         var result = new DateTime();
         result._utcDate = this._utcDate.clone();
         result._zoneDate = this._zoneDate.clone();
-        result._unixUtcMillisCache = this._unixUtcMillisCache;
         result._zone = this._zone;
         return result;
     };
@@ -1139,10 +1233,7 @@ var DateTime = (function () {
      * @return Milliseconds since 1970-01-01T00:00:00.000Z
      */
     DateTime.prototype.unixUtcMillis = function () {
-        if (this._unixUtcMillisCache === null) {
-            this._unixUtcMillisCache = this._utcDate.toUnixNoLeapSecs();
-        }
-        return this._unixUtcMillisCache;
+        return exports.UTC_MILLIS_CACHE.timeStruct2UtcMillis(this._utcDate);
     };
     /**
      * @return The full year e.g. 2014
@@ -1262,7 +1353,6 @@ var DateTime = (function () {
         else {
             this._zone = null;
             this._utcDate = this._zoneDate.clone();
-            this._unixUtcMillisCache = null;
         }
         return this;
     };
@@ -1624,7 +1714,6 @@ var DateTime = (function () {
      * Calculate this._zoneDate from this._utcDate
      */
     DateTime.prototype._utcDateToZoneDate = function () {
-        this._unixUtcMillisCache = null;
         /* istanbul ignore else */
         if (this._zone) {
             var offset = this._zone.offsetForUtc(this._utcDate.year, this._utcDate.month, this._utcDate.day, this._utcDate.hour, this._utcDate.minute, this._utcDate.second, this._utcDate.milli);
@@ -1638,7 +1727,6 @@ var DateTime = (function () {
      * Calculate this._utcDate from this._zoneDate
      */
     DateTime.prototype._zoneDateToUtcDate = function () {
-        this._unixUtcMillisCache = null;
         if (this._zone) {
             var offset = this._zone.offsetForZone(this._zoneDate.year, this._zoneDate.month, this._zoneDate.day, this._zoneDate.hour, this._zoneDate.minute, this._zoneDate.second, this._zoneDate.milli);
             this._utcDate = TimeStruct.fromUnix(this._zoneDate.toUnixNoLeapSecs() - offset * 60000);
@@ -2370,6 +2458,7 @@ exports.DateTime = datetime.DateTime;
 exports.now = datetime.now;
 exports.nowLocal = datetime.nowLocal;
 exports.nowUtc = datetime.nowUtc;
+exports.UTC_MILLIS_CACHE = datetime.UTC_MILLIS_CACHE;
 var duration = require("./duration");
 duration;
 exports.Duration = duration.Duration;

@@ -776,3 +776,46 @@ export class TimeStruct {
 
 }
 
+
+/**
+ * Binary search
+ * @param array Array to search
+ * @param compare Function that should return < 0 if given element is less than searched element etc
+ * @return {Number} The insertion index of the element to look for
+ */
+export function binaryInsertionIndex<T>(arr: T[], compare?: (a: T) => number): number {
+	var minIndex = 0;
+	var maxIndex = arr.length - 1;
+	var currentIndex: number;
+	var currentElement: T;
+	// no array / empty array
+	if (!arr) {
+		return 0;
+	}
+	if (arr.length === 0) {
+		return 0;
+	}
+	// out of bounds
+	if (compare(arr[0]) > 0) {
+		return 0;
+	}
+	if (compare(arr[maxIndex]) < 0) {
+		return maxIndex + 1;
+	}
+	// element in range
+	while (minIndex <= maxIndex) {
+		currentIndex = Math.floor((minIndex + maxIndex) / 2);
+		currentElement = arr[currentIndex];
+
+		if (compare(currentElement) < 0) {
+			minIndex = currentIndex + 1;
+		} else if (compare(currentElement) > 0) {
+			maxIndex = currentIndex - 1;
+		} else {
+			return currentIndex;
+		}
+	}
+
+	return maxIndex;
+}
+

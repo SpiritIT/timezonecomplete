@@ -57,6 +57,81 @@ export function now(timeZone: TimeZone = TimeZone.utc()): DateTime {
 	return DateTime.now(timeZone);
 }
 
+interface CacheElement {
+	/**
+	 * Time to represent
+	 */
+	isoString: string;
+	/**
+	 * Same time in unix utc millis
+	 */
+	unixUtcMillis: number;
+	/**
+	 * Indicates how recently the element was used
+	 */
+	seqNo: number;
+}
+
+/**
+ * Cache for timestruct -> utc millis conversion
+ */
+export class UtcMillisCache {
+
+	public MAX_CACHE_SIZE: number = 1000;
+
+	private _lastSeqNo: number = 0;
+	private _cache: CacheElement[] = [];
+
+	/**
+	 * Returns the unix milliseconds for a given time struct
+	 */
+	public timeStruct2UtcMillis(timeStruct: TimeStruct): number {
+		var cacheElement: CacheElement;
+		var isoString = timeStruct.toString();
+		var index = basics.binaryInsertionIndex(this._cache, (a: CacheElement): number => {
+			return (a.isoString < isoString ? -1 : (a.isoString > isoString ? 1 : 0));
+		});
+
+		// element found in cache?
+		if (index >= 0 && index < this._cache.length && this._cache[index].isoString === isoString) {
+			cacheElement = this._cache[index];
+			// mark cache element as recently used
+			if (cacheElement.seqNo < this._lastSeqNo) {
+				this._lastSeqNo++;
+				cacheElement.seqNo = this._lastSeqNo;
+			}
+			return cacheElement.unixUtcMillis;
+		} else {
+			// if oversized, trim cache by throwing away elements not recently used
+			if (this._cache.length >= this.MAX_CACHE_SIZE) {
+				this._cache = this._cache.filter((element: CacheElement): boolean => {
+					return (element.seqNo >= this._lastSeqNo - this.MAX_CACHE_SIZE / 2);
+				});
+			}
+			// add element to cache
+			var unixUtcMillis = timeStruct.toUnixNoLeapSecs();
+			this._lastSeqNo++;
+			cacheElement = {
+				isoString: isoString,
+				unixUtcMillis: unixUtcMillis,
+				seqNo: this._lastSeqNo
+			};
+			this._cache.splice(index, 0, cacheElement);
+			return unixUtcMillis;
+		}
+	}
+
+	/**
+	 * The current cache size, for testing purposes
+	 */
+	public size(): number {
+		return this._cache.length;
+	}
+
+}
+
+export var UTC_MILLIS_CACHE = new UtcMillisCache();
+
 /**
  * DateTime class which is time zone-aware
  * and which can be mocked for testing purposes.
@@ -68,12 +143,6 @@ export class DateTime {
 	 * getUTCXxx() fields.
 	 */
 	private _utcDate: TimeStruct;
-
-	/**
-	 * Cached value for unixUtcMillis(). This is useful because valueOf() uses it and it is
-	 * likely to be called multiple times.
-	 */
-	private _unixUtcMillisCache: number = null;
 
 	/**
 	 * Date object that contains the represented date converted to this._zone in its
@@ -358,7 +427,6 @@ export class DateTime {
 		var result = new DateTime();
 		result._utcDate = this._utcDate.clone();
 		result._zoneDate = this._zoneDate.clone();
-		result._unixUtcMillisCache = this._unixUtcMillisCache;
 		result._zone = this._zone;
 		return result;
 	}
@@ -495,10 +563,7 @@ export class DateTime {
 	 * @return Milliseconds since 1970-01-01T00:00:00.000Z
 	 */
 	public unixUtcMillis(): number {
-		if (this._unixUtcMillisCache === null) {
-			this._unixUtcMillisCache = this._utcDate.toUnixNoLeapSecs();
-		}
-		return this._unixUtcMillisCache;
+		return UTC_MILLIS_CACHE.timeStruct2UtcMillis(this._utcDate);
 	}
 
 	/**
@@ -633,7 +698,6 @@ export class DateTime {
 		} else {
 			this._zone = null;
 			this._utcDate = this._zoneDate.clone();
-			this._unixUtcMillisCache = null;
 		}
 		return this;
 	}
@@ -1073,7 +1137,6 @@ export class DateTime {
 	 * Calculate this._zoneDate from this._utcDate
 	 */
 	private _utcDateToZoneDate(): void {
-		this._unixUtcMillisCache = null;
 		/* istanbul ignore else */
 		if (this._zone) {
 			var offset: number = this._zone.offsetForUtc(this._utcDate.year, this._utcDate.month, this._utcDate.day,
@@ -1088,7 +1151,6 @@ export class DateTime {
 	 * Calculate this._utcDate from this._zoneDate
 	 */
 	private _zoneDateToUtcDate(): void {
-		this._unixUtcMillisCache = null;
 		if (this._zone) {
 			var offset: number = this._zone.offsetForZone(this._zoneDate.year, this._zoneDate.month, this._zoneDate.day,
 				this._zoneDate.hour, this._zoneDate.minute, this._zoneDate.second, this._zoneDate.milli);

@@ -23,6 +23,7 @@ declare module 'timezonecomplete' {
     export import now = datetime.now;
     export import nowLocal = datetime.nowLocal;
     export import nowUtc = datetime.nowUtc;
+    export import UTC_MILLIS_CACHE = datetime.UTC_MILLIS_CACHE;
     import duration = require("__timezonecomplete/duration");
     export import Duration = duration.Duration;
     export import years = duration.years;
@@ -335,11 +336,19 @@ declare module '__timezonecomplete/basics' {
             toString(): string;
             inspect(): string;
     }
+    /**
+        * Binary search
+        * @param array Array to search
+        * @param compare Function that should return < 0 if given element is less than searched element etc
+        * @return {Number} The insertion index of the element to look for
+        */
+    export function binaryInsertionIndex<T>(arr: T[], compare?: (a: T) => number): number;
 }
 
 declare module '__timezonecomplete/datetime' {
     import basics = require("__timezonecomplete/basics");
     import WeekDay = basics.WeekDay;
+    import TimeStruct = basics.TimeStruct;
     import TimeUnit = basics.TimeUnit;
     import duration = require("__timezonecomplete/duration");
     import Duration = duration.Duration;
@@ -362,6 +371,21 @@ declare module '__timezonecomplete/datetime' {
         * @param timeZone	The desired time zone (optional, defaults to UTC).
         */
     export function now(timeZone?: TimeZone): DateTime;
+    /**
+        * Cache for timestruct -> utc millis conversion
+        */
+    export class UtcMillisCache {
+            MAX_CACHE_SIZE: number;
+            /**
+                * Returns the unix milliseconds for a given time struct
+                */
+            timeStruct2UtcMillis(timeStruct: TimeStruct): number;
+            /**
+                * The current cache size, for testing purposes
+                */
+            size(): number;
+    }
+    export var UTC_MILLIS_CACHE: UtcMillisCache;
     /**
         * DateTime class which is time zone-aware
         * and which can be mocked for testing purposes.

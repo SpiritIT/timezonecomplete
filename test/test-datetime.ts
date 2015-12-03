@@ -1610,6 +1610,16 @@ describe("DateTime", (): void => {
 			expect(d.format("dd/MM/yyyy HH:mm:ss")).to.equal("26/05/2014 00:30:00");
 		});
 	});
+
+	describe("unixUtcMillis()", (): void => {
+		it("should trim the cache", (): void => {
+			for (var i = 0; i < 2 * datetimeFuncs.UTC_MILLIS_CACHE.MAX_CACHE_SIZE; ++i) {
+				var d = new DateTime(i, TimeZone.utc());
+				expect(d.unixUtcMillis()).to.equal(i);
+			}
+			expect(datetimeFuncs.UTC_MILLIS_CACHE.size()).to.be.lessThan(datetimeFuncs.UTC_MILLIS_CACHE.MAX_CACHE_SIZE + 1);
+		});
+	});
 });
 
 
