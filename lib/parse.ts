@@ -134,7 +134,6 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 			}
 		});
 		if (!result.time.validate()) {
-			console.log(util.inspect(result.time, false, 2));
 			throw new Error("resulting date invalid");
 		}
 		// always overwrite zone with given zone
