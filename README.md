@@ -674,6 +674,12 @@ The version of the included IANA time zone database is 2015g.
 
 ## Changelog
 
+### 1.25.1 (2016-01-13)
+* Improved documentation for DateTime.add()/sub()/addLocal()/subLocal()
+* Removed console.log() statement
+* Bugfix: DateTime#format() would throw if a zone was specified in the format string but no zone was present
+* DateTime#format() now trims the string before returning it.
+
 ### 1.25.0 (2015-12-03)
 * Removed private DateTime member _unixUtcMillisCache to facilitate simple comparison of date objects by their members. There is now a global cache of unix milliseconds.
 
