@@ -771,12 +771,12 @@ export class DateTime {
 
 
 	/**
-	 * Add a time duration relative to UTC.
+	 * Add a time duration relative to UTC. Returns a new DateTime
 	 * @return this + duration
 	 */
 	public add(duration: Duration): DateTime;
 	/**
-	 * Add an amount of time relative to UTC, as regularly as possible.
+	 * Add an amount of time relative to UTC, as regularly as possible. Returns a new DateTime
 	 *
 	 * Adding e.g. 1 hour will increment the utcHour() field, adding 1 month
 	 * increments the utcMonth() field.
@@ -812,7 +812,7 @@ export class DateTime {
 	}
 
 	/**
-	 * Add an amount of time to the zone time, as regularly as possible.
+	 * Add an amount of time to the zone time, as regularly as possible. Returns a new DateTime
 	 *
 	 * Adding e.g. 1 hour will increment the hour() field of the zone
 	 * date by one. In case of DST changes, the time fields may additionally
@@ -927,11 +927,11 @@ export class DateTime {
 	}
 
 	/**
-	 * Same as add(-1*duration);
+	 * Same as add(-1*duration); Returns a new DateTime
 	 */
 	public sub(duration: Duration): DateTime;
 	/**
-	 * Same as add(-1*amount, unit);
+	 * Same as add(-1*amount, unit); Returns a new DateTime
 	 */
 	public sub(amount: number, unit: TimeUnit): DateTime;
 	public sub(a1: any, unit?: TimeUnit): DateTime {
@@ -947,7 +947,7 @@ export class DateTime {
 	}
 
 	/**
-	 * Same as addLocal(-1*amount, unit);
+	 * Same as addLocal(-1*amount, unit); Returns a new DateTime
 	 */
 	public subLocal(duration: Duration): DateTime;
 	public subLocal(amount: number, unit: TimeUnit): DateTime;
