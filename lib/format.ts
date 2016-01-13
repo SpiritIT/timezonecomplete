@@ -77,7 +77,7 @@ export function format(dateTime: TimeStruct, utcTime: TimeStruct, localZone: tim
 		result += tokenResult;
 	});
 
-	return result;
+	return result.trim();
 }
 
 /**
@@ -359,6 +359,9 @@ function _formatSecond(dateTime: TimeStruct, token: Token): string {
  * @return string
  */
 function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: timeZone.TimeZone, token: Token): string {
+	if (!zone) {
+		return "";
+	}
 	var offset = Math.round((currentTime.toUnixNoLeapSecs() - utcTime.toUnixNoLeapSecs()) / 60000);
 
 	var offsetHours: number = Math.floor(Math.abs(offset) / 60);

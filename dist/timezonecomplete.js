@@ -2576,7 +2576,7 @@ function format(dateTime, utcTime, localZone, formatString) {
         }
         result += tokenResult;
     });
-    return result;
+    return result.trim();
 }
 exports.format = format;
 /**
@@ -2849,6 +2849,9 @@ function _formatSecond(dateTime, token) {
  * @return string
  */
 function _formatZone(currentTime, utcTime, zone, token) {
+    if (!zone) {
+        return "";
+    }
     var offset = Math.round((currentTime.toUnixNoLeapSecs() - utcTime.toUnixNoLeapSecs()) / 60000);
     var offsetHours = Math.floor(Math.abs(offset) / 60);
     var offsetHoursString = strings.padLeft(offsetHours.toString(), 2, "0");
@@ -3215,7 +3218,6 @@ function parse(dateTimeString, formatString, zone) {
             }
         });
         if (!result.time.validate()) {
-            console.log(util.inspect(result.time, false, 2));
             throw new Error("resulting date invalid");
         }
         // always overwrite zone with given zone

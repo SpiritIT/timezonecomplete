@@ -688,12 +688,12 @@ declare module '__timezonecomplete/datetime' {
                 */
             toUtcExcel(): number;
             /**
-                * Add a time duration relative to UTC.
+                * Add a time duration relative to UTC. Returns a new DateTime
                 * @return this + duration
                 */
             add(duration: Duration): DateTime;
             /**
-                * Add an amount of time relative to UTC, as regularly as possible.
+                * Add an amount of time relative to UTC, as regularly as possible. Returns a new DateTime
                 *
                 * Adding e.g. 1 hour will increment the utcHour() field, adding 1 month
                 * increments the utcMonth() field.
@@ -709,7 +709,7 @@ declare module '__timezonecomplete/datetime' {
                 */
             add(amount: number, unit: TimeUnit): DateTime;
             /**
-                * Add an amount of time to the zone time, as regularly as possible.
+                * Add an amount of time to the zone time, as regularly as possible. Returns a new DateTime
                 *
                 * Adding e.g. 1 hour will increment the hour() field of the zone
                 * date by one. In case of DST changes, the time fields may additionally
@@ -726,15 +726,15 @@ declare module '__timezonecomplete/datetime' {
             addLocal(duration: Duration): DateTime;
             addLocal(amount: number, unit: TimeUnit): DateTime;
             /**
-                * Same as add(-1*duration);
+                * Same as add(-1*duration); Returns a new DateTime
                 */
             sub(duration: Duration): DateTime;
             /**
-                * Same as add(-1*amount, unit);
+                * Same as add(-1*amount, unit); Returns a new DateTime
                 */
             sub(amount: number, unit: TimeUnit): DateTime;
             /**
-                * Same as addLocal(-1*amount, unit);
+                * Same as addLocal(-1*amount, unit); Returns a new DateTime
                 */
             subLocal(duration: Duration): DateTime;
             subLocal(amount: number, unit: TimeUnit): DateTime;

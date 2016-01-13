@@ -472,6 +472,29 @@ describe("format", (): void => {
 	});
 
 	describe("formatTimeZone", (): void => {
+		it("should not crash on NULL zone", (): void => {
+			utcTime = basics.unixToTimeNoLeapSecs(dateTime.toUnixNoLeapSecs());
+			expect(format.format(dateTime, utcTime, null, "z")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "zzzz")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "zzzzz")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "O")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "OOOO")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "v")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "vvvv")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "V")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "VV")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "VVV")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "VVVV")).to.equal("");
+			expect(format.format(dateTime, utcTime, null, "VVVVVV")).to.equal("");
+		});
+
+		it("should not add space for NULL zone", (): void => {
+			dateTime.year = 2014;
+			dateTime.month = 7;
+			dateTime.day = 15;
+			utcTime = dateTime;
+			expect(format.format(dateTime, utcTime, null, "MM/dd/yyyy z")).to.equal("07/15/2014");
+		});
 
 		it("should get the short specific name of the timezone for format z", (): void => {
 			localZone = new timeZone.TimeZone("Europe/Amsterdam");

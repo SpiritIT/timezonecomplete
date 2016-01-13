@@ -1609,6 +1609,14 @@ describe("DateTime", (): void => {
 			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			expect(d.format("dd/MM/yyyy HH:mm:ss")).to.equal("26/05/2014 00:30:00");
 		});
+		it("should not care about NULL time zone", (): void => {
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, null);
+			expect(d.format("dd/MM/yyyy HH:mm:ss zzzz")).to.equal("26/05/2014 00:30:00");
+		});
+		it("should add non-null time zone", (): void => {
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("America/Chicago"));
+			expect(d.format("dd/MM/yyyy HH:mm:ss zzzz")).to.equal("26/05/2014 00:30:00 America/Chicago");
+		});
 	});
 
 	describe("unixUtcMillis()", (): void => {
