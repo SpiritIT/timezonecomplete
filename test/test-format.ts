@@ -165,6 +165,18 @@ describe("format", (): void => {
 			dateTime.month = 1;
 			assert.throws((): void => { format.format(dateTime, utcTime, localZone, "MMMMMM"); });
 		});
+		it("should use given format options", (): void => {
+			dateTime.month = 11;
+			expect(format.format(dateTime, utcTime, localZone, "MMM", {
+				shortMonthNames: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+			})).to.equal("K");
+			expect(format.format(dateTime, utcTime, localZone, "MMMM", {
+				longMonthNames: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+			})).to.equal("K");
+			expect(format.format(dateTime, utcTime, localZone, "MMMMM", {
+				monthLetters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+			})).to.equal("K");
+		});
 	});
 
 	describe("formatWeek", (): void => {

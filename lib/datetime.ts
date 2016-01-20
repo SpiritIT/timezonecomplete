@@ -1075,10 +1075,11 @@ export class DateTime {
 	 * (http://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns)
 	 *
 	 * @param formatString The format specification (e.g. "dd/MM/yyyy HH:mm:ss")
+	 * @param formatOptions Optional, non-english format month names etc.
 	 * @return The string representation of this DateTime
 	 */
-	public format(formatString: string): string {
-		return format.format(this._zoneDate, this._utcDate, this.zone(), formatString);
+	public format(formatString: string, formatOptions?: format.FormatOptions): string {
+		return format.format(this._zoneDate, this._utcDate, this.zone(), formatString, formatOptions);
 	}
 
 	/**

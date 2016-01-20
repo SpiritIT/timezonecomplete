@@ -17,6 +17,82 @@ import TokenType = token.DateTimeTokenType;
 import strings = require("./strings");
 import timeZone = require("./timezone");
 
+
+export interface FormatOptions {
+	/**
+	 * The letter indicating a quarter e.g. "Q" (becomes Q1, Q2, Q3, Q4)
+	 */
+	quarterLetter?: string;
+	/**
+	 * The word for 'quarter'
+	 */
+	quarterWord?: string;
+	/**
+	 * Quarter abbreviations e.g. 1st, 2nd, 3rd, 4th
+	 */
+	quarterAbbreviations?: string[];
+
+	/**
+	 * Month names
+	 */
+	longMonthNames?: string[];
+	/**
+	 * Three-letter month names
+	 */
+	shortMonthNames?: string[];
+	/**
+	 * Month letters
+	 */
+	monthLetters?: string[];
+
+	/**
+	 * Week day names, starting with sunday
+	 */
+	longWeekdayNames?: string[];
+	shortWeekdayNames?: string[];
+	weekdayTwoLetters?: string[];
+	weekdayLetters?: string[];
+}
+
+export var LONG_MONTH_NAMES =
+	["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+export var SHORT_MONTH_NAMES =
+	["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export var MONTH_LETTERS =
+	["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+
+export var LONG_WEEKDAY_NAMES =
+	["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+export var SHORT_WEEKDAY_NAMES =
+	["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+export var WEEKDAY_TWO_LETTERS =
+	["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+export var WEEKDAY_LETTERS =
+	["S", "M", "T", "W", "T", "F", "S"];
+
+export var QUARTER_LETTER = "Q";
+export var QUARTER_WORD = "quarter";
+export var QUARTER_ABBREVIATIONS = ["1st", "2nd", "3rd", "4th"];
+
+export var DEFAULT_FORMAT_OPTIONS: FormatOptions = {
+	quarterLetter: QUARTER_LETTER,
+	quarterWord: QUARTER_WORD,
+	quarterAbbreviations: QUARTER_ABBREVIATIONS,
+	longMonthNames: LONG_MONTH_NAMES,
+	shortMonthNames: SHORT_MONTH_NAMES,
+	monthLetters: MONTH_LETTERS,
+	longWeekdayNames: LONG_WEEKDAY_NAMES,
+	shortWeekdayNames: SHORT_WEEKDAY_NAMES,
+	weekdayTwoLetters: WEEKDAY_TWO_LETTERS,
+	weekdayLetters: WEEKDAY_LETTERS
+};
+
+
 /**
  * Format the supplied dateTime with the formatting string.
  *
@@ -24,9 +100,30 @@ import timeZone = require("./timezone");
  * @param utcTime The time in UTC
  * @param localZone The zone that currentTime is in
  * @param formatString The formatting string to be applied
+ * @param formatOptions Other format options such as month names
  * @return string
  */
-export function format(dateTime: TimeStruct, utcTime: TimeStruct, localZone: timeZone.TimeZone, formatString: string): string {
+export function format(
+	dateTime: TimeStruct,
+	utcTime: TimeStruct,
+	localZone: timeZone.TimeZone,
+	formatString: string,
+	formatOptions: FormatOptions = {}
+): string {
+	// merge format options with default format options
+	// typecast to prevent error TS7017: Index signature of object type implicitly has an 'any' type.
+	var givenFormatOptions: { [index: string]: any } = formatOptions;
+	var defaultFormatOptions: { [index: string]: any } = DEFAULT_FORMAT_OPTIONS;
+	var mergedFormatOptions: { [index: string]: any } = {};
+	for (var name in DEFAULT_FORMAT_OPTIONS) {
+		if (DEFAULT_FORMAT_OPTIONS.hasOwnProperty(name)) {
+			var givenFormatOption: any = givenFormatOptions[name];
+			var defaultFormatOption: any = defaultFormatOptions[name];
+			mergedFormatOptions[name] = givenFormatOption || defaultFormatOption;
+		}
+	}
+	formatOptions = mergedFormatOptions;
+
 	var tokenizer = new Tokenizer(formatString);
 	var tokens: Token[] = tokenizer.parseTokens();
 	var result: string = "";
@@ -40,16 +137,16 @@ export function format(dateTime: TimeStruct, utcTime: TimeStruct, localZone: tim
 				tokenResult = _formatYear(dateTime, token);
 				break;
 			case TokenType.QUARTER:
-				tokenResult = _formatQuarter(dateTime, token);
+				tokenResult = _formatQuarter(dateTime, token, formatOptions);
 				break;
 			case TokenType.MONTH:
-				tokenResult = _formatMonth(dateTime, token);
+				tokenResult = _formatMonth(dateTime, token, formatOptions);
 				break;
 			case TokenType.DAY:
 				tokenResult = _formatDay(dateTime, token);
 				break;
 			case TokenType.WEEKDAY:
-				tokenResult = _formatWeekday(dateTime, token);
+				tokenResult = _formatWeekday(dateTime, token, formatOptions);
 				break;
 			case TokenType.DAYPERIOD:
 				tokenResult = _formatDayPeriod(dateTime, token);
@@ -137,17 +234,16 @@ function _formatYear(dateTime: TimeStruct, token: Token): string {
  * @param token The token passed
  * @return string
  */
-function _formatQuarter(dateTime: TimeStruct, token: Token): string {
-	var quarterAbbr = ["1st", "2nd", "3rd", "4th"];
+function _formatQuarter(dateTime: TimeStruct, token: Token, formatOptions: FormatOptions): string {
 	var quarter = Math.ceil(dateTime.month / 3);
 	switch (token.length) {
 		case 1:
 		case 2:
 			return strings.padLeft(quarter.toString(), 2, "0");
 		case 3:
-			return "Q" + quarter;
+			return formatOptions.quarterLetter + quarter;
 		case 4:
-			return quarterAbbr[quarter - 1] + " quarter";
+			return formatOptions.quarterAbbreviations[quarter - 1] + " " + formatOptions.quarterWord;
 		case 5:
 			return quarter.toString();
 		/* istanbul ignore next */
@@ -167,20 +263,17 @@ function _formatQuarter(dateTime: TimeStruct, token: Token): string {
  * @param token The token passed
  * @return string
  */
-function _formatMonth(dateTime: TimeStruct, token: Token): string {
-	var monthStrings = ["January", "February", "March", "April", "May",
-		"June", "July", "August", "September", "October", "November", "December"];
-	var monthString = monthStrings[dateTime.month - 1];
+function _formatMonth(dateTime: TimeStruct, token: Token, formatOptions: FormatOptions): string {
 	switch (token.length) {
 		case 1:
 		case 2:
 			return strings.padLeft(dateTime.month.toString(), token.length, "0");
 		case 3:
-			return monthString.slice(0, 3);
+			return formatOptions.shortMonthNames[dateTime.month - 1];
 		case 4:
-			return monthString;
+			return formatOptions.longMonthNames[dateTime.month - 1];
 		case 5:
-			return monthString.slice(0, 1);
+			return formatOptions.monthLetters[dateTime.month - 1];
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore if */
@@ -237,8 +330,8 @@ function _formatDay(dateTime: TimeStruct, token: Token): string {
  * @param token The token passed
  * @return string
  */
-function _formatWeekday(dateTime: TimeStruct, token: Token): string {
-	var weekDay = basics.WeekDay[basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs())];
+function _formatWeekday(dateTime: TimeStruct, token: Token, formatOptions: FormatOptions): string {
+	var weekDayNumber = basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs());
 
 	switch (token.length) {
 		case 1:
@@ -247,13 +340,13 @@ function _formatWeekday(dateTime: TimeStruct, token: Token): string {
 				return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs()).toString(), token.length, "0");
 			} // No break, this is intentional fallthrough!
 		case 3:
-			return weekDay.slice(0, 3);
+			return formatOptions.shortWeekdayNames[weekDayNumber];
 		case 4:
-			return weekDay;
+			return formatOptions.longWeekdayNames[weekDayNumber];
 		case 5:
-			return weekDay.slice(0, 1);
+			return formatOptions.weekdayLetters[weekDayNumber];
 		case 6:
-			return weekDay.slice(0, 2);
+			return formatOptions.weekdayTwoLetters[weekDayNumber];
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore if */

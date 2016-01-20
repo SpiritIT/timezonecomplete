@@ -46,6 +46,10 @@ export import minutes = duration.minutes;
 export import seconds = duration.seconds;
 export import milliseconds = duration.milliseconds;
 
+import format = require("./format"); format;
+export import DEFAULT_FORMAT_OPTIONS = format.DEFAULT_FORMAT_OPTIONS;
+export import FormatOptions = format.FormatOptions;
+
 import javascript = require("./javascript"); javascript;
 export import DateFunctions = javascript.DateFunctions;
 
@@ -75,7 +79,6 @@ export import ToType = tzDatabase.ToType;
 export import Transition = tzDatabase.Transition;
 export import TzDatabase = tzDatabase.TzDatabase;
 export import ZoneInfo = tzDatabase.ZoneInfo;
-
 
 import globals = require("./globals"); globals;
 export import min = globals.min;

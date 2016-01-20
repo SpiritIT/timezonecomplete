@@ -33,6 +33,9 @@ declare module 'timezonecomplete' {
     export import minutes = duration.minutes;
     export import seconds = duration.seconds;
     export import milliseconds = duration.milliseconds;
+    import format = require("__timezonecomplete/format");
+    export import DEFAULT_FORMAT_OPTIONS = format.DEFAULT_FORMAT_OPTIONS;
+    export import FormatOptions = format.FormatOptions;
     import javascript = require("__timezonecomplete/javascript");
     export import DateFunctions = javascript.DateFunctions;
     import period = require("__timezonecomplete/period");
@@ -358,6 +361,7 @@ declare module '__timezonecomplete/datetime' {
     import TimeSource = timesource.TimeSource;
     import timezone = require("__timezonecomplete/timezone");
     import TimeZone = timezone.TimeZone;
+    import format = require("__timezonecomplete/format");
     /**
         * Current date+time in local time
         */
@@ -801,9 +805,10 @@ declare module '__timezonecomplete/datetime' {
                 * (http://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns)
                 *
                 * @param formatString The format specification (e.g. "dd/MM/yyyy HH:mm:ss")
+                * @param formatOptions Optional, non-english format month names etc.
                 * @return The string representation of this DateTime
                 */
-            format(formatString: string): string;
+            format(formatString: string, formatOptions?: format.FormatOptions): string;
             /**
                 * Parse a date in a given format
                 * @param s the string to parse
@@ -1159,6 +1164,72 @@ declare module '__timezonecomplete/duration' {
                 */
             valueOf(): any;
     }
+}
+
+declare module '__timezonecomplete/format' {
+    /**
+        * Copyright(c) 2014 Spirit IT BV
+        *
+        * Functionality to parse a DateTime object to a string
+        */
+    import basics = require("__timezonecomplete/basics");
+    import TimeStruct = basics.TimeStruct;
+    import timeZone = require("__timezonecomplete/timezone");
+    export interface FormatOptions {
+            /**
+                * The letter indicating a quarter e.g. "Q" (becomes Q1, Q2, Q3, Q4)
+                */
+            quarterLetter?: string;
+            /**
+                * The word for 'quarter'
+                */
+            quarterWord?: string;
+            /**
+                * Quarter abbreviations e.g. 1st, 2nd, 3rd, 4th
+                */
+            quarterAbbreviations?: string[];
+            /**
+                * Month names
+                */
+            longMonthNames?: string[];
+            /**
+                * Three-letter month names
+                */
+            shortMonthNames?: string[];
+            /**
+                * Month letters
+                */
+            monthLetters?: string[];
+            /**
+                * Week day names, starting with sunday
+                */
+            longWeekdayNames?: string[];
+            shortWeekdayNames?: string[];
+            weekdayTwoLetters?: string[];
+            weekdayLetters?: string[];
+    }
+    export var LONG_MONTH_NAMES: string[];
+    export var SHORT_MONTH_NAMES: string[];
+    export var MONTH_LETTERS: string[];
+    export var LONG_WEEKDAY_NAMES: string[];
+    export var SHORT_WEEKDAY_NAMES: string[];
+    export var WEEKDAY_TWO_LETTERS: string[];
+    export var WEEKDAY_LETTERS: string[];
+    export var QUARTER_LETTER: string;
+    export var QUARTER_WORD: string;
+    export var QUARTER_ABBREVIATIONS: string[];
+    export var DEFAULT_FORMAT_OPTIONS: FormatOptions;
+    /**
+        * Format the supplied dateTime with the formatting string.
+        *
+        * @param dateTime The current time to format
+        * @param utcTime The time in UTC
+        * @param localZone The zone that currentTime is in
+        * @param formatString The formatting string to be applied
+        * @param formatOptions Other format options such as month names
+        * @return string
+        */
+    export function format(dateTime: TimeStruct, utcTime: TimeStruct, localZone: timeZone.TimeZone, formatString: string, formatOptions?: FormatOptions): string;
 }
 
 declare module '__timezonecomplete/javascript' {

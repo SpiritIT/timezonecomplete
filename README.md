@@ -606,6 +606,39 @@ var s = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), tc.months(1), tc.P
 p.equals(q); // false, not same results
 p.identical(q); // false, not same constructor arguments
 
+```
+
+### Internationalization
+
+You can format and parse date times using LDML format strings. You can also change the used month, weekday and quarter names.
+Unfortunately, parsing month, weekday and quarter names is not yet possible. Please submit an issue if you need it.
+
+```
+// parsing and formatting
+var dt = new tc.DateTime("2015-03-01", "yyyy-MM-dd");
+dt.format("dd-MMMM-yyyy"); // "31-March-2015"
+
+// formatting with custom month names
+dt.format("dd-MMMM-yyyy", {
+	longMonthNames: ["Januari", "Februari", "Maart", "April", "Mei", .......]
+}); // "31-Maart-2015"
+
+// default month names
+console.log(tc.DEFAULT_FORMAT_OPTIONS.longMonthNames[1]); // "January"
+
+// all possible format options for English/US:
+var myFormatOptions = {
+	quarterLetter: "Q",
+	quarterWord: "quarter",
+	quarterAbbreviations: ["1st", "2nd", "3rd", "4th"],
+	longMonthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+	shortMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	monthLetters: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+	longWeekdayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+	shortWeekdayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+	weekdayTwoLetters: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+	weekdayLetters: ["S", "M", "T", "W", "T", "F", "S"]
+}
 
 ```
 
@@ -673,6 +706,9 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2015g.
 
 ## Changelog
+
+### 1.26.0 (2016-01-20)
+* Add possibility to change month, weekday, quarter names
 
 ### 1.25.1 (2016-01-13)
 * Improved documentation for DateTime.add()/sub()/addLocal()/subLocal()

@@ -193,9 +193,6 @@ gulp.task("build", function () {
 			target: "es5",
 			noImplicitAny: true
 		}));
-	tsResult.on("error", function (err) {
-		result.emit("error", err);
-	});
 	var jsStream = tsResult.js
 		.pipe(sourcemaps.write());
 	var dtsStream = tsResult.dts;

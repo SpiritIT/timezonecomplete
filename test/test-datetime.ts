@@ -1617,6 +1617,12 @@ describe("DateTime", (): void => {
 			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("America/Chicago"));
 			expect(d.format("dd/MM/yyyy HH:mm:ss zzzz")).to.equal("26/05/2014 00:30:00 America/Chicago");
 		});
+		it("should use given format options", (): void => {
+			var d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("America/Chicago"));
+			expect(d.format("MMM", {
+				shortMonthNames: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+			})).to.equal("E");
+		});
 	});
 
 	describe("unixUtcMillis()", (): void => {

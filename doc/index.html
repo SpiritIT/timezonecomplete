@@ -629,7 +629,35 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 p.equals(q); <span class="hljs-comment">// false, not same results</span>
 p.identical(q); <span class="hljs-comment">// false, not same constructor arguments</span>
 </code></pre>
-				<h2 id="on-a-web-page">On a web page</h2>
+				<h3 id="internationalization">Internationalization</h3>
+				<p>You can format and parse date times using LDML format strings. You can also change the used month, weekday and quarter names.
+				Unfortunately, parsing month, weekday and quarter names is not yet possible. Please submit an issue if you need it.</p>
+				<pre><code>// <span class="hljs-atom">parsing</span> <span class="hljs-atom">and</span> <span class="hljs-atom">formatting</span>
+<span class="hljs-atom">var</span> <span class="hljs-atom">dt</span> = <span class="hljs-atom">new</span> <span class="hljs-atom">tc</span>.<span class="hljs-name">DateTime</span>(<span class="hljs-string">"2015-03-01"</span>, <span class="hljs-string">"yyyy-MM-dd"</span>);
+<span class="hljs-atom">dt</span>.<span class="hljs-atom">format</span>(<span class="hljs-string">"dd-MMMM-yyyy"</span>); // <span class="hljs-string">"31-March-2015"</span>
+
+// <span class="hljs-atom">formatting</span> <span class="hljs-atom">with</span> <span class="hljs-atom">custom</span> <span class="hljs-atom">month</span> <span class="hljs-atom">names</span>
+<span class="hljs-atom">dt</span>.<span class="hljs-atom">format</span>(<span class="hljs-string">"dd-MMMM-yyyy"</span>, {
+    <span class="hljs-atom">longMonthNames</span>: [<span class="hljs-string">"Januari"</span>, <span class="hljs-string">"Februari"</span>, <span class="hljs-string">"Maart"</span>, <span class="hljs-string">"April"</span>, <span class="hljs-string">"Mei"</span>, .......]
+}); // <span class="hljs-string">"31-Maart-2015"</span>
+
+// <span class="hljs-atom">default</span> <span class="hljs-atom">month</span> <span class="hljs-atom">names</span>
+<span class="hljs-atom">console</span>.<span class="hljs-atom">log</span>(<span class="hljs-atom">tc</span>.<span class="hljs-name">DEFAULT_FORMAT_OPTIONS</span>.<span class="hljs-atom">longMonthNames</span>[<span class="hljs-number">1</span>]); // <span class="hljs-string">"January"</span>
+
+// <span class="hljs-atom">all</span> <span class="hljs-atom">possible</span> <span class="hljs-atom">format</span> <span class="hljs-atom">options</span> <span class="hljs-atom">for</span> <span class="hljs-name">English</span>/<span class="hljs-name">US</span>:
+<span class="hljs-atom">var</span> <span class="hljs-atom">myFormatOptions</span> = {
+    <span class="hljs-atom">quarterLetter</span>: <span class="hljs-string">"Q"</span>,
+    <span class="hljs-atom">quarterWord</span>: <span class="hljs-string">"quarter"</span>,
+    <span class="hljs-atom">quarterAbbreviations</span>: [<span class="hljs-string">"1st"</span>, <span class="hljs-string">"2nd"</span>, <span class="hljs-string">"3rd"</span>, <span class="hljs-string">"4th"</span>],
+    <span class="hljs-atom">longMonthNames</span>: [<span class="hljs-string">"January"</span>, <span class="hljs-string">"February"</span>, <span class="hljs-string">"March"</span>, <span class="hljs-string">"April"</span>, <span class="hljs-string">"May"</span>, <span class="hljs-string">"June"</span>, <span class="hljs-string">"July"</span>, <span class="hljs-string">"August"</span>, <span class="hljs-string">"September"</span>, <span class="hljs-string">"October"</span>, <span class="hljs-string">"November"</span>, <span class="hljs-string">"December"</span>],
+    <span class="hljs-atom">shortMonthNames</span>: [<span class="hljs-string">"Jan"</span>, <span class="hljs-string">"Feb"</span>, <span class="hljs-string">"Mar"</span>, <span class="hljs-string">"Apr"</span>, <span class="hljs-string">"May"</span>, <span class="hljs-string">"Jun"</span>, <span class="hljs-string">"Jul"</span>, <span class="hljs-string">"Aug"</span>, <span class="hljs-string">"Sep"</span>, <span class="hljs-string">"Oct"</span>, <span class="hljs-string">"Nov"</span>, <span class="hljs-string">"Dec"</span>],
+    <span class="hljs-atom">monthLetters</span>: [<span class="hljs-string">"J"</span>, <span class="hljs-string">"F"</span>, <span class="hljs-string">"M"</span>, <span class="hljs-string">"A"</span>, <span class="hljs-string">"M"</span>, <span class="hljs-string">"J"</span>, <span class="hljs-string">"J"</span>, <span class="hljs-string">"A"</span>, <span class="hljs-string">"S"</span>, <span class="hljs-string">"O"</span>, <span class="hljs-string">"N"</span>, <span class="hljs-string">"D"</span>],
+    <span class="hljs-atom">longWeekdayNames</span>: [<span class="hljs-string">"Sunday"</span>, <span class="hljs-string">"Monday"</span>, <span class="hljs-string">"Tuesday"</span>, <span class="hljs-string">"Wednesday"</span>, <span class="hljs-string">"Thursday"</span>, <span class="hljs-string">"Friday"</span>, <span class="hljs-string">"Saturday"</span>],
+    <span class="hljs-atom">shortWeekdayNames</span>: [<span class="hljs-string">"Sun"</span>, <span class="hljs-string">"Mon"</span>, <span class="hljs-string">"Tue"</span>, <span class="hljs-string">"Wed"</span>, <span class="hljs-string">"Thu"</span>, <span class="hljs-string">"Fri"</span>, <span class="hljs-string">"Sat"</span>],
+    <span class="hljs-atom">weekdayTwoLetters</span>: [<span class="hljs-string">"Su"</span>, <span class="hljs-string">"Mo"</span>, <span class="hljs-string">"Tu"</span>, <span class="hljs-string">"We"</span>, <span class="hljs-string">"Th"</span>, <span class="hljs-string">"Fr"</span>, <span class="hljs-string">"Sa"</span>],
+    <span class="hljs-atom">weekdayLetters</span>: [<span class="hljs-string">"S"</span>, <span class="hljs-string">"M"</span>, <span class="hljs-string">"T"</span>, <span class="hljs-string">"W"</span>, <span class="hljs-string">"T"</span>, <span class="hljs-string">"F"</span>, <span class="hljs-string">"S"</span>]
+}
+</code></pre><h2 id="on-a-web-page">On a web page</h2>
 				<p>We spent some effort making timezonecomplete usable in the browser, by packaging it in a <a href="https://github.com/umdjs/umd">UMD</a>. This way, it can be used for example in plain html/javascript:</p>
 				<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Timezonecomplete test<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
@@ -677,6 +705,10 @@ p.identical(q); <span class="hljs-comment">// false, not same constructor argume
 				<h2 id="current-tz-database-version-">Current TZ database version:</h2>
 				<p>The version of the included IANA time zone database is 2015g.</p>
 				<h2 id="changelog">Changelog</h2>
+				<h3 id="1-26-0-2016-01-20-">1.26.0 (2016-01-20)</h3>
+				<ul>
+					<li>Add possibility to change month, weekday, quarter names</li>
+				</ul>
 				<h3 id="1-25-1-2016-01-13-">1.25.1 (2016-01-13)</h3>
 				<ul>
 					<li>Improved documentation for DateTime.add()/sub()/addLocal()/subLocal()</li>
@@ -1000,9 +1032,9 @@ var dt = <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number
 				</ul>
 				<h2 id="contributors">Contributors</h2>
 				<ul>
-					<li>Rogier Schouten <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x72;&#x2e;&#x73;&#x63;&#104;&#111;&#117;&#x74;&#x65;&#110;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#116;&#46;&#99;&#x6f;&#109;">&#x72;&#x2e;&#x73;&#x63;&#104;&#111;&#117;&#x74;&#x65;&#110;&#x40;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#x69;&#116;&#46;&#99;&#x6f;&#109;</a></li>
-					<li>Daan Wissing <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#100;&#x2e;&#x77;&#105;&#x73;&#115;&#x69;&#110;&#x67;&#x40;&#x73;&#x70;&#105;&#114;&#105;&#116;&#x69;&#116;&#46;&#99;&#x6f;&#109;">&#100;&#x2e;&#x77;&#105;&#x73;&#115;&#x69;&#110;&#x67;&#x40;&#x73;&#x70;&#105;&#114;&#105;&#116;&#x69;&#116;&#46;&#99;&#x6f;&#109;</a></li>
-					<li>Peter Kooijmans <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#112;&#x2e;&#x6b;&#x6f;&#x6f;&#105;&#106;&#109;&#97;&#110;&#x73;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#x6d;">&#112;&#x2e;&#x6b;&#x6f;&#x6f;&#105;&#106;&#109;&#97;&#110;&#x73;&#64;&#x73;&#x70;&#x69;&#x72;&#x69;&#x74;&#105;&#x74;&#46;&#x63;&#x6f;&#x6d;</a></li>
+					<li>Rogier Schouten <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x72;&#46;&#115;&#x63;&#x68;&#x6f;&#117;&#116;&#x65;&#x6e;&#x40;&#x73;&#112;&#105;&#x72;&#105;&#x74;&#x69;&#x74;&#x2e;&#99;&#x6f;&#109;">&#x72;&#46;&#115;&#x63;&#x68;&#x6f;&#117;&#116;&#x65;&#x6e;&#x40;&#x73;&#112;&#105;&#x72;&#105;&#x74;&#x69;&#x74;&#x2e;&#99;&#x6f;&#109;</a></li>
+					<li>Daan Wissing <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x64;&#x2e;&#119;&#105;&#x73;&#x73;&#105;&#x6e;&#103;&#64;&#x73;&#x70;&#x69;&#114;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#109;">&#x64;&#x2e;&#119;&#105;&#x73;&#x73;&#105;&#x6e;&#103;&#64;&#x73;&#x70;&#x69;&#114;&#105;&#x74;&#105;&#116;&#x2e;&#x63;&#x6f;&#109;</a></li>
+					<li>Peter Kooijmans <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x70;&#x2e;&#x6b;&#x6f;&#x6f;&#x69;&#x6a;&#109;&#x61;&#110;&#x73;&#x40;&#x73;&#112;&#x69;&#114;&#105;&#116;&#105;&#x74;&#x2e;&#x63;&#111;&#x6d;">&#x70;&#x2e;&#x6b;&#x6f;&#x6f;&#x69;&#x6a;&#109;&#x61;&#110;&#x73;&#x40;&#x73;&#112;&#x69;&#114;&#105;&#116;&#105;&#x74;&#x2e;&#x63;&#111;&#x6d;</a></li>
 				</ul>
 				<h2 id="license">License</h2>
 				<p>MIT</p>

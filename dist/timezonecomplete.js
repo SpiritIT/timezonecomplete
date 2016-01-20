@@ -1659,10 +1659,11 @@ var DateTime = (function () {
      * (http://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns)
      *
      * @param formatString The format specification (e.g. "dd/MM/yyyy HH:mm:ss")
+     * @param formatOptions Optional, non-english format month names etc.
      * @return The string representation of this DateTime
      */
-    DateTime.prototype.format = function (formatString) {
-        return format.format(this._zoneDate, this._utcDate, this.zone(), formatString);
+    DateTime.prototype.format = function (formatString, formatOptions) {
+        return format.format(this._zoneDate, this._utcDate, this.zone(), formatString, formatOptions);
     };
     /**
      * Parse a date in a given format
@@ -2469,6 +2470,9 @@ exports.hours = duration.hours;
 exports.minutes = duration.minutes;
 exports.seconds = duration.seconds;
 exports.milliseconds = duration.milliseconds;
+var format = require("./format");
+format;
+exports.DEFAULT_FORMAT_OPTIONS = format.DEFAULT_FORMAT_OPTIONS;
 var javascript = require("./javascript");
 javascript;
 exports.DateFunctions = javascript.DateFunctions;
@@ -2505,7 +2509,7 @@ exports.max = globals.max;
 
 
 
-},{"./basics":1,"./datetime":2,"./duration":3,"./globals":6,"./javascript":9,"./period":12,"./timesource":14,"./timezone":16,"./tz-database":18}],5:[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./format":5,"./globals":6,"./javascript":9,"./period":12,"./timesource":14,"./timezone":16,"./tz-database":18}],5:[function(require,module,exports){
 /**
  * Copyright(c) 2014 Spirit IT BV
  *
@@ -2517,6 +2521,28 @@ var token = require("./token");
 var Tokenizer = token.Tokenizer;
 var TokenType = token.DateTimeTokenType;
 var strings = require("./strings");
+exports.LONG_MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+exports.SHORT_MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+exports.MONTH_LETTERS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+exports.LONG_WEEKDAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+exports.SHORT_WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+exports.WEEKDAY_TWO_LETTERS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+exports.WEEKDAY_LETTERS = ["S", "M", "T", "W", "T", "F", "S"];
+exports.QUARTER_LETTER = "Q";
+exports.QUARTER_WORD = "quarter";
+exports.QUARTER_ABBREVIATIONS = ["1st", "2nd", "3rd", "4th"];
+exports.DEFAULT_FORMAT_OPTIONS = {
+    quarterLetter: exports.QUARTER_LETTER,
+    quarterWord: exports.QUARTER_WORD,
+    quarterAbbreviations: exports.QUARTER_ABBREVIATIONS,
+    longMonthNames: exports.LONG_MONTH_NAMES,
+    shortMonthNames: exports.SHORT_MONTH_NAMES,
+    monthLetters: exports.MONTH_LETTERS,
+    longWeekdayNames: exports.LONG_WEEKDAY_NAMES,
+    shortWeekdayNames: exports.SHORT_WEEKDAY_NAMES,
+    weekdayTwoLetters: exports.WEEKDAY_TWO_LETTERS,
+    weekdayLetters: exports.WEEKDAY_LETTERS
+};
 /**
  * Format the supplied dateTime with the formatting string.
  *
@@ -2524,9 +2550,24 @@ var strings = require("./strings");
  * @param utcTime The time in UTC
  * @param localZone The zone that currentTime is in
  * @param formatString The formatting string to be applied
+ * @param formatOptions Other format options such as month names
  * @return string
  */
-function format(dateTime, utcTime, localZone, formatString) {
+function format(dateTime, utcTime, localZone, formatString, formatOptions) {
+    if (formatOptions === void 0) { formatOptions = {}; }
+    // merge format options with default format options
+    // typecast to prevent error TS7017: Index signature of object type implicitly has an 'any' type.
+    var givenFormatOptions = formatOptions;
+    var defaultFormatOptions = exports.DEFAULT_FORMAT_OPTIONS;
+    var mergedFormatOptions = {};
+    for (var name in exports.DEFAULT_FORMAT_OPTIONS) {
+        if (exports.DEFAULT_FORMAT_OPTIONS.hasOwnProperty(name)) {
+            var givenFormatOption = givenFormatOptions[name];
+            var defaultFormatOption = defaultFormatOptions[name];
+            mergedFormatOptions[name] = givenFormatOption || defaultFormatOption;
+        }
+    }
+    formatOptions = mergedFormatOptions;
     var tokenizer = new Tokenizer(formatString);
     var tokens = tokenizer.parseTokens();
     var result = "";
@@ -2540,16 +2581,16 @@ function format(dateTime, utcTime, localZone, formatString) {
                 tokenResult = _formatYear(dateTime, token);
                 break;
             case TokenType.QUARTER:
-                tokenResult = _formatQuarter(dateTime, token);
+                tokenResult = _formatQuarter(dateTime, token, formatOptions);
                 break;
             case TokenType.MONTH:
-                tokenResult = _formatMonth(dateTime, token);
+                tokenResult = _formatMonth(dateTime, token, formatOptions);
                 break;
             case TokenType.DAY:
                 tokenResult = _formatDay(dateTime, token);
                 break;
             case TokenType.WEEKDAY:
-                tokenResult = _formatWeekday(dateTime, token);
+                tokenResult = _formatWeekday(dateTime, token, formatOptions);
                 break;
             case TokenType.DAYPERIOD:
                 tokenResult = _formatDayPeriod(dateTime, token);
@@ -2634,17 +2675,16 @@ function _formatYear(dateTime, token) {
  * @param token The token passed
  * @return string
  */
-function _formatQuarter(dateTime, token) {
-    var quarterAbbr = ["1st", "2nd", "3rd", "4th"];
+function _formatQuarter(dateTime, token, formatOptions) {
     var quarter = Math.ceil(dateTime.month / 3);
     switch (token.length) {
         case 1:
         case 2:
             return strings.padLeft(quarter.toString(), 2, "0");
         case 3:
-            return "Q" + quarter;
+            return formatOptions.quarterLetter + quarter;
         case 4:
-            return quarterAbbr[quarter - 1] + " quarter";
+            return formatOptions.quarterAbbreviations[quarter - 1] + " " + formatOptions.quarterWord;
         case 5:
             return quarter.toString();
         /* istanbul ignore next */
@@ -2663,20 +2703,17 @@ function _formatQuarter(dateTime, token) {
  * @param token The token passed
  * @return string
  */
-function _formatMonth(dateTime, token) {
-    var monthStrings = ["January", "February", "March", "April", "May",
-        "June", "July", "August", "September", "October", "November", "December"];
-    var monthString = monthStrings[dateTime.month - 1];
+function _formatMonth(dateTime, token, formatOptions) {
     switch (token.length) {
         case 1:
         case 2:
             return strings.padLeft(dateTime.month.toString(), token.length, "0");
         case 3:
-            return monthString.slice(0, 3);
+            return formatOptions.shortMonthNames[dateTime.month - 1];
         case 4:
-            return monthString;
+            return formatOptions.longMonthNames[dateTime.month - 1];
         case 5:
-            return monthString.slice(0, 1);
+            return formatOptions.monthLetters[dateTime.month - 1];
         /* istanbul ignore next */
         default:
             /* istanbul ignore if */
@@ -2731,8 +2768,8 @@ function _formatDay(dateTime, token) {
  * @param token The token passed
  * @return string
  */
-function _formatWeekday(dateTime, token) {
-    var weekDay = basics.WeekDay[basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs())];
+function _formatWeekday(dateTime, token, formatOptions) {
+    var weekDayNumber = basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs());
     switch (token.length) {
         case 1:
         case 2:
@@ -2740,13 +2777,13 @@ function _formatWeekday(dateTime, token) {
                 return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs()).toString(), token.length, "0");
             } // No break, this is intentional fallthrough!
         case 3:
-            return weekDay.slice(0, 3);
+            return formatOptions.shortWeekdayNames[weekDayNumber];
         case 4:
-            return weekDay;
+            return formatOptions.longWeekdayNames[weekDayNumber];
         case 5:
-            return weekDay.slice(0, 1);
+            return formatOptions.weekdayLetters[weekDayNumber];
         case 6:
-            return weekDay.slice(0, 2);
+            return formatOptions.weekdayTwoLetters[weekDayNumber];
         /* istanbul ignore next */
         default:
             /* istanbul ignore if */
@@ -3025,7 +3062,7 @@ exports.abs = abs;
 
 },{"./datetime":2,"./duration":3,"assert":19}],"Focm2+":[function(require,module,exports){
 module.exports=require(4)
-},{"./basics":1,"./datetime":2,"./duration":3,"./globals":6,"./javascript":9,"./period":12,"./timesource":14,"./timezone":16,"./tz-database":18}],"timezonecomplete":[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./format":5,"./globals":6,"./javascript":9,"./period":12,"./timesource":14,"./timezone":16,"./tz-database":18}],"timezonecomplete":[function(require,module,exports){
 module.exports=require('Focm2+');
 },{}],9:[function(require,module,exports){
 /**
