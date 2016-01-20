@@ -44,6 +44,23 @@ interface ParseZoneResult {
 	remaining: string;
 }
 
+
+/**
+ * Checks if a given datetime string is according to the given format
+ * @param dateTimeString The string to test
+ * @param formatString LDML format string
+ * @param allowTrailing Allow trailing string after the date+time
+ * @returns true iff the string is valid
+ */
+export function parseable(dateTimeString: string, formatString: string, allowTrailing: boolean = true): boolean {
+	try {
+		parse(dateTimeString, formatString, null, allowTrailing);
+		return true;
+	} catch (e) {
+		return false;
+	}
+}
+
 /**
  * Parse the supplied dateTime assuming the given format.
  *
@@ -51,7 +68,7 @@ interface ParseZoneResult {
  * @param formatString The formatting string to be applied
  * @return string
  */
-export function parse(dateTimeString: string, formatString: string, zone?: TimeZone): AwareTimeStruct {
+export function parse(dateTimeString: string, formatString: string, zone?: TimeZone, allowTrailing: boolean = true): AwareTimeStruct {
 	if (!dateTimeString) {
 		throw new Error("no date given");
 	}
@@ -139,6 +156,11 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 		// always overwrite zone with given zone
 		if (zone) {
 			result.zone = zone;
+		}
+		if (remaining && !allowTrailing) {
+			throw new Error(util.format(
+				"Invalid date '%s' not according to format '%s': trailing characters: '%s'", dateTimeString, formatString, remaining)
+			);
 		}
 		return result;
 	} catch (e) {

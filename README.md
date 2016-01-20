@@ -707,6 +707,9 @@ The version of the included IANA time zone database is 2015g.
 
 ## Changelog
 
+### 1.27.0 (2016-01-20)
+* Add validation function tc.parseable() for date/time strings
+
 ### 1.26.0 (2016-01-20)
 * Add possibility to change month, weekday, quarter names
 

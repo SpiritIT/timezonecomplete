@@ -38,6 +38,8 @@ declare module 'timezonecomplete' {
     export import FormatOptions = format.FormatOptions;
     import javascript = require("__timezonecomplete/javascript");
     export import DateFunctions = javascript.DateFunctions;
+    import parse = require("__timezonecomplete/parse");
+    export import parseable = parse.parseable;
     import period = require("__timezonecomplete/period");
     export import Period = period.Period;
     export import PeriodDst = period.PeriodDst;
@@ -1248,6 +1250,42 @@ declare module '__timezonecomplete/javascript' {
                 */
             GetUTC = 1,
     }
+}
+
+declare module '__timezonecomplete/parse' {
+    import basics = require("__timezonecomplete/basics");
+    import TimeStruct = basics.TimeStruct;
+    import timeZone = require("__timezonecomplete/timezone");
+    import TimeZone = timeZone.TimeZone;
+    /**
+        * TimeStruct plus zone
+        */
+    export interface AwareTimeStruct {
+            /**
+                * The time struct
+                */
+            time: TimeStruct;
+            /**
+                * The time zone
+                */
+            zone?: timeZone.TimeZone;
+    }
+    /**
+        * Checks if a given datetime string is according to the given format
+        * @param dateTimeString The string to test
+        * @param formatString LDML format string
+        * @param allowTrailing Allow trailing string after the date+time
+        * @returns true iff the string is valid
+        */
+    export function parseable(dateTimeString: string, formatString: string, allowTrailing?: boolean): boolean;
+    /**
+        * Parse the supplied dateTime assuming the given format.
+        *
+        * @param dateTimeString The string to parse
+        * @param formatString The formatting string to be applied
+        * @return string
+        */
+    export function parse(dateTimeString: string, formatString: string, zone?: TimeZone, allowTrailing?: boolean): AwareTimeStruct;
 }
 
 declare module '__timezonecomplete/period' {

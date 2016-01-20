@@ -53,6 +53,9 @@ export import FormatOptions = format.FormatOptions;
 import javascript = require("./javascript"); javascript;
 export import DateFunctions = javascript.DateFunctions;
 
+import parse = require("./parse"); parse;
+export import parseable = parse.parseable;
+
 import period = require("./period"); period;
 export import Period = period.Period;
 export import PeriodDst = period.PeriodDst;

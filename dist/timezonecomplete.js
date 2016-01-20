@@ -2476,6 +2476,9 @@ exports.DEFAULT_FORMAT_OPTIONS = format.DEFAULT_FORMAT_OPTIONS;
 var javascript = require("./javascript");
 javascript;
 exports.DateFunctions = javascript.DateFunctions;
+var parse = require("./parse");
+parse;
+exports.parseable = parse.parseable;
 var period = require("./period");
 period;
 exports.Period = period.Period;
@@ -2509,7 +2512,7 @@ exports.max = globals.max;
 
 
 
-},{"./basics":1,"./datetime":2,"./duration":3,"./format":5,"./globals":6,"./javascript":9,"./period":12,"./timesource":14,"./timezone":16,"./tz-database":18}],5:[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./format":5,"./globals":6,"./javascript":9,"./parse":11,"./period":12,"./timesource":14,"./timezone":16,"./tz-database":18}],5:[function(require,module,exports){
 /**
  * Copyright(c) 2014 Spirit IT BV
  *
@@ -3062,7 +3065,7 @@ exports.abs = abs;
 
 },{"./datetime":2,"./duration":3,"assert":19}],"Focm2+":[function(require,module,exports){
 module.exports=require(4)
-},{"./basics":1,"./datetime":2,"./duration":3,"./format":5,"./globals":6,"./javascript":9,"./period":12,"./timesource":14,"./timezone":16,"./tz-database":18}],"timezonecomplete":[function(require,module,exports){
+},{"./basics":1,"./datetime":2,"./duration":3,"./format":5,"./globals":6,"./javascript":9,"./parse":11,"./period":12,"./timesource":14,"./timezone":16,"./tz-database":18}],"timezonecomplete":[function(require,module,exports){
 module.exports=require('Focm2+');
 },{}],9:[function(require,module,exports){
 /**
@@ -3164,13 +3167,32 @@ var Tokenizer = token.Tokenizer;
 var TokenType = token.DateTimeTokenType;
 var timeZone = require("./timezone");
 /**
+ * Checks if a given datetime string is according to the given format
+ * @param dateTimeString The string to test
+ * @param formatString LDML format string
+ * @param allowTrailing Allow trailing string after the date+time
+ * @returns true iff the string is valid
+ */
+function parseable(dateTimeString, formatString, allowTrailing) {
+    if (allowTrailing === void 0) { allowTrailing = true; }
+    try {
+        parse(dateTimeString, formatString, null, allowTrailing);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+}
+exports.parseable = parseable;
+/**
  * Parse the supplied dateTime assuming the given format.
  *
  * @param dateTimeString The string to parse
  * @param formatString The formatting string to be applied
  * @return string
  */
-function parse(dateTimeString, formatString, zone) {
+function parse(dateTimeString, formatString, zone, allowTrailing) {
+    if (allowTrailing === void 0) { allowTrailing = true; }
     if (!dateTimeString) {
         throw new Error("no date given");
     }
@@ -3260,6 +3282,9 @@ function parse(dateTimeString, formatString, zone) {
         // always overwrite zone with given zone
         if (zone) {
             result.zone = zone;
+        }
+        if (remaining && !allowTrailing) {
+            throw new Error(util.format("Invalid date '%s' not according to format '%s': trailing characters: '%s'", dateTimeString, formatString, remaining));
         }
         return result;
     }
