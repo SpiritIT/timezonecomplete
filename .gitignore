@@ -64,19 +64,14 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-
-# intermediate results
-/test/*.d.ts
-/examples/*.d.ts
+# output files
+*.d.ts
+*.js
 *.js.map
-bower_components
-/lib/*.d.ts
-!/lib/timezonecomplete.d.ts
-/test/*.d.ts
+/dist
+/doc
 /temp
-/obj
-*.suo
+/TestResults
 
-# do not ignore the combined d.ts file
-!/lib/timezonecomplete.d.ts
+
 

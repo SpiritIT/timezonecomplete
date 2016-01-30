@@ -50,6 +50,7 @@ gulp.task("clean", function() {
 		.src([
 			"coverage/",
 			"dist/",
+			"doc/",
 			"gulp-tsc*/",
 			"lib/**/*.d.ts",
 			"lib/**/*.js",
@@ -57,10 +58,11 @@ gulp.task("clean", function() {
 			"test/**/*.d.ts",
 			"test/**/*.js",
 			"test/**/*.map",
+			"TestResults/",
 			"examples/**/*.d.ts",
 			"examples/**/*.js",
 			"examples/**/*.map",
-      "doc/"
+			"doc/"
 		], { read: false, base: "." })
 		.pipe(gulpIgnore.exclude("**/maintenance/**"))
 		.pipe(rimraf({force: true}))
@@ -70,7 +72,7 @@ gulp.task("clean", function() {
 gulp.task("bundle", ["build"], function() {
 	dtsBundle.bundle({
 		name: 'timezonecomplete',
-	    main: 'lib/index.d.ts',
+		main: 'lib/index.d.ts',
 		baseDir: './lib',
 		externals: false,
 	});
