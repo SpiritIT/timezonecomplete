@@ -112,9 +112,9 @@ export function format(
 ): string {
 	// merge format options with default format options
 	// typecast to prevent error TS7017: Index signature of object type implicitly has an 'any' type.
-	var givenFormatOptions: { [index: string]: any } = formatOptions;
-	var defaultFormatOptions: { [index: string]: any } = DEFAULT_FORMAT_OPTIONS;
-	var mergedFormatOptions: { [index: string]: any } = {};
+	var givenFormatOptions: any = formatOptions;
+	var defaultFormatOptions: any = DEFAULT_FORMAT_OPTIONS;
+	var mergedFormatOptions: any = {};
 	for (var name in DEFAULT_FORMAT_OPTIONS) {
 		if (DEFAULT_FORMAT_OPTIONS.hasOwnProperty(name)) {
 			var givenFormatOption: any = givenFormatOptions[name];

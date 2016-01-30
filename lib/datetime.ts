@@ -743,7 +743,7 @@ export class DateTime {
 	 * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
 	 */
 	public toExcel(timeZone?: TimeZone): number {
-		var dt = this;
+		var dt: DateTime = this;
 		if (timeZone && !timeZone.equals(this.zone())) {
 			dt = this.toZone(timeZone);
 		}
