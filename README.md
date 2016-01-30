@@ -703,9 +703,12 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2015g.
+The version of the included IANA time zone database is 2016a.
 
 ## Changelog
+
+### 1.27.1 (2016-01-29)
+* Upgrade timezone database to 2016a
 
 ### 1.27.0 (2016-01-20)
 * Add validation function tc.parseable() for date/time strings
