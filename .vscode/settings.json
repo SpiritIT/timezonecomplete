@@ -1,4 +1,12 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-	"editor.renderWhitespace": true
+	"editor.renderWhitespace": true,
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"search.exclude": {
+		"doc/": true,
+		"dist/": true,
+		"**/node_modules": true,
+		"**/bower_components": true
+	}
 }
