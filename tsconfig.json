@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+		"declaration": true,
+		"target": "es5",
+		"inlineSourceMap": true,
+		"inlineSources": true,
+        "sourceMap": false,
+		"newLine": "LF",
+		"noEmitOnError": true,
+		"suppressImplicitAnyIndexErrors": true
+    },
+    "exclude": [
+		".vscode",
+        "build",
+        "node_modules",
+		"temp",
+		"umd-template"
+    ]
+}
