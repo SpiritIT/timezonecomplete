@@ -1,0 +1,12 @@
+/.vscode/
+/.git/
+/node_modules/
+/temp/
+/test/
+/typings/
+/umd-template/
+*.yml
+*.ts
+*.d.ts
+!/lib/timezonecomplete.d.ts
+
