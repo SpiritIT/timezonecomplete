@@ -1626,7 +1626,8 @@ describe("DateTime", (): void => {
 	});
 
 	describe("unixUtcMillis()", (): void => {
-		it("should trim the cache", (): void => {
+		it("should trim the cache", function(): void {
+			this.timeout(10000);
 			for (var i = 0; i < 2 * datetimeFuncs.UTC_MILLIS_CACHE.MAX_CACHE_SIZE; ++i) {
 				var d = new DateTime(i, TimeZone.utc());
 				expect(d.unixUtcMillis()).to.equal(i);

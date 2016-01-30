@@ -333,7 +333,7 @@ describe("Period", function(): void {
 
 	describe("Period(X, 2, X, RegularLocalTime).findFirst()", (): void => {
 		it("should handle 2 Millisecond", function (): void {
-			this.timeout(30 * 1000);
+			this.timeout(60e3);
 			// note the target time is 2AM during DST backward, so 2AM exists twice.
 			// Because we want to increase local time, we expect to go from the FIRST 02:59:59 to 03:00:00, skippint the second 02:00:00
 			expect((new Period(new DateTime("1970-01-01T12:00:00 Europe/Amsterdam"), 2, TimeUnit.Millisecond, PeriodDst.RegularLocalTime))
