@@ -707,6 +707,9 @@ The version of the included IANA time zone database is 2016a.
 
 ## Changelog
 
+### 1.27.2 (2016-02-02)
+* Bugfix for zones that have observed DST but no longer do e.g. Asia/Tokyo zone (issue #22)
+
 ### 1.27.1 (2016-01-29)
 * Upgrade timezone database to 2016a
 

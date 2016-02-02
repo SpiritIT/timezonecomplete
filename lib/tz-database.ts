@@ -932,7 +932,8 @@ export class TzDatabase {
 
 		/* istanbul ignore if */
 		if (!offset) {
-			throw new Error("No offset found.");
+			// apparently no longer DST, as e.g. for Asia/Tokyo
+			offset = Duration.minutes(0);
 		}
 
 		return offset;

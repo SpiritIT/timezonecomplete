@@ -1635,6 +1635,14 @@ describe("DateTime", (): void => {
 			expect(datetimeFuncs.UTC_MILLIS_CACHE.size()).to.be.lessThan(datetimeFuncs.UTC_MILLIS_CACHE.MAX_CACHE_SIZE + 1);
 		});
 	});
+
+	describe("issue #22", (): void => {
+		it("should not crash", (): void => {
+			var arrivalTime = new DateTime(2016, 2, 12, 11, 0, 0, 0, TimeZone.zone("Asia/Tokyo"));
+			arrivalTime = arrivalTime.add(Duration.days(1));
+			expect(arrivalTime.toString()).to.equal("2016-02-13T11:00:00.000 Asia/Tokyo");
+		});
+	});
 });
 
 
