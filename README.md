@@ -9,8 +9,10 @@
 
 ## New in version 2
 
-- Uses ES6 imports
-- Uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts
+For TypeScript users only:
+- Uses ES6-style imports
+- Uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts and ensure that you use 'node' module resolution for tsc.
+- Added karma tests to ensure timezonecomplete works well across different browsers
 
 ## Synopsis
 
@@ -708,6 +710,9 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2016a.
 
 ## Changelog
+
+### 2.0.0 (2016-02-23)
+* Used the "typings" field in package.json.
 
 ### 1.27.2 (2016-02-02)
 * Bugfix for zones that have observed DST but no longer do e.g. Asia/Tokyo zone (issue #22)
