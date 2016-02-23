@@ -1,13 +1,13 @@
 
 
 NEW TZ DATABASE
-* Copy parsing code from other NPM module timezone-js 
+* Copy parsing code from other NPM module timezone-js
   (node-preparse.js and its dependencies) to a temp/ dir
 * Change date.js to exclude more files:
   , EXCLUDED = new RegExp('README|Makefile|factory|CONTRIBUTING|checktab|yearistype|iso3166|leapseconds|NEWS|README|Theory|zone|zone1970|zoneinfo2tdf(\\.+)', 'i');
 * Extract TZ database in a directory, say TZ_DIR
   NOTE: no other files (like the tar file itself) may be in the directory
-* Run 
+* Run
 node node-preparse.js TZ_DIR/ > timezone-data.json
 * In case of trouble, first throw away all non-zone files from the tz data directory
 * copy timezone-data.json to lib/
@@ -19,7 +19,7 @@ MODULE PUBLISH
 * Adjust README.md and add examples and changelog, and possibly features
 * Adjust package.json and adjust version number
 * Run:
-gulp clean && gulp release && npm test
+npm run all
 * Commit changes and Sync with GitHub
 * In GitHub, create a release tag
 * Ensure .npmrc points to the world NPM repository, not the spirit repository

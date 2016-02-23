@@ -42,7 +42,7 @@
     "browserify": "node ./browserify.js",
     "karma": "./node_modules/.bin/karma start --single-run",
     "browma": "npm run browserify && npm run karma",
-    "prepublish": "npm run clean && npm run build && npm run test && npm run browma"
+    "all": "npm run clean && npm run build && npm run test && npm run browma"
   },
   "dependencies": {},
   "devDependencies": {
