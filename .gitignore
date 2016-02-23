@@ -64,13 +64,12 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-# output files
-*.d.ts
-*.js
-*.js.map
-/dist
-/temp
-/TestResults
-
+.vscode/
+.settings/
+node_modules
+dist/
+temp/
+*.log
+*.tgz
 
 

@@ -1,6 +1,6 @@
 {
   "name": "timezonecomplete",
-  "version": "1.27.2",
+  "version": "2.0.0-alpha.2",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": [
     "Date",
@@ -26,43 +26,41 @@
       "email": "R.Schouten@SpiritIT.com"
     }
   ],
-  "directories": {
-    "lib": "lib/",
-    "doc": "doc/"
-  },
-  "typescript": {
-    "definition": "lib/timezonecomplete.d.ts"
-  },
   "repository": {
     "type": "git",
     "url": "http://github.com/spiritit/timezonecomplete.git"
   },
-  "main": "lib/index.js",
+  "main": "./dist/lib/index.js",
+  "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "node runtests.js"
+    "clean": "./node_modules/.bin/rimraf ./dist ./temp",
+    "tsc": "./node_modules/.bin/tsc",
+    "lint": "./node_modules/.bin/tslint -c ./tslint.json ./src/**/*.ts",
+    "build": "npm run lint && npm run tsc && cp ./src/lib/*.json ./dist/lib && cp ./src/test/*.json ./dist/test",
+    "test": "node ./runtests.js",
+    "cover": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- ./dist/test/*.js",
+    "browserify": "node ./browserify.js",
+    "karma": "./node_modules/.bin/karma start --single-run",
+    "browma": "npm run browserify && npm run karma",
+    "prepublish": "npm run clean && npm run build && npm run test && npm run browma"
   },
   "dependencies": {},
   "devDependencies": {
+    "browserify": "^13.0.0",
     "chai": "^3.5.0",
     "coveralls": "^2.11.6",
-    "dts-bundle": "^0.4.3",
-    "event-stream": "^3.3.2",
-    "gulp": "^3.9.0",
-    "gulp-browserify": "^0.5.1",
-    "gulp-debug": "^2.1.2",
-    "gulp-ignore": "^2.0.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-rimraf": "^0.2.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-tslint": "^4.3.1",
-    "gulp-typedoc": "^1.2.1",
-    "gulp-typescript": "^2.10.0",
-    "gulp-util": "^3.0.7",
-    "gulp-wrap-umd": "^0.2.1",
+    "glob": "^7.0.0",
     "istanbul": "^0.4.2",
+    "karma": "^0.13.21",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-mocha": "^0.2.2",
+    "karma-mocha-reporter": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^2.4.5",
+    "rimraf": "^2.5.2",
     "source-map-support": "^0.4.0",
-    "tslint": "^3.3.0",
-    "typescript": "^1.7.5"
+    "tslint": "^3.4.0",
+    "typescript": "^1.8.2"
   }
 }

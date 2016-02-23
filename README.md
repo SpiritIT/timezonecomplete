@@ -7,6 +7,10 @@
 [![NPM](https://nodei.co/npm/timezonecomplete.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/timezonecomplete/)
 [![NPM](https://nodei.co/npm-dl/timezonecomplete.png?months=9&height=3)](https://nodei.co/npm/timezonecomplete/)
 
+## New in version 2
+
+- Uses ES6 imports
+- Uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts
 
 ## Synopsis
 
@@ -15,27 +19,26 @@ TimezoneComplete is a library of date/time utilities, all of which are aware of 
 
 ## Difference with timezone-js, Moment.js and other Date libraries
 
-Other libraries are great. We had different requirements, that's all.
+Other libraries are great, we had different requirements. Oh, and they all had bugs in time zone conversions and Daylight Saving Time calculations.
 
-* Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings. Most other libraries internally use JavaScript Date. The ECMAScript 6 standard is not specific enough about Date class behaviour around DST changes, and plain wrong in some cases. As a result, the Date class behaviour is different in Firefox, Chrome, IE and Node. Timezonecomplete does not use Date internally for this reason. Date problems include:
-  * The Date constructor normalizes non-existing local times (during DST forward changes) in different ways in Firefox, Chrome, IE and Node.
-  * The Date class responds differently to the TZ environment variable on different platforms.
-  * The conversion of a local time to a UTC value is broken by specification.
-* Timezonecomplete aims to be "complete", whatever that means. Of course it will never be complete but we will keep adding. We did not find a library out there that has all of the following:
+* Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings
+* Timezonecomplete correctly handles zone conversions back and forth
+* Timezonecomplete correctly handles Daylight Saving Time
+* Timezonecomplete has a clear policy for dealing with non-existing hours during DST changes
+* Timezonecomplete has:
   * Naive dates (which know they have NO timezone information)
   * Aware dates (which have timezone information)
   * Proper behaviour around DST changes
-  * Calculating with dates and preserving unit information. Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with "number" type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.
-  * Calculating with regular periods. For instance, I could define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
+  * Calculating with dates and preserving unit information (millisecond/day/month/...). Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with "number" type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.
+  * Calculating with regular periods. For instance, you can define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
   * Utility functions for e.g. determining leap years, determining the last Monday of the month etc.
   * Ability to use with NodeJS as well as in a browser.
 * Timezonecomplete has at least 99% test coverage.
 * Timezonecomplete is under active development by a company who have an interest in keeping it up to date.
-* The DateTime class in timezonecomplete does not emulate the Date class, because we consider its interface to be inconsistent. For instance, the month numbers ranging from 0 to 11 instead of 1 to 12 catches everyone by surprise. Also, some methods being in plural form and some in singular (getFullYear() versus getHours()). Thus, timezonecomplete is not a drop-in replacement, however with a few find/replace operations you should be able to convert your project.
+* Timezonecomplete does not aim to follow the ugly Date class interface.
+* Timezonecomplete is Written in Typescript and typings are included.
 
 ## Usage
-
-See also ./doc/modules/index.html.
 
 ### Enums
 

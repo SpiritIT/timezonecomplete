@@ -2,9 +2,7 @@
 var exec = require("child_process").exec;
 var path = require("path");
 var env = process.env;
-
-var istanbulPath = path.join(path.dirname(require.resolve("istanbul")), "..", ".bin", "istanbul");
-var mochaPath = path.join(path.dirname(require.resolve("mocha")), "bin", "_mocha");
+var util = require("util");
 
 function logItAll(name, error, stdout, stderr) {
 	console.log("");
@@ -18,14 +16,14 @@ function logItAll(name, error, stdout, stderr) {
 	console.log("");
 }
 
+var mochaPath = path.join(path.dirname(require.resolve("mocha")), "..", ".bin", "mocha");
+var mochaCmd = util.format("%s ./dist/test/*.js", mochaPath);
+
 env["TZ"] = "";
-exec("mocha ./test/*.js", { env: env }, logItAll.bind(null, "TZ=\"\""));
+exec(mochaCmd, { env: env }, logItAll.bind(null, "TZ=\"\""));
 
 env["TZ"] = "America/Anchorage";
-exec("mocha ./test/*.js", { env: env }, logItAll.bind(null, "TZ=\"America/Anchorage\""));
+exec(mochaCmd, { env: env }, logItAll.bind(null, "TZ=\"America/Anchorage\""));
 
 env["TZ"] = "Europe/Amsterdam";
-exec("mocha ./test/*.js", { env: env }, logItAll.bind(null, "TZ=\"Europe/Amsterdam\""));
-
-env["TZ"] = "";
-exec(istanbulPath + " cover " + mochaPath + " -- ./test/*.js", { env: env }, logItAll.bind(null, "CODE COVERAGE"));
+exec(mochaCmd, { env: env }, logItAll.bind(null, "TZ=\"Europe/Amsterdam\""));
