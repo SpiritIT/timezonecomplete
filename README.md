@@ -9,10 +9,10 @@
 
 ## New in version 2
 
-- Browser bundle with UMD wrapper and minified version
-- For TypeScript users: uses ES6-style imports
-- For TypeScript users: uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts and ensure that you use 'node' module resolution for tsc.
-- Added karma tests to ensure timezonecomplete works well across different browsers
+* Browser bundle with UMD wrapper and minified version
+* For TypeScript users: uses ES6-style imports
+* For TypeScript users: uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts and ensure that you use 'node' module resolution for tsc.
+* Added karma tests to ensure timezonecomplete works well across different browsers
 
 ## Synopsis
 

@@ -226,7 +226,6 @@ export class Period {
 	}
 
 	/**
-	 * DEPRECATED
 	 * The amount of units of the interval
 	 */
 	public amount(): number {
@@ -234,7 +233,6 @@ export class Period {
 	}
 
 	/**
-	 * DEPRECATED
 	 * The unit of the interval
 	 */
 	public unit(): TimeUnit {

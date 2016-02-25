@@ -305,7 +305,6 @@ export class Duration {
 	}
 
 	/**
-	 * DEPRECATED
 	 * The hour part of the duration (always positive).
 	 * Note that this part can exceed 23 hours, because for
 	 * now, we do not have a days() function
@@ -527,7 +526,6 @@ export class Duration {
 	}
 
 	/**
-	 * DEPRECATED
 	 * String in [-]hhhh:mm:ss.nnn notation. All fields are
 	 * always present except the sign.
 	 */
