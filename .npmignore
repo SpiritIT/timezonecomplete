@@ -2,6 +2,7 @@
 .settings/
 .vscode/
 dist/test/
+examples/
 node_modules/
 src/
 temp/

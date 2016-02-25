@@ -1,6 +1,6 @@
 {
   "name": "timezonecomplete",
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.3",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": [
     "Date",
@@ -33,22 +33,29 @@
   "main": "./dist/lib/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "clean": "./node_modules/.bin/rimraf ./dist ./temp",
-    "tsc": "./node_modules/.bin/tsc",
+    "clean": "./node_modules/.bin/rimraf ./dist ./temp ./examples/browser-amd-requirejs/timezonecomplete.js",
     "lint": "./node_modules/.bin/tslint -c ./tslint.json ./src/**/*.ts",
-    "build": "npm run lint && npm run tsc && cp ./src/lib/*.json ./dist/lib && cp ./src/test/*.json ./dist/test",
+    "tsc": "./node_modules/.bin/tsc",
+    "copy": "cp ./src/lib/*.json ./dist/lib && cp ./src/test/*.json ./dist/test",
+    "umd": "node browserify-umd.js",
+    "minify": "node minify-umd.js",
+    "build": "npm run lint && npm run tsc && npm run copy && npm run umd && npm run minify",
     "test": "node ./runtests.js",
     "cover": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- ./dist/test/*.js",
-    "browserify": "node ./browserify.js",
-    "karma": "./node_modules/.bin/karma start --single-run",
-    "browma": "npm run browserify && npm run karma",
-    "all": "npm run clean && npm run build && npm run test && npm run browma"
+    "bundle_tests": "node browserify-karma.js",
+    "exec_karma": "./node_modules/.bin/karma start --single-run",
+    "karma": "npm run bundle_tests && npm run exec_karma",
+    "all": "npm run clean && npm run build && npm run test && npm run karma && npm run karma"
   },
   "dependencies": {},
   "devDependencies": {
     "browserify": "^13.0.0",
+    "browserify-umdify": "^1.0.3",
     "chai": "^3.5.0",
     "coveralls": "^2.11.6",
+    "deamdify": "^0.2.0",
+    "deglobalify": "^0.2.0",
+    "es6ify": "^1.6.0",
     "glob": "^7.0.0",
     "istanbul": "^0.4.2",
     "karma": "^0.13.21",
@@ -61,6 +68,7 @@
     "rimraf": "^2.5.2",
     "source-map-support": "^0.4.0",
     "tslint": "^3.4.0",
-    "typescript": "^1.8.2"
+    "typescript": "^1.8.2",
+    "uglifyjs": "^2.4.10"
   }
 }

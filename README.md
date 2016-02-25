@@ -9,9 +9,9 @@
 
 ## New in version 2
 
-For TypeScript users only:
-- Uses ES6-style imports
-- Uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts and ensure that you use 'node' module resolution for tsc.
+- Browser bundle with UMD wrapper and minified version
+- For TypeScript users: uses ES6-style imports
+- For TypeScript users: uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts and ensure that you use 'node' module resolution for tsc.
 - Added karma tests to ensure timezonecomplete works well across different browsers
 
 ## Synopsis
@@ -23,30 +23,48 @@ TimezoneComplete is a library of date/time utilities, all of which are aware of 
 
 Other libraries are great, we had different requirements. Oh, and they all had bugs in time zone conversions and Daylight Saving Time calculations.
 
-* Timezonecomplete behaves consistently across platforms and with different TZ environment variable settings
-* Timezonecomplete correctly handles zone conversions back and forth
-* Timezonecomplete correctly handles Daylight Saving Time
-* Timezonecomplete has a clear policy for dealing with non-existing hours during DST changes
-* Timezonecomplete has:
+* Consistent behaviour across platforms and with different TZ environment variable settings
+* Correct time zone conversions back and forth
+* Correct Daylight Saving Time handling
+* Predictable behaviour for non-existing hours during DST changes
+* Feature-rich:
   * Naive dates (which know they have NO timezone information)
   * Aware dates (which have timezone information)
-  * Proper behaviour around DST changes
-  * Calculating with dates and preserving unit information (millisecond/day/month/...). Usually calculating with durations requires converting to milliseconds. Your project then becomes littered with "number" type variables that everybody has to guess contains milliseconds. We have a Duration class which you can create and read in terms of Hours, Minutes, Seconds, or Milliseconds. Adding or subtracting DateTimes yields a Duration.
-  * Calculating with regular periods. For instance, you can define a period of 12 hours starting at 1970-01-01 08:00:00 Europe/Amsterdam time. What is the next period boundary from the current time?  This cannot be calculated by adding hours to the UTC milliseconds because you have to account for Daylight Saving time.
+  * Calculating with dates
+  * Durations with units
+  * Periods with regular UTC or regular local time repetition
   * Utility functions for e.g. determining leap years, determining the last Monday of the month etc.
-  * Ability to use with NodeJS as well as in a browser.
-* Timezonecomplete has at least 99% test coverage.
-* Timezonecomplete is under active development by a company who have an interest in keeping it up to date.
-* Timezonecomplete does not aim to follow the ugly Date class interface.
+  * Ability to use with NodeJS as well as in a browser (CommonJS, AMD).
+* At least 99% test coverage.
+* Under active development by a company who have an interest in keeping it up to date.
 * Timezonecomplete is Written in Typescript and typings are included.
 
 ## Usage
 
+### Node.JS
+
+Install using:
+```
+npm install timezonecomplete
+```
+
+Then require the module in your code:
+
+```javascript
+var tc = require("timezonecomplete");
+```
+
+### Browser
+
+There are two options:
+# Browserify your Node.JS code
+# Use one of the ready-made UMD-wrapped browser bundles [timezonecomplete.js](dist/timezonecomplete.js) or [timezonecomplete.min.js](dist/timezonecomplete.min.js)
+
+You can find an example of timezonecomplete and RequireJS in the [examples](examples/) directory
+
 ### Enums
 
 ```javascript
-
-var tc = require("timezonecomplete");
 
 // day-of-week
 tc.WeekDay.Sunday;
@@ -73,24 +91,6 @@ tc.TimeUnit.Millisecond;
 Timezonecomplete defines a number of utility functions.
 
 ```javascript
-var tc = require("timezonecomplete");
-
-// convert a time unit to approximate milliseconds
-tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Second); // returns -2 * 1000 milliseconds
-tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Day); // returns -2 * 1000 * 3600 * 24 milliseconds
-tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Month); // returns -2 * 1000 * 3600 * 24 * 30 milliseconds
-tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Year); // returns -2 * 1000 * 3600 * 24 * 365 milliseconds
-
-// time unit to string function takes an optional amount and pluralizes the outcome
-tc.timeUnitToString(tc.TimeUnit.Day); // "day"
-tc.timeUnitToString(tc.TimeUnit.Day, 1); // "day"
-tc.timeUnitToString(tc.TimeUnit.Day, -1); // "day"
-tc.timeUnitToString(tc.TimeUnit.Day, 5); // "days"
-
-// time unit from string function
-tc.stringToTimeUnit("days"); // tc.TimeUnit.Day
-tc.stringToTimeUnit("day"); // tc.TimeUnit.Day
-tc.stringToTimeUnit("DAY"); // tc.TimeUnit.Day
 
 // number of days in a month, accounting for leap years
 tc.daysInMonth(2004, 2); // returns 29
@@ -141,6 +141,23 @@ var datetime2 = new tc.DateTime("2014-01-22");
 tc.min(datetime1, datetime2); // returns a clone of datetime1
 tc.max(datetime1, datetime2); // returns a clone of datetime2
 
+// convert a time unit to approximate milliseconds
+tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Second); // returns -2 * 1000 milliseconds
+tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Day); // returns -2 * 1000 * 3600 * 24 milliseconds
+tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Month); // returns -2 * 1000 * 3600 * 24 * 30 milliseconds
+tc.timeUnitToMilliseconds(-2, tc.TimeUnit.Year); // returns -2 * 1000 * 3600 * 24 * 365 milliseconds
+
+// time unit to string function takes an optional amount and pluralizes the outcome
+tc.timeUnitToString(tc.TimeUnit.Day); // "day"
+tc.timeUnitToString(tc.TimeUnit.Day, 1); // "day"
+tc.timeUnitToString(tc.TimeUnit.Day, -1); // "day"
+tc.timeUnitToString(tc.TimeUnit.Day, 5); // "days"
+
+// time unit from string function
+tc.stringToTimeUnit("days"); // tc.TimeUnit.Day
+tc.stringToTimeUnit("day"); // tc.TimeUnit.Day
+tc.stringToTimeUnit("DAY"); // tc.TimeUnit.Day
+
 ```
 
 ### Duration
@@ -149,9 +166,6 @@ The Duration class is a unit-aware representation of a duration in wall clock ti
 You can create a Duration in milliseconds, seconds, minutes or hours and then query the value in another unit.
 
 ```javascript
-var tc = require("timezonecomplete");
-
-
 // creating durations
 var duration;
 duration = tc.milliseconds(2);	// 2 milliseconds
@@ -330,8 +344,6 @@ z.offsetForZone(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in Eu
 The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like 'what is the maximum Daylight Saving Time shift of all zones in the database'?
 
 ```javascript
-var tc = require("timezonecomplete");
-
 // TzDatabase is a singleton, get at it using the instance() method
 var db = tc.TzDatabase.instance();
 
@@ -357,17 +369,14 @@ It is smart enough to represent different dates which map to the same UTC date a
 that the local time is incremented by one hour even if the UTC date does not change.
 
 The main differences with the JavaScript Date are:
-- DateTime is time zone aware.
-- All methods are in singular form: "year()" not "years()" and "hour()" not "hours()". The JavaScript Date class mixes these forms.
-- Our day-of-month is called day() not date().
-- We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.
-- With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value
-  is always UTC for dates that have a time zone, and it is equal to the "local" date value for naive dates.
-- format() is a function that takes an [LDML](http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns) formatting string and returns a formatted string.
+* DateTime is time zone aware.
+* All methods are in singular form: "year()" not "years()" and "hour()" not "hours()". The JavaScript Date class mixes these forms.
+* Our day-of-month is called day() not date().
+* We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.
+* With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value is always UTC for dates that have a time zone, and it is equal to the "local" date value for naive dates.
+* format() is a function that takes an [LDML](http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns) formatting string and returns a formatted string.
 
 ```javascript
-var tc = require("timezonecomplete");
-
 // a naive timestamp: 2014-01-01 13:59:59
 var naiveDate = new tc.DateTime(2014, 1, 1, 13, 59, 59);
 
@@ -511,9 +520,6 @@ The DateTime class allows date arithmetic. The diff() method returns the differe
 
 
 ```javascript
-
-var tc = require("timezonecomplete");
-
 var utcDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.utc());
 var amsterdamDate = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Europe/Amsterdam"));
 
@@ -569,8 +575,6 @@ We had a need for regularly scheduling a task. However if you think about it, wh
 We needed to be able to specify both.
 
 ```javascript
-var tc = require("timezonecomplete");
-
 // Timezone with DST specified (Europe/Amsterdam)
 // Last argument is "RegularLocalTime"
 // Repeating daily period at 8:05 local Amsterdam time (moves with Daylight Saving Time so it is always at 8:05 locally)
