@@ -14,6 +14,12 @@
 * For TypeScript users: uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts and ensure that you use 'node' module resolution for tsc.
 * Added karma tests to ensure timezonecomplete works well across different browsers
 
+## Upgrading from version 1
+
+Javascript users don't need to do anything. Typescript users should:
+* Remove your triple-slash references to the timezonecomplete typings file
+* Ensure tsc is called with 'node' module resolution (which is the default)
+
 ## Synopsis
 
 TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone's time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.
@@ -34,10 +40,10 @@ Other libraries are great, we had different requirements. Oh, and they all had b
   * Durations with units
   * Periods with regular UTC or regular local time repetition
   * Utility functions for e.g. determining leap years, determining the last Monday of the month etc.
-  * Ability to use with NodeJS as well as in a browser (CommonJS, AMD).
-* At least 99% test coverage.
-* Under active development by a company who have an interest in keeping it up to date.
-* Timezonecomplete is Written in Typescript and typings are included.
+  * Ability to use with NodeJS as well as in a browser (CommonJS, AMD)
+* Good test coverage
+* Under active development by a company who have an interest in keeping it up to date
+* Timezonecomplete is Written in Typescript and typings are included
 
 ## Usage
 
@@ -713,8 +719,9 @@ The version of the included IANA time zone database is 2016a.
 
 ## Changelog
 
-### 2.0.1 (2016-02-25)
+### 2.0.1-2.0.3 (2016-02-25)
 * adjust .npmignore to avoid publishing stuff that doesn't need publishing
+* Improve README.md
 
 ### 2.0.0 (2016-02-25)
 * Browser bundle with UMD wrapper and minified version

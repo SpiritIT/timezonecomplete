@@ -4,7 +4,7 @@ var util = require("util");
 var packageJson = require("./package.json");
 
 var distInFile = "./dist/timezonecomplete.js";
-var distOutFileVersioned = util.format("./dist/timezonecomplete.%s.min.js", packageJson.version);
+var distOutFileVersioned = util.format("./temp/timezonecomplete.%s.min.js", packageJson.version);
 var distOutFileUnversioned = "./dist/timezonecomplete.min.js";
 
 var result = UglifyJS.minify(distInFile, { mangle: false });

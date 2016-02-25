@@ -13,7 +13,7 @@ var exampleOutFile = "./examples/browser-amd-requirejs/timezonecomplete.js";
 var exampleOut = fs.createWriteStream(exampleOutFile, { encoding: "utf-8", flags: "w"})
 
 var packageJson = require("./package.json");
-var distOutFileVersioned = util.format("./dist/timezonecomplete.%s.js", packageJson.version);
+var distOutFileVersioned = util.format("./temp/timezonecomplete.%s.js", packageJson.version);
 var distOutVersioned = fs.createWriteStream(distOutFileVersioned, { encoding: "utf-8", flags: "w"})
 var distOutFileUnversioned = "./dist/timezonecomplete.js";
 var distOutUnversioned = fs.createWriteStream(distOutFileUnversioned, { encoding: "utf-8", flags: "w"})
