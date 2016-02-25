@@ -57,8 +57,8 @@ var tc = require("timezonecomplete");
 ### Browser
 
 There are two options:
-# Browserify your Node.JS code
-# Use one of the ready-made UMD-wrapped browser bundles [timezonecomplete.js](dist/timezonecomplete.js) or [timezonecomplete.min.js](dist/timezonecomplete.min.js)
+1. Browserify your Node.JS code
+1. Use one of the ready-made UMD-wrapped browser bundles [timezonecomplete.js](dist/timezonecomplete.js) or [timezonecomplete.min.js](dist/timezonecomplete.min.js)
 
 You can find an example of timezonecomplete and RequireJS in the [examples](examples/) directory
 

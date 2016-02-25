@@ -45,7 +45,7 @@
     "bundle_tests": "node browserify-karma.js",
     "exec_karma": "./node_modules/.bin/karma start --single-run",
     "karma": "npm run bundle_tests && npm run exec_karma",
-    "all": "npm run clean && npm run build && npm run test && npm run karma && npm run karma"
+    "all": "npm run clean && npm run build && npm run test && npm run karma"
   },
   "dependencies": {},
   "devDependencies": {
