@@ -9,14 +9,15 @@ src/
 temp/
 typings/
 tzdata/
-umd-template/
 .coveralls.yml
 .editorconfig
 .gitattributes
 .gitignore
 .travis.yml
-browserify.js
+browserify-karma.js
+browserify-umd.js
 karma.conf.js
+minify-umd.js
 RELEASING.TXT
 runtests.js
 tsconfig.json
