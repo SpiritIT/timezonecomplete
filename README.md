@@ -713,8 +713,14 @@ The version of the included IANA time zone database is 2016a.
 
 ## Changelog
 
-### 2.0.0 (2016-02-23)
-* Used the "typings" field in package.json.
+### 2.0.1 (2016-02-25)
+* adjust .npmignore to avoid publishing stuff that doesn't need publishing
+
+### 2.0.0 (2016-02-25)
+* Browser bundle with UMD wrapper and minified version
+* For TypeScript users: uses ES6-style imports
+* For TypeScript users: uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts and ensure that you use 'node' module resolution for tsc.
+* Added karma tests to ensure timezonecomplete works well across different browsers
 
 ### 1.27.2 (2016-02-02)
 * Bugfix for zones that have observed DST but no longer do e.g. Asia/Tokyo zone (issue #22)

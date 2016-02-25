@@ -1,12 +1,14 @@
 .git/
 .settings/
 .vscode/
+coverage/
 dist/test/
 examples/
 node_modules/
 src/
 temp/
 typings/
+tzdata/
 umd-template/
 .coveralls.yml
 .editorconfig
