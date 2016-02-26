@@ -1,6 +1,6 @@
 {
   "name": "timezonecomplete",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": [
     "Date",
@@ -31,7 +31,7 @@
     "url": "http://github.com/spiritit/timezonecomplete.git"
   },
   "main": "./dist/lib/index.js",
-  "typings": "./dist/index.d.ts",
+  "typings": "./dist/lib/index.d.ts",
   "scripts": {
     "clean": "./node_modules/.bin/rimraf ./dist ./temp ./examples/browser-amd-requirejs/timezonecomplete.js",
     "lint": "./node_modules/.bin/tslint -c ./tslint.json ./src/**/*.ts",
@@ -69,6 +69,7 @@
     "source-map-support": "^0.4.0",
     "tslint": "^3.4.0",
     "typescript": "^1.8.2",
+    "uglify-js": "^2.6.2",
     "uglifyjs": "^2.4.10"
   }
 }

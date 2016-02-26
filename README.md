@@ -719,6 +719,9 @@ The version of the included IANA time zone database is 2016a.
 
 ## Changelog
 
+### 2.0.4 (2016-02-26)
+* fix for package.json typings field
+
 ### 2.0.1-2.0.3 (2016-02-25)
 * adjust .npmignore to avoid publishing stuff that doesn't need publishing
 * Improve README.md

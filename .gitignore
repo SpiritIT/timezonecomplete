@@ -68,9 +68,9 @@ $RECYCLE.BIN/
 .settings/
 node_modules
 dist/
+lib/
 temp/
+test/
+tzdata/
 *.log
 *.tgz
-
-
-/tzdata
