@@ -66,9 +66,10 @@ $RECYCLE.BIN/
 
 .vscode/
 .settings/
-node_modules
+coverage/
 dist/
 lib/
+node_modules
 temp/
 test/
 tzdata/

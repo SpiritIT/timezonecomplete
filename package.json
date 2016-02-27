@@ -53,9 +53,6 @@
     "browserify-umdify": "^1.0.3",
     "chai": "^3.5.0",
     "coveralls": "^2.11.6",
-    "deamdify": "^0.2.0",
-    "deglobalify": "^0.2.0",
-    "es6ify": "^1.6.0",
     "glob": "^7.0.0",
     "istanbul": "^0.4.2",
     "karma": "^0.13.21",
@@ -69,7 +66,6 @@
     "source-map-support": "^0.4.0",
     "tslint": "^3.4.0",
     "typescript": "^1.8.2",
-    "uglify-js": "^2.6.2",
-    "uglifyjs": "^2.4.10"
+    "uglify-js": "^2.6.2"
   }
 }
