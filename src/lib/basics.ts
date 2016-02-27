@@ -6,8 +6,7 @@
 
 "use strict";
 
-import assert = require("assert");
-
+import assert from "./assert";
 import { DateFunctions } from "./javascript";
 import * as math from "./math";
 import * as strings from "./strings";

@@ -720,6 +720,9 @@ The version of the included IANA time zone database is 2016a.
 
 ## Changelog
 
+### 2.0.6 (2016-02-27)
+* Remove dependency on Node.JS modules for better browser support.
+
 ### 2.0.5 (2016-02-26)
 * fix for Travis CI build
 

@@ -6,8 +6,7 @@
 
 "use strict";
 
-import * as assert from "assert";
-
+import assert from "./assert";
 import { DateTime } from "./datetime";
 import { Duration } from "./duration";
 

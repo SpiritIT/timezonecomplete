@@ -4,6 +4,7 @@
  * Functionality to parse a DateTime object to a string
  */
 
+"use strict";
 
 import { TimeStruct } from "./basics";
 import * as basics from "./basics";

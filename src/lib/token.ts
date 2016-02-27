@@ -4,6 +4,8 @@
  * Functionality to parse a DateTime object to a string
  */
 
+"use strict";
+
 export class Tokenizer {
 
 	/**

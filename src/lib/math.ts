@@ -6,7 +6,7 @@
 
 "use strict";
 
-import * as assert from "assert";
+import assert from "./assert";
 
 /**
  * @return true iff given argument is an integer number

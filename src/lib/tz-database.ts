@@ -8,9 +8,7 @@
 
 "use strict";
 
-import * as assert from "assert";
-import * as util from "util";
-
+import assert from "./assert";
 import { TimeStruct, TimeUnit, WeekDay } from "./basics";
 import * as basics from "./basics";
 import { Duration } from "./duration";
@@ -808,7 +806,7 @@ export class TzDatabase {
 			} else {
 				letter = "";
 			}
-			return util.format(format, letter);
+			return format.replace("%s", letter);
 		}
 
 		return format;

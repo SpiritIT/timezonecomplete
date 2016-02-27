@@ -6,8 +6,7 @@
 
 "use strict";
 
-import * as assert from "assert";
-
+import assert from "./assert";
 import { TimeStruct } from "./basics";
 import { DateFunctions } from "./javascript";
 import * as strings from "./strings";
