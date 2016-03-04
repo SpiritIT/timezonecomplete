@@ -58,20 +58,14 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
 .vscode/
 .settings/
-coverage/
-dist/
-lib/
+/coverage/
+/dist/
+/lib/
 node_modules
-temp/
-test/
-tzdata/
+/temp/
+/test/
+/tzdata/
 *.log
 *.tgz

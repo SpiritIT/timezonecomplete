@@ -26,6 +26,7 @@
 		"placeOpenBraceOnNewLineForControlBlocks": false
 	},
 	"files": [
+		"src/lib/assert.ts",
 		"src/lib/basics.ts",
 		"src/lib/datetime.ts",
 		"src/lib/duration.ts",
