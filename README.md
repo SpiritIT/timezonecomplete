@@ -31,19 +31,18 @@ Other libraries are great, we had different requirements. Oh, and they all had b
 
 * Consistent behaviour across platforms and with different TZ environment variable settings
 * Correct time zone conversions back and forth
-* Correct Daylight Saving Time handling
-* Predictable behaviour for non-existing hours during DST changes
+* Correct Daylight Saving Time handling with predictable behavior for non-existing hours during DST changes
 * Feature-rich:
   * Naive dates (which know they have NO timezone information)
   * Aware dates (which have timezone information)
   * Calculating with dates
   * Durations with units
   * Periods with regular UTC or regular local time repetition
-  * Utility functions for e.g. determining leap years, determining the last Monday of the month etc.
-  * Ability to use with NodeJS as well as in a browser (CommonJS, AMD)
+  * Utility functions for determining leap years, determining the last Monday of the month etc.
+  * Ability to use with Node.JS as well as in a browser (CommonJS, AMD)
 * Good test coverage
 * Under active development by a company who have an interest in keeping it up to date
-* Timezonecomplete is Written in Typescript and typings are included
+* Timezonecomplete is written in Typescript and typings are included
 
 ## Usage
 
