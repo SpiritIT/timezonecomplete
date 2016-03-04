@@ -654,24 +654,6 @@ var myFormatOptions = {
 
 ```
 
-## On a web page
-We spent some effort making timezonecomplete usable in the browser, by packaging it in a [UMD](https://github.com/umdjs/umd). This way, it can be used for example in plain html/javascript:
-
-```html
-<html>
-<head><title>Timezonecomplete test</title></head>
-<body>
-	Hello world
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="timezonecomplete.js"></script> <!-- This is the javascript bundle from ./dist/ -->
-	<script>
-	    alert(timezonecomplete.isLeapYear(2012));
-	</script>
-</body>
-</html>
-```
-
-In theory this bundle is also usable using module loaders like [RequireJS](http://requirejs.org/). However, this has not been thoroughly tested yet, this will happen in the near future.
 
 ## FAQ
 
