@@ -1,6 +1,6 @@
 ﻿# TimezoneComplete
 
-[![Coverage Status](https://coveralls.io/repos/SpiritIT/timezonecomplete/badge.png?branch=master)](https://coveralls.io/r/SpiritIT/timezonecomplete?branch=master)
+[![Coveralls](https://img.shields.io/coveralls/jekyll/jekyll.svg)](https://github.com/SpiritIT/timezonecomplete)
 [![NPM version](https://badge.fury.io/js/timezonecomplete.svg)](http://badge.fury.io/js/timezonecomplete)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/spiritit/timezonecomplete/master/LICENSE-MIT)
 
