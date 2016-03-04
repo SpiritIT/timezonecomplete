@@ -1,5 +1,6 @@
 ﻿# TimezoneComplete
 
+[![Build Status](https://travis-ci.org/SpiritIT/timezonecomplete.svg?branch=master)](https://travis-ci.org/SpiritIT/timezonecomplete)
 [![Coverage Status](https://coveralls.io/repos/github/SpiritIT/timezonecomplete/badge.svg?branch=master)](https://coveralls.io/github/SpiritIT/timezonecomplete?branch=master)
 [![NPM version](https://badge.fury.io/js/timezonecomplete.svg)](http://badge.fury.io/js/timezonecomplete)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/spiritit/timezonecomplete/master/LICENSE-MIT)
