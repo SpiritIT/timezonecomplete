@@ -307,7 +307,7 @@ A TimeZone object defines a time zone. This can be a fixed UTC offset (e.g. +01:
 For an IANA time zone, you can choose whether Daylight Saving Time should be applied or not. Time zone objects are cached - if you ask for the same zone twice you
 may get the very same object back. For this reason, time zone objects are immutable.
 
-```
+```javascript
 var z;
 
 // local time
