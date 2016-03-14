@@ -11,12 +11,12 @@
 
 ## What's new in version 3
 
-The Period class has had an overhaul. It now behaves the same for dates before the start date as after the start date. Previously, it would consider the start moment a real 'starting moment' i.e. before which no periodic timestamps occur. We renamed the 'start' moment to 'reference' moment to reflect this. This new symmetric behaviour also has an impact on period equality:  period1.equals(period2) if their reference dates are on one anothers boundary dates and their interval and DST matches.
+The Period class has had an overhaul. It now behaves the same for dates before the start date as after the start date. Previously, it would consider the start date a real 'starting date' i.e. before which no periodic timestamps occur. We renamed the 'start' date to 'reference' date to reflect this. This new symmetric behaviour also has an impact on period equality:  period1.equals(period2) if and only if their reference dates are on one anothers boundary dates and their interval and DST matches.
 
 ## Upgrading from version  2
 
 * Change your application logic if it depends on periods not returning timestamps before the start date.
-* Change your application logic if you want period equality to mean 'same start date and same interval'. Consider using Period#identical() for that purpose if it isn't too strict for you.
+* Change your application logic if it depends on Period#equals() to mean 'same start date and same interval'. Consider using Period#identical() for that purpose if it isn't too strict for you.
 * Rename all calls to Period#start() to Period#reference().  The start() method has been marked DEPRECATED and will be removed in the next major version.
 
 ## Upgrading from version 1
@@ -605,15 +605,24 @@ var occurrence = period.findFirst(new tc.DateTime("2014-04-30T12:00:00 Europe/Am
 // "2014-05-02T08:05:00.000 Europe/Amsterdam"
 var occurrence2 = period.findNext(occurrence);
 
+// Analogous to findFirst, we have findLast:
+// "2014-04-30T08:05:00.000 Europe/Amsterdam"
+var occurrence = period.findLast(new tc.DateTime("2014-04-30T12:00:00 Europe/Amsterdam"));
+
+// Analogous to findNext, we have findPrev (much faster than findLast):
 // findPrev also assumes that the given time is on a boundary
 var occurrence1 = period.findPrev(occurrence);
+
+// findPrev() and findNext() take an optional count parameter:
+// "2014-05-03T08:05:00.000 Europe/Amsterdam"
+var occurrence3 = period.findNext(occurrence, 3);
 
 // isBoundary checks whether the given DateTime is on a period boundary
 period.isBoundary(occurrence); // true
 
 // Equality checking
 var p = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), tc.hours(1), tc.PeriodDst.RegularIntervals);
-var q = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), tc.minutes(60), tc.PeriodDst.RegularIntervals);
+var q = new tc.Period(new tc.DateTime("2015-02-02T00:00:00"), tc.minutes(60), tc.PeriodDst.RegularIntervals);
 p.equals(q); // true, same results
 p.identical(q); // false, not same constructor arguments
 
