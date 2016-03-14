@@ -55,9 +55,9 @@ describe("Period", function(): void {
 		});
 	});
 
-	describe("start()", (): void => {
+	describe("reference()", (): void => {
 		expect((new Period(new DateTime("2014-01-31T12:00:00.000 UTC"), 2, TimeUnit.Month, PeriodDst.RegularIntervals))
-			.start().toString())
+			.reference().toString())
 			.to.equal("2014-01-31T12:00:00.000 UTC");
 	});
 
@@ -79,18 +79,23 @@ describe("Period", function(): void {
 			.to.equal(PeriodDst.RegularIntervals);
 	});
 
-	describe("findFirst(<=start)", (): void => {
-		it("should return start date in fromDate zone", (): void => {
+	describe("findFirst(<=reference)", (): void => {
+		it("should return dates before the reference date", (): void => {
 			expect((new Period(new DateTime("2014-01-01T12:00:00.000 UTC"), 2, TimeUnit.Month, PeriodDst.RegularIntervals))
-				.findFirst(new DateTime("2013-01-01T12:00:00.00+02")).toString())
-				.to.equal("2014-01-01T14:00:00.000+02:00");
+				.findFirst(new DateTime("2013-01-01T11:00:00.00 UTC")).toString())
+				.to.equal("2013-01-01T12:00:00.000 UTC");
+		});
+		it("should return reference date", (): void => {
+			expect((new Period(new DateTime("2014-01-01T12:00:00.000 UTC"), 2, TimeUnit.Month, PeriodDst.RegularIntervals))
+				.findFirst(new DateTime("2014-01-01T11:00:00.00 UTC")).toString())
+				.to.equal("2014-01-01T12:00:00.000 UTC");
 		});
 		it("should work for 400-year leap year", (): void => {
 			expect((new Period(new DateTime("2000-02-29T12:00:00.000 UTC"), 1, TimeUnit.Year, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("1999-12-31T12:00:00 UTC")).toString())
 				.to.equal("2000-02-29T12:00:00.000 UTC");
 		});
-		it("should NOT return start date for the start date itself", (): void => {
+		it("should NOT return reference date for the reference date itself", (): void => {
 			expect((new Period(new DateTime("2014-01-01T12:00:00.000 UTC"), 2, TimeUnit.Month, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-01-01T14:00:00.00+02")).toString())
 				.to.equal("2014-03-01T14:00:00.000+02:00");
@@ -273,7 +278,7 @@ describe("Period", function(): void {
 			// check around dst
 			expect((new Period(new DateTime("1970-01-01T12:05:06.007 Europe/Amsterdam"), 2, TimeUnit.Hour, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-10-26T00:10:00.000 UTC")).toString())
-				.to.equal("2014-10-26T01:05:06.007 UTC"); // note 1AM because start time is 11AM UTC
+				.to.equal("2014-10-26T01:05:06.007 UTC"); // note 1AM because reference time is 11AM UTC
 			// check it returns OK in local time (which stays from 2AM at 2AM)
 			expect((new Period(new DateTime("1970-01-01T01:00:00.000 Europe/Amsterdam"), 2, TimeUnit.Hour, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-10-25T23:10:00.000 UTC").toZone(TimeZone.zone("Europe/Amsterdam"))).toString())
@@ -656,16 +661,40 @@ describe("Period", function(): void {
 		});
 	});
 
+	describe("findLast()", (): void => {
+		it("should return the first date before a non-boundary date", (): void => {
+			expect((new Period(new DateTime("2014-01-01T12:00:00.000 UTC"), 1, TimeUnit.Day, PeriodDst.RegularIntervals))
+				.findLast(new DateTime("2014-10-10T13:00:00.00 UTC")).toString())
+				.to.equal("2014-10-10T12:00:00.000 UTC");
+		});
+		it("should return the first date before a boundary date", (): void => {
+			expect((new Period(new DateTime("2014-01-01T12:00:00.000 UTC"), 1, TimeUnit.Day, PeriodDst.RegularIntervals))
+				.findLast(new DateTime("2014-10-10T12:00:00.00 UTC")).toString())
+				.to.equal("2014-10-09T12:00:00.000 UTC");
+		});
+		it("should return the same timezone as given", (): void => {
+			expect((new Period(new DateTime("2014-01-01T12:00:00.000 UTC"), 1, TimeUnit.Day, PeriodDst.RegularIntervals))
+				.findLast(new DateTime("2014-10-10T13:00:00.00+01")).toString())
+				.to.equal("2014-10-09T13:00:00.000+01:00");
+		});
+		it("should return a date from before the reference date", (): void => {
+			expect((new Period(new DateTime("2014-02-10T12:00:00.000 UTC"), 1, TimeUnit.Day, PeriodDst.RegularIntervals))
+				.findLast(new DateTime("2014-01-10T13:00:00.00 UTC")).toString())
+				.to.equal("2014-01-10T12:00:00.000 UTC");
+		});
+		it("should return a date before the reference date if reference date given", (): void => {
+			expect((new Period(new DateTime("2014-02-10T12:00:00.000 UTC"), 1, TimeUnit.Day, PeriodDst.RegularIntervals))
+				.findLast(new DateTime("2014-02-10T12:00:00.00 UTC")).toString())
+				.to.equal("2014-02-09T12:00:00.000 UTC");
+		});
+	});
+
 	describe("findPrev()", (): void => {
-		it("should return null for start date", (): void => {
+		it("should return a date before the reference date", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.findPrev(new DateTime("2013-12-31T23:00:00 UTC"))).to.equal(null);
+			expect(p.findPrev(new DateTime("2013-12-31T23:00:00 UTC")).toString()).to.equal("2013-12-31T22:00:00.000 UTC");
 		});
-		it("should return null for before start date", (): void => {
-			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.findPrev(new DateTime("2013-12-31T23:00:00 UTC"))).to.equal(null);
-		});
-		it("should return the start date for first period", (): void => {
+		it("should return the reference date for first period", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.findPrev(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam")).toString())
 				.to.equal("2014-01-01T00:00:00.000 Europe/Amsterdam");
@@ -697,10 +726,15 @@ describe("Period", function(): void {
 			expect(p.findPrev(new DateTime("2014-03-30T07:00:00 UTC"), 2).toString())
 				.to.equal("2014-03-28T07:00:00.000 UTC");
 		});
+		it("Should handle count < 0", (): void => {
+			const p = new Period(new DateTime("2014-01-31T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Day, PeriodDst.RegularLocalTime);
+			expect(p.findPrev(new DateTime("2014-01-10T00:00:00 Europe/Amsterdam"), -10).toString())
+				.to.equal("2014-01-20T00:00:00.000 Europe/Amsterdam");
+		});
 	});
 
 	describe("isBoundary()", (): void => {
-		it("should return true for start date", (): void => {
+		it("should return true for reference date", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.isBoundary(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"))).to.equal(true);
 		});
@@ -719,12 +753,12 @@ describe("Period", function(): void {
 	});
 
 	describe("equals()", (): void => {
-		it("should return false for periods with different start", (): void => {
+		it("should return false for periods with different reference", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			const q = new Period(new DateTime("2014-01-01T00:00:01 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.equals(q)).to.equal(false);
 		});
-		it("should return false for periods with equal start but different time zone effect", (): void => {
+		it("should return false for periods with equal reference but different time zone effect", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			const q = new Period(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.equals(q)).to.equal(false);
@@ -754,7 +788,7 @@ describe("Period", function(): void {
 			const q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.equals(q)).to.equal(true);
 		});
-		it("should return true for periods with equal but not identical start", (): void => {
+		it("should return true for periods with equal but not identical reference", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			const q = new Period(new DateTime("2014-01-01T00:00:00 GMT"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.equals(q)).to.equal(true);
@@ -767,12 +801,12 @@ describe("Period", function(): void {
 	});
 
 	describe("identical()", (): void => {
-		it("should return false for periods with different start", (): void => {
+		it("should return false for periods with different reference", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			const q = new Period(new DateTime("2014-01-01T00:00:01 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.identical(q)).to.equal(false);
 		});
-		it("should return false for periods with equal start but different time zone effect", (): void => {
+		it("should return false for periods with equal reference but different time zone effect", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			const q = new Period(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.identical(q)).to.equal(false);
@@ -797,7 +831,7 @@ describe("Period", function(): void {
 			const q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
 			expect(p.identical(q)).to.equal(false);
 		});
-		it("should return false for periods with equal but not identical start", (): void => {
+		it("should return false for periods with equal but not identical reference", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			const q = new Period(new DateTime("2014-01-01T00:00:00 GMT"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.identical(q)).to.equal(false);
@@ -817,19 +851,19 @@ describe("Period", function(): void {
 	describe("toString()", (): void => {
 		it("should work with naive date", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000");
+			expect(p.toString()).to.equal("1 hour, referenceing at 2014-01-01T00:00:00.000");
 		});
 		it("should work with PeriodDst.RegularLocalTime", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular local time");
+			expect(p.toString()).to.equal("1 hour, referenceing at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular local time");
 		});
 		it("should work with PeriodDst.RegularIntervals", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
-			expect(p.toString()).to.equal("1 hour, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular intervals");
+			expect(p.toString()).to.equal("1 hour, referenceing at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular intervals");
 		});
 		it("should work with multiple hours", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 2, TimeUnit.Hour, PeriodDst.RegularIntervals);
-			expect(p.toString()).to.equal("2 hours, starting at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular intervals");
+			expect(p.toString()).to.equal("2 hours, referenceing at 2014-01-01T00:00:00.000 Europe/Amsterdam, keeping regular intervals");
 		});
 	});
 

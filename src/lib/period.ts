@@ -31,8 +31,8 @@ export enum PeriodDst {
 	/**
 	 * Ensure that the time at which the intervals occur stay
 	 * at the same place in the day, local time. So e.g.
-	 * a period of one day, starting at 8:05AM Europe/Amsterdam time
-	 * will always start at 8:05 Europe/Amsterdam. This means that
+	 * a period of one day, referenceing at 8:05AM Europe/Amsterdam time
+	 * will always reference at 8:05 Europe/Amsterdam. This means that
 	 * in UTC time, some intervals will be 25 hours and some
 	 * 23 hours during DST changes.
 	 * Another example: an hourly interval will be hourly in local time,
@@ -64,15 +64,15 @@ export function periodDstToString(p: PeriodDst): string {
 }
 
 /**
- * Repeating time period: consists of a starting point and
+ * Repeating time period: consists of a reference date and
  * a time length. This class accounts for leap seconds and leap days.
  */
 export class Period {
 
 	/**
-	 * Start moment of period
+	 * Reference moment of period
 	 */
-	private _start: DateTime;
+	private _reference: DateTime;
 
 	/**
 	 * Interval
@@ -85,10 +85,10 @@ export class Period {
 	private _dst: PeriodDst;
 
 	/**
-	 * Normalized start date, has day-of-month <= 28 for Monthly
+	 * Normalized reference date, has day-of-month <= 28 for Monthly
 	 * period, or for Yearly period if month is February
 	 */
-	private _intStart: DateTime;
+	private _intReference: DateTime;
 
 	/**
 	 * Normalized interval
@@ -97,7 +97,7 @@ export class Period {
 
 	/**
 	 * Normalized internal DST handling. If DST handling is irrelevant
-	 * (because the start time zone does not have DST)
+	 * (because the reference time zone does not have DST)
 	 * then it is set to RegularInterval
 	 */
 	private _intDst: PeriodDst;
@@ -110,15 +110,15 @@ export class Period {
 	 * This is due to the enormous processing power required by these cases. They are not
 	 * implemented and you will get an assert.
 	 *
-	 * @param start The start of the period. If the period is in Months or Years, and
+	 * @param reference The reference date of the period. If the period is in Months or Years, and
 	 *				the day is 29 or 30 or 31, the results are maximised to end-of-month.
 	 * @param interval	The interval of the period
 	 * @param dst	Specifies how to handle Daylight Saving Time. Not relevant
-	 *              if the time zone of the start datetime does not have DST.
+	 *              if the time zone of the reference datetime does not have DST.
 	 *              Defaults to RegularLocalTime.
 	 */
 	constructor(
-		start: DateTime,
+		reference: DateTime,
 		interval: Duration,
 		dst?: PeriodDst);
 	/**
@@ -128,16 +128,16 @@ export class Period {
 	 * This is due to the enormous processing power required by these cases. They are not
 	 * implemented and you will get an assert.
 	 *
-	 * @param start The start of the period. If the period is in Months or Years, and
+	 * @param reference The reference of the period. If the period is in Months or Years, and
 	 *				the day is 29 or 30 or 31, the results are maximised to end-of-month.
 	 * @param amount	The amount of units.
 	 * @param unit	The unit.
 	 * @param dst	Specifies how to handle Daylight Saving Time. Not relevant
-	 *              if the time zone of the start datetime does not have DST.
+	 *              if the time zone of the reference datetime does not have DST.
 	 *              Defaults to RegularLocalTime.
 	 */
 	constructor(
-		start: DateTime,
+		reference: DateTime,
 		amount: number,
 		unit: TimeUnit,
 		dst?: PeriodDst);
@@ -145,7 +145,7 @@ export class Period {
 	 * Constructor implementation. See other constructors for explanation.
 	 */
 	constructor(
-		start: DateTime,
+		reference: DateTime,
 		amountOrInterval: any,
 		unitOrDst?: any,
 		givenDst?: PeriodDst
@@ -165,11 +165,11 @@ export class Period {
 			dst = PeriodDst.RegularLocalTime;
 		}
 		assert(dst >= 0 && dst < PeriodDst.MAX, "Invalid PeriodDst setting");
-		assert(start !== null, "Start time may not be null");
+		assert(!!reference, "Reference time not given");
 		assert(interval.amount() > 0, "Amount must be positive non-zero.");
 		assert(Math.floor(interval.amount()) === interval.amount(), "Amount must be a whole number");
 
-		this._start = start;
+		this._reference = reference;
 		this._interval = interval;
 		this._dst = dst;
 		this._calcInternalValues();
@@ -207,14 +207,21 @@ export class Period {
 	 * Return a fresh copy of the period
 	 */
 	public clone(): Period {
-		return new Period(this._start, this._interval, this._dst);
+		return new Period(this._reference, this._interval, this._dst);
 	}
 
 	/**
-	 * The start date
+	 * The reference date
+	 */
+	public reference(): DateTime {
+		return this._reference;
+	}
+
+	/**
+	 * DEPRECATED: old name for the reference date
 	 */
 	public start(): DateTime {
-		return this._start;
+		return this._reference;
 	}
 
 	/**
@@ -248,14 +255,14 @@ export class Period {
 	/**
 	 * The first occurrence of the period greater than
 	 * the given date. The given date need not be at a period boundary.
-	 * Pre: the fromdate and startdate must either both have timezones or not
+	 * Pre: the fromdate and reference date must either both have timezones or not
 	 * @param fromDate: the date after which to return the next date
 	 * @return the first date matching the period after fromDate, given
 	 *			in the same zone as the fromDate.
 	 */
 	public findFirst(fromDate: DateTime): DateTime {
-		assert((this._intStart.zone() === null) === (fromDate.zone() === null),
-			"The fromDate and startDate must both be aware or unaware");
+		assert(!!this._intReference.zone() === !!fromDate.zone(),
+			"The fromDate and reference date must both be aware or unaware");
 		let approx: DateTime;
 		let approx2: DateTime;
 		let approxMin: DateTime;
@@ -268,46 +275,61 @@ export class Period {
 		let imin: number;
 		let imid: number;
 
-		const normalFrom = this._normalizeDay(fromDate.toZone(this._intStart.zone()));
-
-		// Simple case: period has not started yet.
-		if (normalFrom.lessThan(this._intStart)) {
-			// use toZone because we don't want to return a reference to our internal member
-			return this._correctDay(this._intStart).toZone(fromDate.zone());
-		}
+		const normalFrom = this._normalizeDay(fromDate.toZone(this._intReference.zone()));
 
 		if (this._intInterval.amount() === 1) {
-			// simple cases: amount equals 1 (eliminates need for searching for starting point)
+			// simple cases: amount equals 1 (eliminates need for searching for referenceing point)
 			if (this._intDst === PeriodDst.RegularIntervals) {
 				// apply to UTC time
 				switch (this._intInterval.unit()) {
 					case TimeUnit.Millisecond:
-						approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
-							normalFrom.utcHour(), normalFrom.utcMinute(), normalFrom.utcSecond(), normalFrom.utcMillisecond(), TimeZone.utc());
+						approx = new DateTime(
+							normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
+							normalFrom.utcHour(), normalFrom.utcMinute(), normalFrom.utcSecond(),
+							normalFrom.utcMillisecond(), TimeZone.utc()
+						);
 						break;
 					case TimeUnit.Second:
-						approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
-							normalFrom.utcHour(), normalFrom.utcMinute(), normalFrom.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
+						approx = new DateTime(
+							normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
+							normalFrom.utcHour(), normalFrom.utcMinute(), normalFrom.utcSecond(),
+							this._intReference.utcMillisecond(), TimeZone.utc()
+						);
 						break;
 					case TimeUnit.Minute:
-						approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
-							normalFrom.utcHour(), normalFrom.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
+						approx = new DateTime(
+							normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
+							normalFrom.utcHour(), normalFrom.utcMinute(), this._intReference.utcSecond(),
+							this._intReference.utcMillisecond(), TimeZone.utc()
+						);
 						break;
 					case TimeUnit.Hour:
-						approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
-							normalFrom.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
+						approx = new DateTime(
+							normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
+							normalFrom.utcHour(), this._intReference.utcMinute(), this._intReference.utcSecond(),
+							this._intReference.utcMillisecond(), TimeZone.utc()
+						);
 						break;
 					case TimeUnit.Day:
-						approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
-							this._intStart.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
+						approx = new DateTime(
+							normalFrom.utcYear(), normalFrom.utcMonth(), normalFrom.utcDay(),
+							this._intReference.utcHour(), this._intReference.utcMinute(), this._intReference.utcSecond(),
+							this._intReference.utcMillisecond(), TimeZone.utc()
+						);
 						break;
 					case TimeUnit.Month:
-						approx = new DateTime(normalFrom.utcYear(), normalFrom.utcMonth(), this._intStart.utcDay(),
-							this._intStart.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
+						approx = new DateTime(
+							normalFrom.utcYear(), normalFrom.utcMonth(), this._intReference.utcDay(),
+							this._intReference.utcHour(), this._intReference.utcMinute(), this._intReference.utcSecond(),
+							this._intReference.utcMillisecond(), TimeZone.utc()
+						);
 						break;
 					case TimeUnit.Year:
-						approx = new DateTime(normalFrom.utcYear(), this._intStart.utcMonth(), this._intStart.utcDay(),
-							this._intStart.utcHour(), this._intStart.utcMinute(), this._intStart.utcSecond(), this._intStart.utcMillisecond(), TimeZone.utc());
+						approx = new DateTime(
+							normalFrom.utcYear(), this._intReference.utcMonth(), this._intReference.utcDay(),
+							this._intReference.utcHour(), this._intReference.utcMinute(), this._intReference.utcSecond(),
+							this._intReference.utcMillisecond(), TimeZone.utc()
+						);
 						break;
 					/* istanbul ignore next */
 					default:
@@ -324,32 +346,53 @@ export class Period {
 				// Try to keep regular local intervals
 				switch (this._intInterval.unit()) {
 					case TimeUnit.Millisecond:
-						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-							normalFrom.hour(), normalFrom.minute(), normalFrom.second(), normalFrom.millisecond(), this._intStart.zone());
+						approx = new DateTime(
+							normalFrom.year(), normalFrom.month(), normalFrom.day(),
+							normalFrom.hour(), normalFrom.minute(), normalFrom.second(),
+							normalFrom.millisecond(), this._intReference.zone()
+						);
 						break;
 					case TimeUnit.Second:
-						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-							normalFrom.hour(), normalFrom.minute(), normalFrom.second(), this._intStart.millisecond(), this._intStart.zone());
+						approx = new DateTime(
+							normalFrom.year(), normalFrom.month(), normalFrom.day(),
+							normalFrom.hour(), normalFrom.minute(), normalFrom.second(),
+							this._intReference.millisecond(), this._intReference.zone()
+						);
 						break;
 					case TimeUnit.Minute:
-						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-							normalFrom.hour(), normalFrom.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+						approx = new DateTime(
+							normalFrom.year(), normalFrom.month(), normalFrom.day(),
+							normalFrom.hour(), normalFrom.minute(), this._intReference.second(),
+							this._intReference.millisecond(), this._intReference.zone()
+						);
 						break;
 					case TimeUnit.Hour:
-						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-							normalFrom.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+						approx = new DateTime(
+							normalFrom.year(), normalFrom.month(), normalFrom.day(),
+							normalFrom.hour(), this._intReference.minute(), this._intReference.second(),
+							this._intReference.millisecond(), this._intReference.zone()
+						);
 						break;
 					case TimeUnit.Day:
-						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+						approx = new DateTime(
+							normalFrom.year(), normalFrom.month(), normalFrom.day(),
+							this._intReference.hour(), this._intReference.minute(), this._intReference.second(),
+							this._intReference.millisecond(), this._intReference.zone()
+						);
 						break;
 					case TimeUnit.Month:
-						approx = new DateTime(normalFrom.year(), normalFrom.month(), this._intStart.day(),
-							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+						approx = new DateTime(
+							normalFrom.year(), normalFrom.month(), this._intReference.day(),
+							this._intReference.hour(), this._intReference.minute(), this._intReference.second(),
+							this._intReference.millisecond(), this._intReference.zone()
+						);
 						break;
 					case TimeUnit.Year:
-						approx = new DateTime(normalFrom.year(), this._intStart.month(), this._intStart.day(),
-							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+						approx = new DateTime(
+							normalFrom.year(), this._intReference.month(), this._intReference.day(),
+							this._intReference.hour(), this._intReference.minute(), this._intReference.second(),
+							this._intReference.millisecond(), this._intReference.zone()
+						);
 						break;
 					/* istanbul ignore next */
 					default:
@@ -369,41 +412,42 @@ export class Period {
 				// apply to UTC time
 				switch (this._intInterval.unit()) {
 					case TimeUnit.Millisecond:
-						diff = normalFrom.diff(this._intStart).milliseconds();
+						diff = normalFrom.diff(this._intReference).milliseconds();
 						periods = Math.floor(diff / this._intInterval.amount());
-						approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
+						approx = this._intReference.add(periods * this._intInterval.amount(), this._intInterval.unit());
 						break;
 					case TimeUnit.Second:
-						diff = normalFrom.diff(this._intStart).seconds();
+						diff = normalFrom.diff(this._intReference).seconds();
 						periods = Math.floor(diff / this._intInterval.amount());
-						approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
+						approx = this._intReference.add(periods * this._intInterval.amount(), this._intInterval.unit());
 						break;
 					case TimeUnit.Minute:
 						// only 25 leap seconds have ever been added so this should still be OK.
-						diff = normalFrom.diff(this._intStart).minutes();
+						diff = normalFrom.diff(this._intReference).minutes();
 						periods = Math.floor(diff / this._intInterval.amount());
-						approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
+						approx = this._intReference.add(periods * this._intInterval.amount(), this._intInterval.unit());
 						break;
 					case TimeUnit.Hour:
-						diff = normalFrom.diff(this._intStart).hours();
+						diff = normalFrom.diff(this._intReference).hours();
 						periods = Math.floor(diff / this._intInterval.amount());
-						approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
+						approx = this._intReference.add(periods * this._intInterval.amount(), this._intInterval.unit());
 						break;
 					case TimeUnit.Day:
-						diff = normalFrom.diff(this._intStart).hours() / 24;
+						diff = normalFrom.diff(this._intReference).hours() / 24;
 						periods = Math.floor(diff / this._intInterval.amount());
-						approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
+						approx = this._intReference.add(periods * this._intInterval.amount(), this._intInterval.unit());
 						break;
 					case TimeUnit.Month:
-						diff = (normalFrom.utcYear() - this._intStart.utcYear()) * 12 + (normalFrom.utcMonth() - this._intStart.utcMonth()) - 1;
-						periods = Math.floor(Math.max(0, diff) / this._intInterval.amount());
-						approx = this._intStart.add(periods * this._intInterval.amount(), this._intInterval.unit());
+						diff = (normalFrom.utcYear() - this._intReference.utcYear()) * 12 +
+							(normalFrom.utcMonth() - this._intReference.utcMonth()) - 1;
+						periods = Math.floor(diff / this._intInterval.amount());
+						approx = this._intReference.add(periods * this._intInterval.amount(), this._intInterval.unit());
 						break;
 					case TimeUnit.Year:
-						// The -1 below is because the day-of-month of start date may be after the day of the fromDate
-						diff = normalFrom.year() - this._intStart.year() - 1;
-						periods = Math.floor(Math.max(0, diff) / this._intInterval.amount()); // max needed due to -1 above
-						approx = this._intStart.add(periods * this._intInterval.amount(), TimeUnit.Year);
+						// The -1 below is because the day-of-month of reference date may be after the day of the fromDate
+						diff = normalFrom.year() - this._intReference.year() - 1;
+						periods = Math.floor(diff / this._intInterval.amount());
+						approx = this._intReference.add(periods * this._intInterval.amount(), TimeUnit.Year);
 						break;
 					/* istanbul ignore next */
 					default:
@@ -417,26 +461,34 @@ export class Period {
 					approx = approx.add(this._intInterval.amount(), this._intInterval.unit());
 				}
 			} else {
-				// Try to keep regular local times. If the unit is less than a day, we start each day anew
+				// Try to keep regular local times. If the unit is less than a day, we reference each day anew
 				switch (this._intInterval.unit()) {
 					case TimeUnit.Millisecond:
 						if (this._intInterval.amount() < 1000 && (1000 % this._intInterval.amount()) === 0) {
-							// optimization: same millisecond each second, so just take the fromDate minus one second with the this._intStart milliseconds
-							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-								normalFrom.hour(), normalFrom.minute(), normalFrom.second(), this._intStart.millisecond(), this._intStart.zone())
-								.subLocal(1, TimeUnit.Second);
+							// optimization: same millisecond each second, so just take the fromDate
+							// minus one second with the this._intReference milliseconds
+							approx = new DateTime(
+								normalFrom.year(), normalFrom.month(), normalFrom.day(),
+								normalFrom.hour(), normalFrom.minute(), normalFrom.second(),
+								this._intReference.millisecond(), this._intReference.zone()
+							)
+							.subLocal(1, TimeUnit.Second);
 						} else {
-							// per constructor assert, the seconds are less than a day, so just go the fromDate start-of-day
-							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-								this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+							// per constructor assert, the seconds are less than a day, so just go the fromDate reference-of-day
+							approx = new DateTime(
+								normalFrom.year(), normalFrom.month(), normalFrom.day(),
+								this._intReference.hour(), this._intReference.minute(), this._intReference.second(),
+								this._intReference.millisecond(), this._intReference.zone()
+							);
 
-							// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
-							remainder = Math.floor((24 * 3600 * 1000) % this._intInterval.amount());
+							// since we start counting from this._intReference each day, we have to
+							// take care of the shorter interval at the boundary
+							remainder = Math.floor((86400000) % this._intInterval.amount());
 							if (approx.greaterThan(normalFrom)) {
 								// todo
 								/* istanbul ignore if */
 								if (approx.subLocal(remainder, TimeUnit.Millisecond).greaterThan(normalFrom)) {
-									// normalFrom lies outside the boundary period before the start date
+									// normalFrom lies outside the boundary period before the reference date
 									approx = approx.subLocal(1, TimeUnit.Day);
 								}
 							} else {
@@ -447,7 +499,7 @@ export class Period {
 							}
 
 							// optimization: binary search
-							imax = Math.floor((24 * 3600 * 1000) / this._intInterval.amount());
+							imax = Math.floor((86400000) / this._intInterval.amount());
 							imin = 0;
 							while (imax >= imin) {
 								// calculate the midpoint for roughly equal partition
@@ -469,20 +521,28 @@ export class Period {
 						break;
 					case TimeUnit.Second:
 						if (this._intInterval.amount() < 60 && (60 % this._intInterval.amount()) === 0) {
-							// optimization: same second each minute, so just take the fromDate minus one minute with the this._intStart seconds
-							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-								normalFrom.hour(), normalFrom.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone())
-								.subLocal(1, TimeUnit.Minute);
+							// optimization: same second each minute, so just take the fromDate
+							// minus one minute with the this._intReference seconds
+							approx = new DateTime(
+								normalFrom.year(), normalFrom.month(), normalFrom.day(),
+								normalFrom.hour(), normalFrom.minute(), this._intReference.second(),
+								this._intReference.millisecond(), this._intReference.zone()
+							)
+							.subLocal(1, TimeUnit.Minute);
 						} else {
-							// per constructor assert, the seconds are less than a day, so just go the fromDate start-of-day
-							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-								this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+							// per constructor assert, the seconds are less than a day, so just go the fromDate reference-of-day
+							approx = new DateTime(
+								normalFrom.year(), normalFrom.month(), normalFrom.day(),
+								this._intReference.hour(), this._intReference.minute(), this._intReference.second(),
+								this._intReference.millisecond(), this._intReference.zone()
+							);
 
-							// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
-							remainder = Math.floor((24 * 3600) % this._intInterval.amount());
+							// since we start counting from this._intReference each day, we have to take
+							// are of the shorter interval at the boundary
+							remainder = Math.floor((86400) % this._intInterval.amount());
 							if (approx.greaterThan(normalFrom)) {
 								if (approx.subLocal(remainder, TimeUnit.Second).greaterThan(normalFrom)) {
-									// normalFrom lies outside the boundary period before the start date
+									// normalFrom lies outside the boundary period before the reference date
 									approx = approx.subLocal(1, TimeUnit.Day);
 								}
 							} else {
@@ -493,7 +553,7 @@ export class Period {
 							}
 
 							// optimization: binary search
-							imax = Math.floor((24 * 3600) / this._intInterval.amount());
+							imax = Math.floor((86400) / this._intInterval.amount());
 							imin = 0;
 							while (imax >= imin) {
 								// calculate the midpoint for roughly equal partition
@@ -515,21 +575,28 @@ export class Period {
 						break;
 					case TimeUnit.Minute:
 						if (this._intInterval.amount() < 60 && (60 % this._intInterval.amount()) === 0) {
-							// optimization: same hour this._intStartary each time, so just take the fromDate minus one hour
-							// with the this._intStart minutes, seconds
-							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-								normalFrom.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone())
-								.subLocal(1, TimeUnit.Hour);
+							// optimization: same hour this._intReferenceary each time, so just take the fromDate minus one hour
+							// with the this._intReference minutes, seconds
+							approx = new DateTime(
+								normalFrom.year(), normalFrom.month(), normalFrom.day(),
+								normalFrom.hour(), this._intReference.minute(), this._intReference.second(),
+								this._intReference.millisecond(), this._intReference.zone()
+							)
+							.subLocal(1, TimeUnit.Hour);
 						} else {
 							// per constructor assert, the seconds fit in a day, so just go the fromDate previous day
-							approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-								this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+							approx = new DateTime(
+								normalFrom.year(), normalFrom.month(), normalFrom.day(),
+								this._intReference.hour(), this._intReference.minute(), this._intReference.second(),
+								this._intReference.millisecond(), this._intReference.zone()
+							);
 
-							// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
+							// since we start counting from this._intReference each day,
+							// we have to take care of the shorter interval at the boundary
 							remainder = Math.floor((24 * 60) % this._intInterval.amount());
 							if (approx.greaterThan(normalFrom)) {
 								if (approx.subLocal(remainder, TimeUnit.Minute).greaterThan(normalFrom)) {
-									// normalFrom lies outside the boundary period before the start date
+									// normalFrom lies outside the boundary period before the reference date
 									approx = approx.subLocal(1, TimeUnit.Day);
 								}
 							} else {
@@ -541,14 +608,18 @@ export class Period {
 						}
 						break;
 					case TimeUnit.Hour:
-						approx = new DateTime(normalFrom.year(), normalFrom.month(), normalFrom.day(),
-							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+						approx = new DateTime(
+							normalFrom.year(), normalFrom.month(), normalFrom.day(),
+							this._intReference.hour(), this._intReference.minute(), this._intReference.second(),
+							this._intReference.millisecond(), this._intReference.zone()
+						);
 
-						// since we start counting from this._intStart each day, we have to take care of the shorter interval at the boundary
+						// since we start counting from this._intReference each day,
+						// we have to take care of the shorter interval at the boundary
 						remainder = Math.floor(24 % this._intInterval.amount());
 						if (approx.greaterThan(normalFrom)) {
 							if (approx.subLocal(remainder, TimeUnit.Hour).greaterThan(normalFrom)) {
-								// normalFrom lies outside the boundary period before the start date
+								// normalFrom lies outside the boundary period before the reference date
 								approx = approx.subLocal(1, TimeUnit.Day);
 							}
 						} else {
@@ -560,28 +631,26 @@ export class Period {
 						break;
 					case TimeUnit.Day:
 						// we don't have leap days, so we can approximate by calculating with UTC timestamps
-						diff = normalFrom.diff(this._intStart).hours() / 24;
+						diff = normalFrom.diff(this._intReference).hours() / 24;
 						periods = Math.floor(diff / this._intInterval.amount());
-						approx = this._intStart.addLocal(periods * this._intInterval.amount(), this._intInterval.unit());
+						approx = this._intReference.addLocal(periods * this._intInterval.amount(), this._intInterval.unit());
 						break;
 					case TimeUnit.Month:
-						// we don't have leap days, so we can approximate by calculating with UTC timestamps
-						// The -1 below is because the day-of-month of start date may be after the day of the fromDate
-						diff = (normalFrom.year() - this._intStart.year()) * 12 + (normalFrom.month() - this._intStart.month()) - 1;
-						periods = Math.floor(Math.max(0, diff) / this._intInterval.amount()); // max needed due to -1 above
-						newYear = this._intStart.year() + Math.floor(periods * this._intInterval.amount() / 12);
-						newMonth = ((this._intStart.month() - 1 + Math.floor(periods * this._intInterval.amount())) % 12) + 1;
-						// note that newYear-newMonth-this._intStart.day() is a valid date due to our start day normalization
-						approx = new DateTime(newYear, newMonth, this._intStart.day(),
-							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+						diff = (normalFrom.year() - this._intReference.year()) * 12 +
+							(normalFrom.month() - this._intReference.month());
+						periods = Math.floor(diff / this._intInterval.amount());
+						approx = this._intReference.addLocal(this._interval.multiply(periods));
 						break;
 					case TimeUnit.Year:
-						// The -1 below is because the day-of-month of start date may be after the day of the fromDate
-						diff = normalFrom.year() - this._intStart.year() - 1;
-						periods = Math.floor(Math.max(0, diff) / this._intInterval.amount()); // max needed due to -1 above
-						newYear = this._intStart.year() + periods * this._intInterval.amount();
-						approx = new DateTime(newYear, this._intStart.month(), this._intStart.day(),
-							this._intStart.hour(), this._intStart.minute(), this._intStart.second(), this._intStart.millisecond(), this._intStart.zone());
+						// The -1 below is because the day-of-month of reference date may be after the day of the fromDate
+						diff = normalFrom.year() - this._intReference.year() - 1;
+						periods = Math.floor(diff / this._intInterval.amount());
+						newYear = this._intReference.year() + periods * this._intInterval.amount();
+						approx = new DateTime(
+							newYear, this._intReference.month(), this._intReference.day(),
+							this._intReference.hour(), this._intReference.minute(), this._intReference.second(),
+							this._intReference.millisecond(), this._intReference.zone()
+						);
 						break;
 					/* istanbul ignore next */
 					default:
@@ -604,33 +673,49 @@ export class Period {
 	 * be at a period boundary, otherwise the answer is incorrect.
 	 * This function has MUCH better performance than findFirst.
 	 * Returns the datetime "count" times away from the given datetime.
-	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
-	 * @param count	Number of periods to add. Optional. Must be an integer number.
+	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period reference date has one.
+	 * @param count	Number of periods to add. Optional. Must be an integer number, may be negative.
 	 * @return (prev + count * period), in the same timezone as prev.
 	 */
 	public findNext(prev: DateTime, count: number = 1): DateTime {
-		assert(prev !== null, "Prev must be non-null");
-		assert((this._intStart.zone() === null) === (prev.zone() === null),
-			"The fromDate and startDate must both be aware or unaware");
+		assert(!!prev, "Prev must be given");
+		assert(!!this._intReference.zone() === !!prev.zone(),
+			"The fromDate and referenceDate must both be aware or unaware");
 		assert(typeof (count) === "number", "Count must be a number");
 		assert(Math.floor(count) === count, "Count must be an integer");
-		if (count < 0 && prev.lessEqual(this.start())) {
-			return null;
-		}
-		const normalizedPrev = this._normalizeDay(prev.toZone(this._start.zone()));
+		const normalizedPrev = this._normalizeDay(prev.toZone(this._reference.zone()));
 		if (this._intDst === PeriodDst.RegularIntervals) {
-			return this._correctDay(normalizedPrev.add(this._intInterval.amount() * count, this._intInterval.unit())).convert(prev.zone());
+			return this._correctDay(normalizedPrev.add(
+				this._intInterval.amount() * count, this._intInterval.unit())
+			).convert(prev.zone());
 		} else {
-			return this._correctDay(normalizedPrev.addLocal(this._intInterval.amount() * count, this._intInterval.unit())).convert(prev.zone());
+			return this._correctDay(normalizedPrev.addLocal(
+				this._intInterval.amount() * count, this._intInterval.unit())
+			).convert(prev.zone());
 		}
+	}
+
+	/**
+	 * The last occurrence of the period less than
+	 * the given date. The given date need not be at a period boundary.
+	 * Pre: the fromdate and the period reference date must either both have timezones or not
+	 * @param fromDate: the date before which to return the next date
+	 * @return the last date matching the period before fromDate, given
+	 *			in the same zone as the fromDate.
+	 */
+	public findLast(from: DateTime): DateTime {
+		let result = this.findPrev(this.findFirst(from));
+		if (result.equals(from)) {
+			result = this.findPrev(result);
+		}
+		return result;
 	}
 
 	/**
 	 * Returns the previous timestamp in the period. The given timestamp must
 	 * be at a period boundary, otherwise the answer is incorrect.
-	 * Returns NULL if the previous occurrence is before the start date
-	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period start date has one.
-	 * @param count	Number of periods to subtract. Optional. Must be an integer number.
+	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period reference date has one.
+	 * @param count	Number of periods to subtract. Optional. Must be an integer number, may be negative.
 	 * @return (next - count * period), in the same timezone as next.
 	 */
 	public findPrev(next: DateTime, count: number = 1): DateTime {
@@ -645,19 +730,19 @@ export class Period {
 		if (!occurrence) {
 			return false;
 		}
-		assert((this._intStart.zone() === null) === (occurrence.zone() === null),
-			"The occurrence and startDate must both be aware or unaware");
+		assert(!!this._intReference.zone() === !!occurrence.zone(),
+			"The occurrence and referenceDate must both be aware or unaware");
 		return (this.findFirst(occurrence.sub(Duration.milliseconds(1))).equals(occurrence));
 	}
 
 	/**
 	 * Returns true iff this period has the same effect as the given one.
-	 * i.e. a period of 24 hours is equal to one of 1 day if they have the same UTC start moment
+	 * i.e. a period of 24 hours is equal to one of 1 day if they have the same UTC reference moment
 	 * and same dst.
 	 */
 	public equals(other: Period): boolean {
-		// note we take the non-normalized start() because this has an influence on the outcome
-		return (this._start.equals(other.start())
+		// note we take the non-normalized reference() because this has an influence on the outcome
+		return (this.isBoundary(other.reference())
 			&& this._intInterval.equalsExact(other.interval())
 			&& this._intDst === other._intDst);
 	}
@@ -666,7 +751,7 @@ export class Period {
 	 * Returns true iff this period was constructed with identical arguments to the other one.
 	 */
 	public identical(other: Period): boolean {
-		return (this._start.identical(other.start())
+		return (this._reference.identical(other.reference())
 			&& this._interval.identical(other.interval())
 			&& this.dst() === other.dst());
 	}
@@ -678,15 +763,15 @@ export class Period {
 	 * 2014-01-01T12:00:00.000+01:00/P1M   (one month)
 	 */
 	public toIsoString(): string {
-		return this._start.toIsoString() + "/" + this._interval.toIsoString();
+		return this._reference.toIsoString() + "/" + this._interval.toIsoString();
 	}
 
 	/**
 	 * A string representation e.g.
-	 * "10 years, starting at 2014-03-01T12:00:00 Europe/Amsterdam, keeping regular intervals".
+	 * "10 years, referenceing at 2014-03-01T12:00:00 Europe/Amsterdam, keeping regular intervals".
 	 */
 	public toString(): string {
-		let result: string = this._interval.toString() + ", starting at " + this._start.toString();
+		let result: string = this._interval.toString() + ", referenceing at " + this._reference.toString();
 		// only add the DST handling if it is relevant
 		if (this._dstRelevant()) {
 			result += ", keeping " + periodDstToString(this._dst);
@@ -702,12 +787,12 @@ export class Period {
 	}
 
 	/**
-	 * Corrects the difference between _start and _intStart.
+	 * Corrects the difference between _reference and _intReference.
 	 */
 	private _correctDay(d: DateTime): DateTime {
-		if (this._start !== this._intStart) {
+		if (this._reference !== this._intReference) {
 			return new DateTime(
-				d.year(), d.month(), Math.min(basics.daysInMonth(d.year(), d.month()), this._start.day()),
+				d.year(), d.month(), Math.min(basics.daysInMonth(d.year(), d.month()), this._reference.day()),
 				d.hour(), d.minute(), d.second(), d.millisecond(), d.zone());
 		} else {
 			return d;
@@ -734,12 +819,12 @@ export class Period {
 
 	/**
 	 * Returns true if DST handling is relevant for us.
-	 * (i.e. if the start time zone has DST)
+	 * (i.e. if the reference time zone has DST)
 	 */
 	private _dstRelevant(): boolean {
-		return (this._start.zone() != null
-			&& this._start.zone().kind() === TimeZoneKind.Proper
-			&& this._start.zone().hasDst());
+		return (!!this._reference.zone()
+			&& this._reference.zone().kind() === TimeZoneKind.Proper
+			&& this._reference.zone().hasDst());
 	}
 
 	/**
@@ -791,8 +876,8 @@ export class Period {
 			this._intDst = PeriodDst.RegularIntervals;
 		}
 
-		// normalize start day
-		this._intStart = this._normalizeDay(this._start, false);
+		// normalize reference day
+		this._intReference = this._normalizeDay(this._reference, false);
 	}
 
 }

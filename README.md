@@ -8,17 +8,21 @@
 [![NPM](https://nodei.co/npm/timezonecomplete.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/timezonecomplete/)
 [![NPM](https://nodei.co/npm-dl/timezonecomplete.png?months=9&height=3)](https://nodei.co/npm/timezonecomplete/)
 
-## New in version 2
 
-* Browser bundle with UMD wrapper and minified version
-* For TypeScript users: uses ES6-style imports
-* For TypeScript users: uses 'typings' field in package.json, so you can/must drop your reference to timezonecomplete.d.ts and ensure that you use 'node' module resolution for tsc.
-* Added karma tests to ensure timezonecomplete works well across different browsers
+## What's new in version 3
+
+The Period class has had an overhaul. It now behaves the same for dates before the start date as after the start date. Previously, it would consider the start moment a real 'starting moment' i.e. before which no periodic timestamps occur. We renamed the 'start' moment to 'reference' moment to reflect this. This new symmetric behaviour also has an impact on period equality:  period1.equals(period2) if their reference dates are on one anothers boundary dates and their interval and DST matches.
+
+## Upgrading from version  2
+
+* Change your application logic if it depends on periods not returning timestamps before the start date.
+* Change your application logic if you want period equality to mean 'same start date and same interval'. Consider using Period#identical() for that purpose if it isn't too strict for you.
+* Rename all calls to Period#start() to Period#reference().  The start() method has been marked DEPRECATED and will be removed in the next major version.
 
 ## Upgrading from version 1
 
 Javascript users don't need to do anything. Typescript users should:
-* Remove your triple-slash references to the timezonecomplete typings file
+* Remove any triple-slash references to the timezonecomplete typings file
 * Ensure tsc is called with 'node' module resolution (which is the default)
 
 ## Synopsis
@@ -700,6 +704,15 @@ Currently not. This is because most platforms don't, especially when converting 
 The version of the included IANA time zone database is 2016a.
 
 ## Changelog
+
+### 3.0.0 (2016-03-14)
+A small Period overhaul:
+* Add Period#findLast() analogous to Period#findFirst().
+* Periods are now symmetric around the start date, i.e. the start date is no longer considered the point only after which the periods run. So now, calling e.g. findPrev() on the start date returns one period before the start date rather than null.
+** Period#findFirst() no longer returns the start date when called with a date multiple periods before the start date, but rather returns the first boundary date after the given date.
+** Period#findPrev() no longer returns null when called with the start date or less, but rather returns the greatest boundary date before the given date.
+** Period#start() is now deprecated in favor of Period#reference() - after all, the 'start' date is not a starting point anymore but a reference point only.
+* The Period#equals() method now considers periods equal also if their reference dates (start dates) are not equal but are boundary dates of each other.
 
 ### 2.0.6 (2016-02-27)
 * Remove dependency on Node.JS modules for better browser support.
