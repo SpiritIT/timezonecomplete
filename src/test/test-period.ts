@@ -753,7 +753,12 @@ describe("Period", function(): void {
 	});
 
 	describe("equals()", (): void => {
-		it("should return false for periods with different reference", (): void => {
+		it("should return false for periods with different reference but same result", (): void => {
+			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			const q = new Period(new DateTime("2015-02-02T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(true);
+		});
+		it("should return false for periods with different reference with different result", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			const q = new Period(new DateTime("2014-01-01T00:00:01 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.equals(q)).to.equal(false);
