@@ -13,7 +13,7 @@ import { expect } from "chai";
 import * as token from "../lib/token";
 
 describe("Token", (): void => {
-	describe("constructor", (): void => {
+	describe("constructor()", (): void => {
 		it("should accept an initial format string", (): void => {
 			var tokenizer = new token.Tokenizer("foo");
 			expect(tokenizer.parseTokens()).to.not.be.empty;

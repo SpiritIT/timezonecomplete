@@ -54,7 +54,7 @@ describe("duration loose", (): void => {
 
 describe("Duration()", (): void => {
 
-	describe("constructor", (): void => {
+	describe("constructor()", (): void => {
 		it("default constructor", (): void => {
 			const d = new Duration();
 			expect(d.amount()).to.equal(0);
