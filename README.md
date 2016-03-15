@@ -710,9 +710,12 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2016a.
+The version of the included IANA time zone database is 2016b.
 
 ## Changelog
+
+### 3.0.1 (2016-03-15)
+* Upgrade TZ database to 2016b
 
 ### 3.0.0 (2016-03-14)
 A small Period overhaul:
