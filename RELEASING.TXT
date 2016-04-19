@@ -11,7 +11,6 @@ NEW TZ DATABASE
 node node-preparse.js TZ_DIR/ > timezone-data.json
 * In case of trouble, first throw away all non-zone files from the tz data directory
 * copy timezone-data.json to src/lib
-* rebuild
 * Adjust README.md  to change database version number and changelog
 
 
