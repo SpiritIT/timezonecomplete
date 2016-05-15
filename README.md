@@ -1029,9 +1029,9 @@ var dt = new DateTime(2014, 1, 1, 23, 59, 59, 999, tc.zone("Europe/Amsterdam", f
 
 ## Contributors
 
-* Rogier Schouten <r.schouten@spiritit.com>
-* Daan Wissing <d.wissing@spiritit.com>
-* Peter Kooijmans <p.kooijmans@spiritit.com>
+* Rogier Schouten
+* Daan Wissing
+* Peter Kooijmans
 
 ## License
 
