@@ -714,6 +714,9 @@ The version of the included IANA time zone database is 2016d.
 
 ## Changelog
 
+### 3.0.4 (2016-06-15)
+* Upgrade TZ database to 2016e
+
 ### 3.0.3 (2016-04-18)
 * Upgrade TZ database to 2016d
 

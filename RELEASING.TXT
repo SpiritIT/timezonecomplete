@@ -24,19 +24,3 @@ npm run all
 * Ensure .npmrc points to the world NPM repository, not the spirit repository
 * Run:
 npm publish
-
-DEFINITELYTYPED
-* Sync your DefinitelyTyped fork to the latest version of DefinitelyTyped
-* Make a branch timezonecomplete-X.Y.Z
-* Copy the last timezonecomplete.d.ts to timezonecomplete-<PREVIOUS_VERSION>.d.ts
-* Edit it so that the module name is timezonecomplete-<PREVIOUS_VERSION>
-* Copy the last timezonecomplete-tests.ts to timezonecomplete-<PREVIOUS_VERSION>-tests.d.ts
-* Edit it so that it refers to timezonecomplete-<PREVIOUS_VERSION>.d.ts
-* Copy the lib/timezonecomplete.d.ts over the old one
-* Add to the timezonecomplete-tests.ts
-* For EVERY -tests.ts file, run:
-tsc -m commonjs --noImplicitAny <TS_FILE>
-* Commit and sync and do a pull request
-
-
-
