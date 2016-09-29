@@ -354,7 +354,7 @@ export class TimeZone {
 				/* istanbul ignore if */
 				/* istanbul ignore next */
 				if (true) {
-					throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
+					throw new Error(`unknown TimeZoneKind '${this._kind}'`);
 				}
 		}
 	}
@@ -402,7 +402,7 @@ export class TimeZone {
 				/* istanbul ignore if */
 				/* istanbul ignore next */
 				if (true) {
-					throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
+					throw new Error(`unknown TimeZoneKind '${this._kind}'`);
 				}
 		}
 	}
@@ -528,7 +528,7 @@ export class TimeZone {
 				/* istanbul ignore if */
 				/* istanbul ignore next */
 				if (true) {
-					throw new Error("Unknown TimeZoneKind \"" + TimeZoneKind[this._kind] + "\"");
+					throw new Error(`unknown TimeZoneKind '${this._kind}'`);
 				}
 		}
 	}

@@ -9,9 +9,10 @@ NEW TZ DATABASE
   NOTE: no other files (like the tar file itself) may be in the directory
 * Run
 node node-preparse.js TZ_DIR/ > timezone-data.json
+node beautifyjson.js
 * In case of trouble, first throw away all non-zone files from the tz data directory
 * copy timezone-data.json to src/lib
-* Adjust README.md  to change database version number and changelog
+* Adjust README.md to change database version number and changelog
 
 
 MODULE PUBLISH
