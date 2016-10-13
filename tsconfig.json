@@ -25,39 +25,7 @@
 		"placeOpenBraceOnNewLineForFunctions": false,
 		"placeOpenBraceOnNewLineForControlBlocks": false
 	},
-	"files": [
-		"src/lib/assert.ts",
-		"src/lib/basics.ts",
-		"src/lib/datetime.ts",
-		"src/lib/duration.ts",
-		"src/lib/format.ts",
-		"src/lib/globals.ts",
-		"src/lib/index.ts",
-		"src/lib/javascript.ts",
-		"src/lib/math.ts",
-		"src/lib/parse.ts",
-		"src/lib/period.ts",
-		"src/lib/strings.ts",
-		"src/lib/timesource.ts",
-		"src/lib/timezone.ts",
-		"src/lib/token.ts",
-		"src/lib/tz-database.ts",
-		"src/test/test-basics.ts",
-		"src/test/test-datetime.ts",
-		"src/test/test-duration.ts",
-		"src/test/test-format.ts",
-		"src/test/test-globals.ts",
-		"src/test/test-math.ts",
-		"src/test/test-parse.ts",
-		"src/test/test-period.ts",
-		"src/test/test-timezone.ts",
-		"src/test/test-token.ts",
-		"src/test/test-tz-database.ts",
-		"typings/async/async.d.ts",
-		"typings/chai/chai.d.ts",
-		"typings/mocha/mocha.d.ts",
-		"typings/node/node.d.ts",
-		"typings/sinon/sinon.d.ts",
-		"typings/source-map-support/source-map-support.d.ts"
+	"include": [
+		"src/**/*.ts"
 	]
 }
