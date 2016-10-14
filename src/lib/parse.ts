@@ -74,7 +74,8 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 		let pnr: ParseNumberResult;
 		let pzr: ParseZoneResult;
 		let remaining: string = dateTimeString;
-		tokens.forEach((token: Token): void => {
+		for (let i = 0; i < tokens.length; ++i) {
+			const token = tokens[i];
 			let tokenResult: string;
 			switch (token.type) {
 				case TokenType.ERA:
@@ -138,7 +139,7 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 					remaining = stripRaw(remaining, token.raw);
 					break;
 			}
-		});
+		};
 		if (!result.time.validate()) {
 			throw new Error("resulting date invalid");
 		}

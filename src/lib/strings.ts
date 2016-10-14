@@ -16,8 +16,6 @@ import assert from "./assert";
  * @return	the padded string
  */
 export function padLeft(s: string, width: number, char: string): string {
-	assert(width > 0, "expect width > 0");
-	assert(char.length === 1, "expect single character in char");
 	let padding: string = "";
 	for (let i = 0; i < (width - s.length); i++) {
 		padding += char;
@@ -33,8 +31,6 @@ export function padLeft(s: string, width: number, char: string): string {
  * @return	the padded string
  */
 export function padRight(s: string, width: number, char: string): string {
-	assert(width > 0, "expect width > 0");
-	assert(char.length === 1, "expect single character in char");
 	let padding: string = "";
 	for (let i = 0; i < (width - s.length); i++) {
 		padding += char;

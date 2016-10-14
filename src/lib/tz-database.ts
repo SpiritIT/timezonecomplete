@@ -529,7 +529,8 @@ export class TzDatabase {
 			const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 			let result: Duration = null;
 			const ruleNames: string[] = [];
-			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
+			for (let i = 0; i < zoneInfos.length; ++i) {
+				const zoneInfo = zoneInfos[i];
 				if (zoneInfo.ruleType === RuleType.Offset) {
 					if (!result || result.greaterThan(zoneInfo.ruleOffset)) {
 						if (zoneInfo.ruleOffset.milliseconds() !== 0) {
@@ -541,15 +542,16 @@ export class TzDatabase {
 					&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
 					ruleNames.push(zoneInfo.ruleName);
 					const temp = this.getRuleInfos(zoneInfo.ruleName);
-					temp.forEach((ruleInfo: RuleInfo): void => {
+					for (let j = 0; j < temp.length; ++j) {
+						const ruleInfo = temp[j];
 						if (!result || result.greaterThan(ruleInfo.save)) {
 							if (ruleInfo.save.milliseconds() !== 0) {
 								result = ruleInfo.save;
 							}
 						}
-					});
+					};
 				}
-			});
+			};
 			if (!result) {
 				result = Duration.hours(0);
 			}
@@ -572,7 +574,8 @@ export class TzDatabase {
 			const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 			let result: Duration = null;
 			const ruleNames: string[] = [];
-			zoneInfos.forEach((zoneInfo: ZoneInfo): void => {
+			for (let i = 0; i < zoneInfos.length; ++i) {
+				const zoneInfo = zoneInfos[i];
 				if (zoneInfo.ruleType === RuleType.Offset) {
 					if (!result || result.lessThan(zoneInfo.ruleOffset)) {
 						result = zoneInfo.ruleOffset;
@@ -582,13 +585,14 @@ export class TzDatabase {
 					&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
 					ruleNames.push(zoneInfo.ruleName);
 					const temp = this.getRuleInfos(zoneInfo.ruleName);
-					temp.forEach((ruleInfo: RuleInfo): void => {
+					for (let j = 0; j < temp.length; ++j) {
+						const ruleInfo = temp[j];
 						if (!result || result.lessThan(ruleInfo.save)) {
 							result = ruleInfo.save;
 						}
-					});
+					};
 				}
-			});
+			};
 			if (!result) {
 				result = Duration.hours(0);
 			}
@@ -1052,14 +1056,15 @@ export class TzDatabase {
 						// (e.g. Lybia)
 						if (prevZone) {
 							const ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
-							ruleInfos.forEach((ruleInfo: RuleInfo): void => {
+							for (let j = 0; j < ruleInfos.length; ++j) {
+								const ruleInfo = ruleInfos[j];
 								if (ruleInfo.applicable(prevUntilTm.year)) {
 									if (ruleInfo.transitionTimeUtc(prevUntilTm.year, stdOffset, null) === prevZone.until) {
 										dstOffset = ruleInfo.save;
 										letter = ruleInfo.letter;
 									}
 								}
-							});
+							};
 						}
 						break;
 				}
@@ -1073,12 +1078,15 @@ export class TzDatabase {
 					const dstTransitions: Transition[] = this.getTransitionsDstOffsets(
 						zoneInfo.ruleName,
 						prevUntilTm ? Math.max(prevUntilTm.year, fromYear) : fromYear,
-						Math.min(untilTm.year, toYear), stdOffset);
-					dstTransitions.forEach((transition: Transition): void => {
+						Math.min(untilTm.year, toYear),
+						stdOffset
+					);
+					for (let k = 0; k < dstTransitions.length; ++k) {
+						const transition = dstTransitions[k];
 						letter = transition.letter;
 						dstOffset = transition.offset;
 						result.push(new Transition(transition.at, transition.offset.add(stdOffset), transition.letter));
-					});
+					};
 				}
 			}
 

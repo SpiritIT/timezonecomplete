@@ -122,7 +122,8 @@ export function format(
 	const tokenizer = new Tokenizer(formatString);
 	const tokens: Token[] = tokenizer.parseTokens();
 	let result: string = "";
-	tokens.forEach((token: Token): void => {
+	for (let i = 0; i < tokens.length; ++i) {
+		const token = tokens[i];
 		let tokenResult: string;
 		switch (token.type) {
 			case TokenType.ERA:
@@ -167,7 +168,7 @@ export function format(
 				break;
 		}
 		result += tokenResult;
-	});
+	}
 
 	return result.trim();
 }
