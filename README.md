@@ -15,19 +15,18 @@ TimezoneComplete is a library of date/time utilities, all of which are aware of 
 
 ## Difference with timezone-js, Moment.js and other Date libraries
 
-Other libraries are great, we had different requirements. The main thing for us was that calculations should be stable and predictable, especially around DST change moments. It should handle non-existing local times (during DST changes) in a predictable way.
+Other libraries are great, we had different requirements. The main thing for us was that calculations should be stable and predictable, especially around DST change moments.
 Above all, it should give the same answers across platforms. At the time we started this, none of the other libraries showed this level of predictability.
-
 
 * Consistent behaviour across platforms and with different TZ environment variable settings
 * Correct time zone conversions back and forth
 * Correct Daylight Saving Time handling with predictable behavior for non-existing hours during DST changes
 * Feature-rich:
-  * DateTime class with or without time zone
-  * Durations with units
-  * Calculating with dates and durations across time zones
-  * Periods with regular UTC or regular local time repetition
-  * Utility functions for determining leap years, determining the last Monday of the month etc.
+  * **DateTime** class with or without time zone
+  * **Durations** with units
+  * **Calculating** with dates and durations across time zones
+  * **Periods** with regular UTC or regular local time repetition
+  * **Utility functions** for determining leap years, determining the last Monday of the month etc.
   * Ability to use with Node.JS as well as in a browser (CommonJS, AMD)
 * Good test coverage
 * Under active development by a company who have an interest in keeping it up to date
