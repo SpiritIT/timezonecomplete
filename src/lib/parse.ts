@@ -4,7 +4,7 @@
  * Functionality to parse a DateTime object to a string
  */
 
-import { TimeStruct } from "./basics";
+import { TimeComponentOpts, TimeStruct } from "./basics";
 import { Tokenizer, Token, DateTimeTokenType as TokenType } from "./token";
 import * as strings from "./strings";
 import { TimeZone } from "./timezone";
@@ -57,7 +57,9 @@ export function parseable(dateTimeString: string, formatString: string, allowTra
  * @param formatString The formatting string to be applied
  * @return string
  */
-export function parse(dateTimeString: string, formatString: string, zone?: TimeZone, allowTrailing: boolean = true): AwareTimeStruct {
+export function parse(
+	dateTimeString: string, formatString: string, overrideZone?: TimeZone, allowTrailing: boolean = true
+): AwareTimeStruct {
 	if (!dateTimeString) {
 		throw new Error("no date given");
 	}
@@ -67,10 +69,8 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 	try {
 		const tokenizer = new Tokenizer(formatString);
 		const tokens: Token[] = tokenizer.parseTokens();
-		const result: AwareTimeStruct = {
-			time: new TimeStruct(0, 1, 1, 0, 0, 0, 0),
-			zone: zone
-		};
+		const time: TimeComponentOpts = { year: -1 };
+		let zone: TimeZone;
 		let pnr: ParseNumberResult;
 		let pzr: ParseZoneResult;
 		let remaining: string = dateTimeString;
@@ -84,7 +84,7 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 				case TokenType.YEAR:
 					pnr = stripNumber(remaining);
 					remaining = pnr.remaining;
-					result.time.year = pnr.n;
+					time.year = pnr.n;
 					break;
 				case TokenType.QUARTER:
 					// nothing
@@ -92,12 +92,12 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 				case TokenType.MONTH:
 					pnr = stripNumber(remaining);
 					remaining = pnr.remaining;
-					result.time.month = pnr.n;
+					time.month = pnr.n;
 					break;
 				case TokenType.DAY:
 					pnr = stripNumber(remaining);
 					remaining = pnr.remaining;
-					result.time.day = pnr.n;
+					time.day = pnr.n;
 					break;
 				case TokenType.WEEKDAY:
 					// nothing
@@ -108,20 +108,20 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 				case TokenType.HOUR:
 					pnr = stripNumber(remaining);
 					remaining = pnr.remaining;
-					result.time.hour = pnr.n;
+					time.hour = pnr.n;
 					break;
 				case TokenType.MINUTE:
 					pnr = stripNumber(remaining);
 					remaining = pnr.remaining;
-					result.time.minute = pnr.n;
+					time.minute = pnr.n;
 					break;
 				case TokenType.SECOND:
 					pnr = stripNumber(remaining);
 					remaining = pnr.remaining;
 					if (token.raw.charAt(0) === "s") {
-						result.time.second = pnr.n;
+						time.second = pnr.n;
 					} else if (token.raw.charAt(0) === "S") {
-						result.time.milli = pnr.n;
+						time.milli = pnr.n;
 					} else {
 						throw new Error(`unsupported second format '${token.raw}'`);
 					}
@@ -129,7 +129,7 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 				case TokenType.ZONE:
 					pzr = stripZone(remaining);
 					remaining = pzr.remaining;
-					result.zone = pzr.zone;
+					zone = pzr.zone;
 					break;
 				case TokenType.WEEK:
 					// nothing
@@ -140,12 +140,13 @@ export function parse(dateTimeString: string, formatString: string, zone?: TimeZ
 					break;
 			}
 		};
+		const result = { time: new TimeStruct(time), zone: zone || null };
 		if (!result.time.validate()) {
 			throw new Error("resulting date invalid");
 		}
 		// always overwrite zone with given zone
-		if (zone) {
-			result.zone = zone;
+		if (overrideZone) {
+			result.zone = overrideZone;
 		}
 		if (remaining && !allowTrailing) {
 			throw new Error(

@@ -327,13 +327,13 @@ function _formatDay(dateTime: TimeStruct, token: Token): string {
  * @return string
  */
 function _formatWeekday(dateTime: TimeStruct, token: Token, formatOptions: FormatOptions): string {
-	const weekDayNumber = basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs());
+	const weekDayNumber = basics.weekDayNoLeapSecs(dateTime.unixMillis);
 
 	switch (token.length) {
 		case 1:
 		case 2:
 			if (token.symbol === "e") {
-				return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.toUnixNoLeapSecs()).toString(), token.length, "0");
+				return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.unixMillis).toString(), token.length, "0");
 			} // No break, this is intentional fallthrough!
 		case 3:
 			return formatOptions.shortWeekdayNames[weekDayNumber];
@@ -451,7 +451,7 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 	if (!zone) {
 		return "";
 	}
-	const offset = Math.round((currentTime.toUnixNoLeapSecs() - utcTime.toUnixNoLeapSecs()) / 60000);
+	const offset = Math.round((currentTime.unixMillis - utcTime.unixMillis) / 60000);
 
 	const offsetHours: number = Math.floor(Math.abs(offset) / 60);
 	let offsetHoursString = strings.padLeft(offsetHours.toString(), 2, "0");
@@ -502,8 +502,7 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 				case 1:
 				case 2:
 				case 3:
-					return zone.abbreviationForUtc(currentTime.year, currentTime.month, currentTime.day,
-						currentTime.hour, currentTime.minute, currentTime.second, currentTime.milli, true);
+					return zone.abbreviationForUtc(currentTime, true);
 				case 4:
 					return zone.toString();
 				/* istanbul ignore next */
@@ -516,8 +515,7 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 			}
 		case "v":
 			if (token.length === 1) {
-				return zone.abbreviationForUtc(currentTime.year, currentTime.month, currentTime.day,
-					currentTime.hour, currentTime.minute, currentTime.second, currentTime.milli, false);
+				return zone.abbreviationForUtc(currentTime, false);
 			} else {
 				return zone.toString();
 			}

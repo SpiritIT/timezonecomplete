@@ -12,6 +12,74 @@ import * as math from "./math";
 import * as strings from "./strings";
 
 /**
+ * Used for methods that take a timestamp as separate year/month/... components
+ */
+export interface TimeComponentOpts {
+	/**
+	 * Year, default 1970
+	 */
+	year?: number;
+	/**
+	 * Month 1-12, default 1
+	 */
+	month?: number;
+	/**
+	 * Day of month 1-31, default 1
+	 */
+	day?: number;
+	/**
+	 * Hour of day 0-23, default 0
+	 */
+	hour?: number;
+	/**
+	 * Minute 0-59, default 0
+	 */
+	minute?: number;
+	/**
+	 * Second 0-59, default 0
+	 */
+	second?: number;
+	/**
+	 * Millisecond 0-999, default 0
+	 */
+	milli?: number;
+}
+
+/**
+ * Timestamp represented as separate year/month/... components
+ */
+export interface TimeComponents {
+	/**
+	 * Year
+	 */
+	year: number;
+	/**
+	 * Month 1-12
+	 */
+	month: number;
+	/**
+	 * Day of month 1-31
+	 */
+	day: number;
+	/**
+	 * Hour 0-23
+	 */
+	hour: number;
+	/**
+	 * Minute
+	 */
+	minute: number;
+	/**
+	 * Second
+	 */
+	second: number;
+	/**
+	 * Millisecond 0-999
+	 */
+	milli: number;
+}
+
+/**
  * Day-of-week. Note the enum values correspond to JavaScript day-of-week:
  * Sunday = 0, Monday = 1 etc
  */
@@ -179,14 +247,13 @@ export function dayOfYear(year: number, month: number, day: number): number {
  * @return the last occurrence of the week day in the month
  */
 export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
-	const endOfMonth: TimeStruct = new TimeStruct(year, month, daysInMonth(year, month));
-	const endOfMonthMillis = timeToUnixNoLeapSecs(endOfMonth);
-	const endOfMonthWeekDay = weekDayNoLeapSecs(endOfMonthMillis);
+	const endOfMonth: TimeStruct = new TimeStruct({ year, month, day: daysInMonth(year, month) });
+	const endOfMonthWeekDay = weekDayNoLeapSecs(endOfMonth.unixMillis);
 	let diff: number = weekDay - endOfMonthWeekDay;
 	if (diff > 0) {
 		diff -= 7;
 	}
-	return endOfMonth.day + diff;
+	return endOfMonth.components.day + diff;
 }
 
 /**
@@ -199,29 +266,28 @@ export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay
  * @return the first occurrence of the week day in the month
  */
 export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
-	const beginOfMonth: TimeStruct = new TimeStruct(year, month, 1);
-	const beginOfMonthMillis = timeToUnixNoLeapSecs(beginOfMonth);
-	const beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonthMillis);
+	const beginOfMonth: TimeStruct = new TimeStruct({ year, month, day: 1});
+	const beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonth.unixMillis);
 	let diff: number = weekDay - beginOfMonthWeekDay;
 	if (diff < 0) {
 		diff += 7;
 	}
-	return beginOfMonth.day + diff;
+	return beginOfMonth.components.day + diff;
 }
+
 /**
  * Returns the day-of-month that is on the given weekday and which is >= the given day.
  * Throws if the month has no such day.
  */
 export function weekDayOnOrAfter(year: number, month: number, day: number, weekDay: WeekDay): number {
-	const start: TimeStruct = new TimeStruct(year, month, day);
-	const startMillis: number = timeToUnixNoLeapSecs(start);
-	const startWeekDay: WeekDay = weekDayNoLeapSecs(startMillis);
+	const start: TimeStruct = new TimeStruct({ year, month, day });
+	const startWeekDay: WeekDay = weekDayNoLeapSecs(start.unixMillis);
 	let diff: number = weekDay - startWeekDay;
 	if (diff < 0) {
 		diff += 7;
 	}
-	assert(start.day + diff <= daysInMonth(year, month), "The given month has no such weekday");
-	return start.day + diff;
+	assert(start.components.day + diff <= daysInMonth(year, month), "The given month has no such weekday");
+	return start.components.day + diff;
 }
 
 /**
@@ -229,15 +295,14 @@ export function weekDayOnOrAfter(year: number, month: number, day: number, weekD
  * Throws if the month has no such day.
  */
 export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number {
-	const start: TimeStruct = new TimeStruct(year, month, day);
-	const startMillis: number = timeToUnixNoLeapSecs(start);
-	const startWeekDay: WeekDay = weekDayNoLeapSecs(startMillis);
+	const start: TimeStruct = new TimeStruct({year, month, day});
+	const startWeekDay: WeekDay = weekDayNoLeapSecs(start.unixMillis);
 	let diff: number = weekDay - startWeekDay;
 	if (diff > 0) {
 		diff -= 7;
 	}
-	assert(start.day + diff >= 1, "The given month has no such weekday");
-	return start.day + diff;
+	assert(start.components.day + diff >= 1, "The given month has no such weekday");
+	return start.components.day + diff;
 }
 
 /**
@@ -361,11 +426,11 @@ function assertUnixTimestamp(unixMillis: number): void {
  * Convert a unix milli timestamp into a TimeT structure.
  * This does NOT take leap seconds into account.
  */
-export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct {
+export function unixToTimeNoLeapSecs(unixMillis: number): TimeComponents {
 	assertUnixTimestamp(unixMillis);
 
 	let temp: number = unixMillis;
-	const result: TimeStruct = new TimeStruct();
+	const result: TimeComponents = { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0, milli: 0};
 	let year: number;
 	let month: number;
 
@@ -425,6 +490,22 @@ export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct {
 }
 
 /**
+ * Fill you any missing time component parts, defaults are 1970-01-01T00:00:00.000
+ */
+function normalizeTimeComponents(components: TimeComponentOpts): TimeComponents {
+	const input = {
+		year: typeof components.year === "number" ? components.year : 1970,
+		month: typeof components.month === "number" ? components.month : 1,
+		day: typeof components.day === "number" ? components.day : 1,
+		hour: typeof components.hour === "number" ? components.hour : 0,
+		minute: typeof components.minute === "number" ? components.minute : 0,
+		second: typeof components.second === "number" ? components.second : 0,
+		milli: typeof components.milli === "number" ? components.milli : 0,
+	};
+	return input;
+}
+
+/**
  * Convert a year, month, day etc into a unix milli timestamp.
  * This does NOT take leap seconds into account.
  *
@@ -437,37 +518,18 @@ export function unixToTimeNoLeapSecs(unixMillis: number): TimeStruct {
  * @param milli	Millisecond 0-999
  */
 export function timeToUnixNoLeapSecs(
-	year?: number, month?: number, day?: number,
-	hour?: number, minute?: number, second?: number, milli?: number): number;
-
-/**
- * Convert a TimeT structure into a unix milli timestamp.
- * This does NOT take leap seconds into account.
- */
-export function timeToUnixNoLeapSecs(tm: TimeStruct): number;
-
+	year: number, month: number, day: number, hour: number, minute: number, second: number, milli: number
+): number;
+export function timeToUnixNoLeapSecs(components: TimeComponentOpts): number;
 export function timeToUnixNoLeapSecs(
-	a: any = 1970, month: number = 1, day: number = 1,
-	hour: number = 0, minute: number = 0, second: number = 0, milli: number = 0): number {
-	assert(typeof (a) === "object" || typeof (a) === "number", "Please give either a TimeStruct or a number as first argument.");
-
-	if (typeof (a) === "object") {
-		const tm: TimeStruct = <TimeStruct>a;
-		assert(tm.validate(), "tm invalid");
-		return timeToUnixNoLeapSecs(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second, tm.milli);
-	} else {
-		const year: number = <number> a;
-		assert(month >= 1 && month <= 12, "Month out of range");
-		assert(day >= 1 && day <= daysInMonth(year, month), "day out of range");
-		assert(hour >= 0 && hour <= 23, "hour out of range");
-		assert(minute >= 0 && minute <= 59, "minute out of range");
-		assert(second >= 0 && second <= 59, "second out of range");
-		assert(milli >= 0 && milli <= 999, "milli out of range");
-		return milli + 1000 * (
-			second + minute * 60 + hour * 3600 + dayOfYear(year, month, day) * 86400 +
-			(year - 1970) * 31536000 + Math.floor((year - 1969) / 4) * 86400 -
-			Math.floor((year - 1901) / 100) * 86400 + Math.floor((year - 1900 + 299) / 400) * 86400);
-	}
+	a: TimeComponentOpts | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
+): number {
+	const components: TimeComponentOpts = (typeof a === "number" ? { year: a, month, day, hour, minute, second, milli } : a);
+	const input: TimeComponents = normalizeTimeComponents(components);
+	return input.milli + 1000 * (
+		input.second + input.minute * 60 + input.hour * 3600 + dayOfYear(input.year, input.month, input.day) * 86400 +
+		(input.year - 1970) * 31536000 + Math.floor((input.year - 1969) / 4) * 86400 -
+		Math.floor((input.year - 1901) / 100) * 86400 + Math.floor((input.year - 1900 + 299) / 400) * 86400);
 }
 
 /**
@@ -495,10 +557,29 @@ export function secondOfDay(hour: number, minute: number, second: number): numbe
 export class TimeStruct {
 
 	/**
+	 * Returns a TimeStruct from the given year, month, day etc
+	 *
+	 * @param year	Year e.g. 1970
+	 * @param month	Month 1-12
+	 * @param day	Day 1-31
+	 * @param hour	Hour 0-23
+	 * @param minute	Minute 0-59
+	 * @param second	Second 0-59 (no leap seconds)
+	 * @param milli	Millisecond 0-999
+	 */
+	public static fromComponents(
+		year?: number, month?: number, day?: number,
+		hour?: number, minute?: number, second?: number, milli?: number
+	): TimeStruct {
+		return new TimeStruct({ year, month, day, hour, minute, second, milli });
+	}
+
+	/**
 	 * Create a TimeStruct from a number of unix milliseconds
+	 * (backward compatibility)
 	 */
 	public static fromUnix(unixMillis: number): TimeStruct {
-		return unixToTimeNoLeapSecs(unixMillis);
+		return new TimeStruct(unixMillis);
 	}
 
 	/**
@@ -509,11 +590,15 @@ export class TimeStruct {
 	 */
 	public static fromDate(d: Date, df: DateFunctions): TimeStruct {
 		if (df === DateFunctions.Get) {
-			return new TimeStruct(d.getFullYear(), d.getMonth() + 1, d.getDate(),
-				d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
+			return new TimeStruct({
+				year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(),
+				hour: d.getHours(), minute: d.getMinutes(), second: d.getSeconds(), milli: d.getMilliseconds()
+			});
 		} else {
-			return new TimeStruct(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(),
-				d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds());
+			return new TimeStruct({
+				year: d.getUTCFullYear(), month: d.getUTCMonth() + 1, day: d.getUTCDate(),
+				hour: d.getUTCHours(), minute: d.getUTCMinutes(), second: d.getUTCSeconds(), milli: d.getUTCMilliseconds()
+			});
 		}
 	}
 
@@ -633,136 +718,138 @@ export class TimeStruct {
 			hour = math.roundSym(hour);
 			minute = math.roundSym(minute);
 			second = math.roundSym(second);
-			let unixMillis: number = timeToUnixNoLeapSecs(year, month, day, hour, minute, second);
+			let unixMillis: number = timeToUnixNoLeapSecs({ year, month, day, hour, minute, second });
 			unixMillis = math.roundSym(unixMillis + fractionMillis);
-			return unixToTimeNoLeapSecs(unixMillis);
+			return new TimeStruct(unixMillis);
 		} catch (e) {
 			throw new Error("Invalid ISO 8601 string: \"" + s + "\": " + e.message);
 		}
 	}
 
 	/**
-	 * Constructor
-	 *
-	 * @param year	Year e.g. 1970
-	 * @param month	Month 1-12
-	 * @param day	Day 1-31
-	 * @param hour	Hour 0-23
-	 * @param minute	Minute 0-59
-	 * @param second	Second 0-59 (no leap seconds)
-	 * @param milli	Millisecond 0-999
+	 * The time value in unix milliseconds
 	 */
-	constructor(
-		/**
-		 * Year, 1970-...
-		 */
-		public year: number = 1970,
-
-		/**
-		 * Month 1-12
-		 */
-		public month: number = 1,
-
-		/**
-		 * Day of month, 1-31
-		 */
-		public day: number = 1,
-
-		/**
-		 * Hour 0-23
-		 */
-		public hour: number = 0,
-
-		/**
-		 * Minute 0-59
-		 */
-		public minute: number = 0,
-
-		/**
-		 * Seconds, 0-59
-		 */
-		public second: number = 0,
-
-		/**
-		 * Milliseconds 0-999
-		 */
-		public milli: number = 0
-		) {
-		assert(this.validate(), "Invalid arguments: " + this.toString());
+	private _unixMillis: number;
+	public get unixMillis(): number {
+		if (this._unixMillis === undefined) {
+			this._unixMillis = timeToUnixNoLeapSecs(this._components);
+		}
+		return this._unixMillis;
 	}
 
 	/**
-	 * Validate a TimeStruct, returns false if invalid.
+	 * The time value in separate year/month/... components
 	 */
-	public validate(): boolean {
-		return (typeof (this.year) === "number" && !isNaN(this.year) && math.isInt(this.year) && this.year >= -10000 && this.year < 10000
-			&& typeof (this.month) === "number" && !isNaN(this.month) && math.isInt(this.month) && this.month >= 1 && this.month <= 12
-			&& typeof (this.day) === "number" && !isNaN(this.day) && math.isInt(this.day) && this.day >= 1
-			&& this.day <= daysInMonth(this.year, this.month)
-			&& typeof (this.hour) === "number" && !isNaN(this.hour) && math.isInt(this.hour) && this.hour >= 0 && this.hour <= 23
-			&& typeof (this.minute) === "number" && !isNaN(this.minute) && math.isInt(this.minute) && this.minute >= 0 && this.minute <= 59
-			&& typeof (this.second) === "number" && !isNaN(this.second) && math.isInt(this.second) && this.second >= 0 && this.second <= 59
-			&& typeof (this.milli) === "number" && !isNaN(this.milli) && math.isInt(this.milli) && this.milli >= 0
-			&& this.milli <= 999
-			);
+	private _components: TimeComponents;
+	public get components(): TimeComponents {
+		if (!this._components) {
+			this._components = unixToTimeNoLeapSecs(this._unixMillis);
+		}
+		return this._components;
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param unixMillis milliseconds since 1-1-1970
+	 */
+	constructor(unixMillis: number);
+	/**
+	 * Constructor
+	 *
+	 * @param components Separate timestamp components (year, month, ...)
+	 */
+	constructor(components: TimeComponentOpts);
+	/**
+	 * Constructor implementation
+	 */
+	constructor(a: number | TimeComponentOpts) {
+		if (typeof a === "number") {
+			this._unixMillis = a;
+		} else {
+			this._components = normalizeTimeComponents(a);
+		}
+	}
+
+	get year(): number {
+		return this.components.year;
+	}
+
+	get month(): number {
+		return this.components.month;
+	}
+
+	get day(): number {
+		return this.components.day;
+	}
+
+	get hour(): number {
+		return this.components.hour;
+	}
+
+	get minute(): number {
+		return this.components.minute;
+	}
+
+	get second(): number {
+		return this.components.second;
+	}
+
+	get milli(): number {
+		return this.components.milli;
 	}
 
 	/**
 	 * The day-of-year 0-365
 	 */
 	public yearDay(): number {
-		assert(this.validate(), "Invalid TimeStruct value: " + this.toString());
-		return dayOfYear(this.year, this.month, this.day);
+		return dayOfYear(this.components.year, this.components.month, this.components.day);
 	}
 
-	/**
-	 * Returns this time as a unix millisecond timestamp
-	 * Does NOT take leap seconds into account.
-	 */
-	public toUnixNoLeapSecs(): number {
-		assert(this.validate(), "Invalid TimeStruct value: " + this.toString());
-		return timeToUnixNoLeapSecs(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
-	}
-
-	/**
-	 * Deep equals
-	 */
 	public equals(other: TimeStruct): boolean {
-		return (this.year === other.year
-			&& this.month === other.month
-			&& this.day === other.day
-			&& this.hour === other.hour
-			&& this.minute === other.minute
-			&& this.second === other.second
-			&& this.milli === other.milli);
-	}
-
-	/**
-	 * < operator
-	 */
-	public lessThan(other: TimeStruct): boolean {
-		return (this.toUnixNoLeapSecs() < other.toUnixNoLeapSecs());
-	}
-
-	public clone(): TimeStruct {
-		return new TimeStruct(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+		return this.valueOf() === other.valueOf();
 	}
 
 	public valueOf(): number {
-		return timeToUnixNoLeapSecs(this.year, this.month, this.day, this.hour, this.minute, this.second, this.milli);
+		return this.unixMillis;
+	}
+
+	public clone(): TimeStruct {
+		if (this._components) {
+			return new TimeStruct(this._components);
+		} else {
+			return new TimeStruct(this._unixMillis);
+		}
+	}
+
+	/**
+	 * Validate a timestamp. Filters out non-existing values for all time components
+	 * @returns true iff the timestamp is valid
+	 */
+	public validate(): boolean {
+		if (this._components) {
+			return this.components.month >= 1 && this.components.month <= 12
+				&& this.components.day >= 1 && this.components.day <= daysInMonth(this.components.year, this.components.month)
+				&& this.components.hour >= 0 && this.components.hour <= 23
+				&& this.components.minute >= 0 && this.components.minute <= 59
+				&& this.components.second >= 0 && this.components.second <= 59
+				&& this.components.milli >= 0 && this.components.milli <= 999;
+		} else {
+			return true;
+		}
 	}
 
 	/**
 	 * ISO 8601 string YYYY-MM-DDThh:mm:ss.nnn
 	 */
 	public toString(): string {
-		return strings.padLeft(this.year.toString(10), 4, "0")
-			+ "-" + strings.padLeft(this.month.toString(10), 2, "0")
-			+ "-" + strings.padLeft(this.day.toString(10), 2, "0")
-			+ "T" + strings.padLeft(this.hour.toString(10), 2, "0")
-			+ ":" + strings.padLeft(this.minute.toString(10), 2, "0")
-			+ ":" + strings.padLeft(this.second.toString(10), 2, "0")
-			+ "." + strings.padLeft(this.milli.toString(10), 3, "0");
+		return strings.padLeft(this.components.year.toString(10), 4, "0")
+			+ "-" + strings.padLeft(this.components.month.toString(10), 2, "0")
+			+ "-" + strings.padLeft(this.components.day.toString(10), 2, "0")
+			+ "T" + strings.padLeft(this.components.hour.toString(10), 2, "0")
+			+ ":" + strings.padLeft(this.components.minute.toString(10), 2, "0")
+			+ ":" + strings.padLeft(this.components.second.toString(10), 2, "0")
+			+ "." + strings.padLeft(this.components.milli.toString(10), 3, "0");
 	}
 
 	public inspect(): string {

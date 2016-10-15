@@ -188,7 +188,7 @@ export class TimeZone {
 	 * @param name NORMALIZED name, assumed to be correct
 	 * @param dst	Adhere to Daylight Saving Time if applicable, ignored for local time and fixed offsets
 	 */
-	constructor(name: string, dst: boolean = true) {
+	private constructor(name: string, dst: boolean = true) {
 		this._name = name;
 		this._dst = dst;
 		if (name === "localtime") {
@@ -312,41 +312,30 @@ export class TimeZone {
 
 	/**
 	 * Calculate timezone offset from a UTC time.
-	 *
-	 * @param year Full year
-	 * @param month Month 1-12 (note this deviates from JavaScript date)
-	 * @param day Day of month 1-31
-	 * @param hour Hour 0-23
-	 * @param minute Minute 0-59
-	 * @param second Second 0-59
-	 * @param millisecond Millisecond 0-999
-	 *
-	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
+\	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
+	public offsetForUtc(offsetForUtc: TimeStruct): number;
+	public offsetForUtc(year: number, month: number, day: number, hour: number, minute: number, second: number, milli: number): number;
 	public offsetForUtc(
-		year: number, month: number, day: number,
-		hour: number = 0, minute: number = 0, second: number = 0,
-		millisecond: number = 0): number {
-		assert(month > 0 && month < 13, "TimeZone.offsetForUtc():  month out of range.");
-		assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
-		assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
-		assert(minute >= 0 && minute < 60, "TimeZone.offsetForUtc():  minute out of range.");
-		assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  second out of range.");
-		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
+		a: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
+	): number {
+		const utcTime = (typeof a === "number" ? new TimeStruct({ year: a, month, day, hour, minute, second, milli }) : a);
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
-				const date: Date = new Date(Date.UTC(year, month - 1, day, hour, minute, second, millisecond));
+				const date: Date = new Date(Date.UTC(
+					utcTime.components.year, utcTime.components.month - 1, utcTime.components.day,
+					utcTime.components.hour, utcTime.components.minute, utcTime.components.second, utcTime.components.milli
+				));
 				return -1 * date.getTimezoneOffset();
 			}
 			case TimeZoneKind.Offset: {
 				return this._offset;
 			}
 			case TimeZoneKind.Proper: {
-				const tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
 				if (this._dst) {
-					return TzDatabase.instance().totalOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
+					return TzDatabase.instance().totalOffset(this._name, utcTime).minutes();
 				} else {
-					return TzDatabase.instance().standardOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
+					return TzDatabase.instance().standardOffset(this._name, utcTime).minutes();
 				}
 			}
 			/* istanbul ignore next */
@@ -370,19 +359,18 @@ export class TimeZone {
 	 * @param millisecond local millisecond 0-999
 	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
+	public offsetForZone(localTime: TimeStruct): number;
+	public offsetForZone(year: number, month: number, day: number, hour: number, minute: number, second: number, milli: number): number;
 	public offsetForZone(
-		year: number, month: number, day: number,
-		hour: number = 0, minute: number = 0, second: number = 0,
-		millisecond: number = 0): number {
-		assert(month > 0 && month < 13, "TimeZone.offsetForZone():  month out of range: " + month);
-		assert(day > 0 && day < 32, "TimeZone.offsetForZone():  day out of range.");
-		assert(hour >= 0 && hour < 24, "TimeZone.offsetForZone():  hour out of range.");
-		assert(minute >= 0 && minute < 60, "TimeZone.offsetForZone():  minute out of range.");
-		assert(second >= 0 && second < 60, "TimeZone.offsetForZone():  second out of range.");
-		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForZone():  millisecond out of range.");
+		a: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
+	): number {
+		const localTime = (typeof a === "number" ? new TimeStruct({ year: a, month, day, hour, minute, second, milli }) : a);
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
-				const date: Date = new Date(year, month - 1, day, hour, minute, second, millisecond);
+				const date: Date = new Date(
+					localTime.components.year, localTime.components.month - 1, localTime.components.day,
+					localTime.components.hour, localTime.components.minute, localTime.components.second, localTime.components.milli
+				);
 				return -1 * date.getTimezoneOffset();
 			}
 			case TimeZoneKind.Offset: {
@@ -390,11 +378,10 @@ export class TimeZone {
 			}
 			case TimeZoneKind.Proper: {
 				// note that TzDatabase normalizes the given date so we don't have to do it
-				const tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
 				if (this._dst) {
-					return TzDatabase.instance().totalOffsetLocal(this._name, tm.toUnixNoLeapSecs()).minutes();
+					return TzDatabase.instance().totalOffsetLocal(this._name, localTime).minutes();
 				} else {
-					return TzDatabase.instance().standardOffset(this._name, tm.toUnixNoLeapSecs()).minutes();
+					return TzDatabase.instance().standardOffset(this._name, localTime).minutes();
 				}
 			}
 			/* istanbul ignore next */
@@ -417,35 +404,7 @@ export class TimeZone {
 	 * @param funcs: the set of functions to use: get() or getUTC()
 	 */
 	public offsetForUtcDate(date: Date, funcs: DateFunctions): number {
-		switch (funcs) {
-			case DateFunctions.Get: {
-				return this.offsetForUtc(
-					date.getFullYear(),
-					date.getMonth() + 1,
-					date.getDate(),
-					date.getHours(),
-					date.getMinutes(),
-					date.getSeconds(),
-					date.getMilliseconds());
-			}
-			case DateFunctions.GetUTC: {
-				return this.offsetForUtc(
-					date.getUTCFullYear(),
-					date.getUTCMonth() + 1,
-					date.getUTCDate(),
-					date.getUTCHours(),
-					date.getUTCMinutes(),
-					date.getUTCSeconds(),
-					date.getUTCMilliseconds());
-			}
-			/* istanbul ignore next */
-			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error("Unknown DateFunctions value");
-				}
-		}
+		return this.offsetForUtc(TimeStruct.fromDate(date, funcs));
 	}
 
 	/**
@@ -458,35 +417,7 @@ export class TimeZone {
 	 * @param funcs: the set of functions to use: get() or getUTC()
 	 */
 	public offsetForZoneDate(date: Date, funcs: DateFunctions): number {
-		switch (funcs) {
-			case DateFunctions.Get: {
-				return this.offsetForZone(
-					date.getFullYear(),
-					date.getMonth() + 1,
-					date.getDate(),
-					date.getHours(),
-					date.getMinutes(),
-					date.getSeconds(),
-					date.getMilliseconds());
-			}
-			case DateFunctions.GetUTC: {
-				return this.offsetForZone(
-					date.getUTCFullYear(),
-					date.getUTCMonth() + 1,
-					date.getUTCDate(),
-					date.getUTCHours(),
-					date.getUTCMinutes(),
-					date.getUTCSeconds(),
-					date.getUTCMilliseconds());
-			}
-			/* istanbul ignore next */
-			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error("Unknown DateFunctions value");
-				}
-		}
+		return this.offsetForZone(TimeStruct.fromDate(date, funcs));
 	}
 
 	/**
@@ -503,15 +434,22 @@ export class TimeZone {
 	 *
 	 * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
 	 */
-	public abbreviationForUtc(year: number, month: number, day: number,
-		hour: number = 0, minute: number = 0, second: number = 0,
-		millisecond: number = 0, dstDependent: boolean = true): string {
-		assert(month > 0 && month < 13, "TimeZone.offsetForUtc():  month out of range.");
-		assert(day > 0 && day < 32, "TimeZone.offsetForUtc():  day out of range.");
-		assert(hour >= 0 && hour < 24, "TimeZone.offsetForUtc():  hour out of range.");
-		assert(minute >= 0 && minute < 60, "TimeZone.offsetForUtc():  minute out of range.");
-		assert(second >= 0 && second < 60, "TimeZone.offsetForUtc():  second out of range.");
-		assert(millisecond >= 0 && millisecond < 1000, "TimeZone.offsetForUtc():  millisecond out of range.");
+	public abbreviationForUtc(
+		year: number, month: number, day: number, hour: number, minute: number, second: number, milli: number, dstDependent?: boolean
+	): string;
+	public abbreviationForUtc(utcTime: TimeStruct, dstDependent?: boolean): string;
+	public abbreviationForUtc(
+		a: TimeStruct | number, b?: number | boolean, day?: number, hour?: number, minute?: number, second?: number, milli?: number, c?: boolean
+	): string {
+		let utcTime: TimeStruct;
+		let dstDependent: boolean = true;
+		if (a instanceof TimeStruct) {
+			utcTime = a;
+			dstDependent = (b === false ? false : true);
+		} else {
+			utcTime = new TimeStruct({ year: a, month: b as number, day, hour, minute, second, milli });
+			dstDependent = (c === false ? false : true);
+		}
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
 				return "local";
@@ -520,8 +458,7 @@ export class TimeZone {
 				return this.toString();
 			}
 			case TimeZoneKind.Proper: {
-				const tm: TimeStruct = new TimeStruct(year, month, day, hour, minute, second, millisecond);
-				return TzDatabase.instance().abbreviation(this._name, tm.toUnixNoLeapSecs(), dstDependent);
+				return TzDatabase.instance().abbreviation(this._name, utcTime, dstDependent);
 			}
 			/* istanbul ignore next */
 			default:
@@ -540,18 +477,35 @@ export class TimeZone {
 	 * This function adds the amount of forward change to any non-existing time. After all,
 	 * this is probably what the user meant.
 	 *
-	 * @param localUnixMillis	Unix timestamp in zone time
+	 * @param localTime	zone time timestamp as unix milliseconds
 	 * @param opt	(optional) Round up or down? Default: up
 	 *
-	 * @returns	Unix timestamp in zone time, normalized.
+	 * @returns	unix milliseconds in zone time, normalized.
 	 */
-	public normalizeZoneTime(localUnixMillis: number, opt: NormalizeOption = NormalizeOption.Up): number {
+	public normalizeZoneTime(localUnixMillis: number, opt?: NormalizeOption): number;
+	/**
+	 * Normalizes non-existing local times by adding a forward offset change.
+	 * During a forward standard offset change or DST offset change, some amount of
+	 * local time is skipped. Therefore, this amount of local time does not exist.
+	 * This function adds the amount of forward change to any non-existing time. After all,
+	 * this is probably what the user meant.
+	 *
+	 * @param localTime	zone time timestamp
+	 * @param opt	(optional) Round up or down? Default: up
+	 *
+	 * @returns	time struct in zone time, normalized.
+	 */
+	public normalizeZoneTime(localTime: TimeStruct, opt?: NormalizeOption): TimeStruct;
+	public normalizeZoneTime(localTime: TimeStruct | number, opt: NormalizeOption = NormalizeOption.Up): TimeStruct | number {
+		const tzopt: NormalizeOption = (opt === NormalizeOption.Down ? NormalizeOption.Down : NormalizeOption.Up);
 		if (this.kind() === TimeZoneKind.Proper) {
-			const tzopt: NormalizeOption =
-				(opt === NormalizeOption.Down ? NormalizeOption.Down : NormalizeOption.Up);
-			return TzDatabase.instance().normalizeLocal(this._name, localUnixMillis, tzopt);
+			if (typeof localTime === "number") {
+				return TzDatabase.instance().normalizeLocal(this._name, new TimeStruct(localTime), tzopt).unixMillis;
+			} else {
+				return TzDatabase.instance().normalizeLocal(this._name, localTime, tzopt);
+			}
 		} else {
-			return localUnixMillis;
+			return localTime;
 		}
 	}
 

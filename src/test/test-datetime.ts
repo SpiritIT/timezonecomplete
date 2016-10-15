@@ -1281,8 +1281,8 @@ describe("DateTime", (): void => {
 			expect(diff.milliseconds()).to.equal(Duration.hours(1).milliseconds());
 		});
 		it("should diff across time zones", (): void => {
-			const d = new DateTime(2014, 1, 1, 1, 0, 0, 0, new TimeZone("+0100"));
-			const e = new DateTime(2014, 1, 1, 1, 0, 0, 0, new TimeZone("-0100"));
+			const d = new DateTime(2014, 1, 1, 1, 0, 0, 0, TimeZone.zone("+0100"));
+			const e = new DateTime(2014, 1, 1, 1, 0, 0, 0, TimeZone.zone("-0100"));
 			const diff = d.diff(e);
 			expect(diff.milliseconds()).to.equal(Duration.hours(-2).milliseconds());
 		});
@@ -1617,17 +1617,6 @@ describe("DateTime", (): void => {
 			expect(d.format("MMM", {
 				shortMonthNames: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
 			})).to.equal("E");
-		});
-	});
-
-	describe("unixUtcMillis()", (): void => {
-		it("should trim the cache", function(): void {
-			this.timeout(10000);
-			for (let i = 0; i < 2 * index.UTC_MILLIS_CACHE.MAX_CACHE_SIZE; ++i) {
-				const d = new DateTime(i, TimeZone.utc());
-				expect(d.unixUtcMillis()).to.equal(i);
-			}
-			expect(index.UTC_MILLIS_CACHE.size()).to.be.lessThan(index.UTC_MILLIS_CACHE.MAX_CACHE_SIZE + 1);
 		});
 	});
 

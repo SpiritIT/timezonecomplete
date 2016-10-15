@@ -228,7 +228,7 @@ describe("TimeZone", (): void => {
 		});
 		it("should work if time not given", (): void => {
 			const t = TimeZone.zone("+0130");
-			expect(t.offsetForUtc(2014, 1, 1)).to.equal(90);
+			expect(t.offsetForUtc(2014, 1, 1, 0, 0, 0, 0)).to.equal(90);
 		});
 	});
 
@@ -289,7 +289,7 @@ describe("TimeZone", (): void => {
 		});
 		it("should work if time not given", (): void => {
 			const t = TimeZone.zone("+0130");
-			expect(t.offsetForZone(2014, 1, 1)).to.equal(90);
+			expect(t.offsetForZone(2014, 1, 1, 0, 0, 0, 0)).to.equal(90);
 		});
 	});
 
@@ -410,17 +410,17 @@ describe("TimeZone", (): void => {
 
 	describe("abbreviationForUtc()", (): void => {
 		it("should work for local timezone", (): void => {
-			expect(TimeZone.local().abbreviationForUtc(2014, 1, 1)).to.equal("local");
+			expect(TimeZone.local().abbreviationForUtc(2014, 1, 1, 0, 0, 0, 0)).to.equal("local");
 		});
 		it("should work for offset timezone", (): void => {
-			expect(TimeZone.zone(3).abbreviationForUtc(2014, 1, 1)).to.equal(TimeZone.zone(3).toString());
+			expect(TimeZone.zone(3).abbreviationForUtc(2014, 1, 1, 0, 0, 0, 0)).to.equal(TimeZone.zone(3).toString());
 		});
 		it("should work for named zone without DST", (): void => {
-			expect(TimeZone.zone("UTC").abbreviationForUtc(2014, 1, 1)).to.equal("UTC");
+			expect(TimeZone.zone("UTC").abbreviationForUtc(2014, 1, 1, 0, 0, 0, 0)).to.equal("UTC");
 		});
 		it("should work for named zone with DST", (): void => {
 			// note that the underlying functionality is fully tested in test-tz-database
-			expect(TimeZone.zone("Europe/Amsterdam").abbreviationForUtc(2014, 7, 1)).to.equal("CEST");
+			expect(TimeZone.zone("Europe/Amsterdam").abbreviationForUtc(2014, 7, 1, 0, 0, 0, 0)).to.equal("CEST");
 		});
 	});
 

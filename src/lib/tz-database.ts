@@ -9,7 +9,7 @@
 "use strict";
 
 import assert from "./assert";
-import { TimeStruct, TimeUnit, WeekDay } from "./basics";
+import { TimeComponentOpts, TimeStruct, TimeUnit, WeekDay } from "./basics";
 import * as basics from "./basics";
 import { Duration } from "./duration";
 import * as math from "./math";
@@ -173,7 +173,7 @@ export class RuleInfo {
 		if (this.inMonth > other.inMonth) {
 			return false;
 		}
-		if (this.effectiveDate(this.from).lessThan(other.effectiveDate(this.from))) {
+		if (this.effectiveDate(this.from) < other.effectiveDate(this.from)) {
 			return true;
 		}
 		return false;
@@ -205,7 +205,7 @@ export class RuleInfo {
 		assert(this.applicable(year), "Rule is not applicable in " + year.toString(10));
 
 		// year and month are given
-		const tm: TimeStruct = new TimeStruct(year, this.inMonth);
+		const tm: TimeComponentOpts = {year, month: this.inMonth };
 
 		// calculate day
 		switch (this.onType) {
@@ -228,7 +228,7 @@ export class RuleInfo {
 		tm.minute = this.atMinute;
 		tm.second = this.atSecond;
 
-		return tm;
+		return new TimeStruct(tm);
 	}
 
 	/**
@@ -240,7 +240,7 @@ export class RuleInfo {
 	 */
 	public transitionTimeUtc(year: number, standardOffset: Duration, prevRule: RuleInfo): number {
 		assert(this.applicable(year), "Rule not applicable in given year");
-		const unixMillis = this.effectiveDate(year).toUnixNoLeapSecs();
+		const unixMillis = this.effectiveDate(year).unixMillis;
 
 		// adjust for given offset
 		let offset: Duration;
@@ -612,15 +612,17 @@ export class TzDatabase {
 	/**
 	 * First DST change moment AFTER the given UTC date in UTC milliseconds, within one year
 	 */
-	public nextDstChange(zoneName: string, utcMillis: number): number {
-		const tm: TimeStruct = basics.unixToTimeNoLeapSecs(utcMillis);
+	public nextDstChange(zoneName: string, utcTime: number): number;
+	public nextDstChange(zoneName: string, utcTime: TimeStruct): number;
+	public nextDstChange(zoneName: string, a: TimeStruct | number): number {
 		let zoneInfo: ZoneInfo;
+		const utcTime: TimeStruct = (typeof a === "number" ? new TimeStruct(a) : a);
 
 		// get all zone infos for [date, date+1year)
 		const allZoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 		const relevantZoneInfos: ZoneInfo[] = [];
-		const rangeStart: number = utcMillis;
-		const rangeEnd: number = utcMillis + 365 * 24 * 3600 * 1000;
+		const rangeStart: number = utcTime.unixMillis;
+		const rangeEnd: number = rangeStart + 365 * 86400E3;
 		let prevEnd: number = null;
 		for (let i = 0; i < allZoneInfos.length; ++i) {
 			zoneInfo = allZoneInfos[i];
@@ -635,7 +637,9 @@ export class TzDatabase {
 		for (let i = 0; i < relevantZoneInfos.length; ++i) {
 			zoneInfo = relevantZoneInfos[i];
 			// find applicable transition moments
-			transitions = transitions.concat(this.getTransitionsDstOffsets(zoneInfo.ruleName, tm.year - 1, tm.year + 1, zoneInfo.gmtoff));
+			transitions = transitions.concat(
+				this.getTransitionsDstOffsets(zoneInfo.ruleName, utcTime.components.year - 1, utcTime.components.year + 1, zoneInfo.gmtoff)
+			);
 		}
 		transitions.sort((a: Transition, b: Transition): number => {
 			return a.at - b.at;
@@ -646,7 +650,7 @@ export class TzDatabase {
 		for (let i = 0; i < transitions.length; ++i) {
 			const transition = transitions[i];
 			if (!prevSave || !prevSave.equals(transition.offset)) {
-				if (transition.at > utcMillis) {
+				if (transition.at > utcTime.unixMillis) {
 					return transition.at;
 				}
 			}
@@ -690,23 +694,11 @@ export class TzDatabase {
 	 *
 	 * @return	The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)
 	 */
-	public normalizeLocal(zoneName: string, localTime: TimeStruct, opt?: NormalizeOption): TimeStruct;
 	public normalizeLocal(zoneName: string, localTime: number, opt?: NormalizeOption): number;
-	public normalizeLocal(zoneName: string, a: any, opt: NormalizeOption = NormalizeOption.Up): any {
-		assert(typeof (a) === "number" || typeof (a) === "object", "number or object expected");
-		assert(typeof(a) !== "object" || a, "a is null");
-
+	public normalizeLocal(zoneName: string, localTime: TimeStruct, opt?: NormalizeOption): TimeStruct;
+	public normalizeLocal(zoneName: string, a: TimeStruct | number, opt: NormalizeOption = NormalizeOption.Up): TimeStruct | number {
 		if (this.hasDst(zoneName)) {
-			let unixMillis: number = 0;
-			let tm: TimeStruct = null;
-			if (typeof a === "object") {
-				unixMillis = (<TimeStruct>(a)).toUnixNoLeapSecs();
-				tm = <TimeStruct>(a);
-			} else {
-				unixMillis = <number>a;
-				tm = basics.unixToTimeNoLeapSecs(unixMillis);
-			}
-
+			const localTime: TimeStruct = (typeof a === "number" ? new TimeStruct(a) : a);
 			// local times behave like this during DST changes:
 			// forward change (1h):   0 1 3 4 5
 			// forward change (2h):   0 1 4 5 6
@@ -717,7 +709,9 @@ export class TzDatabase {
 			// Instead, we should check the DST forward transitions within a window around the local time
 
 			// get all transitions (note this includes fake transition rules for zone offset changes)
-			const transitions: Transition[] = this.getTransitionsTotalOffsets(zoneName, tm.year - 1, tm.year + 1);
+			const transitions: Transition[] = this.getTransitionsTotalOffsets(
+				zoneName, localTime.components.year - 1, localTime.components.year + 1
+			);
 
 			// find the DST forward transitions
 			let prev: Duration = Duration.hours(0);
@@ -727,35 +721,30 @@ export class TzDatabase {
 				if (transition.offset.greaterThan(prev)) {
 					const localBefore: number = transition.at + prev.milliseconds();
 					const localAfter: number = transition.at + transition.offset.milliseconds();
-					if (unixMillis >= localBefore && unixMillis < localAfter) {
+					if (localTime.unixMillis >= localBefore && localTime.unixMillis < localAfter) {
 						const forwardChange = transition.offset.sub(prev);
 						// non-existing time
 						const factor: number = (opt === NormalizeOption.Up ? 1 : -1);
-						if (typeof a === "object") {
-							return basics.unixToTimeNoLeapSecs(unixMillis + factor * forwardChange.milliseconds());
-						} else {
-							return unixMillis + factor * forwardChange.milliseconds();
-						}
+						const resultMillis = localTime.unixMillis + factor * forwardChange.milliseconds();
+						return (typeof a === "number" ? resultMillis : new TimeStruct(resultMillis));
 					}
 				}
 				prev = transition.offset;
 			};
 
 			// no non-existing time
-			return a;
-		} else {
-			return a;
 		}
+		return (typeof a === "number" ? a : a.clone());
 	}
 
 	/**
 	 * Returns the standard time zone offset from UTC, without DST.
 	 * Throws if info not found.
 	 * @param zoneName	IANA time zone name
-	 * @param utcMillis	Timestamp in UTC
+	 * @param utcTime	Timestamp in UTC, either as TimeStruct or as Unix millisecond value
 	 */
-	public standardOffset(zoneName: string, utcMillis: number): Duration {
-		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcMillis);
+	public standardOffset(zoneName: string, utcTime: TimeStruct | number): Duration {
+		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
 		return zoneInfo.gmtoff.clone();
 	}
 
@@ -765,10 +754,10 @@ export class TzDatabase {
 	 * Throws if zone info not found.
 	 *
 	 * @param zoneName	IANA time zone name
-	 * @param utcMillis	Timestamp in UTC
+	 * @param utcTime	Timestamp in UTC, either as TimeStruct or as Unix millisecond value
 	 */
-	public totalOffset(zoneName: string, utcMillis: number): Duration {
-		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcMillis);
+	public totalOffset(zoneName: string, utcTime: TimeStruct | number): Duration {
+		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
 		let dstOffset: Duration = null;
 
 		switch (zoneInfo.ruleType) {
@@ -779,7 +768,7 @@ export class TzDatabase {
 				dstOffset = zoneInfo.ruleOffset;
 			} break;
 			case RuleType.RuleName: {
-				dstOffset = this.dstOffsetForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+				dstOffset = this.dstOffsetForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
 			}
 		}
 
@@ -792,12 +781,12 @@ export class TzDatabase {
 	 * and therefore different abbreviations. They also change with DST: e.g. CEST or CET.
 	 *
 	 * @param zoneName	IANA zone name
-	 * @param utcMillis	Timestamp in UTC unix milliseconds
+	 * @param utcTime	Timestamp in UTC unix milliseconds
 	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
 	 * @return	The abbreviation of the rule that is in effect
 	 */
-	public abbreviation(zoneName: string, utcMillis: number, dstDependent: boolean = true): string {
-		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcMillis);
+	public abbreviation(zoneName: string, utcTime: TimeStruct | number, dstDependent: boolean = true): string {
+		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
 		const format: string = zoneInfo.format;
 
 		// is format dependent on DST?
@@ -806,7 +795,7 @@ export class TzDatabase {
 			let letter: string;
 			// place in format string
 			if (dstDependent) {
-				letter = this.letterForRule(zoneInfo.ruleName, utcMillis, zoneInfo.gmtoff);
+				letter = this.letterForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
 			} else {
 				letter = "";
 			}
@@ -826,13 +815,14 @@ export class TzDatabase {
 	 * Throws if zone info not found.
 	 *
 	 * @param zoneName	IANA time zone name
-	 * @param localMillis	Timestamp in time zone time
+	 * @param localTime	Timestamp in time zone time
 	 */
-	public standardOffsetLocal(zoneName: string, localMillis: number): Duration {
+	public standardOffsetLocal(zoneName: string, localTime: TimeStruct | number): Duration {
+		const unixMillis = (typeof localTime === "number" ? localTime : localTime.unixMillis);
 		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 		for (let i = 0; i < zoneInfos.length; ++i) {
 			const zoneInfo = zoneInfos[i];
-			if (zoneInfo.until === null || zoneInfo.until + zoneInfo.gmtoff.milliseconds() > localMillis) {
+			if (zoneInfo.until === null || zoneInfo.until + zoneInfo.gmtoff.milliseconds() > unixMillis) {
 				return zoneInfo.gmtoff.clone();
 			}
 		}
@@ -851,11 +841,11 @@ export class TzDatabase {
 	 * Throws if zone info not found.
 	 *
 	 * @param zoneName	IANA time zone name
-	 * @param localMillis	Timestamp in time zone time
+	 * @param localTime	Timestamp in time zone time
 	 */
-	public totalOffsetLocal(zoneName: string, localMillis: number): Duration {
-		const normalized: number = this.normalizeLocal(zoneName, localMillis);
-		const normalizedTm: TimeStruct = basics.unixToTimeNoLeapSecs(normalized);
+	public totalOffsetLocal(zoneName: string, localTime: TimeStruct | number): Duration {
+		const ts: TimeStruct = (typeof localTime === "number" ? new TimeStruct(localTime) : localTime);
+		const normalizedTm: TimeStruct = this.normalizeLocal(zoneName, ts);
 
 		/// Note: during offset changes, local time can behave like:
 		// forward change (1h):   0 1 3 4 5
@@ -866,12 +856,14 @@ export class TzDatabase {
 		// Therefore binary search does not apply. Linear search through transitions
 		// and return the first offset that matches
 
-		const transitions: Transition[] = this.getTransitionsTotalOffsets(zoneName, normalizedTm.year - 1, normalizedTm.year + 1);
+		const transitions: Transition[] = this.getTransitionsTotalOffsets(
+			zoneName, normalizedTm.components.year - 1, normalizedTm.components.year + 1
+		);
 		let prev: Transition = null;
 		let prevPrev: Transition = null;
 		for (let i = 0; i < transitions.length; ++i) {
 			const transition = transitions[i];
-			if (transition.at + transition.offset.milliseconds() > normalized) {
+			if (transition.at + transition.offset.milliseconds() > normalizedTm.unixMillis) {
 				// found offset: prev.offset applies
 				break;
 			}
@@ -885,8 +877,8 @@ export class TzDatabase {
 			if (prevPrev && prevPrev.offset.greaterThan(prev.offset)) {
 				// backward change
 				const diff = prevPrev.offset.sub(prev.offset);
-				if (normalized >= prev.at + prev.offset.milliseconds()
-					&& normalized < prev.at + prev.offset.milliseconds() + diff.milliseconds()) {
+				if (normalizedTm.unixMillis >= prev.at + prev.offset.milliseconds()
+					&& normalizedTm.unixMillis < prev.at + prev.offset.milliseconds() + diff.milliseconds()) {
 					// within duplicate range
 					return prevPrev.offset.clone();
 				} else {
@@ -907,20 +899,22 @@ export class TzDatabase {
 	 * ruleset and the given UTC timestamp
 	 *
 	 * @param ruleName	name of ruleset
-	 * @param utcMillis	UTC timestamp
+	 * @param utcTime	UTC timestamp
 	 * @param standardOffset	Standard offset without DST for the time zone
 	 */
-	public dstOffsetForRule(ruleName: string, utcMillis: number, standardOffset: Duration): Duration {
-		const tm: TimeStruct = basics.unixToTimeNoLeapSecs(utcMillis);
+	public dstOffsetForRule(ruleName: string, utcTime: TimeStruct | number, standardOffset: Duration): Duration {
+		const ts: TimeStruct = (typeof utcTime === "number" ? new TimeStruct(utcTime) : utcTime);
 
 		// find applicable transition moments
-		const transitions: Transition[] = this.getTransitionsDstOffsets(ruleName, tm.year - 1, tm.year, standardOffset);
+		const transitions: Transition[] = this.getTransitionsDstOffsets(
+			ruleName, ts.components.year - 1, ts.components.year, standardOffset
+		);
 
 		// find the last prior to given date
 		let offset: Duration = null;
 		for (let i = transitions.length - 1; i >= 0; i--) {
 			const transition = transitions[i];
-			if (transition.at <= utcMillis) {
+			if (transition.at <= ts.unixMillis) {
 				offset = transition.offset.clone();
 				break;
 			}
@@ -940,20 +934,21 @@ export class TzDatabase {
 	 * ruleset and the given UTC timestamp
 	 *
 	 * @param ruleName	name of ruleset
-	 * @param utcMillis	UTC timestamp
+	 * @param utcTime	UTC timestamp as TimeStruct or unix millis
 	 * @param standardOffset	Standard offset without DST for the time zone
 	 */
-	public letterForRule(ruleName: string, utcMillis: number, standardOffset: Duration): string {
-		const tm: TimeStruct = basics.unixToTimeNoLeapSecs(utcMillis);
-
+	public letterForRule(ruleName: string, utcTime: TimeStruct | number, standardOffset: Duration): string {
+		const ts: TimeStruct = (typeof utcTime === "number" ? new TimeStruct(utcTime) : utcTime);
 		// find applicable transition moments
-		const transitions: Transition[] = this.getTransitionsDstOffsets(ruleName, tm.year - 1, tm.year, standardOffset);
+		const transitions: Transition[] = this.getTransitionsDstOffsets(
+			ruleName, ts.components.year - 1, ts.components.year, standardOffset
+		);
 
 		// find the last prior to given date
 		let letter: string = null;
 		for (let i = transitions.length - 1; i >= 0; i--) {
 			const transition = transitions[i];
-			if (transition.at <= utcMillis) {
+			if (transition.at <= ts.unixMillis) {
 				letter = transition.letter;
 				break;
 			}
@@ -1015,8 +1010,8 @@ export class TzDatabase {
 	public getTransitionsTotalOffsets(zoneName: string, fromYear: number, toYear: number): Transition[] {
 		assert(fromYear <= toYear, "fromYear must be <= toYear");
 
-		const startMillis: number = basics.timeToUnixNoLeapSecs(fromYear);
-		const endMillis: number = basics.timeToUnixNoLeapSecs(toYear + 1);
+		const startMillis: number = basics.timeToUnixNoLeapSecs({ year: fromYear });
+		const endMillis: number = basics.timeToUnixNoLeapSecs({ year: toYear + 1 });
 
 
 		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
@@ -1025,13 +1020,13 @@ export class TzDatabase {
 		const result: Transition[] = [];
 
 		let prevZone: ZoneInfo = null;
-		let prevUntilTm: TimeStruct = null;
+		let prevUntilYear: number;
 		let prevStdOffset: Duration = Duration.hours(0);
 		let prevDstOffset: Duration = Duration.hours(0);
 		let prevLetter: string = "";
 		for (let i = 0; i < zoneInfos.length; ++i) {
 			const zoneInfo = zoneInfos[i];
-			const untilTm: TimeStruct = (zoneInfo.until ? basics.unixToTimeNoLeapSecs(zoneInfo.until) : new TimeStruct(toYear + 1));
+			const untilYear: number = zoneInfo.until ? new TimeStruct(zoneInfo.until).components.year : toYear + 1;
 			var stdOffset: Duration = prevStdOffset;
 			var dstOffset: Duration = prevDstOffset;
 			var letter: string = prevLetter;
@@ -1058,8 +1053,8 @@ export class TzDatabase {
 							const ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
 							for (let j = 0; j < ruleInfos.length; ++j) {
 								const ruleInfo = ruleInfos[j];
-								if (ruleInfo.applicable(prevUntilTm.year)) {
-									if (ruleInfo.transitionTimeUtc(prevUntilTm.year, stdOffset, null) === prevZone.until) {
+								if (ruleInfo.applicable(prevUntilYear)) {
+									if (ruleInfo.transitionTimeUtc(prevUntilYear, stdOffset, null) === prevZone.until) {
 										dstOffset = ruleInfo.save;
 										letter = ruleInfo.letter;
 									}
@@ -1077,8 +1072,8 @@ export class TzDatabase {
 				if (zoneInfo.ruleType === RuleType.RuleName) {
 					const dstTransitions: Transition[] = this.getTransitionsDstOffsets(
 						zoneInfo.ruleName,
-						prevUntilTm ? Math.max(prevUntilTm.year, fromYear) : fromYear,
-						Math.min(untilTm.year, toYear),
+						prevUntilYear !== undefined ? Math.max(prevUntilYear, fromYear) : fromYear,
+						Math.min(untilYear, toYear),
 						stdOffset
 					);
 					for (let k = 0; k < dstTransitions.length; ++k) {
@@ -1091,7 +1086,7 @@ export class TzDatabase {
 			}
 
 			prevZone = zoneInfo;
-			prevUntilTm = untilTm;
+			prevUntilYear = untilYear;
 			prevStdOffset = stdOffset;
 			prevDstOffset = dstOffset;
 			prevLetter = letter;
@@ -1106,14 +1101,15 @@ export class TzDatabase {
 	/**
 	 * Get the zone info for the given UTC timestamp. Throws if not found.
 	 * @param zoneName	IANA time zone name
-	 * @param utcMillis	UTC time stamp
+	 * @param utcTime	UTC time stamp as unix milliseconds or as a TimeStruct
 	 * @returns	ZoneInfo object. Do not change, we cache this object.
 	 */
-	public getZoneInfo(zoneName: string, utcMillis: number): ZoneInfo {
+	public getZoneInfo(zoneName: string, utcTime: TimeStruct | number): ZoneInfo {
+		const unixMillis = (typeof utcTime === "number" ? utcTime : utcTime.unixMillis);
 		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 		for (let i = 0; i < zoneInfos.length; ++i) {
 			const zoneInfo = zoneInfos[i];
-			if (zoneInfo.until === null || zoneInfo.until > utcMillis) {
+			if (zoneInfo.until === null || zoneInfo.until > unixMillis) {
 				return zoneInfo;
 			}
 		}
