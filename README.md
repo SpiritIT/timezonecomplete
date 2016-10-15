@@ -8,10 +8,6 @@
 [![NPM](https://nodei.co/npm/timezonecomplete.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/timezonecomplete/)
 [![NPM](https://nodei.co/npm-dl/timezonecomplete.png?months=9&height=3)](https://nodei.co/npm/timezonecomplete/)
 
-
-
-
-
 ## Synopsis
 
 TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone's time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.
@@ -36,6 +32,11 @@ Above all, it should give the same answers across platforms. At the time we star
 * Good test coverage
 * Under active development by a company who have an interest in keeping it up to date
 * Timezonecomplete is written in TypeScript and typings are included
+
+## New in version 4
+
+We did some performance improvements. The majority of users should be able to just upgrade without making any changes.
+A small part of the external API had to change, but it only concerns parts you shouldn't really need anyway. See the [Upgrade Instructions](./doc/UPGRADING.md).
 
 ## Documentation
 

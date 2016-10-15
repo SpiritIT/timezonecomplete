@@ -1,7 +1,8 @@
 
 # Changelog
 
-## Changelog
+### 4.0.0 (2016-10-15)
+* Performance improvements, with a few minor breaking changes as a result
 
 ### 3.0.6 (2016-09-29)
 * Upgrade TZ database to 2016g
