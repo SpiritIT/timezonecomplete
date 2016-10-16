@@ -4,13 +4,14 @@ var browserify  = require("browserify");
 var fs = require("fs");
 var glob = require("glob");
 var mkdirp = require("mkdirp");
-var Umd = require("browserify-umdify");
 var util = require("util");
 
 mkdirp.sync("./temp");
 
 var exampleOutFile = "./examples/browser-amd-requirejs/timezonecomplete.js";
 var exampleOut = fs.createWriteStream(exampleOutFile, { encoding: "utf-8", flags: "w"})
+var example2OutFile = "./examples/browser-stand-alone/timezonecomplete.js";
+var example2Out = fs.createWriteStream(exampleOutFile, { encoding: "utf-8", flags: "w"})
 
 var packageJson = require("./package.json");
 var distOutFileVersioned = util.format("./temp/timezonecomplete.%s.js", packageJson.version);
@@ -20,13 +21,14 @@ var distOutUnversioned = fs.createWriteStream(distOutFileUnversioned, { encoding
 
 var bundled = browserify({
 		extensions: [".js", ".json"],
-		debug: true
+		debug: true,
+		standalone: "tc"
 	})
 	.require("./dist/lib/index.js", { expose: "timezonecomplete" })
-	.bundle()
-	.pipe(new Umd());
+	.bundle();
 
 bundled.pipe(exampleOut);
+bundled.pipe(example2Out);
 bundled.pipe(distOutVersioned);
 bundled.pipe(distOutUnversioned);
 

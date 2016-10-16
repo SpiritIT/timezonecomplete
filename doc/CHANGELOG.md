@@ -1,6 +1,10 @@
 
 # Changelog
 
+### 4.0.1 (2016-10-16)
+* Fix for stand-alone use of timezonecomplete browser bundles
+* Add stand-alone use example
+
 ### 4.0.0 (2016-10-15)
 * Performance improvements, with a few minor breaking changes as a result
 
