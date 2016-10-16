@@ -64,7 +64,35 @@ var tc = require("timezonecomplete");
 
 There are two options:
 * Browserify your Node.JS code
-* Use one of the ready-made UMD-wrapped browser bundles: [timezonecomplete.js](dist/timezonecomplete.js) or [timezonecomplete.min.js](dist/timezonecomplete.min.js). You can find an example of timezonecomplete and RequireJS in the [examples](examples/) directory
+* Use one of the ready-made UMD-wrapped browser bundles: [timezonecomplete.js](dist/timezonecomplete.js) or [timezonecomplete.min.js](dist/timezonecomplete.min.js).
+
+You can find examples of using timezonecomplete in a browser in the [examples](examples/) directory
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Timezonecomplete Browser Example</title>
+  <script src="./timezonecomplete.js"></script>
+  <script>
+    function doIt() {
+      var utc = tc.nowUtc();
+      var local = utc.toZone(tc.zone('localtime'));
+      var diff = local.toZone(null).diff(utc.toZone(null));
+      var hourDiff = tc.hours(diff.hours());
+      document.getElementById('diff').textContent = hourDiff.toString();
+    }
+  </script>
+</head>
+<body onLoad="doIt()">
+  <p>
+    The difference between local time and UTC is:&nbsp;
+    <span id="diff"></div>
+  </p>
+</body>
+</html>
+```
 
 ## License
 
