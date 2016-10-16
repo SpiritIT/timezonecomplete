@@ -42,6 +42,8 @@ Separating the TZ data from timezonecomplete has three advantages:
 1. By choosing for e.g. 'tzdata-northamerica', you can install just the time zones you need, which is handy for browser use (smaller footprint).
 1. The upgrades to the TZ data become independent of changes to timezonecomplete. That means you do not have to upgrade to the latest timezonecomplete version to get the latest TZ data.
 
+See the [Upgrade Instructions](./doc/UPGRADING.md).
+
 ## New in Version 4
 
 We did some performance improvements. The majority of users should be able to just upgrade without making any changes.
