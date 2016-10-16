@@ -32,7 +32,17 @@ Above all, it should give the same answers across platforms. At the time we star
 * Under active development by a company who have an interest in keeping it up to date
 * Timezonecomplete is written in TypeScript and typings are included
 
-## New in version 4
+
+## New in Version 5
+
+The IANA time zone data is no longer included with this module. You need to install the 'tzdata' module (or one of the more light-weight tzdata-* modules) manually next to timezonecomplete.
+
+Separating the TZ data from timezonecomplete has three advantages:
+# The data becomes useful to other modules than just timezonecomplete
+# By choosing for e.g. 'tzdata-northamerica', you can install just the time zones you need, which is handy for browser use (smaller footprint).
+# The upgrades to the TZ data become independent of changes to timezonecomplete. That means you do not have to upgrade to the latest timezonecomplete version to get the latest TZ data.
+
+## New in Version 4
 
 We did some performance improvements. The majority of users should be able to just upgrade without making any changes.
 A small part of the external API had to change, but it only concerns parts you shouldn't really need anyway. See the [Upgrade Instructions](./doc/UPGRADING.md).
@@ -44,29 +54,62 @@ A small part of the external API had to change, but it only concerns parts you s
 * [Upgrade Instructions](./doc/UPGRADING.md)
 * [FAQ](./doc/FAQ.md)
 
-
 ## Usage
 
 ### Node.JS
 
+You need to install both timezonecomplete and also one or more of the tzdata modules:
+
+* [tzdata](https://npmjs.com/package/tzdata): contains all time zones. When in doubt, use this.
+* [tzdata-africa](https://npmjs.com/package/tzdata-africa)
+* [tzdata-antarctica](https://npmjs.com/package/tzdata-antarctica)
+* [tzdata-asia](https://npmjs.com/package/tzdata-asia)
+* [tzdata-australasia](https://npmjs.com/package/tzdata-australasia)
+* [tzdata-backward](https://npmjs.com/package/tzdata-backward): contains deprecated zone names, depends on the other modules
+* [tzdata-backward-utc](https://npmjs.com/package/tzdata-backward-utc): contains only the UTC and GMT zones of backward, depends on tzdata-etcetera
+* [tzdata-etcetera](https://npmjs.com/package/tzdata-etcetera)
+* [tzdata-europe](https://npmjs.com/package/tzdata-europe)
+* [tzdata-northamerica](https://npmjs.com/package/tzdata-northamerica)
+* [tzdata-pacificnew](https://npmjs.com/package/tzdata-pacificnew)
+* [tzdata-southamerica](https://npmjs.com/package/tzdata-southamerica)
+* [tzdata-systemv](https://npmjs.com/package/tzdata-systemv)
+
 Install using:
 ```
 npm install timezonecomplete
+npm install tzdata-northamerica tzdata-etcetera tzdata-backward-utc
 ```
 
-Then require the module in your code:
+Then require the timezonecomplete module in your code. Timezonecomplete will automatically find any installed tzdata modules:
 
 ```javascript
 var tc = require("timezonecomplete");
 ```
 
-### Browser
+### Browserify
 
-There are two options:
-* Browserify your Node.JS code
-* Use one of the ready-made UMD-wrapped browser bundles: [timezonecomplete.js](dist/timezonecomplete.js) or [timezonecomplete.min.js](dist/timezonecomplete.min.js).
+If you use browserify, be sure to include the tzdata modules manually, as browserify won't pick them up automatically:
 
-You can find examples of using timezonecomplete in a browser in the [examples](examples/) directory
+```
+var fs = require('fs');
+var glob = require('glob');
+var browserify  = require('browserify');
+browserify({
+    entries: glob.sync('./src/*.js'),
+    extensions: ['.js', '.json'], // needed to include the tzdata modules
+    debug: true
+})
+.require('./node_modules/tzdata/timezone-data.json', {expose: 'tzdata'}) // add tzdata
+.bundle()
+.pipe(fs.createWriteStream('./dist/bundle.js'));
+```
+
+### Browser, stand-alone
+
+Timezonecomplete comes with a [bundle](./dist/timezonecomplete.js) and a [minified bundle](./dist/timezonecomplete.min.js). Both are UMD (isomorphic) modules.
+Next to these bundles, you also need one or more of the bundles from the tzdata modules listed above.
+
+You can find examples of using timezonecomplete in a browser in the [examples](examples/) directory, both using Require.JS and ambient.
 
 ```html
 <!DOCTYPE html>
@@ -74,7 +117,8 @@ You can find examples of using timezonecomplete in a browser in the [examples](e
 <head>
   <meta charset="utf-8">
   <title>Timezonecomplete Browser Example</title>
-  <script src="./timezonecomplete.js"></script>
+  <script src="./tzdata.js"></script>
+  <script src="./timezonecomplete.min.js"></script>
   <script>
     function doIt() {
       var utc = tc.nowUtc();

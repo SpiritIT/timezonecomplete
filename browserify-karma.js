@@ -10,8 +10,9 @@ var outfile = fs.createWriteStream('./temp/browser-test-bundle.js', { encoding: 
 
 browserify({
     entries: glob.sync('./dist/test/**/*.js'),
-    extensions: ['.js'],
+    extensions: ['.js', '.json'],
     debug: true
 })
+.require('./dist/test/test-timezone-data.json', {expose: 'tzdata'})
 .bundle()
 .pipe(outfile);

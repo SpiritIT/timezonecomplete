@@ -40,4 +40,9 @@ Currently not. This is because most platforms don't, especially when converting 
 
 ## Current TZ database version:
 
-The version of the included IANA time zone database is 2016g.
+The TZ data is no longer installed with this module. You need to install the 'tzdata' module (or one of the more light-weight tzdata-* modules) manually next to timezonecomplete.
+
+Separating the TZ data from timezonecomplete has three advantages:
+# The data becomes useful to other modules than just timezonecomplete
+# By choosing for e.g. 'tzdata-northamerica', you can install just the time zones you need, which is especially handy for browser use (smaller footprint).
+# The upgrades to the TZ data become independent of changes to timezonecomplete. That means you do not have to upgrade to the latest timezonecomplete version to get the latest TZ data.

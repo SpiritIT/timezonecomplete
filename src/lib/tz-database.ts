@@ -13,11 +13,7 @@ import { TimeComponentOpts, TimeStruct, TimeUnit, WeekDay } from "./basics";
 import * as basics from "./basics";
 import { Duration } from "./duration";
 import * as math from "./math";
-
-/* tslint:disable */
-const data: any = require("./timezone-data.json");
-/* tslint:enable */
-
+import * as util from "util";
 
 /**
  * Type of rule TO column value
@@ -457,9 +453,8 @@ export enum NormalizeOption {
 }
 
 /**
- * DO NOT USE THIS CLASS DIRECTLY, USE TimeZone
- *
- * This class typescriptifies reading the TZ data
+ * This class is a wrapper around time zone data JSON object from the tzdata NPM module.
+ * You usually do not need to use this directly, use TimeZone and DateTime instead.
  */
 export class TzDatabase {
 
@@ -469,36 +464,117 @@ export class TzDatabase {
 	private static _instance: TzDatabase = null;
 
 	/**
+	 * (re-) initialize timezonecomplete with time zone data
+	 *
+	 * @param data TZ data as JSON object (from one of the tzdata NPM modules).
+	 *             If not given, Timezonecomplete will search for installed modules.
+	 */
+	public static init(data?: any): void {
+		if (data) {
+			TzDatabase._instance = undefined;
+			TzDatabase._instance = new TzDatabase([data]);
+		} else {
+			TzDatabase._instance = undefined;
+			TzDatabase.instance();
+		}
+	}
+
+	/**
 	 * Single instance of this database
 	 */
 	public static instance(): TzDatabase {
 		if (!TzDatabase._instance) {
+			const data: any[] = [];
+			// try to find TZ data in global variables
+			const g: any = (global ? global : window);
+			if (g) {
+				for (const key of Object.keys(g)) {
+					if (key.indexOf("tzdata") === 0) {
+						if (typeof g[key] === "object" && g[key].rules && g[key].zones) {
+							data.push(g[key]);
+						}
+					}
+				}
+			}
+			// try to find TZ data as installed NPM modules
+			if (data.length === 0 && require && require) {
+				try {
+					// first try tzdata which contains all data
+					const tzDataName = "tzdata";
+					const d = require(tzDataName); // use variable to avoid browserify acting up
+					data.push(d);
+				} catch (e) {
+					// then try subsets
+					const moduleNames: string[] = [
+						"tzdata-africa",
+						"tzdata-antarctica",
+						"tzdata-asia",
+						"tzdata-australasia",
+						"tzdata-backward",
+						"tzdata-backward-utc",
+						"tzdata-etcetera",
+						"tzdata-europe",
+						"tzdata-northamerica",
+						"tzdata-pacificnew",
+						"tzdata-southamerica",
+						"tzdata-systemv"
+					];
+					const existing: string[] = [];
+					const existingPaths: string[] = [];
+					moduleNames.forEach((moduleName: string): void => {
+						try {
+							const d = require(moduleName);
+							data.push(d);
+						} catch (e) {
+							// nothing
+						}
+					});
+				}
+			}
 			TzDatabase._instance = new TzDatabase(data);
 		}
 		return TzDatabase._instance;
 	}
 
 	/**
-	 * Inject test timezone data for unittests
+	 * Time zone database data
 	 */
-	public static inject(data: any): void {
-		TzDatabase._instance = null; // circumvent constructor check on duplicate instances
-		TzDatabase._instance = new TzDatabase(data);
-	}
+	private _data: any;
 
 	/**
-	 * Information on aggregate values in the database
+	 * Cached min/max DST values
 	 */
 	private _minmax: MinMaxInfo;
 
-	private _data: any;
-
+	/**
+	 * Cached zone names
+	 */
 	private _zoneNames: string[];
 
-	constructor(data: any) {
+	/**
+	 * Constructor - do not use, this is a singleton class. Use TzDatabase.instance() instead
+	 */
+	private constructor(data: any[]) {
 		assert(!TzDatabase._instance, "You should not create an instance of the TzDatabase class yourself. Use TzDatabase.instance()");
-		this._data = data;
-		this._minmax = validateData(data);
+		assert(data.length > 0,
+			"Timezonecomplete needs time zone data. You need to install one of the tzdata NPM modules before using timezonecomplete."
+		);
+		if (data.length === 1) {
+			this._data = data[0];
+		} else {
+			this._data = { zones: {}, rules: {} };
+			data.forEach((d: any): void => {
+				if (d && d.rules && d.zones) {
+					for (const key of Object.keys(d.rules)) {
+						this._data.rules[key] = d.rules[key];
+					}
+					for (const key of Object.keys(d.zones)) {
+						this._data.zones[key] = d.zones[key];
+					}
+				}
+			});
+		}
+		this._minmax = validateData(this._data);
 	}
 
 	/**

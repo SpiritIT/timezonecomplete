@@ -286,6 +286,10 @@ z.offsetForZone(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in Eu
 The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like 'what is the maximum Daylight Saving Time shift of all zones in the database'?
 
 ```javascript
+
+// Optional, to use your own subset of the IANA time zone data
+tc.TzDatabase.init(customTimeZoneData);
+
 // TzDatabase is a singleton, get at it using the instance() method
 var db = tc.TzDatabase.instance();
 

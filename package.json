@@ -1,6 +1,6 @@
 {
   "name": "timezonecomplete",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": [
     "Date",
@@ -36,7 +36,7 @@
     "clean": "./node_modules/.bin/rimraf ./dist ./temp ./examples/browser-amd-requirejs/timezonecomplete.js, ./examples/browser-stand-alone/timezonecomplete.js",
     "lint": "./node_modules/.bin/tslint -c ./tslint.json ./src/**/*.ts",
     "tsc": "./node_modules/.bin/tsc",
-    "copy": "cp ./src/lib/*.json ./dist/lib && cp ./src/test/*.json ./dist/test",
+    "copy": "cp ./src/test/*.json ./dist/test",
     "umd": "node browserify-umd.js",
     "minify": "node minify-umd.js",
     "build": "npm run lint && npm run tsc && npm run copy && npm run umd && npm run minify",
@@ -71,6 +71,7 @@
     "source-map-support": "^0.4.3",
     "tslint": "^3.15.1",
     "typescript": "^2.0.3",
+    "tzdata": "^1.0.0",
     "uglify-js": "^2.7.3"
   }
 }

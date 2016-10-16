@@ -21,7 +21,7 @@ import * as index from "../lib/index";
 // inject test data into TzDatabase
 /* tslint:disable */
 const testData = require("./test-timezone-data.json");
-TzDatabase.inject(testData);
+TzDatabase.init(testData);
 /* tslint:enable */
 
 /* tslint:disable:max-line-length */

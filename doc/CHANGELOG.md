@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.0.0 (2016-10-15)
+* Separate the tz data into a separate set of NPM modules, allowing to install only the time zones needed.
+
+See [UPGRADING.md](./UPGRADING.md) for instructions on how to migrate from earlier versions.
+
 ### 4.0.1 (2016-10-16)
 * Fix for stand-alone use of timezonecomplete browser bundles
 * Add stand-alone use example
