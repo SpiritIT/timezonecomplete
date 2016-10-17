@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 5.1.0 (2016-10-17)
+
+* Simplify using timezonecomplete and tzdata with browserify
+** Allow to pass arrays to TzDatabase.init()
+** Describe way-of-work in README.md
+
 ## 5.0.1 (2016-10-17)
 
 * Backward compatibility fix: make year/month/day/... parameters optional in TimeZone#abbreviationForUtc(), TimeZone#offsetForZone() and TimeZone#offsetForUtc()

@@ -90,9 +90,27 @@ var tc = require("timezonecomplete");
 
 ### Browserify
 
-If you use browserify, be sure to include the tzdata modules manually, as browserify won't pick them up automatically:
+If you use browserify, There are two options:
+1. Require the .json files in your code and pass them to TzDatabase.init() before using any timezonecomplete functionality.
+1. Include the tzdata .json files manually using browserify.require()
 
+Option 1:
 ```
+// browserify will pick these up. You may need to set the 'extensions' option of browserify to include .json files
+const northamerica = require('tzdata-northamerica');
+const etcetera = require('tzdata-etcetera');
+const tc = require('timezonecomplete');
+
+// Do this before creating e.g. tc.DateTime objects.
+// In this example we use only part of the timezone database to reduce bundle size.
+// Note you could whittle down the zones and rules further if you like by e.g. excluding rules pre-1990.
+// That's at your own risk though
+tc.TzDatabase.init([northamerica, etcetera]);
+```
+
+Option 2:
+```
+// Manual browserifying ambient JSON data
 var fs = require('fs');
 var glob = require('glob');
 var browserify  = require('browserify');
@@ -101,7 +119,7 @@ browserify({
     extensions: ['.js', '.json'], // needed to include the tzdata modules
     debug: true
 })
-.require('./node_modules/tzdata/timezone-data.json', {expose: 'tzdata'}) // add tzdata
+.require('./node_modules/tzdata/timezone-data.json', {expose: 'tzdata'}) // add 'tzdata' and make it available globally under its own name
 .bundle()
 .pipe(fs.createWriteStream('./dist/bundle.js'));
 ```

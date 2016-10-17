@@ -469,10 +469,10 @@ export class TzDatabase {
 	 * @param data TZ data as JSON object (from one of the tzdata NPM modules).
 	 *             If not given, Timezonecomplete will search for installed modules.
 	 */
-	public static init(data?: any): void {
+	public static init(data?: any | any[]): void {
 		if (data) {
 			TzDatabase._instance = undefined;
-			TzDatabase._instance = new TzDatabase([data]);
+			TzDatabase._instance = new TzDatabase(Array.isArray(data) ? data : [data]);
 		} else {
 			TzDatabase._instance = undefined;
 			TzDatabase.instance();
