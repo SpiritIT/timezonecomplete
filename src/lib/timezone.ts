@@ -315,11 +315,11 @@ export class TimeZone {
 \	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
 	public offsetForUtc(offsetForUtc: TimeStruct): number;
-	public offsetForUtc(year: number, month: number, day: number, hour: number, minute: number, second: number, milli: number): number;
+	public offsetForUtc(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
 	public offsetForUtc(
-		a: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
+		a?: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
 	): number {
-		const utcTime = (typeof a === "number" ? new TimeStruct({ year: a, month, day, hour, minute, second, milli }) : a);
+		const utcTime = (a && a instanceof TimeStruct ? a : new TimeStruct({ year: a as number, month, day, hour, minute, second, milli }));
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
 				const date: Date = new Date(Date.UTC(
@@ -360,11 +360,11 @@ export class TimeZone {
 	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
 	public offsetForZone(localTime: TimeStruct): number;
-	public offsetForZone(year: number, month: number, day: number, hour: number, minute: number, second: number, milli: number): number;
+	public offsetForZone(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
 	public offsetForZone(
-		a: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
+		a?: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
 	): number {
-		const localTime = (typeof a === "number" ? new TimeStruct({ year: a, month, day, hour, minute, second, milli }) : a);
+		const localTime = (a && a instanceof TimeStruct ? a : new TimeStruct({ year: a as number, month, day, hour, minute, second, milli }));
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
 				const date: Date = new Date(
@@ -435,11 +435,11 @@ export class TimeZone {
 	 * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
 	 */
 	public abbreviationForUtc(
-		year: number, month: number, day: number, hour: number, minute: number, second: number, milli: number, dstDependent?: boolean
+		year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number, dstDependent?: boolean
 	): string;
 	public abbreviationForUtc(utcTime: TimeStruct, dstDependent?: boolean): string;
 	public abbreviationForUtc(
-		a: TimeStruct | number, b?: number | boolean, day?: number, hour?: number, minute?: number, second?: number, milli?: number, c?: boolean
+		a?: TimeStruct | number, b?: number | boolean, day?: number, hour?: number, minute?: number, second?: number, milli?: number, c?: boolean
 	): string {
 		let utcTime: TimeStruct;
 		let dstDependent: boolean = true;
