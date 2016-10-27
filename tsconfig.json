@@ -1,15 +1,16 @@
 {
 	"compilerOptions": {
-		"target": "es5",
-		"module": "commonjs",
 		"declaration": true,
+		"inlineSources": true,
+		"module": "commonjs",
 		"noImplicitAny": true,
+		"noLib": false,
+		"outDir": "./dist",
+		"preserveConstEnums": true,
 		"removeComments": false,
 		"sourceMap": true,
-		"outDir": "./dist",
-		"noLib": false,
-		"preserveConstEnums": true,
-		"suppressImplicitAnyIndexErrors": true
+		"suppressImplicitAnyIndexErrors": true,
+		"target": "es5"
 	},
 	"formatCodeOptions": {
 		"indentSize": 4,
