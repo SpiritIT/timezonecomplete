@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.1.1 (2016-10-27)
+
+* Attempt to fix warnings about the 'require' function that webpack users experience due to automatic loading of tzdata NPM modules.
+* Inline the sourcemaps as requested in issue #28
+
 ## 5.1.0 (2016-10-17)
 
 * Simplify using timezonecomplete and tzdata with browserify
