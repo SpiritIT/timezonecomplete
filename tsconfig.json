@@ -1,14 +1,13 @@
 {
 	"compilerOptions": {
 		"declaration": true,
-		"inlineSources": true,
+		"inlineSourceMap": true,
 		"module": "commonjs",
 		"noImplicitAny": true,
 		"noLib": false,
 		"outDir": "./dist",
 		"preserveConstEnums": true,
 		"removeComments": false,
-		"sourceMap": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"target": "es5"
 	},
