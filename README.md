@@ -27,6 +27,7 @@ Above all, it should give the same answers across platforms. At the time we star
   * **Calculating** with dates and durations across time zones
   * **Periods** with regular UTC or regular local time repetition
   * **Utility functions** for determining leap years, determining the last Monday of the month etc.
+  * **Formatting and parsing** of dates using LDML format strings
   * Ability to use with Node.JS as well as in a browser (CommonJS, AMD)
 * Good test coverage
 * Under active development by a company who have an interest in keeping it up to date
@@ -97,6 +98,7 @@ If you use browserify, There are two options:
 Option 1:
 ```
 // browserify will pick these up. You may need to set the 'extensions' option of browserify to include .json files
+// NOTE in TypeScript, also use 'const' NOT 'import'!
 const northamerica = require('tzdata-northamerica');
 const etcetera = require('tzdata-etcetera');
 const tc = require('timezonecomplete');
