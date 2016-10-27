@@ -497,7 +497,7 @@ export class TzDatabase {
 				}
 			}
 			// try to find TZ data as installed NPM modules
-			if (data.length === 0 && require && require) {
+			const findNodeModules = (require: any): void => {
 				try {
 					// first try tzdata which contains all data
 					const tzDataName = "tzdata";
@@ -529,6 +529,11 @@ export class TzDatabase {
 							// nothing
 						}
 					});
+				}
+			};
+			if (data.length === 0) {
+				if (typeof module === "object" && typeof module.exports === "object") {
+					findNodeModules(require); // need to put require into a function to make webpack happy
 				}
 			}
 			TzDatabase._instance = new TzDatabase(data);
