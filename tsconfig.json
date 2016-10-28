@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"declaration": true,
 		"inlineSourceMap": true,
+		"inlineSources": true,
 		"module": "commonjs",
 		"noImplicitAny": true,
 		"noLib": false,
