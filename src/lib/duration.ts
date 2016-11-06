@@ -477,8 +477,8 @@ export class Duration {
 	}
 
 	/**
-	 * Approximate if the durations have units that cannot be converted
 	 * Multiply with a fixed number.
+	 * Approximate if the durations have units that cannot be converted
 	 * @return a new Duration of (this * value)
 	 */
 	public multiply(value: number): Duration {
@@ -486,15 +486,29 @@ export class Duration {
 	}
 
 	/**
-	 * Approximate if the durations have units that cannot be converted
-	 * Divide by a fixed number.
+	 * Divide by a unitless number. The result is a Duration, e.g. 1 year / 2 = 0.5 year
+	 * The result is approximate if this duration as a unit that cannot be converted to a number (e.g. 1 month has variable length)
 	 * @return a new Duration of (this / value)
 	 */
-	public divide(value: number): Duration {
-		if (value === 0) {
-			throw new Error("Duration.divide(): Divide by zero");
+	public divide(value: number): Duration;
+	/**
+	 * Divide this Duration by a Duration. The result is a unitless number e.g. 1 year / 1 month = 12
+	 * The result is approximate if this duration as a unit that cannot be converted to a number (e.g. 1 month has variable length)
+	 * @return a new Duration of (this / value)
+	 */
+	public divide(value: Duration): number;
+	public divide(value: number | Duration): Duration | number {
+		if (typeof value === "number") {
+			if (value === 0) {
+				throw new Error("Duration.divide(): Divide by zero");
+			}
+			return new Duration(this._amount / value, this._unit);
+		} else {
+			if (value._amount === 0) {
+				throw new Error("Duration.divide(): Divide by zero duration");
+			}
+			return this.milliseconds() / value.milliseconds();
 		}
-		return new Duration(this._amount / value, this._unit);
 	}
 
 	/**

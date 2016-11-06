@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.2.0 (2016-11-06)
+
+* Add Duration#divide() method that takes another Duration and outputs a unitless number.
+
 ## 5.1.2 (2016-10-28)
 
 * Inline the sourcemaps as requested in issue #28

@@ -337,7 +337,7 @@ describe("Duration()", (): void => {
 		});
 	});
 
-	describe("divide()", (): void => {
+	describe("divide() by number", (): void => {
 		it("should divide by positive number", (): void => {
 			expect(Duration.milliseconds(6).divide(3).milliseconds()).to.equal(2);
 		});
@@ -348,6 +348,20 @@ describe("Duration()", (): void => {
 		});
 		it("should divide by negative number", (): void => {
 			expect(Duration.milliseconds(6).divide(-3).milliseconds()).to.equal(-2);
+		});
+	});
+
+	describe("divide() by Duration", (): void => {
+		it("should divide by positive Duration", (): void => {
+			expect(Duration.years(1).divide(Duration.months(2))).to.equal(6);
+		});
+		it("should throw on divide by 0", (): void => {
+			assert.throws((): void => {
+				Duration.milliseconds(6).divide(Duration.months(0));
+			});
+		});
+		it("should divide by negative number", (): void => {
+			expect(Duration.years(1).divide(Duration.months(-2))).to.equal(-6);
 		});
 	});
 

@@ -149,6 +149,7 @@ duration2 = duration.add(tc.hours(5)); // 18002 seconds
 duration2 = duration.sub(tc.milliseconds(500)); // 1.5 seconds
 duration2 = duration.multiply(3); // 6 seconds
 duration2 = duration.divide(3); // 0.67 seconds
+tc.years(1).divide(tc.months(2)); // 1 year divided by 2 months = 6
 
 // note that e.g. adding hours to months gives an approximate value
 // as not all months are equally long
