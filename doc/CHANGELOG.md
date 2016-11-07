@@ -1,10 +1,11 @@
 
 # Changelog
 
+## 5.3.0 (2016-11-07)
 
-* Add DateTime#standardOffsetDuration() method that returns the offset excluding DST.
-* Add DateTime#offsetDuration() method that returns a Duration instead of a number.
-* Bugfix: the DateTime constructor would throw when given a time zone name with "without DST" appended.
+* Add DateTime#standardOffsetDuration() method that returns the offset excluding DST. (Issue #30)
+* Add DateTime#offsetDuration() method that returns a Duration instead of a number. (Issue #30)
+* Bugfix: the DateTime constructor would throw when given a time zone name with "without DST" appended. (Issue #30)
 
 ## 5.2.0 (2016-11-06)
 
