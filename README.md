@@ -40,7 +40,7 @@ Above all, it should give the same answers across platforms. At the time we star
 
 ## New in Version 5
 
-The IANA time zone data is no longer included with this module. You need to install the 'tzdata' module (or one of the more light-weight tzdata-* modules) manually next to timezonecomplete.
+The TZ data is now installed as a separate NPM module [tzdata](https://npmjs.com/package/tzdata). For browser use, the data is NOT automatically included anymore, to allow you to choose a subset of the data to optimize your bundle.
 
 Separating the TZ data from timezonecomplete has three advantages:
 1. The data becomes useful to other modules than just timezonecomplete
@@ -65,26 +65,11 @@ A small part of the external API had to change, but it only concerns parts you s
 
 ### Node.JS
 
-You need to install both timezonecomplete and also one or more of the tzdata modules:
-
-* [tzdata](https://npmjs.com/package/tzdata): contains all time zones. When in doubt, use this.
-* [tzdata-africa](https://npmjs.com/package/tzdata-africa)
-* [tzdata-antarctica](https://npmjs.com/package/tzdata-antarctica)
-* [tzdata-asia](https://npmjs.com/package/tzdata-asia)
-* [tzdata-australasia](https://npmjs.com/package/tzdata-australasia)
-* [tzdata-backward](https://npmjs.com/package/tzdata-backward): contains deprecated zone names, depends on the other modules
-* [tzdata-backward-utc](https://npmjs.com/package/tzdata-backward-utc): contains only the UTC and GMT zones of backward, depends on tzdata-etcetera
-* [tzdata-etcetera](https://npmjs.com/package/tzdata-etcetera)
-* [tzdata-europe](https://npmjs.com/package/tzdata-europe)
-* [tzdata-northamerica](https://npmjs.com/package/tzdata-northamerica)
-* [tzdata-pacificnew](https://npmjs.com/package/tzdata-pacificnew)
-* [tzdata-southamerica](https://npmjs.com/package/tzdata-southamerica)
-* [tzdata-systemv](https://npmjs.com/package/tzdata-systemv)
+In Node.JS, timezonecomplete automatically has all time zone data.
 
 Install using:
 ```
 npm install timezonecomplete
-npm install tzdata-northamerica tzdata-etcetera tzdata-backward-utc
 ```
 
 Then require the timezonecomplete module in your code. Timezonecomplete will automatically find any installed tzdata modules:

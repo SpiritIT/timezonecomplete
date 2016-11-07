@@ -1,6 +1,13 @@
 
 # Changelog
 
+
+## 5.4.0 (2016-11-07)
+
+The tzdata module is not getting downloaded much and timezonecomplete is. This means that nobody understands that they have to install the tzdata manually. Therefore we make it automatic, assuming that for server use it doesn't matter to load all time zone data.
+
+* Add the tzdata module as a proper dependency. For Node.JS applications, this will automatically add all time zones without initialisation. You can remove time zones by explicitly initializing the TzDatabase using TzDatabase.init().
+
 ## 5.3.0 (2016-11-07)
 
 * Add DateTime#standardOffsetDuration() method that returns the offset excluding DST. (Issue #30)
