@@ -1072,7 +1072,13 @@ export class DateTime {
 	private static _splitDateFromTimeZone(s: string): string[] {
 		const trimmed = s.trim();
 		const result = ["", ""];
-		let index = trimmed.lastIndexOf(" ");
+		let index = trimmed.lastIndexOf("without DST");
+		if (index > -1) {
+			const result = DateTime._splitDateFromTimeZone(s.slice(0, index - 1));
+			result[1] += " without DST";
+			return result;
+		}
+		index = trimmed.lastIndexOf(" ");
 		if (index > -1) {
 			result[0] = trimmed.substr(0, index);
 			result[1] = trimmed.substr(index + 1);

@@ -1,6 +1,10 @@
 
 # Changelog
 
+
+* Bugfix: the DateTime constructor would throw when given a time zone name with "without DST" appended.
+
+
 ## 5.2.0 (2016-11-06)
 
 * Add Duration#divide() method that takes another Duration and outputs a unitless number.
