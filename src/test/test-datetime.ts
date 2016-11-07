@@ -1651,6 +1651,18 @@ describe("DateTime", (): void => {
 			expect(new DateTime("2016-03-31 Europe/Amsterdam without DST").offsetDuration().hours()).to.equal(1);
 		});
 	});
+
+	describe("standardOffsetDuration()", (): void => {
+		it("should return 0 for naive dates", (): void => {
+			expect(new DateTime("2016-03-31").standardOffsetDuration().milliseconds()).to.equal(0);
+		});
+		it("should return standard offset for aware dates", (): void => {
+			expect(new DateTime("2016-03-31 Europe/Amsterdam").standardOffsetDuration().hours()).to.equal(1);
+		});
+		it("should return standard offset for aware dates without DST", (): void => {
+			expect(new DateTime("2016-03-31 Europe/Amsterdam without DST").standardOffsetDuration().hours()).to.equal(1);
+		});
+	});
 });
 
 

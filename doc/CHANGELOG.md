@@ -2,7 +2,7 @@
 # Changelog
 
 
-
+* Add DateTime#standardOffsetDuration() method that returns the offset excluding DST.
 * Add DateTime#offsetDuration() method that returns a Duration instead of a number.
 * Bugfix: the DateTime constructor would throw when given a time zone name with "without DST" appended.
 

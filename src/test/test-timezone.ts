@@ -232,6 +232,40 @@ describe("TimeZone", (): void => {
 		});
 	});
 
+	describe("standardOffsetForUtc()", (): void => {
+		it("should work for local time", (): void => {
+			const t = TimeZone.local();
+			// check DST changes (should not happen)
+			const d1 = new Date(2014, 1, 1, 0, 0, 0, 0);
+			expect(t.standardOffsetForUtc(2014, 1, 1, 1, 2, 3, 4)).to.equal(-1 * d1.getTimezoneOffset());
+			expect(t.standardOffsetForUtc(2014, 7, 1, 1, 2, 3, 4)).to.equal(-1 * d1.getTimezoneOffset());
+		});
+		it("should work for IANA zone", (): void => {
+			const t = TimeZone.zone("America/Edmonton");
+			// check DST changes
+			expect(t.standardOffsetForUtc(2014, 1, 1, 1, 2, 3, 4)).to.equal(-7 * 60);
+			expect(t.standardOffsetForUtc(2014, 7, 1, 1, 2, 3, 4)).to.equal(-7 * 60);
+		});
+		it("should work for around DST", (): void => {
+			const t = TimeZone.zone("Europe/Amsterdam");
+			expect(t.standardOffsetForUtc(2014, 10, 26, 1, 59, 59, 0)).to.equal(60);
+		});
+		it("should work for IANA zone without DST", (): void => {
+			const t = TimeZone.zone("Europe/Amsterdam", false);
+			expect(t.standardOffsetForUtc(2014, 8, 26, 1, 59, 59, 0)).to.equal(60);
+		});
+		it("should work for fixed offset", (): void => {
+			const t = TimeZone.zone("+0130");
+			// check DST changes
+			expect(t.standardOffsetForUtc(2014, 1, 1, 1, 2, 3, 4)).to.equal(90);
+			expect(t.standardOffsetForUtc(2014, 7, 1, 1, 2, 3, 4)).to.equal(90);
+		});
+		it("should work if time not given", (): void => {
+			const t = TimeZone.zone("+0130");
+			expect(t.standardOffsetForUtc(2014, 1, 1, 0, 0, 0, 0)).to.equal(90);
+		});
+	});
+
 	describe("offsetForUtcDate()", (): void => {
 		it("should with Get", (): void => {
 			const t = TimeZone.zone("Europe/Amsterdam");

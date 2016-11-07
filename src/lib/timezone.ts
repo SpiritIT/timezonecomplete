@@ -311,7 +311,7 @@ export class TimeZone {
 	}
 
 	/**
-	 * Calculate timezone offset from a UTC time.
+	 * Calculate timezone offset including DST from a UTC time.
 \	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
 	public offsetForUtc(offsetForUtc: TimeStruct): number;
@@ -337,6 +337,39 @@ export class TimeZone {
 				} else {
 					return TzDatabase.instance().standardOffset(this._name, utcTime).minutes();
 				}
+			}
+			/* istanbul ignore next */
+			default:
+				/* istanbul ignore if */
+				/* istanbul ignore next */
+				if (true) {
+					throw new Error(`unknown TimeZoneKind '${this._kind}'`);
+				}
+		}
+	}
+
+	/**
+	 * Calculate timezone standard offset excluding DST from a UTC time.
+	 * @return the standard offset of this time zone with respect to UTC at the given time, in minutes.
+	 */
+	public standardOffsetForUtc(offsetForUtc: TimeStruct): number;
+	public standardOffsetForUtc(
+		year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
+	): number;
+	public standardOffsetForUtc(
+		a?: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
+	): number {
+		const utcTime = (a && a instanceof TimeStruct ? a : new TimeStruct({ year: a as number, month, day, hour, minute, second, milli }));
+		switch (this._kind) {
+			case TimeZoneKind.Local: {
+				const date: Date = new Date(Date.UTC(utcTime.components.year, 0, 1, 0));
+				return -1 * date.getTimezoneOffset();
+			}
+			case TimeZoneKind.Offset: {
+				return this._offset;
+			}
+			case TimeZoneKind.Proper: {
+				return TzDatabase.instance().standardOffset(this._name, utcTime).minutes();
 			}
 			/* istanbul ignore next */
 			default:

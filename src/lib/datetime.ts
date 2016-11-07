@@ -389,17 +389,27 @@ export class DateTime {
 	}
 
 	/**
-	 * @return the offset w.r.t. UTC in minutes. Returns 0 for unaware dates and for UTC dates.
+	 * @return the offset including DST w.r.t. UTC in minutes. Returns 0 for unaware dates and for UTC dates.
 	 */
 	public offset(): number {
 		return Math.round((this.zoneDate.unixMillis - this.utcDate.unixMillis) / 60000);
 	}
 
 	/**
-	 * @return the offset w.r.t. UTC as a Duration.
+	 * @return the offset including DST w.r.t. UTC as a Duration.
 	 */
 	public offsetDuration(): Duration {
 		return Duration.milliseconds(Math.round(this.zoneDate.unixMillis - this.utcDate.unixMillis));
+	}
+
+	/**
+	 * @return the standard offset WITHOUT DST w.r.t. UTC as a Duration.
+	 */
+	public standardOffsetDuration(): Duration {
+		if (this._zone) {
+			return Duration.minutes(this._zone.standardOffsetForUtc(this._utcDate));
+		}
+		return Duration.minutes(0);
 	}
 
 	/**
