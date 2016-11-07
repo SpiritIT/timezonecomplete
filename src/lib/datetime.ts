@@ -396,6 +396,13 @@ export class DateTime {
 	}
 
 	/**
+	 * @return the offset w.r.t. UTC as a Duration.
+	 */
+	public offsetDuration(): Duration {
+		return Duration.milliseconds(Math.round(this.zoneDate.unixMillis - this.utcDate.unixMillis));
+	}
+
+	/**
 	 * @return The full year e.g. 2014
 	 */
 	public year(): number {

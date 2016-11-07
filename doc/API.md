@@ -414,6 +414,12 @@ amsterdamDate.zone(); // tc.TimeZone.zone("Europe/Amsterdam");
 // many zones have a different abbreviation during summer time)
 amsterdamDate.zoneAbbreviation(); // "CET"
 
+// Get the total offset from UTC including DST
+new tc.DateTime("2016-03-31 Europe/Amsterdam").offsetDuration(); // 2 hours
+
+// Get the total offset from UTC excluding DST
+new tc.DateTime("2016-03-31 Europe/Amsterdam without DST").offsetDuration(); // 1 hour
+
 // Time zone conversion
 var africaDoualaDate = amsterdamDate.toZone("Africa/Douala");
 

@@ -2,8 +2,9 @@
 # Changelog
 
 
-* Bugfix: the DateTime constructor would throw when given a time zone name with "without DST" appended.
 
+* Add DateTime#offsetDuration() method that returns a Duration instead of a number.
+* Bugfix: the DateTime constructor would throw when given a time zone name with "without DST" appended.
 
 ## 5.2.0 (2016-11-06)
 

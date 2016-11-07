@@ -1639,6 +1639,18 @@ describe("DateTime", (): void => {
 			expect(arrivalTime.toString()).to.equal("2016-02-13T11:00:00.000 Asia/Tokyo");
 		});
 	});
+
+	describe("offsetDuration()", (): void => {
+		it("should return 0 for naive dates", (): void => {
+			expect(new DateTime("2016-03-31").offsetDuration().milliseconds()).to.equal(0);
+		});
+		it("should return total offset for aware dates", (): void => {
+			expect(new DateTime("2016-03-31 Europe/Amsterdam").offsetDuration().hours()).to.equal(2);
+		});
+		it("should return standard offset for aware dates without DST", (): void => {
+			expect(new DateTime("2016-03-31 Europe/Amsterdam without DST").offsetDuration().hours()).to.equal(1);
+		});
+	});
 });
 
 
