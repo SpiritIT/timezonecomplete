@@ -803,6 +803,16 @@ describe("Period", function(): void {
 			const q = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 60, TimeUnit.Minute, PeriodDst.RegularLocalTime);
 			expect(p.equals(q)).to.equal(true);
 		});
+		it("should return true for periods with equal reference but specified in different zone but regular intervals", (): void => {
+			const p = new Period(new DateTime("2014-01-01T00:00:00 UTC"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
+			const q = new Period(new DateTime("2014-01-01T01:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
+			expect(p.equals(q)).to.equal(true);
+		});
+		it("should return true for identical periods (bug)", (): void => {
+			const p = new Period(new DateTime("2014-01-01T08:00:00.000 Europe/Amsterdam"), Duration.days(1), PeriodDst.RegularLocalTime);
+			const q = new Period(new DateTime("2014-01-01T08:00:00.000 Europe/Amsterdam"), Duration.days(1), PeriodDst.RegularLocalTime);
+			expect(p.equals(q)).to.equal(true);
+		});
 	});
 
 	describe("identical()", (): void => {

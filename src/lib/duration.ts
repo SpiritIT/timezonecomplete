@@ -422,12 +422,14 @@ export class Duration {
 	 * @return True iff this and other represent the same time duration
 	 */
 	public equalsExact(other: Duration): boolean {
-		if (this._unit >= TimeUnit.Month && other.unit() >= TimeUnit.Month) {
-			return this.equals(other);
-		} else if (this._unit <= TimeUnit.Day && other.unit() < TimeUnit.Day) {
-			return this.equals(other);
+		if (this._unit === other._unit) {
+			return (this._amount === other._amount);
+		} else if (this._unit >= TimeUnit.Month && other.unit() >= TimeUnit.Month) {
+			return this.equals(other); // can compare months and years
+		} else if (this._unit < TimeUnit.Day && other.unit() < TimeUnit.Day) {
+			return this.equals(other); // can compare milliseconds through hours
 		} else {
-			return false;
+			return false; // cannot compare days to anything else
 		}
 	}
 

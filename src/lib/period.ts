@@ -741,19 +741,28 @@ export class Period {
 	 * and same dst.
 	 */
 	public equals(other: Period): boolean {
-		// note we take the non-normalized reference() because this has an influence on the outcome
-		return (this.isBoundary(other.reference())
-			&& this._intInterval.equalsExact(other.interval())
-			&& this._intDst === other._intDst);
+		// note we take the non-normalized _reference because this has an influence on the outcome
+		if (!this.isBoundary(other._reference) || !this._intInterval.equals(other._intInterval)) {
+			return false;
+		}
+		const thisIsRegular = (this._intDst === PeriodDst.RegularIntervals || !this._reference.zone() || this._reference.zone().isUtc());
+		const otherIsRegular = (other._intDst === PeriodDst.RegularIntervals || !other._reference.zone() || other._reference.zone().isUtc());
+		if (thisIsRegular && otherIsRegular) {
+			return true;
+		}
+		if (this._intDst === other._intDst && this._reference.zone().equals(other._reference.zone())) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * Returns true iff this period was constructed with identical arguments to the other one.
 	 */
 	public identical(other: Period): boolean {
-		return (this._reference.identical(other.reference())
-			&& this._interval.identical(other.interval())
-			&& this.dst() === other.dst());
+		return (this._reference.identical(other._reference)
+			&& this._interval.identical(other._interval)
+			&& this._dst === other._dst);
 	}
 
 	/**

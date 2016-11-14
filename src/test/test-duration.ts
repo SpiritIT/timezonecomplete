@@ -243,6 +243,13 @@ describe("Duration()", (): void => {
 	});
 
 	describe("equalsExact()", (): void => {
+		it("should return true for same unit and amount", (): void => {
+			expect(Duration.milliseconds(1).equalsExact(Duration.milliseconds(1))).to.equal(true);
+			expect(Duration.hours(1).equalsExact(Duration.hours(1))).to.equal(true);
+			expect(Duration.days(1).equalsExact(Duration.days(1))).to.equal(true);
+			expect(Duration.months(1).equalsExact(Duration.months(1))).to.equal(true);
+			expect(Duration.years(1).equalsExact(Duration.years(1))).to.equal(true);
+		});
 		it("should return false approximately equal units", (): void => {
 			expect(Duration.hours(24).equalsExact(Duration.days(1))).to.equal(false);
 			expect(Duration.days(30).equalsExact(Duration.months(1))).to.equal(false);

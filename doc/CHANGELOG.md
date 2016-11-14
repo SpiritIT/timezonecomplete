@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.4.1 (2016-11-14)
+
+* Bugfix in Duration#equalsExact(): identical durations of 1 day would not be seen as equal
+* Bugfix in Period#equals(): identical periods of 1 day would not be seen as equal; equal regular periods specified in different zones would not be seen as equal
 
 ## 5.4.0 (2016-11-07)
 
