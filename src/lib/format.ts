@@ -139,7 +139,7 @@ export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
 export function format(
 	dateTime: TimeStruct,
 	utcTime: TimeStruct,
-	localZone: TimeZone | null,
+	localZone: TimeZone | undefined | null,
 	formatString: string,
 	formatOptions: Partial<FormatOptions> = {}
 ): string {
@@ -188,7 +188,7 @@ export function format(
 				tokenResult = _formatSecond(dateTime, token);
 				break;
 			case TokenType.ZONE:
-				tokenResult = _formatZone(dateTime, utcTime, localZone, token);
+				tokenResult = _formatZone(dateTime, utcTime, localZone ? localZone : undefined, token);
 				break;
 			case TokenType.WEEK:
 				tokenResult = _formatWeek(dateTime, token);
@@ -480,7 +480,7 @@ function _formatSecond(dateTime: TimeStruct, token: Token): string {
  * @param token The token passed
  * @return string
  */
-function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZone | null, token: Token): string {
+function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZone | undefined, token: Token): string {
 	if (!zone) {
 		return "";
 	}

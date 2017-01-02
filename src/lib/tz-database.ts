@@ -1472,8 +1472,7 @@ interface MinMaxInfo {
  * Sanity check on data. Returns min/max values.
  */
 function validateData(data: any): MinMaxInfo {
-	const result: Partial<MinMaxInfo> = {
-	};
+	const result: Partial<MinMaxInfo> = {};
 
 	/* istanbul ignore if */
 	if (typeof(data) !== "object") {

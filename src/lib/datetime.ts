@@ -36,11 +36,11 @@ export function nowUtc(): DateTime {
  * Current date+time in the given time zone
  * @param timeZone	The desired time zone (optional, defaults to UTC).
  */
-export function now(timeZone: TimeZone | null = TimeZone.utc()): DateTime {
+export function now(timeZone: TimeZone | undefined | null = TimeZone.utc()): DateTime {
 	return DateTime.now(timeZone);
 }
 
-function convertToUtc(localTime: TimeStruct, fromZone?: TimeZone | null): TimeStruct {
+function convertToUtc(localTime: TimeStruct, fromZone?: TimeZone): TimeStruct {
 	if (fromZone) {
 		const offset: number = fromZone.offsetForZone(localTime);
 		return new TimeStruct(localTime.unixMillis - offset * 60000);
@@ -49,7 +49,7 @@ function convertToUtc(localTime: TimeStruct, fromZone?: TimeZone | null): TimeSt
 	}
 }
 
-function convertFromUtc(utcTime: TimeStruct, toZone?: TimeZone | null): TimeStruct {
+function convertFromUtc(utcTime: TimeStruct, toZone?: TimeZone): TimeStruct {
 	if (toZone) {
 		const offset: number = toZone.offsetForUtc(utcTime);
 		return toZone.normalizeZoneTime(new TimeStruct(utcTime.unixMillis + offset * 60000));
@@ -67,7 +67,7 @@ export class DateTime {
 	/**
 	 * UTC timestamp (lazily calculated)
 	 */
-	private _utcDate: TimeStruct | undefined;
+	private _utcDate?: TimeStruct;
 	private get utcDate(): TimeStruct {
 		if (!this._utcDate) {
 			this._utcDate = convertToUtc(this._zoneDate as TimeStruct, this._zone);
@@ -82,7 +82,7 @@ export class DateTime {
 	/**
 	 * Local timestamp (lazily calculated)
 	 */
-	private _zoneDate: TimeStruct | undefined;
+	private _zoneDate?: TimeStruct;
 	private get zoneDate(): TimeStruct {
 		if (!this._zoneDate) {
 			this._zoneDate = convertFromUtc(this._utcDate as TimeStruct, this._zone);
@@ -96,9 +96,9 @@ export class DateTime {
 
 	/**
 	 * Original time zone this instance was created for.
-	 * Can be NULL for unaware timestamps
+	 * Can be undefined for unaware timestamps
 	 */
-	private _zone: TimeZone | null;
+	private _zone?: TimeZone;
 
 	/**
 	 * Actual time source in use. Setting this property allows to
@@ -126,7 +126,7 @@ export class DateTime {
 	 * Current date+time in the given time zone
 	 * @param timeZone	The desired time zone (optional, defaults to UTC).
 	 */
-	public static now(timeZone: TimeZone | null = TimeZone.utc()): DateTime {
+	public static now(timeZone: TimeZone | null | undefined = TimeZone.utc()): DateTime {
 		return new DateTime(DateTime.timeSource.now(), DateFunctions.GetUTC, TimeZone.utc()).toZone(timeZone);
 	}
 
@@ -138,7 +138,7 @@ export class DateTime {
 	 * @param timeZone Time zone to assume that the excel value is in
 	 * @returns a DateTime
 	 */
-	public static fromExcel(n: number, timeZone?: TimeZone | null): DateTime {
+	public static fromExcel(n: number, timeZone?: TimeZone | null | undefined): DateTime {
 		assert(typeof n === "number", "fromExcel(): first parameter must be a number");
 		assert(!isNaN(n), "fromExcel(): first parameter must not be NaN");
 		assert(isFinite(n), "fromExcel(): first parameter must not be NaN");
@@ -159,7 +159,7 @@ export class DateTime {
 	public static exists(
 		year: number, month: number = 1, day: number = 1,
 		hour: number = 0, minute: number = 0, second: number = 0, millisecond: number = 0,
-		zone: TimeZone | null = null, allowPre1970: boolean = false
+		zone: TimeZone | null | undefined = undefined, allowPre1970: boolean = false
 	): boolean {
 		if (!isFinite(year) || !isFinite(month) || !isFinite(day)
 			|| !isFinite(hour) || !isFinite(minute) || !isFinite(second) || !isFinite(millisecond)) {
@@ -195,7 +195,7 @@ export class DateTime {
 	 *					Note that it is NOT CONVERTED to the time zone. Useful
 	 *					for strings without a time zone
 	 */
-	constructor(isoString: string, timeZone?: TimeZone | null);
+	constructor(isoString: string, timeZone?: TimeZone | null | undefined);
 	/**
 	 * Constructor. Parses string in given LDML format.
 	 * NOTE: does not handle eras/quarters/weeks/weekdays.
@@ -207,7 +207,7 @@ export class DateTime {
 	 *					Note that it is NOT CONVERTED to the time zone. Useful
 	 *					for strings without a time zone
 	 */
-	constructor(dateString: string, format: string, timeZone?: TimeZone | null);
+	constructor(dateString: string, format: string, timeZone?: TimeZone | null | undefined);
 	/**
 	 * Constructor. You provide a date, then you say whether to take the
 	 * date.getYear()/getXxx methods or the date.getUTCYear()/date.getUTCXxx methods,
@@ -219,13 +219,13 @@ export class DateTime {
 	 * @param date	A date object.
 	 * @param getters	Specifies which set of Date getters contains the date in the given time zone: the
 	 *					Date.getXxx() methods or the Date.getUTCXxx() methods.
-	 * @param timeZone	The time zone that the given date is assumed to be in (may be null for unaware dates)
+	 * @param timeZone	The time zone that the given date is assumed to be in (may be undefined or null for unaware dates)
 	 */
-	constructor(date: Date, getFuncs: DateFunctions, timeZone?: TimeZone | null);
+	constructor(date: Date, getFuncs: DateFunctions, timeZone?: TimeZone | null | undefined);
 	/**
 	 * Get a date from a TimeStruct
 	 */
-	constructor(tm: TimeStruct, timeZone?: TimeZone | null);
+	constructor(tm: TimeStruct, timeZone?: TimeZone | null | undefined);
 	/**
 	 * Constructor. Note that unlike JavaScript dates we require fields to be in normal ranges.
 	 * Use the add(duration) or sub(duration) for arithmetic.
@@ -236,18 +236,19 @@ export class DateTime {
 	 * @param minute	The minute of the hour [0-59]
 	 * @param second	The second of the minute [0-59]
 	 * @param millisecond	The millisecond of the second [0-999]
-	 * @param timeZone	The time zone, or null (for unaware dates)
+	 * @param timeZone	The time zone, or null/undefined (for unaware dates)
 	 */
 	constructor(
 		year: number, month: number, day: number,
 		hour?: number, minute?: number, second?: number, millisecond?: number,
-		timeZone?: TimeZone | null);
+		timeZone?: TimeZone | null | undefined
+	);
 	/**
 	 * Constructor
 	 * @param unixTimestamp	milliseconds since 1970-01-01T00:00:00.000
 	 * @param timeZone	the time zone that the timestamp is assumed to be in (usually UTC).
 	 */
-	constructor(unixTimestamp: number, timeZone?: TimeZone | null);
+	constructor(unixTimestamp: number, timeZone?: TimeZone | null | undefined);
 
 	/**
 	 * Constructor implementation, do not call
@@ -262,7 +263,7 @@ export class DateTime {
 				if (a2 === undefined || a2 === null || a2 instanceof TimeZone) {
 					// unix timestamp constructor
 					assert(typeof (a1) === "number", "DateTime.DateTime(): expect unixTimestamp to be a number");
-					this._zone = (typeof (a2) === "object" && a2 instanceof TimeZone ? <TimeZone>a2 : null);
+					this._zone = (typeof (a2) === "object" && a2 instanceof TimeZone ? <TimeZone>a2 : undefined);
 					if (this._zone) {
 						this._zoneDate = this._zone.normalizeZoneTime(new TimeStruct(math.roundSym(<number>a1)));
 					} else {
@@ -290,7 +291,7 @@ export class DateTime {
 					const tm = new TimeStruct({ year, month, day, hour, minute, second, milli });
 					assert(tm.validate(), `invalid date: ${tm.toString()}`);
 
-					this._zone = (typeof (timeZone) === "object" && timeZone instanceof TimeZone ? timeZone : null);
+					this._zone = (typeof (timeZone) === "object" && timeZone instanceof TimeZone ? timeZone : undefined);
 
 					// normalize local time (remove non-existing local time)
 					if (this._zone) {
@@ -305,13 +306,13 @@ export class DateTime {
 					// format string given
 					const dateString: string = <string>a1;
 					const formatString: string = <string>a2;
-					let zone: TimeZone | null = null;
+					let zone: TimeZone | undefined;
 					if (typeof a3 === "object" && a3 instanceof TimeZone) {
 						zone = <TimeZone>(a3);
 					}
 					const parsed = parseFuncs.parse(dateString, formatString, zone);
 					this._zoneDate = parsed.time;
-					this._zone = parsed.zone || null;
+					this._zone = parsed.zone;
 				} else {
 					const givenString = (<string>a1).trim();
 					const ss: string[] = DateTime._splitDateFromTimeZone(givenString);
@@ -319,7 +320,7 @@ export class DateTime {
 					if (a2 instanceof TimeZone) {
 						this._zone = <TimeZone>(a2);
 					} else {
-						this._zone = (ss[1].trim() ? TimeZone.zone(ss[1]) : null);
+						this._zone = (ss[1].trim() ? TimeZone.zone(ss[1]) : undefined);
 					}
 					// use our own ISO parsing because that it platform independent
 					// (free of Date quirks)
@@ -332,14 +333,14 @@ export class DateTime {
 			case "object": {
 				if (a1 instanceof TimeStruct) {
 					this._zoneDate = a1.clone();
-					this._zone = (a2 ? a2 : null);
+					this._zone = (a2 ? a2 : undefined);
 				} else if (a1 instanceof Date) {
 					assert(typeof (a2) === "number",
 						"DateTime.DateTime(): for a Date object a DateFunctions must be passed as second argument");
 					assert(!a3 || a3 instanceof TimeZone, "DateTime.DateTime(): timeZone should be a TimeZone object.");
 					const d: Date = <Date>(a1);
 					const dk: DateFunctions = <DateFunctions>(a2);
-					this._zone = (a3 ? a3 : null);
+					this._zone = (a3 ? a3 : undefined);
 					this._zoneDate = TimeStruct.fromDate(d, dk);
 					if (this._zone) {
 						this._zoneDate = this._zone.normalizeZoneTime(this._zoneDate);
@@ -369,9 +370,9 @@ export class DateTime {
 	}
 
 	/**
-	 * @return The time zone that the date is in. May be null for unaware dates.
+	 * @return The time zone that the date is in. May be undefined for unaware dates.
 	 */
-	public zone(): TimeZone | null {
+	public zone(): TimeZone | undefined {
 		return this._zone;
 	}
 
@@ -626,7 +627,7 @@ export class DateTime {
 	 * @param zone The new time zone
 	 * @return A new DateTime with the original timestamp and the new zone.
 	 */
-	public withZone(zone?: TimeZone | null): DateTime {
+	public withZone(zone?: TimeZone | null | undefined): DateTime {
 		return new DateTime(
 			this.year(), this.month(), this.day(),
 			this.hour(), this.minute(), this.second(), this.millisecond(),
@@ -639,7 +640,7 @@ export class DateTime {
 	 * Throws if this date does not have a time zone.
 	 * @return this (for chaining)
 	 */
-	public convert(zone?: TimeZone | null): DateTime {
+	public convert(zone?: TimeZone | null | undefined): DateTime {
 		if (zone) {
 			if (!this._zone) { // if-statement satisfies the compiler
 				assert(this._zone, "DateTime.toZone(): Cannot convert unaware date to an aware date");
@@ -659,7 +660,7 @@ export class DateTime {
 			if (!this._zoneDate) {
 				this._zoneDate = convertFromUtc(this._utcDate as TimeStruct, this._zone);
 			}
-			this._zone = null;
+			this._zone = undefined;
 			this._utcDate = undefined; // cause later zone -> utc conversion
 		}
 		return this;
@@ -671,10 +672,10 @@ export class DateTime {
 	 * Converting an unaware date to an aware date throws an exception. Use the constructor
 	 * if you really need to do that.
 	 *
-	 * @param zone	The new time zone. This may be null to create unaware date.
+	 * @param zone	The new time zone. This may be null or undefined to create unaware date.
 	 * @return The converted date
 	 */
-	public toZone(zone?: TimeZone | null): DateTime {
+	public toZone(zone?: TimeZone | null | undefined): DateTime {
 		if (zone) {
 			assert(this._zone, "DateTime.toZone(): Cannot convert unaware date to an aware date");
 			const result = new DateTime();
@@ -682,7 +683,7 @@ export class DateTime {
 			result._zone = zone;
 			return result;
 		} else {
-			return new DateTime(this.zoneDate, null);
+			return new DateTime(this.zoneDate, undefined);
 		}
 	}
 
@@ -702,7 +703,7 @@ export class DateTime {
 	 * @param timeZone Optional. Zone to convert to, default the zone the datetime is already in.
 	 * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
 	 */
-	public toExcel(timeZone?: TimeZone | null): number {
+	public toExcel(timeZone?: TimeZone | null | undefined): number {
 		let dt: DateTime = this;
 		if (timeZone && (!this._zone || !timeZone.equals(this._zone))) {
 			dt = this.toZone(timeZone);
@@ -807,7 +808,7 @@ export class DateTime {
 			const normalized = this._zone.normalizeZoneTime(localTm, direction);
 			return new DateTime(normalized, this._zone);
 		} else {
-			return new DateTime(localTm, null);
+			return new DateTime(localTm, undefined);
 		}
 	}
 

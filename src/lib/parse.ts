@@ -17,9 +17,9 @@ export interface AwareTimeStruct {
 	 */
 	time: TimeStruct;
 	/**
-	 * The time zone
+	 * The time zone (can be undefined)
 	 */
-	zone: TimeZone | null;
+	zone: TimeZone | undefined;
 }
 
 interface ParseNumberResult {
@@ -28,7 +28,7 @@ interface ParseNumberResult {
 }
 
 interface ParseZoneResult {
-	zone: TimeZone | null;
+	zone?: TimeZone;
 	remaining: string;
 }
 
@@ -57,7 +57,7 @@ export function parseable(dateTimeString: string, formatString: string, allowTra
  * @return string
  */
 export function parse(
-	dateTimeString: string, formatString: string, overrideZone?: TimeZone | null, allowTrailing: boolean = true
+	dateTimeString: string, formatString: string, overrideZone?: TimeZone | null | undefined, allowTrailing: boolean = true
 ): AwareTimeStruct {
 	if (!dateTimeString) {
 		throw new Error("no date given");
@@ -69,7 +69,7 @@ export function parse(
 		const tokenizer = new Tokenizer(formatString);
 		const tokens: Token[] = tokenizer.parseTokens();
 		const time: TimeComponentOpts = { year: -1 };
-		let zone: TimeZone | null = null;
+		let zone: TimeZone | undefined;
 		let pnr: ParseNumberResult;
 		let pzr: ParseZoneResult;
 		let remaining: string = dateTimeString;
@@ -138,7 +138,7 @@ export function parse(
 					break;
 			}
 		};
-		const result: AwareTimeStruct = { time: new TimeStruct(time), zone: (zone ? zone : null) };
+		const result: AwareTimeStruct = { time: new TimeStruct(time), zone };
 		if (!result.time.validate()) {
 			throw new Error("resulting date invalid");
 		}
@@ -186,7 +186,6 @@ function stripZone(s: string): ParseZoneResult {
 		throw new Error("no zone given");
 	}
 	const result: ParseZoneResult = {
-		zone: null,
 		remaining: s
 	};
 	let zoneString = "";
@@ -194,7 +193,9 @@ function stripZone(s: string): ParseZoneResult {
 		zoneString += result.remaining.charAt(0);
 		result.remaining = result.remaining.substr(1);
 	}
-	result.zone = TimeZone.zone(zoneString);
+	if (zoneString.trim()) {
+		result.zone = TimeZone.zone(zoneString);
+	}
 	return result;
 }
 

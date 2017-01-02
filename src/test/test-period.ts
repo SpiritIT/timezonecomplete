@@ -600,6 +600,12 @@ describe("Period", function(): void {
 				p.findNext(null as any as DateTime);
 			});
 		});
+		it("Should throw on undefined datetime", (): void => {
+			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
+			assert.throws(function (): void {
+				p.findNext(undefined as any as DateTime);
+			});
+		});
 		it("Should throw on non-integer count", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
 			assert.throws(function (): void {

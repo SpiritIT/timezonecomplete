@@ -38,8 +38,7 @@ export function zone(offset: number): TimeZone;
 /**
  * Time zone for an offset string or an IANA time zone string. Note that time zones are cached
  * so you don't necessarily get a new object each time.
- * @param s Empty string for no time zone (null is returned),
- *          "localtime" for local time,
+ * @param s "localtime" for local time,
  *          a TZ database time zone name (e.g. Europe/Amsterdam),
  *          or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
  *          https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
@@ -135,8 +134,7 @@ export class TimeZone {
 	/**
 	 * Time zone for an offset string or an IANA time zone string. Note that time zones are cached
 	 * so you don't necessarily get a new object each time.
-	 * @param s Empty string for no time zone (null is returned),
-	 *          "localtime" for local time,
+	 * @param s "localtime" for local time,
 	 *          a TZ database time zone name (e.g. Europe/Amsterdam),
 	 *          or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
 	 *          https://en.wikipedia.org/wiki/List_of_tz_database_time_zones

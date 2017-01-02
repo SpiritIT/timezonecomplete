@@ -216,7 +216,7 @@ describe("TzDatabase", (): void => {
 			expect(TzDatabase.instance().parseAtType("")).to.equal(AtType.Wall);
 		});
 		it("should work for null", (): void => {
-			expect(TzDatabase.instance().parseAtType("")).to.equal(AtType.Wall);
+			expect(TzDatabase.instance().parseAtType(null)).to.equal(AtType.Wall);
 		});
 		it("should default to Wall", (): void => {
 			expect(TzDatabase.instance().parseAtType("k")).to.equal(AtType.Wall);

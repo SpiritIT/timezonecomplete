@@ -22,8 +22,8 @@ export function min(d1: Duration, d2: Duration): Duration;
  * Returns the minimum of two DateTimes or Durations
  */
 export function min(d1: any, d2: any): any {
-	assert(d1, "first argument is null");
-	assert(d2, "first argument is null");
+	assert(d1, "first argument is falsy");
+	assert(d2, "first argument is falsy");
 	/* istanbul ignore next */
 	assert((d1 instanceof DateTime && d2 instanceof DateTime) || (d1 instanceof Duration && d2 instanceof Duration),
 		"Either two datetimes or two durations expected");
@@ -42,8 +42,8 @@ export function max(d1: Duration, d2: Duration): Duration;
  * Returns the maximum of two DateTimes or Durations
  */
 export function max(d1: any, d2: any): any {
-	assert(d1, "first argument is null");
-	assert(d2, "first argument is null");
+	assert(d1, "first argument is falsy");
+	assert(d2, "first argument is falsy");
 	/* istanbul ignore next */
 	assert((d1 instanceof DateTime && d2 instanceof DateTime) || (d1 instanceof Duration && d2 instanceof Duration),
 		"Either two datetimes or two durations expected");
@@ -54,7 +54,7 @@ export function max(d1: any, d2: any): any {
  * Returns the absolute value of a Duration
  */
 export function abs(d: Duration): Duration {
-	assert(d, "first argument is null");
+	assert(d, "first argument is falsy");
 	assert(d instanceof Duration, "first argument is not a Duration");
 	return d.abs();
 }
