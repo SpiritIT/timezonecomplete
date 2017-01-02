@@ -236,7 +236,7 @@ describe("DateTime", (): void => {
 			expect(d.minute()).to.equal(8);
 			expect(d.second()).to.equal(9);
 			expect(d.millisecond()).to.equal(10);
-			expect(d.zone().name()).to.equal("+00:00");
+			expect((d.zone() as TimeZone).name()).to.equal("+00:00");
 			expect(d.offset()).to.equal(0);
 		});
 		it("should parse zero-offset date", (): void => {
@@ -248,7 +248,7 @@ describe("DateTime", (): void => {
 			expect(d.minute()).to.equal(8);
 			expect(d.second()).to.equal(9);
 			expect(d.millisecond()).to.equal(10);
-			expect(d.zone().name()).to.equal("+00:00");
+			expect((d.zone() as TimeZone).name()).to.equal("+00:00");
 			expect(d.offset()).to.equal(0);
 		});
 		it("should parse positive-offset date", (): void => {
@@ -391,7 +391,7 @@ describe("DateTime", (): void => {
 			expect(d.minute()).to.equal(44);
 			expect(d.second()).to.equal(12);
 			expect(d.millisecond()).to.equal(233);
-			expect(d.zone().identical(TimeZone.utc())).to.equal(true);
+			expect((d.zone() as TimeZone).identical(TimeZone.utc())).to.equal(true);
 		});
 		it("should parse date with offset", (): void => {
 			const d = new DateTime("3/2/2015 23:44:12.233+02:30", "MM/dd/yyyy HH:mm:ss.SSSzzzz");
@@ -402,7 +402,7 @@ describe("DateTime", (): void => {
 			expect(d.minute()).to.equal(44);
 			expect(d.second()).to.equal(12);
 			expect(d.millisecond()).to.equal(233);
-			expect(d.zone().identical(TimeZone.zone("+02:30"))).to.equal(true);
+			expect((d.zone() as TimeZone).identical(TimeZone.zone("+02:30"))).to.equal(true);
 		});
 		it("should parse date with zone name", (): void => {
 			const d = new DateTime("3/2/2015 23:44:12.233 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS zzzz");
@@ -413,7 +413,7 @@ describe("DateTime", (): void => {
 			expect(d.minute()).to.equal(44);
 			expect(d.second()).to.equal(12);
 			expect(d.millisecond()).to.equal(233);
-			expect(d.zone().identical(TimeZone.zone("America/Chicago"))).to.equal(true);
+			expect((d.zone() as TimeZone).identical(TimeZone.zone("America/Chicago"))).to.equal(true);
 		});
 		it("should parse date with zeroes", (): void => {
 			const d = new DateTime("3/2/2015 06:00:00.000 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS zzzz");
@@ -424,7 +424,7 @@ describe("DateTime", (): void => {
 			expect(d.minute()).to.equal(0);
 			expect(d.second()).to.equal(0);
 			expect(d.millisecond()).to.equal(0);
-			expect(d.zone().identical(TimeZone.zone("America/Chicago"))).to.equal(true);
+			expect((d.zone() as TimeZone).identical(TimeZone.zone("America/Chicago"))).to.equal(true);
 		});
 	});
 

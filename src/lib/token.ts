@@ -1,6 +1,4 @@
 ﻿/**
- * Copyright(c) 2014 Spirit IT BV
- *
  * Functionality to parse a DateTime object to a string
  */
 
@@ -8,12 +6,14 @@
 
 export class Tokenizer {
 
+	private _formatString: string | undefined;
+
 	/**
 	 * Create a new tokenizer
-	 * @param _formatString (optional) Set the format string
+	 * @param formatString (optional) Set the format string
 	 */
-	constructor(private _formatString?: string) {
-
+	constructor(formatString?: string) {
+		this._formatString = formatString;
 	}
 
 	/**
@@ -54,6 +54,9 @@ export class Tokenizer {
 	 * @return Token[]
 	 */
 	parseTokens(): Token[] {
+		if (!this._formatString) {
+			return [];
+		}
 		let result: Token[] = [];
 
 		let currentToken: string = "";

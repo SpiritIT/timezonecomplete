@@ -865,7 +865,7 @@ export class TimeStruct {
  * @param compare Function that should return < 0 if given element is less than searched element etc
  * @return {Number} The insertion index of the element to look for
  */
-export function binaryInsertionIndex<T>(arr: T[], compare?: (a: T) => number): number {
+export function binaryInsertionIndex<T>(arr: T[], compare: (a: T) => number): number {
 	let minIndex = 0;
 	let maxIndex = arr.length - 1;
 	let currentIndex: number;

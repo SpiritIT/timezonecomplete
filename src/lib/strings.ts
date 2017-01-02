@@ -6,8 +6,6 @@
 
 "use strict";
 
-import assert from "./assert";
-
 /**
  * Pad a string by adding characters to the beginning.
  * @param s	the string to pad

@@ -13,7 +13,6 @@ import * as assert from "assert";
 import { expect } from "chai";
 
 import { DateTime, Duration, Period, PeriodDst, TimeSource, TimeUnit, TimeZone } from "../lib/index";
-import * as index from "../lib/index";
 
 // Fake time source
 class TestTimeSource implements TimeSource {
@@ -598,7 +597,7 @@ describe("Period", function(): void {
 		it("Should throw on null datetime", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
 			assert.throws(function (): void {
-				p.findNext(null);
+				p.findNext(null as any as DateTime);
 			});
 		});
 		it("Should throw on non-integer count", (): void => {
@@ -746,9 +745,10 @@ describe("Period", function(): void {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
 			expect(p.isBoundary(new DateTime("2014-01-02T02:00:01 Europe/Amsterdam"))).to.equal(false);
 		});
-		it("should return false for null date", (): void => {
+		it("should return false for null or undefined date", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.isBoundary(null)).to.equal(false);
+			expect(p.isBoundary(null as any as DateTime)).to.equal(false);
+			expect(p.isBoundary(undefined as any as DateTime)).to.equal(false);
 		});
 	});
 

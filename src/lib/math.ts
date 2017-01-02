@@ -12,10 +12,7 @@ import assert from "./assert";
  * @return true iff given argument is an integer number
  */
 export function isInt(n: number): boolean {
-	if (typeof (n) !== "number") {
-		return false;
-	}
-	if (isNaN(n)) {
+	if (n === null || !isFinite(n)) {
 		return false;
 	}
 	return (Math.floor(n) === n);

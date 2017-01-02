@@ -25,10 +25,10 @@ describe("globals", (): void => {
 		});
 		it("should throw on null input", (): void => {
 			assert.throws((): void => {
-				index.min(null, Duration.seconds(2));
+				index.min(null as any as  Duration, Duration.seconds(2));
 			});
 			assert.throws((): void => {
-				index.min(Duration.seconds(2), null);
+				index.min(Duration.seconds(2), null as any as Duration);
 			});
 		});
 	});
@@ -42,10 +42,10 @@ describe("globals", (): void => {
 		});
 		it("should throw on null input", (): void => {
 			assert.throws((): void => {
-				index.max(null, Duration.seconds(2));
+				index.max(null as any as Duration, Duration.seconds(2));
 			});
 			assert.throws((): void => {
-				index.max(Duration.seconds(2), null);
+				index.max(Duration.seconds(2), null as any as Duration);
 			});
 		});
 	});

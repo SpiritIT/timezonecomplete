@@ -17,36 +17,36 @@ export interface FormatOptions {
 	/**
 	 * The letter indicating a quarter e.g. "Q" (becomes Q1, Q2, Q3, Q4)
 	 */
-	quarterLetter?: string;
+	quarterLetter: string;
 	/**
 	 * The word for 'quarter'
 	 */
-	quarterWord?: string;
+	quarterWord: string;
 	/**
 	 * Quarter abbreviations e.g. 1st, 2nd, 3rd, 4th
 	 */
-	quarterAbbreviations?: string[];
+	quarterAbbreviations: string[];
 
 	/**
 	 * Month names
 	 */
-	longMonthNames?: string[];
+	longMonthNames: string[];
 	/**
 	 * Three-letter month names
 	 */
-	shortMonthNames?: string[];
+	shortMonthNames: string[];
 	/**
 	 * Month letters
 	 */
-	monthLetters?: string[];
+	monthLetters: string[];
 
 	/**
 	 * Week day names, starting with sunday
 	 */
-	longWeekdayNames?: string[];
-	shortWeekdayNames?: string[];
-	weekdayTwoLetters?: string[];
-	weekdayLetters?: string[];
+	longWeekdayNames: string[];
+	shortWeekdayNames: string[];
+	weekdayTwoLetters: string[];
+	weekdayLetters: string[];
 }
 
 export const LONG_MONTH_NAMES =
@@ -101,23 +101,16 @@ export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
 export function format(
 	dateTime: TimeStruct,
 	utcTime: TimeStruct,
-	localZone: TimeZone,
+	localZone: TimeZone | null,
 	formatString: string,
-	formatOptions: FormatOptions = {}
+	formatOptions: Partial<FormatOptions> = {}
 ): string {
-	// merge format options with default format options
-	// typecast to prevent error TS7017: Index signature of object type implicitly has an 'any' type.
-	const givenFormatOptions: any = formatOptions;
-	const defaultFormatOptions: any = DEFAULT_FORMAT_OPTIONS;
-	const mergedFormatOptions: any = {};
+	const mergedFormatOptions: Partial<FormatOptions> = {};
 	for (const name in DEFAULT_FORMAT_OPTIONS) {
 		if (DEFAULT_FORMAT_OPTIONS.hasOwnProperty(name)) {
-			const givenFormatOption: any = givenFormatOptions[name];
-			const defaultFormatOption: any = defaultFormatOptions[name];
-			mergedFormatOptions[name] = givenFormatOption || defaultFormatOption;
+			mergedFormatOptions[name] = (formatOptions[name] !== undefined ? formatOptions[name] : DEFAULT_FORMAT_OPTIONS[name]);
 		}
 	}
-	formatOptions = mergedFormatOptions;
 
 	const tokenizer = new Tokenizer(formatString);
 	const tokens: Token[] = tokenizer.parseTokens();
@@ -133,19 +126,19 @@ export function format(
 				tokenResult = _formatYear(dateTime, token);
 				break;
 			case TokenType.QUARTER:
-				tokenResult = _formatQuarter(dateTime, token, formatOptions);
+				tokenResult = _formatQuarter(dateTime, token, mergedFormatOptions as FormatOptions);
 				break;
 			case TokenType.MONTH:
-				tokenResult = _formatMonth(dateTime, token, formatOptions);
+				tokenResult = _formatMonth(dateTime, token, mergedFormatOptions as FormatOptions);
 				break;
 			case TokenType.DAY:
 				tokenResult = _formatDay(dateTime, token);
 				break;
 			case TokenType.WEEKDAY:
-				tokenResult = _formatWeekday(dateTime, token, formatOptions);
+				tokenResult = _formatWeekday(dateTime, token, mergedFormatOptions as FormatOptions);
 				break;
 			case TokenType.DAYPERIOD:
-				tokenResult = _formatDayPeriod(dateTime, token);
+				tokenResult = _formatDayPeriod(dateTime);
 				break;
 			case TokenType.HOUR:
 				tokenResult = _formatHour(dateTime, token);
@@ -334,7 +327,9 @@ function _formatWeekday(dateTime: TimeStruct, token: Token, formatOptions: Forma
 		case 2:
 			if (token.symbol === "e") {
 				return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.unixMillis).toString(), token.length, "0");
-			} // No break, this is intentional fallthrough!
+			} else {
+				return formatOptions.shortWeekdayNames[weekDayNumber];
+			}
 		case 3:
 			return formatOptions.shortWeekdayNames[weekDayNumber];
 		case 4:
@@ -360,7 +355,7 @@ function _formatWeekday(dateTime: TimeStruct, token: Token, formatOptions: Forma
  * @param token The token passed
  * @return string
  */
-function _formatDayPeriod(dateTime: TimeStruct, token: Token): string {
+function _formatDayPeriod(dateTime: TimeStruct): string {
 	return (dateTime.hour < 12 ? "AM" : "PM");
 }
 
@@ -447,7 +442,7 @@ function _formatSecond(dateTime: TimeStruct, token: Token): string {
  * @param token The token passed
  * @return string
  */
-function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZone, token: Token): string {
+function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZone | null, token: Token): string {
 	if (!zone) {
 		return "";
 	}
@@ -538,10 +533,10 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 					}
 			}
 		case "X":
-			if (offset === 0) {
+		case "x":
+			if (token.symbol === "X" && offset === 0) {
 				return "Z";
 			}
-		case "x":
 			switch (token.length) {
 				case 1:
 					result = offsetHoursString;

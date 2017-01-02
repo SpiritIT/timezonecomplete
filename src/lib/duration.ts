@@ -631,10 +631,6 @@ export class Duration {
 	 * Return this % unit, always positive
 	 */
 	private _part(unit: TimeUnit): number {
-		/* istanbul ignore if */
-		if (unit === TimeUnit.Year) {
-			return Math.floor(Math.abs(this.as(TimeUnit.Year)));
-		}
 		let nextUnit: TimeUnit;
 		// note not all units are used here: Weeks and Years are ruled out
 		switch (unit) {
@@ -644,6 +640,8 @@ export class Duration {
 			case TimeUnit.Hour: nextUnit = TimeUnit.Day; break;
 			case TimeUnit.Day: nextUnit = TimeUnit.Month; break;
 			case TimeUnit.Month: nextUnit = TimeUnit.Year; break;
+			default:
+				return Math.floor(Math.abs(this.as(TimeUnit.Year)));
 		}
 
 		const msecs = (basics.timeUnitToMilliseconds(this._unit) * Math.abs(this._amount)) % basics.timeUnitToMilliseconds(nextUnit);

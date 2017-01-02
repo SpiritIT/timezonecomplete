@@ -8,7 +8,6 @@ import sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: false });
 
-import * as assert from "assert";
 import { expect } from "chai";
 
 import * as parse from "../lib/parse";

@@ -102,7 +102,6 @@ export class Period {
 	 */
 	private _intDst: PeriodDst;
 
-
 	/**
 	 * Constructor
 	 * LIMITATION: if dst equals RegularLocalTime, and unit is Second, Minute or Hour,
@@ -120,7 +119,8 @@ export class Period {
 	constructor(
 		reference: DateTime,
 		interval: Duration,
-		dst?: PeriodDst);
+		dst?: PeriodDst
+	);
 	/**
 	 * Constructor
 	 * LIMITATION: if dst equals RegularLocalTime, and unit is Second, Minute or Hour,
@@ -140,7 +140,8 @@ export class Period {
 		reference: DateTime,
 		amount: number,
 		unit: TimeUnit,
-		dst?: PeriodDst);
+		dst?: PeriodDst
+	);
 	/**
 	 * Constructor implementation. See other constructors for explanation.
 	 */
@@ -149,7 +150,7 @@ export class Period {
 		amountOrInterval: any,
 		unitOrDst?: any,
 		givenDst?: PeriodDst
-		) {
+	) {
 
 		let interval: Duration;
 		let dst: PeriodDst = PeriodDst.RegularLocalTime;
@@ -159,7 +160,7 @@ export class Period {
 		} else {
 			assert(typeof unitOrDst === "number" && unitOrDst >= 0 && unitOrDst < TimeUnit.MAX, "Invalid unit");
 			interval = new Duration(<number>amountOrInterval, <TimeUnit>unitOrDst);
-			dst = givenDst;
+			dst = givenDst as PeriodDst;
 		}
 		if (typeof dst !== "number") {
 			dst = PeriodDst.RegularLocalTime;
@@ -269,7 +270,6 @@ export class Period {
 		let periods: number;
 		let diff: number;
 		let newYear: number;
-		let newMonth: number;
 		let remainder: number;
 		let imax: number;
 		let imin: number;
@@ -730,8 +730,10 @@ export class Period {
 		if (!occurrence) {
 			return false;
 		}
-		assert(!!this._intReference.zone() === !!occurrence.zone(),
-			"The occurrence and referenceDate must both be aware or unaware");
+		assert(
+			!!this._intReference.zone() === !!occurrence.zone(),
+			"The occurrence and referenceDate must both be aware or unaware"
+		);
 		return (this.findFirst(occurrence.sub(Duration.milliseconds(1))).equals(occurrence));
 	}
 
@@ -745,12 +747,14 @@ export class Period {
 		if (!this.isBoundary(other._reference) || !this._intInterval.equals(other._intInterval)) {
 			return false;
 		}
-		const thisIsRegular = (this._intDst === PeriodDst.RegularIntervals || !this._reference.zone() || this._reference.zone().isUtc());
-		const otherIsRegular = (other._intDst === PeriodDst.RegularIntervals || !other._reference.zone() || other._reference.zone().isUtc());
+		const refZone = this._reference.zone();
+		const otherZone = other._reference.zone();
+		const thisIsRegular = (this._intDst === PeriodDst.RegularIntervals || !refZone || refZone.isUtc());
+		const otherIsRegular = (other._intDst === PeriodDst.RegularIntervals || !otherZone || otherZone.isUtc());
 		if (thisIsRegular && otherIsRegular) {
 			return true;
 		}
-		if (this._intDst === other._intDst && this._reference.zone().equals(other._reference.zone())) {
+		if (this._intDst === other._intDst && refZone && otherZone && refZone.equals(otherZone)) {
 			return true;
 		}
 		return false;
@@ -831,9 +835,11 @@ export class Period {
 	 * (i.e. if the reference time zone has DST)
 	 */
 	private _dstRelevant(): boolean {
-		return (!!this._reference.zone()
-			&& this._reference.zone().kind() === TimeZoneKind.Proper
-			&& this._reference.zone().hasDst());
+		let zone = this._reference.zone();
+		return !!(zone
+			&& zone.kind() === TimeZoneKind.Proper
+			&& zone.hasDst()
+		);
 	}
 
 	/**

@@ -132,10 +132,6 @@ describe("TimeZone", (): void => {
 	});
 
 	describe("zone(string)", (): void => {
-		it("should return NULL for an empty string", (): void => {
-			const t: TimeZone = TimeZone.zone("");
-			expect(t).to.be.null;
-		});
 		it("should create a time zone for a positive ISO offset", (): void => {
 			const t: TimeZone = TimeZone.zone("+01:30");
 			expect(t.offsetForUtc(2014, 1, 1, 1, 2, 3, 4)).to.equal(90);
@@ -474,7 +470,7 @@ describe("TimeZone", (): void => {
 	});
 
 	describe("clone()", (): void => {
-		it("should NOT ACTUALLY CLONE because time zones are cached", (): void => {
+		it("should not actually clone because time zones are cached", (): void => {
 			const p = TimeZone.zone("Europe/Amsterdam");
 			const q = p.clone();
 			expect(p).to.equal(q);

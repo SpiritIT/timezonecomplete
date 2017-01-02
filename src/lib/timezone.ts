@@ -156,15 +156,11 @@ export class TimeZone {
 		switch (typeof (a)) {
 			case "string": {
 				let s = <string>a;
-				if (s.trim().length === 0) {
-					return null; // no time zone
-				} else {
-					if (s.indexOf("without DST") >= 0) {
-						dst = false;
-						s = s.slice(0, s.indexOf("without DST") - 1);
-					}
-					name = TimeZone._normalizeString(s);
+				if (s.indexOf("without DST") >= 0) {
+					dst = false;
+					s = s.slice(0, s.indexOf("without DST") - 1);
 				}
+				name = TimeZone._normalizeString(s);
 			} break;
 			case "number": {
 				const offset: number = <number>a;

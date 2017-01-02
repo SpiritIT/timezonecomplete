@@ -13,7 +13,6 @@ import { TimeComponentOpts, TimeStruct, TimeUnit, WeekDay } from "./basics";
 import * as basics from "./basics";
 import { Duration } from "./duration";
 import * as math from "./math";
-import * as util from "util";
 
 /**
  * Type of rule TO column value
@@ -234,7 +233,7 @@ export class RuleInfo {
 	 * @param standardOffset	The standard offset for the timezone without DST
 	 * @param prevRule	The previous rule
 	 */
-	public transitionTimeUtc(year: number, standardOffset: Duration, prevRule: RuleInfo): number {
+	public transitionTimeUtc(year: number, standardOffset: Duration, prevRule?: RuleInfo): number {
 		assert(this.applicable(year), "Rule not applicable in given year");
 		const unixMillis = this.effectiveDate(year).unixMillis;
 
@@ -355,9 +354,9 @@ export class ZoneInfo {
 		/**
 		 * Until timestamp in unix utc millis. The zone info is valid up to
 		 * and excluding this timestamp.
-		 * Note this value can be NULL (for the first rule)
+		 * Note this value can be undefined (for the first rule)
 		 */
-		public until: number
+		public until?: number
 	) {
 		if (this.ruleOffset) {
 			this.ruleOffset = this.ruleOffset.convert(basics.TimeUnit.Hour);
@@ -461,7 +460,7 @@ export class TzDatabase {
 	/**
 	 * Single instance member
 	 */
-	private static _instance: TzDatabase = null;
+	private static _instance?: TzDatabase;
 
 	/**
 	 * (re-) initialize timezonecomplete with time zone data
@@ -471,19 +470,9 @@ export class TzDatabase {
 	 */
 	public static init(data?: any | any[]): void {
 		if (data) {
-			TzDatabase._instance = undefined;
+			TzDatabase._instance = undefined; // needed for assert in constructor
 			TzDatabase._instance = new TzDatabase(Array.isArray(data) ? data : [data]);
 		} else {
-			TzDatabase._instance = undefined;
-			TzDatabase.instance();
-		}
-	}
-
-	/**
-	 * Single instance of this database
-	 */
-	public static instance(): TzDatabase {
-		if (!TzDatabase._instance) {
 			const data: any[] = [];
 			// try to find TZ data in global variables
 			const g: any = (global ? global : window);
@@ -519,8 +508,6 @@ export class TzDatabase {
 						"tzdata-southamerica",
 						"tzdata-systemv"
 					];
-					const existing: string[] = [];
-					const existingPaths: string[] = [];
 					moduleNames.forEach((moduleName: string): void => {
 						try {
 							const d = require(moduleName);
@@ -538,7 +525,16 @@ export class TzDatabase {
 			}
 			TzDatabase._instance = new TzDatabase(data);
 		}
-		return TzDatabase._instance;
+	}
+
+	/**
+	 * Single instance of this database
+	 */
+	public static instance(): TzDatabase {
+		if (!TzDatabase._instance) {
+			TzDatabase.init();
+		}
+		return TzDatabase._instance as TzDatabase;
 	}
 
 	/**
@@ -608,7 +604,7 @@ export class TzDatabase {
 	public minDstSave(zoneName?: string): Duration {
 		if (zoneName) {
 			const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-			let result: Duration = null;
+			let result: Duration | undefined;
 			const ruleNames: string[] = [];
 			for (let i = 0; i < zoneInfos.length; ++i) {
 				const zoneInfo = zoneInfos[i];
@@ -653,7 +649,7 @@ export class TzDatabase {
 	public maxDstSave(zoneName?: string): Duration {
 		if (zoneName) {
 			const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-			let result: Duration = null;
+			let result: Duration | undefined;
 			const ruleNames: string[] = [];
 			for (let i = 0; i < zoneInfos.length; ++i) {
 				const zoneInfo = zoneInfos[i];
@@ -691,11 +687,12 @@ export class TzDatabase {
 	}
 
 	/**
-	 * First DST change moment AFTER the given UTC date in UTC milliseconds, within one year
+	 * First DST change moment AFTER the given UTC date in UTC milliseconds, within one year,
+	 * returns undefined if no such change
 	 */
-	public nextDstChange(zoneName: string, utcTime: number): number;
-	public nextDstChange(zoneName: string, utcTime: TimeStruct): number;
-	public nextDstChange(zoneName: string, a: TimeStruct | number): number {
+	public nextDstChange(zoneName: string, utcTime: number): number | undefined;
+	public nextDstChange(zoneName: string, utcTime: TimeStruct): number | undefined;
+	public nextDstChange(zoneName: string, a: TimeStruct | number): number | undefined {
 		let zoneInfo: ZoneInfo;
 		const utcTime: TimeStruct = (typeof a === "number" ? new TimeStruct(a) : a);
 
@@ -704,10 +701,10 @@ export class TzDatabase {
 		const relevantZoneInfos: ZoneInfo[] = [];
 		const rangeStart: number = utcTime.unixMillis;
 		const rangeEnd: number = rangeStart + 365 * 86400E3;
-		let prevEnd: number = null;
+		let prevEnd: number | undefined;
 		for (let i = 0; i < allZoneInfos.length; ++i) {
 			zoneInfo = allZoneInfos[i];
-			if ((prevEnd === null || prevEnd < rangeEnd) && (zoneInfo.until === null || zoneInfo.until > rangeStart)) {
+			if ((prevEnd === undefined || prevEnd < rangeEnd) && (zoneInfo.until === undefined || zoneInfo.until > rangeStart)) {
 				relevantZoneInfos.push(zoneInfo);
 			}
 			prevEnd = zoneInfo.until;
@@ -727,7 +724,7 @@ export class TzDatabase {
 		});
 
 		// find the first after the given date that has a different offset
-		let prevSave: Duration = null;
+		let prevSave: Duration | undefined;
 		for (let i = 0; i < transitions.length; ++i) {
 			const transition = transitions[i];
 			if (!prevSave || !prevSave.equals(transition.offset)) {
@@ -737,6 +734,8 @@ export class TzDatabase {
 			}
 			prevSave = transition.offset;
 		}
+
+		return undefined;
 	}
 
 	/**
@@ -839,7 +838,7 @@ export class TzDatabase {
 	 */
 	public totalOffset(zoneName: string, utcTime: TimeStruct | number): Duration {
 		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
-		let dstOffset: Duration = null;
+		let dstOffset: Duration;
 
 		switch (zoneInfo.ruleType) {
 			case RuleType.None: {
@@ -850,7 +849,10 @@ export class TzDatabase {
 			} break;
 			case RuleType.RuleName: {
 				dstOffset = this.dstOffsetForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
-			}
+			} break;
+			default: // cannot happen, but the compiler doesnt realize it
+				dstOffset = Duration.minutes(0);
+				break;
 		}
 
 		return dstOffset.add(zoneInfo.gmtoff);
@@ -903,7 +905,7 @@ export class TzDatabase {
 		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 		for (let i = 0; i < zoneInfos.length; ++i) {
 			const zoneInfo = zoneInfos[i];
-			if (zoneInfo.until === null || zoneInfo.until + zoneInfo.gmtoff.milliseconds() > unixMillis) {
+			if (zoneInfo.until === undefined || zoneInfo.until + zoneInfo.gmtoff.milliseconds() > unixMillis) {
 				return zoneInfo.gmtoff.clone();
 			}
 		}
@@ -940,8 +942,8 @@ export class TzDatabase {
 		const transitions: Transition[] = this.getTransitionsTotalOffsets(
 			zoneName, normalizedTm.components.year - 1, normalizedTm.components.year + 1
 		);
-		let prev: Transition = null;
-		let prevPrev: Transition = null;
+		let prev: Transition | undefined;
+		let prevPrev: Transition | undefined;
 		for (let i = 0; i < transitions.length; ++i) {
 			const transition = transitions[i];
 			if (transition.at + transition.offset.milliseconds() > normalizedTm.unixMillis) {
@@ -992,7 +994,7 @@ export class TzDatabase {
 		);
 
 		// find the last prior to given date
-		let offset: Duration = null;
+		let offset: Duration | undefined;
 		for (let i = transitions.length - 1; i >= 0; i--) {
 			const transition = transitions[i];
 			if (transition.at <= ts.unixMillis) {
@@ -1026,7 +1028,7 @@ export class TzDatabase {
 		);
 
 		// find the last prior to given date
-		let letter: string = null;
+		let letter: string | undefined;
 		for (let i = transitions.length - 1; i >= 0; i--) {
 			const transition = transitions[i];
 			if (transition.at <= ts.unixMillis) {
@@ -1061,7 +1063,7 @@ export class TzDatabase {
 		const result: Transition[] = [];
 
 		for (let y = fromYear; y <= toYear; y++) {
-			let prevInfo: RuleInfo = null;
+			let prevInfo: RuleInfo | undefined;
 			for (let i = 0; i < ruleInfos.length; i++) {
 				const ruleInfo: RuleInfo = ruleInfos[i];
 				if (ruleInfo.applicable(y)) {
@@ -1100,21 +1102,20 @@ export class TzDatabase {
 
 		const result: Transition[] = [];
 
-		let prevZone: ZoneInfo = null;
-		let prevUntilYear: number;
+		let prevZone: ZoneInfo | undefined;
+		let prevUntilYear: number | undefined;
 		let prevStdOffset: Duration = Duration.hours(0);
 		let prevDstOffset: Duration = Duration.hours(0);
 		let prevLetter: string = "";
 		for (let i = 0; i < zoneInfos.length; ++i) {
 			const zoneInfo = zoneInfos[i];
-			const untilYear: number = zoneInfo.until ? new TimeStruct(zoneInfo.until).components.year : toYear + 1;
-			var stdOffset: Duration = prevStdOffset;
-			var dstOffset: Duration = prevDstOffset;
-			var letter: string = prevLetter;
+			const untilYear: number = zoneInfo.until !== undefined ? new TimeStruct(zoneInfo.until).components.year : toYear + 1;
+			let stdOffset: Duration = prevStdOffset;
+			let dstOffset: Duration = prevDstOffset;
+			let letter: string = prevLetter;
 
 			// zone applicable?
-			if ((prevZone === null || prevZone.until < endMillis - 1)
-				&& (zoneInfo.until === null || zoneInfo.until >= startMillis)) {
+			if ((!prevZone || prevZone.until < endMillis - 1) && (zoneInfo.until === undefined || zoneInfo.until >= startMillis)) {
 
 				stdOffset = zoneInfo.gmtoff;
 
@@ -1134,8 +1135,8 @@ export class TzDatabase {
 							const ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
 							for (let j = 0; j < ruleInfos.length; ++j) {
 								const ruleInfo = ruleInfos[j];
-								if (ruleInfo.applicable(prevUntilYear)) {
-									if (ruleInfo.transitionTimeUtc(prevUntilYear, stdOffset, null) === prevZone.until) {
+								if (typeof prevUntilYear === "number" && ruleInfo.applicable(prevUntilYear)) {
+									if (ruleInfo.transitionTimeUtc(prevUntilYear, stdOffset, undefined) === prevZone.until) {
 										dstOffset = ruleInfo.save;
 										letter = ruleInfo.letter;
 									}
@@ -1146,7 +1147,7 @@ export class TzDatabase {
 				}
 
 				// add a transition for the zone transition
-				const at: number = (prevZone ? prevZone.until : startMillis);
+				const at: number = (prevZone && prevZone.until !== undefined ? prevZone.until : startMillis);
 				result.push(new Transition(at, stdOffset.add(dstOffset), letter));
 
 				// add transitions for the zone rules in the range
@@ -1190,7 +1191,7 @@ export class TzDatabase {
 		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 		for (let i = 0; i < zoneInfos.length; ++i) {
 			const zoneInfo = zoneInfos[i];
-			if (zoneInfo.until === null || zoneInfo.until > unixMillis) {
+			if (zoneInfo.until === undefined || zoneInfo.until > unixMillis) {
 				return zoneInfo;
 			}
 		}
@@ -1246,9 +1247,9 @@ export class TzDatabase {
 		for (let i: number = 0; i < zoneEntries.length; ++i) {
 			const zoneEntry = zoneEntries[i];
 			const ruleType: RuleType = this.parseRuleType(zoneEntry[1]);
-			let until: number = math.filterFloat(zoneEntry[3]);
+			let until: number | undefined = math.filterFloat(zoneEntry[3]);
 			if (isNaN(until)) {
-				until = null;
+				until = undefined;
 			}
 
 			result.push(new ZoneInfo(
@@ -1262,15 +1263,15 @@ export class TzDatabase {
 		}
 
 		result.sort((a: ZoneInfo, b: ZoneInfo): number => {
-			// sort null last
+			// sort undefined last
 			/* istanbul ignore if */
-			if (a.until === null && b.until === null) {
+			if (a.until === undefined && b.until === undefined) {
 				return 0;
 			}
-			if (a.until !== null && b.until === null) {
+			if (a.until !== undefined && b.until === undefined) {
 				return -1;
 			}
-			if (a.until === null && b.until !== null) {
+			if (a.until === undefined && b.until !== undefined) {
 				return 1;
 			}
 			return (a.until - b.until);
@@ -1471,11 +1472,7 @@ interface MinMaxInfo {
  * Sanity check on data. Returns min/max values.
  */
 function validateData(data: any): MinMaxInfo {
-	const result: MinMaxInfo = {
-		minDstSave: null,
-		maxDstSave: null,
-		minGmtOff: null,
-		maxGmtOff: null
+	const result: Partial<MinMaxInfo> = {
 	};
 
 	/* istanbul ignore if */
@@ -1541,10 +1538,10 @@ function validateData(data: any): MinMaxInfo {
 					if (typeof entry[3] === "string" && isNaN(math.filterFloat(entry[3]))) {
 						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" fourth column does not contain a number");
 					}
-					if (result.maxGmtOff === null || gmtoff > result.maxGmtOff) {
+					if (result.maxGmtOff === undefined || gmtoff > result.maxGmtOff) {
 						result.maxGmtOff = gmtoff;
 					}
-					if (result.minGmtOff === null || gmtoff < result.minGmtOff) {
+					if (result.minGmtOff === undefined || gmtoff < result.minGmtOff) {
 						result.minGmtOff = gmtoff;
 					}
 				}
@@ -1625,10 +1622,10 @@ function validateData(data: any): MinMaxInfo {
 					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][6] does not contain a valid number");
 				}
 				if (save !== 0) {
-					if (result.maxDstSave === null || save > result.maxDstSave) {
+					if (result.maxDstSave === undefined || save > result.maxDstSave) {
 						result.maxDstSave = save;
 					}
-					if (result.minDstSave === null || save < result.minDstSave) {
+					if (result.minDstSave === undefined || save < result.minDstSave) {
 						result.minDstSave = save;
 					}
 				}
@@ -1636,5 +1633,5 @@ function validateData(data: any): MinMaxInfo {
 		}
 	}
 
-	return result;
+	return result as MinMaxInfo;
 }

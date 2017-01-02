@@ -24,11 +24,11 @@ describe("isInt()", (): void => {
 		expect(math.isInt(0.1)).to.equal(false);
 		expect(math.isInt(-1.1)).to.equal(false);
 	});
-	it("should return false for NaN", (): void => {
+	it("should return false for NaN, null, undefined, infinity", (): void => {
 		expect(math.isInt(NaN)).to.equal(false);
-	});
-	it("should return false for null", (): void => {
-		expect(math.isInt(null)).to.equal(false);
+		expect(math.isInt(Infinity)).to.equal(false);
+		expect(math.isInt(null as any as number)).to.equal(false);
+		expect(math.isInt(undefined as any as number)).to.equal(false);
 	});
 });
 

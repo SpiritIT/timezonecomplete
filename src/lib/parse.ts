@@ -6,7 +6,6 @@
 
 import { TimeComponentOpts, TimeStruct } from "./basics";
 import { Tokenizer, Token, DateTimeTokenType as TokenType } from "./token";
-import * as strings from "./strings";
 import { TimeZone } from "./timezone";
 
 /**
@@ -20,7 +19,7 @@ export interface AwareTimeStruct {
 	/**
 	 * The time zone
 	 */
-	zone?: TimeZone;
+	zone: TimeZone | null;
 }
 
 interface ParseNumberResult {
@@ -29,7 +28,7 @@ interface ParseNumberResult {
 }
 
 interface ParseZoneResult {
-	zone: TimeZone;
+	zone: TimeZone | null;
 	remaining: string;
 }
 
@@ -43,7 +42,7 @@ interface ParseZoneResult {
  */
 export function parseable(dateTimeString: string, formatString: string, allowTrailing: boolean = true): boolean {
 	try {
-		parse(dateTimeString, formatString, null, allowTrailing);
+		parse(dateTimeString, formatString, undefined, allowTrailing);
 		return true;
 	} catch (e) {
 		return false;
@@ -58,7 +57,7 @@ export function parseable(dateTimeString: string, formatString: string, allowTra
  * @return string
  */
 export function parse(
-	dateTimeString: string, formatString: string, overrideZone?: TimeZone, allowTrailing: boolean = true
+	dateTimeString: string, formatString: string, overrideZone?: TimeZone | null, allowTrailing: boolean = true
 ): AwareTimeStruct {
 	if (!dateTimeString) {
 		throw new Error("no date given");
@@ -70,13 +69,12 @@ export function parse(
 		const tokenizer = new Tokenizer(formatString);
 		const tokens: Token[] = tokenizer.parseTokens();
 		const time: TimeComponentOpts = { year: -1 };
-		let zone: TimeZone;
+		let zone: TimeZone | null = null;
 		let pnr: ParseNumberResult;
 		let pzr: ParseZoneResult;
 		let remaining: string = dateTimeString;
 		for (let i = 0; i < tokens.length; ++i) {
 			const token = tokens[i];
-			let tokenResult: string;
 			switch (token.type) {
 				case TokenType.ERA:
 					// nothing
@@ -140,7 +138,7 @@ export function parse(
 					break;
 			}
 		};
-		const result = { time: new TimeStruct(time), zone: zone || null };
+		const result: AwareTimeStruct = { time: new TimeStruct(time), zone: (zone ? zone : null) };
 		if (!result.time.validate()) {
 			throw new Error("resulting date invalid");
 		}

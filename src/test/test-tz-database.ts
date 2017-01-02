@@ -16,7 +16,6 @@ import {
 	AtType, Duration, NormalizeOption, OnType, RuleType, RuleInfo,
 	ToType, TimeStruct, Transition, TzDatabase, ZoneInfo, WeekDay
 } from "../lib/index";
-import * as index from "../lib/index";
 
 // inject test data into TzDatabase
 /* tslint:disable */
@@ -273,8 +272,7 @@ describe("TzDatabase", (): void => {
 					RuleType.RuleName,
 					Duration.hours(0),
 					"EU",
-					"CE%sT",
-					null
+					"CE%sT"
 				)
 			]));
 		});
@@ -434,7 +432,7 @@ describe("TzDatabase", (): void => {
 
 	describe("getTransitionsTotalOffsets()", (): void => {
 		it("should work for UTC", (): void => {
-			expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Etc/GMT", 2013, 2014))).
+			expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Etc/UTC", 2013, 2014))).
 				to.equal(util.inspect([
 					new Transition((TimeStruct.fromComponents(2013, 1, 1, 0, 0, 0, 0)).unixMillis, Duration.hours(0), ""),
 				]));
