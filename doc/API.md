@@ -427,7 +427,7 @@ var africaDoualaDate = amsterdamDate.toZone("Africa/Douala");
 var error = naiveDate.toZone("Europe/Amsterdam"); // ERROR! THROWS
 
 // Other way around is ok
-var ok = amsterdamDate.toZone(null); // returns naive date
+var ok = amsterdamDate.toZone(undefined); // returns naive date
 
 // In-place time zone conversion
 var d = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
@@ -460,8 +460,8 @@ tc.DateTime.exists(2015, 3, 29, 3, 0, 0, 0, TimeZone.zone("Europe/Amsterdam")); 
 
 // Pre-1970 dates: you can allow or disallow them with the last boolean parameter
 // as the IANA time zone database is not reliable prior to 1970
-tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, null, false); // false
-tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, null, true); // true
+tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, undefined, false); // false
+tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, undefined, true); // true
 tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), false); // false
 tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), true); // true
 

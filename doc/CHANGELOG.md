@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.4.2 (2017-01-02)
+
+* Upgrade TypeScript to 2.1.4 and enable strict null checks and other compile-time checks
+* DateTime.zone() now returns undefined rather than null for an unaware date
+
 ## 5.4.1 (2016-11-14)
 
 * Bugfix in Duration#equalsExact(): identical durations of 1 day would not be seen as equal
