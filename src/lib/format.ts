@@ -49,6 +49,44 @@ export interface FormatOptions {
 	weekdayLetters: string[];
 }
 
+// todo this can be Partial<FormatOptions> but for compatibility with 
+// pre-2.1 typescript users we write this out ourselves for a while yet
+export interface PartialFormatOptions {
+	/**
+	 * The letter indicating a quarter e.g. "Q" (becomes Q1, Q2, Q3, Q4)
+	 */
+	quarterLetter?: string;
+	/**
+	 * The word for 'quarter'
+	 */
+	quarterWord?: string;
+	/**
+	 * Quarter abbreviations e.g. 1st, 2nd, 3rd, 4th
+	 */
+	quarterAbbreviations?: string[];
+
+	/**
+	 * Month names
+	 */
+	longMonthNames?: string[];
+	/**
+	 * Three-letter month names
+	 */
+	shortMonthNames?: string[];
+	/**
+	 * Month letters
+	 */
+	monthLetters?: string[];
+
+	/**
+	 * Week day names, starting with sunday
+	 */
+	longWeekdayNames?: string[];
+	shortWeekdayNames?: string[];
+	weekdayTwoLetters?: string[];
+	weekdayLetters?: string[];
+}
+
 export const LONG_MONTH_NAMES =
 	["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -105,7 +143,7 @@ export function format(
 	formatString: string,
 	formatOptions: Partial<FormatOptions> = {}
 ): string {
-	const mergedFormatOptions: Partial<FormatOptions> = {};
+	const mergedFormatOptions: PartialFormatOptions = {};
 	for (const name in DEFAULT_FORMAT_OPTIONS) {
 		if (DEFAULT_FORMAT_OPTIONS.hasOwnProperty(name)) {
 			mergedFormatOptions[name] = (formatOptions[name] !== undefined ? formatOptions[name] : DEFAULT_FORMAT_OPTIONS[name]);

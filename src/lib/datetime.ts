@@ -1032,7 +1032,7 @@ export class DateTime {
 	 * @param formatOptions Optional, non-english format month names etc.
 	 * @return The string representation of this DateTime
 	 */
-	public format(formatString: string, formatOptions?: Partial<format.FormatOptions>): string {
+	public format(formatString: string, formatOptions?: format.PartialFormatOptions): string {
 		return format.format(this.zoneDate, this.utcDate, this._zone, formatString, formatOptions);
 	}
 
