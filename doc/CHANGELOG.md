@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.4.3 (2017-01-03)
+
+* Fix compatibility issue with TypeScript 2.0
+
 ## 5.4.2 (2017-01-02)
 
 * Upgrade TypeScript to 2.1.4 and enable strict null checks and other compile-time checks
