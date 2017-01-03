@@ -87,30 +87,30 @@ export interface PartialFormatOptions {
 	weekdayLetters?: string[];
 }
 
-export const LONG_MONTH_NAMES =
+export const LONG_MONTH_NAMES: string[] =
 	["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-export const SHORT_MONTH_NAMES =
+export const SHORT_MONTH_NAMES: string[] =
 	["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export const MONTH_LETTERS =
+export const MONTH_LETTERS: string[] =
 	["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
 
-export const LONG_WEEKDAY_NAMES =
+export const LONG_WEEKDAY_NAMES: string[] =
 	["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-export const SHORT_WEEKDAY_NAMES =
+export const SHORT_WEEKDAY_NAMES: string[] =
 	["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export const WEEKDAY_TWO_LETTERS =
+export const WEEKDAY_TWO_LETTERS: string[] =
 	["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-export const WEEKDAY_LETTERS =
+export const WEEKDAY_LETTERS: string[] =
 	["S", "M", "T", "W", "T", "F", "S"];
 
-export const QUARTER_LETTER = "Q";
-export const QUARTER_WORD = "quarter";
-export const QUARTER_ABBREVIATIONS = ["1st", "2nd", "3rd", "4th"];
+export const QUARTER_LETTER: string = "Q";
+export const QUARTER_WORD: string = "quarter";
+export const QUARTER_ABBREVIATIONS: string[] = ["1st", "2nd", "3rd", "4th"];
 
 export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
 	quarterLetter: QUARTER_LETTER,
@@ -141,7 +141,7 @@ export function format(
 	utcTime: TimeStruct,
 	localZone: TimeZone | undefined | null,
 	formatString: string,
-	formatOptions: Partial<FormatOptions> = {}
+	formatOptions: PartialFormatOptions = {}
 ): string {
 	const mergedFormatOptions: PartialFormatOptions = {};
 	for (const name in DEFAULT_FORMAT_OPTIONS) {
