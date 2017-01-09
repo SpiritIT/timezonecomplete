@@ -117,7 +117,7 @@ browserify({
 
 ### Webpack
 
-Use a 2.x (beta) version of webpack, to avoid warnings. Then, use a plugin in your webpack configuration to load the time zone data you need.
+Use a >=2.x (beta) version of webpack, to avoid warnings. Then, use a plugin in your webpack configuration to load the time zone data you need.
 
 ```javascript
   plugins: [
@@ -131,6 +131,18 @@ Use a 2.x (beta) version of webpack, to avoid warnings. Then, use a plugin in yo
       }
     )
   ]
+```
+
+To install a beta version of webpack, first, look up the latest unstable version using:
+
+```
+npm show webpack versions --json
+```
+
+Then, install the specific version by specifying it behind an @-sign (in this example 2.2.0-rc3) like this:
+
+```
+npm install --save-dev webpack@2.2.0-rc.3
 ```
 
 ### Browser, stand-alone
