@@ -115,6 +115,24 @@ browserify({
 .pipe(fs.createWriteStream('./dist/bundle.js'));
 ```
 
+### Webpack
+
+Use a 2.x (beta) version of webpack, to avoid warnings. Then, use a plugin in your webpack configuration to load the time zone data you need.
+
+```javascript
+  plugins: [
+    new webpack.ContextReplacementPlugin(
+      /[\/\\]node_modules[\/\\]timezonecomplete[\/\\]/, 
+      path.resolve("tz-database-context"), 
+      {
+        "tzdata-backward-utc": "tzdata-backward-utc",
+        "tzdata-etcetera": "tzdata-etcetera",
+        "tzdata-europe": "tzdata-europe"
+      }
+    )
+  ]
+```
+
 ### Browser, stand-alone
 
 Timezonecomplete comes with a [bundle](./dist/timezonecomplete.js) and a [minified bundle](./dist/timezonecomplete.min.js). Both are UMD (isomorphic) modules.
