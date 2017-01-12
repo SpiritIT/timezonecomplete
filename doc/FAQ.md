@@ -30,7 +30,39 @@ var datetime2 = new tc.DateTime(jsDate2, tc.DateFunctions.GetUTC, tc.zone("Ameri
 
 ```
 
+### Dates in GMT+5 zone are five hours behind GMT instead of ahead
+
+This is a peculiarity of the IANA time zone database: the zones with names `GMT+N` are reversed with what you'd expect. From the IANA database file 'etcetera':
+
+```
+# Be consistent with POSIX TZ settings in the Zone names,
+# even though this is the opposite of what many people expect.
+# POSIX has positive signs west of Greenwich, but many people expect
+# positive signs east of Greenwich.  For example, TZ='Etc/GMT+4' uses
+# the abbreviation "-04" and corresponds to 4 hours behind UT
+# (i.e. west of Greenwich) even though many people would expect it to
+# mean 4 hours ahead of UT (i.e. east of Greenwich).
+
+# Earlier incarnations of this package were not POSIX-compliant,
+# and had lines such as
+#		Zone	GMT-12		-12	-	GMT-1200
+# We did not want things to change quietly if someone accustomed to the old
+# way does a
+#		zic -l GMT-12
+# so we moved the names into the Etc subdirectory.
+# Also, the time zone abbreviations are now compatible with %z.
+```
+
+So this is not a timezonecomplete issue but rather one of the TZ database. Instead of using GMT+3, simply create a numeric zone that's 3 hours ahead:
+
+```javascript
+var t1 = new tc.DateTime("2017-01-12T12:13:59+03:00");
+var t2 = new tc.DateTime("2017-01-12T12:13:59.000", tc.zone("+03:00"))
+var t3 = new tc.DateTime("2017-01-12T12:13:59.000", tc.zone(3 * 60))
+```
+
 ### Why does the number returned by weekNumber() not correspond to my calendar?
+
 Different countries have different week number algoritms. We adhere to the ISO 8601 standard, where the first week starts on a Monday and is defined as the week having January 4th in it.
 If you need different week numbers, please submit an issue or a pull request.
 
