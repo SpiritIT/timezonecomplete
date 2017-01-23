@@ -261,8 +261,13 @@ export class DateTime {
 		switch (typeof (a1)) {
 			case "number": {
 				if (a2 === undefined || a2 === null || a2 instanceof TimeZone) {
+					assert(
+						a3 === undefined && h === undefined && m === undefined
+						&& s === undefined && ms === undefined && timeZone === undefined,
+						"for unix timestamp datetime constructor, third through 8th argument must be undefined"
+					);
+					assert(a2 === undefined || a2 === null  || a2 instanceof TimeZone, "DateTime.DateTime(): second arg should be a TimeZone object.");
 					// unix timestamp constructor
-					assert(typeof (a1) === "number", "DateTime.DateTime(): expect unixTimestamp to be a number");
 					this._zone = (typeof (a2) === "object" && a2 instanceof TimeZone ? <TimeZone>a2 : undefined);
 					if (this._zone) {
 						this._zoneDate = this._zone.normalizeZoneTime(new TimeStruct(math.roundSym(<number>a1)));
@@ -271,9 +276,11 @@ export class DateTime {
 					}
 				} else {
 					// year month day constructor
-					assert(typeof (a1) === "number", "DateTime.DateTime(): Expect year to be a number.");
 					assert(typeof (a2) === "number", "DateTime.DateTime(): Expect month to be a number.");
 					assert(typeof (a3) === "number", "DateTime.DateTime(): Expect day to be a number.");
+					assert(timeZone === undefined || timeZone === null  || timeZone instanceof TimeZone,
+						"DateTime.DateTime(): eighth arg should be a TimeZone object."
+					);
 					let year: number = <number>a1;
 					let month: number = <number>a2;
 					let day: number = <number>a3;
@@ -303,6 +310,12 @@ export class DateTime {
 			} break;
 			case "string": {
 				if (typeof a2 === "string") {
+					assert(
+						h === undefined && m === undefined
+						&& s === undefined && ms === undefined && timeZone === undefined,
+						"first two arguments are a string, therefore the fourth through 8th argument must be undefined"
+					);
+					assert(a3 === undefined || a3 === null  || a3 instanceof TimeZone, "DateTime.DateTime(): third arg should be a TimeZone object.");
 					// format string given
 					const dateString: string = <string>a1;
 					const formatString: string = <string>a2;
@@ -314,6 +327,12 @@ export class DateTime {
 					this._zoneDate = parsed.time;
 					this._zone = parsed.zone;
 				} else {
+					assert(
+						a3 === undefined && h === undefined && m === undefined
+						&& s === undefined && ms === undefined && timeZone === undefined,
+						"first arguments is a string and the second is not, therefore the third through 8th argument must be undefined"
+					);
+					assert(a2 === undefined || a2 === null  || a2 instanceof TimeZone, "DateTime.DateTime(): second arg should be a TimeZone object.");
 					const givenString = (<string>a1).trim();
 					const ss: string[] = DateTime._splitDateFromTimeZone(givenString);
 					assert(ss.length === 2, "Invalid date string given: \"" + <string>a1 + "\"");
@@ -332,12 +351,23 @@ export class DateTime {
 			} break;
 			case "object": {
 				if (a1 instanceof TimeStruct) {
+					assert(
+						a3 === undefined && h === undefined && m === undefined
+						&& s === undefined && ms === undefined && timeZone === undefined,
+						"first argument is a TimeStruct, therefore the third through 8th argument must be undefined"
+					);
+					assert(a2 === undefined || a2 === null || a2 instanceof TimeZone, "expect a TimeZone as second argument");
 					this._zoneDate = a1.clone();
 					this._zone = (a2 ? a2 : undefined);
 				} else if (a1 instanceof Date) {
-					assert(typeof (a2) === "number",
+					assert(
+						h === undefined && m === undefined
+						&& s === undefined && ms === undefined && timeZone === undefined,
+						"first argument is a Date, therefore the fourth through 8th argument must be undefined"
+					);
+					assert(typeof (a2) === "number" && (a2 === DateFunctions.Get || a2 === DateFunctions.GetUTC),
 						"DateTime.DateTime(): for a Date object a DateFunctions must be passed as second argument");
-					assert(!a3 || a3 instanceof TimeZone, "DateTime.DateTime(): timeZone should be a TimeZone object.");
+					assert(a3 === undefined || a3 === null  || a3 instanceof TimeZone, "DateTime.DateTime(): third arg should be a TimeZone object.");
 					const d: Date = <Date>(a1);
 					const dk: DateFunctions = <DateFunctions>(a2);
 					this._zone = (a3 ? a3 : undefined);
@@ -345,9 +375,16 @@ export class DateTime {
 					if (this._zone) {
 						this._zoneDate = this._zone.normalizeZoneTime(this._zoneDate);
 					}
+				} else {
+					assert(false, `DateTime constructor expected a Date or a TimeStruct but got a ${a1}`);
 				}
 			} break;
 			case "undefined": {
+				assert(
+					a2 === undefined && a3 === undefined && h === undefined && m === undefined
+					&& s === undefined && ms === undefined && timeZone === undefined,
+					"first argument is undefined, therefore the rest must also be undefined"
+				);
 				// nothing given, make local datetime
 				this._zone = TimeZone.local();
 				this._utcDate = TimeStruct.fromDate(DateTime.timeSource.now(), DateFunctions.GetUTC);

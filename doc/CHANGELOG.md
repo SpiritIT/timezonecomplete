@@ -1,6 +1,9 @@
 
 # Changelog
 
+
+* Add more parameter checking to DateTime constructor (solves issue #32)
+
 ## 5.4.3 (2017-01-03)
 
 * Fix compatibility issue with TypeScript 2.0
