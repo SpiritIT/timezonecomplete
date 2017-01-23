@@ -1,6 +1,7 @@
 
 # Changelog
 
+## 5.4.4 (2017-01-23)
 
 * Add more parameter checking to DateTime constructor (solves issue #32)
 
