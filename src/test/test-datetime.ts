@@ -183,6 +183,14 @@ describe("DateTime", (): void => {
 			expect(DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), false)).to.equal(false);
 			expect(DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), true)).to.equal(true);
 		});
+		it("should return false for NaN values", (): void => {
+			expect(DateTime.exists(2015, NaN, 29, 2, 0, 0, 0, TimeZone.zone("Europe/Amsterdam"))).to.equal(false);
+			expect(DateTime.exists(2015, 3, Infinity, 1, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"))).to.equal(false);
+		});
+		it("should fill in default arguments", (): void => {
+			expect(DateTime.exists(1969)).to.equal(false);
+			expect(DateTime.exists(1970)).to.equal(true);
+		});
 	});
 
 	describe("constructor()", (): void => {
@@ -222,132 +230,129 @@ describe("DateTime", (): void => {
 			expect(d.zone()).to.be.undefined;
 		});
 		it("should round the milliseconds", (): void => {
-			it("should round the milliseconds", (): void => {
-				const d = new DateTime("2014-05-06T07:08:09.0105");
-				expect(d.millisecond()).to.equal(11);
-			});
-			it("should parse only date", (): void => {
-				const d = new DateTime("2014-05-06");
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(0);
-				expect(d.minute()).to.equal(0);
-				expect(d.second()).to.equal(0);
-				expect(d.millisecond()).to.equal(0);
-				expect(d.zone()).to.be.undefined;
-				expect(d.offset()).to.equal(0);
-			});
-			it("should parse Zulu date", (): void => {
-				const d = new DateTime("2014-05-06T07:08:09.010Z");
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(7);
-				expect(d.minute()).to.equal(8);
-				expect(d.second()).to.equal(9);
-				expect(d.millisecond()).to.equal(10);
-				expect((d.zone() as TimeZone).name()).to.equal("+00:00");
-				expect(d.offset()).to.equal(0);
-			});
-			it("should parse zero-offset date", (): void => {
-				const d = new DateTime("2014-05-06T07:08:09.010+00:00");
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(7);
-				expect(d.minute()).to.equal(8);
-				expect(d.second()).to.equal(9);
-				expect(d.millisecond()).to.equal(10);
-				expect((d.zone() as TimeZone).name()).to.equal("+00:00");
-				expect(d.offset()).to.equal(0);
-			});
-			it("should parse positive-offset date", (): void => {
-				const d = new DateTime("2014-05-06T07:08:09.010+01:30");
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(7);
-				expect(d.minute()).to.equal(8);
-				expect(d.second()).to.equal(9);
-				expect(d.millisecond()).to.equal(10);
-				expect(d.zone()).to.equal(TimeZone.zone(90));
-				expect(d.offset()).to.equal(90);
-			});
-			it("should parse negative-offset date", (): void => {
-				const d = new DateTime("2014-05-06T07:08:09.010-01:30");
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(7);
-				expect(d.minute()).to.equal(8);
-				expect(d.second()).to.equal(9);
-				expect(d.millisecond()).to.equal(10);
-				expect(d.zone()).to.equal(TimeZone.zone(-90));
-				expect(d.offset()).to.equal(-90);
-			});
-			it("should parse IANA time zone", (): void => {
-				const d = new DateTime("2014-05-06T07:08:09.010 Europe/Amsterdam");
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(7);
-				expect(d.minute()).to.equal(8);
-				expect(d.second()).to.equal(9);
-				expect(d.millisecond()).to.equal(10);
-				expect(d.zone()).to.equal(TimeZone.zone("Europe/Amsterdam"));
-				expect(d.offset()).to.equal(120);
-			});
-			it("should parse IANA time zone without DST", (): void => {
-				const d = new DateTime("2014-05-06T07:08:09.010 Europe/Amsterdam without DST");
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(7);
-				expect(d.minute()).to.equal(8);
-				expect(d.second()).to.equal(9);
-				expect(d.millisecond()).to.equal(10);
-				expect(d.zone()).to.equal(TimeZone.zone("Europe/Amsterdam", false));
-				expect(d.offset()).to.equal(60);
-			});
-			it("should take care of whitespace", (): void => {
-				const d = new DateTime(" \n\t2014-05-06T07:08:09.010 Europe/Amsterdam \n\t");
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(7);
-				expect(d.minute()).to.equal(8);
-				expect(d.second()).to.equal(9);
-				expect(d.millisecond()).to.equal(10);
-				expect(d.zone()).to.equal(TimeZone.zone("Europe/Amsterdam"));
-				expect(d.offset()).to.equal(120);
-			});
-			it("should add given time zone", (): void => {
-				const d = new DateTime("2014-05-06", TimeZone.zone(6));
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(0);
-				expect(d.minute()).to.equal(0);
-				expect(d.second()).to.equal(0);
-				expect(d.millisecond()).to.equal(0);
-				expect(!!d.zone()).to.equal(true);
-				expect(d.offset()).to.equal(6);
-			});
-			it("should override time zone in string", (): void => {
-				const d = new DateTime("2014-05-06T00:00:00+05", TimeZone.zone(6));
-				expect(d.year()).to.equal(2014);
-				expect(d.month()).to.equal(5);
-				expect(d.day()).to.equal(6);
-				expect(d.hour()).to.equal(0);
-				expect(d.minute()).to.equal(0);
-				expect(d.second()).to.equal(0);
-				expect(d.millisecond()).to.equal(0);
-				expect(!!d.zone()).to.equal(true);
-				expect(d.offset()).to.equal(6);
-			});
+			const d = new DateTime("2014-05-06T07:08:09.0105");
+			expect(d.millisecond()).to.equal(11);
 		});
-
+		it("should parse only date", (): void => {
+			const d = new DateTime("2014-05-06");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(0);
+			expect(d.minute()).to.equal(0);
+			expect(d.second()).to.equal(0);
+			expect(d.millisecond()).to.equal(0);
+			expect(d.zone()).to.be.undefined;
+			expect(d.offset()).to.equal(0);
+		});
+		it("should parse Zulu date", (): void => {
+			const d = new DateTime("2014-05-06T07:08:09.010Z");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(7);
+			expect(d.minute()).to.equal(8);
+			expect(d.second()).to.equal(9);
+			expect(d.millisecond()).to.equal(10);
+			expect((d.zone() as TimeZone).name()).to.equal("+00:00");
+			expect(d.offset()).to.equal(0);
+		});
+		it("should parse zero-offset date", (): void => {
+			const d = new DateTime("2014-05-06T07:08:09.010+00:00");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(7);
+			expect(d.minute()).to.equal(8);
+			expect(d.second()).to.equal(9);
+			expect(d.millisecond()).to.equal(10);
+			expect((d.zone() as TimeZone).name()).to.equal("+00:00");
+			expect(d.offset()).to.equal(0);
+		});
+		it("should parse positive-offset date", (): void => {
+			const d = new DateTime("2014-05-06T07:08:09.010+01:30");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(7);
+			expect(d.minute()).to.equal(8);
+			expect(d.second()).to.equal(9);
+			expect(d.millisecond()).to.equal(10);
+			expect(d.zone()).to.equal(TimeZone.zone(90));
+			expect(d.offset()).to.equal(90);
+		});
+		it("should parse negative-offset date", (): void => {
+			const d = new DateTime("2014-05-06T07:08:09.010-01:30");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(7);
+			expect(d.minute()).to.equal(8);
+			expect(d.second()).to.equal(9);
+			expect(d.millisecond()).to.equal(10);
+			expect(d.zone()).to.equal(TimeZone.zone(-90));
+			expect(d.offset()).to.equal(-90);
+		});
+		it("should parse IANA time zone", (): void => {
+			const d = new DateTime("2014-05-06T07:08:09.010 Europe/Amsterdam");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(7);
+			expect(d.minute()).to.equal(8);
+			expect(d.second()).to.equal(9);
+			expect(d.millisecond()).to.equal(10);
+			expect(d.zone()).to.equal(TimeZone.zone("Europe/Amsterdam"));
+			expect(d.offset()).to.equal(120);
+		});
+		it("should parse IANA time zone without DST", (): void => {
+			const d = new DateTime("2014-05-06T07:08:09.010 Europe/Amsterdam without DST");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(7);
+			expect(d.minute()).to.equal(8);
+			expect(d.second()).to.equal(9);
+			expect(d.millisecond()).to.equal(10);
+			expect(d.zone()).to.equal(TimeZone.zone("Europe/Amsterdam", false));
+			expect(d.offset()).to.equal(60);
+		});
+		it("should take care of whitespace", (): void => {
+			const d = new DateTime(" \n\t2014-05-06T07:08:09.010 Europe/Amsterdam \n\t");
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(7);
+			expect(d.minute()).to.equal(8);
+			expect(d.second()).to.equal(9);
+			expect(d.millisecond()).to.equal(10);
+			expect(d.zone()).to.equal(TimeZone.zone("Europe/Amsterdam"));
+			expect(d.offset()).to.equal(120);
+		});
+		it("should add given time zone", (): void => {
+			const d = new DateTime("2014-05-06", TimeZone.zone(6));
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(0);
+			expect(d.minute()).to.equal(0);
+			expect(d.second()).to.equal(0);
+			expect(d.millisecond()).to.equal(0);
+			expect(!!d.zone()).to.equal(true);
+			expect(d.offset()).to.equal(6);
+		});
+		it("should override time zone in string", (): void => {
+			const d = new DateTime("2014-05-06T00:00:00+05", TimeZone.zone(6));
+			expect(d.year()).to.equal(2014);
+			expect(d.month()).to.equal(5);
+			expect(d.day()).to.equal(6);
+			expect(d.hour()).to.equal(0);
+			expect(d.minute()).to.equal(0);
+			expect(d.second()).to.equal(0);
+			expect(d.millisecond()).to.equal(0);
+			expect(!!d.zone()).to.equal(true);
+			expect(d.offset()).to.equal(6);
+		});
 	});
 
 	describe("constructor(string, string, zone?)", (): void => {
@@ -1685,6 +1690,11 @@ describe("DateTime", (): void => {
 			const d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
 			expect(d.zoneAbbreviation()).to.equal("CEST");
 		});
+		it("should allow to remove the DST flag", (): void => {
+			// note already tested in test-tz-database
+			const d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("Europe/Amsterdam"));
+			expect(d.zoneAbbreviation(false)).to.equal("CET"); // instead of CEST
+		});
 	});
 
 	describe("format()", (): void => {
@@ -1705,6 +1715,20 @@ describe("DateTime", (): void => {
 			expect(d.format("MMM", {
 				shortMonthNames: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
 			})).to.equal("E");
+		});
+	});
+
+	describe("parse()", (): void => {
+		it("should parse a date string", (): void => {
+			const dt = DateTime.parse("2017-11-01", "yyyy-MM-dd");
+			expect(dt.toString()).to.equal("2017-11-01T00:00:00.000");
+		});
+		it("should parse a date string and add a zone", (): void => {
+			const dt = DateTime.parse("2017-11-01", "yyyy-MM-dd", TimeZone.zone("Europe/Amsterdam"));
+			expect(dt.toString()).to.equal("2017-11-01T00:00:00.000 Europe/Amsterdam");
+		});
+		it("should throw on invalid date string", (): void => {
+			assert.throws(() => DateTime.parse("2017-11-foo", "yyyy-MM-dd"));
 		});
 	});
 

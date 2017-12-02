@@ -50,6 +50,7 @@ function convertToUtc(localTime: TimeStruct, fromZone?: TimeZone): TimeStruct {
 }
 
 function convertFromUtc(utcTime: TimeStruct, toZone?: TimeZone): TimeStruct {
+	/* istanbul ignore else */
 	if (toZone) {
 		const offset: number = toZone.offsetForUtc(utcTime);
 		return toZone.normalizeZoneTime(new TimeStruct(utcTime.unixMillis + offset * 60000));
@@ -161,8 +162,10 @@ export class DateTime {
 		hour: number = 0, minute: number = 0, second: number = 0, millisecond: number = 0,
 		zone?: TimeZone | null | undefined, allowPre1970: boolean = false
 	): boolean {
-		if (!isFinite(year) || !isFinite(month) || !isFinite(day)
-			|| !isFinite(hour) || !isFinite(minute) || !isFinite(second) || !isFinite(millisecond)) {
+		if (
+			!isFinite(year) || !isFinite(month) || !isFinite(day) || !isFinite(hour) || !isFinite(minute) || !isFinite(second)
+			|| !isFinite(millisecond)
+		) {
 			return false;
 		}
 		if (!allowPre1970 && year < 1970) {
