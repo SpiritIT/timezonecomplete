@@ -1,6 +1,13 @@
 
 # Changelog
 
+## 5.4.5 (2017-12-03)
+
+* Fix for issue #35: DateTime#format() no longer throws errors
+* Update all dependencies
+* Improve code coverage
+* Have Travis CI test against more Node.JS versions
+
 ## 5.4.4 (2017-01-23)
 
 * Add more parameter checking to DateTime constructor (solves issue #32)

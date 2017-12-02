@@ -1,6 +1,8 @@
 
 MODULE PUBLISH
-* Adjust README.md and add examples and changelog, and possibly features
+* Adjust doc/CHANGELOG.md
+* Adjust doc/API.md
+* Adjust README.md
 * Adjust package.json and adjust version number
 * Run:
 npm run all
