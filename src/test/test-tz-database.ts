@@ -9,12 +9,11 @@ import sourcemapsupport = require("source-map-support");
 sourcemapsupport.install({ handleUncaughtExceptions: false });
 
 import * as assert from "assert";
-import * as util from "util";
 import { expect } from "chai";
+import * as util from "util";
 
 import {
-	AtType, Duration, NormalizeOption, OnType, RuleType, RuleInfo,
-	ToType, TimeStruct, Transition, TzDatabase, ZoneInfo, WeekDay
+	AtType, Duration, NormalizeOption, OnType, RuleInfo, RuleType, TimeStruct, ToType, Transition, TzDatabase, WeekDay, ZoneInfo
 } from "../lib/index";
 
 // inject test data into TzDatabase

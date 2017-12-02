@@ -557,7 +557,8 @@ export class TzDatabase {
 	 */
 	private constructor(data: any[]) {
 		assert(!TzDatabase._instance, "You should not create an instance of the TzDatabase class yourself. Use TzDatabase.instance()");
-		assert(data.length > 0,
+		assert(
+			data.length > 0,
 			"Timezonecomplete needs time zone data. You need to install one of the tzdata NPM modules before using timezonecomplete."
 		);
 		if (data.length === 1) {
@@ -606,8 +607,7 @@ export class TzDatabase {
 			const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 			let result: Duration | undefined;
 			const ruleNames: string[] = [];
-			for (let i = 0; i < zoneInfos.length; ++i) {
-				const zoneInfo = zoneInfos[i];
+			for (const zoneInfo of zoneInfos) {
 				if (zoneInfo.ruleType === RuleType.Offset) {
 					if (!result || result.greaterThan(zoneInfo.ruleOffset)) {
 						if (zoneInfo.ruleOffset.milliseconds() !== 0) {
@@ -619,16 +619,15 @@ export class TzDatabase {
 					&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
 					ruleNames.push(zoneInfo.ruleName);
 					const temp = this.getRuleInfos(zoneInfo.ruleName);
-					for (let j = 0; j < temp.length; ++j) {
-						const ruleInfo = temp[j];
+					for (const ruleInfo of temp) {
 						if (!result || result.greaterThan(ruleInfo.save)) {
 							if (ruleInfo.save.milliseconds() !== 0) {
 								result = ruleInfo.save;
 							}
 						}
-					};
+					}
 				}
-			};
+			}
 			if (!result) {
 				result = Duration.hours(0);
 			}
@@ -651,8 +650,7 @@ export class TzDatabase {
 			const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
 			let result: Duration | undefined;
 			const ruleNames: string[] = [];
-			for (let i = 0; i < zoneInfos.length; ++i) {
-				const zoneInfo = zoneInfos[i];
+			for (const zoneInfo of zoneInfos) {
 				if (zoneInfo.ruleType === RuleType.Offset) {
 					if (!result || result.lessThan(zoneInfo.ruleOffset)) {
 						result = zoneInfo.ruleOffset;
@@ -662,14 +660,13 @@ export class TzDatabase {
 					&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
 					ruleNames.push(zoneInfo.ruleName);
 					const temp = this.getRuleInfos(zoneInfo.ruleName);
-					for (let j = 0; j < temp.length; ++j) {
-						const ruleInfo = temp[j];
+					for (const ruleInfo of temp) {
 						if (!result || result.lessThan(ruleInfo.save)) {
 							result = ruleInfo.save;
 						}
-					};
+					}
 				}
-			};
+			}
 			if (!result) {
 				result = Duration.hours(0);
 			}
@@ -693,7 +690,6 @@ export class TzDatabase {
 	public nextDstChange(zoneName: string, utcTime: number): number | undefined;
 	public nextDstChange(zoneName: string, utcTime: TimeStruct): number | undefined;
 	public nextDstChange(zoneName: string, a: TimeStruct | number): number | undefined {
-		let zoneInfo: ZoneInfo;
 		const utcTime: TimeStruct = (typeof a === "number" ? new TimeStruct(a) : a);
 
 		// get all zone infos for [date, date+1year)
@@ -702,8 +698,7 @@ export class TzDatabase {
 		const rangeStart: number = utcTime.unixMillis;
 		const rangeEnd: number = rangeStart + 365 * 86400E3;
 		let prevEnd: number | undefined;
-		for (let i = 0; i < allZoneInfos.length; ++i) {
-			zoneInfo = allZoneInfos[i];
+		for (const zoneInfo of allZoneInfos) {
 			if ((prevEnd === undefined || prevEnd < rangeEnd) && (zoneInfo.until === undefined || zoneInfo.until > rangeStart)) {
 				relevantZoneInfos.push(zoneInfo);
 			}
@@ -712,8 +707,7 @@ export class TzDatabase {
 
 		// collect all transitions in the zones for the year
 		let transitions: Transition[] = [];
-		for (let i = 0; i < relevantZoneInfos.length; ++i) {
-			zoneInfo = relevantZoneInfos[i];
+		for (const zoneInfo of relevantZoneInfos) {
 			// find applicable transition moments
 			transitions = transitions.concat(
 				this.getTransitionsDstOffsets(zoneInfo.ruleName, utcTime.components.year - 1, utcTime.components.year + 1, zoneInfo.gmtoff)
@@ -725,8 +719,7 @@ export class TzDatabase {
 
 		// find the first after the given date that has a different offset
 		let prevSave: Duration | undefined;
-		for (let i = 0; i < transitions.length; ++i) {
-			const transition = transitions[i];
+		for (const transition of transitions) {
 			if (!prevSave || !prevSave.equals(transition.offset)) {
 				if (transition.at > utcTime.unixMillis) {
 					return transition.at;
@@ -795,8 +788,7 @@ export class TzDatabase {
 
 			// find the DST forward transitions
 			let prev: Duration = Duration.hours(0);
-			for (let i = 0; i < transitions.length; ++i) {
-				const transition = transitions[i];
+			for (const transition of transitions) {
 				// forward transition?
 				if (transition.offset.greaterThan(prev)) {
 					const localBefore: number = transition.at + prev.milliseconds();
@@ -810,7 +802,7 @@ export class TzDatabase {
 					}
 				}
 				prev = transition.offset;
-			};
+			}
 
 			// no non-existing time
 		}
@@ -903,8 +895,7 @@ export class TzDatabase {
 	public standardOffsetLocal(zoneName: string, localTime: TimeStruct | number): Duration {
 		const unixMillis = (typeof localTime === "number" ? localTime : localTime.unixMillis);
 		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-		for (let i = 0; i < zoneInfos.length; ++i) {
-			const zoneInfo = zoneInfos[i];
+		for (const zoneInfo of zoneInfos) {
 			if (zoneInfo.until === undefined || zoneInfo.until + zoneInfo.gmtoff.milliseconds() > unixMillis) {
 				return zoneInfo.gmtoff.clone();
 			}
@@ -944,8 +935,7 @@ export class TzDatabase {
 		);
 		let prev: Transition | undefined;
 		let prevPrev: Transition | undefined;
-		for (let i = 0; i < transitions.length; ++i) {
-			const transition = transitions[i];
+		for (const transition of transitions) {
 			if (transition.at + transition.offset.milliseconds() > normalizedTm.unixMillis) {
 				// found offset: prev.offset applies
 				break;
@@ -1064,8 +1054,7 @@ export class TzDatabase {
 
 		for (let y = fromYear; y <= toYear; y++) {
 			let prevInfo: RuleInfo | undefined;
-			for (let i = 0; i < ruleInfos.length; i++) {
-				const ruleInfo: RuleInfo = ruleInfos[i];
+			for (const ruleInfo of ruleInfos) {
 				if (ruleInfo.applicable(y)) {
 					result.push(new Transition(
 						ruleInfo.transitionTimeUtc(y, standardOffset, prevInfo),
@@ -1107,15 +1096,14 @@ export class TzDatabase {
 		let prevStdOffset: Duration = Duration.hours(0);
 		let prevDstOffset: Duration = Duration.hours(0);
 		let prevLetter: string = "";
-		for (let i = 0; i < zoneInfos.length; ++i) {
-			const zoneInfo = zoneInfos[i];
+		for (const zoneInfo of zoneInfos) {
 			const untilYear: number = zoneInfo.until !== undefined ? new TimeStruct(zoneInfo.until).components.year : toYear + 1;
 			let stdOffset: Duration = prevStdOffset;
 			let dstOffset: Duration = prevDstOffset;
 			let letter: string = prevLetter;
 
 			// zone applicable?
-			if ((!prevZone || prevZone.until < endMillis - 1) && (zoneInfo.until === undefined || zoneInfo.until >= startMillis)) {
+			if ((!prevZone || prevZone.until! < endMillis - 1) && (zoneInfo.until === undefined || zoneInfo.until >= startMillis)) {
 
 				stdOffset = zoneInfo.gmtoff;
 
@@ -1133,15 +1121,14 @@ export class TzDatabase {
 						// (e.g. Lybia)
 						if (prevZone) {
 							const ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
-							for (let j = 0; j < ruleInfos.length; ++j) {
-								const ruleInfo = ruleInfos[j];
+							for (const ruleInfo of ruleInfos) {
 								if (typeof prevUntilYear === "number" && ruleInfo.applicable(prevUntilYear)) {
 									if (ruleInfo.transitionTimeUtc(prevUntilYear, stdOffset, undefined) === prevZone.until) {
 										dstOffset = ruleInfo.save;
 										letter = ruleInfo.letter;
 									}
 								}
-							};
+							}
 						}
 						break;
 				}
@@ -1158,12 +1145,11 @@ export class TzDatabase {
 						Math.min(untilYear, toYear),
 						stdOffset
 					);
-					for (let k = 0; k < dstTransitions.length; ++k) {
-						const transition = dstTransitions[k];
+					for (const transition of dstTransitions) {
 						letter = transition.letter;
 						dstOffset = transition.offset;
 						result.push(new Transition(transition.at, transition.offset.add(stdOffset), transition.letter));
-					};
+					}
 				}
 			}
 
@@ -1189,8 +1175,7 @@ export class TzDatabase {
 	public getZoneInfo(zoneName: string, utcTime: TimeStruct | number): ZoneInfo {
 		const unixMillis = (typeof utcTime === "number" ? utcTime : utcTime.unixMillis);
 		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-		for (let i = 0; i < zoneInfos.length; ++i) {
-			const zoneInfo = zoneInfos[i];
+		for (const zoneInfo of zoneInfos) {
 			if (zoneInfo.until === undefined || zoneInfo.until > unixMillis) {
 				return zoneInfo;
 			}
@@ -1244,8 +1229,7 @@ export class TzDatabase {
 			zoneEntries = this._data.zones[actualZoneName];
 		}
 		// final zone info found
-		for (let i: number = 0; i < zoneEntries.length; ++i) {
-			const zoneEntry = zoneEntries[i];
+		for (const zoneEntry of zoneEntries) {
 			const ruleType: RuleType = this.parseRuleType(zoneEntry[1]);
 			let until: number | undefined = math.filterFloat(zoneEntry[3]);
 			if (isNaN(until)) {
@@ -1274,7 +1258,7 @@ export class TzDatabase {
 			if (a.until === undefined && b.until !== undefined) {
 				return 1;
 			}
-			return (a.until - b.until);
+			return (a.until! - b.until!);
 		});
 
 		this._zoneInfoCache[zoneName] = result;
@@ -1306,8 +1290,7 @@ export class TzDatabase {
 
 		const result: RuleInfo[] = [];
 		const ruleSet = this._data.rules[ruleName];
-		for (let i = 0; i < ruleSet.length; ++i) {
-			const rule = ruleSet[i];
+		for (const rule of ruleSet) {
 
 			const fromYear: number = (rule[0] === "NaN" ? -10000 : parseInt(rule[0], 10));
 			const toType: ToType = this.parseToType(rule[1]);
@@ -1315,7 +1298,7 @@ export class TzDatabase {
 			const onType: OnType = this.parseOnType(rule[4]);
 			const onDay: number = this.parseOnDay(rule[4], onType);
 			const onWeekDay: WeekDay = this.parseOnWeekDay(rule[4]);
-			const monthName: string = <string>rule[3];
+			const monthName: string = rule[3] as string;
 			const monthNumber: number = monthNameToString(monthName);
 
 			result.push(new RuleInfo(
@@ -1427,7 +1410,7 @@ export class TzDatabase {
 	public parseOnWeekDay(on: string): WeekDay {
 		for (let i = 0; i < 7; i++) {
 			if (on.indexOf(TzDayNames[i]) !== -1) {
-				return <WeekDay>i;
+				return i as WeekDay;
 			}
 		}
 		/* istanbul ignore if */
@@ -1488,14 +1471,14 @@ function validateData(data: any): MinMaxInfo {
 	}
 
 	// validate zones
-	for (let zoneName in data.zones) {
+	for (const zoneName in data.zones) {
 		if (data.zones.hasOwnProperty(zoneName)) {
 			const zoneArr: any = data.zones[zoneName];
 			if (typeof (zoneArr) === "string") {
 				// ok, is link to other zone, check link
 				/* istanbul ignore if */
-				if (!data.zones.hasOwnProperty(<string>zoneArr)) {
-					throw new Error("Entry for zone \"" + zoneName + "\" links to \"" + <string>zoneArr + "\" but that doesn\'t exist");
+				if (!data.zones.hasOwnProperty(zoneArr as string)) {
+					throw new Error("Entry for zone \"" + zoneName + "\" links to \"" + zoneArr as string + "\" but that doesn\'t exist");
 				}
 			} else {
 				/* istanbul ignore if */
@@ -1549,7 +1532,7 @@ function validateData(data: any): MinMaxInfo {
 	}
 
 	// validate rules
-	for (let ruleName in data.rules) {
+	for (const ruleName in data.rules) {
 		if (data.rules.hasOwnProperty(ruleName)) {
 			const ruleArr: any = data.rules[ruleName];
 			/* istanbul ignore if */

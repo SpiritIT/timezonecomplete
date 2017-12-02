@@ -11,8 +11,8 @@ sourcemapsupport.install({ handleUncaughtExceptions: false });
 import * as assert from "assert";
 import { expect } from "chai";
 
-import { TimeUnit, TimeStruct, WeekDay } from "../lib/index";
 import * as basics from "../lib/basics";
+import { TimeStruct, TimeUnit, WeekDay } from "../lib/index";
 import { DateFunctions } from "../lib/javascript";
 
 
@@ -204,8 +204,11 @@ describe("TimeStruct", (): void => {
 			expect(TimeStruct.fromDate(d, DateFunctions.Get)).to.deep.equal(
 				TimeStruct.fromComponents(2014, 1, 2, 3, 4, 5, 6));
 			expect(TimeStruct.fromDate(new Date(2014, 0, 2, 3, 4, 5, 6), DateFunctions.GetUTC)).to.deep.equal(
-				TimeStruct.fromComponents(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(),
-					d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()));
+				TimeStruct.fromComponents(
+					d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(),
+					d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()
+				)
+			);
 		});
 	});
 

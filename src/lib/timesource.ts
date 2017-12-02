@@ -20,7 +20,7 @@ export interface TimeSource {
  * Default time source, returns actual time
  */
 export class RealTimeSource implements TimeSource {
-	now(): Date {
+	public now(): Date {
 		/* istanbul ignore if */
 		/* istanbul ignore next */
 		if (true) {

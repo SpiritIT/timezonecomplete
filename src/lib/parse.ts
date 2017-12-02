@@ -5,8 +5,8 @@
  */
 
 import { TimeComponentOpts, TimeStruct } from "./basics";
-import { Tokenizer, Token, DateTimeTokenType as TokenType } from "./token";
 import { TimeZone } from "./timezone";
+import { DateTimeTokenType as TokenType, Token, Tokenizer } from "./token";
 
 /**
  * TimeStruct plus zone
@@ -73,8 +73,7 @@ export function parse(
 		let pnr: ParseNumberResult;
 		let pzr: ParseZoneResult;
 		let remaining: string = dateTimeString;
-		for (let i = 0; i < tokens.length; ++i) {
-			const token = tokens[i];
+		for (const token of tokens) {
 			switch (token.type) {
 				case TokenType.ERA:
 					// nothing
@@ -137,7 +136,7 @@ export function parse(
 					remaining = stripRaw(remaining, token.raw);
 					break;
 			}
-		};
+		}
 		const result: AwareTimeStruct = { time: new TimeStruct(time), zone };
 		if (!result.time.validate()) {
 			throw new Error("resulting date invalid");

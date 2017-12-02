@@ -87,13 +87,13 @@ describe("Duration()", (): void => {
 
 		it("throws on invalid string", (): void => {
 			/* tslint:disable:no-unused-expression */
-			assert.throws(function (): void { new Duration("harrie"); });
-			assert.throws(function (): void { new Duration("01:01:01:01"); });
-			assert.throws(function (): void { new Duration("01.001"); });
-			assert.throws(function (): void { new Duration("01:02.003"); });
-			assert.throws(function (): void { new Duration("01:01:01:-2.003"); });
-			assert.throws(function (): void { new Duration(".001"); });
-			assert.throws(function (): void { new Duration(":01:01"); });
+			assert.throws((): void => { new Duration("harrie"); });
+			assert.throws((): void => { new Duration("01:01:01:01"); });
+			assert.throws((): void => { new Duration("01.001"); });
+			assert.throws((): void => { new Duration("01:02.003"); });
+			assert.throws((): void => { new Duration("01:01:01:-2.003"); });
+			assert.throws((): void => { new Duration(".001"); });
+			assert.throws((): void => { new Duration(":01:01"); });
 			/* tslint:enable:no-unused-expression */
 		});
 

@@ -11,14 +11,14 @@ sourcemapsupport.install({ handleUncaughtExceptions: false });
 import * as assert from "assert";
 import { expect } from "chai";
 
-import { DateTime, DateFunctions, TimeSource, TimeZone } from "../lib/index";
+import { DateFunctions, DateTime, TimeSource, TimeZone } from "../lib/index";
 import * as index from "../lib/index";
 
 // Fake time source
 class TestTimeSource implements TimeSource {
 	public currentTime: Date = new Date("2014-01-03T04:05:06.007Z");
 
-	now(): Date {
+	public now(): Date {
 		return this.currentTime;
 	}
 }
@@ -127,8 +127,8 @@ describe("TimeZone", (): void => {
 			const u: TimeZone = TimeZone.zone(-60);
 			expect(t).to.equal(u);
 		});
-		assert.throws(function (): void { TimeZone.zone(-24 * 60); }, "zone(number) should throw on out of range offset");
-		assert.throws(function (): void { TimeZone.zone(24 * 60); }, "zone(number) should throw on out of range offset");
+		assert.throws((): void => { TimeZone.zone(-24 * 60); }, "zone(number) should throw on out of range offset");
+		assert.throws((): void => { TimeZone.zone(24 * 60); }, "zone(number) should throw on out of range offset");
 	});
 
 	describe("zone(string)", (): void => {
@@ -189,8 +189,8 @@ describe("TimeZone", (): void => {
 			const u: TimeZone = TimeZone.zone("+00:00");
 			expect(t).to.equal(u);
 		});
-		assert.throws(function (): void { TimeZone.zone("+24:00"); }, "zone(string) should throw on out of range input");
-		assert.throws(function (): void { TimeZone.zone("-24:00"); }, "zone(string) should throw on out of range input");
+		assert.throws((): void => { TimeZone.zone("+24:00"); }, "zone(string) should throw on out of range input");
+		assert.throws((): void => { TimeZone.zone("-24:00"); }, "zone(string) should throw on out of range input");
 	});
 
 	describe("offsetForUtc()", (): void => {
@@ -267,15 +267,21 @@ describe("TimeZone", (): void => {
 			const t = TimeZone.zone("Europe/Amsterdam");
 			const d = new Date(2014, 2, 26, 3, 0, 1, 0);
 			expect(t.offsetForUtcDate(d, DateFunctions.Get)).to.equal(
-				t.offsetForUtc(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(),
-					d.getMinutes(), d.getSeconds(), d.getMilliseconds()));
+				t.offsetForUtc(
+					d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(),
+					d.getMinutes(), d.getSeconds(), d.getMilliseconds()
+				)
+			);
 		});
 		it("should with GetUtc", (): void => {
 			const t = TimeZone.zone("Europe/Amsterdam");
 			const d = new Date(2014, 2, 26, 3, 0, 1, 0);
 			expect(t.offsetForUtcDate(d, DateFunctions.GetUTC)).to.equal(
-				t.offsetForUtc(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(),
-					d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()));
+				t.offsetForUtc(
+					d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(),
+					d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()
+				)
+			);
 		});
 	});
 
@@ -328,15 +334,21 @@ describe("TimeZone", (): void => {
 			const t = TimeZone.zone("Europe/Amsterdam");
 			const d = new Date(2014, 2, 26, 3, 0, 1, 0);
 			expect(t.offsetForZoneDate(d, DateFunctions.Get)).to.equal(
-				t.offsetForZone(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(),
-					d.getMinutes(), d.getSeconds(), d.getMilliseconds()));
+				t.offsetForZone(
+					d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(),
+					d.getMinutes(), d.getSeconds(), d.getMilliseconds()
+				)
+			);
 		});
 		it("should with GetUtc", (): void => {
 			const t = TimeZone.zone("Europe/Amsterdam");
 			const d = new Date(2014, 2, 26, 3, 0, 1, 0);
 			expect(t.offsetForZoneDate(d, DateFunctions.GetUTC)).to.equal(
-				t.offsetForZone(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(),
-					d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()));
+				t.offsetForZone(
+					d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), d.getUTCHours(),
+					d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()
+				)
+			);
 		});
 	});
 

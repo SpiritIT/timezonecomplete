@@ -25,8 +25,10 @@ export function min(d1: any, d2: any): any {
 	assert(d1, "first argument is falsy");
 	assert(d2, "first argument is falsy");
 	/* istanbul ignore next */
-	assert((d1 instanceof DateTime && d2 instanceof DateTime) || (d1 instanceof Duration && d2 instanceof Duration),
-		"Either two datetimes or two durations expected");
+	assert(
+		(d1 instanceof DateTime && d2 instanceof DateTime) || (d1 instanceof Duration && d2 instanceof Duration),
+		"Either two datetimes or two durations expected"
+	);
 	return d1.min(d2);
 }
 
@@ -45,8 +47,10 @@ export function max(d1: any, d2: any): any {
 	assert(d1, "first argument is falsy");
 	assert(d2, "first argument is falsy");
 	/* istanbul ignore next */
-	assert((d1 instanceof DateTime && d2 instanceof DateTime) || (d1 instanceof Duration && d2 instanceof Duration),
-		"Either two datetimes or two durations expected");
+	assert(
+		(d1 instanceof DateTime && d2 instanceof DateTime) || (d1 instanceof Duration && d2 instanceof Duration),
+		"Either two datetimes or two durations expected"
+	);
 	return d1.max(d2);
 }
 

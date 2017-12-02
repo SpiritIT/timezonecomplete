@@ -184,12 +184,12 @@ export class Duration {
 	constructor(i1?: any, unit?: TimeUnit) {
 		if (typeof (i1) === "number") {
 			// amount+unit constructor
-			const amount = <number>i1;
+			const amount = i1 as number;
 			this._amount = amount;
 			this._unit = (typeof unit === "number" ? unit : TimeUnit.Millisecond);
 		} else if (typeof (i1) === "string") {
 			// string constructor
-			this._fromString(<string>i1);
+			this._fromString(i1 as string);
 		} else {
 			// default constructor
 			this._amount = 0;
@@ -702,5 +702,4 @@ export class Duration {
 			this._unit = basics.stringToTimeUnit(split[1]);
 		}
 	}
-};
-
+}

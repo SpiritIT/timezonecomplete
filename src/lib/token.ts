@@ -20,7 +20,7 @@ export class Tokenizer {
 	 * Set the format string
 	 * @param formatString The new string to use for formatting
 	 */
-	setFormatString(formatString: string): void {
+	public setFormatString(formatString: string): void {
 		this._formatString = formatString;
 	}
 
@@ -53,7 +53,7 @@ export class Tokenizer {
 	 * Parse the internal string and return an array of tokens.
 	 * @return Token[]
 	 */
-	parseTokens(): Token[] {
+	public parseTokens(): Token[] {
 		if (!this._formatString) {
 			return [];
 		}
@@ -64,9 +64,7 @@ export class Tokenizer {
 		let quoting: boolean = false;
 		let possibleEscaping: boolean = false;
 
-		for (let i = 0; i < this._formatString.length; ++i) {
-			const currentChar = this._formatString[i];
-
+		for (const currentChar of this._formatString) {
 			// Hanlde escaping and quoting
 			if (currentChar === "'") {
 				if (!quoting) {
@@ -179,55 +177,55 @@ export interface Token {
 }
 
 const symbolMapping: { [char: string]: DateTimeTokenType } = {
-	"G": DateTimeTokenType.ERA,
+	G: DateTimeTokenType.ERA,
 
-	"y": DateTimeTokenType.YEAR,
-	"Y": DateTimeTokenType.YEAR,
-	"u": DateTimeTokenType.YEAR,
-	"U": DateTimeTokenType.YEAR,
-	"r": DateTimeTokenType.YEAR,
+	y: DateTimeTokenType.YEAR,
+	Y: DateTimeTokenType.YEAR,
+	u: DateTimeTokenType.YEAR,
+	U: DateTimeTokenType.YEAR,
+	r: DateTimeTokenType.YEAR,
 
-	"Q": DateTimeTokenType.QUARTER,
-	"q": DateTimeTokenType.QUARTER,
+	Q: DateTimeTokenType.QUARTER,
+	q: DateTimeTokenType.QUARTER,
 
-	"M": DateTimeTokenType.MONTH,
-	"L": DateTimeTokenType.MONTH,
-	"l": DateTimeTokenType.MONTH,
+	M: DateTimeTokenType.MONTH,
+	L: DateTimeTokenType.MONTH,
+	l: DateTimeTokenType.MONTH,
 
-	"w": DateTimeTokenType.WEEK,
-	"W": DateTimeTokenType.WEEK,
+	w: DateTimeTokenType.WEEK,
+	W: DateTimeTokenType.WEEK,
 
-	"d": DateTimeTokenType.DAY,
-	"D": DateTimeTokenType.DAY,
-	"F": DateTimeTokenType.DAY,
-	"g": DateTimeTokenType.DAY,
+	d: DateTimeTokenType.DAY,
+	D: DateTimeTokenType.DAY,
+	F: DateTimeTokenType.DAY,
+	g: DateTimeTokenType.DAY,
 
-	"E": DateTimeTokenType.WEEKDAY,
-	"e": DateTimeTokenType.WEEKDAY,
-	"c": DateTimeTokenType.WEEKDAY,
+	E: DateTimeTokenType.WEEKDAY,
+	e: DateTimeTokenType.WEEKDAY,
+	c: DateTimeTokenType.WEEKDAY,
 
-	"a": DateTimeTokenType.DAYPERIOD,
+	a: DateTimeTokenType.DAYPERIOD,
 
-	"h": DateTimeTokenType.HOUR,
-	"H": DateTimeTokenType.HOUR,
-	"k": DateTimeTokenType.HOUR,
-	"K": DateTimeTokenType.HOUR,
-	"j": DateTimeTokenType.HOUR,
-	"J": DateTimeTokenType.HOUR,
+	h: DateTimeTokenType.HOUR,
+	H: DateTimeTokenType.HOUR,
+	k: DateTimeTokenType.HOUR,
+	K: DateTimeTokenType.HOUR,
+	j: DateTimeTokenType.HOUR,
+	J: DateTimeTokenType.HOUR,
 
-	"m": DateTimeTokenType.MINUTE,
+	m: DateTimeTokenType.MINUTE,
 
-	"s": DateTimeTokenType.SECOND,
-	"S": DateTimeTokenType.SECOND,
-	"A": DateTimeTokenType.SECOND,
+	s: DateTimeTokenType.SECOND,
+	S: DateTimeTokenType.SECOND,
+	A: DateTimeTokenType.SECOND,
 
-	"z": DateTimeTokenType.ZONE,
-	"Z": DateTimeTokenType.ZONE,
-	"O": DateTimeTokenType.ZONE,
-	"v": DateTimeTokenType.ZONE,
-	"V": DateTimeTokenType.ZONE,
-	"X": DateTimeTokenType.ZONE,
-	"x": DateTimeTokenType.ZONE
+	z: DateTimeTokenType.ZONE,
+	Z: DateTimeTokenType.ZONE,
+	O: DateTimeTokenType.ZONE,
+	v: DateTimeTokenType.ZONE,
+	V: DateTimeTokenType.ZONE,
+	X: DateTimeTokenType.ZONE,
+	x: DateTimeTokenType.ZONE
 };
 
 /**

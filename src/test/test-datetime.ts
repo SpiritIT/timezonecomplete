@@ -4,6 +4,8 @@
 
 "use strict";
 
+// tslint:disable:no-unused-expression
+
 import sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: false });
@@ -18,7 +20,7 @@ import * as index from "../lib/index";
 class TestTimeSource implements TimeSource {
 	public currentTime: Date = new Date("2014-01-03T04:05:06.007Z");
 
-	now(): Date {
+	public now(): Date {
 		return this.currentTime;
 	}
 }
@@ -29,7 +31,7 @@ DateTime.timeSource = testTimeSource;
 
 describe("datetime loose", (): void => {
 	// ensure time faked
-	beforeEach(function (): void {
+	beforeEach((): void => {
 		testTimeSource.currentTime = new Date("2014-01-03T04:05:06.007Z");
 		DateTime.timeSource = testTimeSource;
 	});
@@ -79,7 +81,7 @@ describe("datetime loose", (): void => {
 
 describe("DateTime", (): void => {
 	// ensure time faked
-	beforeEach(function (): void {
+	beforeEach((): void => {
 		testTimeSource.currentTime = new Date("2014-01-03T04:05:06.007Z");
 		DateTime.timeSource = testTimeSource;
 	});
@@ -600,20 +602,18 @@ describe("DateTime", (): void => {
 			expect(d.hour()).to.equal(3); // should be normalized to 3AM
 		});
 		it("should throw on wrong input", (): void => {
-			/* tslint:disable:no-unused-expression */
-			assert.throws(function (): void { new DateTime(2014, 0, 1); }, "doesn't throw on invalid month");
-			assert.throws(function (): void { new DateTime(2014, 13, 1); }, "doesn't throw on invalid month");
-			assert.throws(function (): void { new DateTime(2014, 1, 0); }, "doesn't throw on invalid day");
-			assert.throws(function (): void { new DateTime(2014, 1, 32); }, "doesn't throw on invalid day");
-			assert.throws(function (): void { new DateTime(2014, 1, 30, 24); }, "doesn't throw on invalid hour");
-			assert.throws(function (): void { new DateTime(2014, 1, 30, -1); }, "doesn't throw on invalid hour");
-			assert.throws(function (): void { new DateTime(2014, 1, 30, 1, 60); }, "doesn't throw on invalid minute");
-			assert.throws(function (): void { new DateTime(2014, 1, 30, 1, -1); }, "doesn't throw on invalid minute");
-			assert.throws(function (): void { new DateTime(2014, 1, 30, 1, 1, 60); }, "doesn't throw on invalid second");
-			assert.throws(function (): void { new DateTime(2014, 1, 30, 1, 1, -1); }, "doesn't throw on invalid second");
-			assert.throws(function (): void { new DateTime(2014, 1, 30, 1, 1, 1, -1); }, "doesn't throw on invalid millisecond");
-			assert.throws(function (): void { new DateTime(2014, 1, 30, 1, 1, 1, 1000); }, "doesn't throw on invalid millisecond");
-			/* tslint:enable:no-unused-expression */
+			assert.throws((): void => { new DateTime(2014, 0, 1); }, "doesn't throw on invalid month");
+			assert.throws((): void => { new DateTime(2014, 13, 1); }, "doesn't throw on invalid month");
+			assert.throws((): void => { new DateTime(2014, 1, 0); }, "doesn't throw on invalid day");
+			assert.throws((): void => { new DateTime(2014, 1, 32); }, "doesn't throw on invalid day");
+			assert.throws((): void => { new DateTime(2014, 1, 30, 24); }, "doesn't throw on invalid hour");
+			assert.throws((): void => { new DateTime(2014, 1, 30, -1); }, "doesn't throw on invalid hour");
+			assert.throws((): void => { new DateTime(2014, 1, 30, 1, 60); }, "doesn't throw on invalid minute");
+			assert.throws((): void => { new DateTime(2014, 1, 30, 1, -1); }, "doesn't throw on invalid minute");
+			assert.throws((): void => { new DateTime(2014, 1, 30, 1, 1, 60); }, "doesn't throw on invalid second");
+			assert.throws((): void => { new DateTime(2014, 1, 30, 1, 1, -1); }, "doesn't throw on invalid second");
+			assert.throws((): void => { new DateTime(2014, 1, 30, 1, 1, 1, -1); }, "doesn't throw on invalid millisecond");
+			assert.throws((): void => { new DateTime(2014, 1, 30, 1, 1, 1, 1000); }, "doesn't throw on invalid millisecond");
 		});
 	});
 
@@ -732,7 +732,7 @@ describe("DateTime", (): void => {
 	describe("convert()", (): void => {
 		it("unaware to aware", (): void => {
 			const d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
-			assert.throws(function (): void { d.convert(TimeZone.zone("Europe/Amsterdam")); });
+			assert.throws((): void => { d.convert(TimeZone.zone("Europe/Amsterdam")); });
 		});
 		it("unaware to unaware (null)", (): void => {
 			const d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
@@ -764,7 +764,7 @@ describe("DateTime", (): void => {
 	describe("toZone()", (): void => {
 		it("unaware to aware", (): void => {
 			const d = new DateTime(2014, 1, 1, 0, 0, 0, 0);
-			assert.throws(function (): void { d.toZone(TimeZone.zone("Europe/Amsterdam")); });
+			assert.throws((): void => { d.toZone(TimeZone.zone("Europe/Amsterdam")); });
 		});
 		it("unaware to unaware", (): void => {
 			const d = new DateTime(2014, 1, 1, 0, 0, 0, 0);

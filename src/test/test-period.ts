@@ -18,7 +18,7 @@ import { DateTime, Duration, Period, PeriodDst, TimeSource, TimeUnit, TimeZone }
 class TestTimeSource implements TimeSource {
 	public currentTime: Date = new Date("2014-01-03T04:05:06.007Z");
 
-	now(): Date {
+	public now(): Date {
 		return this.currentTime;
 	}
 }
@@ -332,7 +332,7 @@ describe("Period", function(): void {
 	});
 
 	describe("Period(X, 2, X, RegularLocalTime).findFirst()", (): void => {
-		it("should handle 2 Millisecond", function (): void {
+		it("should handle 2 Millisecond", (): void => {
 			this.timeout(60e3);
 			// note the target time is 2AM during DST backward, so 2AM exists twice.
 			// Because we want to increase local time, we expect to go from the FIRST 02:59:59 to 03:00:00, skippint the second 02:00:00
@@ -596,19 +596,19 @@ describe("Period", function(): void {
 		});
 		it("Should throw on null datetime", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
-			assert.throws(function (): void {
+			assert.throws((): void => {
 				p.findNext(null as any as DateTime);
 			});
 		});
 		it("Should throw on undefined datetime", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
-			assert.throws(function (): void {
+			assert.throws((): void => {
 				p.findNext(undefined as any as DateTime);
 			});
 		});
 		it("Should throw on non-integer count", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals);
-			assert.throws(function (): void {
+			assert.throws((): void => {
 				p.findNext(new DateTime("2014-01-01T00:00:00 Europe/Amsterdam"), 1.1);
 			});
 		});

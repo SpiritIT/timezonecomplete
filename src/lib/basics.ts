@@ -415,7 +415,6 @@ export function weekNumber(year: number, month: number, day: number): number {
 	return Math.floor((doy - thisYearWeekOne) / 7) + 1;
 }
 
-
 function assertUnixTimestamp(unixMillis: number): void {
 	assert(typeof (unixMillis) === "number", "number input expected");
 	assert(!isNaN(unixMillis), "NaN not expected as input");
@@ -693,21 +692,21 @@ export class TimeStruct {
 			if (split.length > 1 && split[1].length > 0) {
 				const fraction: number = parseFloat("0." + split[1]);
 				switch (lastUnit) {
-					case TimeUnit.Year: {
+					case TimeUnit.Year:
 						fractionMillis = daysInYear(year) * 86400000 * fraction;
-					} break;
-					case TimeUnit.Day: {
+						break;
+					case TimeUnit.Day:
 						fractionMillis = 86400000 * fraction;
-					} break;
-					case TimeUnit.Hour: {
+						break;
+					case TimeUnit.Hour:
 						fractionMillis = 3600000 * fraction;
-					} break;
-					case TimeUnit.Minute: {
+						break;
+					case TimeUnit.Minute:
 						fractionMillis = 60000 * fraction;
-					} break;
-					case TimeUnit.Second: {
+						break;
+					case TimeUnit.Second:
 						fractionMillis = 1000 * fraction;
-					} break;
+						break;
 				}
 			}
 

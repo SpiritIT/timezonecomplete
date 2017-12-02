@@ -8,9 +8,9 @@
 
 import { TimeStruct } from "./basics";
 import * as basics from "./basics";
-import { Tokenizer, Token, DateTimeTokenType as TokenType } from "./token";
 import * as strings from "./strings";
 import { TimeZone } from "./timezone";
+import { DateTimeTokenType as TokenType, Token, Tokenizer } from "./token";
 
 
 export interface FormatOptions {
@@ -49,7 +49,7 @@ export interface FormatOptions {
 	weekdayLetters: string[];
 }
 
-// todo this can be Partial<FormatOptions> but for compatibility with 
+// todo this can be Partial<FormatOptions> but for compatibility with
 // pre-2.1 typescript users we write this out ourselves for a while yet
 export interface PartialFormatOptions {
 	/**
@@ -153,8 +153,7 @@ export function format(
 	const tokenizer = new Tokenizer(formatString);
 	const tokens: Token[] = tokenizer.parseTokens();
 	let result: string = "";
-	for (let i = 0; i < tokens.length; ++i) {
-		const token = tokens[i];
+	for (const token of tokens) {
 		let tokenResult: string;
 		switch (token.type) {
 			case TokenType.ERA:
@@ -411,7 +410,7 @@ function _formatHour(dateTime: TimeStruct, token: Token): string {
 			hour = hour % 12;
 			if (hour === 0) {
 				hour = 12;
-			};
+			}
 			return strings.padLeft(hour.toString(), token.length, "0");
 		case "H":
 			return strings.padLeft(hour.toString(), token.length, "0");
@@ -421,7 +420,7 @@ function _formatHour(dateTime: TimeStruct, token: Token): string {
 		case "k":
 			if (hour === 0) {
 				hour = 24;
-			};
+			}
 			return strings.padLeft(hour.toString(), token.length, "0");
 		/* istanbul ignore next */
 		default:

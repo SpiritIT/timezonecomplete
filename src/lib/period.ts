@@ -9,8 +9,8 @@
 import assert from "./assert";
 import { TimeUnit } from "./basics";
 import * as basics from "./basics";
-import { Duration } from "./duration";
 import { DateTime } from "./datetime";
+import { Duration } from "./duration";
 import { TimeZone, TimeZoneKind } from "./timezone";
 
 /**
@@ -110,11 +110,11 @@ export class Period {
 	 * implemented and you will get an assert.
 	 *
 	 * @param reference The reference date of the period. If the period is in Months or Years, and
-	 *				the day is 29 or 30 or 31, the results are maximised to end-of-month.
-	 * @param interval	The interval of the period
-	 * @param dst	Specifies how to handle Daylight Saving Time. Not relevant
-	 *              if the time zone of the reference datetime does not have DST.
-	 *              Defaults to RegularLocalTime.
+	 *                  the day is 29 or 30 or 31, the results are maximised to end-of-month.
+	 * @param interval The interval of the period
+	 * @param dst Specifies how to handle Daylight Saving Time. Not relevant
+	 *            if the time zone of the reference datetime does not have DST.
+	 *            Defaults to RegularLocalTime.
 	 */
 	constructor(
 		reference: DateTime,
@@ -129,10 +129,10 @@ export class Period {
 	 * implemented and you will get an assert.
 	 *
 	 * @param reference The reference of the period. If the period is in Months or Years, and
-	 *				the day is 29 or 30 or 31, the results are maximised to end-of-month.
-	 * @param amount	The amount of units.
-	 * @param unit	The unit.
-	 * @param dst	Specifies how to handle Daylight Saving Time. Not relevant
+	 *                  the day is 29 or 30 or 31, the results are maximised to end-of-month.
+	 * @param amount The amount of units.
+	 * @param unit The unit.
+	 * @param dst Specifies how to handle Daylight Saving Time. Not relevant
 	 *              if the time zone of the reference datetime does not have DST.
 	 *              Defaults to RegularLocalTime.
 	 */
@@ -155,11 +155,11 @@ export class Period {
 		let interval: Duration;
 		let dst: PeriodDst = PeriodDst.RegularLocalTime;
 		if (typeof (amountOrInterval) === "object") {
-			interval = <Duration>amountOrInterval;
-			dst = <PeriodDst>unitOrDst;
+			interval = amountOrInterval as Duration;
+			dst = unitOrDst as PeriodDst;
 		} else {
 			assert(typeof unitOrDst === "number" && unitOrDst >= 0 && unitOrDst < TimeUnit.MAX, "Invalid unit");
-			interval = new Duration(<number>amountOrInterval, <TimeUnit>unitOrDst);
+			interval = new Duration(amountOrInterval as number, unitOrDst as TimeUnit);
 			dst = givenDst as PeriodDst;
 		}
 		if (typeof dst !== "number") {
@@ -181,24 +181,32 @@ export class Period {
 		if (this._dstRelevant() && dst === PeriodDst.RegularLocalTime) {
 			switch (this._intInterval.unit()) {
 				case TimeUnit.Millisecond:
-					assert(this._intInterval.amount() < 86400000,
+					assert(
+						this._intInterval.amount() < 86400000,
 						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
-						"then the amount must be either less than a day or a multiple of the next unit.");
+						"then the amount must be either less than a day or a multiple of the next unit."
+					);
 					break;
 				case TimeUnit.Second:
-					assert(this._intInterval.amount() < 86400,
+					assert(
+						this._intInterval.amount() < 86400,
 						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
-						"then the amount must be either less than a day or a multiple of the next unit.");
+						"then the amount must be either less than a day or a multiple of the next unit."
+					);
 					break;
 				case TimeUnit.Minute:
-					assert(this._intInterval.amount() < 1440,
+					assert(
+						this._intInterval.amount() < 1440,
 						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
-						"then the amount must be either less than a day or a multiple of the next unit.");
+						"then the amount must be either less than a day or a multiple of the next unit."
+					);
 					break;
 				case TimeUnit.Hour:
-					assert(this._intInterval.amount() < 24,
+					assert(
+						this._intInterval.amount() < 24,
 						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
-						"then the amount must be either less than a day or a multiple of the next unit.");
+						"then the amount must be either less than a day or a multiple of the next unit."
+					);
 					break;
 			}
 		}
@@ -258,12 +266,13 @@ export class Period {
 	 * the given date. The given date need not be at a period boundary.
 	 * Pre: the fromdate and reference date must either both have timezones or not
 	 * @param fromDate: the date after which to return the next date
-	 * @return the first date matching the period after fromDate, given
-	 *			in the same zone as the fromDate.
+	 * @return the first date matching the period after fromDate, given in the same zone as the fromDate.
 	 */
 	public findFirst(fromDate: DateTime): DateTime {
-		assert(!!this._intReference.zone() === !!fromDate.zone(),
-			"The fromDate and reference date must both be aware or unaware");
+		assert(
+			!!this._intReference.zone() === !!fromDate.zone(),
+			"The fromDate and reference date must both be aware or unaware"
+		);
 		let approx: DateTime;
 		let approx2: DateTime;
 		let approxMin: DateTime;
@@ -679,8 +688,10 @@ export class Period {
 	 */
 	public findNext(prev: DateTime, count: number = 1): DateTime {
 		assert(!!prev, "Prev must be given");
-		assert(!!this._intReference.zone() === !!prev.zone(),
-			"The fromDate and referenceDate must both be aware or unaware");
+		assert(
+			!!this._intReference.zone() === !!prev.zone(),
+			"The fromDate and referenceDate must both be aware or unaware"
+		);
 		assert(typeof (count) === "number", "Count must be a number");
 		assert(Math.floor(count) === count, "Count must be an integer");
 		const normalizedPrev = this._normalizeDay(prev.toZone(this._reference.zone()));
@@ -701,7 +712,7 @@ export class Period {
 	 * Pre: the fromdate and the period reference date must either both have timezones or not
 	 * @param fromDate: the date before which to return the next date
 	 * @return the last date matching the period before fromDate, given
-	 *			in the same zone as the fromDate.
+	 *         in the same zone as the fromDate.
 	 */
 	public findLast(from: DateTime): DateTime {
 		let result = this.findPrev(this.findFirst(from));
@@ -835,7 +846,7 @@ export class Period {
 	 * (i.e. if the reference time zone has DST)
 	 */
 	private _dstRelevant(): boolean {
-		let zone = this._reference.zone();
+		const zone = this._reference.zone();
 		return !!(zone
 			&& zone.kind() === TimeZoneKind.Proper
 			&& zone.hasDst()

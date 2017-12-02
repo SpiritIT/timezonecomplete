@@ -10,7 +10,7 @@ import assert from "./assert";
 import { TimeStruct } from "./basics";
 import { DateFunctions } from "./javascript";
 import * as strings from "./strings";
-import  { NormalizeOption, TzDatabase } from "./tz-database";
+import { NormalizeOption, TzDatabase } from "./tz-database";
 
 /**
  * The local time zone for a given date as per OS settings. Note that time zones are cached
@@ -153,7 +153,7 @@ export class TimeZone {
 		let name = "";
 		switch (typeof (a)) {
 			case "string": {
-				let s = <string>a;
+				let s = a as string;
 				if (s.indexOf("without DST") >= 0) {
 					dst = false;
 					s = s.slice(0, s.indexOf("without DST") - 1);
@@ -161,7 +161,7 @@ export class TimeZone {
 				name = TimeZone._normalizeString(s);
 			} break;
 			case "number": {
-				const offset: number = <number>a;
+				const offset: number = a as number;
 				assert(offset > -24 * 60 && offset < 24 * 60, "TimeZone.zone(): offset out of range");
 				name = TimeZone.offsetToString(offset);
 			} break;
@@ -306,7 +306,7 @@ export class TimeZone {
 
 	/**
 	 * Calculate timezone offset including DST from a UTC time.
-\	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
+	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
 	 */
 	public offsetForUtc(offsetForUtc: TimeStruct): number;
 	public offsetForUtc(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
@@ -553,7 +553,7 @@ export class TimeZone {
 	/**
 	 * Used by util.inspect()
 	 */
-	inspect(): string {
+	public inspect(): string {
 		return "[TimeZone: " + this.toString() + "]";
 	}
 

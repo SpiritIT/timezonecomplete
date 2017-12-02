@@ -4,6 +4,8 @@
 
 "use strict";
 
+// tslint:disable:no-unused-expression
+
 import sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: false });
@@ -15,29 +17,29 @@ import * as token from "../lib/token";
 describe("Token", (): void => {
 	describe("constructor()", (): void => {
 		it("should accept an initial format string", (): void => {
-			var tokenizer = new token.Tokenizer("foo");
+			const tokenizer = new token.Tokenizer("foo");
 			expect(tokenizer.parseTokens()).to.not.be.empty;
 		});
 	});
 	describe("setFormatString", (): void => {
 		it("should accept a new format string", (): void => {
-			var tokenizer = new token.Tokenizer("");
+			const tokenizer = new token.Tokenizer("");
 			tokenizer.setFormatString("foo");
 			expect(tokenizer.parseTokens()).to.not.be.empty;
 		});
 	});
 	describe("parseTokens", (): void => {
 		it("should return the empty list for an empty string", (): void => {
-			var tokenizer = new token.Tokenizer("");
-			var result = tokenizer.parseTokens();
-			var expected: token.Token[] = [];
+			const tokenizer = new token.Tokenizer("");
+			const result = tokenizer.parseTokens();
+			const expected: token.Token[] = [];
 			expect(result).to.eql(expected);
 		});
 
 		it("should return one token for \"aaaa\"", (): void => {
-			var tokenizer = new token.Tokenizer("aaaa");
-			var result = tokenizer.parseTokens();
-			var expected: token.Token[] = [{
+			const tokenizer = new token.Tokenizer("aaaa");
+			const result = tokenizer.parseTokens();
+			const expected: token.Token[] = [{
 				length: 4,
 				raw: "aaaa",
 				type: token.DateTimeTokenType.DAYPERIOD,
@@ -48,10 +50,10 @@ describe("Token", (): void => {
 		});
 
 		it("should return two tokens for \"aacc\"", (): void => {
-			var tokenizer = new token.Tokenizer("aacc");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("aacc");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 2,
 				raw: "aa",
 				type: token.DateTimeTokenType.DAYPERIOD,
@@ -61,16 +63,16 @@ describe("Token", (): void => {
 					raw: "cc",
 					type: token.DateTimeTokenType.WEEKDAY,
 					symbol: "c"
-				}];
+			}];
 
 			expect(result).to.eql(expected);
 		});
 
 		it("should return three tokens for \"aa cc\"", (): void => {
-			var tokenizer = new token.Tokenizer("aa cc");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("aa cc");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 2,
 				raw: "aa",
 				type: token.DateTimeTokenType.DAYPERIOD,
@@ -92,10 +94,10 @@ describe("Token", (): void => {
 		});
 
 		it("should return one token for \"    \"", (): void => {
-			var tokenizer = new token.Tokenizer("    ");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("    ");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 4,
 				raw: "    ",
 				type: token.DateTimeTokenType.IDENTITY,
@@ -106,10 +108,10 @@ describe("Token", (): void => {
 		});
 
 		it("should return five tokens for \"12345\"", (): void => {
-			var tokenizer = new token.Tokenizer("12345");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("12345");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 1,
 				raw: "1",
 				type: token.DateTimeTokenType.IDENTITY,
@@ -140,10 +142,10 @@ describe("Token", (): void => {
 		});
 
 		it("should return one token for \"'hello'\"", (): void => {
-			var tokenizer = new token.Tokenizer("'hello'");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("'hello'");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 5,
 				raw: "hello",
 				type: token.DateTimeTokenType.IDENTITY,
@@ -153,10 +155,10 @@ describe("Token", (): void => {
 		});
 
 		it("should escape a double ''", (): void => {
-			var tokenizer = new token.Tokenizer("aaa''ccc");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("aaa''ccc");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 3,
 				raw: "aaa",
 				type: token.DateTimeTokenType.DAYPERIOD,
@@ -177,10 +179,10 @@ describe("Token", (): void => {
 		});
 
 		it("should escape two double ''", (): void => {
-			var tokenizer = new token.Tokenizer("aaa''''dddccc");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("aaa''''dddccc");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 3,
 				raw: "aaa",
 				type: token.DateTimeTokenType.DAYPERIOD,
@@ -206,10 +208,10 @@ describe("Token", (): void => {
 		});
 
 		it("should escape a '' while quoting", (): void => {
-			var tokenizer = new token.Tokenizer("aaa'Hello ''there'' buddy'ccc");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("aaa'Hello ''there'' buddy'ccc");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 3,
 				raw: "aaa",
 				type: token.DateTimeTokenType.DAYPERIOD,
@@ -230,10 +232,10 @@ describe("Token", (): void => {
 		});
 
 		it("should escape two '' while quoting", (): void => {
-			var tokenizer = new token.Tokenizer("aaa'Hello ''''there'''' buddy'ccc");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("aaa'Hello ''''there'''' buddy'ccc");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 3,
 				raw: "aaa",
 				type: token.DateTimeTokenType.DAYPERIOD,
@@ -254,10 +256,10 @@ describe("Token", (): void => {
 		});
 
 		it("should escape a '' at the front of the string", (): void => {
-			var tokenizer = new token.Tokenizer("''aaa sss");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("''aaa sss");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 1,
 				raw: "'",
 				type: token.DateTimeTokenType.IDENTITY,
@@ -283,10 +285,10 @@ describe("Token", (): void => {
 		});
 
 		it("should escape a '' at the end of the string", (): void => {
-			var tokenizer = new token.Tokenizer("aaa sss''");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("aaa sss''");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 3,
 				raw: "aaa",
 				type: token.DateTimeTokenType.DAYPERIOD,
@@ -312,10 +314,10 @@ describe("Token", (): void => {
 		});
 
 		it("should escape a '' at the end of the string", (): void => {
-			var tokenizer = new token.Tokenizer("aaa'hi'sssbbb");
-			var result = tokenizer.parseTokens();
+			const tokenizer = new token.Tokenizer("aaa'hi'sssbbb");
+			const result = tokenizer.parseTokens();
 
-			var expected: token.Token[] = [{
+			const expected: token.Token[] = [{
 				length: 3,
 				raw: "aaa",
 				type: token.DateTimeTokenType.DAYPERIOD,
