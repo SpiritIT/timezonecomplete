@@ -8,7 +8,6 @@ import sourcemapsupport = require("source-map-support");
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
 sourcemapsupport.install({ handleUncaughtExceptions: false });
 
-import * as assert from "assert";
 import { expect } from "chai";
 
 import {format, TimeStruct, TimeZone} from "../lib/index";
@@ -25,6 +24,51 @@ describe("format", (): void => {
 			const localZone: TimeZone | null | null = null;
 			const result = format(dateTime, dateTime, localZone, "'abcdefghijklmnopqrstuvwxyz'");
 			expect(result).to.equal("abcdefghijklmnopqrstuvwxyz");
+		});
+		it("should return the raw string if it is only part of a token", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, undefined, "F");
+			expect(result).to.equal("F");
+		});
+		it("should split a too-long quarter", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, undefined, "QQQQQQ");
+			expect(result).to.equal("101");
+		});
+		it("should split a too-long month", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, undefined, "MMMMMM");
+			expect(result).to.equal("J1");
+		});
+		it("should split a too-long weekday", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, undefined, "EEEEEEE");
+			expect(result).to.equal("ThThu");
+		});
+		it("should split a too-long zone offset", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, TimeZone.zone("UTC"), "ZZZZZZ");
+			expect(result).to.equal("+00:00+0000");
+		});
+		it("should split a too-long zone offset when no zone given", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, undefined, "ZZZZZZ");
+			expect(result).to.equal("");
+		});
+		it("should split a too-long zone name", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, TimeZone.zone("UTC"), "zzzzz");
+			expect(result).to.equal("UTCUTC");
+		});
+		it("should split a too-long zone offset x", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, TimeZone.zone("UTC"), "XXXXXX");
+			expect(result).to.equal("ZZ");
+		});
+		it("should split a non-existing zone offset OO", (): void => {
+			const dateTime = TimeStruct.fromComponents();
+			const result = format(dateTime, dateTime, TimeZone.zone("UTC"), "OO");
+			expect(result).to.equal("UTC+0UTC+0");
 		});
 	});
 
@@ -70,12 +114,6 @@ describe("format", (): void => {
 			const localZone: TimeZone | null | null = null;
 			const result = format(dateTime, utcTime, localZone, "GGGGG");
 			expect(result).to.equal("A");
-		});
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(-1);
-			const utcTime = dateTime;
-			const localZone: TimeZone | null | null = null;
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "GGGGGG"); });
 		});
 	});
 
@@ -153,12 +191,6 @@ describe("format", (): void => {
 			const result = format(dateTime, utcTime, localZone, "qqqqq");
 			expect(result).to.equal("3");
 		});
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(1970, 5);
-			const utcTime = dateTime;
-			const localZone: TimeZone | null | null = null;
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "qqqqqq"); });
-		});
 	});
 
 	describe("formatMonth", (): void => {
@@ -203,12 +235,6 @@ describe("format", (): void => {
 			const localZone: TimeZone | null | null = null;
 			const result = format(dateTime, utcTime, localZone, "MMMMM");
 			expect(result).to.equal("N");
-		});
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(1970, 1);
-			const utcTime = dateTime;
-			const localZone: TimeZone | null | null = null;
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "MMMMMM"); });
 		});
 		it("should use given format options", (): void => {
 			const dateTime = TimeStruct.fromComponents(1970, 11);
@@ -356,12 +382,6 @@ describe("format", (): void => {
 			expect(result).to.equal("2");
 		});
 
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(2014, 8, 19);
-			const utcTime = dateTime;
-			const localZone: TimeZone | null | null = null;
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "EEEEEEE"); });
-		});
 	});
 
 	describe("formatDayPeriod", (): void => {
@@ -648,12 +668,6 @@ describe("format", (): void => {
 			const result = format(dateTime, utcTime, localZone, "zzzz");
 			expect(result).to.equal("Europe/Amsterdam"); // Should be Central European Time
 		});
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
-			const utcTime = TimeStruct.fromComponents(2014, 7, 14, 22);
-			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "zzzzz"); });
-		});
 
 		it("should get the short specific name of the timezone for format O", (): void => {
 			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
@@ -740,12 +754,6 @@ describe("format", (): void => {
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "VVVV");
 			expect(result).to.equal("Unknown");
-		});
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
-			const utcTime = TimeStruct.fromComponents(2014, 7, 14, 21, 30);
-			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "VVVVVV"); });
 		});
 
 		it("should get the basic ISO format for format X with positive offset", (): void => {
@@ -857,12 +865,6 @@ describe("format", (): void => {
 			const result = format(dateTime, utcTime, localZone, "XXXXX");
 			expect(result).to.equal("Z");
 		});
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
-			const utcTime = TimeStruct.fromComponents(2014, 7, 14, 21, 30);
-			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "XXXXXX"); });
-		});
 
 		it("should get the basic ISO format for format x with positive offset", (): void => {
 			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
@@ -972,12 +974,6 @@ describe("format", (): void => {
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "xxxxx");
 			expect(result).to.equal("+00:00");
-		});
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
-			const utcTime = TimeStruct.fromComponents(2014, 7, 15);
-			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "xxxxxx"); });
 		});
 
 		it("should get the basic ISO format for format Z with positive offset", (): void => {
@@ -1089,12 +1085,5 @@ describe("format", (): void => {
 		const result = format(dateTime, utcTime, localZone, "ZZZZZ");
 			expect(result).to.equal("+00:00");
 		});
-		it("should throw if the token is too long", (): void => {
-			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
-			const utcTime = TimeStruct.fromComponents(2014, 7, 15);
-			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
-			assert.throws((): void => { format(dateTime, utcTime, localZone, "ZZZZZZ"); });
-		});
-
 	});
 });

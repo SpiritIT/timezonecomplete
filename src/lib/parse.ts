@@ -6,7 +6,7 @@
 
 import { TimeComponentOpts, TimeStruct } from "./basics";
 import { TimeZone } from "./timezone";
-import { DateTimeTokenType as TokenType, Token, Tokenizer } from "./token";
+import { Token, tokenize, TokenType } from "./token";
 
 /**
  * TimeStruct plus zone
@@ -66,8 +66,7 @@ export function parse(
 		throw new Error("no format given");
 	}
 	try {
-		const tokenizer = new Tokenizer(formatString);
-		const tokens: Token[] = tokenizer.parseTokens();
+		const tokens: Token[] = tokenize(formatString);
 		const time: TimeComponentOpts = { year: -1 };
 		let zone: TimeZone | undefined;
 		let pnr: ParseNumberResult;
@@ -75,16 +74,22 @@ export function parse(
 		let remaining: string = dateTimeString;
 		for (const token of tokens) {
 			switch (token.type) {
+				/* istanbul ignore next */
 				case TokenType.ERA:
-					// nothing
-					break;
+				/* istanbul ignore next */
+				case TokenType.QUARTER:
+				/* istanbul ignore next */
+				case TokenType.WEEKDAY:
+				/* istanbul ignore next */
+				case TokenType.DAYPERIOD:
+				/* istanbul ignore next */
+				case TokenType.WEEK:
+					/* istanbul ignore next */
+					break; // nothing to learn from this
 				case TokenType.YEAR:
 					pnr = stripNumber(remaining);
 					remaining = pnr.remaining;
 					time.year = pnr.n;
-					break;
-				case TokenType.QUARTER:
-					// nothing
 					break;
 				case TokenType.MONTH:
 					pnr = stripNumber(remaining);
@@ -95,12 +100,6 @@ export function parse(
 					pnr = stripNumber(remaining);
 					remaining = pnr.remaining;
 					time.day = pnr.n;
-					break;
-				case TokenType.WEEKDAY:
-					// nothing
-					break;
-				case TokenType.DAYPERIOD:
-					// nothing
 					break;
 				case TokenType.HOUR:
 					pnr = stripNumber(remaining);
@@ -117,7 +116,7 @@ export function parse(
 					remaining = pnr.remaining;
 					if (token.raw.charAt(0) === "s") {
 						time.second = pnr.n;
-					} else if (token.raw.charAt(0) === "S") {
+					} else /* istanbul ignore else */ if (token.raw.charAt(0) === "S") {
 						time.milli = pnr.n;
 					} else {
 						throw new Error(`unsupported second format '${token.raw}'`);
@@ -128,9 +127,7 @@ export function parse(
 					remaining = pzr.remaining;
 					zone = pzr.zone;
 					break;
-				case TokenType.WEEK:
-					// nothing
-					break;
+				/* istanbul ignore next */
 				default:
 				case TokenType.IDENTITY:
 					remaining = stripRaw(remaining, token.raw);
@@ -139,7 +136,7 @@ export function parse(
 		}
 		const result: AwareTimeStruct = { time: new TimeStruct(time), zone };
 		if (!result.time.validate()) {
-			throw new Error("resulting date invalid");
+			throw new Error(`invalid resulting date`);
 		}
 		// always overwrite zone with given zone
 		if (overrideZone) {
@@ -192,6 +189,7 @@ function stripZone(s: string): ParseZoneResult {
 		zoneString += result.remaining.charAt(0);
 		result.remaining = result.remaining.substr(1);
 	}
+	/* istanbul ignore next */
 	if (zoneString.trim()) {
 		result.zone = TimeZone.zone(zoneString);
 	}

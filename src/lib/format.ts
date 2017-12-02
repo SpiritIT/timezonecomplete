@@ -10,7 +10,7 @@ import { TimeStruct } from "./basics";
 import * as basics from "./basics";
 import * as strings from "./strings";
 import { TimeZone } from "./timezone";
-import { DateTimeTokenType as TokenType, Token, Tokenizer } from "./token";
+import { Token, tokenize, TokenType } from "./token";
 
 
 export interface FormatOptions {
@@ -150,8 +150,7 @@ export function format(
 		}
 	}
 
-	const tokenizer = new Tokenizer(formatString);
-	const tokens: Token[] = tokenizer.parseTokens();
+	const tokens: Token[] = tokenize(formatString);
 	let result: string = "";
 	for (const token of tokens) {
 		let tokenResult: string;
@@ -192,8 +191,9 @@ export function format(
 			case TokenType.WEEK:
 				tokenResult = _formatWeek(dateTime, token);
 				break;
+			case TokenType.IDENTITY: // intentional fallthrough
+			/* istanbul ignore next */
 			default:
-			case TokenType.IDENTITY:
 				tokenResult = token.raw;
 				break;
 		}
@@ -221,8 +221,11 @@ function _formatEra(dateTime: TimeStruct, token: Token): string {
 			return (AD ? "Anno Domini" : "Before Christ");
 		case 5:
 			return (AD ? "A" : "B");
+		/* istanbul ignore next */
 		default:
-			throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
+			// tokenizer should prevent this
+			/* istanbul ignore next */
+			return token.raw;
 	}
 }
 
@@ -245,11 +248,9 @@ function _formatYear(dateTime: TimeStruct, token: Token): string {
 			return yearValue;
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
+			// tokenizer should prevent this
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
-			}
+			return token.raw;
 	}
 }
 
@@ -274,11 +275,9 @@ function _formatQuarter(dateTime: TimeStruct, token: Token, formatOptions: Forma
 			return quarter.toString();
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
+			// tokenizer should prevent this
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
-			}
+			return token.raw;
 	}
 }
 
@@ -302,11 +301,9 @@ function _formatMonth(dateTime: TimeStruct, token: Token, formatOptions: FormatO
 			return formatOptions.monthLetters[dateTime.month - 1];
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
+			// tokenizer should prevent this
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
-			}
+			return token.raw;
 	}
 }
 
@@ -341,11 +338,9 @@ function _formatDay(dateTime: TimeStruct, token: Token): string {
 			return strings.padLeft(dayOfYear.toString(), token.length, "0");
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
+			// tokenizer should prevent this
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
-			}
+			return token.raw;
 	}
 }
 
@@ -377,11 +372,9 @@ function _formatWeekday(dateTime: TimeStruct, token: Token, formatOptions: Forma
 			return formatOptions.weekdayTwoLetters[weekDayNumber];
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
+			// tokenizer should prevent this
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
-			}
+			return token.raw;
 	}
 }
 
@@ -424,11 +417,9 @@ function _formatHour(dateTime: TimeStruct, token: Token): string {
 			return strings.padLeft(hour.toString(), token.length, "0");
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
+			// tokenizer should prevent this
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
-			}
+			return token.raw;
 	}
 }
 
@@ -463,11 +454,9 @@ function _formatSecond(dateTime: TimeStruct, token: Token): string {
 			return strings.padLeft(basics.secondOfDay(dateTime.hour, dateTime.minute, dateTime.second).toString(), token.length, "0");
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
+			// tokenizer should prevent this
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
-			}
+			return token.raw;
 	}
 }
 
@@ -504,6 +493,9 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 			if (token.length >= 4 || offsetMinutes !== 0) {
 				result += ":" + offsetMinutesString;
 			}
+			if (token.length > 4) {
+				result += token.raw.slice(4);
+			}
 			return result;
 		case "Z":
 			switch (token.length) {
@@ -523,11 +515,9 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 					return offsetHoursString + ":" + offsetMinutesString;
 				/* istanbul ignore next */
 				default:
-					/* istanbul ignore if */
+					// tokenizer should prevent this
 					/* istanbul ignore next */
-					if (true) {
-						throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
-					}
+					return token.raw;
 			}
 		case "z":
 			switch (token.length) {
@@ -539,11 +529,9 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 					return zone.toString();
 				/* istanbul ignore next */
 				default:
-					/* istanbul ignore if */
+					// tokenizer should prevent this
 					/* istanbul ignore next */
-					if (true) {
-						throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
-					}
+					return token.raw;
 			}
 		case "v":
 			if (token.length === 1) {
@@ -563,11 +551,9 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 					return "Unknown";
 				/* istanbul ignore next */
 				default:
-					/* istanbul ignore if */
+					// tokenizer should prevent this
 					/* istanbul ignore next */
-					if (true) {
-						throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
-					}
+					return token.raw;
 			}
 		case "X":
 		case "x":
@@ -589,19 +575,15 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 					return offsetHoursString + ":" + offsetMinutesString;
 				/* istanbul ignore next */
 				default:
-					/* istanbul ignore if */
+					// tokenizer should prevent this
 					/* istanbul ignore next */
-					if (true) {
-						throw new Error("Unexpected length " + token.length + " for symbol " + token.symbol);
-					}
+					return token.raw;
 			}
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
+			// tokenizer should prevent this
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unexpected symbol " + token.symbol + " for token " + TokenType[token.type]);
-			}
+			return token.raw;
 	}
 }
 
