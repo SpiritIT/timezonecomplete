@@ -48,7 +48,7 @@ describe("format", (): void => {
 		it("should split a too-long zone offset", (): void => {
 			const dateTime = TimeStruct.fromComponents();
 			const result = format(dateTime, dateTime, TimeZone.zone("UTC"), "ZZZZZZ");
-			expect(result).to.equal("+00:00+0000");
+			expect(result).to.equal("Z+0000");
 		});
 		it("should split a too-long zone offset when no zone given", (): void => {
 			const dateTime = TimeStruct.fromComponents();
@@ -68,7 +68,7 @@ describe("format", (): void => {
 		it("should split a non-existing zone offset OO", (): void => {
 			const dateTime = TimeStruct.fromComponents();
 			const result = format(dateTime, dateTime, TimeZone.zone("UTC"), "OO");
-			expect(result).to.equal("UTC+0UTC+0");
+			expect(result).to.equal("GMT+0GMT+0");
 		});
 	});
 
@@ -674,28 +674,21 @@ describe("format", (): void => {
 			const utcTime = TimeStruct.fromComponents(2014, 7, 14, 22);
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "O");
-			expect(result).to.equal("UTC+2");
+			expect(result).to.equal("GMT+2");
 		});
-		it("should get the short specific name of the timezone for format O", (): void => {
+		it("should show GMT for format O", (): void => {
 			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
 			const utcTime = TimeStruct.fromComponents(2014, 7, 14, 23);
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "O");
-			expect(result).to.equal("UTC+1");
+			expect(result).to.equal("GMT+1");
 		});
-		it("should get the short specific name of the timezone for format OOOO", (): void => {
+		it("should show GMT for format OOOO", (): void => {
 			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
 			const utcTime = TimeStruct.fromComponents(2014, 7, 14, 22);
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "OOOO");
-			expect(result).to.equal("UTC+2:00");
-		});
-		it("should get the short specific name of the timezone for format OOOO", (): void => {
-			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
-			const utcTime = TimeStruct.fromComponents(2014, 7, 14, 23);
-			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
-			const result = format(dateTime, utcTime, localZone, "OOOO");
-			expect(result).to.equal("UTC+1:00");
+			expect(result).to.equal("GMT+2:00");
 		});
 
 		it("should get the short specific name of the timezone for format v", (): void => {
@@ -1047,21 +1040,21 @@ describe("format", (): void => {
 			const utcTime = TimeStruct.fromComponents(2014, 7, 14, 21, 30);
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "ZZZZ");
-			expect(result).to.equal("UTC+2:30");
+			expect(result).to.equal("GMT+2:30");
 		});
 		it("should get the basic ISO format for format ZZZZ with negative offset", (): void => {
 			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
 			const utcTime = TimeStruct.fromComponents(2014, 7, 15, 8);
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "ZZZZ");
-			expect(result).to.equal("UTC-8:00");
+			expect(result).to.equal("GMT-8:00");
 		});
 		it("should get the basic ISO format for format ZZZZ with 0 offset", (): void => {
 			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
 			const utcTime = TimeStruct.fromComponents(2014, 7, 15);
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "ZZZZ");
-			expect(result).to.equal("UTC+0:00");
+			expect(result).to.equal("GMT+0:00");
 		});
 
 		it("should get the basic ISO format for format ZZZZZ with positive offset", (): void => {
@@ -1083,7 +1076,7 @@ describe("format", (): void => {
 			const utcTime = TimeStruct.fromComponents(2014, 7, 15);
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
 			const result = format(dateTime, utcTime, localZone, "ZZZZZ");
-			expect(result).to.equal("+00:00");
+			expect(result).to.equal("Z");
 		});
 	});
 

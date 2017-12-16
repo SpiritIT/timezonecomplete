@@ -430,7 +430,7 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 
 	switch (token.symbol) {
 		case "O":
-			result = "UTC";
+			result = "GMT";
 			if (offset >= 0) {
 				result += "+";
 			} else {
@@ -459,6 +459,9 @@ function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZon
 					};
 					return _formatZone(currentTime, utcTime, zone, newToken);
 				case 5:
+					if (offset === 0) {
+						return "Z";
+					}
 					return offsetHoursString + ":" + offsetMinutesString;
 				/* istanbul ignore next */
 				default:
