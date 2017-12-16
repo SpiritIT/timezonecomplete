@@ -321,7 +321,7 @@ The main differences with the JavaScript Date are:
 * Our day-of-month is called day() not date().
 * We count months from 1 to 12 inclusive, not from 0 to 11 as JavaScript does.
 * With both JavaScript Date and timezone-js Date, the UTC millisecond value is sometimes off (because it depends on your local time). The DateTime UTC value is always UTC for dates that have a time zone, and it is equal to the "local" date value for naive dates.
-* format() is a function that takes an [LDML](http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns) formatting string and returns a formatted string.
+* format() is a function that takes an [LDML](./LDML.md) formatting string and returns a formatted string.
 
 ```javascript
 // a naive timestamp: 2014-01-01 13:59:59
@@ -343,7 +343,7 @@ var amsterdamDateNoDst = new tc.DateTime(2014, 1, 1, 13, 59, 59, 0, tc.zone("Eur
 var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Amsterdam");
 
 // date from other string format
-var unitedStatesDate = new tc.DateTime("12/31/2015 23:44:55.123 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS zzzz");
+var unitedStatesDate = new tc.DateTime("12/31/2015 23:44:55.123 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS vv");
 
 // date from an Excel datetime number
 var dt = tc.DateTime.fromExcel(42005.5430555556); // 2015-01-01T13:02:00
@@ -580,10 +580,10 @@ p.identical(q); // false, not same constructor arguments
 
 ### Internationalization
 
-You can format and parse date times using LDML format strings. You can also change the used month, weekday and quarter names.
-Unfortunately, parsing month, weekday and quarter names is not yet possible. Please submit an issue if you need it.
+You can change the names used for months and weekdays etc. You can do so globally (by setting `DEFAULT_FORMAT_OPTIONS`), or locally
+(by passing an options object to the `format` and `parse` functions).
 
-```
+```javascript
 // parsing and formatting
 var dt = new tc.DateTime("2015-03-01", "yyyy-MM-dd");
 dt.format("dd-MMMM-yyyy"); // "31-March-2015"
@@ -607,7 +607,10 @@ var myFormatOptions = {
 	longWeekdayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 	shortWeekdayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 	weekdayTwoLetters: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-	weekdayLetters: ["S", "M", "T", "W", "T", "F", "S"]
+	weekdayLetters: ["S", "M", "T", "W", "T", "F", "S"],
+	dayPeriodAbbreviated: { am: "AM", pm: "PM", noon: "noon", midnight: "mid." },
+	dayPeriodWide: { am: "AM", pm: "PM", noon: "noon", midnight: "midnight" },
+	dayPeriodNarrow: { am: "A", pm: "P", noon: "noon", midnight: "md" }
 }
 
 ```

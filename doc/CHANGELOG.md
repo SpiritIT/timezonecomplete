@@ -1,9 +1,18 @@
 
 # Changelog
 
+## 5.4.6 (2017-12-16)
+
+* Fix for issue #35: AM/PM not parsed and formatted correctly
+* Fix for formatting of `O` and `OOOO` patterns which used 'UTC' instead of 'GMT'
+* Fix for formatting of `ZZZZZ` patterns which did not use 'Z' when appropriate
+* Allow setting locale in `DateTime#parse()`
+* Documented the [LDML formats](./doc/LDML.md) that we do and do not support
+* Changed copyright from Spirit IT to ABB because company has been acquired by ABB
+
 ## 5.4.5 (2017-12-03)
 
-* Fix for issue #35: DateTime#format() no longer throws errors
+* Fix for issue #34: DateTime#format() no longer throws errors
 * Update all dependencies
 * Improve code coverage
 * Have Travis CI test against more Node.JS versions
