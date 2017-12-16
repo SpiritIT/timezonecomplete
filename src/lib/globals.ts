@@ -1,5 +1,5 @@
-﻿/**
- * Copyright(c) 2014 Spirit IT BV
+/**
+ * Copyright(c) 2014 ABB Switzerland Ltd.
  *
  * Global functions depending on DateTime/Duration etc
  */

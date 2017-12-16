@@ -1,5 +1,5 @@
 /**
- * Copyright(c) 2016 Spirit IT BV
+ * Copyright(c) 2016 ABB Switzerland Ltd.
  */
 
 "use strict";

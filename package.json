@@ -55,7 +55,7 @@
     "@types/chai": "^4.0.6",
     "@types/lolex": "^2.1.1",
     "@types/mocha": "^2.2.44",
-    "@types/node": "^8.0.53",
+    "@types/node": "^8.5.1",
     "@types/sinon": "^4.0.0",
     "@types/source-map-support": "^0.4.0",
     "browserify": "^14.5.0",
