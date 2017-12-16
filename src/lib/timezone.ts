@@ -581,16 +581,28 @@ export class TimeZone {
 			return 0;
 		}
 		// check that the remainder conforms to ISO time zone spec
-		assert(t.match(/^[+-]\d\d(:?)\d\d$/) || t.match(/^[+-]\d\d$/), "Wrong time zone format: \"" + t + "\"");
+		assert(t.match(/^[+-]\d$/) || t.match(/^[+-]\d\d$/) || t.match(/^[+-]\d\d(:?)\d\d$/), "Wrong time zone format: \"" + t + "\"");
 		const sign: number = (t.charAt(0) === "+" ? 1 : -1);
-		const hours: number = parseInt(t.substr(1, 2), 10);
+		let hours: number = 0;
 		let minutes: number = 0;
-		if (t.length === 5) {
-			minutes = parseInt(t.substr(3, 2), 10);
-		} else if (t.length === 6) {
-			minutes = parseInt(t.substr(4, 2), 10);
+		switch (t.length) {
+			case 2:
+				hours = parseInt(t.slice(1, 2), 10);
+				break;
+			case 3:
+				hours = parseInt(t.slice(1, 3), 10);
+				break;
+			case 5:
+				hours = parseInt(t.slice(1, 3), 10);
+				minutes = parseInt(t.slice(3, 5), 10);
+				break;
+			case 6:
+				hours = parseInt(t.slice(1, 3), 10);
+				minutes = parseInt(t.slice(4, 6), 10);
+				break;
 		}
-		assert(hours >= 0 && hours < 24, "Offsets from UTC must be less than a day.");
+		assert(hours >= 0 && hours < 24, `Invalid time zone (hours out of range): '${t}'`);
+		assert(minutes >= 0 && minutes < 60, `Invalid time zone (minutes out of range): '${t}'`);
 		return sign * (hours * 60 + minutes);
 	}
 

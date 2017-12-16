@@ -769,4 +769,58 @@ describe("parse", (): void => {
 			});
 		});
 	});
+
+	describe("zone", (): void => {
+		describe("formats with GMT", (): void => {
+			it("should parse ZZZZ", (): void => {
+				expect(parse.parse("GMT+03:30", "ZZZZ", undefined, false).zone!.toString()).to.equal("+03:30");
+			});
+			it("should parse O", (): void => {
+				expect(parse.parse("GMT+3", "O", undefined, false).zone!.toString()).to.equal("+03:00");
+			});
+			it("should parse OOOO", (): void => {
+				expect(parse.parse("GMT+03:30", "OOOO", undefined, false).zone!.toString()).to.equal("+03:30");
+			});
+			it("should throw on invalid offset", (): void => {
+				expect(() => parse.parse("GMT-26:30", "OOOO", undefined, false)).to.throw();
+			});
+			it("should throw on invalid string after GMT", (): void => {
+				expect(() => parse.parse("GMTZ", "OOOO", undefined, false)).to.throw();
+			});
+		});
+		describe("numeric zones", (): void => {
+			it("should parse Zulu", (): void => {
+				expect(parse.parse("Z", "XX", undefined, false).zone!.toString()).to.equal("+00:00");
+			});
+			it("should parse double-digit hour", (): void => {
+				expect(parse.parse("-03", "x", undefined, false).zone!.toString()).to.equal("-03:00");
+			});
+			it("should parse short hour+minute (negative)", (): void => {
+				expect(parse.parse("-0330", "XX", undefined, false).zone!.toString()).to.equal("-03:30");
+			});
+			it("should parse short hour+minute (positive)", (): void => {
+				expect(parse.parse("+0330", "XX", undefined, false).zone!.toString()).to.equal("+03:30");
+			});
+			it("should parse extended hour+minute", (): void => {
+				expect(parse.parse("-03:30", "XXX", undefined, false).zone!.toString()).to.equal("-03:30");
+			});
+			it("should throw on invalid zone", (): void => {
+				expect(() => parse.parse("-26:99:99", "XXXXX", undefined, false)).to.throw();
+			});
+		});
+		describe("named zones", (): void => {
+			it("should parse GMT", (): void => {
+				expect(parse.parse("GMT", "VV", undefined, false).zone!.toString()).to.equal("GMT");
+			});
+			it("should parse UTC", (): void => {
+				expect(parse.parse("UTC", "VV", undefined, false).zone!.toString()).to.equal("UTC");
+			});
+			it("should parse Europe/Amsterdam", (): void => {
+				expect(parse.parse("Europe/Amsterdam", "VV", undefined, false).zone!.toString()).to.equal("Europe/Amsterdam");
+			});
+			it("should throw on invalid zone name", (): void => {
+				expect(() => parse.parse("Europe/Flep", "VV", undefined, false)).to.throw();
+			});
+		});
+	});
 });

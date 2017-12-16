@@ -160,7 +160,7 @@ export function parse(
 					}
 				} break;
 				case TokenType.ZONE:
-					pzr = stripZone(remaining);
+					pzr = stripZone(token, remaining);
 					remaining = pzr.remaining;
 					zone = pzr.zone;
 					break;
@@ -270,21 +270,44 @@ export function parse(
 
 const WHITESPACE = [" ", "\t", "\r", "\v", "\n"];
 
-function stripZone(s: string): ParseZoneResult {
-	if (s.length === 0) {
-		throw new Error("no zone given");
+function stripZone(token: Token, s: string): ParseZoneResult {
+	const unsupported: boolean =
+		(token.symbol === "z")
+		|| (token.symbol === "Z" && token.length === 5)
+		|| (token.symbol === "v")
+		|| (token.symbol === "V" && token.length !== 2)
+		|| (token.symbol === "x" && token.length >= 4)
+		|| (token.symbol === "X" && token.length >= 4)
+		;
+	if (unsupported) {
+		throw new Error("time zone pattern '" + token.raw + "' is not implemented");
 	}
 	const result: ParseZoneResult = {
 		remaining: s
 	};
+	// chop off "GMT" prefix if needed
+	let hadGMT = false;
+	if ((token.symbol === "Z" && token.length === 4) || token.symbol === "O") {
+		if (result.remaining.toUpperCase().startsWith("GMT")) {
+			result.remaining = result.remaining.slice(3);
+			hadGMT = true;
+		}
+	}
+	// parse any zone, regardless of specified format
 	let zoneString = "";
 	while (result.remaining.length > 0 && WHITESPACE.indexOf(result.remaining.charAt(0)) === -1) {
 		zoneString += result.remaining.charAt(0);
 		result.remaining = result.remaining.substr(1);
 	}
-	/* istanbul ignore next */
-	if (zoneString.trim()) {
+	zoneString = zoneString.trim();
+	if (zoneString) {
+		// ensure chopping off GMT does not hide time zone errors (bit of a sloppy regex but OK)
+		if (hadGMT && !zoneString.match(/[\+\-]?[\d\:]+/i)) {
+			throw new Error("invalid time zone 'GMT" + zoneString + "'");
+		}
 		result.zone = TimeZone.zone(zoneString);
+	} else {
+		throw new Error("no time zone given");
 	}
 	return result;
 }

@@ -8,6 +8,7 @@ The functions for formatting and parsing dates use LDML format strings, see http
 |---|---|
 | yyyy-MM-dd HH:mm:ss.SSS | 2017-12-31 23:59:14.999 |
 | yyyy-MM-dd HH:mm:ss.SSS XXX | 2017-12-31 23:59:14.999 -08:00 |
+| yyyy-MM-dd HH:mm:ss.SSS OOOO | 2017-12-31 23:59:14.999 GMT-08:00 |
 | yyyy-MM-dd HH:mm:ss.SSS vv | 2017-12-31 23:59:14.999 Europe/Amsterdam |
 | M/d/yyyy hh:mm:ss a | 1/31/2017 12:00:00 AM |
 
@@ -16,6 +17,8 @@ The functions for formatting and parsing dates use LDML format strings, see http
 * 'MM' is months, 'mm' is minutes
 * 'HH' is 24-hour, 'hh' is 12-hour. If you use AM/PM be sure to use 'hh' and otherwise 'HH'.
 * 'SSS' is millseconds, patterns S, SS, SSSS, and SSSSS don't currently work
+* Time zones can only be parsed if there is whitespace or end-of-string coming after them.
+* Numeric time zones with second offset (e.g. '-03:34:24') are not supported, since all date from pre-1970
 
 ### Internationalization
 
@@ -63,7 +66,7 @@ const myFormatOptions = {
 
 ## Supported patterns
 
-The table below shows the format patterns and whether timezonecomplete supports them:
+The table below shows the format patterns and whether timezonecomplete supports them. If you need additional patterns to be supported then please submit a PR or an issue.
 
 | Type | Pattern | Example | Format support | Parse support | Description |
 |---|---|---|---|---|---|
@@ -149,15 +152,15 @@ The table below shows the format patterns and whether timezonecomplete supports 
 |  | S | 3 | yes | yes | Fractional Second (numeric), one digit |
 |  | SS | 34 | yes | yes | Fractional Second (numeric), two digits |
 |  | SSS | 345 | yes | yes | Fractional Second (numeric), three digits (i.e. milliseconds). Use ss.SSS for displaying seconds.milliseconds |
-|  | SSS+ | 34500 | yes | truncated | Timezonecomplete does not store sub-millisecond values so values are truncated |
+|  | SSS+ | 34500 | yes | partly | Timezonecomplete does not store sub-millisecond values so values are truncated |
 |  | A+ | 69540000 | yes | yes | Milliseconds in day (numeric) |
 | zone | z..zzz | PDT | yes | - | The short specific non-location format |
 |  | zzzz | Pacific Daylight Time | - | - | The long specific non-location format.  |
 |  | Z..ZZZ | -0800 | yes | yes | The ISO8601 basic format with hours, minutes and optional seconds fields |
-|  | ZZZZ | GMT-08:00 | yes | - | The long localized GMT format. This is equivalent to the "OOOO" specifier. |
-|  | ZZZZZ | Z, -08:00, -07:52:13 | yes | yes | The ISO8601 extended format with hours, minutes and optional seconds fields. The ISO8601 UTC indicator "Z" is used when local time offset is 0. |
-|  | O | GMT-8 | yes | - | The short localized GMT format. |
-|  | OOOO | GMT-08:00 | yes | - | The long localized GMT format |
+|  | ZZZZ | GMT-08:00 | yes | yes | The long localized GMT format. This is equivalent to the "OOOO" specifier. |
+|  | ZZZZZ | Z, -08:00, -07:52:13 | - | - | The ISO8601 extended format with hours, minutes and optional seconds fields. The ISO8601 UTC indicator "Z" is used when local time offset is 0. |
+|  | O | GMT-8 | yes | yes | The short localized GMT format. |
+|  | OOOO | GMT-08:00 | yes | yes | The long localized GMT format |
 |  | v | PT | - | - | The short generic non-location format. |
 |  | vvvv | Pacific Time | - | - | The long generic non-location format. |
 |  | V | uslax | - | - | deprecated |
@@ -167,10 +170,10 @@ The table below shows the format patterns and whether timezonecomplete supports 
 |  | X | -08, +0530, Z | yes | yes | The same as x, plus "Z". |
 |  | XX | -0800, Z | yes | yes | The same as xx, plus "Z". |
 |  | XXX | -08:00, Z | yes | yes | The same as xxx, plus "Z". |
-|  | XXXX | -0800, -075258, Z | - | yes | The same as xxxx, plus "Z". |
-|  | XXXXX | -0800, -07:52:58, Z | - | yes | The same as xxxxx, plus "Z". |
+|  | XXXX | -0800, -075258, Z | - | - | The same as xxxx, plus "Z". |
+|  | XXXXX | -0800, -07:52:58, Z | - | - | The same as xxxxx, plus "Z". |
 |  | x | -08, +0530 | yes | yes | The ISO8601 basic format with hours field and optional minutes field. |
 |  | xx | -0800 | yes | yes | The ISO8601 basic format with hours and minutes fields. |
 |  | xxx | -08:00 | yes | yes | The ISO8601 extended format with hours and minutes fields. |
-|  | xxxx | -0800, -075258 | - | yes | The ISO8601 basic format with hours, minutes and optional seconds fields. |
-|  | xxxxx | -0800, -07:52:58 | - | yes | The ISO8601 extended format with hours, minutes and optional seconds fields |
+|  | xxxx | -0800, -075258 | - | - | The ISO8601 basic format with hours, minutes and optional seconds fields. |
+|  | xxxxx | -0800, -07:52:58 | - | - | The ISO8601 extended format with hours, minutes and optional seconds fields |

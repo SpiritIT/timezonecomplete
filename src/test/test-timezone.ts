@@ -189,8 +189,14 @@ describe("TimeZone", (): void => {
 			const u: TimeZone = TimeZone.zone("+00:00");
 			expect(t).to.equal(u);
 		});
-		assert.throws((): void => { TimeZone.zone("+24:00"); }, "zone(string) should throw on out of range input");
-		assert.throws((): void => { TimeZone.zone("-24:00"); }, "zone(string) should throw on out of range input");
+		it("should throw on out-of-range hours", (): void => {
+			assert.throws((): void => { TimeZone.zone("+24:00"); }, "zone(string) should throw on out of range input");
+			assert.throws((): void => { TimeZone.zone("-24:00"); }, "zone(string) should throw on out of range input");
+		});
+		it("should throw on out-of-range minutes", (): void => {
+			assert.throws((): void => { TimeZone.zone("+01:60"); }, "zone(string) should throw on out of range input");
+			assert.throws((): void => { TimeZone.zone("-01:60"); }, "zone(string) should throw on out of range input");
+		});
 	});
 
 	describe("offsetForUtc()", (): void => {

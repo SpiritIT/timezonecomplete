@@ -423,7 +423,7 @@ describe("DateTime", (): void => {
 			expect((d.zone() as TimeZone).identical(TimeZone.utc())).to.equal(true);
 		});
 		it("should parse date with offset", (): void => {
-			const d = new DateTime("3/2/2015 23:44:12.233+02:30", "MM/dd/yyyy HH:mm:ss.SSSzzzz");
+			const d = new DateTime("3/2/2015 23:44:12.233+02:30", "MM/dd/yyyy HH:mm:ss.SSSXXX");
 			expect(d.year()).to.equal(2015);
 			expect(d.month()).to.equal(3);
 			expect(d.day()).to.equal(2);
@@ -434,7 +434,7 @@ describe("DateTime", (): void => {
 			expect((d.zone() as TimeZone).identical(TimeZone.zone("+02:30"))).to.equal(true);
 		});
 		it("should parse date with zone name", (): void => {
-			const d = new DateTime("3/2/2015 23:44:12.233 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS zzzz");
+			const d = new DateTime("3/2/2015 23:44:12.233 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS VV");
 			expect(d.year()).to.equal(2015);
 			expect(d.month()).to.equal(3);
 			expect(d.day()).to.equal(2);
@@ -445,7 +445,7 @@ describe("DateTime", (): void => {
 			expect((d.zone() as TimeZone).identical(TimeZone.zone("America/Chicago"))).to.equal(true);
 		});
 		it("should parse date with zeroes", (): void => {
-			const d = new DateTime("3/2/2015 06:00:00.000 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS zzzz");
+			const d = new DateTime("3/2/2015 06:00:00.000 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS VV");
 			expect(d.year()).to.equal(2015);
 			expect(d.month()).to.equal(3);
 			expect(d.day()).to.equal(2);
@@ -1704,11 +1704,11 @@ describe("DateTime", (): void => {
 		});
 		it("should not care about undefined time zone", (): void => {
 			const d = new DateTime(2014, 5, 26, 0, 30, 0, 0, undefined);
-			expect(d.format("dd/MM/yyyy HH:mm:ss zzzz")).to.equal("26/05/2014 00:30:00");
+			expect(d.format("dd/MM/yyyy HH:mm:ss VV")).to.equal("26/05/2014 00:30:00");
 		});
 		it("should add defined time zone", (): void => {
 			const d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("America/Chicago"));
-			expect(d.format("dd/MM/yyyy HH:mm:ss zzzz")).to.equal("26/05/2014 00:30:00 America/Chicago");
+			expect(d.format("dd/MM/yyyy HH:mm:ss VV")).to.equal("26/05/2014 00:30:00 America/Chicago");
 		});
 		it("should use given format options", (): void => {
 			const d = new DateTime(2014, 5, 26, 0, 30, 0, 0, TimeZone.zone("America/Chicago"));
