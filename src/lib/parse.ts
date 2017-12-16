@@ -132,7 +132,7 @@ export function parse(
 					time.day = pnr.n;
 					break;
 				case TokenType.HOUR:
-					pnr = stripNumber(remaining, 2);
+					pnr = stripHour(token, remaining);
 					remaining = pnr.remaining;
 					time.hour = pnr.n;
 					break;
@@ -184,7 +184,7 @@ export function parse(
 					}
 				break;
 				case "noon":
-					if (time.hour === undefined) {
+					if (time.hour === undefined || time.hour === 0) {
 						time.hour = 12;
 					}
 					if (time.minute === undefined) {
@@ -201,7 +201,7 @@ export function parse(
 					}
 				break;
 				case "midnight":
-					if (time.hour === undefined) {
+					if (time.hour === undefined || time.hour === 12) {
 						time.hour = 0;
 					}
 					if (time.hour === 12) {
@@ -474,6 +474,27 @@ function stripMonth(token: Token, remaining: string, locale: Locale): ParseNumbe
 	}
 	const r = stripStrings(token, remaining, allowed);
 	return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
+}
+
+function stripHour(token: Token, remaining: string): ParseNumberResult {
+	const result = stripNumber(remaining, 2);
+	switch (token.symbol) {
+		case "h":
+			if (result.n === 12) {
+				result.n = 0;
+			}
+			break;
+		case "H":
+			// nothing, in range 0-23
+			break;
+		case "K":
+			// nothing, in range 0-11
+			break;
+		case "k":
+			result.n -= 1;
+			break;
+	}
+	return result;
 }
 
 function stripSecond(token: Token, remaining: string): ParseNumberResult {

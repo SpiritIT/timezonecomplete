@@ -131,14 +131,14 @@ The table below shows the format patterns and whether timezonecomplete supports 
 |  | B..BBB | at night | - | - | Flexible day periods (abbreviated) |
 |  | BBBB | at night | - | - | Flexible day periods (wide) |
 |  | BBBBB | at night | - | - | Flexible day periods (narrow) |
-| hour | h | 2, 12 | yes | yes | hour of day, 1-12 |
+| hour | h | 2, 12 | yes | yes | hour of day, 1-12 (when parsing, 0-23 is allowed; 12 without AM/PM is parsed as midnight) |
 |  | hh | 02, 12 | yes | yes | |
 |  | H | 0, 23 | yes | yes | hour of day, 0-23 |
 |  | HH | 00, 23 | yes | yes | |
-|  | K | 0, 11 | yes | - | hour of day, 0-11 |
-|  | KK | 00, 11 | yes | - | |
-|  | k | 1, 24 | yes | - | hour of day, 1-24 |
-|  | kk | 01, 24 | yes | - | |
+|  | K | 0, 11 | yes | yes | hour of day, 0-11 (when parsing, 0-23 is allowed; 12 without AM/PM is parsed as noon) |
+|  | KK | 00, 11 | yes | yes | |
+|  | k | 1, 24 | yes | yes | hour of day, 1-24 |
+|  | kk | 01, 24 | yes | yes | |
 |  | j+ |  | - | - | Reserved, should not be used |
 |  | J+ |  | - | - | Reserved, should not be used |
 |  | C+ |  | - | - | Reserved, should not be used |
