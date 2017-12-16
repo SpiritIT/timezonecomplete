@@ -156,6 +156,41 @@ describe("format", (): void => {
 	});
 
 	describe("formatQuarter", (): void => {
+		it("should return the numerical value of the quarter of Q", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 1);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "Q");
+			expect(result).to.equal("01");
+		});
+		it("should return the numerical value of the quarter of QQ", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 3);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "QQ");
+			expect(result).to.equal("01");
+		});
+		it("should return the short value of the quarter of QQQ", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 4);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "QQQ");
+			expect(result).to.equal("Q2");
+		});
+		it("should return the long value of the quarter of QQQQ", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 12);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "QQQQ");
+			expect(result).to.equal("4th quarter");
+		});
+		it("should return only the number of the quarter of QQQQQ", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 9);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "QQQQQ");
+			expect(result).to.equal("3");
+		});
 		it("should return the numerical value of the quarter of q", (): void => {
 			const dateTime = TimeStruct.fromComponents(1970, 1);
 			const utcTime = dateTime;
@@ -234,6 +269,48 @@ describe("format", (): void => {
 			const utcTime = dateTime;
 			const localZone: TimeZone | null | null = null;
 			const result = format(dateTime, utcTime, localZone, "MMMMM");
+			expect(result).to.equal("N");
+		});
+		it("should return just the number of the month for L", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 9);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "L");
+			expect(result).to.equal("9");
+		});
+		it("should return just the number of the month for L", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 11);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "L");
+			expect(result).to.equal("11");
+		});
+		it("should return just the number of the month for LL, padded to two characters", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 3);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "LL");
+			expect(result).to.equal("03");
+		});
+		it("should return the shortened name of the month with LLL", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 8);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "LLL");
+			expect(result).to.equal("Aug");
+		});
+		it("should return the full name of the month with LLLL", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 2);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "LLLL");
+			expect(result).to.equal("February");
+		});
+		it("should return the narrow name of the month with LLLLL", (): void => {
+			const dateTime = TimeStruct.fromComponents(1970, 11);
+			const utcTime = dateTime;
+			const localZone: TimeZone | null | null = null;
+			const result = format(dateTime, utcTime, localZone, "LLLLL");
 			expect(result).to.equal("N");
 		});
 		it("should use given format options", (): void => {

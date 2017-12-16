@@ -407,49 +407,80 @@ function stripEra(token: Token, remaining: string, locale: Locale): [number, str
 }
 
 function stripQuarter(token: Token, remaining: string, locale: Locale): ParseNumberResult {
+	let quarterLetter: string;
+	let quarterWord: string;
+	let quarterAbbreviations: string[];
+	switch (token.symbol) {
+		case "Q":
+			quarterLetter = locale.quarterLetter;
+			quarterWord = locale.quarterWord;
+			quarterAbbreviations = locale.quarterAbbreviations;
+			break;
+		case "q": {
+			quarterLetter = locale.standAloneQuarterLetter;
+			quarterWord = locale.standAloneQuarterWord;
+			quarterAbbreviations = locale.standAloneQuarterAbbreviations;
+			break;
+		}
+		default:
+			throw new Error("invalid quarter pattern");
+	}
+	let allowed: string[];
 	switch (token.length) {
 		case 1:
 		case 2:
 		case 5:
 			return stripNumber(remaining);
-		case 3: {
-			const allowed = [1, 2, 3, 4].map((n: number): string => locale.quarterLetter + n.toString(10));
-			const r = stripStrings(token, remaining, allowed);
-			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
-		}
-		case 4: {
-			const allowed = locale.quarterAbbreviations.map((a: string): string => a + " " + locale.quarterWord);
-			const r = stripStrings(token, remaining, allowed);
-			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
-		}
+		case 3:
+			allowed = [1, 2, 3, 4].map((n: number): string => quarterLetter + n.toString(10));
+			break;
+		case 4:
+			allowed = quarterAbbreviations.map((a: string): string => a + " " + quarterWord);
+			break;
 		default:
 			throw new Error("invalid quarter pattern");
 	}
+	const r = stripStrings(token, remaining, allowed);
+	return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
 }
 
 function stripMonth(token: Token, remaining: string, locale: Locale): ParseNumberResult {
+	let shortMonthNames: string[];
+	let longMonthNames: string[];
+	let monthLetters: string[];
+	switch (token.symbol) {
+		case "M":
+			shortMonthNames = locale.shortMonthNames;
+			longMonthNames = locale.longMonthNames;
+			monthLetters = locale.monthLetters;
+			break;
+		case "L":
+			shortMonthNames = locale.standAloneShortMonthNames;
+			longMonthNames = locale.standAloneLongMonthNames;
+			monthLetters = locale.standAloneMonthLetters;
+			break;
+		default:
+			throw new Error("invalid month pattern");
+	}
+	let allowed: string[];
 	switch (token.length) {
 		case 1:
 		case 2:
 			return stripNumber(remaining);
-		case 3: {
-			const allowed = locale.shortMonthNames;
-			const r = stripStrings(token, remaining, allowed);
-			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
-		}
-		case 4: {
-			const allowed = locale.longMonthNames;
-			const r = stripStrings(token, remaining, allowed);
-			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
-		}
-		case 5: {
-			const allowed = locale.monthLetters;
-			const r = stripStrings(token, remaining, allowed);
-			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
-		}
+		case 3:
+			allowed = shortMonthNames;
+			break;
+		case 4:
+			allowed = longMonthNames;
+			break;
+		case 5:
+			allowed = monthLetters;
+			break;
 		default:
 			throw new Error("invalid month pattern");
 	}
+	const r = stripStrings(token, remaining, allowed);
+	return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
 }
 
 function stripStrings(token: Token, remaining: string, allowed: string[]): { remaining: string, chosen: string } {

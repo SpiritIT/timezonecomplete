@@ -149,21 +149,45 @@ function _formatYear(dateTime: TimeStruct, token: Token): string {
  */
 function _formatQuarter(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	const quarter = Math.ceil(dateTime.month / 3);
-	switch (token.length) {
-		case 1:
-		case 2:
-			return strings.padLeft(quarter.toString(), 2, "0");
-		case 3:
-			return locale.quarterLetter + quarter;
-		case 4:
-			return locale.quarterAbbreviations[quarter - 1] + " " + locale.quarterWord;
-		case 5:
-			return quarter.toString();
+	switch (token.symbol) {
+		case "Q":
+			switch (token.length) {
+				case 1:
+				case 2:
+					return strings.padLeft(quarter.toString(), 2, "0");
+				case 3:
+					return locale.quarterLetter + quarter;
+				case 4:
+					return locale.quarterAbbreviations[quarter - 1] + " " + locale.quarterWord;
+				case 5:
+					return quarter.toString();
+				/* istanbul ignore next */
+				default:
+					// tokenizer should prevent this
+					/* istanbul ignore next */
+					return token.raw;
+			}
+		case "q":
+			switch (token.length) {
+				case 1:
+				case 2:
+					return strings.padLeft(quarter.toString(), 2, "0");
+				case 3:
+					return locale.standAloneQuarterLetter + quarter;
+				case 4:
+					return locale.standAloneQuarterAbbreviations[quarter - 1] + " " + locale.standAloneQuarterWord;
+				case 5:
+					return quarter.toString();
+				/* istanbul ignore next */
+				default:
+					// tokenizer should prevent this
+					/* istanbul ignore next */
+					return token.raw;
+			}
 		/* istanbul ignore next */
 		default:
-			// tokenizer should prevent this
 			/* istanbul ignore next */
-			return token.raw;
+			throw new Error("invalid quarter pattern");
 	}
 }
 
@@ -175,21 +199,45 @@ function _formatQuarter(dateTime: TimeStruct, token: Token, locale: Locale): str
  * @return string
  */
 function _formatMonth(dateTime: TimeStruct, token: Token, locale: Locale): string {
-	switch (token.length) {
-		case 1:
-		case 2:
-			return strings.padLeft(dateTime.month.toString(), token.length, "0");
-		case 3:
-			return locale.shortMonthNames[dateTime.month - 1];
-		case 4:
-			return locale.longMonthNames[dateTime.month - 1];
-		case 5:
-			return locale.monthLetters[dateTime.month - 1];
+	switch (token.symbol) {
+		case "M":
+			switch (token.length) {
+				case 1:
+				case 2:
+					return strings.padLeft(dateTime.month.toString(), token.length, "0");
+				case 3:
+					return locale.shortMonthNames[dateTime.month - 1];
+				case 4:
+					return locale.longMonthNames[dateTime.month - 1];
+				case 5:
+					return locale.monthLetters[dateTime.month - 1];
+				/* istanbul ignore next */
+				default:
+					// tokenizer should prevent this
+					/* istanbul ignore next */
+					return token.raw;
+			}
+		case "L":
+			switch (token.length) {
+				case 1:
+				case 2:
+					return strings.padLeft(dateTime.month.toString(), token.length, "0");
+				case 3:
+					return locale.standAloneShortMonthNames[dateTime.month - 1];
+				case 4:
+					return locale.standAloneLongMonthNames[dateTime.month - 1];
+				case 5:
+					return locale.standAloneMonthLetters[dateTime.month - 1];
+				/* istanbul ignore next */
+				default:
+					// tokenizer should prevent this
+					/* istanbul ignore next */
+					return token.raw;
+			}
 		/* istanbul ignore next */
 		default:
-			// tokenizer should prevent this
 			/* istanbul ignore next */
-			return token.raw;
+			throw new Error("invalid month pattern");
 	}
 }
 

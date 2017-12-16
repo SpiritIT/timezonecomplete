@@ -37,6 +37,13 @@ export interface Locale {
 	quarterAbbreviations: string[];
 
 	/**
+	 * In some languages, quarters need different names when used stand-alone
+	 */
+	standAloneQuarterLetter: string;
+	standAloneQuarterWord: string;
+	standAloneQuarterAbbreviations: string[];
+
+	/**
 	 * Month names
 	 */
 	longMonthNames: string[];
@@ -48,6 +55,13 @@ export interface Locale {
 	 * Month letters
 	 */
 	monthLetters: string[];
+
+	/**
+	 * In some languages, months need different names when used stand-alone
+	 */
+	standAloneLongMonthNames: string[];
+	standAloneShortMonthNames: string[];
+	standAloneMonthLetters: string[];
 
 	/**
 	 * Week day names, starting with sunday
@@ -90,6 +104,13 @@ export interface PartialLocale {
 	quarterAbbreviations?: string[];
 
 	/**
+	 * In some languages, quarters need different names when used stand-alone
+	 */
+	standAloneQuarterLetter?: string;
+	standAloneQuarterWord?: string;
+	standAloneQuarterAbbreviations?: string[];
+
+	/**
 	 * Month names
 	 */
 	longMonthNames?: string[];
@@ -101,6 +122,13 @@ export interface PartialLocale {
 	 * Month letters
 	 */
 	monthLetters?: string[];
+
+	/**
+	 * In some languages, months need different names when used stand-alone
+	 */
+	standAloneLongMonthNames?: string[];
+	standAloneShortMonthNames?: string[];
+	standAloneMonthLetters?: string[];
 
 	/**
 	 * Week day names, starting with sunday
@@ -126,6 +154,13 @@ export const QUARTER_LETTER: string = "Q";
 export const QUARTER_WORD: string = "quarter";
 export const QUARTER_ABBREVIATIONS: string[] = ["1st", "2nd", "3rd", "4th"];
 
+/**
+ * In some languages, different words are necessary for stand-alone quarter names
+ */
+export const STAND_ALONE_QUARTER_LETTER: string = QUARTER_LETTER;
+export const STAND_ALONE_QUARTER_WORD: string = QUARTER_WORD;
+export const STAND_ALONE_QUARTER_ABBREVIATIONS: string[] = QUARTER_ABBREVIATIONS.slice();
+
 export const LONG_MONTH_NAMES: string[] =
 	["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -134,6 +169,10 @@ export const SHORT_MONTH_NAMES: string[] =
 
 export const MONTH_LETTERS: string[] =
 	["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+
+export const STAND_ALONE_LONG_MONTH_NAMES: string[] = LONG_MONTH_NAMES.slice();
+export const STAND_ALONE_SHORT_MONTH_NAMES: string[] = SHORT_MONTH_NAMES.slice();
+export const STAND_ALONE_MONTH_LETTERS: string[] = MONTH_LETTERS.slice();
 
 export const LONG_WEEKDAY_NAMES: string[] =
 	["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -158,9 +197,15 @@ export const DEFAULT_LOCALE: Locale = {
 	quarterLetter: QUARTER_LETTER,
 	quarterWord: QUARTER_WORD,
 	quarterAbbreviations: QUARTER_ABBREVIATIONS,
+	standAloneQuarterLetter: STAND_ALONE_QUARTER_LETTER,
+	standAloneQuarterWord: STAND_ALONE_QUARTER_WORD,
+	standAloneQuarterAbbreviations: STAND_ALONE_QUARTER_ABBREVIATIONS,
 	longMonthNames: LONG_MONTH_NAMES,
 	shortMonthNames: SHORT_MONTH_NAMES,
 	monthLetters: MONTH_LETTERS,
+	standAloneLongMonthNames: STAND_ALONE_LONG_MONTH_NAMES,
+	standAloneShortMonthNames: STAND_ALONE_SHORT_MONTH_NAMES,
+	standAloneMonthLetters: STAND_ALONE_MONTH_LETTERS,
 	longWeekdayNames: LONG_WEEKDAY_NAMES,
 	shortWeekdayNames: SHORT_WEEKDAY_NAMES,
 	weekdayTwoLetters: WEEKDAY_TWO_LETTERS,

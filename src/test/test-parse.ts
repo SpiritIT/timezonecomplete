@@ -173,6 +173,79 @@ describe("parse", (): void => {
 				expect(() => parse.parse("2017", "yyyy QQQQQ", undefined, false)).to.throw();
 			});
 		});
+		describe("q", (): void => {
+			it("should parse '2017 1'", (): void => {
+				expect(parse.parse("2017 1", "yyyy q", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
+			});
+			it("should parse '2017 2'", (): void => {
+				expect(parse.parse("2017 2", "yyyy q", undefined, false).time.toString()).to.equal("2017-04-01T00:00:00.000");
+			});
+			it("should parse '2017 3'", (): void => {
+				expect(parse.parse("2017 3", "yyyy q", undefined, false).time.toString()).to.equal("2017-07-01T00:00:00.000");
+			});
+			it("should parse '2017 4'", (): void => {
+				expect(parse.parse("2017 4", "yyyy q", undefined, false).time.toString()).to.equal("2017-10-01T00:00:00.000");
+			});
+			it("should keep the date if present", (): void => {
+				expect(parse.parse("2017-12-15 4", "yyyy-MM-dd q", undefined, false).time.toString()).to.equal("2017-12-15T00:00:00.000");
+			});
+			it("should throw when quarter conflicts with date", (): void => {
+				expect(() => parse.parse("2017-01-15 4", "yyyy-MM-dd q", undefined, false)).to.throw();
+			});
+			it("should use year 1970 when nothing specified", (): void => {
+				expect(parse.parse("4", "q", undefined, false).time.toString()).to.equal("1970-10-01T00:00:00.000");
+			});
+			it("should not parse '2017 foo'", (): void => {
+				expect(() => parse.parse("2017 foo", "yyyy q", undefined, false)).to.throw();
+			});
+			it("should not parse '2017'", (): void => {
+				expect(() => parse.parse("2017", "yyyy q", undefined, false)).to.throw();
+			});
+		});
+		describe("qq", (): void => {
+			it("should parse '2017 01'", (): void => {
+				expect(parse.parse("2017 01", "yyyy qq", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
+			});
+			it("should not parse '2017 foo'", (): void => {
+				expect(() => parse.parse("2017 foo", "yyyy qq", undefined, false)).to.throw();
+			});
+			it("should not parse '2017'", (): void => {
+				expect(() => parse.parse("2017", "yyyy qq", undefined, false)).to.throw();
+			});
+		});
+		describe("qqq", (): void => {
+			it("should parse '2017 q3'", (): void => {
+				expect(parse.parse("2017 q3", "yyyy qqq", undefined, false).time.toString()).to.equal("2017-07-01T00:00:00.000");
+			});
+			it("should not parse '2017 foo'", (): void => {
+				expect(() => parse.parse("2017 foo", "yyyy qqq", undefined, false)).to.throw();
+			});
+			it("should not parse '2017'", (): void => {
+				expect(() => parse.parse("2017", "yyyy qqq", undefined, false)).to.throw();
+			});
+		});
+		describe("qqqq", (): void => {
+			it("should parse '2017 3rd quarter'", (): void => {
+				expect(parse.parse("2017 3rd quarter", "yyyy qqqq", undefined, false).time.toString()).to.equal("2017-07-01T00:00:00.000");
+			});
+			it("should not parse '2017 foo'", (): void => {
+				expect(() => parse.parse("2017 foo", "yyyy qqqq", undefined, false)).to.throw();
+			});
+			it("should not parse '2017'", (): void => {
+				expect(() => parse.parse("2017", "yyyy qqqq", undefined, false)).to.throw();
+			});
+		});
+		describe("qqqqq", (): void => {
+			it("should parse '2017 01'", (): void => {
+				expect(parse.parse("2017 01", "yyyy qqqqq", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
+			});
+			it("should not parse '2017 foo'", (): void => {
+				expect(() => parse.parse("2017 foo", "yyyy qqqqq", undefined, false)).to.throw();
+			});
+			it("should not parse '2017'", (): void => {
+				expect(() => parse.parse("2017", "yyyy qqqqq", undefined, false)).to.throw();
+			});
+		});
 	});
 
 	describe("month", (): void => {
@@ -232,6 +305,64 @@ describe("parse", (): void => {
 			});
 			it("should not parse 'E'", (): void => {
 				expect(() => parse.parse("E", "MMMMM", undefined, false)).to.throw();
+			});
+		});
+		describe("L", (): void => {
+			it("should parse '3'", (): void => {
+				expect(parse.parse("3", "L", undefined, false).time.toString()).to.equal("1970-03-01T00:00:00.000");
+			});
+			it("should not parse '13'", (): void => {
+				expect(() => parse.parse("13", "L", undefined, false)).to.throw();
+			});
+			it("should not parse '0'", (): void => {
+				expect(() => parse.parse("0", "L", undefined, false)).to.throw();
+			});
+		});
+		describe("LL", (): void => {
+			it("should parse '3'", (): void => {
+				expect(parse.parse("3", "LL", undefined, false).time.toString()).to.equal("1970-03-01T00:00:00.000");
+			});
+			it("should parse '03'", (): void => {
+				expect(parse.parse("03", "LL", undefined, false).time.toString()).to.equal("1970-03-01T00:00:00.000");
+			});
+			it("should not parse '13'", (): void => {
+				expect(() => parse.parse("13", "LL", undefined, false)).to.throw();
+			});
+			it("should not parse '00'", (): void => {
+				expect(() => parse.parse("00", "LL", undefined, false)).to.throw();
+			});
+		});
+		describe("LLL", (): void => {
+			it("should parse 'Sep'", (): void => {
+				expect(parse.parse("Sep", "LLL", undefined, false).time.toString()).to.equal("1970-09-01T00:00:00.000");
+			});
+			it("should parse 'sEP'", (): void => {
+				expect(parse.parse("sEP", "LLL", undefined, false).time.toString()).to.equal("1970-09-01T00:00:00.000");
+			});
+			it("should not parse 'Sap'", (): void => {
+				expect(() => parse.parse("Sap", "LLL", undefined, false)).to.throw();
+			});
+		});
+		describe("LLLL", (): void => {
+			it("should parse 'September'", (): void => {
+				expect(parse.parse("September", "LLLL", undefined, false).time.toString()).to.equal("1970-09-01T00:00:00.000");
+			});
+			it("should parse 'september'", (): void => {
+				expect(parse.parse("september", "LLLL", undefined, false).time.toString()).to.equal("1970-09-01T00:00:00.000");
+			});
+			it("should not parse 'Saptember'", (): void => {
+				expect(() => parse.parse("Sap", "LLLL", undefined, false)).to.throw();
+			});
+		});
+		describe("LLLLL", (): void => {
+			it("should parse 'D'", (): void => {
+				expect(parse.parse("D", "LLLLL", undefined, false).time.toString()).to.equal("1970-12-01T00:00:00.000");
+			});
+			it("should parse 'j'", (): void => {
+				expect(parse.parse("j", "LLLLL", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.000");
+			});
+			it("should not parse 'E'", (): void => {
+				expect(() => parse.parse("E", "LLLLL", undefined, false)).to.throw();
 			});
 		});
 	});
