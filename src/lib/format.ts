@@ -42,7 +42,7 @@ export function format(
 		let tokenResult: string;
 		switch (token.type) {
 			case TokenType.ERA:
-				tokenResult = _formatEra(dateTime, token);
+				tokenResult = _formatEra(dateTime, token, mergedLocale);
 				break;
 			case TokenType.YEAR:
 				tokenResult = _formatYear(dateTime, token);
@@ -96,17 +96,17 @@ export function format(
  * @param token The token passed
  * @return string
  */
-function _formatEra(dateTime: TimeStruct, token: Token): string {
+function _formatEra(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	const AD: boolean = dateTime.year > 0;
 	switch (token.length) {
 		case 1:
 		case 2:
 		case 3:
-			return (AD ? "AD" : "BC");
+			return (AD ? locale.eraAbbreviated[0] : locale.eraAbbreviated[1]);
 		case 4:
-			return (AD ? "Anno Domini" : "Before Christ");
+			return (AD ? locale.eraWide[0] : locale.eraWide[1]);
 		case 5:
-			return (AD ? "A" : "B");
+			return (AD ? locale.eraNarrow[0] : locale.eraNarrow[1]);
 		/* istanbul ignore next */
 		default:
 			// tokenizer should prevent this

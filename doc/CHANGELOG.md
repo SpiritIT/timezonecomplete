@@ -1,6 +1,10 @@
 
 # Changelog
 
+## next (minor)
+
+* Add parsing of era
+
 ## 5.4.6 (2017-12-16)
 
 * Fix for issue #35: AM/PM not parsed and formatted correctly

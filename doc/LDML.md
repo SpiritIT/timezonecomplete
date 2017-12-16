@@ -11,15 +11,59 @@ The functions for formatting and parsing dates use LDML format strings, see http
 | yyyy-MM-dd HH:mm:ss.SSS vv | 2017-12-31 23:59:14.999 Europe/Amsterdam |
 | M/d/yyyy hh:mm:ss a | 1/31/2017 12:00:00 AM |
 
+## Caveats
+
+* 'MM' is months, 'mm' is minutes
+* 'HH' is 24-hour, 'hh' is 12-hour. If you use AM/PM be sure to use 'hh' and otherwise 'HH'.
+* 'SSS' is millseconds, other patterns don't currently work
+
+### Internationalization
+
+You can change the names used for months and weekdays etc. You can do so globally (by setting `DEFAULT_FORMAT_OPTIONS`), or locally
+(by passing an options object to the `format` and `parse` functions).
+
+```javascript
+// parsing and formatting
+var dt = new tc.DateTime("2015-03-01", "yyyy-MM-dd");
+dt.format("dd-MMMM-yyyy"); // "31-March-2015"
+
+// formatting with custom month names
+dt.format("dd-MMMM-yyyy", { longMonthNames: ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", ...]}); // "31-Maart-2015"
+
+// default month names
+console.log(tc.DEFAULT_FORMAT_OPTIONS.longMonthNames[1]); // "January"
+
+// all possible format options:
+var myFormatOptions = {
+	eraNarrow: ["A", "B"],
+	eraWide: ["Anno Domini", "Before Christ"],
+	eraAbbreviated: ["AD", "BC"],
+	quarterLetter: "Q",
+	quarterWord: "quarter",
+	quarterAbbreviations: ["1st", "2nd", "3rd", "4th"],
+	longMonthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+	shortMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	monthLetters: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+	longWeekdayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+	shortWeekdayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+	weekdayTwoLetters: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+	weekdayLetters: ["S", "M", "T", "W", "T", "F", "S"],
+	dayPeriodAbbreviated: { am: "AM", pm: "PM", noon: "noon", midnight: "mid." },
+	dayPeriodWide: { am: "AM", pm: "PM", noon: "noon", midnight: "midnight" },
+	dayPeriodNarrow: { am: "A", pm: "P", noon: "noon", midnight: "md" }
+}
+
+```
+
 ## Supported patterns
 
-The table below shows the format patterns and whether timezonecomplete supports them:****
+The table below shows the format patterns and whether timezonecomplete supports them:
 
 | Type | Pattern | Example | Format support | Parse support | Description |
 |---|---|---|---|---|---|
-| era | G..GGG | AD | yes | NO | |
-|  | GGGG | Anno Domini | yes | NO | |
-|  | GGGGG | A | yes | NO | |
+| era | G..GGG | AD | yes | yes | |
+|  | GGGG | Anno Domini | yes | yes | |
+|  | GGGGG | A | yes | yes | |
 | year | y | 2, 20, 201, 2017, 20173 | yes | yes | Calendar year (numeric). In most cases the length of the y field specifies the minimum number of digits to display, zero-padded as necessary; more digits will be displayed if needed to show the full year. However, “yy” requests just the two low-order digits of the year, zero-padded as necessary. For most use cases, “y” or “yy” should be adequate. |
 |  | yy | 02, 20, 01, 17, 73 | yes | yes |  |
 |  | yyy | 002, 020, 201, 2017, 20173 | yes | yes | |
@@ -114,8 +158,8 @@ The table below shows the format patterns and whether timezonecomplete supports 
 |  | X | -08, +0530, Z | yes | yes | The same as x, plus "Z". |
 |  | XX | -0800, Z | yes | yes | The same as xx, plus "Z". |
 |  | XXX | -08:00, Z | yes | yes | The same as xxx, plus "Z". |
-|  | XXXX | -0800, -075258, Z | NO | yes | The same as xxx, plus "Z". |
-|  | XXXXX | -0800, -07:52:58, Z | NO | yes | The same as xxx, plus "Z". |
+|  | XXXX | -0800, -075258, Z | NO | yes | The same as xxxx, plus "Z". |
+|  | XXXXX | -0800, -07:52:58, Z | NO | yes | The same as xxxxx, plus "Z". |
 |  | x | -08, +0530 | yes | yes | The ISO8601 basic format with hours field and optional minutes field. |
 |  | xx | -0800 | yes | yes | The ISO8601 basic format with hours and minutes fields. |
 |  | xxx | -08:00 | yes | yes | The ISO8601 extended format with hours and minutes fields. |

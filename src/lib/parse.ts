@@ -93,15 +93,17 @@ export function parse(
 		let pnr: ParseNumberResult | undefined;
 		let pzr: ParseZoneResult | undefined;
 		let dpr: ParseDayPeriodResult | undefined;
+		let era: number = 1;
 		let remaining: string = dateTimeString;
 		for (const token of tokens) {
 			switch (token.type) {
-				/* istanbul ignore next */
 				case TokenType.ERA:
-				/* istanbul ignore next */
+					[era, remaining] = stripEra(token, remaining, mergedLocale);
+					break;
 				case TokenType.QUARTER:
 				/* istanbul ignore next */
 				case TokenType.WEEKDAY:
+				/* istanbul ignore next */
 				case TokenType.WEEK:
 					/* istanbul ignore next */
 					break; // nothing to learn from this
@@ -207,6 +209,9 @@ export function parse(
 					}
 				break;
 			}
+		}
+		if (time.year !== undefined) {
+			time.year *= era;
 		}
 		const result: AwareTimeStruct = { time: new TimeStruct(time), zone };
 		if (!result.time.validate()) {
@@ -351,4 +356,39 @@ function stripDayPeriod(token: Token, remaining: string, locale: Locale): ParseD
 		}
 	}
 	throw new Error("missing day period i.e. " + Object.keys(offsets).join(", "));
+}
+
+/**
+ * Returns factor -1 or 1 depending on BC or AD
+ * @param token
+ * @param remaining
+ * @param locale
+ * @returns [factor, remaining]
+ */
+function stripEra(token: Token, remaining: string, locale: Locale): [number, string] {
+	let allowed: string[];
+	switch (token.length) {
+		case 4: allowed = locale.eraWide; break;
+		case 5: allowed = locale.eraNarrow; break;
+		default: allowed = locale.eraAbbreviated; break;
+	}
+	const result = stripStrings(token, remaining, allowed);
+	return [allowed.indexOf(result.chosen) === 0 ? 1 : -1, result.remaining];
+}
+
+function stripStrings(token: Token, remaining: string, allowed: string[]): { remaining: string, chosen: string } {
+	// match longest possible string; sort keys by length descending
+	const sortedKeys: string[] = allowed.slice()
+		.sort((a: string, b: string): number => (a.length < b.length ? 1 : a.length > b.length ? -1 : 0));
+
+	const upper = remaining.toUpperCase();
+	for (const key of sortedKeys) {
+		if (upper.startsWith(key.toUpperCase())) {
+			return {
+				chosen: key,
+				remaining: remaining.slice(key.length)
+			};
+		}
+	}
+	throw new Error("invalid " + TokenType[token.type].toLowerCase() + ", expected one of " + allowed.join(", "));
 }

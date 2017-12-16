@@ -578,39 +578,3 @@ p.identical(q); // false, not same constructor arguments
 
 ```
 
-### Internationalization
-
-You can change the names used for months and weekdays etc. You can do so globally (by setting `DEFAULT_FORMAT_OPTIONS`), or locally
-(by passing an options object to the `format` and `parse` functions).
-
-```javascript
-// parsing and formatting
-var dt = new tc.DateTime("2015-03-01", "yyyy-MM-dd");
-dt.format("dd-MMMM-yyyy"); // "31-March-2015"
-
-// formatting with custom month names
-dt.format("dd-MMMM-yyyy", {
-	longMonthNames: ["Januari", "Februari", "Maart", "April", "Mei", .......]
-}); // "31-Maart-2015"
-
-// default month names
-console.log(tc.DEFAULT_FORMAT_OPTIONS.longMonthNames[1]); // "January"
-
-// all possible format options for English/US:
-var myFormatOptions = {
-	quarterLetter: "Q",
-	quarterWord: "quarter",
-	quarterAbbreviations: ["1st", "2nd", "3rd", "4th"],
-	longMonthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-	shortMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-	monthLetters: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
-	longWeekdayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-	shortWeekdayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-	weekdayTwoLetters: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-	weekdayLetters: ["S", "M", "T", "W", "T", "F", "S"],
-	dayPeriodAbbreviated: { am: "AM", pm: "PM", noon: "noon", midnight: "mid." },
-	dayPeriodWide: { am: "AM", pm: "PM", noon: "noon", midnight: "midnight" },
-	dayPeriodNarrow: { am: "A", pm: "P", noon: "noon", midnight: "md" }
-}
-
-```
