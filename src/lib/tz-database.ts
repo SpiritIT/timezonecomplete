@@ -475,10 +475,19 @@ export class TzDatabase {
 		} else {
 			const data: any[] = [];
 			// try to find TZ data in global variables
-			const g: any = (global ? global : window);
+			let g: any;
+			if (typeof window !== "undefined") {
+				g = window;
+			} else if (typeof global !== "undefined") {
+				g = global;
+			} else if (typeof self !== "undefined") {
+				g = self;
+			} else {
+				g = {};
+			}
 			if (g) {
 				for (const key of Object.keys(g)) {
-					if (key.indexOf("tzdata") === 0) {
+					if (key.startsWith("tzdata")) {
 						if (typeof g[key] === "object" && g[key].rules && g[key].zones) {
 							data.push(g[key]);
 						}
