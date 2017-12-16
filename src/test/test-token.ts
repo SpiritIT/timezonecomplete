@@ -300,8 +300,8 @@ describe("token", (): void => {
 			expect(result).to.eql(expected);
 		});
 
-		it("should escape a '' at the end of the string", (): void => {
-			const tokens = token.tokenize("aaa'hi'ssbbb");
+		it("should escape a '' in the middle of the string", (): void => {
+			const tokens = token.tokenize("aaa'hi'ss");
 			const result = tokens;
 
 			const expected: token.Token[] = [{
@@ -319,11 +319,6 @@ describe("token", (): void => {
 					raw: "ss",
 					type: token.TokenType.SECOND,
 					symbol: "s"
-				}, {
-					length: 3,
-					raw: "bbb",
-					type: token.TokenType.IDENTITY,
-					symbol: "b"
 				}
 			];
 			expect(result).to.eql(expected);

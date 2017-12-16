@@ -1082,8 +1082,109 @@ describe("format", (): void => {
 			const dateTime = TimeStruct.fromComponents(2014, 7, 15);
 			const utcTime = TimeStruct.fromComponents(2014, 7, 15);
 			const localZone: TimeZone | null | null = TimeZone.zone("Europe/Amsterdam");
-		const result = format(dateTime, utcTime, localZone, "ZZZZZ");
+			const result = format(dateTime, utcTime, localZone, "ZZZZZ");
 			expect(result).to.equal("+00:00");
+		});
+	});
+
+	describe("formatDayPeriod()", (): void => {
+		it("should format 'a'", (): void => {
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), null, "a"
+			)).to.equal("AM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), null, "a"
+			)).to.equal("PM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), null, "a"
+			)).to.equal("AM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), null, "a"
+			)).to.equal("PM");
+		});
+		it("should format 'a'", (): void => {
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), null, "a"
+			)).to.equal("AM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), null, "a"
+			)).to.equal("PM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), null, "a"
+			)).to.equal("AM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), null, "a"
+			)).to.equal("PM");
+		});
+		it("should format 'aaaa'", (): void => {
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), null, "aaaa"
+			)).to.equal("AM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), null, "aaaa"
+			)).to.equal("PM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), null, "aaaa"
+			)).to.equal("AM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), null, "aaaa"
+			)).to.equal("PM");
+		});
+		it("should format 'aaaaa'", (): void => {
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), null, "aaaaa"
+			)).to.equal("A");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), null, "aaaaa"
+			)).to.equal("P");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), null, "aaaaa"
+			)).to.equal("A");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), null, "aaaaa"
+			)).to.equal("P");
+		});
+		it("should format 'b'", (): void => {
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), null, "b"
+			)).to.equal("mid.");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), null, "b"
+			)).to.equal("noon");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), null, "b"
+			)).to.equal("AM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), null, "b"
+			)).to.equal("PM");
+		});
+		it("should format 'bbbb'", (): void => {
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), null, "bbbb"
+			)).to.equal("midnight");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), null, "bbbb"
+			)).to.equal("noon");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), null, "bbbb"
+			)).to.equal("AM");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), null, "bbbb"
+			)).to.equal("PM");
+		});
+		it("should format 'bbbbb'", (): void => {
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 0), null, "bbbbb"
+			)).to.equal("md");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 0), null, "bbbbb"
+			)).to.equal("noon");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 0, 0, 0, 1), null, "bbbbb"
+			)).to.equal("A");
+			expect(format(
+				TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), TimeStruct.fromComponents(2017, 12, 15, 12, 0, 0, 1), null, "bbbbb"
+			)).to.equal("P");
 		});
 	});
 });

@@ -5,6 +5,10 @@
 		"forceConsistentCasingInFileNames": false,
 		"inlineSourceMap": true,
 		"inlineSources": true,
+		"lib": [
+			"es2016",
+			"dom"
+		],
 		"module": "commonjs",
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitAny": true,

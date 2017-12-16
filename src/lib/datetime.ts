@@ -12,6 +12,7 @@ import { TimeStruct, TimeUnit, WeekDay } from "./basics";
 import { Duration } from "./duration";
 import * as format from "./format";
 import { DateFunctions } from "./javascript";
+import { PartialLocale } from "./locale";
 import * as math from "./math";
 import * as parseFuncs from "./parse";
 import { RealTimeSource, TimeSource } from "./timesource";
@@ -1077,11 +1078,11 @@ export class DateTime {
 	 * (http://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns)
 	 *
 	 * @param formatString The format specification (e.g. "dd/MM/yyyy HH:mm:ss")
-	 * @param formatOptions Optional, non-english format month names etc.
+	 * @param locale Optional, non-english format month names etc.
 	 * @return The string representation of this DateTime
 	 */
-	public format(formatString: string, formatOptions?: format.PartialFormatOptions): string {
-		return format.format(this.zoneDate, this.utcDate, this._zone, formatString, formatOptions);
+	public format(formatString: string, locale?: PartialLocale): string {
+		return format.format(this.zoneDate, this.utcDate, this._zone, formatString, locale);
 	}
 
 	/**
@@ -1089,9 +1090,10 @@ export class DateTime {
 	 * @param s the string to parse
 	 * @param format the format the string is in
 	 * @param zone Optional, the zone to add (if no zone is given in the string)
+	 * @param locale Optional, different settings for constants like 'AM' etc
 	 */
-	public static parse(s: string, format: string, zone?: TimeZone): DateTime {
-		const parsed = parseFuncs.parse(s, format, zone);
+	public static parse(s: string, format: string, zone?: TimeZone, locale?: PartialLocale): DateTime {
+		const parsed = parseFuncs.parse(s, format, zone, false, locale);
 		return new DateTime(parsed.time, parsed.zone);
 	}
 

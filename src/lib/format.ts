@@ -8,122 +8,10 @@
 
 import { TimeStruct } from "./basics";
 import * as basics from "./basics";
+import { DEFAULT_LOCALE, Locale, PartialLocale } from "./locale";
 import * as strings from "./strings";
 import { TimeZone } from "./timezone";
 import { Token, tokenize, TokenType } from "./token";
-
-
-export interface FormatOptions {
-	/**
-	 * The letter indicating a quarter e.g. "Q" (becomes Q1, Q2, Q3, Q4)
-	 */
-	quarterLetter: string;
-	/**
-	 * The word for 'quarter'
-	 */
-	quarterWord: string;
-	/**
-	 * Quarter abbreviations e.g. 1st, 2nd, 3rd, 4th
-	 */
-	quarterAbbreviations: string[];
-
-	/**
-	 * Month names
-	 */
-	longMonthNames: string[];
-	/**
-	 * Three-letter month names
-	 */
-	shortMonthNames: string[];
-	/**
-	 * Month letters
-	 */
-	monthLetters: string[];
-
-	/**
-	 * Week day names, starting with sunday
-	 */
-	longWeekdayNames: string[];
-	shortWeekdayNames: string[];
-	weekdayTwoLetters: string[];
-	weekdayLetters: string[];
-}
-
-// todo this can be Partial<FormatOptions> but for compatibility with
-// pre-2.1 typescript users we write this out ourselves for a while yet
-export interface PartialFormatOptions {
-	/**
-	 * The letter indicating a quarter e.g. "Q" (becomes Q1, Q2, Q3, Q4)
-	 */
-	quarterLetter?: string;
-	/**
-	 * The word for 'quarter'
-	 */
-	quarterWord?: string;
-	/**
-	 * Quarter abbreviations e.g. 1st, 2nd, 3rd, 4th
-	 */
-	quarterAbbreviations?: string[];
-
-	/**
-	 * Month names
-	 */
-	longMonthNames?: string[];
-	/**
-	 * Three-letter month names
-	 */
-	shortMonthNames?: string[];
-	/**
-	 * Month letters
-	 */
-	monthLetters?: string[];
-
-	/**
-	 * Week day names, starting with sunday
-	 */
-	longWeekdayNames?: string[];
-	shortWeekdayNames?: string[];
-	weekdayTwoLetters?: string[];
-	weekdayLetters?: string[];
-}
-
-export const LONG_MONTH_NAMES: string[] =
-	["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-export const SHORT_MONTH_NAMES: string[] =
-	["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-export const MONTH_LETTERS: string[] =
-	["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-
-export const LONG_WEEKDAY_NAMES: string[] =
-	["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-export const SHORT_WEEKDAY_NAMES: string[] =
-	["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-export const WEEKDAY_TWO_LETTERS: string[] =
-	["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-
-export const WEEKDAY_LETTERS: string[] =
-	["S", "M", "T", "W", "T", "F", "S"];
-
-export const QUARTER_LETTER: string = "Q";
-export const QUARTER_WORD: string = "quarter";
-export const QUARTER_ABBREVIATIONS: string[] = ["1st", "2nd", "3rd", "4th"];
-
-export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
-	quarterLetter: QUARTER_LETTER,
-	quarterWord: QUARTER_WORD,
-	quarterAbbreviations: QUARTER_ABBREVIATIONS,
-	longMonthNames: LONG_MONTH_NAMES,
-	shortMonthNames: SHORT_MONTH_NAMES,
-	monthLetters: MONTH_LETTERS,
-	longWeekdayNames: LONG_WEEKDAY_NAMES,
-	shortWeekdayNames: SHORT_WEEKDAY_NAMES,
-	weekdayTwoLetters: WEEKDAY_TWO_LETTERS,
-	weekdayLetters: WEEKDAY_LETTERS
-};
 
 
 /**
@@ -133,7 +21,7 @@ export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
  * @param utcTime The time in UTC
  * @param localZone The zone that currentTime is in
  * @param formatString The formatting string to be applied
- * @param formatOptions Other format options such as month names
+ * @param locale Other format options such as month names
  * @return string
  */
 export function format(
@@ -141,14 +29,12 @@ export function format(
 	utcTime: TimeStruct,
 	localZone: TimeZone | undefined | null,
 	formatString: string,
-	formatOptions: PartialFormatOptions = {}
+	locale: PartialLocale = {}
 ): string {
-	const mergedFormatOptions: PartialFormatOptions = {};
-	for (const name in DEFAULT_FORMAT_OPTIONS) {
-		if (DEFAULT_FORMAT_OPTIONS.hasOwnProperty(name)) {
-			mergedFormatOptions[name] = (formatOptions[name] !== undefined ? formatOptions[name] : DEFAULT_FORMAT_OPTIONS[name]);
-		}
-	}
+	const mergedLocale: Locale = {
+		...DEFAULT_LOCALE,
+		...locale
+	};
 
 	const tokens: Token[] = tokenize(formatString);
 	let result: string = "";
@@ -162,19 +48,19 @@ export function format(
 				tokenResult = _formatYear(dateTime, token);
 				break;
 			case TokenType.QUARTER:
-				tokenResult = _formatQuarter(dateTime, token, mergedFormatOptions as FormatOptions);
+				tokenResult = _formatQuarter(dateTime, token, mergedLocale);
 				break;
 			case TokenType.MONTH:
-				tokenResult = _formatMonth(dateTime, token, mergedFormatOptions as FormatOptions);
+				tokenResult = _formatMonth(dateTime, token, mergedLocale);
 				break;
 			case TokenType.DAY:
 				tokenResult = _formatDay(dateTime, token);
 				break;
 			case TokenType.WEEKDAY:
-				tokenResult = _formatWeekday(dateTime, token, mergedFormatOptions as FormatOptions);
+				tokenResult = _formatWeekday(dateTime, token, mergedLocale);
 				break;
 			case TokenType.DAYPERIOD:
-				tokenResult = _formatDayPeriod(dateTime);
+				tokenResult = _formatDayPeriod(dateTime, token, mergedLocale);
 				break;
 			case TokenType.HOUR:
 				tokenResult = _formatHour(dateTime, token);
@@ -261,16 +147,16 @@ function _formatYear(dateTime: TimeStruct, token: Token): string {
  * @param token The token passed
  * @return string
  */
-function _formatQuarter(dateTime: TimeStruct, token: Token, formatOptions: FormatOptions): string {
+function _formatQuarter(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	const quarter = Math.ceil(dateTime.month / 3);
 	switch (token.length) {
 		case 1:
 		case 2:
 			return strings.padLeft(quarter.toString(), 2, "0");
 		case 3:
-			return formatOptions.quarterLetter + quarter;
+			return locale.quarterLetter + quarter;
 		case 4:
-			return formatOptions.quarterAbbreviations[quarter - 1] + " " + formatOptions.quarterWord;
+			return locale.quarterAbbreviations[quarter - 1] + " " + locale.quarterWord;
 		case 5:
 			return quarter.toString();
 		/* istanbul ignore next */
@@ -288,17 +174,17 @@ function _formatQuarter(dateTime: TimeStruct, token: Token, formatOptions: Forma
  * @param token The token passed
  * @return string
  */
-function _formatMonth(dateTime: TimeStruct, token: Token, formatOptions: FormatOptions): string {
+function _formatMonth(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	switch (token.length) {
 		case 1:
 		case 2:
 			return strings.padLeft(dateTime.month.toString(), token.length, "0");
 		case 3:
-			return formatOptions.shortMonthNames[dateTime.month - 1];
+			return locale.shortMonthNames[dateTime.month - 1];
 		case 4:
-			return formatOptions.longMonthNames[dateTime.month - 1];
+			return locale.longMonthNames[dateTime.month - 1];
 		case 5:
-			return formatOptions.monthLetters[dateTime.month - 1];
+			return locale.monthLetters[dateTime.month - 1];
 		/* istanbul ignore next */
 		default:
 			// tokenizer should prevent this
@@ -351,7 +237,7 @@ function _formatDay(dateTime: TimeStruct, token: Token): string {
  * @param token The token passed
  * @return string
  */
-function _formatWeekday(dateTime: TimeStruct, token: Token, formatOptions: FormatOptions): string {
+function _formatWeekday(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	const weekDayNumber = basics.weekDayNoLeapSecs(dateTime.unixMillis);
 
 	switch (token.length) {
@@ -360,16 +246,16 @@ function _formatWeekday(dateTime: TimeStruct, token: Token, formatOptions: Forma
 			if (token.symbol === "e") {
 				return strings.padLeft(basics.weekDayNoLeapSecs(dateTime.unixMillis).toString(), token.length, "0");
 			} else {
-				return formatOptions.shortWeekdayNames[weekDayNumber];
+				return locale.shortWeekdayNames[weekDayNumber];
 			}
 		case 3:
-			return formatOptions.shortWeekdayNames[weekDayNumber];
+			return locale.shortWeekdayNames[weekDayNumber];
 		case 4:
-			return formatOptions.longWeekdayNames[weekDayNumber];
+			return locale.longWeekdayNames[weekDayNumber];
 		case 5:
-			return formatOptions.weekdayLetters[weekDayNumber];
+			return locale.weekdayLetters[weekDayNumber];
 		case 6:
-			return formatOptions.weekdayTwoLetters[weekDayNumber];
+			return locale.weekdayTwoLetters[weekDayNumber];
 		/* istanbul ignore next */
 		default:
 			// tokenizer should prevent this
@@ -385,8 +271,69 @@ function _formatWeekday(dateTime: TimeStruct, token: Token, formatOptions: Forma
  * @param token The token passed
  * @return string
  */
-function _formatDayPeriod(dateTime: TimeStruct): string {
-	return (dateTime.hour < 12 ? "AM" : "PM");
+function _formatDayPeriod(dateTime: TimeStruct, token: Token, locale: Locale): string {
+	switch (token.symbol) {
+		case "a": {
+			if (token.length <= 3) {
+				if (dateTime.hour < 12) {
+					return locale.dayPeriodAbbreviated.am;
+				} else {
+					return locale.dayPeriodAbbreviated.pm;
+				}
+			} else if (token.length === 4) {
+				if (dateTime.hour < 12) {
+					return locale.dayPeriodWide.am;
+				} else {
+					return locale.dayPeriodWide.pm;
+				}
+			} else {
+				if (dateTime.hour < 12) {
+					return locale.dayPeriodNarrow.am;
+				} else {
+					return locale.dayPeriodNarrow.pm;
+				}
+			}
+		}
+		case "b":
+		case "B": {
+			if (token.length <= 3) {
+				if (dateTime.hour === 0 && dateTime.minute === 0 && dateTime.second === 0 && dateTime.milli === 0) {
+					return locale.dayPeriodAbbreviated.midnight;
+				} else if (dateTime.hour === 12 && dateTime.minute === 0 && dateTime.second === 0 && dateTime.milli === 0) {
+					return locale.dayPeriodAbbreviated.noon;
+				} else if (dateTime.hour < 12) {
+					return locale.dayPeriodAbbreviated.am;
+				} else {
+					return locale.dayPeriodAbbreviated.pm;
+				}
+			} else if (token.length === 4) {
+				if (dateTime.hour === 0 && dateTime.minute === 0 && dateTime.second === 0 && dateTime.milli === 0) {
+					return locale.dayPeriodWide.midnight;
+				} else if (dateTime.hour === 12 && dateTime.minute === 0 && dateTime.second === 0 && dateTime.milli === 0) {
+					return locale.dayPeriodWide.noon;
+				} else if (dateTime.hour < 12) {
+					return locale.dayPeriodWide.am;
+				} else {
+					return locale.dayPeriodWide.pm;
+				}
+			} else {
+				if (dateTime.hour === 0 && dateTime.minute === 0 && dateTime.second === 0 && dateTime.milli === 0) {
+					return locale.dayPeriodNarrow.midnight;
+				} else if (dateTime.hour === 12 && dateTime.minute === 0 && dateTime.second === 0 && dateTime.milli === 0) {
+					return locale.dayPeriodNarrow.noon;
+				} else if (dateTime.hour < 12) {
+					return locale.dayPeriodNarrow.am;
+				} else {
+					return locale.dayPeriodNarrow.pm;
+				}
+			}
+		}
+		/* istanbul ignore next */
+		default:
+			// tokenizer should prevent this
+			/* istanbul ignore next */
+			return token.raw;
+	}
 }
 
 /**

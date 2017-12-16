@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Functionality to parse a DateTime object to a string
  */
 
@@ -226,6 +226,8 @@ const SYMBOL_MAPPING: { [char: string]: SymbolInfo } = {
 	e: { type: TokenType.WEEKDAY, maxLength: 6 },
 	c: { type: TokenType.WEEKDAY, maxLength: 6 },
 	a: { type: TokenType.DAYPERIOD, maxLength: 5 },
+	b: { type: TokenType.DAYPERIOD, maxLength: 5 },
+	B: { type: TokenType.DAYPERIOD, maxLength: 5 },
 	h: { type: TokenType.HOUR, maxLength: 2 },
 	H: { type: TokenType.HOUR, maxLength: 2 },
 	k: { type: TokenType.HOUR, maxLength: 2 },

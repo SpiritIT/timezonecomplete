@@ -12,6 +12,7 @@ export * from "./duration";
 export * from "./format";
 export * from "./globals";
 export * from "./javascript";
+export * from "./locale";
 export * from "./parse";
 export * from "./period";
 export * from "./basics";
