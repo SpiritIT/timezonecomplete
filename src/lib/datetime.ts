@@ -1074,8 +1074,7 @@ export class DateTime {
 
 	/**
 	 * Return a string representation of the DateTime according to the
-	 * specified format. The format is implemented as the LDML standard
-	 * (http://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns)
+	 * specified format. See LDML.md for supported formats.
 	 *
 	 * @param formatString The format specification (e.g. "dd/MM/yyyy HH:mm:ss")
 	 * @param locale Optional, non-english format month names etc.
@@ -1088,7 +1087,7 @@ export class DateTime {
 	/**
 	 * Parse a date in a given format
 	 * @param s the string to parse
-	 * @param format the format the string is in
+	 * @param format the format the string is in. See LDML.md for supported formats.
 	 * @param zone Optional, the zone to add (if no zone is given in the string)
 	 * @param locale Optional, different settings for constants like 'AM' etc
 	 */

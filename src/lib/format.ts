@@ -20,7 +20,7 @@ import { Token, tokenize, TokenType } from "./token";
  * @param dateTime The current time to format
  * @param utcTime The time in UTC
  * @param localZone The zone that currentTime is in
- * @param formatString The formatting string to be applied
+ * @param formatString The LDML format pattern (see LDML.md)
  * @param locale Other format options such as month names
  * @return string
  */

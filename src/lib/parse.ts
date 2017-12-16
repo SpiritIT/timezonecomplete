@@ -42,7 +42,7 @@ interface ParseDayPeriodResult {
 /**
  * Checks if a given datetime string is according to the given format
  * @param dateTimeString The string to test
- * @param formatString LDML format string
+ * @param formatString LDML format string (see LDML.md)
  * @param allowTrailing Allow trailing string after the date+time
  * @param locale Locale-specific constants such as month names
  * @returns true iff the string is valid

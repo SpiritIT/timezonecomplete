@@ -26,7 +26,7 @@ Above all, it should give the same answers across platforms. At the time we star
   * **Calculating** with dates and durations across time zones
   * **Periods** with regular UTC or regular local time repetition
   * **Utility functions** for determining leap years, determining the last Monday of the month etc.
-  * **Formatting and parsing** of dates using LDML format strings
+  * **Formatting and parsing** of dates using [LDML format strings](./doc/LDML.md)
   * Ability to use with Node.JS as well as in a browser (CommonJS, AMD)
 * Good test coverage
 * Under active development by a company who have an interest in keeping it up to date
@@ -44,14 +44,10 @@ Separating the TZ data from timezonecomplete has three advantages:
 
 See the [Upgrade Instructions](./doc/UPGRADING.md).
 
-## New in Version 4
-
-We did some performance improvements. The majority of users should be able to just upgrade without making any changes.
-A small part of the external API had to change, but it only concerns parts you shouldn't really need anyway. See the [Upgrade Instructions](./doc/UPGRADING.md).
-
 ## Documentation
 
 * [API](./doc/API.md)
+* [Formatting and Parsing](./doc/LDML.md)
 * [Changelog](./doc/CHANGELOG.md)
 * [Upgrade Instructions](./doc/UPGRADING.md)
 * [FAQ](./doc/FAQ.md)
