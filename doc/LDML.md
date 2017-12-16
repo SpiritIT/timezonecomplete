@@ -146,8 +146,11 @@ The table below shows the format patterns and whether timezonecomplete supports 
 |  | mm | 08, 59 | yes | yes | |
 | second | s | 8, 12 | yes | yes | Second |
 |  | ss | 08, 12 | yes | yes | |
-|  | S+ | 3456 | yes | ONLY 'SSS' | Fractional Second (numeric). Truncates, like other numeric time fields, but in this case to the number of digits specified by the field length. (Example shows display using pattern SSSS for seconds value 12.34567). Use ss.SSS for displaying seconds.milliseconds |
-|  | A+ | 69540000 | yes | - | Milliseconds in day (numeric) |
+|  | S | 3 | yes | yes | Fractional Second (numeric), one digit |
+|  | SS | 34 | yes | yes | Fractional Second (numeric), two digits |
+|  | SSS | 345 | yes | yes | Fractional Second (numeric), three digits (i.e. milliseconds). Use ss.SSS for displaying seconds.milliseconds |
+|  | SSS+ | 34500 | yes | truncated | Timezonecomplete does not store sub-millisecond values so values are truncated |
+|  | A+ | 69540000 | yes | yes | Milliseconds in day (numeric) |
 | zone | z..zzz | PDT | yes | - | The short specific non-location format |
 |  | zzzz | Pacific Daylight Time | - | - | The long specific non-location format.  |
 |  | Z..ZZZ | -0800 | yes | yes | The ISO8601 basic format with hours, minutes and optional seconds fields |

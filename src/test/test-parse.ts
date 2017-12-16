@@ -163,8 +163,8 @@ describe("parse", (): void => {
 			});
 		});
 		describe("QQQQQ", (): void => {
-			it("should parse '2017 01'", (): void => {
-				expect(parse.parse("2017 01", "yyyy QQQQQ", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
+			it("should parse '2017 1'", (): void => {
+				expect(parse.parse("2017 1", "yyyy QQQQQ", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
 			});
 			it("should not parse '2017 foo'", (): void => {
 				expect(() => parse.parse("2017 foo", "yyyy QQQQQ", undefined, false)).to.throw();
@@ -236,8 +236,8 @@ describe("parse", (): void => {
 			});
 		});
 		describe("qqqqq", (): void => {
-			it("should parse '2017 01'", (): void => {
-				expect(parse.parse("2017 01", "yyyy qqqqq", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
+			it("should parse '2017 1'", (): void => {
+				expect(parse.parse("2017 1", "yyyy qqqqq", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
 			});
 			it("should not parse '2017 foo'", (): void => {
 				expect(() => parse.parse("2017 foo", "yyyy qqqqq", undefined, false)).to.throw();
@@ -553,4 +553,76 @@ describe("parse", (): void => {
 		});
 	});
 
+	describe("second", (): void => {
+		describe("s", (): void => {
+			it("should parse '1'", (): void => {
+				expect(parse.parse("1", "s", undefined, false).time.toString()).to.equal("1970-01-01T00:00:01.000");
+			});
+			it("should parse '59'", (): void => {
+				expect(parse.parse("59", "s", undefined, false).time.toString()).to.equal("1970-01-01T00:00:59.000");
+			});
+			it("should throw on '62'", (): void => {
+				// note 60, 61 could be leap seconds and we don't test them since we don't support them yet
+				expect(() => parse.parse("62", "s", undefined, false)).to.throw();
+			});
+		});
+		describe("ss", (): void => {
+			it("should parse '1'", (): void => {
+				expect(parse.parse("1", "ss", undefined, false).time.toString()).to.equal("1970-01-01T00:00:01.000");
+			});
+			it("should parse '01'", (): void => {
+				expect(parse.parse("01", "ss", undefined, false).time.toString()).to.equal("1970-01-01T00:00:01.000");
+			});
+			it("should parse '59'", (): void => {
+				expect(parse.parse("59", "ss", undefined, false).time.toString()).to.equal("1970-01-01T00:00:59.000");
+			});
+			it("should throw on '62'", (): void => {
+				// note 60, 61 could be leap seconds and we don't test them since we don't support them yet
+				expect(() => parse.parse("62", "ss", undefined, false)).to.throw();
+			});
+		});
+		describe("S", (): void => {
+			it("should parse '0'", (): void => {
+				expect(parse.parse("0", "S", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.000");
+			});
+			it("should parse '9'", (): void => {
+				expect(parse.parse("9", "S", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.900");
+			});
+		});
+		describe("SS", (): void => {
+			it("should parse '00'", (): void => {
+				expect(parse.parse("00", "SS", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.000");
+			});
+			it("should parse '99'", (): void => {
+				expect(parse.parse("99", "SS", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.990");
+			});
+		});
+		describe("SSS", (): void => {
+			it("should parse '000'", (): void => {
+				expect(parse.parse("000", "SSS", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.000");
+			});
+			it("should parse '999'", (): void => {
+				expect(parse.parse("999", "SSS", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.999");
+			});
+		});
+		describe("SSSS", (): void => {
+			it("should parse '0000'", (): void => {
+				expect(parse.parse("0000", "SSSS", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.000");
+			});
+			it("should parse '9999' and truncate", (): void => {
+				expect(parse.parse("9999", "SSSS", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.999");
+			});
+		});
+		describe("A", (): void => {
+			it("should parse '0'", (): void => {
+				expect(parse.parse("0", "A", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.000");
+			});
+			it("should parse '86399999'", (): void => {
+				expect(parse.parse("86399999", "A", undefined, false).time.toString()).to.equal("1970-01-01T23:59:59.999");
+			});
+			it("should throw on bigger-than-day value", (): void => {
+				expect(() => parse.parse("86400000", "A", undefined, false)).to.throw();
+			});
+		});
+	});
 });

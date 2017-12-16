@@ -117,7 +117,7 @@ export function parse(
 					remaining = dpr.remaining;
 					break;
 				case TokenType.YEAR:
-					pnr = stripNumber(remaining);
+					pnr = stripNumber(remaining, Infinity);
 					remaining = pnr.remaining;
 					time.year = pnr.n;
 					break;
@@ -127,31 +127,38 @@ export function parse(
 					time.month = pnr.n;
 					break;
 				case TokenType.DAY:
-					pnr = stripNumber(remaining);
+					pnr = stripNumber(remaining, 2);
 					remaining = pnr.remaining;
 					time.day = pnr.n;
 					break;
 				case TokenType.HOUR:
-					pnr = stripNumber(remaining);
+					pnr = stripNumber(remaining, 2);
 					remaining = pnr.remaining;
 					time.hour = pnr.n;
 					break;
 				case TokenType.MINUTE:
-					pnr = stripNumber(remaining);
+					pnr = stripNumber(remaining, 2);
 					remaining = pnr.remaining;
 					time.minute = pnr.n;
 					break;
-				case TokenType.SECOND:
-					pnr = stripNumber(remaining);
+				case TokenType.SECOND: {
+					pnr = stripSecond(token, remaining);
 					remaining = pnr.remaining;
-					if (token.raw.charAt(0) === "s") {
-						time.second = pnr.n;
-					} else /* istanbul ignore else */ if (token.raw.charAt(0) === "S") {
-						time.milli = pnr.n;
-					} else {
-						throw new Error(`unsupported second format '${token.raw}'`);
+					switch (token.symbol) {
+						case "s": time.second = pnr.n; break;
+						case "S": time.milli = 1000 * parseFloat("0." + Math.floor(pnr.n).toString(10).slice(0, 3)); break;
+						case "A":
+							time.hour = Math.floor((pnr.n / 3600E3));
+							time.minute = Math.floor((pnr.n / 60E3) % 60);
+							time.second = Math.floor((pnr.n / 1000) % 60);
+							time.milli = pnr.n % 1000;
+							break;
+						/* istanbul ignore next */
+						default:
+							/* istanbul ignore next */
+							throw new Error(`unsupported second format '${token.raw}'`);
 					}
-					break;
+				} break;
 				case TokenType.ZONE:
 					pzr = stripZone(remaining);
 					remaining = pzr.remaining;
@@ -239,7 +246,6 @@ export function parse(
 				}
 			}
 		}
-
 		if (time.year === undefined) {
 			time.year = 1970;
 		}
@@ -260,28 +266,6 @@ export function parse(
 	} catch (e) {
 		throw new Error(`invalid date '${dateTimeString}' not according to format '${formatString}': ${e.message}`);
 	}
-}
-
-
-function stripNumber(s: string): ParseNumberResult {
-	const result: ParseNumberResult = {
-		n: NaN,
-		remaining: s
-	};
-	let numberString = "";
-	while (result.remaining.length > 0 && result.remaining.charAt(0).match(/\d/)) {
-		numberString += result.remaining.charAt(0);
-		result.remaining = result.remaining.substr(1);
-	}
-	// remove leading zeroes
-	while (numberString.charAt(0) === "0" && numberString.length > 1) {
-		numberString = numberString.substr(1);
-	}
-	result.n = parseInt(numberString, 10);
-	if (numberString === "" || !isFinite(result.n)) {
-		throw new Error(`expected a number but got '${numberString}'`);
-	}
-	return result;
 }
 
 const WHITESPACE = [" ", "\t", "\r", "\v", "\n"];
@@ -422,22 +406,27 @@ function stripQuarter(token: Token, remaining: string, locale: Locale): ParseNum
 			quarterAbbreviations = locale.standAloneQuarterAbbreviations;
 			break;
 		}
+		/* istanbul ignore next */
 		default:
+			/* istanbul ignore next */
 			throw new Error("invalid quarter pattern");
 	}
 	let allowed: string[];
 	switch (token.length) {
 		case 1:
-		case 2:
 		case 5:
-			return stripNumber(remaining);
+			return stripNumber(remaining, 1);
+		case 2:
+			return stripNumber(remaining, 2);
 		case 3:
 			allowed = [1, 2, 3, 4].map((n: number): string => quarterLetter + n.toString(10));
 			break;
 		case 4:
 			allowed = quarterAbbreviations.map((a: string): string => a + " " + quarterWord);
 			break;
+		/* istanbul ignore next */
 		default:
+			/* istanbul ignore next */
 			throw new Error("invalid quarter pattern");
 	}
 	const r = stripStrings(token, remaining, allowed);
@@ -459,14 +448,16 @@ function stripMonth(token: Token, remaining: string, locale: Locale): ParseNumbe
 			longMonthNames = locale.standAloneLongMonthNames;
 			monthLetters = locale.standAloneMonthLetters;
 			break;
+		/* istanbul ignore next */
 		default:
+			/* istanbul ignore next */
 			throw new Error("invalid month pattern");
 	}
 	let allowed: string[];
 	switch (token.length) {
 		case 1:
 		case 2:
-			return stripNumber(remaining);
+			return stripNumber(remaining, 2);
 		case 3:
 			allowed = shortMonthNames;
 			break;
@@ -476,11 +467,49 @@ function stripMonth(token: Token, remaining: string, locale: Locale): ParseNumbe
 		case 5:
 			allowed = monthLetters;
 			break;
+		/* istanbul ignore next */
 		default:
+			/* istanbul ignore next */
 			throw new Error("invalid month pattern");
 	}
 	const r = stripStrings(token, remaining, allowed);
 	return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
+}
+
+function stripSecond(token: Token, remaining: string): ParseNumberResult {
+	switch (token.symbol) {
+		case "s":
+			return stripNumber(remaining, 2);
+		case "S":
+			return stripNumber(remaining, token.length);
+		case "A":
+			return stripNumber(remaining, 8);
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			throw new Error("invalid seconds pattern");
+	}
+}
+
+function stripNumber(s: string, maxLength: number): ParseNumberResult {
+	const result: ParseNumberResult = {
+		n: NaN,
+		remaining: s
+	};
+	let numberString = "";
+	while (numberString.length < maxLength && result.remaining.length > 0 && result.remaining.charAt(0).match(/\d/)) {
+		numberString += result.remaining.charAt(0);
+		result.remaining = result.remaining.substr(1);
+	}
+	// remove leading zeroes
+	while (numberString.charAt(0) === "0" && numberString.length > 1) {
+		numberString = numberString.substr(1);
+	}
+	result.n = parseInt(numberString, 10);
+	if (numberString === "" || !Number.isFinite(result.n)) {
+		throw new Error(`expected a number but got '${numberString}'`);
+	}
+	return result;
 }
 
 function stripStrings(token: Token, remaining: string, allowed: string[]): { remaining: string, chosen: string } {
