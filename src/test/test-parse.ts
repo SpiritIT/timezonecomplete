@@ -31,6 +31,9 @@ describe("parse", (): void => {
 		it("should throw when raw text not given when in format", (): void => {
 			assert.throws(() => parse.parse("2017-11-01", "yyyy-MM-dd 'foo'"));
 		});
+		it("parse a time only", (): void => {
+			expect(parse.parse("10:59:50", "HH:mm:ss", undefined, false).time.toString()).to.equal("1970-01-01T10:59:50.000");
+		});
 	});
 
 	describe("parseable()", (): void => {
@@ -168,6 +171,67 @@ describe("parse", (): void => {
 			});
 			it("should not parse '2017'", (): void => {
 				expect(() => parse.parse("2017", "yyyy QQQQQ", undefined, false)).to.throw();
+			});
+		});
+	});
+
+	describe("month", (): void => {
+		describe("M", (): void => {
+			it("should parse '3'", (): void => {
+				expect(parse.parse("3", "M", undefined, false).time.toString()).to.equal("1970-03-01T00:00:00.000");
+			});
+			it("should not parse '13'", (): void => {
+				expect(() => parse.parse("13", "M", undefined, false)).to.throw();
+			});
+			it("should not parse '0'", (): void => {
+				expect(() => parse.parse("0", "M", undefined, false)).to.throw();
+			});
+		});
+		describe("MM", (): void => {
+			it("should parse '3'", (): void => {
+				expect(parse.parse("3", "MM", undefined, false).time.toString()).to.equal("1970-03-01T00:00:00.000");
+			});
+			it("should parse '03'", (): void => {
+				expect(parse.parse("03", "MM", undefined, false).time.toString()).to.equal("1970-03-01T00:00:00.000");
+			});
+			it("should not parse '13'", (): void => {
+				expect(() => parse.parse("13", "MM", undefined, false)).to.throw();
+			});
+			it("should not parse '00'", (): void => {
+				expect(() => parse.parse("00", "MM", undefined, false)).to.throw();
+			});
+		});
+		describe("MMM", (): void => {
+			it("should parse 'Sep'", (): void => {
+				expect(parse.parse("Sep", "MMM", undefined, false).time.toString()).to.equal("1970-09-01T00:00:00.000");
+			});
+			it("should parse 'sEP'", (): void => {
+				expect(parse.parse("sEP", "MMM", undefined, false).time.toString()).to.equal("1970-09-01T00:00:00.000");
+			});
+			it("should not parse 'Sap'", (): void => {
+				expect(() => parse.parse("Sap", "MMM", undefined, false)).to.throw();
+			});
+		});
+		describe("MMMM", (): void => {
+			it("should parse 'September'", (): void => {
+				expect(parse.parse("September", "MMMM", undefined, false).time.toString()).to.equal("1970-09-01T00:00:00.000");
+			});
+			it("should parse 'september'", (): void => {
+				expect(parse.parse("september", "MMMM", undefined, false).time.toString()).to.equal("1970-09-01T00:00:00.000");
+			});
+			it("should not parse 'Saptember'", (): void => {
+				expect(() => parse.parse("Sap", "MMMM", undefined, false)).to.throw();
+			});
+		});
+		describe("MMMMM", (): void => {
+			it("should parse 'D'", (): void => {
+				expect(parse.parse("D", "MMMMM", undefined, false).time.toString()).to.equal("1970-12-01T00:00:00.000");
+			});
+			it("should parse 'j'", (): void => {
+				expect(parse.parse("j", "MMMMM", undefined, false).time.toString()).to.equal("1970-01-01T00:00:00.000");
+			});
+			it("should not parse 'E'", (): void => {
+				expect(() => parse.parse("E", "MMMMM", undefined, false)).to.throw();
 			});
 		});
 	});
@@ -357,4 +421,5 @@ describe("parse", (): void => {
 			});
 		});
 	});
+
 });

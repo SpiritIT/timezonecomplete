@@ -15,7 +15,7 @@ The functions for formatting and parsing dates use LDML format strings, see http
 
 * 'MM' is months, 'mm' is minutes
 * 'HH' is 24-hour, 'hh' is 12-hour. If you use AM/PM be sure to use 'hh' and otherwise 'HH'.
-* 'SSS' is millseconds, other patterns don't currently work
+* 'SSS' is millseconds, patterns S, SS, SSSS, and SSSSS don't currently work
 
 ### Internationalization
 
@@ -24,7 +24,7 @@ You can change the names used for months and weekdays etc. You can do so globall
 
 ```javascript
 // parsing and formatting
-var dt = new tc.DateTime("2015-03-01", "yyyy-MM-dd");
+let dt = new tc.DateTime("2015-03-01", "yyyy-MM-dd");
 dt.format("dd-MMMM-yyyy"); // "31-March-2015"
 
 // formatting with custom month names
@@ -34,7 +34,7 @@ dt.format("dd-MMMM-yyyy", { longMonthNames: ["Januari", "Februari", "Maart", "Ap
 console.log(tc.DEFAULT_FORMAT_OPTIONS.longMonthNames[1]); // "January"
 
 // all possible format options:
-var myFormatOptions = {
+const myFormatOptions = {
 	eraNarrow: ["A", "B"],
 	eraWide: ["Anno Domini", "Before Christ"],
 	eraAbbreviated: ["AD", "BC"],
@@ -85,9 +85,9 @@ The table below shows the format patterns and whether timezonecomplete supports 
 |  | qqqqq | 2 | NO | NO | |
 | month | M | 9, 12 | yes | yes | Month number/name |
 |  | MM | 09, 12 | yes | yes | |
-|  | MMM | Sep | yes | NO | |
+|  | MMM | Sep | yes | yes | |
 |  | MMMM | September | yes | NO | |
-|  | MMMMM | S |yes  | NO | |
+|  | MMMMM | S |yes  | ambiguous | |
 |  | L | 9, 12 | yes | NO | Stand-alone month number/name |
 |  | LL | 09, 12 | yes | NO | |
 |  | LLL | Sep | yes | NO | |

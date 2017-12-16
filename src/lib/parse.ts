@@ -122,7 +122,7 @@ export function parse(
 					time.year = pnr.n;
 					break;
 				case TokenType.MONTH:
-					pnr = stripNumber(remaining);
+					pnr = stripMonth(token, remaining, mergedLocale);
 					remaining = pnr.remaining;
 					time.month = pnr.n;
 					break;
@@ -424,6 +424,31 @@ function stripQuarter(token: Token, remaining: string, locale: Locale): ParseNum
 		}
 		default:
 			throw new Error("invalid quarter pattern");
+	}
+}
+
+function stripMonth(token: Token, remaining: string, locale: Locale): ParseNumberResult {
+	switch (token.length) {
+		case 1:
+		case 2:
+			return stripNumber(remaining);
+		case 3: {
+			const allowed = locale.shortMonthNames;
+			const r = stripStrings(token, remaining, allowed);
+			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
+		}
+		case 4: {
+			const allowed = locale.longMonthNames;
+			const r = stripStrings(token, remaining, allowed);
+			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
+		}
+		case 5: {
+			const allowed = locale.monthLetters;
+			const r = stripStrings(token, remaining, allowed);
+			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
+		}
+		default:
+			throw new Error("invalid month pattern");
 	}
 }
 
