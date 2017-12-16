@@ -1,9 +1,19 @@
 
 # Changelog
 
-## next (minor)
+## 5.5.0 (2017-12-16)
 
-* Add parsing of era
+* Add more support for parsing date-time strings using different LDML patterns (see [LDML formats](./doc/LDML.md))
+  * Era
+  * Quarters and stand-alone quarters
+  * Month names and stand-alone month names
+  * Day periods (am/pm/noon/midnight)
+  * More hour formats (1-12, 0-11, 1-24)
+  * More second formats
+  * More fractional second formats
+  * More time zone formats
+* Documented more LDML caveats
+* Era names can now be customized
 
 ## 5.4.6 (2017-12-16)
 
