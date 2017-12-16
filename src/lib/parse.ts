@@ -88,19 +88,24 @@ export function parse(
 	};
 	try {
 		const tokens: Token[] = tokenize(formatString);
-		const time: TimeComponentOpts = { year: -1 };
+		const time: TimeComponentOpts = { year: undefined };
 		let zone: TimeZone | undefined;
 		let pnr: ParseNumberResult | undefined;
 		let pzr: ParseZoneResult | undefined;
 		let dpr: ParseDayPeriodResult | undefined;
 		let era: number = 1;
+		let quarter: number | undefined;
 		let remaining: string = dateTimeString;
 		for (const token of tokens) {
 			switch (token.type) {
 				case TokenType.ERA:
 					[era, remaining] = stripEra(token, remaining, mergedLocale);
 					break;
-				case TokenType.QUARTER:
+				case TokenType.QUARTER: {
+					const r = stripQuarter(token, remaining, mergedLocale);
+					quarter = r.n;
+					remaining = r.remaining;
+				} break;
 				/* istanbul ignore next */
 				case TokenType.WEEKDAY:
 				/* istanbul ignore next */
@@ -212,6 +217,31 @@ export function parse(
 		}
 		if (time.year !== undefined) {
 			time.year *= era;
+		}
+		if (quarter !== undefined) {
+			if (time.month === undefined) {
+				switch (quarter) {
+					case 1: time.month = 1; break;
+					case 2: time.month = 4; break;
+					case 3: time.month = 7; break;
+					case 4: time.month = 10; break;
+				}
+			} else {
+				let error = false;
+				switch (quarter) {
+					case 1: error = !(time.month >= 1 && time.month <= 3); break;
+					case 2: error = !(time.month >= 4 && time.month <= 6); break;
+					case 3: error = !(time.month >= 7 && time.month <= 9); break;
+					case 4: error = !(time.month >= 10 && time.month <= 12); break;
+				}
+				if (error) {
+					throw new Error("the quarter does not match the month");
+				}
+			}
+		}
+
+		if (time.year === undefined) {
+			time.year = 1970;
 		}
 		const result: AwareTimeStruct = { time: new TimeStruct(time), zone };
 		if (!result.time.validate()) {
@@ -374,6 +404,27 @@ function stripEra(token: Token, remaining: string, locale: Locale): [number, str
 	}
 	const result = stripStrings(token, remaining, allowed);
 	return [allowed.indexOf(result.chosen) === 0 ? 1 : -1, result.remaining];
+}
+
+function stripQuarter(token: Token, remaining: string, locale: Locale): ParseNumberResult {
+	switch (token.length) {
+		case 1:
+		case 2:
+		case 5:
+			return stripNumber(remaining);
+		case 3: {
+			const allowed = [1, 2, 3, 4].map((n: number): string => locale.quarterLetter + n.toString(10));
+			const r = stripStrings(token, remaining, allowed);
+			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
+		}
+		case 4: {
+			const allowed = locale.quarterAbbreviations.map((a: string): string => a + " " + locale.quarterWord);
+			const r = stripStrings(token, remaining, allowed);
+			return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
+		}
+		default:
+			throw new Error("invalid quarter pattern");
+	}
 }
 
 function stripStrings(token: Token, remaining: string, allowed: string[]): { remaining: string, chosen: string } {

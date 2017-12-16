@@ -73,16 +73,16 @@ The table below shows the format patterns and whether timezonecomplete supports 
 |  | u+ | 4601 | NO | NO | Extended year (numeric) |
 |  | U+ | | NO | NO | Cyclic year name |
 |  | r+ | 2017 | yes | yes | Related Gregorian year (numeric) |
-| quarter | Q | 2 | yes | NO | Quarter name/number |
-|  | QQ | 02 | yes | NO | |
-|  | QQQ | Q2 | yes | NO | |
-|  | QQQQ | 2nd quarter | yes | NO | |
-|  | QQQQQ | 2 | yes | NO | |
-|  | q | 2 | yes | NO | Stand-alone quarter name/number |
-|  | qq | 02 | yes | NO | |
-|  | qqq | Q2 | yes | NO | |
-|  | qqqq | 2nd quarter | yes | NO | |
-|  | qqqqq | 2 | yes | NO | |
+| quarter | Q | 2 | yes | yes | Quarter name/number. Parsing a quarter changes the date to the beginning of that quarter |
+|  | QQ | 02 | yes | yes | |
+|  | QQQ | Q2 | yes | yes | |
+|  | QQQQ | 2nd quarter | yes | yes | |
+|  | QQQQQ | 2 | yes | yes | |
+|  | q | 2 | NO | NO | Stand-alone quarter name/number (changes the date to the given quarter) |
+|  | qq | 02 | NO | NO | |
+|  | qqq | Q2 | NO | NO | |
+|  | qqqq | 2nd quarter | NO | NO | |
+|  | qqqqq | 2 | NO | NO | |
 | month | M | 9, 12 | yes | yes | Month number/name |
 |  | MM | 09, 12 | yes | yes | |
 |  | MMM | Sep | yes | NO | |
