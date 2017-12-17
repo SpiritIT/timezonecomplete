@@ -16,9 +16,8 @@ The functions for formatting and parsing dates use LDML format strings, see http
 
 * 'MM' is months, 'mm' is minutes
 * 'HH' is 24-hour, 'hh' is 12-hour. If you use AM/PM be sure to use 'hh' and otherwise 'HH'.
-* 'SSS' is millseconds, patterns S, SS, SSSS, and SSSSS don't currently work
-* Time zones can only be parsed if there is whitespace or end-of-string coming after them.
-* Numeric time zones with second offset (e.g. '-03:34:24') are not supported, since all date from pre-1970
+* Parsing strings with time zones is only possible if there is whitespace or end-of-string after the zone name.
+* Time zones with a non-zero seconds offset (e.g. '-03:34:24') are not supported for parsing or formatting.
 
 ### Internationalization
 
