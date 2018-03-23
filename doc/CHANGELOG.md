@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.5.1 (2018-03-23)
+
+* Remove badges from README.md since some don't work anymore.
+
 ## 5.5.0 (2017-12-16)
 
 * Add more support for parsing date-time strings using different LDML patterns (see [LDML formats](./doc/LDML.md))
