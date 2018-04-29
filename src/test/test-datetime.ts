@@ -1591,13 +1591,6 @@ describe("DateTime", (): void => {
 		});
 	});
 
-	describe("inspect()", (): void => {
-		it("should work", (): void => {
-			expect((new DateTime("2014-02-03T05:06:07.008")).inspect()).to.equal(
-				"[DateTime: " + (new DateTime("2014-02-03T05:06:07.008")).toString() + "]");
-		});
-	});
-
 	describe("valueOf()", (): void => {
 		it("should work", (): void => {
 			expect((new DateTime("2014-02-03T05:06:07.008")).valueOf()).to.equal(

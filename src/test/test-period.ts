@@ -917,13 +917,6 @@ describe("Period", function(): void {
 		});
 	});
 
-	describe("inspect()", (): void => {
-		it("should work", (): void => {
-			const p = new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);
-			expect(p.inspect()).to.equal("[Period: " + p.toString() + "]");
-		});
-	});
-
 	describe("clone()", (): void => {
 		it("should work", (): void => {
 			const p = new Period(new DateTime("2014-01-01T00:00:00"), 1, TimeUnit.Hour, PeriodDst.RegularLocalTime);

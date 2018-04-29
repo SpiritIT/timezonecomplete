@@ -850,11 +850,6 @@ export class TimeStruct {
 			+ ":" + strings.padLeft(this.components.second.toString(10), 2, "0")
 			+ "." + strings.padLeft(this.components.milli.toString(10), 3, "0");
 	}
-
-	public inspect(): string {
-		return "[TimeStruct: " + this.toString() + "]";
-	}
-
 }
 
 

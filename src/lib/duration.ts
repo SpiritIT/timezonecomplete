@@ -616,13 +616,6 @@ export class Duration {
 	}
 
 	/**
-	 * Used by util.inspect()
-	 */
-	public inspect(): string {
-		return "[Duration: " + this.toString() + "]";
-	}
-
-	/**
 	 * The valueOf() method returns the primitive value of the specified object.
 	 */
 	public valueOf(): any {

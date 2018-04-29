@@ -449,13 +449,6 @@ describe("Duration()", (): void => {
 		});
 	});
 
-	describe("inspect()", (): void => {
-		it("should work", (): void => {
-			const d: Duration = new Duration("-01:02:03.4");
-			expect(d.inspect()).to.equal("[Duration: " + d.toString() + "]");
-		});
-	});
-
 	describe("valueOf()", (): void => {
 		it("should work", (): void => {
 			const d: Duration = new Duration("-01:02:03.4");

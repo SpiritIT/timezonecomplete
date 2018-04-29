@@ -563,13 +563,6 @@ export class TimeZone {
 	}
 
 	/**
-	 * Used by util.inspect()
-	 */
-	public inspect(): string {
-		return "[TimeZone: " + this.toString() + "]";
-	}
-
-	/**
 	 * Convert an offset number into an offset string
 	 * @param offset The offset in minutes from UTC e.g. 90 minutes
 	 * @return the offset in ISO notation "+01:30" for +90 minutes

@@ -1116,13 +1116,6 @@ export class DateTime {
 	}
 
 	/**
-	 * Used by util.inspect()
-	 */
-	public inspect(): string {
-		return "[DateTime: " + this.toString() + "]";
-	}
-
-	/**
 	 * The valueOf() method returns the primitive value of the specified object.
 	 */
 	public valueOf(): any {

@@ -804,13 +804,6 @@ export class Period {
 	}
 
 	/**
-	 * Used by util.inspect()
-	 */
-	public inspect(): string {
-		return "[Period: " + this.toString() + "]";
-	}
-
-	/**
 	 * Corrects the difference between _reference and _intReference.
 	 */
 	private _correctDay(d: DateTime): DateTime {

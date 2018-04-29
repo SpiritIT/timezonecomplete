@@ -314,14 +314,6 @@ describe("TimeStruct", (): void => {
 			expect((TimeStruct.fromComponents(1969, 12, 31, 23, 59, 59, 999)).valueOf()).to.equal(-1);
 		});
 	});
-
-	describe("inspect()", (): void => {
-		it("should a wrapped toString()", (): void => {
-			const tm = TimeStruct.fromComponents(1969, 12, 31, 23, 59, 59, 999);
-			expect(tm.inspect()).to.equal("[TimeStruct: " + tm.toString() + "]");
-		});
-	});
-
 });
 
 describe("unixToTimeNoLeapSecs()", (): void => {

@@ -419,12 +419,6 @@ describe("TimeZone", (): void => {
 		});
 	});
 
-	describe("inspect()", (): void => {
-		it("should work", (): void => {
-			expect(TimeZone.zone("Europe/Amsterdam").inspect()).to.equal("[TimeZone: Europe/Amsterdam]");
-		});
-	});
-
 	describe("stringToOffset()", (): void => {
 		it("should work for Z", (): void => {
 			expect(TimeZone.stringToOffset("Z")).to.equal(0);
