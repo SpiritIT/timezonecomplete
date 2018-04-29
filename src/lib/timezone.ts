@@ -313,7 +313,11 @@ export class TimeZone {
 	public offsetForUtc(
 		a?: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
 	): number {
-		const utcTime = (a && a instanceof TimeStruct ? a : new TimeStruct({ year: a as number, month, day, hour, minute, second, milli }));
+		const utcTime: TimeStruct = (
+			typeof a === "number" ? new TimeStruct({ year: a, month, day, hour, minute, second, milli }) :
+			typeof a === "undefined" ? new TimeStruct({}) :
+			a
+		);
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
 				const date: Date = new Date(Date.UTC(
@@ -353,7 +357,11 @@ export class TimeZone {
 	public standardOffsetForUtc(
 		a?: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
 	): number {
-		const utcTime = (a && a instanceof TimeStruct ? a : new TimeStruct({ year: a as number, month, day, hour, minute, second, milli }));
+		const utcTime: TimeStruct = (
+			typeof a === "number" ? new TimeStruct({ year: a, month, day, hour, minute, second, milli }) :
+			typeof a === "undefined" ? new TimeStruct({}) :
+			a
+		);
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
 				const date: Date = new Date(Date.UTC(utcTime.components.year, 0, 1, 0));
@@ -391,7 +399,11 @@ export class TimeZone {
 	public offsetForZone(
 		a?: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
 	): number {
-		const localTime = (a && a instanceof TimeStruct ? a : new TimeStruct({ year: a as number, month, day, hour, minute, second, milli }));
+		const localTime: TimeStruct = (
+			typeof a === "number" ? new TimeStruct({ year: a, month, day, hour, minute, second, milli }) :
+			typeof a === "undefined" ? new TimeStruct({}) :
+			a
+		);
 		switch (this._kind) {
 			case TimeZoneKind.Local: {
 				const date: Date = new Date(
@@ -470,7 +482,7 @@ export class TimeZone {
 	): string {
 		let utcTime: TimeStruct;
 		let dstDependent: boolean = true;
-		if (a instanceof TimeStruct) {
+		if (typeof a !== "number" && !!a) {
 			utcTime = a;
 			dstDependent = (b === false ? false : true);
 		} else {

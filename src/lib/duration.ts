@@ -86,6 +86,8 @@ export function milliseconds(n: number): Duration {
  */
 export class Duration {
 
+	public kind = "Duration";
+
 	/**
 	 * Given amount in constructor
 	 */

@@ -21,15 +21,12 @@ export function min(d1: Duration, d2: Duration): Duration;
 /**
  * Returns the minimum of two DateTimes or Durations
  */
-export function min(d1: any, d2: any): any {
+export function min(d1: DateTime | Duration, d2: DateTime | Duration): DateTime | Duration {
 	assert(d1, "first argument is falsy");
-	assert(d2, "first argument is falsy");
+	assert(d2, "second argument is falsy");
 	/* istanbul ignore next */
-	assert(
-		(d1 instanceof DateTime && d2 instanceof DateTime) || (d1 instanceof Duration && d2 instanceof Duration),
-		"Either two datetimes or two durations expected"
-	);
-	return d1.min(d2);
+	assert(d1.kind === d2.kind, "expected either two datetimes or two durations");
+	return (d1 as any).min(d2);
 }
 
 /**
@@ -43,15 +40,12 @@ export function max(d1: Duration, d2: Duration): Duration;
 /**
  * Returns the maximum of two DateTimes or Durations
  */
-export function max(d1: any, d2: any): any {
+export function max(d1: DateTime | Duration, d2: DateTime | Duration): DateTime | Duration {
 	assert(d1, "first argument is falsy");
-	assert(d2, "first argument is falsy");
+	assert(d2, "second argument is falsy");
 	/* istanbul ignore next */
-	assert(
-		(d1 instanceof DateTime && d2 instanceof DateTime) || (d1 instanceof Duration && d2 instanceof Duration),
-		"Either two datetimes or two durations expected"
-	);
-	return d1.max(d2);
+	assert(d1.kind === d2.kind, "expected either two datetimes or two durations");
+	return (d1 as any).max(d2);
 }
 
 /**
@@ -59,7 +53,6 @@ export function max(d1: any, d2: any): any {
  */
 export function abs(d: Duration): Duration {
 	assert(d, "first argument is falsy");
-	assert(d instanceof Duration, "first argument is not a Duration");
 	return d.abs();
 }
 
