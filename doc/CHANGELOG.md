@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 5.5.2 (2018-04-30)
+
+* Issue #37: remove use of `instanceof` to allow multiple versions of timezonecomplete to be loaded
+* Node 10.0 compatibility fix
+* Update dependencies, (except `@types/node` due to https://github.com/DefinitelyTyped/DefinitelyTyped/issues/25342 )
+
 ## 5.5.1 (2018-03-23)
 
 * Remove badges from README.md since some don't work anymore.
