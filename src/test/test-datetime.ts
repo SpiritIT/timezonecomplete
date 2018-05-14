@@ -77,6 +77,18 @@ describe("datetime loose", (): void => {
 			expect(index.now().hour()).to.equal(testTimeSource.currentTime.getUTCHours());
 		});
 	});
+
+	describe("isDateTime()", (): void => {
+		it("should return true for DateTime", (): void => {
+			expect(index.isDateTime(index.nowLocal())).to.equal(true);
+		});
+		it("should return false for non-DateTime", (): void => {
+			expect(index.isDateTime(new Buffer("tralala"))).to.equal(false);
+		});
+		it("should return false for null", (): void => {
+			expect(index.isDateTime(null)).to.equal(false);
+		});
+	});
 });
 
 describe("DateTime", (): void => {

@@ -75,6 +75,17 @@ describe("timezone loose", (): void => {
 		});
 	});
 
+	describe("isTimeZone()", (): void => {
+		it("should return true for Duration", (): void => {
+			expect(index.isTimeZone(index.nowUtc().zone())).to.equal(true);
+		});
+		it("should return false for non-DateTime", (): void => {
+			expect(index.isTimeZone(new Buffer("tralala"))).to.equal(false);
+		});
+		it("should return false for null", (): void => {
+			expect(index.isTimeZone(null)).to.equal(false);
+		});
+	});
 });
 
 describe("TimeZone", (): void => {

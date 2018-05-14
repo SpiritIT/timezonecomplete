@@ -1195,3 +1195,13 @@ function isTimeZone(a: any): a is TimeZone {
 	}
 	return false;
 }
+
+/**
+ * Checks if a given object is of type DateTime. Note that it does not work for sub classes. However, use this to be robust
+ * against different versions of the library in one process instead of instanceof
+ * @param value Value to check
+ * @throws nothing
+ */
+export function isDateTime(value: any): value is DateTime {
+	return typeof value === "object" && value !== null && value.kind === "DateTime";
+}
