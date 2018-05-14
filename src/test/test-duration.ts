@@ -50,6 +50,18 @@ describe("duration loose", (): void => {
 		expect(d.amount()).to.equal(2);
 		expect(d.unit()).to.equal(TimeUnit.Year);
 	});
+
+	describe("isDuration()", (): void => {
+		it("should return true for Duration", (): void => {
+			expect(index.isDuration(index.hours(3))).to.equal(true);
+		});
+		it("should return false for non-DateTime", (): void => {
+			expect(index.isDuration(new Buffer("tralala"))).to.equal(false);
+		});
+		it("should return false for null", (): void => {
+			expect(index.isDuration(null)).to.equal(false);
+		});
+	});
 });
 
 describe("Duration()", (): void => {

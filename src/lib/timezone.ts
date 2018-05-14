@@ -85,6 +85,10 @@ export enum TimeZoneKind {
  * applied depending on the time zone rules.
  */
 export class TimeZone {
+	/**
+	 * Allow not using instanceof
+	 */
+	public classKind = "TimeZone";
 
 	/**
 	 * Time zone identifier:
@@ -660,5 +664,12 @@ export class TimeZone {
 	}
 }
 
-
-
+/**
+ * Checks if a given object is of type TimeZone. Note that it does not work for sub classes. However, use this to be robust
+ * against different versions of the library in one process instead of instanceof
+ * @param value Value to check
+ * @throws nothing
+ */
+export function isTimeZone(value: any): value is TimeZone {
+	return typeof value === "object" && value !== null && value.classKind === "TimeZone";
+}

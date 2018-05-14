@@ -86,6 +86,9 @@ export function milliseconds(n: number): Duration {
  */
 export class Duration {
 
+	/**
+	 * Allow not using instanceof
+	 */
 	public kind = "Duration";
 
 	/**
@@ -697,4 +700,14 @@ export class Duration {
 			this._unit = basics.stringToTimeUnit(split[1]);
 		}
 	}
+}
+
+/**
+ * Checks if a given object is of type Duration. Note that it does not work for sub classes. However, use this to be robust
+ * against different versions of the library in one process instead of instanceof
+ * @param value Value to check
+ * @throws nothing
+ */
+export function isDuration(value: any): value is Duration {
+	return typeof value === "object" && value !== null && value.kind === "Duration";
 }
