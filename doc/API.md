@@ -238,6 +238,8 @@ var duration8 = new tc.Duration(4, tc.TimeUnit.Month); // 4 months of 30 days
 // create duration from number of milliseconds
 var duration9 = new tc.Duration(-500); // -500 milliseconds
 
+// Checking if a variable is an instance of duration
+isDuration(duration); // returns true
 
 
 ```
@@ -282,7 +284,11 @@ z = tc.zone("Europe/Amsterdam");
 z.offsetForUtc(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in UTC; returns a Duration object
 z.offsetForZone(2014, 1, 1, 12, 59, 59, 0); // offset for a time specified in Europe/Amsterdam time; returns a Duration object
 
+// Checking if a variable is an instance of TimeZone
+isTimeZone(z); // returns true
+
 ```
+
 ### TzDatabase
 The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like 'what is the maximum Daylight Saving Time shift of all zones in the database'?
 
@@ -464,6 +470,9 @@ tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, undefined, false); // false
 tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, undefined, true); // true
 tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), false); // false
 tc.DateTime.exists(1969, 12, 31, 23, 59, 59, 999, TimeZone.zone("Europe/Amsterdam"), true); // true
+
+// Checking if a variable is an instance of DateTime
+isDateTime(dt); // returns true
 
 ```
 

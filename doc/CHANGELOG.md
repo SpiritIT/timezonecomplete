@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.6.0 (2018-05-14)
+
+* Issue #38: add functions `isDateTime`, `isDuration` and `isTimeZone` to use instead of `instanceof`
+
 ## 5.5.2 (2018-04-30)
 
 * Issue #37: remove use of `instanceof` to allow multiple versions of timezonecomplete to be loaded
