@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.6.1 (2018-08-14)
+
+* Issue #39: fix for: minified dist file has no content
+
 ## 5.6.0 (2018-05-14)
 
 * Issue #38: add functions `isDateTime`, `isDuration` and `isTimeZone` to use instead of `instanceof`
