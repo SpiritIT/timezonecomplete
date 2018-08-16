@@ -18,6 +18,7 @@ The functions for formatting and parsing dates use LDML format strings, see http
 * 'HH' is 24-hour, 'hh' is 12-hour. If you use AM/PM be sure to use 'hh' and otherwise 'HH'.
 * Parsing strings with time zones is only possible if there is whitespace or end-of-string after the zone name.
 * Time zones with a non-zero seconds offset (e.g. '-03:34:24') are not supported for parsing or formatting.
+* Two-digit years are interpreted as being in the 20th century if the digits are greater than (current local year + 50) and in 21th century otherwise.
 
 ### Internationalization
 

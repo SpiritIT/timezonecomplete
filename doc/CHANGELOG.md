@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.6.2 (2018-08-16)
+
+* Fix for parsing two-digit years
+
 ## 5.6.1 (2018-08-14)
 
 * Issue #39: fix for: minified dist file has no content

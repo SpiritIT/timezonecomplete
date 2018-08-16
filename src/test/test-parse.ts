@@ -248,6 +248,45 @@ describe("parse", (): void => {
 		});
 	});
 
+	describe("year", (): void => {
+		describe("y", (): void => {
+			it("should parse '2'", (): void => {
+				expect(parse.parse("2", "y", undefined, false).time.toString()).to.equal("0002-01-01T00:00:00.000");
+			});
+			it("should parse '02'", (): void => {
+				expect(parse.parse("02", "y", undefined, false).time.toString()).to.equal("0002-01-01T00:00:00.000");
+			});
+			it("should parse '2017'", (): void => {
+				expect(parse.parse("2017", "y", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
+			});
+			it("should parse '20171'", (): void => {
+				expect(parse.parse("20171", "y", undefined, false).time.toString()).to.equal("20171-01-01T00:00:00.000");
+			});
+		});
+		describe("yy", (): void => {
+			it("should parse '99'", (): void => {
+				expect(parse.parse("99", "yy", undefined, false).time.toString()).to.equal("1999-01-01T00:00:00.000");
+			});
+			it("should parse '02'", (): void => {
+				expect(parse.parse("02", "yy", undefined, false).time.toString()).to.equal("2002-01-01T00:00:00.000");
+			});
+			it("should parse '17'", (): void => {
+				expect(parse.parse("17", "yy", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
+			});
+		});
+		describe("yyyy", (): void => {
+			it("should parse '2'", (): void => {
+				expect(parse.parse("2", "yyyy", undefined, false).time.toString()).to.equal("0002-01-01T00:00:00.000");
+			});
+			it("should parse '2017'", (): void => {
+				expect(parse.parse("2017", "yyyy", undefined, false).time.toString()).to.equal("2017-01-01T00:00:00.000");
+			});
+			it("should parse '20171'", (): void => {
+				expect(parse.parse("20171", "yyyy", undefined, false).time.toString()).to.equal("20171-01-01T00:00:00.000");
+			});
+		});
+	});
+
 	describe("month", (): void => {
 		describe("M", (): void => {
 			it("should parse '3'", (): void => {

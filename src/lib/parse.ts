@@ -86,6 +86,8 @@ export function parse(
 		...DEFAULT_LOCALE,
 		...locale
 	};
+	const yearCutoff = (new Date().getFullYear() + 50) % 100;
+
 	try {
 		const tokens: Token[] = tokenize(formatString);
 		const time: TimeComponentOpts = { year: undefined };
@@ -119,7 +121,15 @@ export function parse(
 				case TokenType.YEAR:
 					pnr = stripNumber(remaining, Infinity);
 					remaining = pnr.remaining;
-					time.year = pnr.n;
+					if (token.length === 2) {
+						if (pnr.n > yearCutoff) {
+							time.year = 1900 + pnr.n;
+						} else {
+							time.year = 2000 + pnr.n;
+						}
+					} else {
+						time.year = pnr.n;
+					}
 					break;
 				case TokenType.MONTH:
 					pnr = stripMonth(token, remaining, mergedLocale);
