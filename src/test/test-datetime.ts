@@ -1591,6 +1591,18 @@ describe("DateTime", (): void => {
 		});
 	});
 
+	describe("toUtcIsoString()", (): void => {
+		it("should work for unaware date", (): void => {
+			expect((new DateTime("2014-02-03T05:06:07.008")).toUtcIsoString()).to.equal("2014-02-03T05:06:07.008Z");
+		});
+		it("should work for proper timezone", (): void => {
+			expect((new DateTime("2014-02-03T05:06:07.008 Europe/Amsterdam")).toUtcIsoString()).to.equal("2014-02-03T04:06:07.008Z");
+		});
+		it("should work for offset timezone", (): void => {
+			expect((new DateTime("2014-02-03T05:06:07.008+02:00")).toUtcIsoString()).to.equal("2014-02-03T03:06:07.008Z");
+		});
+	});
+
 	describe("toUtcString()", (): void => {
 		it("should work for unaware date", (): void => {
 			expect((new DateTime("2014-02-03T05:06:07.008")).toUtcString()).to.equal("2014-02-03T05:06:07.008");

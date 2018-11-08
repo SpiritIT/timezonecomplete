@@ -1064,6 +1064,7 @@ export class DateTime {
 	/**
 	 * Proper ISO 8601 format string with any IANA zone converted to ISO offset
 	 * E.g. "2014-01-01T23:15:33+01:00" for Europe/Amsterdam
+	 * Unaware dates have no zone information at the end.
 	 */
 	public toIsoString(): string {
 		const s: string = this.zoneDate.toString();
@@ -1071,6 +1072,19 @@ export class DateTime {
 			return s + TimeZone.offsetToString(this.offset()); // convert IANA name to offset
 		} else {
 			return s; // no zone present
+		}
+	}
+
+	/**
+	 * Convert to UTC and then return ISO string ending in 'Z'. This is equivalent to Date#toISOString()
+	 * e.g. "2014-01-01T23:15:33 Europe/Amsterdam" becomes "2014-01-01T22:15:33Z".
+	 * Unaware dates are assumed to be in UTC
+	 */
+	public toUtcIsoString(): string {
+		if (this._zone) {
+			return this.toZone(TimeZone.utc()).format("yyyy-MM-ddTHH:mm:ss.SSSZZZZZ");
+		} else {
+			return this.withZone(TimeZone.utc()).format("yyyy-MM-ddTHH:mm:ss.SSSZZZZZ");
 		}
 	}
 
