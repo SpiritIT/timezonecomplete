@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.7.0 (2018-11-08)
+
+* Add `DateTime#toUtcIsoString()` method
+* Add `allowTrailing` argument to `DateTime#parse()` method
+
 ## 5.6.2 (2018-08-16)
 
 * Fix for parsing two-digit years

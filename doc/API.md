@@ -375,6 +375,7 @@ nd = new tc.DateTime();  // computer-local current time
 // To string
 console.log(amsterdamDate.toUtcString()); // 2014-01-01T12:59:59.000
 console.log(amsterdamDate.toString()); // "2014-01-01T13:59:59.000 Europe/Amsterdam", note that this is not ISO 8601
+console.log(amsterdamDate.toUtcIsoString()); // "2014-01-01T12:59:59.000Z", always ends in 'Z' and is converted to UTC
 console.log(amsterdamDate.toIsoString()); // "2014-01-01T13:59:59.000+01:00", note that zone name is removed to make perfect ISO 8601
 
 // Formatting
