@@ -66,6 +66,8 @@ export function parseable(
  *
  * @param dateTimeString The string to parse
  * @param formatString The formatting string to be applied
+ * @param overrideZone Use this zone in the result
+ * @param allowTrailing Allow trailing characters in the source string
  * @param locale Locale-specific constants such as month names
  * @return string
  */

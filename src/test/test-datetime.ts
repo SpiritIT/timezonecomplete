@@ -1735,6 +1735,13 @@ describe("DateTime", (): void => {
 		it("should throw on invalid date string", (): void => {
 			assert.throws(() => DateTime.parse("2017-11-foo", "yyyy-MM-dd"));
 		});
+		it("should throw on trailing characters", (): void => {
+			assert.throws(() => DateTime.parse("2017-11-01 foobar", "yyyy-MM-dd"));
+		});
+		it("should not throw on trailing characters if flag given", (): void => {
+			const dt = DateTime.parse("2017-11-01", "yyyy-MM-dd", undefined, undefined, true);
+			expect(dt.toString()).to.equal("2017-11-01T00:00:00.000");
+		});
 	});
 
 	describe("issue #22", (): void => {

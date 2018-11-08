@@ -1092,9 +1092,10 @@ export class DateTime {
 	 * @param format the format the string is in. See LDML.md for supported formats.
 	 * @param zone Optional, the zone to add (if no zone is given in the string)
 	 * @param locale Optional, different settings for constants like 'AM' etc
+	 * @param allowTrailing Allow trailing characters in the source string
 	 */
-	public static parse(s: string, format: string, zone?: TimeZone, locale?: PartialLocale): DateTime {
-		const parsed = parseFuncs.parse(s, format, zone, false, locale);
+	public static parse(s: string, format: string, zone?: TimeZone, locale?: PartialLocale, allowTrailing?: boolean): DateTime {
+		const parsed = parseFuncs.parse(s, format, zone, allowTrailing || false, locale);
 		return new DateTime(parsed.time, parsed.zone);
 	}
 
