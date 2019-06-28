@@ -1,18 +1,16 @@
 /**
  * Copyright(c) 2014 ABB Switzerland Ltd.
  */
-
-"use strict";
-
-
-import sourcemapsupport = require("source-map-support");
-// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
-sourcemapsupport.install({ handleUncaughtExceptions: false });
-
 import * as assert from "assert";
 import { expect } from "chai";
+import sourcemapsupport = require("source-map-support");
 
-import { DateTime, Duration, Period, PeriodDst, TimeSource, TimeUnit, TimeZone } from "../lib/index";
+import {
+	DateTime, Duration, isPeriod, isValidPeriodJson, Period, PeriodDst, PeriodDstJson, PeriodJson, seconds, TimeSource, TimeUnit, TimeZone,
+} from "../lib/index";
+
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: false });
 
 // Fake time source
 class TestTimeSource implements TimeSource {
@@ -51,6 +49,16 @@ describe("Period", function(): void {
 		it("should work with an amount and unit and provide default DST", (): void => {
 			const p = new Period(new DateTime("2014-01-31T12:00:00.000 UTC"), 2, TimeUnit.Month);
 			expect(p.dst()).to.equal(PeriodDst.RegularLocalTime);
+		});
+		it("should convert a json object to a period", (): void => {
+			const expected = new Period(new DateTime("2019-01-01 Europe/Amsterdam"), seconds(3), PeriodDst.RegularIntervals);
+			const json: PeriodJson = {
+				duration: "3 seconds",
+				reference: "2019-01-01T00:00:00.000 Europe/Amsterdam",
+				periodDst: "regular"
+			};
+			const actual = new Period(json);
+			expect(actual.identical(expected)).to.equal(true);
 		});
 	});
 
@@ -926,6 +934,81 @@ describe("Period", function(): void {
 		});
 	});
 
+	describe("toJson()", (): void => {
+		it("should convert a period to a json object", (): void => {
+			const period = new Period(new DateTime("2019-01-01 Europe/Amsterdam"), seconds(3), PeriodDst.RegularIntervals);
+			const json = period.toJson();
+			expect(json).to.deep.equal({
+				duration: "3 seconds",
+				reference: "2019-01-01T00:00:00.000 Europe/Amsterdam",
+				periodDst: "regular"
+			});
+		});
+		it("should convert a period to a json object (local)", (): void => {
+			const period = new Period(new DateTime("2019-01-01 Europe/Amsterdam"), seconds(3), PeriodDst.RegularLocalTime);
+			const json = period.toJson();
+			expect(json).to.deep.equal({
+				duration: "3 seconds",
+				reference: "2019-01-01T00:00:00.000 Europe/Amsterdam",
+				periodDst: "local"
+			});
+		});
+	});
 });
 // todo test DST zone where DST save is not a whole hour (20 or 40 minutes)
 // todo test zone with two DSTs
+
+describe("isValidPeriodJson()", (): void => {
+	it("should return true for valid object", (): void => {
+		const periodJson: PeriodJson = {
+			duration: "1 hour",
+			periodDst: "regular",
+			reference: "2019-04-02 UTC"
+		};
+		expect(isValidPeriodJson(periodJson)).to.equal(true);
+	});
+	it("should return false for invalid date", (): void => {
+		const periodJson: PeriodJson = {
+			duration: "1 hour",
+			periodDst: "regular",
+			reference: "2019-04-61 UTC"
+		};
+		expect(isValidPeriodJson(periodJson)).to.equal(false);
+	});
+	it("should return false for invalid duration", (): void => {
+		const periodJson: PeriodJson = {
+			duration: "foobar",
+			periodDst: "regular",
+			reference: "2019-04-02 UTC"
+		};
+		expect(isValidPeriodJson(periodJson)).to.equal(false);
+	});
+	it("should return false for invalid dst", (): void => {
+		const periodJson: PeriodJson = {
+			duration: "1 hour",
+			periodDst: "foobar" as PeriodDstJson,
+			reference: "2019-04-02 UTC"
+		};
+		expect(isValidPeriodJson(periodJson)).to.equal(false);
+	});
+	it("should return false for non-object", (): void => {
+		expect(isValidPeriodJson(undefined as any)).to.equal(false);
+		expect(isValidPeriodJson("foo" as any)).to.equal(false);
+		expect(isValidPeriodJson(null as any)).to.equal(false);
+	});
+	it("should return false for different object", (): void => {
+		expect(isValidPeriodJson({foo: "20"} as any)).to.equal(false);
+	});
+});
+
+describe("isPeriod()", (): void => {
+	it("should return true for Period", (): void => {
+		expect(isPeriod(new Period(new DateTime("2019-01-01 Europe/Amsterdam"), seconds(3), PeriodDst.RegularLocalTime))).to.equal(true);
+	});
+	it("should return false for non-Period", (): void => {
+		expect(isPeriod(new Buffer("tralala"))).to.equal(false);
+	});
+	it("should return false for null", (): void => {
+		expect(isPeriod(null)).to.equal(false);
+	});
+});

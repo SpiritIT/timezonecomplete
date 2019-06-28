@@ -586,5 +586,13 @@ var s = new tc.Period(new tc.DateTime("2014-01-01T00:00:00"), tc.months(1), tc.P
 p.equals(q); // false, not same results
 p.identical(q); // false, not same constructor arguments
 
+
+// Checking if a variable is an instance of Period without relying on instanceof
+isPeriod(p); // returns true
+
+// conversion to/from JSON
+const json = p.toJson();
+const p = new Period(json);
+
 ```
 

@@ -9,7 +9,7 @@
 import assert from "./assert";
 import { TimeUnit } from "./basics";
 import * as basics from "./basics";
-import { DateTime } from "./datetime";
+import { DateTime, isDateTime } from "./datetime";
 import { Duration } from "./duration";
 import { TimeZone, TimeZoneKind } from "./timezone";
 
@@ -68,6 +68,10 @@ export function periodDstToString(p: PeriodDst): string {
  * a time length. This class accounts for leap seconds and leap days.
  */
 export class Period {
+	/**
+	 * Allow not using instanceof
+	 */
+	public kind = "Period";
 
 	/**
 	 * Reference moment of period
@@ -143,28 +147,47 @@ export class Period {
 		dst?: PeriodDst
 	);
 	/**
+	 * Constructor
+	 * LIMITATION: if dst equals RegularLocalTime, and unit is Second, Minute or Hour,
+	 * then the amount must be a factor of 24. So 120 seconds is allowed while 121 seconds is not.
+	 * This is due to the enormous processing power required by these cases. They are not
+	 * implemented and you will get an assert.
+	 *
+	 * @param json period represented as JSON object
+	 */
+	constructor(json: PeriodJson);
+	/**
 	 * Constructor implementation. See other constructors for explanation.
 	 */
 	constructor(
-		reference: DateTime,
-		amountOrInterval: any,
+		a: DateTime | PeriodJson,
+		amountOrInterval?: any,
 		unitOrDst?: any,
 		givenDst?: PeriodDst
 	) {
-
+		let reference: DateTime;
 		let interval: Duration;
 		let dst: PeriodDst = PeriodDst.RegularLocalTime;
-		if (typeof (amountOrInterval) === "object") {
-			interval = amountOrInterval as Duration;
-			dst = unitOrDst as PeriodDst;
+
+		if (isDateTime(a)) {
+			reference = a;
+			if (typeof (amountOrInterval) === "object") {
+				interval = amountOrInterval as Duration;
+				dst = unitOrDst as PeriodDst;
+			} else {
+				assert(typeof unitOrDst === "number" && unitOrDst >= 0 && unitOrDst < TimeUnit.MAX, "Invalid unit");
+				interval = new Duration(amountOrInterval as number, unitOrDst as TimeUnit);
+				dst = givenDst as PeriodDst;
+			}
+			if (typeof dst !== "number") {
+				dst = PeriodDst.RegularLocalTime;
+			}
 		} else {
-			assert(typeof unitOrDst === "number" && unitOrDst >= 0 && unitOrDst < TimeUnit.MAX, "Invalid unit");
-			interval = new Duration(amountOrInterval as number, unitOrDst as TimeUnit);
-			dst = givenDst as PeriodDst;
+			reference = new DateTime(a.reference);
+			interval = new Duration(a.duration);
+			dst = a.periodDst === "regular" ? PeriodDst.RegularIntervals : PeriodDst.RegularLocalTime;
 		}
-		if (typeof dst !== "number") {
-			dst = PeriodDst.RegularLocalTime;
-		}
+
 		assert(dst >= 0 && dst < PeriodDst.MAX, "Invalid PeriodDst setting");
 		assert(!!reference, "Reference time not given");
 		assert(interval.amount() > 0, "Amount must be positive non-zero.");
@@ -804,6 +827,17 @@ export class Period {
 	}
 
 	/**
+	 * Returns a JSON-compatible representation of this period
+	 */
+	public toJson(): PeriodJson {
+		return {
+			reference: this.reference().toString(),
+			duration: this.interval().toString(),
+			periodDst: this.dst() === PeriodDst.RegularIntervals ? "regular" : "local"
+		};
+	}
+
+	/**
 	 * Corrects the difference between _reference and _intReference.
 	 */
 	private _correctDay(d: DateTime): DateTime {
@@ -899,4 +933,71 @@ export class Period {
 		this._intReference = this._normalizeDay(this._reference, false);
 	}
 
+}
+
+
+/**
+ * PeriodDst encoded a a string
+ */
+export type PeriodDstJson = "regular" | "local";
+
+/**
+ * Period encoded as a JSON object
+ */
+export interface PeriodJson {
+	/**
+	 * Reference date as iso timestamp + time zone
+	 */
+	reference: string;
+	/**
+	 * Interval as a timezonecomplete duration string
+	 */
+	duration: string;
+	/**
+	 * Daylight saving time handling
+	 */
+	periodDst: PeriodDstJson;
+}
+
+/**
+ * Returns true iff the given json value represents a valid period JSON
+ * @param json
+ * @throws nothing
+ */
+export function isValidPeriodJson(json: PeriodJson): boolean {
+	if (typeof json !== "object") {
+		return false;
+	}
+	if (json === null) {
+		return false;
+	}
+	if (typeof json.duration !== "string") {
+		return false;
+	}
+	if (typeof json.periodDst !== "string") {
+		return false;
+	}
+	if (typeof json.reference !== "string") {
+		return false;
+	}
+	if (!["regular", "local"].includes(json.periodDst)) {
+		return false;
+	}
+	try {
+		// tslint:disable-next-line: no-unused-expression
+		new Period(json);
+	} catch {
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Checks if a given object is of type Period. Note that it does not work for sub classes. However, use this to be robust
+ * against different versions of the library in one process instead of instanceof
+ * @param value Value to check
+ * @throws nothing
+ */
+export function isPeriod(value: any): value is Period {
+	return typeof value === "object" && value !== null && value.kind === "Period";
 }

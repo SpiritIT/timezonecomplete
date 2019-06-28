@@ -1,6 +1,13 @@
 
 # Changelog
 
+## 5.8.0 (2019-06-28)
+
+* add `Period#toJson()`
+* add `Period` constructor that accepts JSON
+* add `isPeriod()` function
+* add `isValidPeriodJson()` function
+
 ## 5.7.0 (2018-11-08)
 
 * Add `DateTime#toUtcIsoString()` method
