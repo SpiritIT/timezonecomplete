@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.8.1 (2019-07-15)
+
+* fix dependency vulnerabilities
+
 ## 5.8.0 (2019-06-28)
 
 * add `Period#toJson()`
