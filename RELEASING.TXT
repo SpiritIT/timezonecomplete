@@ -1,7 +1,7 @@
 
 MODULE PUBLISH
 * Adjust doc/CHANGELOG.md
-* Adjust doc/API.md
+* Adjust doc/OVERVIEW.md
 * Adjust README.md
 * Adjust package.json and adjust version number
 * Run:

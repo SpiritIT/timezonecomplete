@@ -3,11 +3,11 @@
 .vscode/
 coverage/
 dist/test/
+doc/
 examples/
 node_modules/
 src/
 temp/
-typings/
 tzdata/
 .coveralls.yml
 .editorconfig
@@ -22,3 +22,4 @@ RELEASING.TXT
 runtests.js
 tsconfig.json
 tslint.json
+typedoc.json

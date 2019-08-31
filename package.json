@@ -33,10 +33,11 @@
   "main": "./dist/lib/index.js",
   "typings": "./dist/lib/index.d.ts",
   "scripts": {
-    "clean": "./node_modules/.bin/rimraf ./dist ./temp ./examples/browser-amd-requirejs/timezonecomplete.js, ./examples/browser-stand-alone/timezonecomplete.js",
+    "clean": "./node_modules/.bin/rimraf ./dist ./temp ./doc/typedoc ./examples/browser-amd-requirejs/timezonecomplete.js, ./examples/browser-stand-alone/timezonecomplete.js",
     "lint": "./node_modules/.bin/tslint -c ./tslint.json -t stylish ./src/**/*.ts",
     "tsc": "./node_modules/.bin/tsc",
     "copy": "cp ./src/test/*.json ./dist/test",
+    "doc": "typedoc ./src/lib",
     "umd": "node browserify-umd.js",
     "minify": "node minify-umd.js",
     "build": "npm run tsc && npm run lint && npm run copy && npm run umd && npm run minify",
@@ -46,7 +47,7 @@
     "bundle_tests": "node browserify-karma.js",
     "exec_karma": "./node_modules/.bin/karma start --single-run",
     "karma": "npm run bundle_tests && npm run exec_karma",
-    "all": "npm run clean && npm run build && npm run test && npm run karma"
+    "all": "npm run clean && npm run build && npm run test && npm run karma && npm run doc"
   },
   "dependencies": {
     "tzdata": "^1.0.11"
@@ -73,6 +74,7 @@
     "sinon": "^6.1.5",
     "source-map-support": "^0.5.8",
     "tslint": "^5.11.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.0.1",
     "uglify-js": "^3.4.7"
   }

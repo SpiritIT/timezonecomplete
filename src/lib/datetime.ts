@@ -935,6 +935,7 @@ export class DateTime {
 	 * Note adding Months or Years will clamp the date to the end-of-month if
 	 * the start date was at the end of a month, i.e. contrary to JavaScript
 	 * Date#setUTCMonth() it will not overflow into the next month
+	 * @throws nothing
 	 */
 	public addLocal(duration: Duration): DateTime;
 	/**

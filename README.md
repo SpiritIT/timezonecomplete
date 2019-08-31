@@ -39,7 +39,8 @@ See the [Upgrade Instructions](./doc/UPGRADING.md).
 
 ## Documentation
 
-* [API](./doc/API.md)
+* [Overview of features](./doc/OVERVIEW.md)
+* [API Reference](./doc/typedoc/globals.md)
 * [Formatting and Parsing](./doc/LDML.md)
 * [Changelog](./doc/CHANGELOG.md)
 * [Upgrade Instructions](./doc/UPGRADING.md)
