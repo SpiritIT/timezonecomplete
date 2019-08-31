@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 5.9.0 (2019-08-31)
+
+* Give names to thrown errors
+* Document all thrown errors in method comments
+* Add typedoc API reference
+
 ## 5.8.1 (2019-07-15)
 
 * fix dependency vulnerabilities
