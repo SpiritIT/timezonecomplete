@@ -1,10 +1,41 @@
+# The API by example
 
-# API description
+For proper documentation, see [API reference](./typedoc/globals.html)
+
+All examples below assume that timezonecomplete is imported like below. And yes, some are from 2014 so they still use things like `var`.
+
+```javascript
+const tc = require("timezonecomplete");
+```
+
+## A note on error handling
+
+Timezonecomplete throws named errors, i.e. the `Error#name` property will tell you what the error is, in a machine-readable way. All name values start with `timezonecomplete.` so it's nicely scoped to this package.
+
+Example:
+```javascript
+
+try {
+	// create a datetime from an invalid unix millisecond timestamp
+	const unixMillis: number = NaN;
+	const d = new tc.DateTime(unixMillis);
+} catch (e) {
+	if (e.name === "timezonecomplete.Argument.UnixMillis") {
+		console.log("oh dear, those milliseconds cannot be non-numeric");
+	}
+}
+
+```
+
+Error documentation can be found in the [API reference](./typedoc/globals.html). All `throws` clauses in the API reference have the corresponding value of the `Error#name` property as first item.
+
+There are two kinds of errors that are NOT always documented:
+
+1. `timezonecomplete.Assertion` errors that indicate programming errors in timezonecomplete. If they happen, enter an issue.
+1. `timezonecomplete.InvalidTimeZoneData`. This error indicated that there is a syntax error in the TZ database that was loaded with one of the `tzdata*` NPM packages. This should not happen, unless you manually created your own global time zone data.
 
 
-## By Example
-
-### Enums
+## Enums
 
 ```javascript
 
@@ -28,7 +59,7 @@ tc.TimeUnit.Millisecond;
 
 ```
 
-### Utility Functions
+## Utility Functions
 
 Timezonecomplete defines a number of utility functions.
 
@@ -102,7 +133,7 @@ tc.stringToTimeUnit("DAY"); // tc.TimeUnit.Day
 
 ```
 
-### Duration
+## Duration
 
 The Duration class is a unit-aware representation of a duration in wall clock time.
 You can create a Duration in milliseconds, seconds, minutes or hours and then query the value in another unit.
@@ -243,7 +274,7 @@ isDuration(duration); // returns true
 
 
 ```
-### TimeZone
+## TimeZone
 A TimeZone object defines a time zone. This can be a fixed UTC offset (e.g. +01:30), the OS time zone (localtime), or an IANA time zone (e.g. Europe/Amsterdam).
 For an IANA time zone, you can choose whether Daylight Saving Time should be applied or not. Time zone objects are cached - if you ask for the same zone twice you
 may get the very same object back. For this reason, time zone objects are immutable.
@@ -289,7 +320,7 @@ isTimeZone(z); // returns true
 
 ```
 
-### TzDatabase
+## TzDatabase
 The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like 'what is the maximum Daylight Saving Time shift of all zones in the database'?
 
 ```javascript
@@ -315,8 +346,8 @@ var unixUtcMillis = db.nextDstChange("Europe/Amsterdam", 1427590799999); // 1427
 
 ```
 
+## DateTime
 
-### DateTime
 The DateTime class is a replacement (although not drop-in) for the Date class. It has a date value and a time zone. It has getters for both UTC date and equivalent time zone time.
 It is smart enough to represent different dates which map to the same UTC date around DST. You could increment the local time by an hour and be sure
 that the local time is incremented by one hour even if the UTC date does not change.
@@ -477,7 +508,7 @@ isDateTime(dt); // returns true
 
 ```
 
-### Date Arithmetic
+## Date Arithmetic
 
 The DateTime class allows date arithmetic. The diff() method returns the difference between two dates as a Duration. Next to that, you can use add() and addLocal() to add either a duration or a specific unit of time. The latter case accounts for DST: addLocal(1, TimeUnit.Hour) ensures that the local hour() field increments by one, even if that means UTC time does not change or changes 2 hours due to DST.
 
@@ -532,7 +563,7 @@ d5.max(d6); // returns a clone of d6
 
 ```
 
-### Periods
+## Periods
 
 We had a need for regularly scheduling a task. However if you think about it, what does it mean to run something every 12 hours? Does that mean it happens at the same local time every day? Or does it happen at regular intervals, shifting with DST?  The former means that the intervals are not always 12 hours. The latter means that it doesn't occur at the same time always.
 We needed to be able to specify both.

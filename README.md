@@ -10,6 +10,8 @@ TimezoneComplete is a library of date/time utilities, all of which are aware of 
 Other libraries are great, we had different requirements. The main thing for us was that calculations should be stable and predictable, especially around DST change moments.
 Above all, it should give the same answers across platforms. At the time we started this, none of the other libraries showed this level of predictability.
 
+Try for example to convert some edge case timestamps back and forth between local and UTC or keep adding one hour to a timestamp through daylight saving time changes.
+
 * Consistent behaviour across platforms and with different TZ environment variable settings
 * Correct time zone conversions back and forth
 * Correct Daylight Saving Time handling with predictable behavior for non-existing hours during DST changes
@@ -40,7 +42,7 @@ See the [Upgrade Instructions](./doc/UPGRADING.md).
 ## Documentation
 
 * [Overview of features](./doc/OVERVIEW.md)
-* [API Reference](./doc/typedoc/globals.md)
+* [API Reference](./doc/typedoc/globals.html)
 * [Formatting and Parsing](./doc/LDML.md)
 * [Changelog](./doc/CHANGELOG.md)
 * [Upgrade Instructions](./doc/UPGRADING.md)

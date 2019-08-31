@@ -303,6 +303,7 @@ export class DateTime {
 	 * @param unixTimestamp	milliseconds since 1970-01-01T00:00:00.000
 	 * @param timeZone	the time zone that the timestamp is assumed to be in (usually UTC).
 	 * @throws timezonecomplete.Argument.TimeZone if the given time zone is invalid
+	 * @throws timezonecomplete.Argument.UnixMillis if the given unix timestamp is not finite
 	 */
 	constructor(unixTimestamp: number, timeZone?: TimeZone | null | undefined);
 
@@ -329,10 +330,11 @@ export class DateTime {
 					);
 					// unix timestamp constructor
 					this._zone = (typeof (a2) === "object" && isTimeZone(a2) ? a2 as TimeZone : undefined);
+					const unixMillis = convertError("Argument.UnixMillis", () => math.roundSym(a1 as number));
 					if (this._zone) {
-						this._zoneDate = this._zone.normalizeZoneTime(new TimeStruct(math.roundSym(a1 as number)));
+						this._zoneDate = this._zone.normalizeZoneTime(new TimeStruct(unixMillis));
 					} else {
-						this._zoneDate = new TimeStruct(math.roundSym(a1 as number));
+						this._zoneDate = new TimeStruct(unixMillis);
 					}
 				} else {
 					// year month day constructor
