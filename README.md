@@ -42,7 +42,7 @@ See the [Upgrade Instructions](./doc/UPGRADING.md).
 ## Documentation
 
 * [Overview of features](./doc/OVERVIEW.md)
-* [API Reference](./doc/typedoc/globals.html)
+* [API Reference](https://rawcdn.githack.com/SpiritIT/timezonecomplete/master/doc/typedoc/globals.html)
 * [Formatting and Parsing](./doc/LDML.md)
 * [Changelog](./doc/CHANGELOG.md)
 * [Upgrade Instructions](./doc/UPGRADING.md)

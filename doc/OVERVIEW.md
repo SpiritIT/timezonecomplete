@@ -1,6 +1,6 @@
 # The API by example
 
-For proper documentation, see [API reference](./typedoc/globals.html)
+For proper documentation, see [API reference](https://rawcdn.githack.com/SpiritIT/timezonecomplete/master/doc/typedoc/globals.html)
 
 All examples below assume that timezonecomplete is imported like below. And yes, some are from 2014 so they still use things like `var`.
 
@@ -27,7 +27,7 @@ try {
 
 ```
 
-Error documentation can be found in the [API reference](./typedoc/globals.html). All `throws` clauses in the API reference have the corresponding value of the `Error#name` property as first item.
+Error documentation can be found in the [API reference](https://rawcdn.githack.com/SpiritIT/timezonecomplete/master/doc/typedoc/globals.html). All `throws` clauses in the API reference have the corresponding value of the `Error#name` property as first item.
 
 There are two kinds of errors that are NOT always documented:
 
