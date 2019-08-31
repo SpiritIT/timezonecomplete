@@ -12,6 +12,7 @@
 export interface TimeSource {
 	/**
 	 * Return the current date+time as a javascript Date object
+	 * @throws nothing
 	 */
 	now(): Date;
 }
@@ -20,6 +21,7 @@ export interface TimeSource {
  * Default time source, returns actual time
  */
 export class RealTimeSource implements TimeSource {
+	/** @inheritdoc */
 	public now(): Date {
 		/* istanbul ignore if */
 		/* istanbul ignore next */

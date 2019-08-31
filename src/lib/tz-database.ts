@@ -12,6 +12,7 @@ import assert from "./assert";
 import { TimeComponentOpts, TimeStruct, TimeUnit, WeekDay } from "./basics";
 import * as basics from "./basics";
 import { Duration } from "./duration";
+import { error, errorIs, throwError } from "./error";
 import * as math from "./math";
 
 /**
@@ -72,6 +73,24 @@ export enum AtType {
  */
 export class RuleInfo {
 
+	/**
+	 * Constructor
+	 * @param from
+	 * @param toType
+	 * @param toYear
+	 * @param type
+	 * @param inMonth
+	 * @param onType
+	 * @param onDay
+	 * @param onWeekDay
+	 * @param atHour
+	 * @param atMinute
+	 * @param atSecond
+	 * @param atType
+	 * @param save
+	 * @param letter
+	 * @throws nothing
+	 */
 	constructor(
 		/**
 		 * FROM column year number.
@@ -131,7 +150,7 @@ export class RuleInfo {
 		 * Note if TZ database indicates "-" this is the empty string
 		 */
 		public letter: string
-		) {
+	) {
 
 		if (this.save) {
 			this.save = this.save.convert(TimeUnit.Hour);
@@ -140,6 +159,7 @@ export class RuleInfo {
 
 	/**
 	 * Returns true iff this rule is applicable in the year
+	 * @throws nothing
 	 */
 	public applicable(year: number): boolean {
 		if (year < this.from) {
@@ -154,6 +174,7 @@ export class RuleInfo {
 	/**
 	 * Sort comparison
 	 * @return (first effective date is less than other's first effective date)
+	 * @throws timezonecomplete.InvalidTimeZoneData if this rule depends on a weekday and the weekday in question doesn't exist
 	 */
 	public effectiveLess(other: RuleInfo): boolean {
 		if (this.from < other.from) {
@@ -177,6 +198,7 @@ export class RuleInfo {
 	/**
 	 * Sort comparison
 	 * @return (first effective date is equal to other's first effective date)
+	 * @throws timezonecomplete.InvalidTimeZoneData for invalid internal structure of the database
 	 */
 	public effectiveEqual(other: RuleInfo): boolean {
 		if (this.from !== other.from) {
@@ -195,35 +217,44 @@ export class RuleInfo {
 	 * Returns the date that the rule takes effect. Note that the time
 	 * is NOT adjusted for wall clock time or standard time, i.e. this.atType is
 	 * not taken into account
+	 * @throws NotApplicable if this rule is not applicable in the given year
+	 * @throws timezonecomplete.InvalidTimeZoneData if this rule depends on a weekday and the weekday in question doesn't exist
 	 */
 	public effectiveDate(year: number): TimeStruct {
-		assert(this.applicable(year), "Rule is not applicable in " + year.toString(10));
+		assert(this.applicable(year), "NotApplicable", "Rule is not applicable in %d", year);
+		try {
+			// year and month are given
+			const tm: TimeComponentOpts = {year, month: this.inMonth };
 
-		// year and month are given
-		const tm: TimeComponentOpts = {year, month: this.inMonth };
+			// calculate day
+			switch (this.onType) {
+				case OnType.DayNum: {
+					tm.day = this.onDay;
+				} break;
+				case OnType.GreqX: {
+					tm.day = basics.weekDayOnOrAfter(year, this.inMonth, this.onDay, this.onWeekDay);
+				} break;
+				case OnType.LeqX: {
+					tm.day = basics.weekDayOnOrBefore(year, this.inMonth, this.onDay, this.onWeekDay);
+				} break;
+				case OnType.LastX: {
+					tm.day = basics.lastWeekDayOfMonth(year, this.inMonth, this.onWeekDay);
+				} break;
+			}
 
-		// calculate day
-		switch (this.onType) {
-			case OnType.DayNum: {
-				tm.day = this.onDay;
-			} break;
-			case OnType.GreqX: {
-				tm.day = basics.weekDayOnOrAfter(year, this.inMonth, this.onDay, this.onWeekDay);
-			} break;
-			case OnType.LeqX: {
-				tm.day = basics.weekDayOnOrBefore(year, this.inMonth, this.onDay, this.onWeekDay);
-			} break;
-			case OnType.LastX: {
-				tm.day = basics.lastWeekDayOfMonth(year, this.inMonth, this.onWeekDay);
-			} break;
+			// calculate time
+			tm.hour = this.atHour;
+			tm.minute = this.atMinute;
+			tm.second = this.atSecond;
+
+			return new TimeStruct(tm);
+		} catch (e) {
+			if (errorIs(e, "NotFound")) {
+				// weekDayXXX() function threw an error
+				e = error("InvalidTimeZoneData", e.message);
+			}
+			throw e;
 		}
-
-		// calculate time
-		tm.hour = this.atHour;
-		tm.minute = this.atMinute;
-		tm.second = this.atSecond;
-
-		return new TimeStruct(tm);
 	}
 
 	/**
@@ -232,9 +263,11 @@ export class RuleInfo {
 	 * @param year	The year for which to return the transition
 	 * @param standardOffset	The standard offset for the timezone without DST
 	 * @param prevRule	The previous rule
+	 * @throws NotApplicable if this rule is not applicable in the given year
+	 * @throws timezonecomplete.InvalidTimeZoneData for invalid internal structure of the database
 	 */
 	public transitionTimeUtc(year: number, standardOffset: Duration, prevRule?: RuleInfo): number {
-		assert(this.applicable(year), "Rule not applicable in given year");
+		assert(this.applicable(year), "NotApplicable", "Rule not applicable in given year");
 		const unixMillis = this.effectiveDate(year).unixMillis;
 
 		// adjust for given offset
@@ -314,6 +347,16 @@ export enum RuleType {
  */
 export class ZoneInfo {
 
+	/**
+	 * Constructor
+	 * @param gmtoff
+	 * @param ruleType
+	 * @param ruleOffset
+	 * @param ruleName
+	 * @param format
+	 * @param until
+	 * @throws nothing
+	 */
 	constructor(
 		/**
 		 * GMT offset in fractional minutes, POSITIVE to UTC (note JavaScript.Date gives offsets
@@ -380,17 +423,18 @@ enum TzMonthNames {
 	Dec = 12
 }
 
-function monthNameToString(name: string): number {
+/**
+ * Turns a month name from the TZ database into a number 1-12
+ * @param name
+ * @throws timezonecomplete.InvalidTimeZoneData for invalid month name
+ */
+function monthNameToNumber(name: string): number {
 	for (let i: number = 1; i <= 12; ++i) {
 		if (TzMonthNames[i] === name) {
 			return i;
 		}
 	}
-	/* istanbul ignore if */
-	/* istanbul ignore next */
-	if (true) {
-		throw new Error("Invalid month name \"" + name + "\"");
-	}
+	return throwError("InvalidTimeZoneData", "Invalid month name '%s'", name);
 }
 
 enum TzDayNames {
@@ -406,6 +450,7 @@ enum TzDayNames {
 /**
  * Returns true if the given string is a valid offset string i.e.
  * 1, -1, +1, 01, 1:00, 1:23:25.143
+ * @throws nothing
  */
 export function isValidOffsetString(s: string): boolean {
 	return /^(\-|\+)?([0-9]+((\:[0-9]+)?(\:[0-9]+(\.[0-9]+)?)?))$/.test(s);
@@ -415,6 +460,13 @@ export function isValidOffsetString(s: string): boolean {
  * Defines a moment at which the given rule becomes valid
  */
 export class Transition {
+	/**
+	 * Constructor
+	 * @param at
+	 * @param offset
+	 * @param letter
+	 * @throws nothing
+	 */
 	constructor(
 		/**
 		 * Transition time in UTC millis
@@ -430,7 +482,7 @@ export class Transition {
 		 */
 		public letter: string
 
-		) {
+	) {
 		if (this.offset) {
 			this.offset = this.offset.convert(basics.TimeUnit.Hour);
 		}
@@ -467,6 +519,7 @@ export class TzDatabase {
 	 *
 	 * @param data TZ data as JSON object (from one of the tzdata NPM modules).
 	 *             If not given, Timezonecomplete will search for installed modules.
+	 * @throws timezonecomplete.InvalidTimeZoneData if `data` or the global time zone data is invalid
 	 */
 	public static init(data?: any | any[]): void {
 		if (data) {
@@ -538,6 +591,7 @@ export class TzDatabase {
 
 	/**
 	 * Single instance of this database
+	 * @throws timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid
 	 */
 	public static instance(): TzDatabase {
 		if (!TzDatabase._instance) {
@@ -563,11 +617,16 @@ export class TzDatabase {
 
 	/**
 	 * Constructor - do not use, this is a singleton class. Use TzDatabase.instance() instead
+	 * @throws AlreadyCreated if an instance already exists
+	 * @throws timezonecomplete.InvalidTimeZoneData if `data` is empty or invalid
 	 */
 	private constructor(data: any[]) {
-		assert(!TzDatabase._instance, "You should not create an instance of the TzDatabase class yourself. Use TzDatabase.instance()");
 		assert(
-			data.length > 0,
+			!TzDatabase._instance, "AlreadyCreated",
+			"You should not create an instance of the TzDatabase class yourself. Use TzDatabase.instance()"
+		);
+		assert(
+			data.length > 0, "InvalidTimeZoneData",
 			"Timezonecomplete needs time zone data. You need to install one of the tzdata NPM modules before using timezonecomplete."
 		);
 		if (data.length === 1) {
@@ -590,6 +649,7 @@ export class TzDatabase {
 
 	/**
 	 * Returns a sorted list of all zone names
+	 * @throws nothing
 	 */
 	public zoneNames(): string[] {
 		if (!this._zoneNames) {
@@ -599,6 +659,11 @@ export class TzDatabase {
 		return this._zoneNames;
 	}
 
+	/**
+	 * Returns true iff the given zone name exists
+	 * @param zoneName
+	 * @throws nothing
+	 */
 	public exists(zoneName: string): boolean {
 		return this._data.zones.hasOwnProperty(zoneName);
 	}
@@ -610,39 +675,47 @@ export class TzDatabase {
 	 * Does return zero if a zoneName is given and there is no DST at all for the zone.
 	 *
 	 * @param zoneName	(optional) if given, the result for the given zone is returned
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public minDstSave(zoneName?: string): Duration {
-		if (zoneName) {
-			const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-			let result: Duration | undefined;
-			const ruleNames: string[] = [];
-			for (const zoneInfo of zoneInfos) {
-				if (zoneInfo.ruleType === RuleType.Offset) {
-					if (!result || result.greaterThan(zoneInfo.ruleOffset)) {
-						if (zoneInfo.ruleOffset.milliseconds() !== 0) {
-							result = zoneInfo.ruleOffset;
+		try {
+			if (zoneName) {
+				const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+				let result: Duration | undefined;
+				const ruleNames: string[] = [];
+				for (const zoneInfo of zoneInfos) {
+					if (zoneInfo.ruleType === RuleType.Offset) {
+						if (!result || result.greaterThan(zoneInfo.ruleOffset)) {
+							if (zoneInfo.ruleOffset.milliseconds() !== 0) {
+								result = zoneInfo.ruleOffset;
+							}
 						}
 					}
-				}
-				if (zoneInfo.ruleType === RuleType.RuleName
-					&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
-					ruleNames.push(zoneInfo.ruleName);
-					const temp = this.getRuleInfos(zoneInfo.ruleName);
-					for (const ruleInfo of temp) {
-						if (!result || result.greaterThan(ruleInfo.save)) {
-							if (ruleInfo.save.milliseconds() !== 0) {
-								result = ruleInfo.save;
+					if (zoneInfo.ruleType === RuleType.RuleName && ruleNames.indexOf(zoneInfo.ruleName) === -1) {
+						ruleNames.push(zoneInfo.ruleName);
+						const temp = this.getRuleInfos(zoneInfo.ruleName);
+						for (const ruleInfo of temp) {
+							if (!result || result.greaterThan(ruleInfo.save)) {
+								if (ruleInfo.save.milliseconds() !== 0) {
+									result = ruleInfo.save;
+								}
 							}
 						}
 					}
 				}
+				if (!result) {
+					result = Duration.hours(0);
+				}
+				return result.clone();
+			} else {
+				return Duration.minutes(this._minmax.minDstSave);
 			}
-			if (!result) {
-				result = Duration.hours(0);
+		} catch (e) {
+			if (errorIs(e, ["NotFound.Rule", "Argument.N"])) {
+				e = error("InvalidTimeZoneData", e.message);
 			}
-			return result.clone();
-		} else {
-			return Duration.minutes(this._minmax.minDstSave);
+			throw e;
 		}
 	}
 
@@ -653,40 +726,51 @@ export class TzDatabase {
 	 * Returns 0 if zoneName given and no DST observed.
 	 *
 	 * @param zoneName	(optional) if given, the result for the given zone is returned
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public maxDstSave(zoneName?: string): Duration {
-		if (zoneName) {
-			const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-			let result: Duration | undefined;
-			const ruleNames: string[] = [];
-			for (const zoneInfo of zoneInfos) {
-				if (zoneInfo.ruleType === RuleType.Offset) {
-					if (!result || result.lessThan(zoneInfo.ruleOffset)) {
-						result = zoneInfo.ruleOffset;
+		try {
+			if (zoneName) {
+				const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
+				let result: Duration | undefined;
+				const ruleNames: string[] = [];
+				for (const zoneInfo of zoneInfos) {
+					if (zoneInfo.ruleType === RuleType.Offset) {
+						if (!result || result.lessThan(zoneInfo.ruleOffset)) {
+							result = zoneInfo.ruleOffset;
+						}
 					}
-				}
-				if (zoneInfo.ruleType === RuleType.RuleName
-					&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
-					ruleNames.push(zoneInfo.ruleName);
-					const temp = this.getRuleInfos(zoneInfo.ruleName);
-					for (const ruleInfo of temp) {
-						if (!result || result.lessThan(ruleInfo.save)) {
-							result = ruleInfo.save;
+					if (zoneInfo.ruleType === RuleType.RuleName
+						&& ruleNames.indexOf(zoneInfo.ruleName) === -1) {
+						ruleNames.push(zoneInfo.ruleName);
+						const temp = this.getRuleInfos(zoneInfo.ruleName);
+						for (const ruleInfo of temp) {
+							if (!result || result.lessThan(ruleInfo.save)) {
+								result = ruleInfo.save;
+							}
 						}
 					}
 				}
+				if (!result) {
+					result = Duration.hours(0);
+				}
+				return result.clone();
+			} else {
+				return Duration.minutes(this._minmax.maxDstSave);
 			}
-			if (!result) {
-				result = Duration.hours(0);
+		} catch (e) {
+			if (errorIs(e, ["NotFound.Rule", "Argument.N"])) {
+				e = error("InvalidTimeZoneData", e.message);
 			}
-			return result.clone();
-		} else {
-			return Duration.minutes(this._minmax.maxDstSave);
+			throw e;
 		}
 	}
 
 	/**
 	 * Checks whether the zone has DST at all
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public hasDst(zoneName: string): boolean {
 		return (this.maxDstSave(zoneName).milliseconds() !== 0);
@@ -695,6 +779,8 @@ export class TzDatabase {
 	/**
 	 * First DST change moment AFTER the given UTC date in UTC milliseconds, within one year,
 	 * returns undefined if no such change
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public nextDstChange(zoneName: string, utcTime: number): number | undefined;
 	public nextDstChange(zoneName: string, utcTime: TimeStruct): number | undefined;
@@ -717,10 +803,17 @@ export class TzDatabase {
 		// collect all transitions in the zones for the year
 		let transitions: Transition[] = [];
 		for (const zoneInfo of relevantZoneInfos) {
-			// find applicable transition moments
-			transitions = transitions.concat(
-				this.getTransitionsDstOffsets(zoneInfo.ruleName, utcTime.components.year - 1, utcTime.components.year + 1, zoneInfo.gmtoff)
-			);
+			try {
+				// find applicable transition moments
+				transitions = transitions.concat(
+					this.getTransitionsDstOffsets(zoneInfo.ruleName, utcTime.components.year - 1, utcTime.components.year + 1, zoneInfo.gmtoff)
+				);
+			} catch (e) {
+				if (errorIs(e, "NotFound.Rule")) {
+					e = error("InvalidTimeZoneData", e.message);
+				}
+				throw e;
+			}
 		}
 		transitions.sort((a: Transition, b: Transition): number => {
 			return a.at - b.at;
@@ -746,6 +839,7 @@ export class TzDatabase {
 	 * "UTC", "GMT", "Etc/GMT" etc.
 	 *
 	 * @param zoneName	IANA time zone name.
+	 * @throws nothing
 	 */
 	public zoneIsUtc(zoneName: string): boolean {
 		let actualZoneName: string = zoneName;
@@ -771,12 +865,29 @@ export class TzDatabase {
 	 * this is probably what the user meant.
 	 *
 	 * @param zoneName	IANA time zone name
-	 * @param localTime	A local time, either as a TimeStruct or as a unix millisecond value
+	 * @param localTime	A local time as a unix millisecond value
 	 * @param opt	(optional) Round up or down? Default: up.
 	 *
 	 * @return	The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public normalizeLocal(zoneName: string, localTime: number, opt?: NormalizeOption): number;
+	/**
+	 * Normalizes non-existing local times by adding/subtracting a forward offset change.
+	 * During a forward standard offset change or DST offset change, some amount of
+	 * local time is skipped. Therefore, this amount of local time does not exist.
+	 * This function adds the amount of forward change to any non-existing time. After all,
+	 * this is probably what the user meant.
+	 *
+	 * @param zoneName	IANA time zone name
+	 * @param localTime	A local time, as a TimeStruct
+	 * @param opt	(optional) Round up or down? Default: up.
+	 *
+	 * @return	The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
+	 */
 	public normalizeLocal(zoneName: string, localTime: TimeStruct, opt?: NormalizeOption): TimeStruct;
 	public normalizeLocal(zoneName: string, a: TimeStruct | number, opt: NormalizeOption = NormalizeOption.Up): TimeStruct | number {
 		if (this.hasDst(zoneName)) {
@@ -823,6 +934,8 @@ export class TzDatabase {
 	 * Throws if info not found.
 	 * @param zoneName	IANA time zone name
 	 * @param utcTime	Timestamp in UTC, either as TimeStruct or as Unix millisecond value
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public standardOffset(zoneName: string, utcTime: TimeStruct | number): Duration {
 		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
@@ -836,6 +949,8 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	IANA time zone name
 	 * @param utcTime	Timestamp in UTC, either as TimeStruct or as Unix millisecond value
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public totalOffset(zoneName: string, utcTime: TimeStruct | number): Duration {
 		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
@@ -849,7 +964,14 @@ export class TzDatabase {
 				dstOffset = zoneInfo.ruleOffset;
 			} break;
 			case RuleType.RuleName: {
-				dstOffset = this.dstOffsetForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
+				try {
+					dstOffset = this.dstOffsetForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
+				} catch (e) {
+					if (errorIs(e, "NotFound.Rule")) {
+						e = error("InvalidTimeZoneData", e.message);
+					}
+					throw e;
+				}
 			} break;
 			default: // cannot happen, but the compiler doesnt realize it
 				dstOffset = Duration.minutes(0);
@@ -868,6 +990,8 @@ export class TzDatabase {
 	 * @param utcTime	Timestamp in UTC unix milliseconds
 	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
 	 * @return	The abbreviation of the rule that is in effect
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public abbreviation(zoneName: string, utcTime: TimeStruct | number, dstDependent: boolean = true): string {
 		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
@@ -879,7 +1003,14 @@ export class TzDatabase {
 			let letter: string;
 			// place in format string
 			if (dstDependent) {
-				letter = this.letterForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
+				try {
+					letter = this.letterForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
+				} catch (e) {
+					if (errorIs(e, "NotFound.Rule")) {
+						e = error("InvalidTimeZoneData", e.message);
+					}
+					throw e;
+				}
 			} else {
 				letter = "";
 			}
@@ -900,6 +1031,8 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	IANA time zone name
 	 * @param localTime	Timestamp in time zone time
+	 * @throws timezonecomplete.NotFound.Zone if zoneName not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database
 	 */
 	public standardOffsetLocal(zoneName: string, localTime: TimeStruct | number): Duration {
 		const unixMillis = (typeof localTime === "number" ? localTime : localTime.unixMillis);
@@ -912,7 +1045,7 @@ export class TzDatabase {
 		/* istanbul ignore if */
 		/* istanbul ignore next */
 		if (true) {
-			throw new Error("No zone info found");
+			return throwError("InvalidTimeZoneData", "No zone info found");
 		}
 	}
 
@@ -925,6 +1058,8 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	IANA time zone name
 	 * @param localTime	Timestamp in time zone time
+	 * @throws timezonecomplete.NotFound.Zone if zoneName not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database
 	 */
 	public totalOffsetLocal(zoneName: string, localTime: TimeStruct | number): Duration {
 		const ts: TimeStruct = (typeof localTime === "number" ? new TimeStruct(localTime) : localTime);
@@ -983,6 +1118,8 @@ export class TzDatabase {
 	 * @param ruleName	name of ruleset
 	 * @param utcTime	UTC timestamp
 	 * @param standardOffset	Standard offset without DST for the time zone
+	 * @throws timezonecomplete.NotFound.Rule if ruleName not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database
 	 */
 	public dstOffsetForRule(ruleName: string, utcTime: TimeStruct | number, standardOffset: Duration): Duration {
 		const ts: TimeStruct = (typeof utcTime === "number" ? new TimeStruct(utcTime) : utcTime);
@@ -1018,6 +1155,8 @@ export class TzDatabase {
 	 * @param ruleName	name of ruleset
 	 * @param utcTime	UTC timestamp as TimeStruct or unix millis
 	 * @param standardOffset	Standard offset without DST for the time zone
+	 * @throws timezonecomplete.NotFound.Rule if ruleName not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database
 	 */
 	public letterForRule(ruleName: string, utcTime: TimeStruct | number, standardOffset: Duration): string {
 		const ts: TimeStruct = (typeof utcTime === "number" ? new TimeStruct(utcTime) : utcTime);
@@ -1054,9 +1193,12 @@ export class TzDatabase {
 	 * @param standardOffset	Standard offset without DST for the time zone
 	 *
 	 * @return Transitions, with DST offsets (no standard offset included)
+	 * @throws timezonecomplete.Argument.FromYear if fromYear > toYear
+	 * @throws timezonecomplete.NotFound.Rule if ruleName not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database
 	 */
 	public getTransitionsDstOffsets(ruleName: string, fromYear: number, toYear: number, standardOffset: Duration): Transition[] {
-		assert(fromYear <= toYear, "fromYear must be <= toYear");
+		assert(fromYear <= toYear, "Argument.FromYear", "fromYear must be <= toYear");
 
 		const ruleInfos: RuleInfo[] = this.getRuleInfos(ruleName);
 		const result: Transition[] = [];
@@ -1087,16 +1229,19 @@ export class TzDatabase {
 	 * @param zoneName	IANA zone name
 	 * @param fromYear	First year to include
 	 * @param toYear	Last year to include
+	 * @throws timezonecomplete.Argument.FromYear if fromYear > toYear
+	 * @throws timezonecomplete.NotFound.Zone if zoneName not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database
 	 */
 	public getTransitionsTotalOffsets(zoneName: string, fromYear: number, toYear: number): Transition[] {
-		assert(fromYear <= toYear, "fromYear must be <= toYear");
+		assert(fromYear <= toYear, "Argument.FromYear", "fromYear must be <= toYear");
 
 		const startMillis: number = basics.timeToUnixNoLeapSecs({ year: fromYear });
 		const endMillis: number = basics.timeToUnixNoLeapSecs({ year: toYear + 1 });
 
 
 		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-		assert(zoneInfos.length > 0, "Empty zoneInfos array returned from getZoneInfos()");
+		assert(zoneInfos.length > 0, "InvalidTimeZoneData", "Empty zoneInfos array returned from getZoneInfos()");
 
 		const result: Transition[] = [];
 
@@ -1129,14 +1274,21 @@ export class TzDatabase {
 						// check whether the first rule takes effect immediately on the zone transition
 						// (e.g. Lybia)
 						if (prevZone) {
-							const ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
-							for (const ruleInfo of ruleInfos) {
-								if (typeof prevUntilYear === "number" && ruleInfo.applicable(prevUntilYear)) {
-									if (ruleInfo.transitionTimeUtc(prevUntilYear, stdOffset, undefined) === prevZone.until) {
-										dstOffset = ruleInfo.save;
-										letter = ruleInfo.letter;
+							try {
+								const ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
+								for (const ruleInfo of ruleInfos) {
+									if (typeof prevUntilYear === "number" && ruleInfo.applicable(prevUntilYear)) {
+										if (ruleInfo.transitionTimeUtc(prevUntilYear, stdOffset, undefined) === prevZone.until) {
+											dstOffset = ruleInfo.save;
+											letter = ruleInfo.letter;
+										}
 									}
 								}
+							} catch (e) {
+								if (errorIs(e, "NotFound.Rule")) {
+									e = error("InvalidTimeZoneData", e.message);
+								}
+								throw e;
 							}
 						}
 						break;
@@ -1180,6 +1332,8 @@ export class TzDatabase {
 	 * @param zoneName	IANA time zone name
 	 * @param utcTime	UTC time stamp as unix milliseconds or as a TimeStruct
 	 * @returns	ZoneInfo object. Do not change, we cache this object.
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public getZoneInfo(zoneName: string, utcTime: TimeStruct | number): ZoneInfo {
 		const unixMillis = (typeof utcTime === "number" ? utcTime : utcTime.unixMillis);
@@ -1189,11 +1343,7 @@ export class TzDatabase {
 				return zoneInfo;
 			}
 		}
-		/* istanbul ignore if */
-		/* istanbul ignore next */
-		if (true) {
-			throw new Error("No zone info found");
-		}
+		return throwError("NotFound.Zone", "no zone info found for zone '%s'", zoneName);
 	}
 
 	/**
@@ -1207,17 +1357,12 @@ export class TzDatabase {
 	 *
 	 * @param zoneName	IANA zone name like "Pacific/Efate"
 	 * @return Array of zone infos. Do not change, this is a cached value.
+	 * @throws timezonecomplete.NotFound.Zone if zone does not exist or a linked zone does not exit
 	 */
 	public getZoneInfos(zoneName: string): ZoneInfo[] {
 		// FIRST validate zone name before searching cache
 		/* istanbul ignore if */
-		if (!this._data.zones.hasOwnProperty(zoneName)) {
-			/* istanbul ignore if */
-			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Zone \"" + zoneName + "\" not found.");
-			}
-		}
+		assert(this._data.zones.hasOwnProperty(zoneName), "NotFound.Zone", "zone not found: '%s'", zoneName);
 
 		// Take from cache
 		if (this._zoneInfoCache.hasOwnProperty(zoneName)) {
@@ -1231,7 +1376,7 @@ export class TzDatabase {
 		while (typeof (zoneEntries) === "string") {
 			/* istanbul ignore if */
 			if (!this._data.zones.hasOwnProperty(zoneEntries)) {
-				throw new Error("Zone \"" + zoneEntries + "\" not found (referred to in link from \""
+				return throwError("NotFound.Zone", "Zone \"" + zoneEntries + "\" not found (referred to in link from \""
 					+ zoneName + "\" via \"" + actualZoneName + "\"");
 			}
 			actualZoneName = zoneEntries;
@@ -1285,68 +1430,76 @@ export class TzDatabase {
 	 *
 	 * @param ruleName	Name of rule set
 	 * @return RuleInfo array. Do not change, this is a cached value.
+	 * @throws timezonecomplete.NotFound.Rule if rule not found
+	 * @throws timezonecomplete.InvalidTimeZoneData for invalid values in the time zone database
 	 */
 	public getRuleInfos(ruleName: string): RuleInfo[] {
 		// validate name BEFORE searching cache
-		if (!this._data.rules.hasOwnProperty(ruleName)) {
-			throw new Error("Rule set \"" + ruleName + "\" not found.");
-		}
+		assert(this._data.rules.hasOwnProperty(ruleName), "NotFound.Rule", "Rule set \"" + ruleName + "\" not found.");
 
 		// return from cache
 		if (this._ruleInfoCache.hasOwnProperty(ruleName)) {
 			return this._ruleInfoCache[ruleName];
 		}
 
-		const result: RuleInfo[] = [];
-		const ruleSet = this._data.rules[ruleName];
-		for (const rule of ruleSet) {
+		try {
+			const result: RuleInfo[] = [];
+			const ruleSet = this._data.rules[ruleName];
+			for (const rule of ruleSet) {
 
-			const fromYear: number = (rule[0] === "NaN" ? -10000 : parseInt(rule[0], 10));
-			const toType: ToType = this.parseToType(rule[1]);
-			const toYear: number = (toType === ToType.Max ? 0 : (rule[1] === "only" ? fromYear : parseInt(rule[1], 10)));
-			const onType: OnType = this.parseOnType(rule[4]);
-			const onDay: number = this.parseOnDay(rule[4], onType);
-			const onWeekDay: WeekDay = this.parseOnWeekDay(rule[4]);
-			const monthName: string = rule[3] as string;
-			const monthNumber: number = monthNameToString(monthName);
+				const fromYear: number = (rule[0] === "NaN" ? -10000 : parseInt(rule[0], 10));
+				const toType: ToType = this.parseToType(rule[1]);
+				const toYear: number = (toType === ToType.Max ? 0 : (rule[1] === "only" ? fromYear : parseInt(rule[1], 10)));
+				const onType: OnType = this.parseOnType(rule[4]);
+				const onDay: number = this.parseOnDay(rule[4], onType);
+				const onWeekDay: WeekDay = this.parseOnWeekDay(rule[4]);
+				const monthName: string = rule[3] as string;
+				const monthNumber: number = monthNameToNumber(monthName);
 
-			result.push(new RuleInfo(
-				fromYear,
-				toType,
-				toYear,
-				rule[2],
-				monthNumber,
-				onType,
-				onDay,
-				onWeekDay,
-				math.positiveModulo(parseInt(rule[5][0], 10), 24), // note the database sometimes contains "24" as hour value
-				math.positiveModulo(parseInt(rule[5][1], 10), 60),
-				math.positiveModulo(parseInt(rule[5][2], 10), 60),
-				this.parseAtType(rule[5][3]),
-				Duration.minutes(parseInt(rule[6], 10)),
-				rule[7] === "-" ? "" : rule[7]
-				));
+				result.push(new RuleInfo(
+					fromYear,
+					toType,
+					toYear,
+					rule[2],
+					monthNumber,
+					onType,
+					onDay,
+					onWeekDay,
+					math.positiveModulo(parseInt(rule[5][0], 10), 24), // note the database sometimes contains "24" as hour value
+					math.positiveModulo(parseInt(rule[5][1], 10), 60),
+					math.positiveModulo(parseInt(rule[5][2], 10), 60),
+					this.parseAtType(rule[5][3]),
+					Duration.minutes(parseInt(rule[6], 10)),
+					rule[7] === "-" ? "" : rule[7]
+					));
 
-		}
-
-		result.sort((a: RuleInfo, b: RuleInfo): number => {
-			/* istanbul ignore if */
-			if (a.effectiveEqual(b)) {
-				return 0;
-			} else if (a.effectiveLess(b)) {
-				return -1;
-			} else {
-				return 1;
 			}
-		});
 
-		this._ruleInfoCache[ruleName] = result;
-		return result;
+			result.sort((a: RuleInfo, b: RuleInfo): number => {
+				/* istanbul ignore if */
+				if (a.effectiveEqual(b)) {
+					return 0;
+				} else if (a.effectiveLess(b)) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+
+			this._ruleInfoCache[ruleName] = result;
+			return result;
+		} catch (e) {
+			if (errorIs(e, ["Argument.To", "Argument.N", "Argument.Value", "Argument.Amount"])) {
+				e = error("InvalidTimeZoneData", e.message);
+			}
+			throw e;
+		}
 	}
 
 	/**
 	 * Parse the RULES column of a zone info entry
 	 * and see what kind of entry it is.
+	 * @throws nothing
 	 */
 	public parseRuleType(rule: string): RuleType {
 		if (rule === "-") {
@@ -1361,8 +1514,10 @@ export class TzDatabase {
 	/**
 	 * Parse the TO column of a rule info entry
 	 * and see what kind of entry it is.
+	 * @throws timezonecomplete.Argument.To for invalid TO
 	 */
 	public parseToType(to: string): ToType {
+		// istanbul ignore else
 		if (to === "max") {
 			return ToType.Max;
 		} else if (to === "only") {
@@ -1370,17 +1525,14 @@ export class TzDatabase {
 		} else if (!isNaN(parseInt(to, 10))) {
 			return ToType.Year;
 		} else {
-			/* istanbul ignore if */
-			/* istanbul ignore next */
-			if (true) {
-				throw new Error("TO column incorrect: " + to);
-			}
+			return throwError("Argument.To", "TO column incorrect: %s", to);
 		}
 	}
 
 	/**
 	 * Parse the ON column of a rule info entry
 	 * and see what kind of entry it is.
+	 * @throws nothing
 	 */
 	public parseOnType(on: string): OnType {
 		if (on.length > 4 && on.substr(0, 4) === "last") {
@@ -1397,6 +1549,7 @@ export class TzDatabase {
 
 	/**
 	 * Get the day number from an ON column string, 0 if no day.
+	 * @throws nothing
 	 */
 	public parseOnDay(on: string, onType: OnType): number {
 		switch (onType) {
@@ -1415,6 +1568,7 @@ export class TzDatabase {
 
 	/**
 	 * Get the day-of-week from an ON column string, Sunday if not present.
+	 * @throws nothing
 	 */
 	public parseOnWeekDay(on: string): WeekDay {
 		for (let i = 0; i < 7; i++) {
@@ -1432,6 +1586,7 @@ export class TzDatabase {
 	/**
 	 * Parse the AT column of a rule info entry
 	 * and see what kind of entry it is.
+	 * @throws nothing
 	 */
 	public parseAtType(at: any): AtType {
 		switch (at) {
@@ -1462,22 +1617,14 @@ interface MinMaxInfo {
 
 /**
  * Sanity check on data. Returns min/max values.
+ * @throws timezonecomplete.InvalidTimeZoneData for invalid data
  */
 function validateData(data: any): MinMaxInfo {
 	const result: Partial<MinMaxInfo> = {};
 
-	/* istanbul ignore if */
-	if (typeof(data) !== "object") {
-		throw new Error("data is not an object");
-	}
-	/* istanbul ignore if */
-	if (!data.hasOwnProperty("rules")) {
-		throw new Error("data has no rules property");
-	}
-	/* istanbul ignore if */
-	if (!data.hasOwnProperty("zones")) {
-		throw new Error("data has no zones property");
-	}
+	assert(typeof data === "object", "InvalidTimeZoneData", "time zone data should be an object");
+	assert(data.hasOwnProperty("rules"), "InvalidTimeZoneData", "time zone data should be an object with a 'rules' property");
+	assert(data.hasOwnProperty("zones"), "InvalidTimeZoneData", "time zone data should be an object with a 'zones' property");
 
 	// validate zones
 	for (const zoneName in data.zones) {
@@ -1485,49 +1632,55 @@ function validateData(data: any): MinMaxInfo {
 			const zoneArr: any = data.zones[zoneName];
 			if (typeof (zoneArr) === "string") {
 				// ok, is link to other zone, check link
-				/* istanbul ignore if */
-				if (!data.zones.hasOwnProperty(zoneArr as string)) {
-					throw new Error("Entry for zone \"" + zoneName + "\" links to \"" + zoneArr as string + "\" but that doesn\'t exist");
-				}
+				assert(
+					data.zones.hasOwnProperty(zoneArr as string), "InvalidTimeZoneData",
+					"Entry for zone \"%s\" links to \"%s\" but that doesn\'t exist", zoneName, zoneArr
+				);
 			} else {
 				/* istanbul ignore if */
 				if (!Array.isArray(zoneArr)) {
-					throw new Error("Entry for zone \"" + zoneName + "\" is neither a string nor an array");
+					return throwError("InvalidTimeZoneData", "Entry for zone \"%s\" is neither a string nor an array", zoneName);
 				}
 				for (let i = 0; i < zoneArr.length; i++) {
 					const entry: any = zoneArr[i];
 					/* istanbul ignore if */
 					if (!Array.isArray(entry)) {
-						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" is not an array");
+						return throwError("InvalidTimeZoneData", "Entry " + i.toString(10) + " for zone \"" + zoneName + "\" is not an array");
 					}
 					/* istanbul ignore if */
 					if (entry.length !== 4) {
-						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" has length != 4");
+						return throwError("InvalidTimeZoneData", "Entry " + i.toString(10) + " for zone \"" + zoneName + "\" has length != 4");
 					}
 					/* istanbul ignore if */
 					if (typeof entry[0] !== "string") {
-						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" first column is not a string");
+						return throwError("InvalidTimeZoneData", "Entry " + i.toString(10) + " for zone \"" + zoneName + "\" first column is not a string");
 					}
 					const gmtoff = math.filterFloat(entry[0]);
 					/* istanbul ignore if */
 					if (isNaN(gmtoff)) {
-						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" first column does not contain a number");
+						return throwError(
+							"InvalidTimeZoneData", "Entry " + i.toString(10) + " for zone \"" + zoneName + "\" first column does not contain a number"
+						);
 					}
 					/* istanbul ignore if */
 					if (typeof entry[1] !== "string") {
-						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" second column is not a string");
+						return throwError("InvalidTimeZoneData", "Entry " + i.toString(10) + " for zone \"" + zoneName + "\" second column is not a string");
 					}
 					/* istanbul ignore if */
 					if (typeof entry[2] !== "string") {
-						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" third column is not a string");
+						return throwError("InvalidTimeZoneData", "Entry " + i.toString(10) + " for zone \"" + zoneName + "\" third column is not a string");
 					}
 					/* istanbul ignore if */
 					if (typeof entry[3] !== "string" && entry[3] !== null) {
-						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" fourth column is not a string nor null");
+						return throwError(
+							"InvalidTimeZoneData", "Entry " + i.toString(10) + " for zone \"" + zoneName + "\" fourth column is not a string nor null"
+						);
 					}
 					/* istanbul ignore if */
 					if (typeof entry[3] === "string" && isNaN(math.filterFloat(entry[3]))) {
-						throw new Error("Entry " + i.toString(10) + " for zone \"" + zoneName + "\" fourth column does not contain a number");
+						return throwError(
+							"InvalidTimeZoneData", "Entry " + i.toString(10) + " for zone \"" + zoneName + "\" fourth column does not contain a number"
+						);
 					}
 					if (result.maxGmtOff === undefined || gmtoff > result.maxGmtOff) {
 						result.maxGmtOff = gmtoff;
@@ -1546,71 +1699,71 @@ function validateData(data: any): MinMaxInfo {
 			const ruleArr: any = data.rules[ruleName];
 			/* istanbul ignore if */
 			if (!Array.isArray(ruleArr)) {
-				throw new Error("Entry for rule \"" + ruleName + "\" is not an array");
+				return throwError("InvalidTimeZoneData", "Entry for rule \"" + ruleName + "\" is not an array");
 			}
 			for (let i = 0; i < ruleArr.length; i++) {
 				const rule = ruleArr[i];
 					/* istanbul ignore if */
 				if (!Array.isArray(rule)) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "] is not an array");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "] is not an array");
 				}
 					/* istanbul ignore if */
 				if (rule.length < 8) { // note some rules > 8 exists but that seems to be a bug in tz file parsing
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "] is not of length 8");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "] is not of length 8");
 				}
 				for (let j = 0; j < rule.length; j++) {
 					/* istanbul ignore if */
 					if (j !== 5 && typeof rule[j] !== "string") {
-						throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][" + j.toString(10) + "] is not a string");
+						return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][" + j.toString(10) + "] is not a string");
 					}
 				}
 				/* istanbul ignore if */
 				if (rule[0] !== "NaN" && isNaN(parseInt(rule[0], 10))) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][0] is not a number");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][0] is not a number");
 				}
 				/* istanbul ignore if */
 				if (rule[1] !== "only" && rule[1] !== "max" && isNaN(parseInt(rule[1], 10))) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][1] is not a number, only or max");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][1] is not a number, only or max");
 				}
 				/* istanbul ignore if */
 				if (!TzMonthNames.hasOwnProperty(rule[3])) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][3] is not a month name");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][3] is not a month name");
 				}
 				/* istanbul ignore if */
 				if (rule[4].substr(0, 4) !== "last" && rule[4].indexOf(">=") === -1
 					&& rule[4].indexOf("<=") === -1 && isNaN(parseInt(rule[4], 10))
 				) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][4] is not a known type of expression");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][4] is not a known type of expression");
 				}
 				/* istanbul ignore if */
 				if (!Array.isArray(rule[5])) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5] is not an array");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][5] is not an array");
 				}
 				/* istanbul ignore if */
 				if (rule[5].length !== 4) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5] is not of length 4");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][5] is not of length 4");
 				}
 				/* istanbul ignore if */
 				if (isNaN(parseInt(rule[5][0], 10))) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][0] is not a number");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][5][0] is not a number");
 				}
 				/* istanbul ignore if */
 				if (isNaN(parseInt(rule[5][1], 10))) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][1] is not a number");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][5][1] is not a number");
 				}
 				/* istanbul ignore if */
 				if (isNaN(parseInt(rule[5][2], 10))) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][2] is not a number");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][5][2] is not a number");
 				}
 				/* istanbul ignore if */
 				if (rule[5][3] !== "" && rule[5][3] !== "s" && rule[5][3] !== "w"
 					&& rule[5][3] !== "g" && rule[5][3] !== "u" && rule[5][3] !== "z" && rule[5][3] !== null) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][5][3] is not empty, g, z, s, w, u or null");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][5][3] is not empty, g, z, s, w, u or null");
 				}
 				const save: number = parseInt(rule[6], 10);
 				/* istanbul ignore if */
 				if (isNaN(save)) {
-					throw new Error("Rule " + ruleName + "[" + i.toString(10) + "][6] does not contain a valid number");
+					return throwError("InvalidTimeZoneData", "Rule " + ruleName + "[" + i.toString(10) + "][6] does not contain a valid number");
 				}
 				if (save !== 0) {
 					if (result.maxDstSave === undefined || save > result.maxDstSave) {

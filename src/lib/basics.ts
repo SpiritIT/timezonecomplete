@@ -7,6 +7,7 @@
 "use strict";
 
 import assert from "./assert";
+import { errorIs, throwError } from "./error";
 import { DateFunctions } from "./javascript";
 import * as math from "./math";
 import * as strings from "./strings";
@@ -118,6 +119,7 @@ export enum TimeUnit {
  *
  * @param unit	Time unit e.g. TimeUnit.Month
  * @returns	The number of milliseconds.
+ * @throws timezonecomplete.Argument.Unit for invalid unit
  */
 export function timeUnitToMilliseconds(unit: TimeUnit): number {
 	switch (unit) {
@@ -129,13 +131,8 @@ export function timeUnitToMilliseconds(unit: TimeUnit): number {
 		case TimeUnit.Week: return 7 * 86400000;
 		case TimeUnit.Month: return 30 * 86400000;
 		case TimeUnit.Year: return 12 * 30 * 86400000;
-		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
-			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unknown time unit");
-			}
+			return throwError("Argument.Unit", "unknown time unit %d", unit);
 	}
 }
 
@@ -144,8 +141,12 @@ export function timeUnitToMilliseconds(unit: TimeUnit): number {
  * if necessary.
  * @param unit The unit
  * @param amount If this is unequal to -1 and 1, then the result is pluralized
+ * @throws timezonecomplete.Argument.Unit for invalid time unit
  */
 export function timeUnitToString(unit: TimeUnit, amount: number = 1): string {
+	if (!Number.isInteger(unit) || unit < 0 || unit >= TimeUnit.MAX) {
+		return throwError("Argument.Unit", "invalid time unit %d", unit);
+	}
 	const result = TimeUnit[unit].toLowerCase();
 	if (amount === 1 || amount === -1) {
 		return result;
@@ -154,6 +155,11 @@ export function timeUnitToString(unit: TimeUnit, amount: number = 1): string {
 	}
 }
 
+/**
+ * Convert a string to a numeric TimeUnit. Case-insensitive; time units can be singular or plural.
+ * @param s
+ * @throws timezonecomplete.Argument.S for invalid string
+ */
 export function stringToTimeUnit(s: string): TimeUnit {
 	const trimmed = s.trim().toLowerCase();
 	for (let i = 0; i < TimeUnit.MAX; ++i) {
@@ -162,13 +168,15 @@ export function stringToTimeUnit(s: string): TimeUnit {
 			return i;
 		}
 	}
-	throw new Error("Unknown time unit string '" + s + "'");
+	return throwError("Argument.S", "Unknown time unit string '%s'", s);
 }
 
 /**
  * @return True iff the given year is a leap year.
+ * @throws timezonecomplete.Argument.Year if year is not integer
  */
 export function isLeapYear(year: number): boolean {
+	assert(Number.isInteger(year), "Argument.Year", "Invalid year %d", year);
 	// from Wikipedia:
 	// if year is not divisible by 4 then common year
 	// else if year is not divisible by 100 then leap year
@@ -187,8 +195,10 @@ export function isLeapYear(year: number): boolean {
 
 /**
  * The days in a given year
+ * @throws timezonecomplete.Argument.Year if year is not integer
  */
 export function daysInYear(year: number): number {
+	// rely on validation by isLeapYear
 	return (isLeapYear(year) ? 366 : 365);
 }
 
@@ -196,6 +206,8 @@ export function daysInYear(year: number): number {
  * @param year	The full year
  * @param month	The month 1-12
  * @return The number of days in the given month
+ * @throws timezonecomplete.Argument.Year if year is not integer
+ * @throws timezonecomplete.Argument.Month for invalid month number
  */
 export function daysInMonth(year: number, month: number): number {
 	switch (month) {
@@ -215,7 +227,7 @@ export function daysInMonth(year: number, month: number): number {
 		case 11:
 			return 30;
 		default:
-			throw new Error("Invalid month: " + month);
+			return throwError("Argument.Month", "Invalid month: %d", month);
 	}
 }
 
@@ -225,10 +237,14 @@ export function daysInMonth(year: number, month: number): number {
  * @param year	The year e.g. 1986
  * @param month Month 1-12
  * @param day Day of month 1-31
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
  */
 export function dayOfYear(year: number, month: number, day: number): number {
-	assert(month >= 1 && month <= 12, "Month out of range");
-	assert(day >= 1 && day <= daysInMonth(year, month), "day out of range");
+	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
 	let yearDay: number = 0;
 	for (let i: number = 1; i < month; i++) {
 		yearDay += daysInMonth(year, i);
@@ -242,11 +258,16 @@ export function dayOfYear(year: number, month: number, day: number): number {
  *
  * @param year	The year
  * @param month	the month 1-12
- * @param weekDay	the desired week day
- *
+ * @param weekDay	the desired week day 0-6
  * @return the last occurrence of the week day in the month
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.WeekDay for invalid week day
  */
 export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
+	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
 	const endOfMonth: TimeStruct = new TimeStruct({ year, month, day: daysInMonth(year, month) });
 	const endOfMonthWeekDay = weekDayNoLeapSecs(endOfMonth.unixMillis);
 	let diff: number = weekDay - endOfMonthWeekDay;
@@ -262,10 +283,15 @@ export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay
  * @param year	The year
  * @param month	the month 1-12
  * @param weekDay	the desired week day
- *
  * @return the first occurrence of the week day in the month
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.WeekDay for invalid week day
  */
 export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
+	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
 	const beginOfMonth: TimeStruct = new TimeStruct({ year, month, day: 1});
 	const beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonth.unixMillis);
 	let diff: number = weekDay - beginOfMonthWeekDay;
@@ -276,46 +302,66 @@ export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDa
 }
 
 /**
- * Returns the day-of-month that is on the given weekday and which is >= the given day.
- * Throws if the month has no such day.
+ * Returns the day-of-month that is on the given weekday and which is >= the given day; throws if not found
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
+ * @throws timezonecomplete.Argument.WeekDay for invalid week day
+ * @throws timezonecomplete.NotFound if the month has no such day
  */
 export function weekDayOnOrAfter(year: number, month: number, day: number, weekDay: WeekDay): number {
+	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
 	const start: TimeStruct = new TimeStruct({ year, month, day });
 	const startWeekDay: WeekDay = weekDayNoLeapSecs(start.unixMillis);
 	let diff: number = weekDay - startWeekDay;
 	if (diff < 0) {
 		diff += 7;
 	}
-	assert(start.components.day + diff <= daysInMonth(year, month), "The given month has no such weekday");
+	assert(start.components.day + diff <= daysInMonth(year, month), "NotFound", "The given month has no such weekday");
 	return start.components.day + diff;
 }
 
 /**
  * Returns the day-of-month that is on the given weekday and which is <= the given day.
- * Throws if the month has no such day.
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
+ * @throws timezonecomplete.Argument.WeekDay for invalid week day
+ * @throws timezonecomplete.NotFound if the month has no such day
  */
 export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number {
+	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
 	const start: TimeStruct = new TimeStruct({year, month, day});
 	const startWeekDay: WeekDay = weekDayNoLeapSecs(start.unixMillis);
 	let diff: number = weekDay - startWeekDay;
 	if (diff > 0) {
 		diff -= 7;
 	}
-	assert(start.components.day + diff >= 1, "The given month has no such weekday");
+	assert(start.components.day + diff >= 1, "NotFound", "The given month has no such weekday");
 	return start.components.day + diff;
 }
 
 /**
- * The week of this month. There is no official standard for this,
- * but we assume the same rules for the weekNumber (i.e.
- * week 1 is the week that has the 4th day of the month in it)
+ * The week of this month. There is no official standard for this, but we assume the same rules for the weekNumber:
+ * week 1 is the week that has the 4th day of the month in it
  *
  * @param year The year
  * @param month The month [1-12]
  * @param day The day [1-31]
  * @return Week number [1-5]
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
  */
 export function weekOfMonth(year: number, month: number, day: number): number {
+	// rely on year/month validation in firstWeekDayOfMonth
+	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
 	const firstThursday = firstWeekDayOfMonth(year, month, WeekDay.Thursday);
 	const firstMonday = firstWeekDayOfMonth(year, month, WeekDay.Monday);
 	// Corner case: check if we are in week 1 or last week of previous month
@@ -358,8 +404,10 @@ export function weekOfMonth(year: number, month: number, day: number): number {
  * Returns the day-of-year of the Monday of week 1 in the given year.
  * Note that the result may lie in the previous year, in which case it
  * will be (much) greater than 4
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
  */
 function getWeekOneDayOfYear(year: number): number {
+	// relay on weekDayOnOrAfter for year validation
 	// first monday of January, minus one because we want day-of-year
 	let result: number = weekDayOnOrAfter(year, 1, 1, WeekDay.Monday) - 1;
 	if (result > 3) { // greater than jan 4th
@@ -379,8 +427,10 @@ function getWeekOneDayOfYear(year: number): number {
  * @param year	Year e.g. 1988
  * @param month	Month 1-12
  * @param day	Day of month 1-31
- *
  * @return Week number 1-53
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
  */
 export function weekNumber(year: number, month: number, day: number): number {
 	const doy = dayOfYear(year, month, day);
@@ -415,18 +465,13 @@ export function weekNumber(year: number, month: number, day: number): number {
 	return Math.floor((doy - thisYearWeekOne) / 7) + 1;
 }
 
-function assertUnixTimestamp(unixMillis: number): void {
-	assert(typeof (unixMillis) === "number", "number input expected");
-	assert(!isNaN(unixMillis), "NaN not expected as input");
-	assert(math.isInt(unixMillis), "Expect integer number for unix UTC timestamp");
-}
-
 /**
  * Convert a unix milli timestamp into a TimeT structure.
  * This does NOT take leap seconds into account.
+ * @throws timezonecomplete.Argument.UnixMillis for non-integer `unixMillis` parameter
  */
 export function unixToTimeNoLeapSecs(unixMillis: number): TimeComponents {
-	assertUnixTimestamp(unixMillis);
+	assert(Number.isInteger(unixMillis), "Argument.UnixMillis", "unixMillis should be an integer number");
 
 	let temp: number = unixMillis;
 	const result: TimeComponents = { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0, milli: 0};
@@ -490,6 +535,13 @@ export function unixToTimeNoLeapSecs(unixMillis: number): TimeComponents {
 
 /**
  * Fill you any missing time component parts, defaults are 1970-01-01T00:00:00.000
+ * @throws timezonecomplete.Argument.Year for invalid year
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
+ * @throws timezonecomplete.Argument.Hour for invalid hour
+ * @throws timezonecomplete.Argument.Minute for invalid minute
+ * @throws timezonecomplete.Argument.Second for invalid second
+ * @throws timezonecomplete.Argument.Milli for invalid milliseconds
  */
 function normalizeTimeComponents(components: TimeComponentOpts): TimeComponents {
 	const input = {
@@ -501,6 +553,16 @@ function normalizeTimeComponents(components: TimeComponentOpts): TimeComponents 
 		second: typeof components.second === "number" ? components.second : 0,
 		milli: typeof components.milli === "number" ? components.milli : 0,
 	};
+	assert(Number.isInteger(input.year), "Argument.Year", "invalid year %d", input.year);
+	assert(Number.isInteger(input.month) && input.month >= 1 && input.month <= 12, "Argument.Month", "invalid month %d", input.month);
+	assert(
+		Number.isInteger(input.day) && input.day >= 1 && input.day <= daysInMonth(input.year, input.month), "Argument.Day",
+		"invalid day %d", input.day
+	);
+	assert(Number.isInteger(input.hour) && input.hour >= 0 && input.hour <= 23, "Argument.Hour", "invalid hour %d", input.hour);
+	assert(Number.isInteger(input.minute) && input.minute >= 0 && input.minute <= 59, "Argument.Minute", "invalid minute %d", input.minute);
+	assert(Number.isInteger(input.second) && input.second >= 0 && input.second <= 59, "Argument.Second", "invalid second %d", input.second);
+	assert(Number.isInteger(input.milli) && input.milli >= 0 && input.milli <= 999, "Argument.Milli", "invalid milli %d", input.milli);
 	return input;
 }
 
@@ -515,6 +577,13 @@ function normalizeTimeComponents(components: TimeComponentOpts): TimeComponents 
  * @param minute	Minute 0-59
  * @param second	Second 0-59 (no leap seconds)
  * @param milli	Millisecond 0-999
+ * @throws timezonecomplete.Argument.Year for invalid year
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
+ * @throws timezonecomplete.Argument.Hour for invalid hour
+ * @throws timezonecomplete.Argument.Minute for invalid minute
+ * @throws timezonecomplete.Argument.Second for invalid second
+ * @throws timezonecomplete.Argument.Milli for invalid milliseconds
  */
 export function timeToUnixNoLeapSecs(
 	year: number, month: number, day: number, hour: number, minute: number, second: number, milli: number
@@ -534,9 +603,10 @@ export function timeToUnixNoLeapSecs(
 /**
  * Return the day-of-week.
  * This does NOT take leap seconds into account.
+ * @throws timezonecomplete.Argument.UnixMillis for invalid `unixMillis` argument
  */
 export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
-	assertUnixTimestamp(unixMillis);
+	assert(Number.isInteger(unixMillis), "Argument.UnixMillis", "unixMillis should be an integer number");
 
 	const epochDay: WeekDay = WeekDay.Thursday;
 	const days = Math.floor(unixMillis / 1000 / 86400);
@@ -545,8 +615,14 @@ export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
 
 /**
  * N-th second in the day, counting from 0
+ * @throws timezonecomplete.Argument.Hour for invalid hour
+ * @throws timezonecomplete.Argument.Minute for invalid minute
+ * @throws timezonecomplete.Argument.Second for invalid second
  */
 export function secondOfDay(hour: number, minute: number, second: number): number {
+	assert(Number.isInteger(hour) && hour >= 0 && hour <= 23, "Argument.Hour", "invalid hour %d", hour);
+	assert(Number.isInteger(minute) && minute >= 0 && minute <= 59, "Argument.Minute", "invalid minute %d", minute);
+	assert(Number.isInteger(second) && second >= 0 && second <= 61, "Argument.Second", "invalid second %d", second);
 	return (((hour * 60) + minute) * 60) + second;
 }
 
@@ -565,6 +641,13 @@ export class TimeStruct {
 	 * @param minute	Minute 0-59
 	 * @param second	Second 0-59 (no leap seconds)
 	 * @param milli	Millisecond 0-999
+	 * @throws timezonecomplete.Argument.Year for invalid year
+	 * @throws timezonecomplete.Argument.Month for invalid month
+	 * @throws timezonecomplete.Argument.Day for invalid day of month
+	 * @throws timezonecomplete.Argument.Hour for invalid hour
+	 * @throws timezonecomplete.Argument.Minute for invalid minute
+	 * @throws timezonecomplete.Argument.Second for invalid second
+	 * @throws timezonecomplete.Argument.Milli for invalid milliseconds
 	 */
 	public static fromComponents(
 		year?: number, month?: number, day?: number,
@@ -576,6 +659,7 @@ export class TimeStruct {
 	/**
 	 * Create a TimeStruct from a number of unix milliseconds
 	 * (backward compatibility)
+	 * @throws timezonecomplete.Argument.UnixMillis for non-integer milliseconds
 	 */
 	public static fromUnix(unixMillis: number): TimeStruct {
 		return new TimeStruct(unixMillis);
@@ -585,7 +669,8 @@ export class TimeStruct {
 	 * Create a TimeStruct from a JavaScript date
 	 *
 	 * @param d	The date
-	 * @param df	Which functions to take (getX() or getUTCX())
+	 * @param df Which functions to take (getX() or getUTCX())
+	 * @throws nothing
 	 */
 	public static fromDate(d: Date, df: DateFunctions): TimeStruct {
 		if (df === DateFunctions.Get) {
@@ -603,6 +688,7 @@ export class TimeStruct {
 
 	/**
 	 * Returns a TimeStruct from an ISO 8601 string WITHOUT time zone
+	 * @throws timezonecomplete.Argument.S if `s` is not a proper iso string
 	 */
 	public static fromString(s: string): TimeStruct {
 		try {
@@ -617,18 +703,18 @@ export class TimeStruct {
 
 			// separate any fractional part
 			const split: string[] = s.trim().split(".");
-			assert(split.length >= 1 && split.length <= 2, "Empty string or multiple dots.");
+			assert(split.length >= 1 && split.length <= 2, "Argument.S", "Empty string or multiple dots.");
 
 			// parse main part
 			const isBasicFormat = (s.indexOf("-") === -1);
 			if (isBasicFormat) {
-				assert(split[0].match(/^((\d)+)|(\d\d\d\d\d\d\d\dT(\d)+)$/),
+				assert(split[0].match(/^((\d)+)|(\d\d\d\d\d\d\d\dT(\d)+)$/), "Argument.S",
 					"ISO string in basic notation may only contain numbers before the fractional part");
 
 				// remove any "T" separator
 				split[0] = split[0].replace("T", "");
 
-				assert([4, 8, 10, 12, 14].indexOf(split[0].length) !== -1,
+				assert([4, 8, 10, 12, 14].indexOf(split[0].length) !== -1, "Argument.S",
 					"Padding or required components are missing. Note that YYYYMM is not valid per ISO 8601");
 
 				if (split[0].length >= 4) {
@@ -653,7 +739,7 @@ export class TimeStruct {
 					lastUnit = TimeUnit.Second;
 				}
 			} else {
-				assert(split[0].match(/^\d\d\d\d(-\d\d-\d\d((T)?\d\d(\:\d\d(:\d\d)?)?)?)?$/), "Invalid ISO string");
+				assert(split[0].match(/^\d\d\d\d(-\d\d-\d\d((T)?\d\d(\:\d\d(:\d\d)?)?)?)?$/), "Argument.S", "Invalid ISO string");
 				let dateAndTime: string[] = [];
 				if (s.indexOf("T") !== -1) {
 					dateAndTime = split[0].split("T");
@@ -662,7 +748,7 @@ export class TimeStruct {
 				} else {
 					dateAndTime = [split[0], ""];
 				}
-				assert([4, 10].indexOf(dateAndTime[0].length) !== -1,
+				assert([4, 10].indexOf(dateAndTime[0].length) !== -1, "Argument.S",
 					"Padding or required components are missing. Note that YYYYMM is not valid per ISO 8601");
 
 				if (dateAndTime[0].length >= 4) {
@@ -721,7 +807,14 @@ export class TimeStruct {
 			unixMillis = math.roundSym(unixMillis + fractionMillis);
 			return new TimeStruct(unixMillis);
 		} catch (e) {
-			throw new Error("Invalid ISO 8601 string: \"" + s + "\": " + e.message);
+			if (errorIs(e, [
+				"Argument.S", "Argument.Year", "Argument.Month", "Argument.Day", "Argument.Hour",
+				"Argument.Minute", "Argument.Second", "Argument.Milli"
+			])) {
+				return throwError("Argument.S", "Invalid ISO 8601 string: \"%s\": %s", s, e.message);
+			} else {
+				throw e; // programming error
+			}
 		}
 	}
 
@@ -751,12 +844,15 @@ export class TimeStruct {
 	 * Constructor
 	 *
 	 * @param unixMillis milliseconds since 1-1-1970
+	 * @throws timezonecomplete.Argument.UnixMillis for non-integer unixMillis
 	 */
 	constructor(unixMillis: number);
 	/**
 	 * Constructor
 	 *
 	 * @param components Separate timestamp components (year, month, ...)
+	 * @throws timezonecomplete.Argument.Components if `components` is not an object
+	 * @throws timezonecomplete.Argument.* for invalid components (* = Year, Month, Day, Hour, Minute, Second, Milli)
 	 */
 	constructor(components: TimeComponentOpts);
 	/**
@@ -764,8 +860,10 @@ export class TimeStruct {
 	 */
 	constructor(a: number | TimeComponentOpts) {
 		if (typeof a === "number") {
+			assert(Number.isInteger(a), "Argument.UnixMillis", "invalid unix millis %d", a);
 			this._unixMillis = a;
 		} else {
+			assert(typeof a === "object" && a !== null, "Argument.Components", "invalid components object");
 			this._components = normalizeTimeComponents(a);
 		}
 	}
@@ -800,19 +898,31 @@ export class TimeStruct {
 
 	/**
 	 * The day-of-year 0-365
+	 * @throws nothing
 	 */
 	public yearDay(): number {
 		return dayOfYear(this.components.year, this.components.month, this.components.day);
 	}
 
+	/**
+	 * Equality function
+	 * @param other
+	 * @throws TypeError if other is not an Object
+	 */
 	public equals(other: TimeStruct): boolean {
 		return this.valueOf() === other.valueOf();
 	}
 
+	/**
+	 * @throws nothing
+	 */
 	public valueOf(): number {
 		return this.unixMillis;
 	}
 
+	/**
+	 * @throws nothing
+	 */
 	public clone(): TimeStruct {
 		if (this._components) {
 			return new TimeStruct(this._components);
@@ -824,6 +934,7 @@ export class TimeStruct {
 	/**
 	 * Validate a timestamp. Filters out non-existing values for all time components
 	 * @returns true iff the timestamp is valid
+	 * @throws nothing
 	 */
 	public validate(): boolean {
 		if (this._components) {
@@ -840,6 +951,7 @@ export class TimeStruct {
 
 	/**
 	 * ISO 8601 string YYYY-MM-DDThh:mm:ss.nnn
+	 * @throws nothing
 	 */
 	public toString(): string {
 		return strings.padLeft(this.components.year.toString(10), 4, "0")
@@ -857,7 +969,9 @@ export class TimeStruct {
  * Binary search
  * @param array Array to search
  * @param compare Function that should return < 0 if given element is less than searched element etc
- * @return {Number} The insertion index of the element to look for
+ * @returns The insertion index of the element to look for
+ * @throws TypeError if arr is not an array
+ * @throws whatever `compare()` throws
  */
 export function binaryInsertionIndex<T>(arr: T[], compare: (a: T) => number): number {
 	let minIndex = 0;

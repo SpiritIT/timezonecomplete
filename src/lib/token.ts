@@ -54,6 +54,7 @@ export interface Token {
 /**
  * Tokenize an LDML date/time format string
  * @param formatString the string to tokenize
+ * @throws nothing
  */
 export function tokenize(formatString: string): Token[] {
 	if (!formatString) {

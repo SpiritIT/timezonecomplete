@@ -11,6 +11,7 @@ import { TimeUnit } from "./basics";
 import * as basics from "./basics";
 import { DateTime, isDateTime } from "./datetime";
 import { Duration } from "./duration";
+import { error, errorIs, throwError } from "./error";
 import { TimeZone, TimeZoneKind } from "./timezone";
 
 /**
@@ -48,6 +49,7 @@ export enum PeriodDst {
 
 /**
  * Convert a PeriodDst to a string: "regular intervals" or "regular local time"
+ * @throws timezonecomplete.Argument.P for invalid PeriodDst value
  */
 export function periodDstToString(p: PeriodDst): string {
 	switch (p) {
@@ -55,11 +57,8 @@ export function periodDstToString(p: PeriodDst): string {
 		case PeriodDst.RegularLocalTime: return "regular local time";
 		/* istanbul ignore next */
 		default:
-			/* istanbul ignore if */
 			/* istanbul ignore next */
-			if (true) {
-				throw new Error("Unknown PeriodDst");
-			}
+			return throwError("Argument.P", "invalid PerioDst value %d", p);
 	}
 }
 
@@ -119,6 +118,9 @@ export class Period {
 	 * @param dst Specifies how to handle Daylight Saving Time. Not relevant
 	 *            if the time zone of the reference datetime does not have DST.
 	 *            Defaults to RegularLocalTime.
+	 * @throws timezonecomplete.Argument.Dst for invalid dst value
+	 * @throws timezonecomplete.Argument.Interval if amount not positive integer
+	 * @throws timezonecomplete.Argument.Interval.NotImplemented if dst=RegularLocalTime and the interval is not a multiple of one day
 	 */
 	constructor(
 		reference: DateTime,
@@ -139,6 +141,11 @@ export class Period {
 	 * @param dst Specifies how to handle Daylight Saving Time. Not relevant
 	 *              if the time zone of the reference datetime does not have DST.
 	 *              Defaults to RegularLocalTime.
+	 * @throws timezonecomplete.Argument.Amount for invalid amount
+	 * @throws timezonecomplete.Argument.Unit for invalid time unit
+	 * @throws timezonecomplete.Argument.Interval if amount not positive integer
+	 * @throws timezonecomplete.Argument.Interval.NotImplemented if dst=RegularLocalTime and the interval is not a multiple of one day
+	 * @throws timezonecomplete.Argument.Dst for invalid dst value
 	 */
 	constructor(
 		reference: DateTime,
@@ -154,6 +161,9 @@ export class Period {
 	 * implemented and you will get an assert.
 	 *
 	 * @param json period represented as JSON object
+	 * @throws timezonecomplete.Argument.Json for invalid JSON (missing reference, unparseable reference or interval)
+	 * @throws timezonecomplete.Argument.Interval if amount not positive integer
+	 * @throws timezonecomplete.Argument.Interval.NotImplemented if dst=RegularLocalTime and the interval is not a multiple of one day
 	 */
 	constructor(json: PeriodJson);
 	/**
@@ -175,7 +185,7 @@ export class Period {
 				interval = amountOrInterval as Duration;
 				dst = unitOrDst as PeriodDst;
 			} else {
-				assert(typeof unitOrDst === "number" && unitOrDst >= 0 && unitOrDst < TimeUnit.MAX, "Invalid unit");
+				assert(typeof unitOrDst === "number" && unitOrDst >= 0 && unitOrDst < TimeUnit.MAX, "Argument.Unit", "Invalid unit");
 				interval = new Duration(amountOrInterval as number, unitOrDst as TimeUnit);
 				dst = givenDst as PeriodDst;
 			}
@@ -183,15 +193,18 @@ export class Period {
 				dst = PeriodDst.RegularLocalTime;
 			}
 		} else {
-			reference = new DateTime(a.reference);
-			interval = new Duration(a.duration);
-			dst = a.periodDst === "regular" ? PeriodDst.RegularIntervals : PeriodDst.RegularLocalTime;
+			try {
+				reference = new DateTime(a.reference);
+				interval = new Duration(a.duration);
+				dst = a.periodDst === "regular" ? PeriodDst.RegularIntervals : PeriodDst.RegularLocalTime;
+			} catch (e) {
+				return throwError("Argument.Json", e);
+			}
 		}
 
-		assert(dst >= 0 && dst < PeriodDst.MAX, "Invalid PeriodDst setting");
-		assert(!!reference, "Reference time not given");
-		assert(interval.amount() > 0, "Amount must be positive non-zero.");
-		assert(Math.floor(interval.amount()) === interval.amount(), "Amount must be a whole number");
+		assert(dst >= 0 && dst < PeriodDst.MAX, "Argument.Dst", "Invalid PeriodDst setting");
+		assert(interval.amount() > 0, "Argument.Interval", "Amount must be positive non-zero.");
+		assert(Number.isInteger(interval.amount()), "Argument.Interval", "Amount must be a whole number");
 
 		this._reference = reference;
 		this._interval = interval;
@@ -205,28 +218,28 @@ export class Period {
 			switch (this._intInterval.unit()) {
 				case TimeUnit.Millisecond:
 					assert(
-						this._intInterval.amount() < 86400000,
+						this._intInterval.amount() < 86400000, "Argument.Interval.NotImplemented",
 						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
 						"then the amount must be either less than a day or a multiple of the next unit."
 					);
 					break;
 				case TimeUnit.Second:
 					assert(
-						this._intInterval.amount() < 86400,
+						this._intInterval.amount() < 86400, "Argument.Interval.NotImplemented",
 						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
 						"then the amount must be either less than a day or a multiple of the next unit."
 					);
 					break;
 				case TimeUnit.Minute:
 					assert(
-						this._intInterval.amount() < 1440,
+						this._intInterval.amount() < 1440, "Argument.Interval.NotImplemented",
 						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
 						"then the amount must be either less than a day or a multiple of the next unit."
 					);
 					break;
 				case TimeUnit.Hour:
 					assert(
-						this._intInterval.amount() < 24,
+						this._intInterval.amount() < 24, "Argument.Interval.NotImplemented",
 						"When using Hour, Minute or (Milli)Second units, with Regular Local Times, " +
 						"then the amount must be either less than a day or a multiple of the next unit."
 					);
@@ -237,6 +250,7 @@ export class Period {
 
 	/**
 	 * Return a fresh copy of the period
+	 * @throws nothing
 	 */
 	public clone(): Period {
 		return new Period(this._reference, this._interval, this._dst);
@@ -244,6 +258,7 @@ export class Period {
 
 	/**
 	 * The reference date
+	 * @throws nothing
 	 */
 	public reference(): DateTime {
 		return this._reference;
@@ -251,6 +266,7 @@ export class Period {
 
 	/**
 	 * DEPRECATED: old name for the reference date
+	 * @throws nothing
 	 */
 	public start(): DateTime {
 		return this._reference;
@@ -258,6 +274,7 @@ export class Period {
 
 	/**
 	 * The interval
+	 * @throws nothing
 	 */
 	public interval(): Duration {
 		return this._interval.clone();
@@ -265,6 +282,7 @@ export class Period {
 
 	/**
 	 * The amount of units of the interval
+	 * @throws nothing
 	 */
 	public amount(): number {
 		return this._interval.amount();
@@ -272,6 +290,7 @@ export class Period {
 
 	/**
 	 * The unit of the interval
+	 * @throws nothing
 	 */
 	public unit(): TimeUnit {
 		return this._interval.unit();
@@ -279,6 +298,7 @@ export class Period {
 
 	/**
 	 * The dst handling mode
+	 * @throws nothing
 	 */
 	public dst(): PeriodDst {
 		return this._dst;
@@ -290,10 +310,12 @@ export class Period {
 	 * Pre: the fromdate and reference date must either both have timezones or not
 	 * @param fromDate: the date after which to return the next date
 	 * @return the first date matching the period after fromDate, given in the same zone as the fromDate.
+	 * @throws timezonecomplete.UnawareToAwareConversion if not both fromdate and the reference date are both aware or unaware of time zone
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public findFirst(fromDate: DateTime): DateTime {
 		assert(
-			!!this._intReference.zone() === !!fromDate.zone(),
+			!!this._intReference.zone() === !!fromDate.zone(), "UnawareToAwareConversion",
 			"The fromDate and reference date must both be aware or unaware"
 		);
 		let approx: DateTime;
@@ -368,7 +390,7 @@ export class Period {
 						/* istanbul ignore if */
 						/* istanbul ignore next */
 						if (true) {
-							throw new Error("Unknown TimeUnit");
+							return throwError("Assertion", "Unknown TimeUnit");
 						}
 				}
 				while (!approx.greaterThan(fromDate)) {
@@ -431,7 +453,7 @@ export class Period {
 						/* istanbul ignore if */
 						/* istanbul ignore next */
 						if (true) {
-							throw new Error("Unknown TimeUnit");
+							return throwError("Assertion", "Unknown TimeUnit");
 						}
 				}
 				while (!approx.greaterThan(normalFrom)) {
@@ -486,7 +508,7 @@ export class Period {
 						/* istanbul ignore if */
 						/* istanbul ignore next */
 						if (true) {
-							throw new Error("Unknown TimeUnit");
+							return throwError("Assertion", "Unknown TimeUnit");
 						}
 				}
 				while (!approx.greaterThan(fromDate)) {
@@ -689,7 +711,7 @@ export class Period {
 						/* istanbul ignore if */
 						/* istanbul ignore next */
 						if (true) {
-							throw new Error("Unknown TimeUnit");
+							return throwError("Assertion", "Unknown TimeUnit");
 						}
 				}
 				while (!approx.greaterThan(normalFrom)) {
@@ -706,17 +728,18 @@ export class Period {
 	 * This function has MUCH better performance than findFirst.
 	 * Returns the datetime "count" times away from the given datetime.
 	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period reference date has one.
-	 * @param count	Number of periods to add. Optional. Must be an integer number, may be negative.
+	 * @param count	Number of periods to add. Optional. Must be an integer number, may be positive or negative, default 1
 	 * @return (prev + count * period), in the same timezone as prev.
+	 * @throws timezonecomplete.Argument.Prev if prev is undefined
+	 * @throws timezonecomplete.Argument.Count if count is not an integer number
 	 */
 	public findNext(prev: DateTime, count: number = 1): DateTime {
-		assert(!!prev, "Prev must be given");
+		assert(!!prev, "Argument.Prev", "Prev must be given");
 		assert(
-			!!this._intReference.zone() === !!prev.zone(),
+			!!this._intReference.zone() === !!prev.zone(), "UnawareToAwareConversion",
 			"The fromDate and referenceDate must both be aware or unaware"
 		);
-		assert(typeof (count) === "number", "Count must be a number");
-		assert(Math.floor(count) === count, "Count must be an integer");
+		assert(Number.isInteger(count), "Argument.Count", "Count must be an integer number");
 		const normalizedPrev = this._normalizeDay(prev.toZone(this._reference.zone()));
 		if (this._intDst === PeriodDst.RegularIntervals) {
 			return this._correctDay(normalizedPrev.add(
@@ -736,6 +759,8 @@ export class Period {
 	 * @param fromDate: the date before which to return the next date
 	 * @return the last date matching the period before fromDate, given
 	 *         in the same zone as the fromDate.
+	 * @throws timezonecomplete.UnawareToAwareConversion if not both `from` and the reference date are both aware or unaware of time zone
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public findLast(from: DateTime): DateTime {
 		let result = this.findPrev(this.findFirst(from));
@@ -751,21 +776,32 @@ export class Period {
 	 * @param prev	Boundary date. Must have a time zone (any time zone) iff the period reference date has one.
 	 * @param count	Number of periods to subtract. Optional. Must be an integer number, may be negative.
 	 * @return (next - count * period), in the same timezone as next.
+	 * @throws timezonecomplete.Argument.Next if prev is undefined
+	 * @throws timezonecomplete.Argument.Count if count is not an integer number
 	 */
 	public findPrev(next: DateTime, count: number = 1): DateTime {
-		return this.findNext(next, -1 * count);
+		try {
+			return this.findNext(next, -1 * count);
+		} catch (e) {
+			if (errorIs(e, "Argument.Prev")) {
+				e = error("Argument.Next", e.message);
+			}
+			throw e;
+		}
 	}
 
 	/**
 	 * Checks whether the given date is on a period boundary
 	 * (expensive!)
+	 * @throws timezonecomplete.UnawareToAwareConversion if not both `occurrence` and the reference date are both aware or unaware of time zone
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public isBoundary(occurrence: DateTime): boolean {
 		if (!occurrence) {
 			return false;
 		}
 		assert(
-			!!this._intReference.zone() === !!occurrence.zone(),
+			!!this._intReference.zone() === !!occurrence.zone(), "UnawareToAwareConversion",
 			"The occurrence and referenceDate must both be aware or unaware"
 		);
 		return (this.findFirst(occurrence.sub(Duration.milliseconds(1))).equals(occurrence));
@@ -775,6 +811,9 @@ export class Period {
 	 * Returns true iff this period has the same effect as the given one.
 	 * i.e. a period of 24 hours is equal to one of 1 day if they have the same UTC reference moment
 	 * and same dst.
+	 * @throws timezonecomplete.UnawareToAwareConversion if not both `other#reference()` and the reference date are both aware or unaware
+	 * of time zone
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public equals(other: Period): boolean {
 		// note we take the non-normalized _reference because this has an influence on the outcome
@@ -796,6 +835,7 @@ export class Period {
 
 	/**
 	 * Returns true iff this period was constructed with identical arguments to the other one.
+	 * @throws nothing
 	 */
 	public identical(other: Period): boolean {
 		return (this._reference.identical(other._reference)
@@ -808,6 +848,7 @@ export class Period {
 	 * 2014-01-01T12:00:00.000+01:00/P1H
 	 * 2014-01-01T12:00:00.000+01:00/PT1M   (one minute)
 	 * 2014-01-01T12:00:00.000+01:00/P1M   (one month)
+	 * @throws nothing
 	 */
 	public toIsoString(): string {
 		return this._reference.toIsoString() + "/" + this._interval.toIsoString();
@@ -816,6 +857,7 @@ export class Period {
 	/**
 	 * A string representation e.g.
 	 * "10 years, referenceing at 2014-03-01T12:00:00 Europe/Amsterdam, keeping regular intervals".
+	 * @throws nothing
 	 */
 	public toString(): string {
 		let result: string = this._interval.toString() + ", referenceing at " + this._reference.toString();
@@ -828,6 +870,7 @@ export class Period {
 
 	/**
 	 * Returns a JSON-compatible representation of this period
+	 * @throws nothing
 	 */
 	public toJson(): PeriodJson {
 		return {
@@ -839,6 +882,7 @@ export class Period {
 
 	/**
 	 * Corrects the difference between _reference and _intReference.
+	 * @throws nothing
 	 */
 	private _correctDay(d: DateTime): DateTime {
 		if (this._reference !== this._intReference) {
@@ -854,6 +898,7 @@ export class Period {
 	 * If this._internalUnit in [Month, Year], normalizes the day-of-month
 	 * to <= 28.
 	 * @return a new date if different, otherwise the exact same object (no clone!)
+	 * @throws nothing
 	 */
 	private _normalizeDay(d: DateTime, anymonth: boolean = true): DateTime {
 		if ((this._intInterval.unit() === TimeUnit.Month && d.day() > 28)
@@ -871,6 +916,7 @@ export class Period {
 	/**
 	 * Returns true if DST handling is relevant for us.
 	 * (i.e. if the reference time zone has DST)
+	 * @throws nothing
 	 */
 	private _dstRelevant(): boolean {
 		const zone = this._reference.zone();
@@ -886,6 +932,7 @@ export class Period {
 	 * E.g. more than 60 minutes is transferred to hours,
 	 * but seconds cannot be transferred to minutes due to leap seconds.
 	 * Weeks are converted back to days.
+	 * @throws nothing
 	 */
 	private _calcInternalValues(): void {
 		// normalize any above-unit values

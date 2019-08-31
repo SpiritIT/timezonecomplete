@@ -8,6 +8,7 @@
 
 import { TimeStruct } from "./basics";
 import * as basics from "./basics";
+import { throwError } from "./error";
 import { DEFAULT_LOCALE, Locale, PartialLocale } from "./locale";
 import * as strings from "./strings";
 import { TimeZone } from "./timezone";
@@ -23,6 +24,8 @@ import { Token, tokenize, TokenType } from "./token";
  * @param formatString The LDML format pattern (see LDML.md)
  * @param locale Other format options such as month names
  * @return string
+ * @throws timezonecomplete.Argument.FormatString for invalid format pattern
+ * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
  */
 export function format(
 	dateTime: TimeStruct,
@@ -95,6 +98,7 @@ export function format(
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws nothing
  */
 function _formatEra(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	const AD: boolean = dateTime.year > 0;
@@ -121,6 +125,7 @@ function _formatEra(dateTime: TimeStruct, token: Token, locale: Locale): string 
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws nothing
  */
 function _formatYear(dateTime: TimeStruct, token: Token): string {
 	switch (token.symbol) {
@@ -146,6 +151,7 @@ function _formatYear(dateTime: TimeStruct, token: Token): string {
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws timezonecomplete.Argument.FormatString for invalid format pattern
  */
 function _formatQuarter(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	const quarter = Math.ceil(dateTime.month / 3);
@@ -187,7 +193,7 @@ function _formatQuarter(dateTime: TimeStruct, token: Token, locale: Locale): str
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			throw new Error("invalid quarter pattern");
+			return throwError("Argument.FormatString", "invalid quarter pattern");
 	}
 }
 
@@ -197,6 +203,7 @@ function _formatQuarter(dateTime: TimeStruct, token: Token, locale: Locale): str
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws timezonecomplete.Argument.FormatString for invalid format pattern
  */
 function _formatMonth(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	switch (token.symbol) {
@@ -237,7 +244,7 @@ function _formatMonth(dateTime: TimeStruct, token: Token, locale: Locale): strin
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			throw new Error("invalid month pattern");
+			return throwError("Argument.FormatString", "invalid month pattern");
 	}
 }
 
@@ -247,6 +254,7 @@ function _formatMonth(dateTime: TimeStruct, token: Token, locale: Locale): strin
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws nothing
  */
 function _formatWeek(dateTime: TimeStruct, token: Token): string {
 	if (token.symbol === "w") {
@@ -262,6 +270,7 @@ function _formatWeek(dateTime: TimeStruct, token: Token): string {
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws nothing
  */
 function _formatDay(dateTime: TimeStruct, token: Token): string {
 	switch (token.symbol) {
@@ -284,6 +293,7 @@ function _formatDay(dateTime: TimeStruct, token: Token): string {
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws nothing
  */
 function _formatWeekday(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	const weekDayNumber = basics.weekDayNoLeapSecs(dateTime.unixMillis);
@@ -318,6 +328,7 @@ function _formatWeekday(dateTime: TimeStruct, token: Token, locale: Locale): str
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws nothing
  */
 function _formatDayPeriod(dateTime: TimeStruct, token: Token, locale: Locale): string {
 	switch (token.symbol) {
@@ -390,6 +401,7 @@ function _formatDayPeriod(dateTime: TimeStruct, token: Token, locale: Locale): s
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws nothing
  */
 function _formatHour(dateTime: TimeStruct, token: Token): string {
 	let hour = dateTime.hour;
@@ -424,6 +436,7 @@ function _formatHour(dateTime: TimeStruct, token: Token): string {
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws nothing
  */
 function _formatMinute(dateTime: TimeStruct, token: Token): string {
 	return strings.padLeft(dateTime.minute.toString(), token.length, "0");
@@ -435,6 +448,7 @@ function _formatMinute(dateTime: TimeStruct, token: Token): string {
  * @param dateTime The current time to format
  * @param token The token passed
  * @return string
+ * @throws timezonecomplete.Argument.** if any of the given dateTime elements are invalid
  */
 function _formatSecond(dateTime: TimeStruct, token: Token): string {
 	switch (token.symbol) {
@@ -462,6 +476,7 @@ function _formatSecond(dateTime: TimeStruct, token: Token): string {
  * @param zone The timezone currentTime is in
  * @param token The token passed
  * @return string
+ * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
  */
 function _formatZone(currentTime: TimeStruct, utcTime: TimeStruct, zone: TimeZone | undefined, token: Token): string {
 	if (!zone) {

@@ -10,6 +10,7 @@ import assert from "./assert";
 import * as basics from "./basics";
 import { TimeStruct, TimeUnit, WeekDay } from "./basics";
 import { Duration } from "./duration";
+import { convertError, error, errorIs, throwError } from "./error";
 import * as format from "./format";
 import { DateFunctions } from "./javascript";
 import { PartialLocale } from "./locale";
@@ -21,6 +22,7 @@ import { NormalizeOption } from "./tz-database";
 
 /**
  * Current date+time in local time
+ * @throws nothing
  */
 export function nowLocal(): DateTime {
 	return DateTime.nowLocal();
@@ -28,6 +30,7 @@ export function nowLocal(): DateTime {
 
 /**
  * Current date+time in UTC time
+ * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
  */
 export function nowUtc(): DateTime {
 	return DateTime.nowUtc();
@@ -36,11 +39,18 @@ export function nowUtc(): DateTime {
 /**
  * Current date+time in the given time zone
  * @param timeZone	The desired time zone (optional, defaults to UTC).
+ * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
  */
 export function now(timeZone: TimeZone | undefined | null = TimeZone.utc()): DateTime {
 	return DateTime.now(timeZone);
 }
 
+/**
+ *
+ * @param localTime
+ * @param fromZone
+ * @throws nothing
+ */
 function convertToUtc(localTime: TimeStruct, fromZone?: TimeZone): TimeStruct {
 	if (fromZone) {
 		const offset: number = fromZone.offsetForZone(localTime);
@@ -50,6 +60,12 @@ function convertToUtc(localTime: TimeStruct, fromZone?: TimeZone): TimeStruct {
 	}
 }
 
+/**
+ *
+ * @param utcTime
+ * @param toZone
+ * @throws nothing
+ */
 function convertFromUtc(utcTime: TimeStruct, toZone?: TimeZone): TimeStruct {
 	/* istanbul ignore else */
 	if (toZone) {
@@ -72,9 +88,14 @@ export class DateTime {
 	public kind = "DateTime";
 
 	/**
-	 * UTC timestamp (lazily calculated)
+	 * UTC timestamp (lazily calculated, use getter for utcDate instead)
 	 */
 	private _utcDate?: TimeStruct;
+
+	/**
+	 * UTC timestamp (lazily calculated)
+	 * @throws nothing
+	 */
 	private get utcDate(): TimeStruct {
 		if (!this._utcDate) {
 			this._utcDate = convertToUtc(this._zoneDate as TimeStruct, this._zone);
@@ -90,6 +111,11 @@ export class DateTime {
 	 * Local timestamp (lazily calculated)
 	 */
 	private _zoneDate?: TimeStruct;
+
+	/**
+	 * Local timestamp (lazily calculated)
+	 * @throws nothing
+	 */
 	private get zoneDate(): TimeStruct {
 		if (!this._zoneDate) {
 			this._zoneDate = convertFromUtc(this._utcDate as TimeStruct, this._zone);
@@ -116,6 +142,7 @@ export class DateTime {
 
 	/**
 	 * Current date+time in local time
+	 * @throws nothing
 	 */
 	public static nowLocal(): DateTime {
 		const n = DateTime.timeSource.now();
@@ -124,6 +151,7 @@ export class DateTime {
 
 	/**
 	 * Current date+time in UTC time
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public static nowUtc(): DateTime {
 		return new DateTime(DateTime.timeSource.now(), DateFunctions.GetUTC, TimeZone.utc());
@@ -132,6 +160,7 @@ export class DateTime {
 	/**
 	 * Current date+time in the given time zone
 	 * @param timeZone	The desired time zone (optional, defaults to UTC).
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public static now(timeZone: TimeZone | null | undefined = TimeZone.utc()): DateTime {
 		return new DateTime(DateTime.timeSource.now(), DateFunctions.GetUTC, TimeZone.utc()).toZone(timeZone);
@@ -144,11 +173,11 @@ export class DateTime {
 	 * @param n excel date/time number
 	 * @param timeZone Time zone to assume that the excel value is in
 	 * @returns a DateTime
+	 * @throws timezonecomplete.Argument.N if n is not a finite number
+	 * @throws timezonecomplete.Argument.TimeZone if the given time zone is invalid
 	 */
 	public static fromExcel(n: number, timeZone?: TimeZone | null | undefined): DateTime {
-		assert(typeof n === "number", "fromExcel(): first parameter must be a number");
-		assert(!isNaN(n), "fromExcel(): first parameter must not be NaN");
-		assert(isFinite(n), "fromExcel(): first parameter must not be NaN");
+		assert(Number.isFinite(n), "Argument.N", "invalid number");
 		const unixTimestamp = Math.round((n - 25569) * 24 * 60 * 60 * 1000);
 		return new DateTime(unixTimestamp, timeZone);
 	}
@@ -162,6 +191,7 @@ export class DateTime {
 	 * before that. You can change that with the allowPre1970 flag.
 	 *
 	 * @param allowPre1970 (optional, default false): return true for pre-1970 dates
+	 * @throws nothing
 	 */
 	public static exists(
 		year: number, month: number = 1, day: number = 1,
@@ -188,6 +218,7 @@ export class DateTime {
 
 	/**
 	 * Constructor. Creates current time in local timezone.
+	 * @throws nothing
 	 */
 	constructor();
 	/**
@@ -203,6 +234,8 @@ export class DateTime {
 	 * @param timeZone	if given, the date in the string is assumed to be in this time zone.
 	 *        Note that it is NOT CONVERTED to the time zone. Useful
 	 *        for strings without a time zone
+	 * @throws timezonecomplete.Argument.S if the given string is invalid
+	 * @throws timezonecomplete.Argument.TimeZone if the given time zone is invalid
 	 */
 	constructor(isoString: string, timeZone?: TimeZone | null | undefined);
 	/**
@@ -211,12 +244,15 @@ export class DateTime {
 	 * Non-existing local times are normalized by rounding up to the next DST offset.
 	 *
 	 * @param dateString	Date+Time string.
-	 * @param format The LDML format that the string is assumed to be in
+	 * @param formatString The LDML format that the string is assumed to be in
 	 * @param timeZone	if given, the date in the string is assumed to be in this time zone.
 	 *        Note that it is NOT CONVERTED to the time zone. Useful
 	 *        for strings without a time zone
+	 * @throws timezonecomplete.ParseError if the given dateTimeString is wrong or not according to the pattern
+	 * @throws timezonecomplete.Argument.FormatString if the given format string is invalid
+	 * @throws timezonecomplete.Argument.Timezone if the given time zone is invalid
 	 */
-	constructor(dateString: string, format: string, timeZone?: TimeZone | null | undefined);
+	constructor(dateString: string, formatString: string, timeZone?: TimeZone | null | undefined);
 	/**
 	 * Constructor. You provide a date, then you say whether to take the
 	 * date.getYear()/getXxx methods or the date.getUTCYear()/date.getUTCXxx methods,
@@ -229,10 +265,13 @@ export class DateTime {
 	 * @param getters Specifies which set of Date getters contains the date in the given time zone: the
 	 *        Date.getXxx() methods or the Date.getUTCXxx() methods.
 	 * @param timeZone The time zone that the given date is assumed to be in (may be undefined or null for unaware dates)
+	 * @throws timezonecomplete.Argument.GetFuncs if the getFuncs argument is invalid
+	 * @throws timezonecomplete.Argument.TimeZone if the time zone argument is invalid
 	 */
 	constructor(date: Date, getFuncs: DateFunctions, timeZone?: TimeZone | null | undefined);
 	/**
 	 * Get a date from a TimeStruct
+	 * @throws timezonecomplete.Argument.TimeZone if the given time zone argument is invalid
 	 */
 	constructor(tm: TimeStruct, timeZone?: TimeZone | null | undefined);
 	/**
@@ -246,6 +285,13 @@ export class DateTime {
 	 * @param second	The second of the minute [0-59]
 	 * @param millisecond	The millisecond of the second [0-999]
 	 * @param timeZone	The time zone, or null/undefined (for unaware dates)
+	 * @throws timezonecomplete.Argument.Year if year invalid
+	 * @throws timezonecomplete.Argument.Month if month invalid
+	 * @throws timezonecomplete.Argument.Day if day invalid
+	 * @throws timezonecomplete.Argument.Hour if hour invalid
+	 * @throws timezonecomplete.Argument.Minute if minute invalid
+	 * @throws timezonecomplete.Argument.Second if second invalid
+	 * @throws timezonecomplete.Argument.Milli if milliseconds invalid
 	 */
 	constructor(
 		year: number, month: number, day: number,
@@ -256,11 +302,12 @@ export class DateTime {
 	 * Constructor
 	 * @param unixTimestamp	milliseconds since 1970-01-01T00:00:00.000
 	 * @param timeZone	the time zone that the timestamp is assumed to be in (usually UTC).
+	 * @throws timezonecomplete.Argument.TimeZone if the given time zone is invalid
 	 */
 	constructor(unixTimestamp: number, timeZone?: TimeZone | null | undefined);
 
 	/**
-	 * Constructor implementation, do not call
+	 * Constructor implementation, @see overrides
 	 */
 	constructor(
 		a1?: any, a2?: any, a3?: any,
@@ -273,9 +320,13 @@ export class DateTime {
 					assert(
 						a3 === undefined && h === undefined && m === undefined
 						&& s === undefined && ms === undefined && timeZone === undefined,
+						"Argument.A3",
 						"for unix timestamp datetime constructor, third through 8th argument must be undefined"
 					);
-					assert(a2 === undefined || a2 === null || isTimeZone(a2), "DateTime.DateTime(): second arg should be a TimeZone object.");
+					assert(
+						a2 === undefined || a2 === null || isTimeZone(a2),
+						"Argument.TimeZone", "DateTime.DateTime(): second arg should be a TimeZone object."
+					);
 					// unix timestamp constructor
 					this._zone = (typeof (a2) === "object" && isTimeZone(a2) ? a2 as TimeZone : undefined);
 					if (this._zone) {
@@ -285,10 +336,10 @@ export class DateTime {
 					}
 				} else {
 					// year month day constructor
-					assert(typeof (a2) === "number", "DateTime.DateTime(): Expect month to be a number.");
-					assert(typeof (a3) === "number", "DateTime.DateTime(): Expect day to be a number.");
+					assert(typeof (a2) === "number", "Argument.Year", "DateTime.DateTime(): Expect month to be a number.");
+					assert(typeof (a3) === "number", "Argument.Month", "DateTime.DateTime(): Expect day to be a number.");
 					assert(
-						timeZone === undefined || timeZone === null || isTimeZone(timeZone),
+						timeZone === undefined || timeZone === null || isTimeZone(timeZone), "Argument.TimeZone",
 						"DateTime.DateTime(): eighth arg should be a TimeZone object."
 					);
 					let year: number = a1 as number;
@@ -298,16 +349,14 @@ export class DateTime {
 					let minute: number = (typeof (m) === "number" ? m : 0);
 					let second: number = (typeof (s) === "number" ? s : 0);
 					let milli: number = (typeof (ms) === "number" ? ms : 0);
-					year = math.roundSym(year);
-					month = math.roundSym(month);
-					day = math.roundSym(day);
-					hour = math.roundSym(hour);
-					minute = math.roundSym(minute);
-					second = math.roundSym(second);
-					milli = math.roundSym(milli);
+					year = convertError("Argument.Year", () => math.roundSym(year));
+					month = convertError("Argument.Month", () => math.roundSym(month));
+					day = convertError("Argument.Day", () => math.roundSym(day));
+					hour = convertError("Argument.Hour", () => math.roundSym(hour));
+					minute = convertError("Argument.Minute", () => math.roundSym(minute));
+					second = convertError("Argument.Second", () => math.roundSym(second));
+					milli = convertError("Argument.Milli", () => math.roundSym(milli));
 					const tm = new TimeStruct({ year, month, day, hour, minute, second, milli });
-					assert(tm.validate(), `invalid date: ${tm.toString()}`);
-
 					this._zone = (typeof (timeZone) === "object" && isTimeZone(timeZone) ? timeZone : undefined);
 
 					// normalize local time (remove non-existing local time)
@@ -323,10 +372,13 @@ export class DateTime {
 				if (typeof a2 === "string") {
 					assert(
 						h === undefined && m === undefined
-						&& s === undefined && ms === undefined && timeZone === undefined,
+						&& s === undefined && ms === undefined && timeZone === undefined, "Argument.A4",
 						"first two arguments are a string, therefore the fourth through 8th argument must be undefined"
 					);
-					assert(a3 === undefined || a3 === null || isTimeZone(a3), "DateTime.DateTime(): third arg should be a TimeZone object.");
+					assert(
+						a3 === undefined || a3 === null || isTimeZone(a3),
+						"Argument.TimeZone", "DateTime.DateTime(): third arg should be a TimeZone object."
+					);
 					// format string given
 					const dateString: string = a1 as string;
 					const formatString: string = a2 as string;
@@ -340,13 +392,16 @@ export class DateTime {
 				} else {
 					assert(
 						a3 === undefined && h === undefined && m === undefined
-						&& s === undefined && ms === undefined && timeZone === undefined,
+						&& s === undefined && ms === undefined && timeZone === undefined, "Argument.A3",
 						"first arguments is a string and the second is not, therefore the third through 8th argument must be undefined"
 					);
-					assert(a2 === undefined || a2 === null || isTimeZone(a2), "DateTime.DateTime(): second arg should be a TimeZone object.");
+					assert(
+						a2 === undefined || a2 === null || isTimeZone(a2),
+						"Argument.TimeZone", "DateTime.DateTime(): second arg should be a TimeZone object."
+					);
 					const givenString = (a1 as string).trim();
 					const ss: string[] = DateTime._splitDateFromTimeZone(givenString);
-					assert(ss.length === 2, "Invalid date string given: \"" + a1 as string + "\"");
+					assert(ss.length === 2, "Argument.S", "Invalid date string given: \"" + a1 as string + "\"");
 					if (isTimeZone(a2)) {
 						this._zone = (a2) as TimeZone;
 					} else {
@@ -365,14 +420,17 @@ export class DateTime {
 				if (a1 instanceof Date) {
 					assert(
 						h === undefined && m === undefined
-						&& s === undefined && ms === undefined && timeZone === undefined,
+						&& s === undefined && ms === undefined && timeZone === undefined, "Argument.A4",
 						"first argument is a Date, therefore the fourth through 8th argument must be undefined"
 					);
 					assert(
-						typeof (a2) === "number" && (a2 === DateFunctions.Get || a2 === DateFunctions.GetUTC),
+						typeof (a2) === "number" && (a2 === DateFunctions.Get || a2 === DateFunctions.GetUTC), "Argument.GetFuncs",
 						"DateTime.DateTime(): for a Date object a DateFunctions must be passed as second argument"
 					);
-					assert(a3 === undefined || a3 === null || isTimeZone(a3), "DateTime.DateTime(): third arg should be a TimeZone object.");
+					assert(
+						a3 === undefined || a3 === null || isTimeZone(a3),
+						"Argument.TimeZone", "DateTime.DateTime(): third arg should be a TimeZone object."
+					);
 					const d: Date = (a1) as Date;
 					const dk: DateFunctions = (a2) as DateFunctions;
 					this._zone = (a3 ? a3 : undefined);
@@ -383,10 +441,10 @@ export class DateTime {
 				} else { // a1 instanceof TimeStruct
 					assert(
 						a3 === undefined && h === undefined && m === undefined
-						&& s === undefined && ms === undefined && timeZone === undefined,
+						&& s === undefined && ms === undefined && timeZone === undefined, "Argument.A3",
 						"first argument is a TimeStruct, therefore the third through 8th argument must be undefined"
 					);
-					assert(a2 === undefined || a2 === null || isTimeZone(a2), "expect a TimeZone as second argument");
+					assert(a2 === undefined || a2 === null || isTimeZone(a2), "Argument.TimeZone", "expect a TimeZone as second argument");
 					this._zoneDate = a1.clone();
 					this._zone = (a2 ? a2 : undefined);
 				}
@@ -394,7 +452,7 @@ export class DateTime {
 			case "undefined": {
 				assert(
 					a2 === undefined && a3 === undefined && h === undefined && m === undefined
-					&& s === undefined && ms === undefined && timeZone === undefined,
+					&& s === undefined && ms === undefined && timeZone === undefined, "Argument.A2",
 					"first argument is undefined, therefore the rest must also be undefined"
 				);
 				// nothing given, make local datetime
@@ -403,16 +461,14 @@ export class DateTime {
 			}                 break;
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
 				/* istanbul ignore next */
-				if (true) {
-					throw new Error("DateTime.DateTime(): unexpected first argument type.");
-				}
+				throw error("Argument.A1", "DateTime.DateTime(): unexpected first argument type.");
 		}
 	}
 
 	/**
 	 * @return a copy of this object
+	 * @throws nothing
 	 */
 	public clone(): DateTime {
 		return new DateTime(this.zoneDate, this._zone);
@@ -420,6 +476,7 @@ export class DateTime {
 
 	/**
 	 * @return The time zone that the date is in. May be undefined for unaware dates.
+	 * @throws nothing
 	 */
 	public zone(): TimeZone | undefined {
 		return this._zone;
@@ -429,6 +486,7 @@ export class DateTime {
 	 * Zone name abbreviation at this time
 	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
 	 * @return The abbreviation
+	 * @throws nothing
 	 */
 	public zoneAbbreviation(dstDependent: boolean = true): string {
 		if (this._zone) {
@@ -440,6 +498,7 @@ export class DateTime {
 
 	/**
 	 * @return the offset including DST w.r.t. UTC in minutes. Returns 0 for unaware dates and for UTC dates.
+	 * @throws nothing
 	 */
 	public offset(): number {
 		return Math.round((this.zoneDate.unixMillis - this.utcDate.unixMillis) / 60000);
@@ -447,6 +506,7 @@ export class DateTime {
 
 	/**
 	 * @return the offset including DST w.r.t. UTC as a Duration.
+	 * @throws nothing
 	 */
 	public offsetDuration(): Duration {
 		return Duration.milliseconds(Math.round(this.zoneDate.unixMillis - this.utcDate.unixMillis));
@@ -454,6 +514,7 @@ export class DateTime {
 
 	/**
 	 * @return the standard offset WITHOUT DST w.r.t. UTC as a Duration.
+	 * @throws nothing
 	 */
 	public standardOffsetDuration(): Duration {
 		if (this._zone) {
@@ -464,6 +525,7 @@ export class DateTime {
 
 	/**
 	 * @return The full year e.g. 2014
+	 * @throws nothing
 	 */
 	public year(): number {
 		return this.zoneDate.components.year;
@@ -471,6 +533,7 @@ export class DateTime {
 
 	/**
 	 * @return The month 1-12 (note this deviates from JavaScript Date)
+	 * @throws nothing
 	 */
 	public month(): number {
 		return this.zoneDate.components.month;
@@ -478,6 +541,7 @@ export class DateTime {
 
 	/**
 	 * @return The day of the month 1-31
+	 * @throws nothing
 	 */
 	public day(): number {
 		return this.zoneDate.components.day;
@@ -485,6 +549,7 @@ export class DateTime {
 
 	/**
 	 * @return The hour 0-23
+	 * @throws nothing
 	 */
 	public hour(): number {
 		return this.zoneDate.components.hour;
@@ -492,6 +557,7 @@ export class DateTime {
 
 	/**
 	 * @return the minutes 0-59
+	 * @throws nothing
 	 */
 	public minute(): number {
 		return this.zoneDate.components.minute;
@@ -499,6 +565,7 @@ export class DateTime {
 
 	/**
 	 * @return the seconds 0-59
+	 * @throws nothing
 	 */
 	public second(): number {
 		return this.zoneDate.components.second;
@@ -506,6 +573,7 @@ export class DateTime {
 
 	/**
 	 * @return the milliseconds 0-999
+	 * @throws nothing
 	 */
 	public millisecond(): number {
 		return this.zoneDate.components.milli;
@@ -514,6 +582,7 @@ export class DateTime {
 	/**
 	 * @return the day-of-week (the enum values correspond to JavaScript
 	 * week day numbers)
+	 * @throws nothing
 	 */
 	public weekDay(): WeekDay {
 		return basics.weekDayNoLeapSecs(this.zoneDate.unixMillis) as WeekDay;
@@ -524,6 +593,7 @@ export class DateTime {
 	 * Jan 2nd has number 1 etc.
 	 *
 	 * @return the day-of-year [0-366]
+	 * @throws nothing
 	 */
 	public dayOfYear(): number {
 		return this.zoneDate.yearDay();
@@ -535,6 +605,7 @@ export class DateTime {
 	 * See https://en.wikipedia.org/wiki/ISO_week_date
 	 *
 	 * @return Week number [1-53]
+	 * @throws nothing
 	 */
 	public weekNumber(): number {
 		return basics.weekNumber(this.year(), this.month(), this.day());
@@ -546,6 +617,7 @@ export class DateTime {
 	 * week 1 is the week that has the 4th day of the month in it)
 	 *
 	 * @return Week number [1-5]
+	 * @throws nothing
 	 */
 	public weekOfMonth(): number {
 		return basics.weekOfMonth(this.year(), this.month(), this.day());
@@ -556,6 +628,7 @@ export class DateTime {
 	 * Does not consider leap seconds
 	 *
 	 * @return seconds [0-86399]
+	 * @throws nothing
 	 */
 	public secondOfDay(): number {
 		return basics.secondOfDay(this.hour(), this.minute(), this.second());
@@ -563,6 +636,7 @@ export class DateTime {
 
 	/**
 	 * @return Milliseconds since 1970-01-01T00:00:00.000Z
+	 * @throws nothing
 	 */
 	public unixUtcMillis(): number {
 		return this.utcDate.unixMillis;
@@ -570,6 +644,7 @@ export class DateTime {
 
 	/**
 	 * @return The full year e.g. 2014
+	 * @throws nothing
 	 */
 	public utcYear(): number {
 		return this.utcDate.components.year;
@@ -577,6 +652,7 @@ export class DateTime {
 
 	/**
 	 * @return The UTC month 1-12 (note this deviates from JavaScript Date)
+	 * @throws nothing
 	 */
 	public utcMonth(): number {
 		return this.utcDate.components.month;
@@ -584,6 +660,7 @@ export class DateTime {
 
 	/**
 	 * @return The UTC day of the month 1-31
+	 * @throws nothing
 	 */
 	public utcDay(): number {
 		return this.utcDate.components.day;
@@ -591,6 +668,7 @@ export class DateTime {
 
 	/**
 	 * @return The UTC hour 0-23
+	 * @throws nothing
 	 */
 	public utcHour(): number {
 		return this.utcDate.components.hour;
@@ -598,6 +676,7 @@ export class DateTime {
 
 	/**
 	 * @return The UTC minutes 0-59
+	 * @throws nothing
 	 */
 	public utcMinute(): number {
 		return this.utcDate.components.minute;
@@ -605,6 +684,7 @@ export class DateTime {
 
 	/**
 	 * @return The UTC seconds 0-59
+	 * @throws nothing
 	 */
 	public utcSecond(): number {
 		return this.utcDate.components.second;
@@ -615,6 +695,7 @@ export class DateTime {
 	 * Jan 2nd has number 1 etc.
 	 *
 	 * @return the day-of-year [0-366]
+	 * @throws nothing
 	 */
 	public utcDayOfYear(): number {
 		return basics.dayOfYear(this.utcYear(), this.utcMonth(), this.utcDay());
@@ -622,6 +703,7 @@ export class DateTime {
 
 	/**
 	 * @return The UTC milliseconds 0-999
+	 * @throws nothing
 	 */
 	public utcMillisecond(): number {
 		return this.utcDate.components.milli;
@@ -630,6 +712,7 @@ export class DateTime {
 	/**
 	 * @return the UTC day-of-week (the enum values correspond to JavaScript
 	 * week day numbers)
+	 * @throws nothing
 	 */
 	public utcWeekDay(): WeekDay {
 		return basics.weekDayNoLeapSecs(this.utcDate.unixMillis) as WeekDay;
@@ -641,6 +724,7 @@ export class DateTime {
 	 * See https://en.wikipedia.org/wiki/ISO_week_date
 	 *
 	 * @return Week number [1-53]
+	 * @throws nothing
 	 */
 	public utcWeekNumber(): number {
 		return basics.weekNumber(this.utcYear(), this.utcMonth(), this.utcDay());
@@ -652,6 +736,7 @@ export class DateTime {
 	 * week 1 is the week that has the 4th day of the month in it)
 	 *
 	 * @return Week number [1-5]
+	 * @throws nothing
 	 */
 	public utcWeekOfMonth(): number {
 		return basics.weekOfMonth(this.utcYear(), this.utcMonth(), this.utcDay());
@@ -662,6 +747,7 @@ export class DateTime {
 	 * Does not consider leap seconds
 	 *
 	 * @return seconds [0-86399]
+	 * @throws nothing
 	 */
 	public utcSecondOfDay(): number {
 		return basics.secondOfDay(this.utcHour(), this.utcMinute(), this.utcSecond());
@@ -675,6 +761,7 @@ export class DateTime {
 	 *
 	 * @param zone The new time zone
 	 * @return A new DateTime with the original timestamp and the new zone.
+	 * @throws nothing
 	 */
 	public withZone(zone?: TimeZone | null | undefined): DateTime {
 		return new DateTime(
@@ -686,13 +773,13 @@ export class DateTime {
 
 	/**
 	 * Convert this date to the given time zone (in-place).
-	 * Throws if this date does not have a time zone.
 	 * @return this (for chaining)
+	 * @throws timezonecomplete.UnawareToAwareConversion if you try to convert a datetime without a zone to a datetime with a zone
 	 */
 	public convert(zone?: TimeZone | null | undefined): DateTime {
 		if (zone) {
 			if (!this._zone) { // if-statement satisfies the compiler
-				assert(this._zone, "DateTime.toZone(): Cannot convert unaware date to an aware date");
+				return throwError("UnawareToAwareConversion", "DateTime.toZone(): Cannot convert unaware date to an aware date");
 			} else if (this._zone.equals(zone)) {
 				this._zone = zone; // still assign, because zones may be equal but not identical (UTC/GMT/+00)
 			} else {
@@ -723,10 +810,11 @@ export class DateTime {
 	 *
 	 * @param zone	The new time zone. This may be null or undefined to create unaware date.
 	 * @return The converted date
+	 * @throws timezonecomplete.UnawareToAwareConversion if you try to convert a naive datetime to an aware one.
 	 */
 	public toZone(zone?: TimeZone | null | undefined): DateTime {
 		if (zone) {
-			assert(this._zone, "DateTime.toZone(): Cannot convert unaware date to an aware date");
+			assert(this._zone, "UnawareToAwareConversion", "DateTime.toZone(): Cannot convert unaware date to an aware date");
 			const result = new DateTime();
 			result.utcDate = this.utcDate;
 			result._zone = zone;
@@ -740,6 +828,7 @@ export class DateTime {
 	 * Convert to JavaScript date with the zone time in the getX() methods.
 	 * Unless the timezone is local, the Date.getUTCX() methods will NOT be correct.
 	 * This is because Date calculates getUTCX() from getX() applying local time zone.
+	 * @throws nothing
 	 */
 	public toDate(): Date {
 		return new Date(
@@ -753,6 +842,7 @@ export class DateTime {
 	 * Does not work for dates < 1900
 	 * @param timeZone Optional. Zone to convert to, default the zone the datetime is already in.
 	 * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+	 * @throws timezonecomplete.UnawareToAwareConversion if you try to convert a naive datetime to an aware one.
 	 */
 	public toExcel(timeZone?: TimeZone | null | undefined): number {
 		let dt: DateTime = this;
@@ -768,12 +858,18 @@ export class DateTime {
 	 * Create an Excel timestamp for this datetime converted to UTC
 	 * Does not work for dates < 1900
 	 * @return an Excel date/time number i.e. days since 1-1-1900 where 1900 is incorrectly seen as leap year
+	 * @throws nothing
 	 */
 	public toUtcExcel(): number {
 		const unixTimestamp = this.unixUtcMillis();
 		return this._unixTimeStampToExcel(unixTimestamp);
 	}
 
+	/**
+	 *
+	 * @param n
+	 * @throws nothing
+	 */
 	private _unixTimeStampToExcel(n: number): number {
 		const result = ((n) / (24 * 60 * 60 * 1000)) + 25569;
 		// round to nearest millisecond
@@ -785,6 +881,7 @@ export class DateTime {
 	/**
 	 * Add a time duration relative to UTC. Returns a new DateTime
 	 * @return this + duration
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public add(duration: Duration): DateTime;
 	/**
@@ -801,6 +898,9 @@ export class DateTime {
 	 *
 	 * In case of DST changes, the utc time fields are still untouched but local
 	 * time fields may shift.
+	 * @throws Argument.Amount if amount is not a finite number or if you're trying to add a non-integer amount of years or months
+	 * @throws Argument.Unit for invalid time unit
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public add(amount: number, unit: TimeUnit): DateTime;
 	/**
@@ -814,8 +914,6 @@ export class DateTime {
 			amount = duration.amount();
 			u = duration.unit();
 		} else {
-			assert(typeof (a1) === "number", "expect number as first argument");
-			assert(typeof (unit) === "number", "expect number as second argument");
 			amount = (a1) as number;
 			u = unit as TimeUnit;
 		}
@@ -839,6 +937,25 @@ export class DateTime {
 	 * Date#setUTCMonth() it will not overflow into the next month
 	 */
 	public addLocal(duration: Duration): DateTime;
+	/**
+	 * Add an amount of time to the zone time, as regularly as possible. Returns a new DateTime
+	 *
+	 * Adding e.g. 1 hour will increment the hour() field of the zone
+	 * date by one. In case of DST changes, the time fields may additionally
+	 * increase by the DST offset, if a non-existing local time would
+	 * be reached otherwise.
+	 *
+	 * Adding a unit of time will leave lower-unit fields intact, unless the result
+	 * would be a non-existing time. Then an extra DST offset is added.
+	 *
+	 * Note adding Months or Years will clamp the date to the end-of-month if
+	 * the start date was at the end of a month, i.e. contrary to JavaScript
+	 * Date#setUTCMonth() it will not overflow into the next month
+	 * @param amount
+	 * @param unit
+	 * @throws Argument.Amount if amount is not a finite number or if you're trying to add a non-integer amount of years or months
+	 * @throws Argument.Unit for invalid time unit
+	 */
 	public addLocal(amount: number, unit: TimeUnit): DateTime;
 	public addLocal(a1: any, unit?: TimeUnit): DateTime {
 		let amount: number;
@@ -848,8 +965,6 @@ export class DateTime {
 			amount = duration.amount();
 			u = duration.unit();
 		} else {
-			assert(typeof (a1) === "number", "expect number as first argument");
-			assert(typeof (unit) === "number", "expect number as second argument");
 			amount = (a1) as number;
 			u = unit as TimeUnit;
 		}
@@ -867,8 +982,11 @@ export class DateTime {
 	 * Add an amount of time to the given time struct. Note: does not normalize.
 	 * Keeps lower unit fields the same where possible, clamps day to end-of-month if
 	 * necessary.
+	 * @throws Argument.Amount if amount is not finite or if it's not an integer and you're adding months or years
+	 * @throws Argument.Unit for invalid time unit
 	 */
 	private _addToTimeStruct(tm: TimeStruct, amount: number, unit: TimeUnit): TimeStruct {
+		assert(Number.isFinite(amount), "Argument.Amount", "amount must be a finite number");
 		let year: number;
 		let month: number;
 		let day: number;
@@ -895,7 +1013,7 @@ export class DateTime {
 				// todo more intelligent approach needed when implementing leap seconds
 				return new TimeStruct(math.roundSym(tm.unixMillis + amount * 7 * 86400000));
 			case TimeUnit.Month: {
-				assert(math.isInt(amount), "Cannot add/sub a non-integer amount of months");
+				assert(math.isInt(amount), "Argument.Amount", "Cannot add/sub a non-integer amount of months");
 				// keep the day-of-month the same (clamp to end-of-month)
 				if (amount >= 0) {
 					year = tm.components.year + Math.ceil((amount - (12 - tm.components.month)) / 12);
@@ -912,7 +1030,7 @@ export class DateTime {
 				return new TimeStruct({ year, month, day, hour, minute, second, milli });
 			}
 			case TimeUnit.Year: {
-				assert(math.isInt(amount), "Cannot add/sub a non-integer amount of years");
+				assert(math.isInt(amount), "Argument.Amount", "Cannot add/sub a non-integer amount of years");
 				year = tm.components.year + amount;
 				month = tm.components.month;
 				day = Math.min(tm.components.day, basics.daysInMonth(year, month));
@@ -924,25 +1042,25 @@ export class DateTime {
 			}
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
 				/* istanbul ignore next */
-				if (true) {
-					throw new Error("Unknown period unit.");
-				}
+				return throwError("Argument.Unit", "invalid time unit");
 		}
 	}
 
 	/**
 	 * Same as add(-1*duration); Returns a new DateTime
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public sub(duration: Duration): DateTime;
 	/**
 	 * Same as add(-1*amount, unit); Returns a new DateTime
+	 * @throws Argument.Amount if amount is not a finite number or if you're trying to add a non-integer amount of years or months
+	 * @throws Argument.Unit for invalid time unit
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public sub(amount: number, unit: TimeUnit): DateTime;
 	public sub(a1: number | Duration, unit?: TimeUnit): DateTime {
 		if (typeof a1 === "number") {
-			assert(typeof unit === "number", "expect number as second argument");
 			const amount: number = a1 as number;
 			return this.add(-1 * amount, unit as TimeUnit);
 		} else {
@@ -953,20 +1071,29 @@ export class DateTime {
 
 	/**
 	 * Same as addLocal(-1*amount, unit); Returns a new DateTime
+	 * @throws nothing
 	 */
 	public subLocal(duration: Duration): DateTime;
+	/**
+	 * Same as addLocal(-1*amount, unit); Returns a new DateTime
+	 * @param amount
+	 * @param unit
+	 * @throws Argument.Amount if amount is not a finite number or if you're trying to add a non-integer amount of years or months
+	 * @throws Argument.Unit for invalid time unit
+	 */
 	public subLocal(amount: number, unit: TimeUnit): DateTime;
 	public subLocal(a1: any, unit?: TimeUnit): DateTime {
-		if (typeof a1 === "object") {
-			return this.addLocal((a1 as Duration).multiply(-1));
-		} else {
+		if (typeof a1 === "number") {
 			return this.addLocal(-1 * a1 as number, unit as TimeUnit);
+		} else {
+			return this.addLocal((a1 as Duration).multiply(-1));
 		}
 	}
 
 	/**
 	 * Time difference between two DateTimes
 	 * @return this - other
+	 * @throws nothing
 	 */
 	public diff(other: DateTime): Duration {
 		return new Duration(this.utcDate.unixMillis - other.utcDate.unixMillis);
@@ -975,6 +1102,7 @@ export class DateTime {
 	/**
 	 * Chops off the time part, yields the same date at 00:00:00.000
 	 * @return a new DateTime
+	 * @throws nothing
 	 */
 	public startOfDay(): DateTime {
 		return new DateTime(this.year(), this.month(), this.day(), 0, 0, 0, 0, this.zone());
@@ -983,6 +1111,7 @@ export class DateTime {
 	/**
 	 * Returns the first day of the month at 00:00:00
 	 * @return a new DateTime
+	 * @throws nothing
 	 */
 	public startOfMonth(): DateTime {
 		return new DateTime(this.year(), this.month(), 1, 0, 0, 0, 0, this.zone());
@@ -991,6 +1120,7 @@ export class DateTime {
 	/**
 	 * Returns the first day of the year at 00:00:00
 	 * @return a new DateTime
+	 * @throws nothing
 	 */
 	public startOfYear(): DateTime {
 		return new DateTime(this.year(), 1, 1, 0, 0, 0, 0, this.zone());
@@ -998,6 +1128,7 @@ export class DateTime {
 
 	/**
 	 * @return True iff (this < other)
+	 * @throws nothing
 	 */
 	public lessThan(other: DateTime): boolean {
 		return this.utcDate.unixMillis < other.utcDate.unixMillis;
@@ -1005,6 +1136,7 @@ export class DateTime {
 
 	/**
 	 * @return True iff (this <= other)
+	 * @throws nothing
 	 */
 	public lessEqual(other: DateTime): boolean {
 		return this.utcDate.unixMillis <= other.utcDate.unixMillis;
@@ -1012,6 +1144,7 @@ export class DateTime {
 
 	/**
 	 * @return True iff this and other represent the same moment in time in UTC
+	 * @throws nothing
 	 */
 	public equals(other: DateTime): boolean {
 		return this.utcDate.equals(other.utcDate);
@@ -1019,6 +1152,7 @@ export class DateTime {
 
 	/**
 	 * @return True iff this and other represent the same time and the same zone
+	 * @throws nothing
 	 */
 	public identical(other: DateTime): boolean {
 		return !!(this.zoneDate.equals(other.zoneDate)
@@ -1029,6 +1163,7 @@ export class DateTime {
 
 	/**
 	 * @return True iff this > other
+	 * @throws nothing
 	 */
 	public greaterThan(other: DateTime): boolean {
 		return this.utcDate.unixMillis > other.utcDate.unixMillis;
@@ -1036,6 +1171,7 @@ export class DateTime {
 
 	/**
 	 * @return True iff this >= other
+	 * @throws nothing
 	 */
 	public greaterEqual(other: DateTime): boolean {
 		return this.utcDate.unixMillis >= other.utcDate.unixMillis;
@@ -1043,6 +1179,7 @@ export class DateTime {
 
 	/**
 	 * @return The minimum of this and other
+	 * @throws nothing
 	 */
 	public min(other: DateTime): DateTime {
 		if (this.lessThan(other)) {
@@ -1053,6 +1190,7 @@ export class DateTime {
 
 	/**
 	 * @return The maximum of this and other
+	 * @throws nothing
 	 */
 	public max(other: DateTime): DateTime {
 		if (this.greaterThan(other)) {
@@ -1065,6 +1203,7 @@ export class DateTime {
 	 * Proper ISO 8601 format string with any IANA zone converted to ISO offset
 	 * E.g. "2014-01-01T23:15:33+01:00" for Europe/Amsterdam
 	 * Unaware dates have no zone information at the end.
+	 * @throws nothing
 	 */
 	public toIsoString(): string {
 		const s: string = this.zoneDate.toString();
@@ -1079,6 +1218,7 @@ export class DateTime {
 	 * Convert to UTC and then return ISO string ending in 'Z'. This is equivalent to Date#toISOString()
 	 * e.g. "2014-01-01T23:15:33 Europe/Amsterdam" becomes "2014-01-01T22:15:33Z".
 	 * Unaware dates are assumed to be in UTC
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public toUtcIsoString(): string {
 		if (this._zone) {
@@ -1095,6 +1235,7 @@ export class DateTime {
 	 * @param formatString The format specification (e.g. "dd/MM/yyyy HH:mm:ss")
 	 * @param locale Optional, non-english format month names etc.
 	 * @return The string representation of this DateTime
+	 * @throws timezonecomplete.Argument.FormatString for invalid format pattern
 	 */
 	public format(formatString: string, locale?: PartialLocale): string {
 		return format.format(this.zoneDate, this.utcDate, this._zone, formatString, locale);
@@ -1107,15 +1248,25 @@ export class DateTime {
 	 * @param zone Optional, the zone to add (if no zone is given in the string)
 	 * @param locale Optional, different settings for constants like 'AM' etc
 	 * @param allowTrailing Allow trailing characters in the source string
+	 * @throws timezonecomplete.ParseError if the given dateTimeString is wrong or not according to the pattern
+	 * @throws timezonecomplete.Argument.FormatString if the given format string is invalid
 	 */
 	public static parse(s: string, format: string, zone?: TimeZone, locale?: PartialLocale, allowTrailing?: boolean): DateTime {
 		const parsed = parseFuncs.parse(s, format, zone, allowTrailing || false, locale);
-		return new DateTime(parsed.time, parsed.zone);
+		try {
+			return new DateTime(parsed.time, parsed.zone);
+		} catch (e) {
+			if (!errorIs(e, "InvalidTimeZoneData")) {
+				e = error("ParseError", e.message);
+			}
+			throw e;
+		}
 	}
 
 	/**
 	 * Modified ISO 8601 format string with IANA name if applicable.
 	 * E.g. "2014-01-01T23:15:33.000 Europe/Amsterdam"
+	 * @throws nothing
 	 */
 	public toString(): string {
 		const s: string = this.zoneDate.toString();
@@ -1132,6 +1283,7 @@ export class DateTime {
 
 	/**
 	 * The valueOf() method returns the primitive value of the specified object.
+	 * @throws nothing
 	 */
 	public valueOf(): any {
 		return this.unixUtcMillis();
@@ -1139,6 +1291,7 @@ export class DateTime {
 
 	/**
 	 * Modified ISO 8601 format string in UTC without time zone info
+	 * @throws nothing
 	 */
 	public toUtcString(): string {
 		return this.utcDate.toString();
@@ -1146,6 +1299,7 @@ export class DateTime {
 
 	/**
 	 * Split a combined ISO datetime and timezone into datetime and timezone
+	 * @throws nothing
 	 */
 	private static _splitDateFromTimeZone(s: string): string[] {
 		const trimmed = s.trim();
@@ -1193,6 +1347,7 @@ export class DateTime {
  * It checks for the availability of the functions used in the DateTime implementation
  * @param a the object to check
  * @returns a is TimeZone-like
+ * @throws nothing
  */
 function isTimeZone(a: any): a is TimeZone {
 	if (a && typeof a === "object") {

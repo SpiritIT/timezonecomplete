@@ -5,6 +5,7 @@
  */
 
 import { TimeComponentOpts, TimeStruct } from "./basics";
+import { error, errorIs, throwError } from "./error";
 import { DEFAULT_LOCALE, Locale, PartialLocale } from "./locale";
 import { TimeZone } from "./timezone";
 import { Token, tokenize, TokenType } from "./token";
@@ -46,6 +47,7 @@ interface ParseDayPeriodResult {
  * @param allowTrailing Allow trailing string after the date+time
  * @param locale Locale-specific constants such as month names
  * @returns true iff the string is valid
+ * @throws nothing
  */
 export function parseable(
 	dateTimeString: string,
@@ -70,6 +72,8 @@ export function parseable(
  * @param allowTrailing Allow trailing characters in the source string
  * @param locale Locale-specific constants such as month names
  * @return string
+ * @throws timezonecomplete.ParseError if the given dateTimeString is wrong or not according to the pattern
+ * @throws timezonecomplete.Argument.FormatString if the given format string is invalid
  */
 export function parse(
 	dateTimeString: string,
@@ -79,10 +83,10 @@ export function parse(
 	locale: PartialLocale = {}
 ): AwareTimeStruct {
 	if (!dateTimeString) {
-		throw new Error("no date given");
+		return throwError("ParseError", "no date given");
 	}
 	if (!formatString) {
-		throw new Error("no format given");
+		return throwError("Argument.FormatString", "no format given");
 	}
 	const mergedLocale: Locale = {
 		...DEFAULT_LOCALE,
@@ -168,7 +172,7 @@ export function parse(
 						/* istanbul ignore next */
 						default:
 							/* istanbul ignore next */
-							throw new Error(`unsupported second format '${token.raw}'`);
+							return throwError("ParseError", `unsupported second format '${token.raw}'`);
 					}
 				} break;
 				case TokenType.ZONE:
@@ -209,7 +213,7 @@ export function parse(
 						time.milli = 0;
 					}
 					if (time.hour !== 12 || time.minute !== 0 || time.second !== 0 || time.milli !== 0) {
-						throw new Error(`invalid time, contains 'noon' specifier but time differs from noon`);
+						return throwError("ParseError", `invalid time, contains 'noon' specifier but time differs from noon`);
 					}
 				break;
 				case "midnight":
@@ -229,7 +233,7 @@ export function parse(
 						time.milli = 0;
 					}
 					if (time.hour !== 0 || time.minute !== 0 || time.second !== 0 || time.milli !== 0) {
-						throw new Error(`invalid time, contains 'midnight' specifier but time differs from midnight`);
+						return throwError("ParseError", `invalid time, contains 'midnight' specifier but time differs from midnight`);
 					}
 				break;
 			}
@@ -254,7 +258,7 @@ export function parse(
 					case 4: error = !(time.month >= 10 && time.month <= 12); break;
 				}
 				if (error) {
-					throw new Error("the quarter does not match the month");
+					return throwError("ParseError", "the quarter does not match the month");
 				}
 			}
 		}
@@ -263,25 +267,32 @@ export function parse(
 		}
 		const result: AwareTimeStruct = { time: new TimeStruct(time), zone };
 		if (!result.time.validate()) {
-			throw new Error(`invalid resulting date`);
+			return throwError("ParseError", `invalid resulting date`);
 		}
 		// always overwrite zone with given zone
 		if (overrideZone) {
 			result.zone = overrideZone;
 		}
 		if (remaining && !allowTrailing) {
-			throw new Error(
+			return throwError("ParseError",
 				`invalid date '${dateTimeString}' not according to format '${formatString}': trailing characters: '${remaining}'`
 			);
 		}
 		return result;
 	} catch (e) {
-		throw new Error(`invalid date '${dateTimeString}' not according to format '${formatString}': ${e.message}`);
+		return throwError("ParseError", `invalid date '${dateTimeString}' not according to format '${formatString}': ${e.message}`);
 	}
 }
 
 const WHITESPACE = [" ", "\t", "\r", "\v", "\n"];
 
+/**
+ *
+ * @param token
+ * @param s
+ * @throws timezonecomplete.NotImplemented if a pattern is used that isn't implemented yet (z, Z, v, V, x, X)
+ * @throws timezonecomplete.ParseError if the given string is not parseable
+ */
 function stripZone(token: Token, s: string): ParseZoneResult {
 	const unsupported: boolean =
 		(token.symbol === "z")
@@ -292,7 +303,7 @@ function stripZone(token: Token, s: string): ParseZoneResult {
 		|| (token.symbol === "X" && token.length >= 4)
 		;
 	if (unsupported) {
-		throw new Error("time zone pattern '" + token.raw + "' is not implemented");
+		return throwError("NotImplemented", "time zone pattern '" + token.raw + "' is not implemented");
 	}
 	const result: ParseZoneResult = {
 		remaining: s
@@ -315,15 +326,28 @@ function stripZone(token: Token, s: string): ParseZoneResult {
 	if (zoneString) {
 		// ensure chopping off GMT does not hide time zone errors (bit of a sloppy regex but OK)
 		if (hadGMT && !zoneString.match(/[\+\-]?[\d\:]+/i)) {
-			throw new Error("invalid time zone 'GMT" + zoneString + "'");
+			return throwError("ParseError", "invalid time zone 'GMT" + zoneString + "'");
 		}
-		result.zone = TimeZone.zone(zoneString);
+		try {
+			result.zone = TimeZone.zone(zoneString);
+		} catch (e) {
+			if (errorIs(e, ["Argument.S", "NotFound.Zone"])) {
+				e = error("ParseError", e.message);
+			}
+			throw e;
+		}
 	} else {
-		throw new Error("no time zone given");
+		return throwError("ParseError", "no time zone given");
 	}
 	return result;
 }
 
+/**
+ *
+ * @param s
+ * @param expected
+ * @throws timezonecomplete.ParseError
+ */
 function stripRaw(s: string, expected: string): string {
 	let remaining = s;
 	let eremaining = expected;
@@ -332,11 +356,18 @@ function stripRaw(s: string, expected: string): string {
 		eremaining = eremaining.substr(1);
 	}
 	if (eremaining.length > 0) {
-		throw new Error(`expected '${expected}'`);
+		return throwError("ParseError", `expected '${expected}'`);
 	}
 	return remaining;
 }
 
+/**
+ *
+ * @param token
+ * @param remaining
+ * @param locale
+ * @throws timezonecomplete.ParseError
+ */
 function stripDayPeriod(token: Token, remaining: string, locale: Locale): ParseDayPeriodResult {
 	let offsets: {[index: string]: "am" | "pm" | "noon" | "midnight"};
 	switch (token.symbol) {
@@ -404,7 +435,7 @@ function stripDayPeriod(token: Token, remaining: string, locale: Locale): ParseD
 			};
 		}
 	}
-	throw new Error("missing day period i.e. " + Object.keys(offsets).join(", "));
+	return throwError("ParseError", "missing day period i.e. " + Object.keys(offsets).join(", "));
 }
 
 /**
@@ -413,6 +444,7 @@ function stripDayPeriod(token: Token, remaining: string, locale: Locale): ParseD
  * @param remaining
  * @param locale
  * @returns [factor, remaining]
+ * @throws timezonecomplete.ParseError
  */
 function stripEra(token: Token, remaining: string, locale: Locale): [number, string] {
 	let allowed: string[];
@@ -425,6 +457,14 @@ function stripEra(token: Token, remaining: string, locale: Locale): [number, str
 	return [allowed.indexOf(result.chosen) === 0 ? 1 : -1, result.remaining];
 }
 
+/**
+ *
+ * @param token
+ * @param remaining
+ * @param locale
+ * @throws timezonecomplete.ParseError
+ * @throws timezonecomplete.Argument.FormatString
+ */
 function stripQuarter(token: Token, remaining: string, locale: Locale): ParseNumberResult {
 	let quarterLetter: string;
 	let quarterWord: string;
@@ -444,7 +484,7 @@ function stripQuarter(token: Token, remaining: string, locale: Locale): ParseNum
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			throw new Error("invalid quarter pattern");
+			return throwError("Argument.FormatString", "invalid quarter pattern");
 	}
 	let allowed: string[];
 	switch (token.length) {
@@ -462,12 +502,20 @@ function stripQuarter(token: Token, remaining: string, locale: Locale): ParseNum
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			throw new Error("invalid quarter pattern");
+			return throwError("Argument.FormatString", "invalid quarter pattern");
 	}
 	const r = stripStrings(token, remaining, allowed);
 	return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
 }
 
+/**
+ *
+ * @param token
+ * @param remaining
+ * @param locale
+ * @throws timezonecomplete.ParseError
+ * @throws timezonecomplete.Argument.FormatString
+ */
 function stripMonth(token: Token, remaining: string, locale: Locale): ParseNumberResult {
 	let shortMonthNames: string[];
 	let longMonthNames: string[];
@@ -486,7 +534,7 @@ function stripMonth(token: Token, remaining: string, locale: Locale): ParseNumbe
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			throw new Error("invalid month pattern");
+			return throwError("Argument.FormatString", "invalid month pattern");
 	}
 	let allowed: string[];
 	switch (token.length) {
@@ -505,12 +553,18 @@ function stripMonth(token: Token, remaining: string, locale: Locale): ParseNumbe
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			throw new Error("invalid month pattern");
+			return throwError("Argument.FormatString", "invalid month pattern");
 	}
 	const r = stripStrings(token, remaining, allowed);
 	return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
 }
 
+/**
+ *
+ * @param token
+ * @param remaining
+ * @throws timezonecomplete.ParseError
+ */
 function stripHour(token: Token, remaining: string): ParseNumberResult {
 	const result = stripNumber(remaining, 2);
 	switch (token.symbol) {
@@ -532,6 +586,13 @@ function stripHour(token: Token, remaining: string): ParseNumberResult {
 	return result;
 }
 
+/**
+ *
+ * @param token
+ * @param remaining
+ * @throws timezonecomplete.ParseError
+ * @throws timezonecomplete.Argument.FormatString
+ */
 function stripSecond(token: Token, remaining: string): ParseNumberResult {
 	switch (token.symbol) {
 		case "s":
@@ -543,10 +604,16 @@ function stripSecond(token: Token, remaining: string): ParseNumberResult {
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			throw new Error("invalid seconds pattern");
+			return throwError("Argument.FormatString", "invalid seconds pattern");
 	}
 }
 
+/**
+ *
+ * @param s
+ * @param maxLength
+ * @throws timezonecomplete.ParseError
+ */
 function stripNumber(s: string, maxLength: number): ParseNumberResult {
 	const result: ParseNumberResult = {
 		n: NaN,
@@ -563,11 +630,18 @@ function stripNumber(s: string, maxLength: number): ParseNumberResult {
 	}
 	result.n = parseInt(numberString, 10);
 	if (numberString === "" || !Number.isFinite(result.n)) {
-		throw new Error(`expected a number but got '${numberString}'`);
+		return throwError("ParseError", `expected a number but got '${numberString}'`);
 	}
 	return result;
 }
 
+/**
+ *
+ * @param token
+ * @param remaining
+ * @param allowed
+ * @throws timezonecomplete.ParseError
+ */
 function stripStrings(token: Token, remaining: string, allowed: string[]): { remaining: string, chosen: string } {
 	// match longest possible string; sort keys by length descending
 	const sortedKeys: string[] = allowed.slice()
@@ -582,5 +656,5 @@ function stripStrings(token: Token, remaining: string, allowed: string[]): { rem
 			};
 		}
 	}
-	throw new Error("invalid " + TokenType[token.type].toLowerCase() + ", expected one of " + allowed.join(", "));
+	return throwError("ParseError", "invalid " + TokenType[token.type].toLowerCase() + ", expected one of " + allowed.join(", "));
 }

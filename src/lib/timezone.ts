@@ -8,6 +8,7 @@
 
 import assert from "./assert";
 import { TimeStruct } from "./basics";
+import { error, errorIs, throwError } from "./error";
 import { DateFunctions } from "./javascript";
 import * as strings from "./strings";
 import { NormalizeOption, TzDatabase } from "./tz-database";
@@ -15,6 +16,7 @@ import { NormalizeOption, TzDatabase } from "./tz-database";
 /**
  * The local time zone for a given date as per OS settings. Note that time zones are cached
  * so you don't necessarily get a new object each time.
+ * @throws nothing
  */
 export function local(): TimeZone {
 	return TimeZone.local();
@@ -23,6 +25,7 @@ export function local(): TimeZone {
 /**
  * Coordinated Universal Time zone. Note that time zones are cached
  * so you don't necessarily get a new object each time.
+ * @throws timezonecomplete.NotFound.Zone if the UTC zone is not present in the time zone database
  */
 export function utc(): TimeZone {
 	return TimeZone.utc();
@@ -32,6 +35,7 @@ export function utc(): TimeZone {
  * @param offset offset w.r.t. UTC in minutes, e.g. 90 for +01:30. Note that time zones are cached
  * so you don't necessarily get a new object each time.
  * @returns a time zone with the given fixed offset
+ * @throws timezonecomplete.Argument.Offset if the given offset is not within -24h...+24h (in minutes)
  */
 export function zone(offset: number): TimeZone;
 
@@ -45,11 +49,13 @@ export function zone(offset: number): TimeZone;
  * @param dst	Optional, default true: adhere to Daylight Saving Time if applicable. Note for
  *              "localtime", timezonecomplete will adhere to the computer settings, the DST flag
  *              does not have any effect.
+ * @throws timezonecomplete.Argument.S if s cannot be parsed
+ * @throws timezonecomplete.NotFound.Zone if the zone name doesn't exist in the time zone database
  */
 export function zone(name: string, dst?: boolean): TimeZone;
 
 /**
- * See the descriptions for the other zone() method signatures.
+ * zone() implementation
  */
 export function zone(a: any, dst?: boolean): TimeZone {
 	return TimeZone.zone(a, dst);
@@ -117,6 +123,7 @@ export class TimeZone {
 	 * The local time zone for a given date. Note that
 	 * the time zone varies with the date: amsterdam time for
 	 * 2014-01-01 is +01:00 and amsterdam time for 2014-07-01 is +02:00
+	 * @throws nothing
 	 */
 	public static local(): TimeZone {
 		return TimeZone._findOrCreate("localtime", true);
@@ -124,6 +131,7 @@ export class TimeZone {
 
 	/**
 	 * The UTC time zone.
+	 * @throws timezonecomplete.NotFound.Zone if the UTC time zone doesn't exist in the time zone database
 	 */
 	public static utc(): TimeZone {
 		return TimeZone._findOrCreate("UTC", true); // use 'true' for DST because we want it to display as "UTC", not "UTC without DST"
@@ -132,6 +140,7 @@ export class TimeZone {
 	/**
 	 * Time zone with a fixed offset
 	 * @param offset	offset w.r.t. UTC in minutes, e.g. 90 for +01:30
+	 * @throws timezonecomplete.Argument.Offset if the offset is not within -24h...+24h (in minutes)
 	 */
 	public static zone(offset: number): TimeZone;
 
@@ -147,11 +156,13 @@ export class TimeZone {
 	 * @param dst	Optional, default true: adhere to Daylight Saving Time if applicable. Note for
 	 *              "localtime", timezonecomplete will adhere to the computer settings, the DST flag
 	 *              does not have any effect.
+	 * @throws timezonecomplete.Argument.S if s cannot be parsed
+	 * @throws timezonecomplete.NotFound.Zone if the zone name doesn't exist in the time zone database
 	 */
 	public static zone(s: string, dst?: boolean): TimeZone;
 
 	/**
-	 * Zone implementations
+	 * zone() implementations
 	 */
 	public static zone(a: any, dst: boolean = true): TimeZone {
 		let name = "";
@@ -166,16 +177,12 @@ export class TimeZone {
 			} break;
 			case "number": {
 				const offset: number = a as number;
-				assert(offset > -24 * 60 && offset < 24 * 60, "TimeZone.zone(): offset out of range");
+				assert(offset > -24 * 60 && offset < 24 * 60, "Argument.Offset", "TimeZone.zone(): offset out of range");
 				name = TimeZone.offsetToString(offset);
 			} break;
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error("TimeZone.zone(): Unexpected argument type \"" + typeof (a) + "\"");
-				}
+				throwError("Argument.A", "unexpected type for first argument: %s", typeof a);
 		}
 		return TimeZone._findOrCreate(name, dst);
 	}
@@ -184,7 +191,9 @@ export class TimeZone {
 	 * Do not use this constructor, use the static
 	 * TimeZone.zone() method instead.
 	 * @param name NORMALIZED name, assumed to be correct
-	 * @param dst	Adhere to Daylight Saving Time if applicable, ignored for local time and fixed offsets
+	 * @param dst Adhere to Daylight Saving Time if applicable, ignored for local time and fixed offsets
+	 * @throws timezonecomplete.NotFound.Zone if the given zone name doesn't exist
+	 * @throws timezonecomplete.InvalidTimeZoneData if the time zone database is invalid
 	 */
 	private constructor(name: string, dst: boolean = true) {
 		this._name = name;
@@ -196,13 +205,14 @@ export class TimeZone {
 			this._offset = TimeZone.stringToOffset(name);
 		} else {
 			this._kind = TimeZoneKind.Proper;
-			assert(TzDatabase.instance().exists(name), `non-existing time zone name '${name}'`);
+			assert(TzDatabase.instance().exists(name), "NotFound.Zone", "non-existing time zone name '%s'", name);
 		}
 	}
 
 	/**
-	 * Makes this class appear clonable. NOTE as time zone objects are cached you will NOT
+	 * Makes this class appear clonable. NOTE as time zone objects are immutable you will NOT
 	 * actually get a clone but the same object.
+	 * @throws nothing
 	 */
 	public clone(): TimeZone {
 		return this;
@@ -212,17 +222,23 @@ export class TimeZone {
 	 * The time zone identifier. Can be an offset "-01:30" or an
 	 * IANA time zone name "Europe/Amsterdam", or "localtime" for
 	 * the local time zone.
+	 * @throws nothing
 	 */
 	public name(): string {
 		return this._name;
 	}
 
+	/**
+	 * Whether DST is enabled
+	 * @throws nothing
+	 */
 	public dst(): boolean {
 		return this._dst;
 	}
 
 	/**
 	 * The kind of time zone (Local/Offset/Proper)
+	 * @throws nothing
 	 */
 	public kind(): TimeZoneKind {
 		return this._kind;
@@ -231,6 +247,7 @@ export class TimeZone {
 	/**
 	 * Equality operator. Maps zero offsets and different names for UTC onto
 	 * each other. Other time zones are not mapped onto each other.
+	 * @throws timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid
 	 */
 	public equals(other: TimeZone): boolean {
 		if (this.isUtc() && other.isUtc()) {
@@ -244,16 +261,14 @@ export class TimeZone {
 				&& (this._dst === other._dst || !this.hasDst()));
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error("Unknown time zone kind.");
-				}
+				// istanbul ignore next
+				return throwError("Assertion", "unknown time zone kind");
 		}
 	}
 
 	/**
 	 * Returns true iff the constructor arguments were identical, so UTC !== GMT
+	 * @throws nothing
 	 */
 	public identical(other: TimeZone): boolean {
 		switch (this._kind) {
@@ -262,16 +277,14 @@ export class TimeZone {
 			case TimeZoneKind.Proper: return (other.kind() === TimeZoneKind.Proper && this._name === other._name && this._dst === other._dst);
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error("Unknown time zone kind.");
-				}
+				// istanbul ignore next
+				return throwError("Assertion", "unknown time zone kind");
 		}
 	}
 
 	/**
 	 * Is this zone equivalent to UTC?
+	 * @throws timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid
 	 */
 	public isUtc(): boolean {
 		switch (this._kind) {
@@ -280,17 +293,15 @@ export class TimeZone {
 			case TimeZoneKind.Proper: return (TzDatabase.instance().zoneIsUtc(this._name));
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					return false;
-				}
+				// istanbul ignore next
+				return throwError("Assertion", "unknown time zone kind");
 		}
 
 	}
 
 	/**
 	 * Does this zone have Daylight Saving Time at all?
+	 * @throws timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid
 	 */
 	public hasDst(): boolean {
 		switch (this._kind) {
@@ -299,11 +310,8 @@ export class TimeZone {
 			case TimeZoneKind.Proper: return (TzDatabase.instance().hasDst(this._name));
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					return false;
-				}
+				// istanbul ignore next
+				return throwError("Assertion", "unknown time zone kind");
 		}
 
 	}
@@ -311,8 +319,28 @@ export class TimeZone {
 	/**
 	 * Calculate timezone offset including DST from a UTC time.
 	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public offsetForUtc(offsetForUtc: TimeStruct): number;
+	/**
+	 * Calculate timezone offset including DST from a UTC time.
+	 * @param year
+	 * @param month 1-12
+	 * @param day
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @param milli
+	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
+	 * @throws timezonecomplete.Argument.Year for invalid year
+	 * @throws timezonecomplete.Argument.Month for invalid month
+	 * @throws timezonecomplete.Argument.Day for invalid day
+	 * @throws timezonecomplete.Argument.Hour for invalid hour
+	 * @throws timezonecomplete.Argument.Minute for invalid minute
+	 * @throws timezonecomplete.Argument.Second for invalid second
+	 * @throws timezonecomplete.Argument.Milli for invalid milliseconds
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
+	 */
 	public offsetForUtc(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
 	public offsetForUtc(
 		a?: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
@@ -342,19 +370,36 @@ export class TimeZone {
 			}
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error(`unknown TimeZoneKind '${this._kind}'`);
-				}
+				// istanbul ignore next
+				return throwError("Assertion", "unknown time zone kind");
 		}
 	}
 
 	/**
 	 * Calculate timezone standard offset excluding DST from a UTC time.
 	 * @return the standard offset of this time zone with respect to UTC at the given time, in minutes.
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public standardOffsetForUtc(offsetForUtc: TimeStruct): number;
+	/**
+	 * Calculate timezone standard offset excluding DST from a UTC time.
+	 * @return the standard offset of this time zone with respect to UTC at the given time, in minutes.
+	 * @param year
+	 * @param month 1-12
+	 * @param day
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @param milli
+	 * @throws timezonecomplete.Argument.Year for invalid year
+	 * @throws timezonecomplete.Argument.Month for invalid month
+	 * @throws timezonecomplete.Argument.Day for invalid day
+	 * @throws timezonecomplete.Argument.Hour for invalid hour
+	 * @throws timezonecomplete.Argument.Minute for invalid minute
+	 * @throws timezonecomplete.Argument.Second for invalid second
+	 * @throws timezonecomplete.Argument.Milli for invalid milliseconds
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
+	 */
 	public standardOffsetForUtc(
 		year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
 	): number;
@@ -379,14 +424,18 @@ export class TimeZone {
 			}
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error(`unknown TimeZoneKind '${this._kind}'`);
-				}
+				// istanbul ignore next
+				return throwError("Assertion", "unknown time zone kind");
 		}
 	}
 
+	/**
+	 * Calculate timezone offset from a zone-local time (NOT a UTC time).
+	 * @param localTime the local time
+	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
+	 */
+	public offsetForZone(localTime: TimeStruct): number;
 	/**
 	 * Calculate timezone offset from a zone-local time (NOT a UTC time).
 	 * @param year local full year
@@ -397,8 +446,15 @@ export class TimeZone {
 	 * @param second local second 0-59
 	 * @param millisecond local millisecond 0-999
 	 * @return the offset of this time zone with respect to UTC at the given time, in minutes.
+	 * @throws timezonecomplete.Argument.Year for invalid year
+	 * @throws timezonecomplete.Argument.Month for invalid month
+	 * @throws timezonecomplete.Argument.Day for invalid day
+	 * @throws timezonecomplete.Argument.Hour for invalid hour
+	 * @throws timezonecomplete.Argument.Minute for invalid minute
+	 * @throws timezonecomplete.Argument.Second for invalid second
+	 * @throws timezonecomplete.Argument.Milli for invalid milliseconds
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
-	public offsetForZone(localTime: TimeStruct): number;
 	public offsetForZone(year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number): number;
 	public offsetForZone(
 		a?: TimeStruct | number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number
@@ -429,11 +485,8 @@ export class TimeZone {
 			}
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error(`unknown TimeZoneKind '${this._kind}'`);
-				}
+				// istanbul ignore next
+				return throwError("Assertion", "unknown time zone kind");
 		}
 	}
 
@@ -445,6 +498,7 @@ export class TimeZone {
 	 *
 	 * @param date: the date
 	 * @param funcs: the set of functions to use: get() or getUTC()
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public offsetForUtcDate(date: Date, funcs: DateFunctions): number {
 		return this.offsetForUtc(TimeStruct.fromDate(date, funcs));
@@ -458,6 +512,7 @@ export class TimeZone {
 	 *
 	 * @param date: the date
 	 * @param funcs: the set of functions to use: get() or getUTC()
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public offsetForZoneDate(date: Date, funcs: DateFunctions): number {
 		return this.offsetForZone(TimeStruct.fromDate(date, funcs));
@@ -476,10 +531,20 @@ export class TimeZone {
 	 * @param dstDependent (default true) set to false for a DST-agnostic abbreviation
 	 *
 	 * @return "local" for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public abbreviationForUtc(
 		year?: number, month?: number, day?: number, hour?: number, minute?: number, second?: number, milli?: number, dstDependent?: boolean
 	): string;
+	/**
+	 * Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.
+	 *
+	 * @param utcTime
+	 * @param dstDependent
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
+	 */
 	public abbreviationForUtc(utcTime: TimeStruct, dstDependent?: boolean): string;
 	public abbreviationForUtc(
 		a?: TimeStruct | number, b?: number | boolean, day?: number, hour?: number, minute?: number, second?: number, milli?: number, c?: boolean
@@ -505,11 +570,8 @@ export class TimeZone {
 			}
 			/* istanbul ignore next */
 			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error(`unknown TimeZoneKind '${this._kind}'`);
-				}
+				// istanbul ignore next
+				return throwError("Assertion", "unknown time zone kind");
 		}
 	}
 
@@ -524,6 +586,7 @@ export class TimeZone {
 	 * @param opt	(optional) Round up or down? Default: up
 	 *
 	 * @returns	unix milliseconds in zone time, normalized.
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public normalizeZoneTime(localUnixMillis: number, opt?: NormalizeOption): number;
 	/**
@@ -537,6 +600,7 @@ export class TimeZone {
 	 * @param opt	(optional) Round up or down? Default: up
 	 *
 	 * @returns	time struct in zone time, normalized.
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public normalizeZoneTime(localTime: TimeStruct, opt?: NormalizeOption): TimeStruct;
 	public normalizeZoneTime(localTime: TimeStruct | number, opt: NormalizeOption = NormalizeOption.Up): TimeStruct | number {
@@ -555,6 +619,7 @@ export class TimeZone {
 	/**
 	 * The time zone identifier (normalized).
 	 * Either "localtime", IANA name, or "+hh:mm" offset.
+	 * @throws nothing
 	 */
 	public toString(): string {
 		let result = this.name();
@@ -570,8 +635,10 @@ export class TimeZone {
 	 * Convert an offset number into an offset string
 	 * @param offset The offset in minutes from UTC e.g. 90 minutes
 	 * @return the offset in ISO notation "+01:30" for +90 minutes
+	 * @throws Argument.Offset if offset is not a finite number or not within -24 * 60 ... +24 * 60 minutes
 	 */
 	public static offsetToString(offset: number): string {
+		assert(Number.isFinite(offset) && offset >= -24 * 60 && offset <= 24 * 60, "Argument.Offset", "invalid offset %d", offset);
 		const sign = (offset < 0 ? "-" : "+");
 		const hours = Math.floor(Math.abs(offset) / 60);
 		const minutes = Math.floor(Math.abs(offset) % 60);
@@ -582,6 +649,7 @@ export class TimeZone {
 	 * String to offset conversion.
 	 * @param s	Formats: "-01:00", "-0100", "-01", "Z"
 	 * @return offset w.r.t. UTC in minutes
+	 * @throws timezonecomplete.Argument.S if s cannot be parsed
 	 */
 	public static stringToOffset(s: string): number {
 		const t = s.trim();
@@ -590,7 +658,10 @@ export class TimeZone {
 			return 0;
 		}
 		// check that the remainder conforms to ISO time zone spec
-		assert(t.match(/^[+-]\d$/) || t.match(/^[+-]\d\d$/) || t.match(/^[+-]\d\d(:?)\d\d$/), "Wrong time zone format: \"" + t + "\"");
+		assert(
+			t.match(/^[+-]\d$/) || t.match(/^[+-]\d\d$/) || t.match(/^[+-]\d\d(:?)\d\d$/),
+			"Argument.S", "Wrong time zone format: \"" + t + "\""
+		);
 		const sign: number = (t.charAt(0) === "+" ? 1 : -1);
 		let hours: number = 0;
 		let minutes: number = 0;
@@ -610,8 +681,8 @@ export class TimeZone {
 				minutes = parseInt(t.slice(4, 6), 10);
 				break;
 		}
-		assert(hours >= 0 && hours < 24, `Invalid time zone (hours out of range): '${t}'`);
-		assert(minutes >= 0 && minutes < 60, `Invalid time zone (minutes out of range): '${t}'`);
+		assert(hours >= 0 && hours < 24, "Argument.S", `Invalid time zone (hours out of range): '${t}'`);
+		assert(minutes >= 0 && minutes < 60, "Argument.S", `Invalid time zone (minutes out of range): '${t}'`);
 		return sign * (hours * 60 + minutes);
 	}
 
@@ -625,6 +696,7 @@ export class TimeZone {
 	 * Find in cache or create zone
 	 * @param name	Time zone name
 	 * @param dst	Adhere to Daylight Saving Time?
+	 * @throws timezonecomplete.NotFound.Zone if the zone doesn't exist in the time zone database
 	 */
 	private static _findOrCreate(name: string, dst: boolean): TimeZone {
 		const key = name + (dst ? "_DST" : "_NO-DST");
@@ -638,12 +710,12 @@ export class TimeZone {
 	}
 
 	/**
-	 * Normalize a string so it can be used as a key for a
-	 * cache lookup
+	 * Normalize a string so it can be used as a key for a cache lookup
+	 * @throws Argument.S if s is empty
 	 */
 	private static _normalizeString(s: string): string {
 		const t: string = s.trim();
-		assert(t.length > 0, "Empty time zone string given");
+		assert(t.length > 0, "Argument.S", "Empty time zone string given");
 		if (t === "localtime") {
 			return t;
 		} else if (t === "Z") {
@@ -651,13 +723,25 @@ export class TimeZone {
 		} else if (TimeZone._isOffsetString(t)) {
 			// offset string
 			// normalize by converting back and forth
-			return TimeZone.offsetToString(TimeZone.stringToOffset(t));
+			try {
+				return TimeZone.offsetToString(TimeZone.stringToOffset(t));
+			} catch (e) {
+				if (errorIs(e, "Argument.Offset")) {
+					e = error("Argument.S", e.message);
+				}
+				throw e;
+			}
 		} else {
 			// Olsen TZ database name
 			return t;
 		}
 	}
 
+	/**
+	 * Returns true iff the first non-whitespace character of s is +, -, or Z
+	 * @param s
+	 * @throws nothing
+	 */
 	private static _isOffsetString(s: string): boolean {
 		const t = s.trim();
 		return (t.charAt(0) === "+" || t.charAt(0) === "-" || t === "Z");
