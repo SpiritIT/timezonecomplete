@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.10.0 (2019-11-18)
+
+* Add ability to parse week days and week numbers (both ignored)
+
 ## 5.9.0 (2019-08-31)
 
 * Give names to thrown errors
