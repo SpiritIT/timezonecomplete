@@ -1,17 +1,15 @@
 /**
  * Copyright(c) 2014 ABB Switzerland Ltd.
  */
-
-"use strict";
-
-import sourcemapsupport = require("source-map-support");
-// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
-sourcemapsupport.install({ handleUncaughtExceptions: false });
-
 import * as assert from "assert";
 import { expect } from "chai";
+import sourcemapsupport = require("source-map-support");
 
+import { TimeZone } from "../lib";
 import * as parse from "../lib/parse";
+
+// Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
+sourcemapsupport.install({ handleUncaughtExceptions: false });
 
 describe("parse", (): void => {
 
@@ -859,6 +857,56 @@ describe("parse", (): void => {
 			});
 			it("should throw on invalid zone name", (): void => {
 				expect(() => parse.parse("Europe/Flep", "VV", undefined, false)).to.throw();
+			});
+		});
+
+		describe("http-date", (): void => {
+			it("should parse a HTTP date", (): void => {
+				expect(parse.parse("Wed, 21 Oct 2015 07:28:00 GMT", "EEE, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+				expect(parse.parse("Wed, 21 Oct 2015 07:28:00 GMT", "EEE, dd MMM yyyy HH:mm:ss VV").zone).to.equal(TimeZone.zone("GMT"));
+			});
+		});
+
+		describe("week days", (): void => {
+			it("should parse a numeric week day (single)", (): void => {
+				expect(parse.parse("3, 21 Oct 2015 07:28:00 GMT", "e, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+			});
+			it("should parse a numeric week day (double)", (): void => {
+				expect(parse.parse("03, 21 Oct 2015 07:28:00 GMT", "ee, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+			});
+			it("should parse a long week day", (): void => {
+				expect(parse.parse("Wednesday, 21 Oct 2015 07:28:00 GMT", "EEEE, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+			});
+			it("should parse a week day letter", (): void => {
+				expect(parse.parse("W, 21 Oct 2015 07:28:00 GMT", "EEEEE, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+			});
+			it("should parse a two-letter week day", (): void => {
+				expect(parse.parse("We, 21 Oct 2015 07:28:00 GMT", "EEEEEE, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+			});
+		});
+
+		describe("week numbers", (): void => {
+			it("should parse a week number (not padded, 1 decimal)", (): void => {
+				expect(parse.parse("3, 21 Oct 2015 07:28:00 GMT", "w, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+			});
+			it("should parse a week number (not padded, 2 decimals)", (): void => {
+				expect(parse.parse("30, 21 Oct 2015 07:28:00 GMT", "w, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+			});
+			it("should parse a week number (padded)", (): void => {
+				expect(parse.parse("03, 21 Oct 2015 07:28:00 GMT", "ww, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
+			});
+			it("should parse a numeric week of month", (): void => {
+				expect(parse.parse("3, 21 Oct 2015 07:28:00 GMT", "W, dd MMM yyyy HH:mm:ss VV").time.toString())
+					.to.equal("2015-10-21T07:28:00.000");
 			});
 		});
 	});

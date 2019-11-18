@@ -114,11 +114,11 @@ export function parse(
 					quarter = r.n;
 					remaining = r.remaining;
 				} break;
-				/* istanbul ignore next */
-				case TokenType.WEEKDAY:
-				/* istanbul ignore next */
+				case TokenType.WEEKDAY: {
+					remaining = stripWeekDay(token, remaining, mergedLocale);
+				} break;
 				case TokenType.WEEK:
-					/* istanbul ignore next */
+					remaining = stripNumber(remaining, 2).remaining;
 					break; // nothing to learn from this
 				case TokenType.DAYPERIOD:
 					dpr = stripDayPeriod(token, remaining, mergedLocale);
@@ -506,6 +506,45 @@ function stripQuarter(token: Token, remaining: string, locale: Locale): ParseNum
 	}
 	const r = stripStrings(token, remaining, allowed);
 	return { n: allowed.indexOf(r.chosen) + 1, remaining: r.remaining };
+}
+
+/**
+ *
+ * @param token
+ * @param remaining
+ * @param locale
+ * @returns remaining string
+ * @throws timezonecomplete.ParseError
+ * @throws timezonecomplete.Argument.FormatString
+ */
+function stripWeekDay(token: Token, remaining: string, locale: Locale): string {
+	let allowed: string[];
+	switch (token.length) {
+		case 1: {
+			if (token.symbol === "e") {
+				return stripNumber(remaining, 1).remaining;
+			} else {
+				allowed = locale.shortWeekdayNames;
+			}
+		} break;
+		case 2: {
+			if (token.symbol === "e") {
+				return stripNumber(remaining, 2).remaining;
+			} else {
+				allowed = locale.shortWeekdayNames;
+			}
+		} break;
+		case 3: allowed = locale.shortWeekdayNames; break;
+		case 4: allowed = locale.longWeekdayNames; break;
+		case 5: allowed = locale.weekdayLetters; break;
+		case 6: allowed = locale.weekdayTwoLetters; break;
+		/* istanbul ignore next */
+		default:
+			/* istanbul ignore next */
+			return throwError("Argument.FormatString", "invalid quarter pattern");
+	}
+	const r = stripStrings(token, remaining, allowed);
+	return r.remaining;
 }
 
 /**

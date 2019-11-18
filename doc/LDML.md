@@ -11,6 +11,7 @@ The functions for formatting and parsing dates use LDML format strings, see http
 | yyyy-MM-dd HH:mm:ss.SSS OOOO | 2017-12-31 23:59:14.999 GMT-08:00 |
 | yyyy-MM-dd HH:mm:ss.SSS vv | 2017-12-31 23:59:14.999 Europe/Amsterdam |
 | M/d/yyyy hh:mm:ss a | 1/31/2017 12:00:00 AM |
+| EEE, dd MMM yyyy HH:mm:ss VV | Wed, 21 Oct 2015 07:28:00 GMT |
 
 ## Caveats
 
@@ -102,29 +103,29 @@ The table below shows the format patterns and whether timezonecomplete supports 
 |  | LLL | Sep | yes | yes | |
 |  | LLLL | September | yes | yes | |
 |  | LLLLL | S | yes | yes | |
-| week | w | 8, 27 | yes | - | Week of Year (numeric) |
-|  | ww | 08, 27 | yes | - | |
-|  | W | 3 | yes | - | Week of Month (numeric) |
+| week | w | 8, 27 | yes | yes (ignored) | Week of Year (numeric) |
+|  | ww | 08, 27 | yes | yes (ignored) | |
+|  | W | 3 | yes | yes (ignored) | Week of Month (numeric) |
 | day | d | 1 | yes | yes | Day of month (numeric) |
 |  | dd | 01 | yes | yes | |
 |  | D..DDD | 345 | yes | - | Day of year (numeric) |
 |  | F | 2 | - | - | Day of Week in Month (numeric) |
 |  | g+ | 2451334 | - | - | Modified Julian day (numeric) |
-| week day | E..EEE | Tue | yes | - | Day of week name |
-|  | EEEE | Tuesday | yes | - | |
-|  | EEEEE | T | yes | - | |
-|  | EEEEEE | Tu | yes | - | |
-|  | e | 2 | yes | - | Local day of week number/name |
-|  | ee | 02 | yes | - | |
-|  | eee | Tue | yes | - | |
-|  | eeee | Tuesday | yes | - | |
-|  | eeeee | T | yes | - | |
-|  | eeeeee | Tu | yes | - | |
-|  | c..cc | 2 | yes | - | Stand-alone local day of week number/name |
-|  | ccc | Tue | yes | - | |
-|  | cccc | Tuesday | yes | - | |
-|  | ccccc | T | yes | - | |
-|  | cccccc | Tu | yes | - | |
+| week day | E..EEE | Tue | yes | yes (ignored) | Day of week name |
+|  | EEEE | Tuesday | yes | yes (ignored) | yes |
+|  | EEEEE | T | yes | yes (ignored) | |
+|  | EEEEEE | Tu | yes | yes (ignored) | |
+|  | e | 2 | yes | yes (ignored) | Local day of week number/name |
+|  | ee | 02 | yes | yes (ignored) | |
+|  | eee | Tue | yes | yes (ignored) | |
+|  | eeee | Tuesday | yes | yes (ignored) | |
+|  | eeeee | T | yes | yes (ignored) | |
+|  | eeeeee | Tu | yes | yes (ignored) | |
+|  | c..cc | 2 | yes | yes (ignored) | Standalone local day of week number/name |
+|  | ccc | Tue | yes | yes (ignored) | |
+|  | cccc | Tuesday | yes | yes (ignored) | |
+|  | ccccc | T | yes | yes (ignored) | |
+|  | cccccc | Tu | yes | yes (ignored) | |
 | day period | a..aaa | AM, PM | yes | yes | AM, PM. Tip: use 'hh' and not 'HH' when specifying 'a+' or 'b+' |
 |  | aaaa | AM, PM | yes | yes | |
 |  | aaaaa | A, P | yes | yes | |
