@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.11.0 (2019-12-06)
+
+* Add functions to find a time-of-week: `timestampOnWeekTimeGreaterThanOrEqualTo()` and `timestampOnWeekTimeLessThan()`
+
 ## 5.10.0 (2019-11-18)
 
 * Add ability to parse week days and week numbers (both ignored)
