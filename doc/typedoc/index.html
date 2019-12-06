@@ -132,17 +132,17 @@
 					<li>Include the tzdata .json files manually using browserify.require()</li>
 				</ol>
 				<p>Option 1:</p>
-				<pre><code>// browserify will pick these up. You may need to <span class="hljs-keyword">set</span> the <span class="hljs-string">'extensions'</span> <span class="hljs-keyword">option</span> <span class="hljs-keyword">of</span> browserify <span class="hljs-keyword">to</span> <span class="hljs-keyword">include</span> .json files
-// NOTE <span class="hljs-keyword">in</span> TypeScript, also <span class="hljs-keyword">use</span> <span class="hljs-string">'const'</span> <span class="hljs-keyword">NOT</span> <span class="hljs-string">'import'</span>!
-const northamerica = require(<span class="hljs-string">'tzdata-northamerica'</span>);
-const etcetera = require('tzdata-etcetera');
-const tc = require('timezonecomplete');
+				<pre><code><span class="hljs-comment">// browserify will pick these up. You may need to set the 'extensions' option of browserify to include .json files</span>
+<span class="hljs-comment">// NOTE in TypeScript, also use 'const' NOT 'import'!</span>
+<span class="hljs-keyword">const</span> northamerica = <span class="hljs-keyword">require</span>(<span class="hljs-string">'tzdata-northamerica'</span>);
+<span class="hljs-keyword">const</span> etcetera = <span class="hljs-keyword">require</span>(<span class="hljs-string">'tzdata-etcetera'</span>);
+<span class="hljs-keyword">const</span> tc = <span class="hljs-keyword">require</span>(<span class="hljs-string">'timezonecomplete'</span>);
 
-// <span class="hljs-keyword">Do</span> this <span class="hljs-keyword">before</span> creating e.g. tc.DateTime objects.
-// <span class="hljs-keyword">In</span> this example we <span class="hljs-keyword">use</span> <span class="hljs-keyword">only</span> part <span class="hljs-keyword">of</span> the timezone <span class="hljs-keyword">database</span> <span class="hljs-keyword">to</span> reduce bundle size.
-// Note you could whittle down the zones <span class="hljs-keyword">and</span> <span class="hljs-keyword">rules</span> further <span class="hljs-keyword">if</span> you <span class="hljs-keyword">like</span> <span class="hljs-keyword">by</span> e.g. <span class="hljs-keyword">excluding</span> <span class="hljs-keyword">rules</span> pre<span class="hljs-number">-1990.</span>
-// That<span class="hljs-string">'s at your own risk though
-tc.TzDatabase.init([northamerica, etcetera]);</span></code></pre><p>Option 2:</p>
+<span class="hljs-comment">// Do this before creating e.g. tc.DateTime objects.</span>
+<span class="hljs-comment">// In this example we use only part of the timezone database to reduce bundle size.</span>
+<span class="hljs-comment">// Note you could whittle down the zones and rules further if you like by e.g. excluding rules pre-1990.</span>
+<span class="hljs-comment">// That's at your own risk though</span>
+tc.TzDatabase.init([northamerica, etcetera]);</code></pre><p>Option 2:</p>
 				<pre><code><span class="hljs-comment">// Manual browserifying ambient JSON data</span>
 <span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">require</span>(<span class="hljs-string">'fs'</span>);
 <span class="hljs-keyword">var</span> glob = <span class="hljs-keyword">require</span>(<span class="hljs-string">'glob'</span>);
@@ -308,6 +308,9 @@ browserify({
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/token.html" class="tsd-kind-icon">Token</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/weektimeopts.html" class="tsd-kind-icon">Week<wbr>Time<wbr>Opts</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#perioddstjson" class="tsd-kind-icon">Period<wbr>Dst<wbr>Json</a>
@@ -503,6 +506,12 @@ browserify({
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#timeunittostring" class="tsd-kind-icon">time<wbr>Unit<wbr>ToString</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#timestamponweektimegreaterthanorequalto" class="tsd-kind-icon">timestamp<wbr>OnWeek<wbr>Time<wbr>Greater<wbr>Than<wbr>OrEqual<wbr>To</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#timestamponweektimelessthan" class="tsd-kind-icon">timestamp<wbr>OnWeek<wbr>Time<wbr>Less<wbr>Than</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#tokenize" class="tsd-kind-icon">tokenize</a>

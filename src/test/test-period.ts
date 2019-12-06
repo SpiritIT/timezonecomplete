@@ -6,7 +6,8 @@ import { expect } from "chai";
 import sourcemapsupport = require("source-map-support");
 
 import {
-	DateTime, Duration, isPeriod, isValidPeriodJson, Period, PeriodDst, PeriodDstJson, PeriodJson, seconds, TimeSource, TimeUnit, TimeZone,
+	DateTime, Duration, isPeriod, isValidPeriodJson, Period, PeriodDst, PeriodDstJson, PeriodJson, seconds, TimeSource,
+	timestampOnWeekTimeGreaterThanOrEqualTo, timestampOnWeekTimeLessThan, TimeUnit, TimeZone, WeekDay,
 } from "../lib/index";
 
 // Enable source-map support for backtraces. Causes TS files & linenumbers to show up in them.
@@ -1010,5 +1011,104 @@ describe("isPeriod()", (): void => {
 	});
 	it("should return false for null", (): void => {
 		expect(isPeriod(null)).to.equal(false);
+	});
+});
+
+describe("timestampOnWeekTimeGreaterThanOrEqualTo()", (): void => {
+	it("should return the given reference time if it matches", (): void => {
+		const result = timestampOnWeekTimeGreaterThanOrEqualTo({
+			reference: new DateTime("2019-12-04T10:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 10
+		});
+		expect(result.toString()).to.equal("2019-12-04T10:00:00.000 Europe/Amsterdam");
+	});
+	it("should return the given reference time if it matches (midnight)", (): void => {
+		const result = timestampOnWeekTimeGreaterThanOrEqualTo({
+			reference: new DateTime("2019-12-04T00:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 0,
+			minute: 0
+		});
+		expect(result.toString()).to.equal("2019-12-04T00:00:00.000 Europe/Amsterdam");
+	});
+	it("should return the next time on the same day", (): void => {
+		const result = timestampOnWeekTimeGreaterThanOrEqualTo({
+			reference: new DateTime("2019-12-04T10:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 11,
+			minute: 0
+		});
+		expect(result.toString()).to.equal("2019-12-04T11:00:00.000 Europe/Amsterdam");
+	});
+	it("should work up to the millisecond", (): void => {
+		const result = timestampOnWeekTimeGreaterThanOrEqualTo({
+			reference: new DateTime("2019-12-04T10:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 11,
+			minute: 9,
+			second: 8,
+			millisecond: 7
+		});
+		expect(result.toString()).to.equal("2019-12-04T11:09:08.007 Europe/Amsterdam");
+	});
+	it("should return the next week", (): void => {
+		const result = timestampOnWeekTimeGreaterThanOrEqualTo({
+			reference: new DateTime("2019-12-04T12:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 11,
+			minute: 0
+		});
+		expect(result.toString()).to.equal("2019-12-11T11:00:00.000 Europe/Amsterdam");
+	});
+});
+
+describe("timestampOnWeekTimeLessThan()", (): void => {
+	it("should NOT return the given reference time if it matches", (): void => {
+		const result = timestampOnWeekTimeLessThan({
+			reference: new DateTime("2019-12-04T10:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 10,
+			minute: 0
+		});
+		expect(result.toString()).to.equal("2019-11-27T10:00:00.000 Europe/Amsterdam");
+	});
+	it("should NOT return the given reference time if it matches (midnight)", (): void => {
+		const result = timestampOnWeekTimeLessThan({
+			reference: new DateTime("2019-12-04T00:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 0,
+			minute: 0
+		});
+		expect(result.toString()).to.equal("2019-11-27T00:00:00.000 Europe/Amsterdam");
+	});
+	it("should return the previous time on the same day", (): void => {
+		const result = timestampOnWeekTimeLessThan({
+			reference: new DateTime("2019-12-04T10:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 9,
+			minute: 0
+		});
+		expect(result.toString()).to.equal("2019-12-04T09:00:00.000 Europe/Amsterdam");
+	});
+	it("should work up to the millisecond", (): void => {
+		const result = timestampOnWeekTimeLessThan({
+			reference: new DateTime("2019-12-04T11:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 10,
+			minute: 9,
+			second: 8,
+			millisecond: 7
+		});
+		expect(result.toString()).to.equal("2019-12-04T10:09:08.007 Europe/Amsterdam");
+	});
+	it("should return the last week", (): void => {
+		const result = timestampOnWeekTimeLessThan({
+			reference: new DateTime("2019-12-04T12:00:00.000 Europe/Amsterdam"),
+			weekday: WeekDay.Wednesday,
+			hour: 13,
+			minute: 0
+		});
+		expect(result.toString()).to.equal("2019-11-27T13:00:00.000 Europe/Amsterdam");
 	});
 });

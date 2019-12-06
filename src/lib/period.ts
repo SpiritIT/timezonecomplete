@@ -10,7 +10,7 @@ import assert from "./assert";
 import { TimeUnit } from "./basics";
 import * as basics from "./basics";
 import { DateTime, isDateTime } from "./datetime";
-import { Duration } from "./duration";
+import { days, Duration } from "./duration";
 import { error, errorIs, throwError } from "./error";
 import { TimeZone, TimeZoneKind } from "./timezone";
 
@@ -1047,4 +1047,102 @@ export function isValidPeriodJson(json: PeriodJson): boolean {
  */
 export function isPeriod(value: any): value is Period {
 	return typeof value === "object" && value !== null && value.kind === "Period";
+}
+
+/**
+ * Options for timestampOnWeekTimeGreaterThanOrEqualTo() and timestampOnWeekTimeLessThan()
+ */
+export interface WeekTimeOpts {
+	/**
+	 * Timestamp to use as a basis
+	 */
+	reference: DateTime;
+	/**
+	 * Desired day of week
+	 */
+	weekday: basics.WeekDay;
+	/**
+	 * Desired time (hours 0-23)
+	 */
+	hour: number;
+	/**
+	 * Desired time (minutes 0-59)
+	 */
+	minute?: number;
+	/**
+	 * Desired time (seconds 0-59)
+	 */
+	second?: number;
+	/**
+	 * Desired time (milliseconds 0-999)
+	 */
+	millisecond?: number;
+}
+
+/**
+ * Returns the first timestamp >= `opts.reference` that matches the given weekday and time. Uses the time zone and DST settings
+ * of the given reference time.
+ * @param opts
+ * @throws timezonecomplete.Argument.Hour if opts.hour out of range
+ * @throws timezonecomplete.Argument.Minute if opts.minute out of range
+ * @throws timezonecomplete.Argument.Second if opts.second out of range
+ * @throws timezonecomplete.Argument.Millisecond if opts.millisecond out of range
+ * @throws timezonecomplete.Argument.Weekday if opts.weekday out of range
+ */
+export function timestampOnWeekTimeGreaterThanOrEqualTo(opts: WeekTimeOpts): DateTime {
+	// tslint:disable: max-line-length
+	assert(opts.hour >= 0 && opts.hour < 24, "Argument.Hour", "opts.hour should be within [0..23]");
+	assert(opts.minute === undefined || (opts.minute >= 0 && opts.minute < 60 && Number.isInteger(opts.minute)), "Argument.Minute", "opts.minute should be within [0..59]");
+	assert(opts.second === undefined || (opts.second >= 0 && opts.second < 60 && Number.isInteger(opts.second)), "Argument.Second", "opts.second should be within [0..59]");
+	assert(opts.millisecond === undefined || (opts.millisecond >= 0 && opts.millisecond < 1000 && Number.isInteger(opts.millisecond)), "Argument.Millisecond", "opts.millisecond should be within [0.999]");
+	assert(opts.weekday >= 0 && opts.weekday < 7, "Argument.Weekday", "opts.weekday should be within [0..6]");
+	// tslint:enable: max-line-length
+	let midnight = opts.reference.startOfDay();
+	while (midnight.weekDay() !== opts.weekday) {
+		midnight = midnight.addLocal(days(1));
+	}
+	const dt = new DateTime(
+		midnight.year(), midnight.month(), midnight.day(),
+		opts.hour, opts.minute ?? 0, opts.second ?? 0, opts.millisecond ?? 0,
+		opts.reference.zone()
+	);
+	if (dt < opts.reference) {
+		// we've started out on the correct weekday and the reference timestamp was greater than the given time, need to skip a week
+		return dt.addLocal(days(7));
+	}
+	return dt;
+}
+
+/**
+ * Returns the first timestamp < `opts.reference` that matches the given weekday and time. Uses the time zone and DST settings
+ * of the given reference time.
+ * @param opts
+ * @throws timezonecomplete.Argument.Hour if opts.hour out of range
+ * @throws timezonecomplete.Argument.Minute if opts.minute out of range
+ * @throws timezonecomplete.Argument.Second if opts.second out of range
+ * @throws timezonecomplete.Argument.Millisecond if opts.millisecond out of range
+ * @throws timezonecomplete.Argument.Weekday if opts.weekday out of range
+ */
+export function timestampOnWeekTimeLessThan(opts: WeekTimeOpts): DateTime {
+	// tslint:disable: max-line-length
+	assert(opts.hour >= 0 && opts.hour < 24, "Argument.Hour", "opts.hour should be within [0..23]");
+	assert(opts.minute === undefined || (opts.minute >= 0 && opts.minute < 60 && Number.isInteger(opts.minute)), "Argument.Minute", "opts.minute should be within [0..59]");
+	assert(opts.second === undefined || (opts.second >= 0 && opts.second < 60 && Number.isInteger(opts.second)), "Argument.Second", "opts.second should be within [0..59]");
+	assert(opts.millisecond === undefined || (opts.millisecond >= 0 && opts.millisecond < 1000 && Number.isInteger(opts.millisecond)), "Argument.Millisecond", "opts.millisecond should be within [0.999]");
+	assert(opts.weekday >= 0 && opts.weekday < 7, "Argument.Weekday", "opts.weekday should be within [0..6]");
+	// tslint:enable: max-line-length
+	let midnight = opts.reference.startOfDay().addLocal(days(1));
+	while (midnight.weekDay() !== opts.weekday) {
+		midnight = midnight.subLocal(days(1));
+	}
+	const dt = new DateTime(
+		midnight.year(), midnight.month(), midnight.day(),
+		opts.hour, opts.minute ?? 0, opts.second ?? 0, opts.millisecond ?? 0,
+		opts.reference.zone()
+	);
+	if (dt >= opts.reference) {
+		// we've started out on the correct weekday and the reference timestamp was less than the given time, need to skip a week
+		return dt.subLocal(days(7));
+	}
+	return dt;
 }
