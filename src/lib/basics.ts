@@ -479,13 +479,13 @@ export function unixToTimeNoLeapSecs(unixMillis: number): TimeComponents {
 	let month: number;
 
 	if (unixMillis >= 0) {
-		result.milli = temp % 1000;
+		result.milli = math.positiveModulo(temp, 1000);
 		temp = Math.floor(temp / 1000);
-		result.second = temp % 60;
+		result.second = math.positiveModulo(temp, 60);
 		temp = Math.floor(temp / 60);
-		result.minute = temp % 60;
+		result.minute = math.positiveModulo(temp, 60);
 		temp = Math.floor(temp / 60);
-		result.hour = temp % 24;
+		result.hour = math.positiveModulo(temp, 24);
 		temp = Math.floor(temp / 24);
 
 		year = 1970;
@@ -610,7 +610,7 @@ export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
 
 	const epochDay: WeekDay = WeekDay.Thursday;
 	const days = Math.floor(unixMillis / 1000 / 86400);
-	return (epochDay + days) % 7;
+	return math.positiveModulo(epochDay + days, 7);
 }
 
 /**

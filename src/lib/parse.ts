@@ -7,6 +7,7 @@
 import { TimeComponentOpts, TimeStruct } from "./basics";
 import { error, errorIs, throwError } from "./error";
 import { DEFAULT_LOCALE, Locale, PartialLocale } from "./locale";
+import { positiveModulo } from "./math";
 import { TimeZone } from "./timezone";
 import { Token, tokenize, TokenType } from "./token";
 
@@ -92,7 +93,7 @@ export function parse(
 		...DEFAULT_LOCALE,
 		...locale
 	};
-	const yearCutoff = (new Date().getFullYear() + 50) % 100;
+	const yearCutoff = positiveModulo((new Date().getFullYear() + 50), 100);
 
 	try {
 		const tokens: Token[] = tokenize(formatString);
@@ -165,9 +166,9 @@ export function parse(
 						case "S": time.milli = 1000 * parseFloat("0." + Math.floor(pnr.n).toString(10).slice(0, 3)); break;
 						case "A":
 							time.hour = Math.floor((pnr.n / 3600E3));
-							time.minute = Math.floor((pnr.n / 60E3) % 60);
-							time.second = Math.floor((pnr.n / 1000) % 60);
-							time.milli = pnr.n % 1000;
+							time.minute = Math.floor(positiveModulo(pnr.n / 60E3, 60));
+							time.second = Math.floor(positiveModulo(pnr.n / 1000, 60));
+							time.milli = positiveModulo(pnr.n, 1000);
 							break;
 						/* istanbul ignore next */
 						default:

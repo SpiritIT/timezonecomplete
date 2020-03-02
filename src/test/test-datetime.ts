@@ -1627,6 +1627,12 @@ describe("DateTime", (): void => {
 			expect(new DateTime("2014-07-07T00:00:00.00 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
 			expect(new DateTime("2014-07-07T23:59:59.999 Europe/Amsterdam").weekDay()).to.equal(WeekDay.Monday);
 		});
+		it("should remain positive for negative date", (): void => {
+			expect(new DateTime(-138909, 12, 31, 23, 59, 59, 999, TimeZone.zone("Africa/Abidjan")).weekDay()).to.equal(WeekDay.Thursday);
+		});
+		it("should remain positive for negative date", (): void => {
+			expect(new DateTime(-206790, 12, 31, 23, 59, 59, 999, TimeZone.zone("Africa/Abidjan")).weekDay()).to.equal(WeekDay.Friday);
+		});
 	});
 
 	describe("utcWeekDay()", (): void => {
