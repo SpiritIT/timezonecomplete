@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.11.1 (2020-03-02)
+
+* Fix #43 - invalid weekday number returned for date before 1970
+
 ## 5.11.0 (2019-12-06)
 
 * Add functions to find a time-of-week: `timestampOnWeekTimeGreaterThanOrEqualTo()` and `timestampOnWeekTimeLessThan()`
