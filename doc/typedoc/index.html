@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>timezonecomplete</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for timezonecomplete">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -52,7 +52,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> timezonecomplete</h1>
+			<h1>timezonecomplete</h1>
 		</div>
 	</div>
 </header>
@@ -122,7 +122,7 @@
 				<p>In Node.JS, timezonecomplete automatically has all time zone data.</p>
 				<p>Install using:</p>
 				<pre><code>npm <span class="hljs-keyword">install</span> timezonecomplete</code></pre><p>Then require the timezonecomplete module in your code. Timezonecomplete will automatically find any installed tzdata modules:</p>
-				<pre><code class="language-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"timezonecomplete"</span>);</code></pre>
+				<pre><code class="language-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;timezonecomplete&quot;</span>);</code></pre>
 				<a href="#browserify" id="browserify" style="color: inherit; text-decoration: none;">
 					<h3>Browserify</h3>
 				</a>
@@ -132,29 +132,29 @@
 					<li>Include the tzdata .json files manually using browserify.require()</li>
 				</ol>
 				<p>Option 1:</p>
-				<pre><code><span class="hljs-comment">// browserify will pick these up. You may need to set the 'extensions' option of browserify to include .json files</span>
-<span class="hljs-comment">// NOTE in TypeScript, also use 'const' NOT 'import'!</span>
-<span class="hljs-keyword">const</span> northamerica = <span class="hljs-keyword">require</span>(<span class="hljs-string">'tzdata-northamerica'</span>);
-<span class="hljs-keyword">const</span> etcetera = <span class="hljs-keyword">require</span>(<span class="hljs-string">'tzdata-etcetera'</span>);
-<span class="hljs-keyword">const</span> tc = <span class="hljs-keyword">require</span>(<span class="hljs-string">'timezonecomplete'</span>);
+				<pre><code><span class="hljs-comment">// browserify will pick these up. You may need to set the &#x27;extensions&#x27; option of browserify to include .json files</span>
+<span class="hljs-comment">// NOTE in TypeScript, also use &#x27;const&#x27; NOT &#x27;import&#x27;!</span>
+<span class="hljs-keyword">const</span> northamerica = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;tzdata-northamerica&#x27;</span>);
+<span class="hljs-keyword">const</span> etcetera = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;tzdata-etcetera&#x27;</span>);
+<span class="hljs-keyword">const</span> tc = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;timezonecomplete&#x27;</span>);
 
 <span class="hljs-comment">// Do this before creating e.g. tc.DateTime objects.</span>
 <span class="hljs-comment">// In this example we use only part of the timezone database to reduce bundle size.</span>
 <span class="hljs-comment">// Note you could whittle down the zones and rules further if you like by e.g. excluding rules pre-1990.</span>
-<span class="hljs-comment">// That's at your own risk though</span>
+<span class="hljs-comment">// That&#x27;s at your own risk though</span>
 tc.TzDatabase.init([northamerica, etcetera]);</code></pre><p>Option 2:</p>
 				<pre><code><span class="hljs-comment">// Manual browserifying ambient JSON data</span>
-<span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">require</span>(<span class="hljs-string">'fs'</span>);
-<span class="hljs-keyword">var</span> glob = <span class="hljs-keyword">require</span>(<span class="hljs-string">'glob'</span>);
-<span class="hljs-keyword">var</span> browserify  = <span class="hljs-keyword">require</span>(<span class="hljs-string">'browserify'</span>);
+<span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<span class="hljs-keyword">var</span> glob = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;glob&#x27;</span>);
+<span class="hljs-keyword">var</span> browserify  = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;browserify&#x27;</span>);
 browserify({
-    entries: glob.sync(<span class="hljs-string">'./src/*.js'</span>),
-    extensions: [<span class="hljs-string">'.js'</span>, <span class="hljs-string">'.json'</span>], <span class="hljs-comment">// needed to include the tzdata modules</span>
-    debug: <span class="hljs-keyword">true</span>
+    entries: glob.sync(<span class="hljs-string">&#x27;./src/*.js&#x27;</span>),
+    extensions: [<span class="hljs-string">&#x27;.js&#x27;</span>, <span class="hljs-string">&#x27;.json&#x27;</span>], <span class="hljs-comment">// needed to include the tzdata modules</span>
+    debug: <span class="hljs-literal">true</span>
 })
-.<span class="hljs-keyword">require</span>(<span class="hljs-string">'./node_modules/tzdata/timezone-data.json'</span>, {expose: <span class="hljs-string">'tzdata'</span>}) <span class="hljs-comment">// add 'tzdata' and make it available globally under its own name</span>
+.<span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;./node_modules/tzdata/timezone-data.json&#x27;</span>, {expose: <span class="hljs-string">&#x27;tzdata&#x27;</span>}) <span class="hljs-comment">// add &#x27;tzdata&#x27; and make it available globally under its own name</span>
 .bundle()
-.pipe(fs.createWriteStream(<span class="hljs-string">'./dist/bundle.js'</span>));</code></pre>
+.pipe(fs.createWriteStream(<span class="hljs-string">&#x27;./dist/bundle.js&#x27;</span>));</code></pre>
 				<a href="#webpack" id="webpack" style="color: inherit; text-decoration: none;">
 					<h3>Webpack</h3>
 				</a>
@@ -162,44 +162,44 @@ browserify({
 				<pre><code class="language-javascript">  plugins: [
     <span class="hljs-keyword">new</span> webpack.ContextReplacementPlugin(
       <span class="hljs-regexp">/[\/\\]node_modules[\/\\]timezonecomplete[\/\\]/</span>,
-      path.resolve(<span class="hljs-string">"tz-database-context"</span>),
+      path.resolve(<span class="hljs-string">&quot;tz-database-context&quot;</span>),
       {
-        <span class="hljs-string">"tzdata-backward-utc"</span>: <span class="hljs-string">"tzdata-backward-utc"</span>,
-        <span class="hljs-string">"tzdata-etcetera"</span>: <span class="hljs-string">"tzdata-etcetera"</span>,
-        <span class="hljs-string">"tzdata-europe"</span>: <span class="hljs-string">"tzdata-europe"</span>
+        <span class="hljs-string">&quot;tzdata-backward-utc&quot;</span>: <span class="hljs-string">&quot;tzdata-backward-utc&quot;</span>,
+        <span class="hljs-string">&quot;tzdata-etcetera&quot;</span>: <span class="hljs-string">&quot;tzdata-etcetera&quot;</span>,
+        <span class="hljs-string">&quot;tzdata-europe&quot;</span>: <span class="hljs-string">&quot;tzdata-europe&quot;</span>
       }
     )
   ]</code></pre>
 				<p>To install a beta version of webpack, first, look up the latest unstable version using:</p>
 				<pre><code>npm <span class="hljs-keyword">show</span> webpack <span class="hljs-keyword">versions</span> <span class="hljs-comment">--json</span></code></pre><p>Then, install the specific version by specifying it behind an @-sign (in this example 2.2.0-rc3) like this:</p>
-				<pre><code><span class="hljs-selector-tag">npm</span> <span class="hljs-selector-tag">install</span> <span class="hljs-selector-tag">--save-dev</span> <span class="hljs-selector-tag">webpack</span>@<span class="hljs-keyword">2</span>.<span class="hljs-keyword">2</span>.<span class="hljs-keyword">0</span>-<span class="hljs-keyword">rc</span>.<span class="hljs-keyword">3</span></code></pre>
+				<pre><code>npm install --save-dev <span class="hljs-symbol">webpack@</span><span class="hljs-number">2.2</span><span class="hljs-number">.0</span>-rc<span class="hljs-number">.3</span></code></pre>
 				<a href="#browser-stand-alone" id="browser-stand-alone" style="color: inherit; text-decoration: none;">
 					<h3>Browser, stand-alone</h3>
 				</a>
 				<p>Timezonecomplete comes with a <a href="./dist/timezonecomplete.js">bundle</a> and a <a href="./dist/timezonecomplete.min.js">minified bundle</a>. Both are UMD (isomorphic) modules.
 				Next to these bundles, you also need one or more of the bundles from the tzdata modules listed above.</p>
 				<p>You can find examples of using timezonecomplete in a browser in the <a href="examples/">examples</a> directory, both using Require.JS and ambient.</p>
-				<pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+				<pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"utf-8"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Timezonecomplete Browser Example<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./tzdata.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./timezonecomplete.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./tzdata.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./timezonecomplete.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doIt</span>(<span class="hljs-params"></span>) </span>{
       <span class="hljs-keyword">var</span> utc = tc.nowUtc();
-      <span class="hljs-keyword">var</span> local = utc.toZone(tc.zone(<span class="hljs-string">'localtime'</span>));
+      <span class="hljs-keyword">var</span> local = utc.toZone(tc.zone(<span class="hljs-string">&#x27;localtime&#x27;</span>));
       <span class="hljs-keyword">var</span> diff = local.toZone(<span class="hljs-literal">null</span>).diff(utc.toZone(<span class="hljs-literal">null</span>));
       <span class="hljs-keyword">var</span> hourDiff = tc.hours(diff.hours());
-      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'diff'</span>).textContent = hourDiff.toString();
+      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;diff&#x27;</span>).textContent = hourDiff.toString();
     }
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">onLoad</span>=<span class="hljs-string">"doIt()"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">onLoad</span>=<span class="hljs-string">&quot;doIt()&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
-    The difference between local time and UTC is:&amp;nbsp;
-    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"diff"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    The difference between local time and UTC is:<span class="hljs-symbol">&amp;nbsp;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;diff&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
@@ -250,6 +250,12 @@ browserify({
 						<a href="enums/tokentype.html" class="tsd-kind-icon">Token<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-enum">
+						<a href="enums/tzdaynames.html" class="tsd-kind-icon">Tz<wbr>Day<wbr>Names</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/tzmonthnames.html" class="tsd-kind-icon">Tz<wbr>Month<wbr>Names</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="enums/weekday.html" class="tsd-kind-icon">Week<wbr>Day</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -292,10 +298,25 @@ browserify({
 						<a href="interfaces/locale.html" class="tsd-kind-icon">Locale</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/minmaxinfo.html" class="tsd-kind-icon">Min<wbr>Max<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/parsedayperiodresult.html" class="tsd-kind-icon">Parse<wbr>Day<wbr>Period<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/parsenumberresult.html" class="tsd-kind-icon">Parse<wbr>Number<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/parsezoneresult.html" class="tsd-kind-icon">Parse<wbr>Zone<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/partiallocale.html" class="tsd-kind-icon">Partial<wbr>Locale</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/periodjson.html" class="tsd-kind-icon">Period<wbr>Json</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/symbolinfo.html" class="tsd-kind-icon">Symbol<wbr>Info</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/timecomponentopts.html" class="tsd-kind-icon">Time<wbr>Component<wbr>Opts</a>
@@ -372,14 +393,62 @@ browserify({
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#weekday_two_letters" class="tsd-kind-icon">WEEKDAY_<wbr>TWO_<wbr>LETTERS</a>
 					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#whitespace" class="tsd-kind-icon">WHITESPACE</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatday" class="tsd-kind-icon">_format<wbr>Day</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatdayperiod" class="tsd-kind-icon">_format<wbr>Day<wbr>Period</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatera" class="tsd-kind-icon">_format<wbr>Era</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formathour" class="tsd-kind-icon">_format<wbr>Hour</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatminute" class="tsd-kind-icon">_format<wbr>Minute</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatmonth" class="tsd-kind-icon">_format<wbr>Month</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatquarter" class="tsd-kind-icon">_format<wbr>Quarter</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatsecond" class="tsd-kind-icon">_format<wbr>Second</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatweek" class="tsd-kind-icon">_format<wbr>Week</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatweekday" class="tsd-kind-icon">_format<wbr>Weekday</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatyear" class="tsd-kind-icon">_format<wbr>Year</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#_formatzone" class="tsd-kind-icon">_format<wbr>Zone</a>
+					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#abs" class="tsd-kind-icon">abs</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#assert" class="tsd-kind-icon">assert</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="globals.html#binaryinsertionindex" class="tsd-kind-icon">binary<wbr>Insertion<wbr>Index</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="globals.html#converterror" class="tsd-kind-icon">convert<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#convertfromutc" class="tsd-kind-icon">convert<wbr>From<wbr>Utc</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#converttoutc" class="tsd-kind-icon">convert<wbr>ToUtc</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a>
@@ -407,6 +476,9 @@ browserify({
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#format" class="tsd-kind-icon">format</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getweekonedayofyear" class="tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#hours" class="tsd-kind-icon">hours</a>
@@ -454,7 +526,13 @@ browserify({
 						<a href="globals.html#minutes" class="tsd-kind-icon">minutes</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#monthnametonumber" class="tsd-kind-icon">month<wbr>Name<wbr>ToNumber</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#months" class="tsd-kind-icon">months</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#normalizetimecomponents" class="tsd-kind-icon">normalize<wbr>Time<wbr>Components</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#now" class="tsd-kind-icon">now</a>
@@ -496,6 +574,39 @@ browserify({
 						<a href="globals.html#stringtotimeunit" class="tsd-kind-icon">string<wbr>ToTime<wbr>Unit</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#stripdayperiod" class="tsd-kind-icon">strip<wbr>Day<wbr>Period</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripera" class="tsd-kind-icon">strip<wbr>Era</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#striphour" class="tsd-kind-icon">strip<wbr>Hour</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripmonth" class="tsd-kind-icon">strip<wbr>Month</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripnumber" class="tsd-kind-icon">strip<wbr>Number</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripquarter" class="tsd-kind-icon">strip<wbr>Quarter</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripraw" class="tsd-kind-icon">strip<wbr>Raw</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripsecond" class="tsd-kind-icon">strip<wbr>Second</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripstrings" class="tsd-kind-icon">strip<wbr>Strings</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripweekday" class="tsd-kind-icon">strip<wbr>Week<wbr>Day</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#stripzone" class="tsd-kind-icon">strip<wbr>Zone</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#throwerror" class="tsd-kind-icon">throw<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -521,6 +632,9 @@ browserify({
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#utc" class="tsd-kind-icon">utc</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#validatedata" class="tsd-kind-icon">validate<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a>
@@ -555,6 +669,9 @@ browserify({
 					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#default_locale" class="tsd-kind-icon">DEFAULT_<wbr>LOCALE</a>
 					</li>
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#symbol_mapping" class="tsd-kind-icon">SYMBOL_<wbr>MAPPING</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -565,57 +682,17 @@ browserify({
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
@@ -625,6 +702,5 @@ browserify({
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.11.2 (2020-07-30)
+
+* Fix dependency vulnerabilities
+
 ## 5.11.1 (2020-03-02)
 
 * Fix #43 - invalid weekday number returned for date before 1970
