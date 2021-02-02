@@ -365,6 +365,10 @@ describe("DateTime", (): void => {
 			expect(!!d.zone()).to.equal(true);
 			expect(d.offset()).to.equal(6);
 		});
+		it("should work for Detroit", (): void => {
+			const d = new DateTime("2021-03-14T01:00:00.000 America/Detroit");
+			expect(d.toString()).to.equal("2021-03-14T01:00:00.000 America/Detroit");
+		});
 	});
 
 	describe("constructor(string, string, zone?)", (): void => {

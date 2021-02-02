@@ -657,6 +657,9 @@ describe("TzDatabase", (): void => {
 		it("should return the next summer to winter time change", (): void => {
 			expect(TzDatabase.instance().nextDstChange("Europe/Amsterdam", new TimeStruct(1445734799999))).to.equal(1445734800000);
 		});
+		it("should work with AtType=Wall", (): void => {
+			expect(TzDatabase.instance().nextDstChange("America/Detroit", 1612199681000)).to.equal(1615701600000 + 3600000);
+		});
 	});
 
 	describe("normalizeLocal()", (): void => {

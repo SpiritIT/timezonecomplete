@@ -280,7 +280,7 @@ export class RuleInfo {
 				offset = standardOffset;
 				break;
 			case AtType.Wall:
-				if (prevRule) {
+				if (this.save.equals(Duration.hours(0)) && prevRule) {
 					offset = standardOffset.add(prevRule.save);
 				} else {
 					offset = standardOffset;

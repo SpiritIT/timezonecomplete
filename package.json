@@ -23,7 +23,7 @@
   "contributors": [
     {
       "name": "Rogier Schouten",
-      "email": "R.Schouten@SpiritIT.com"
+      "email": "github@workingcode.ninja"
     }
   ],
   "repository": {
@@ -49,9 +49,7 @@
     "karma": "npm run bundle_tests && npm run exec_karma",
     "all": "npm run clean && npm run build && npm run test && npm run karma && npm run doc"
   },
-  "dependencies": {
-    "tzdata": "^1.0.11"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.2.12",
     "@types/lolex": "^5.1.0",
@@ -76,6 +74,7 @@
     "tslint": "^6.1.2",
     "typedoc": "^0.17.8",
     "typescript": "^3.9.7",
+    "tzdata": "^1.0.25",
     "uglify-js": "^3.10.0"
   }
 }
