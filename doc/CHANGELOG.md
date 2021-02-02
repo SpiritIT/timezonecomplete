@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.11.4 (2021-02-02)
+
+* build fix
+
 ## 5.11.3 (2021-02-02)
 
 * Fix America/Detroit DST change being calculated incorrectly.

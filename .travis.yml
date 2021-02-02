@@ -1,7 +1,8 @@
  language: node_js
  node_js:
-   - "12.18"
-   - "14.7"
+   - "12.20"
+   - "14.15"
+   - "15.7"
  script:
    - "echo 'running script'"
    - "npm run build && npm run test && npm run cover"

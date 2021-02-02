@@ -1,0 +1,1496 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>TzDatabase | timezonecomplete</title>
+	<meta name="description" content="Documentation for timezonecomplete">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">timezonecomplete</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="tzdatabase.html">TzDatabase</a>
+				</li>
+			</ul>
+			<h1>Class TzDatabase</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This class is a wrapper around time zone data JSON object from the tzdata NPM module.
+						You usually do not need to use this directly, use TimeZone and DateTime instead.</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">TzDatabase</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#abbreviation" class="tsd-kind-icon">abbreviation</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#dstoffsetforrule" class="tsd-kind-icon">dst<wbr>Offset<wbr>For<wbr>Rule</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#exists" class="tsd-kind-icon">exists</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#getruleinfos" class="tsd-kind-icon">get<wbr>Rule<wbr>Infos</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#gettransitionsdstoffsets" class="tsd-kind-icon">get<wbr>Transitions<wbr>Dst<wbr>Offsets</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#gettransitionstotaloffsets" class="tsd-kind-icon">get<wbr>Transitions<wbr>Total<wbr>Offsets</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#getzoneinfo" class="tsd-kind-icon">get<wbr>Zone<wbr>Info</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#getzoneinfos" class="tsd-kind-icon">get<wbr>Zone<wbr>Infos</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#hasdst" class="tsd-kind-icon">has<wbr>Dst</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#letterforrule" class="tsd-kind-icon">letter<wbr>For<wbr>Rule</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#maxdstsave" class="tsd-kind-icon">max<wbr>Dst<wbr>Save</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#mindstsave" class="tsd-kind-icon">min<wbr>Dst<wbr>Save</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#nextdstchange" class="tsd-kind-icon">next<wbr>Dst<wbr>Change</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#normalizelocal" class="tsd-kind-icon">normalize<wbr>Local</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#parseattype" class="tsd-kind-icon">parse<wbr>AtType</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#parseonday" class="tsd-kind-icon">parse<wbr>OnDay</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#parseontype" class="tsd-kind-icon">parse<wbr>OnType</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#parseonweekday" class="tsd-kind-icon">parse<wbr>OnWeek<wbr>Day</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#parseruletype" class="tsd-kind-icon">parse<wbr>Rule<wbr>Type</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#parsetotype" class="tsd-kind-icon">parse<wbr>ToType</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#standardoffset" class="tsd-kind-icon">standard<wbr>Offset</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#standardoffsetlocal" class="tsd-kind-icon">standard<wbr>Offset<wbr>Local</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#totaloffset" class="tsd-kind-icon">total<wbr>Offset</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#totaloffsetlocal" class="tsd-kind-icon">total<wbr>Offset<wbr>Local</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#zoneisutc" class="tsd-kind-icon">zone<wbr>IsUtc</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tzdatabase.html#zonenames" class="tsd-kind-icon">zone<wbr>Names</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="tzdatabase.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="tzdatabase.html#instance" class="tsd-kind-icon">instance</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="abbreviation" class="tsd-anchor"></a>
+					<h3>abbreviation</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">abbreviation<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, dstDependent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L996">tz-database.ts:996</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The time zone rule abbreviation, e.g. CEST for Central European Summer Time.
+										Note this is dependent on the time, because with time different rules are in effect
+									and therefore different abbreviations. They also change with DST: e.g. CEST or CET.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>utcTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Timestamp in UTC unix milliseconds</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> dstDependent: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>(default true) set to false for a DST-agnostic abbreviation</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>The abbreviation of the rule that is in effect</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="dstoffsetforrule" class="tsd-anchor"></a>
+					<h3>dst<wbr>Offset<wbr>For<wbr>Rule</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">dst<wbr>Offset<wbr>For<wbr>Rule<span class="tsd-signature-symbol">(</span>ruleName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, standardOffset<span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1124">tz-database.ts:1124</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the DST offset (WITHOUT the standard zone offset) for the given
+									ruleset and the given UTC timestamp</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Rule if ruleName not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ruleName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>name of ruleset</p>
+									</div>
+								</li>
+								<li>
+									<h5>utcTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>UTC timestamp</p>
+									</div>
+								</li>
+								<li>
+									<h5>standardOffset: <a href="duration.html" class="tsd-signature-type">Duration</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Standard offset without DST for the time zone</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="duration.html" class="tsd-signature-type">Duration</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="exists" class="tsd-anchor"></a>
+					<h3>exists</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">exists<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L667">tz-database.ts:667</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true iff the given zone name exists</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>nothing</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getruleinfos" class="tsd-anchor"></a>
+					<h3>get<wbr>Rule<wbr>Infos</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Rule<wbr>Infos<span class="tsd-signature-symbol">(</span>ruleName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1436">tz-database.ts:1436</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the rule set with the given rule name,
+									sorted by first effective date (uncompensated for &quot;w&quot; or &quot;s&quot; AtTime)</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Rule if rule not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData for invalid values in the time zone database</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ruleName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of rule set</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>RuleInfo array. Do not change, this is a cached value.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="gettransitionsdstoffsets" class="tsd-anchor"></a>
+					<h3>get<wbr>Transitions<wbr>Dst<wbr>Offsets</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Transitions<wbr>Dst<wbr>Offsets<span class="tsd-signature-symbol">(</span>ruleName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fromYear<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, toYear<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, standardOffset<span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1200">tz-database.ts:1200</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return a list of all transitions in [fromYear..toYear] sorted by effective date</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.Argument.FromYear if fromYear &gt; toYear</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Rule if ruleName not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ruleName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the rule set</p>
+									</div>
+								</li>
+								<li>
+									<h5>fromYear: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>first year to return transitions for</p>
+									</div>
+								</li>
+								<li>
+									<h5>toYear: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Last year to return transitions for</p>
+									</div>
+								</li>
+								<li>
+									<h5>standardOffset: <a href="duration.html" class="tsd-signature-type">Duration</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Standard offset without DST for the time zone</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>Transitions, with DST offsets (no standard offset included)</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="gettransitionstotaloffsets" class="tsd-anchor"></a>
+					<h3>get<wbr>Transitions<wbr>Total<wbr>Offsets</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Transitions<wbr>Total<wbr>Offsets<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fromYear<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, toYear<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1236">tz-database.ts:1236</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return both zone and rule changes as total (std + dst) offsets.
+									Adds an initial transition if there is no zone change within the range.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.Argument.FromYear if fromYear &gt; toYear</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zoneName not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>fromYear: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>First year to include</p>
+									</div>
+								</li>
+								<li>
+									<h5>toYear: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Last year to include</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getzoneinfo" class="tsd-anchor"></a>
+					<h3>get<wbr>Zone<wbr>Info</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Zone<wbr>Info<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="zoneinfo.html" class="tsd-signature-type">ZoneInfo</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1338">tz-database.ts:1338</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the zone info for the given UTC timestamp. Throws if not found.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA time zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>utcTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>UTC time stamp as unix milliseconds or as a TimeStruct</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="zoneinfo.html" class="tsd-signature-type">ZoneInfo</a></h4>
+							<p>ZoneInfo object. Do not change, we cache this object.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getzoneinfos" class="tsd-anchor"></a>
+					<h3>get<wbr>Zone<wbr>Infos</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Zone<wbr>Infos<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="zoneinfo.html" class="tsd-signature-type">ZoneInfo</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1362">tz-database.ts:1362</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return the zone records for a given zone name, after
+									following any links.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone does not exist or a linked zone does not exit</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA zone name like &quot;Pacific/Efate&quot;</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="zoneinfo.html" class="tsd-signature-type">ZoneInfo</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>Array of zone infos. Do not change, this is a cached value.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="hasdst" class="tsd-anchor"></a>
+					<h3>has<wbr>Dst</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Dst<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L775">tz-database.ts:775</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks whether the zone has DST at all</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="letterforrule" class="tsd-anchor"></a>
+					<h3>letter<wbr>For<wbr>Rule</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">letter<wbr>For<wbr>Rule<span class="tsd-signature-symbol">(</span>ruleName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, standardOffset<span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1161">tz-database.ts:1161</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the time zone letter for the given
+									ruleset and the given UTC timestamp</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Rule if ruleName not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ruleName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>name of ruleset</p>
+									</div>
+								</li>
+								<li>
+									<h5>utcTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>UTC timestamp as TimeStruct or unix millis</p>
+									</div>
+								</li>
+								<li>
+									<h5>standardOffset: <a href="duration.html" class="tsd-signature-type">Duration</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Standard offset without DST for the time zone</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="maxdstsave" class="tsd-anchor"></a>
+					<h3>max<wbr>Dst<wbr>Save</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">max<wbr>Dst<wbr>Save<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L732">tz-database.ts:732</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Maximum DST offset (which excludes standard offset) of all rules in the database.
+									Note that DST offsets need not be whole hours.</p>
+								</div>
+								<p>Returns 0 if zoneName given and no DST observed.</p>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> zoneName: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>(optional) if given, the result for the given zone is returned</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="duration.html" class="tsd-signature-type">Duration</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="mindstsave" class="tsd-anchor"></a>
+					<h3>min<wbr>Dst<wbr>Save</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">min<wbr>Dst<wbr>Save<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L681">tz-database.ts:681</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Minimum non-zero DST offset (which excludes standard offset) of all rules in the database.
+									Note that DST offsets need not be whole hours.</p>
+								</div>
+								<p>Does return zero if a zoneName is given and there is no DST at all for the zone.</p>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> zoneName: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>(optional) if given, the result for the given zone is returned</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="duration.html" class="tsd-signature-type">Duration</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="nextdstchange" class="tsd-anchor"></a>
+					<h3>next<wbr>Dst<wbr>Change</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">next<wbr>Dst<wbr>Change<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcTime<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">next<wbr>Dst<wbr>Change<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L785">tz-database.ts:785</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>First DST change moment AFTER the given UTC date in UTC milliseconds, within one year,
+									returns undefined if no such change</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>utcTime: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L786">tz-database.ts:786</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>utcTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="normalizelocal" class="tsd-anchor"></a>
+					<h3>normalize<wbr>Local</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">normalize<wbr>Local<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, localTime<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opt<span class="tsd-signature-symbol">?: </span><a href="../enums/normalizeoption.html" class="tsd-signature-type">NormalizeOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">normalize<wbr>Local<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, localTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a>, opt<span class="tsd-signature-symbol">?: </span><a href="../enums/normalizeoption.html" class="tsd-signature-type">NormalizeOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L875">tz-database.ts:875</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Normalizes non-existing local times by adding/subtracting a forward offset change.
+										During a forward standard offset change or DST offset change, some amount of
+										local time is skipped. Therefore, this amount of local time does not exist.
+										This function adds the amount of forward change to any non-existing time. After all,
+									this is probably what the user meant.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA time zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>localTime: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A local time as a unix millisecond value</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opt: <a href="../enums/normalizeoption.html" class="tsd-signature-type">NormalizeOption</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>(optional) Round up or down? Default: up.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L891">tz-database.ts:891</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Normalizes non-existing local times by adding/subtracting a forward offset change.
+										During a forward standard offset change or DST offset change, some amount of
+										local time is skipped. Therefore, this amount of local time does not exist.
+										This function adds the amount of forward change to any non-existing time. After all,
+									this is probably what the user meant.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA time zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>localTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A local time, as a TimeStruct</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opt: <a href="../enums/normalizeoption.html" class="tsd-signature-type">NormalizeOption</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>(optional) Round up or down? Default: up.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h4>
+							<p>The normalized time, in the same format as the localTime parameter (TimeStruct or unix millis)</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="parseattype" class="tsd-anchor"></a>
+					<h3>parse<wbr>AtType</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>AtType<span class="tsd-signature-symbol">(</span>at<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/attype.html" class="tsd-signature-type">AtType</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1591">tz-database.ts:1591</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Parse the AT column of a rule info entry
+									and see what kind of entry it is.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>nothing</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>at: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/attype.html" class="tsd-signature-type">AtType</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="parseonday" class="tsd-anchor"></a>
+					<h3>parse<wbr>OnDay</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>OnDay<span class="tsd-signature-symbol">(</span>on<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, onType<span class="tsd-signature-symbol">: </span><a href="../enums/ontype.html" class="tsd-signature-type">OnType</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1554">tz-database.ts:1554</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the day number from an ON column string, 0 if no day.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>nothing</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>on: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>onType: <a href="../enums/ontype.html" class="tsd-signature-type">OnType</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="parseontype" class="tsd-anchor"></a>
+					<h3>parse<wbr>OnType</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>OnType<span class="tsd-signature-symbol">(</span>on<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/ontype.html" class="tsd-signature-type">OnType</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1537">tz-database.ts:1537</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Parse the ON column of a rule info entry
+									and see what kind of entry it is.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>nothing</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>on: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/ontype.html" class="tsd-signature-type">OnType</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="parseonweekday" class="tsd-anchor"></a>
+					<h3>parse<wbr>OnWeek<wbr>Day</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>OnWeek<wbr>Day<span class="tsd-signature-symbol">(</span>on<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/weekday.html" class="tsd-signature-type">WeekDay</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1573">tz-database.ts:1573</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the day-of-week from an ON column string, Sunday if not present.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>nothing</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>on: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/weekday.html" class="tsd-signature-type">WeekDay</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="parseruletype" class="tsd-anchor"></a>
+					<h3>parse<wbr>Rule<wbr>Type</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>Rule<wbr>Type<span class="tsd-signature-symbol">(</span>rule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/ruletype.html" class="tsd-signature-type">RuleType</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1504">tz-database.ts:1504</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Parse the RULES column of a zone info entry
+									and see what kind of entry it is.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>nothing</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>rule: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/ruletype.html" class="tsd-signature-type">RuleType</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="parsetotype" class="tsd-anchor"></a>
+					<h3>parse<wbr>ToType</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>ToType<span class="tsd-signature-symbol">(</span>to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/totype.html" class="tsd-signature-type">ToType</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1519">tz-database.ts:1519</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Parse the TO column of a rule info entry
+									and see what kind of entry it is.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.Argument.To for invalid TO</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>to: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/totype.html" class="tsd-signature-type">ToType</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="standardoffset" class="tsd-anchor"></a>
+					<h3>standard<wbr>Offset</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">standard<wbr>Offset<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L940">tz-database.ts:940</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the standard time zone offset from UTC, without DST.
+									Throws if info not found.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA time zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>utcTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Timestamp in UTC, either as TimeStruct or as Unix millisecond value</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="duration.html" class="tsd-signature-type">Duration</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="standardoffsetlocal" class="tsd-anchor"></a>
+					<h3>standard<wbr>Offset<wbr>Local</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">standard<wbr>Offset<wbr>Local<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, localTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1037">tz-database.ts:1037</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the standard time zone offset from UTC, excluding DST, at
+									the given LOCAL timestamp, again excluding DST.</p>
+								</div>
+								<p>If the local timestamp exists twice (as can occur very rarely due to zone changes)
+								then the first occurrence is returned.</p>
+								<p>Throws if zone info not found.</p>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zoneName not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA time zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>localTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Timestamp in time zone time</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="duration.html" class="tsd-signature-type">Duration</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="totaloffset" class="tsd-anchor"></a>
+					<h3>total<wbr>Offset</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">total<wbr>Offset<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, utcTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L955">tz-database.ts:955</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the total time zone offset from UTC, including DST, at
+										the given UTC timestamp.
+									Throws if zone info not found.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA time zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>utcTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Timestamp in UTC, either as TimeStruct or as Unix millisecond value</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="duration.html" class="tsd-signature-type">Duration</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="totaloffsetlocal" class="tsd-anchor"></a>
+					<h3>total<wbr>Offset<wbr>Local</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">total<wbr>Offset<wbr>Local<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, localTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L1064">tz-database.ts:1064</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the total time zone offset from UTC, including DST, at
+										the given LOCAL timestamp. Non-existing local time is normalized out.
+										There can be multiple UTC times and therefore multiple offsets for a local time
+										namely during a backward DST change. This returns the FIRST such offset.
+									Throws if zone info not found.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.NotFound.Zone if zoneName not found</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if an error is discovered in the time zone database</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA time zone name</p>
+									</div>
+								</li>
+								<li>
+									<h5>localTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Timestamp in time zone time</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="duration.html" class="tsd-signature-type">Duration</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="zoneisutc" class="tsd-anchor"></a>
+					<h3>zone<wbr>IsUtc</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">zone<wbr>IsUtc<span class="tsd-signature-symbol">(</span>zoneName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L844">tz-database.ts:844</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true iff the given zone name eventually links to
+										&quot;Etc/UTC&quot;, &quot;Etc/GMT&quot; or &quot;Etc/UCT&quot; in the TZ database. This is true e.g. for
+									&quot;UTC&quot;, &quot;GMT&quot;, &quot;Etc/GMT&quot; etc.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>nothing</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>zoneName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IANA time zone name.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="zonenames" class="tsd-anchor"></a>
+					<h3>zone<wbr>Names</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">zone<wbr>Names<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L654">tz-database.ts:654</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a sorted list of all zone names</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>nothing</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="init" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> init</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L524">tz-database.ts:524</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>(re-) initialize timezonecomplete with time zone data</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if <code>data</code> or the global time zone data is invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>TZ data as JSON object (from one of the tzdata NPM modules).
+										If not given, Timezonecomplete will search for installed modules.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="instance" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> instance</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">instance<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tzdatabase.html" class="tsd-signature-type">TzDatabase</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/5c5a55a/src/lib/tz-database.ts#L596">tz-database.ts:596</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Single instance of this database</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="tzdatabase.html" class="tsd-signature-type">TzDatabase</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
+						<a href="tzdatabase.html" class="tsd-kind-icon">Tz<wbr>Database</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#abbreviation" class="tsd-kind-icon">abbreviation</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#dstoffsetforrule" class="tsd-kind-icon">dst<wbr>Offset<wbr>For<wbr>Rule</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#exists" class="tsd-kind-icon">exists</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#getruleinfos" class="tsd-kind-icon">get<wbr>Rule<wbr>Infos</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#gettransitionsdstoffsets" class="tsd-kind-icon">get<wbr>Transitions<wbr>Dst<wbr>Offsets</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#gettransitionstotaloffsets" class="tsd-kind-icon">get<wbr>Transitions<wbr>Total<wbr>Offsets</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#getzoneinfo" class="tsd-kind-icon">get<wbr>Zone<wbr>Info</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#getzoneinfos" class="tsd-kind-icon">get<wbr>Zone<wbr>Infos</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#hasdst" class="tsd-kind-icon">has<wbr>Dst</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#letterforrule" class="tsd-kind-icon">letter<wbr>For<wbr>Rule</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#maxdstsave" class="tsd-kind-icon">max<wbr>Dst<wbr>Save</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#mindstsave" class="tsd-kind-icon">min<wbr>Dst<wbr>Save</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#nextdstchange" class="tsd-kind-icon">next<wbr>Dst<wbr>Change</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#normalizelocal" class="tsd-kind-icon">normalize<wbr>Local</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#parseattype" class="tsd-kind-icon">parse<wbr>AtType</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#parseonday" class="tsd-kind-icon">parse<wbr>OnDay</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#parseontype" class="tsd-kind-icon">parse<wbr>OnType</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#parseonweekday" class="tsd-kind-icon">parse<wbr>OnWeek<wbr>Day</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#parseruletype" class="tsd-kind-icon">parse<wbr>Rule<wbr>Type</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#parsetotype" class="tsd-kind-icon">parse<wbr>ToType</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#standardoffset" class="tsd-kind-icon">standard<wbr>Offset</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#standardoffsetlocal" class="tsd-kind-icon">standard<wbr>Offset<wbr>Local</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#totaloffset" class="tsd-kind-icon">total<wbr>Offset</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#totaloffsetlocal" class="tsd-kind-icon">total<wbr>Offset<wbr>Local</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#zoneisutc" class="tsd-kind-icon">zone<wbr>IsUtc</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tzdatabase.html#zonenames" class="tsd-kind-icon">zone<wbr>Names</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="tzdatabase.html#init" class="tsd-kind-icon">init</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="tzdatabase.html#instance" class="tsd-kind-icon">instance</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
