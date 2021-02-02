@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.11.3 (2021-02-02)
+
+* Fix America/Detroit DST change being calculated incorrectly.
+
 ## 5.11.2 (2020-07-30)
 
 * Fix dependency vulnerabilities
