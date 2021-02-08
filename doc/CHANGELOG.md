@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.11.5 (2021-02-08)
+
+* Fix #51 tzdata no longer being installed
+
 ## 5.11.4 (2021-02-02)
 
 * build fix

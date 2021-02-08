@@ -1,6 +1,6 @@
 {
   "name": "timezonecomplete",
-  "version": "5.11.4",
+  "version": "5.11.5",
   "description": "DateTime, TimeZone, Duration and Period library aimed at providing a consistent and complete date-time interface, away from the original JavaScript Date class.",
   "keywords": [
     "Date",
@@ -49,7 +49,9 @@
     "karma": "npm run bundle_tests && npm run exec_karma",
     "all": "npm run clean && npm run build && npm run test && npm run karma && npm run doc"
   },
-  "dependencies": {},
+  "dependencies": {
+    "tzdata": "^1.0.25"
+  },
   "devDependencies": {
     "@types/chai": "^4.2.12",
     "@types/lolex": "^5.1.0",
@@ -75,7 +77,6 @@
     "tslint": "^6.1.2",
     "typedoc": "^0.17.8",
     "typescript": "^3.9.7",
-    "tzdata": "^1.0.25",
     "uglify-js": "^3.10.0"
   }
 }
