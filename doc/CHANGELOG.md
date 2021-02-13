@@ -1,6 +1,17 @@
 
 # Changelog
 
+## 5.12.0 (2021-02-13)
+
+* Fix #50 America/Detroit daylight saving time transition not calculated correctly
+* Deprecated the following methods because they do not take a zone name and their logic does need to depend on the zone. They are inherently incorrect and cannot be fixed without changing the interface. These methods will be removed in the next major version.
+	* TzDatabase#dstOffsetForRule()
+	* TzDatabase#letterForRule()
+	* TzDatabase#getTransitionsDstOffsets()
+* Fix incorrect zone abbreviations for zones with a slash in their format string
+* Fix InvalidTimeZoneData error for Asia/Gaza zone and Zion rules
+* (SEMVER-MINOR) add `Duration.zero()` and `Duration.nonZero()` methods
+
 ## 5.11.5 (2021-02-08)
 
 * Fix #51 tzdata no longer being installed

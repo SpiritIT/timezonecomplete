@@ -1952,7 +1952,8 @@ class CachedRuleTransitions {
 	public findLastLessEqual(beforeUtc: TimeStruct, standardOffset: Duration): RuleTransition | undefined {
 		let prevTransition: RuleTransition | undefined;
 		let iterator = this.findFirst();
-		let effectiveUtc: TimeStruct | undefined = iterator?.transition ? ruleTransitionUtc(iterator.transition, standardOffset, undefined) : undefined;
+		let effectiveUtc: TimeStruct | undefined =
+			iterator?.transition ? ruleTransitionUtc(iterator.transition, standardOffset, undefined) : undefined;
 		while (iterator && effectiveUtc && effectiveUtc <= beforeUtc) {
 			prevTransition = iterator.transition;
 			iterator = this.findNext(iterator);
@@ -1972,7 +1973,8 @@ class CachedRuleTransitions {
 	): RuleTransition | undefined {
 		// todo inefficient - optimize
 		let iterator = this.findFirst();
-		let effectiveUtc: TimeStruct | undefined = iterator?.transition ? ruleTransitionUtc(iterator?.transition, standardOffset, dstOffset) : undefined;
+		let effectiveUtc: TimeStruct | undefined =
+			iterator?.transition ? ruleTransitionUtc(iterator?.transition, standardOffset, dstOffset) : undefined;
 		while (iterator && effectiveUtc && (!iterator?.transition?.newState.dstOffset.zero() || effectiveUtc <= afterUtc)) {
 			iterator = this.findNext(iterator);
 			effectiveUtc = iterator?.transition ? ruleTransitionUtc(iterator?.transition, standardOffset, dstOffset) : undefined;

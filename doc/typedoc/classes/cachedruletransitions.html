@@ -1,0 +1,363 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>CachedRuleTransitions | timezonecomplete</title>
+	<meta name="description" content="Documentation for timezonecomplete">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">timezonecomplete</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="cachedruletransitions.html">CachedRuleTransitions</a>
+				</li>
+			</ul>
+			<h1>Class CachedRuleTransitions</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Ready-made sorted rule transitions (uncompensated for stdoffset, as rules are used by multiple zones with different offsets)</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">CachedRuleTransitions</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="cachedruletransitions.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="cachedruletransitions.html#final" class="tsd-kind-icon">final</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="cachedruletransitions.html#findfirst" class="tsd-kind-icon">find<wbr>First</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="cachedruletransitions.html#findlastlessequal" class="tsd-kind-icon">find<wbr>Last<wbr>Less<wbr>Equal</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="cachedruletransitions.html#findnext" class="tsd-kind-icon">find<wbr>Next</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="cachedruletransitions.html#firsttransitionwithoutdstafter" class="tsd-kind-icon">first<wbr>Transition<wbr>Without<wbr>Dst<wbr>After</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Cached<wbr>Rule<wbr>Transitions<span class="tsd-signature-symbol">(</span>ruleInfos<span class="tsd-signature-symbol">: </span><a href="ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="cachedruletransitions.html" class="tsd-signature-type">CachedRuleTransitions</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L1788">tz-database.ts:1788</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Constructor</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ruleInfos: <a href="ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="cachedruletransitions.html" class="tsd-signature-type">CachedRuleTransitions</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="final" class="tsd-anchor"></a>
+					<h3>final</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> final<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L1786">tz-database.ts:1786</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The &#39;max&#39; type rules at the end, sorted by year-relative effective date</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="ruleinfo.html" class="tsd-signature-type">RuleInfo</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="findfirst" class="tsd-anchor"></a>
+					<h3>find<wbr>First</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">find<wbr>First<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/ruletransitioniterator.html" class="tsd-signature-type">RuleTransitionIterator</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L1872">tz-database.ts:1872</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the first ever transition as defined by the rule set</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/ruletransitioniterator.html" class="tsd-signature-type">RuleTransitionIterator</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="findlastlessequal" class="tsd-anchor"></a>
+					<h3>find<wbr>Last<wbr>Less<wbr>Equal</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Last<wbr>Less<wbr>Equal<span class="tsd-signature-symbol">(</span>beforeUtc<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a>, standardOffset<span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/ruletransition.html" class="tsd-signature-type">RuleTransition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L1952">tz-database.ts:1952</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Dirty find function that only takes a standard offset from UTC into account</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>beforeUtc: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>timestamp to search for</p>
+									</div>
+								</li>
+								<li>
+									<h5>standardOffset: <a href="duration.html" class="tsd-signature-type">Duration</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>zone standard offset to apply</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/ruletransition.html" class="tsd-signature-type">RuleTransition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="findnext" class="tsd-anchor"></a>
+					<h3>find<wbr>Next</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">find<wbr>Next<span class="tsd-signature-symbol">(</span>prev<span class="tsd-signature-symbol">: </span><a href="../interfaces/ruletransitioniterator.html" class="tsd-signature-type">RuleTransitionIterator</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/ruletransitioniterator.html" class="tsd-signature-type">RuleTransitionIterator</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L1904">tz-database.ts:1904</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the next transition, given an iterator</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>prev: <a href="../interfaces/ruletransitioniterator.html" class="tsd-signature-type">RuleTransitionIterator</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the iterator</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/ruletransitioniterator.html" class="tsd-signature-type">RuleTransitionIterator</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="firsttransitionwithoutdstafter" class="tsd-anchor"></a>
+					<h3>first<wbr>Transition<wbr>Without<wbr>Dst<wbr>After</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">first<wbr>Transition<wbr>Without<wbr>Dst<wbr>After<span class="tsd-signature-symbol">(</span>afterUtc<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a>, standardOffset<span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a>, dstOffset<span class="tsd-signature-symbol">: </span><a href="duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/ruletransition.html" class="tsd-signature-type">RuleTransition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L1971">tz-database.ts:1971</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>afterUtc: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
+								</li>
+								<li>
+									<h5>standardOffset: <a href="duration.html" class="tsd-signature-type">Duration</a></h5>
+								</li>
+								<li>
+									<h5>dstOffset: <a href="duration.html" class="tsd-signature-type">Duration</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/ruletransition.html" class="tsd-signature-type">RuleTransition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
+						<a href="cachedruletransitions.html" class="tsd-kind-icon">Cached<wbr>Rule<wbr>Transitions</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="cachedruletransitions.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="cachedruletransitions.html#final" class="tsd-kind-icon">final</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="cachedruletransitions.html#findfirst" class="tsd-kind-icon">find<wbr>First</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="cachedruletransitions.html#findlastlessequal" class="tsd-kind-icon">find<wbr>Last<wbr>Less<wbr>Equal</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="cachedruletransitions.html#findnext" class="tsd-kind-icon">find<wbr>Next</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="cachedruletransitions.html#firsttransitionwithoutdstafter" class="tsd-kind-icon">first<wbr>Transition<wbr>Without<wbr>Dst<wbr>After</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

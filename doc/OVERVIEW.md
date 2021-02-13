@@ -201,6 +201,14 @@ fiveSecs.equals(sixSecs); // false
 fiveSecs.greaterEqual(sixSecs); // false
 fiveSecs.greaterThan(sixSecs); // false
 
+// zero-check
+tc.seconds(0).zero(); // true
+tc.seconds(-1).zero(); // false
+
+// nonZero-check
+tc.seconds(0).nonZero(); // false
+tc.seconds(-1).nonZero(); // true
+
 // different equality functions:
 tc.seconds(60).equals(tc.minutes(1)); // true, we don't handle leap seconds so 60 seconds is 1 minute
 tc.days(30).equals(tc.months(1)); // true, 1 month is approx 30 days
@@ -321,7 +329,7 @@ isTimeZone(z); // returns true
 ```
 
 ## TzDatabase
-The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like 'what is the maximum Daylight Saving Time shift of all zones in the database'?
+The TzDatabase class is a singleton class containing the time zone database. It has methods to query time zone offsets. Also, it provides some aggregate information like 'what is the maximum Daylight Saving Time shift of all zones in the database'
 
 ```javascript
 
@@ -342,7 +350,6 @@ var bool2 = db.hasDst("UTC"); // false
 
 // Next daylight saving time change in unix utc milliseconds
 var unixUtcMillis = db.nextDstChange("Europe/Amsterdam", 1427590799999); // 1427590800000
-
 
 ```
 

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>NormalizeOption | timezonecomplete</title>
+	<title>RuleState | timezonecomplete</title>
 	<meta name="description" content="Documentation for timezonecomplete">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,10 +52,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="normalizeoption.html">NormalizeOption</a>
+					<a href="rulestate.html">RuleState</a>
 				</li>
 			</ul>
-			<h1>Enumeration NormalizeOption</h1>
+			<h1>Interface RuleState</h1>
 		</div>
 	</div>
 </header>
@@ -65,55 +65,58 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Option for TzDatabase#normalizeLocal()</p>
+						<p>Steady-state of a rule at a given point in time</p>
 					</div>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">RuleState</span>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumeration members</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="normalizeoption.html#down" class="tsd-kind-icon">Down</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="normalizeoption.html#up" class="tsd-kind-icon">Up</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rulestate.html#dstoffset" class="tsd-kind-icon">dst<wbr>Offset</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rulestate.html#letter" class="tsd-kind-icon">letter</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Enumeration members</h2>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="down" class="tsd-anchor"></a>
-					<h3>Down</h3>
-					<div class="tsd-signature tsd-kind-icon">Down<span class="tsd-signature-symbol">:</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="dstoffset" class="tsd-anchor"></a>
+					<h3>dst<wbr>Offset</h3>
+					<div class="tsd-signature tsd-kind-icon">dst<wbr>Offset<span class="tsd-signature-symbol">:</span> <a href="../classes/duration.html" class="tsd-signature-type">Duration</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L500">tz-database.ts:500</a></li>
+							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L1722">tz-database.ts:1722</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Normalize non-existing times by SUBTRACTING the DST offset</p>
+							<p>Offset from stdoffset</p>
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="up" class="tsd-anchor"></a>
-					<h3>Up</h3>
-					<div class="tsd-signature tsd-kind-icon">Up<span class="tsd-signature-symbol">:</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="letter" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> letter</h3>
+					<div class="tsd-signature tsd-kind-icon">letter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L496">tz-database.ts:496</a></li>
+							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/2c993ef/src/lib/tz-database.ts#L1726">tz-database.ts:1726</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Normalize non-existing times by ADDING the DST offset</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -129,14 +132,14 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-enum">
-						<a href="normalizeoption.html" class="tsd-kind-icon">Normalize<wbr>Option</a>
+					<li class="current tsd-kind-interface">
+						<a href="rulestate.html" class="tsd-kind-icon">Rule<wbr>State</a>
 						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="normalizeoption.html#down" class="tsd-kind-icon">Down</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rulestate.html#dstoffset" class="tsd-kind-icon">dst<wbr>Offset</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="normalizeoption.html#up" class="tsd-kind-icon">Up</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rulestate.html#letter" class="tsd-kind-icon">letter</a>
 							</li>
 						</ul>
 					</li>
