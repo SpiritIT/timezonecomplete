@@ -67,5 +67,6 @@ node_modules
 /temp/
 /test/
 /tzdata/
+/tz/
 *.log
 *.tgz
