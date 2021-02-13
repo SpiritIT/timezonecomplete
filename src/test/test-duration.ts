@@ -320,6 +320,32 @@ describe("Duration()", (): void => {
 		});
 	});
 
+	describe("zero()", (): void => {
+		it("should report true for zero", (): void => {
+			expect(Duration.hours(0).zero()).to.equal(true);
+			expect(Duration.milliseconds(0).zero()).to.equal(true);
+			expect(Duration.milliseconds(-0).zero()).to.equal(true);
+		});
+		it("should report false for non-zero", (): void => {
+			expect(Duration.hours(0.1).zero()).to.equal(false);
+			expect(Duration.milliseconds(1).zero()).to.equal(false);
+			expect(Duration.milliseconds(-1).zero()).to.equal(false);
+		});
+	});
+
+	describe("nonZero()", (): void => {
+		it("should report false for zero", (): void => {
+			expect(Duration.hours(0).nonZero()).to.equal(false);
+			expect(Duration.milliseconds(0).nonZero()).to.equal(false);
+			expect(Duration.milliseconds(-0).nonZero()).to.equal(false);
+		});
+		it("should report true for non-Zero", (): void => {
+			expect(Duration.hours(0.1).nonZero()).to.equal(true);
+			expect(Duration.milliseconds(1).nonZero()).to.equal(true);
+			expect(Duration.milliseconds(-1).nonZero()).to.equal(true);
+		});
+	});
+
 	describe("min()", (): void => {
 		it("should return a value equal to this if this is smaller", (): void => {
 			expect(Duration.milliseconds(1).min(Duration.milliseconds(2)).milliseconds()).to.equal(1);

@@ -545,6 +545,20 @@ export class Duration {
 	}
 
 	/**
+	 * Returns true if this is a non-zero length duration
+	 */
+	public nonZero(): boolean {
+		return this._amount !== 0;
+	}
+
+	/**
+	 * Returns true if this is a zero-length duration
+	 */
+	public zero(): boolean {
+		return this._amount === 0;
+	}
+
+	/**
 	 * Approximate if the durations have units that cannot be converted
 	 * @return True iff this > other
 	 * @throws nothing
