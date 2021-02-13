@@ -19,7 +19,6 @@ import {
 // inject test data into TzDatabase
 /* tslint:disable */
 const testData = require("./test-timezone-data.json");
-TzDatabase.init(testData);
 /* tslint:enable */
 
 /* tslint:disable:max-line-length */
@@ -247,7 +246,7 @@ describe("TzDatabase", (): void => {
 					RuleType.RuleName,
 					Duration.hours(0),
 					"Neth",
-					"NE%sT",
+					"+0020/+0120",
 					-935020800000
 				),
 				new ZoneInfo(
@@ -418,39 +417,39 @@ describe("TzDatabase", (): void => {
 
 	describe("getTransitionsDstOffsets()", (): void => {
 		it("should work for rules that use UTC in AT column", (): void => {
-			expect(util.inspect(TzDatabase.instance().getTransitionsDstOffsets("EU", 2013, 2014, Duration.hours(1)))).
-				to.equal(util.inspect([
+			expect(TzDatabase.instance().getTransitionsDstOffsets("EU", 2013, 2014, Duration.hours(1))).
+				to.deep.equal([
 					new Transition((TimeStruct.fromComponents(2013, 3, 31, 1, 0, 0, 0)).unixMillis, Duration.hours(1), "S"),
 					new Transition((TimeStruct.fromComponents(2013, 10, 27, 1, 0, 0, 0)).unixMillis, Duration.hours(0), ""),
 					new Transition((TimeStruct.fromComponents(2014, 3, 30, 1, 0, 0, 0)).unixMillis, Duration.hours(1), "S"),
 					new Transition((TimeStruct.fromComponents(2014, 10, 26, 1, 0, 0, 0)).unixMillis, Duration.hours(0), ""),
-				]));
+				]);
 		});
 		// todors other types of rules
 	});
 
 	describe("getTransitionsTotalOffsets()", (): void => {
 		it("should work for UTC", (): void => {
-			expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Etc/UTC", 2013, 2014))).
-				to.equal(util.inspect([
+			expect(TzDatabase.instance().getTransitionsTotalOffsets("Etc/UTC", 2013, 2014)).
+				to.deep.equal([
 					new Transition((TimeStruct.fromComponents(2013, 1, 1, 0, 0, 0, 0)).unixMillis, Duration.hours(0), ""),
-				]));
+				]);
 		});
 		it("should work for single zone info", (): void => {
-			expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Europe/Amsterdam", 2013, 2014))).
-				to.equal(util.inspect([
-					new Transition(252374400000, Duration.hours(1), ""), // time zone offset
+			expect(TzDatabase.instance().getTransitionsTotalOffsets("Europe/Amsterdam", 2013, 2014)).
+				to.deep.equal([
+					new Transition((TimeStruct.fromComponents(2013, 1, 1, 0, 0, 0, 0)).unixMillis, Duration.hours(1), ""),
 					new Transition((TimeStruct.fromComponents(2013, 3, 31, 1, 0, 0, 0)).unixMillis, Duration.hours(2), "S"),
 					new Transition((TimeStruct.fromComponents(2013, 10, 27, 1, 0, 0, 0)).unixMillis, Duration.hours(1), ""),
 					new Transition((TimeStruct.fromComponents(2014, 3, 30, 1, 0, 0, 0)).unixMillis, Duration.hours(2), "S"),
 					new Transition((TimeStruct.fromComponents(2014, 10, 26, 1, 0, 0, 0)).unixMillis, Duration.hours(1), ""),
-				]));
+				]);
 		});
 		it("should add zone info transition", (): void => {
-			expect(util.inspect(TzDatabase.instance().getTransitionsTotalOffsets("Africa/Porto-Novo", 1969, 1969))).
-				to.equal(util.inspect([
-					new Transition(-1131235200000, Duration.hours(1), ""),
-				]));
+			expect(TzDatabase.instance().getTransitionsTotalOffsets("Africa/Porto-Novo", 1969, 1969)).
+				to.deep.equal([
+					new Transition(TimeStruct.fromComponents(1969, 1, 1, 0, 0, 0, 0).unixMillis, Duration.hours(1), ""),
+				]);
 		});
 	});
 
@@ -494,19 +493,30 @@ describe("TzDatabase", (): void => {
 	});
 
 	describe("abbreviation()", (): void => {
-		it("should work for zones with rules", (): void => {
+		it("should work for zones with a slash format", (): void => {
+			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (TimeStruct.fromComponents(1938, 1, 1, 0, 59, 59, 999)))).
+				to.equal("+0020");
+			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (TimeStruct.fromComponents(1938, 7, 1, 1, 0, 0, 0)))).
+				to.equal("+0120");
+		});
+		it("should work for zones with a %s format", (): void => {
 			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (TimeStruct.fromComponents(2014, 3, 30, 0, 59, 59, 999)))).
 				to.equal("CET");
 			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (TimeStruct.fromComponents(2014, 3, 30, 1, 0, 0, 0)))).
 				to.equal("CEST");
 		});
 		it("should work around zone changes", (): void => {
-			expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", new TimeStruct(1388534399999))).
-				to.equal("TIR");
-			expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", new TimeStruct(1388534400000))).
-				to.equal("TST");
-			expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", new TimeStruct(1388534400))).
-				to.equal("TIR");
+			TzDatabase.init(testData);
+			try {
+				expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", new TimeStruct(1388534399999))).
+					to.equal("TIR");
+				expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", new TimeStruct(1388534400000))).
+					to.equal("TST");
+				expect(TzDatabase.instance().abbreviation("TEST/ImmediateRule", new TimeStruct(1388534400))).
+					to.equal("TIR");
+			} finally {
+				TzDatabase.init();
+			}
 		});
 		it("should work for zones that have a fixed DST offset", (): void => {
 			expect(TzDatabase.instance().abbreviation("Africa/Algiers", new TimeStruct(-1855958400001))).to.equal("PMT");
@@ -555,18 +565,30 @@ describe("TzDatabase", (): void => {
 				"America/Swift_Current", new TimeStruct(-3030227200000)).minutes()).to.be.within(-432, -431);
 		});
 		it("should work for time zones with fixed DST offset", (): void => {
-			expect(TzDatabase.instance().totalOffsetLocal(
-				"TEST/OnlyOffset", new TimeStruct(-2486678340001)).hours()).to.equal(2);
-			expect(TzDatabase.instance().totalOffsetLocal(
-				"TEST/OnlyOffset", new TimeStruct(-1486678340001)).hours()).to.equal(3);
+			TzDatabase.init(testData);
+			try {
+				expect(
+					TzDatabase.instance().totalOffsetLocal("TEST/OnlyOffset", new TimeStruct(-2486678340001)).hours()
+				).to.equal(2);
+				expect(
+					TzDatabase.instance().totalOffsetLocal("TEST/OnlyOffset", new TimeStruct(-1486678340001)).hours()
+				).to.equal(3);
+			} finally {
+				TzDatabase.init();
+			}
 		});
 		it("should work for time zones with rule starting at start of zone", (): void => {
-			expect(TzDatabase.instance().totalOffsetLocal(
-				"TEST/ImmediateRule", (TimeStruct.fromComponents(2013, 12, 31, 23, 59, 59, 999))).hours()).to.equal(1);
-			expect(TzDatabase.instance().totalOffsetLocal(
-				"TEST/ImmediateRule", (TimeStruct.fromComponents(2014, 1, 1, 0, 0, 0, 0))).hours()).to.equal(1);
-			expect(TzDatabase.instance().totalOffsetLocal(
-				"TEST/ImmediateRule", (TimeStruct.fromComponents(2014, 1, 1, 1, 0, 0, 0))).hours()).to.equal(2);
+			TzDatabase.init(testData);
+			try {
+				expect(TzDatabase.instance().totalOffsetLocal(
+					"TEST/ImmediateRule", (TimeStruct.fromComponents(2013, 12, 31, 23, 59, 59, 999))).hours()).to.equal(1);
+				expect(TzDatabase.instance().totalOffsetLocal(
+					"TEST/ImmediateRule", (TimeStruct.fromComponents(2014, 1, 1, 0, 0, 0, 0))).hours()).to.equal(1);
+				expect(TzDatabase.instance().totalOffsetLocal(
+					"TEST/ImmediateRule", (TimeStruct.fromComponents(2014, 1, 1, 1, 0, 0, 0))).hours()).to.equal(2);
+			} finally {
+				TzDatabase.init();
+			}
 		});
 	});
 
@@ -612,6 +634,13 @@ describe("TzDatabase", (): void => {
 	});
 
 	describe("minDstSave()", (): void => {
+		beforeEach(() => {
+			TzDatabase.init(testData);
+		});
+		afterEach(() => {
+			TzDatabase.init();
+		});
+
 		it("should return the minimum for the entire database", (): void => {
 			expect(TzDatabase.instance().minDstSave().minutes()).to.equal(20);
 		});
@@ -627,6 +656,13 @@ describe("TzDatabase", (): void => {
 	});
 
 	describe("maxDstSave()", (): void => {
+		beforeEach(() => {
+			TzDatabase.init(testData);
+		});
+		afterEach(() => {
+			TzDatabase.init();
+		});
+
 		it("should return the maximum for the entire database", (): void => {
 			expect(TzDatabase.instance().maxDstSave().minutes()).to.equal(120);
 		});
@@ -712,6 +748,34 @@ describe("TzDatabase", (): void => {
 			expect(TzDatabase.instance().normalizeLocal(
 				"Europe/Amsterdam", TimeStruct.fromComponents(2014, 3, 30, 3, 0, 0, 0), NormalizeOption.Down).equals(
 				TimeStruct.fromComponents(2014, 3, 30, 3, 0, 0, 0))).to.equal(true);
+		});
+	});
+
+
+	describe("Issue #50", (): void => {
+		it("should calculate correct offset for Detroit (issue)", (): void => {
+			const utcTime = TzDatabase.instance().nextDstChange("America/Detroit", 1612199681000);
+			expect(utcTime).to.equal(1615701600000 + 3600000);
+		});
+
+		it("should calculate correct offset for Detroit (forward)", (): void => {
+			const utcTime = TzDatabase.instance().nextDstChange("America/Detroit", TimeStruct.fromComponents(2021, 3, 14, 6, 30, 0));
+			expect(utcTime).to.equal(TimeStruct.fromComponents(2021, 3, 14, 7, 0, 0).unixMillis, TimeStruct.fromUnix(utcTime ?? 0).toString());
+		});
+
+		it("should calculate correct offset for Detroit (backward)", (): void => {
+			const utcTime = TzDatabase.instance().nextDstChange("America/Detroit", TimeStruct.fromComponents(2021, 11, 7, 5, 30, 0));
+			expect(utcTime).to.equal(TimeStruct.fromComponents(2021, 11, 7, 6, 0, 0).unixMillis, TimeStruct.fromUnix(utcTime ?? 0).toString());
+		});
+
+		it("should calculate correct offset for Amsterdam (forward)", (): void => {
+			const utcTime = TzDatabase.instance().nextDstChange("Europe/Amsterdam", TimeStruct.fromComponents(2021, 3, 28, 0, 30, 0));
+			expect(utcTime).to.equal(TimeStruct.fromComponents(2021, 3, 28, 1, 0, 0).unixMillis, TimeStruct.fromUnix(utcTime ?? 0).toString());
+		});
+
+		it("should calculate correct offset for Amsterdam (backward)", (): void => {
+			const utcTime = TzDatabase.instance().nextDstChange("Europe/Amsterdam", TimeStruct.fromComponents(2021, 10, 31, 0, 30, 0));
+			expect(utcTime).to.equal(TimeStruct.fromComponents(2021, 10, 31, 1, 0, 0).unixMillis, TimeStruct.fromUnix(utcTime ?? 0).toString());
 		});
 	});
 });

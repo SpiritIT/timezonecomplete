@@ -13,6 +13,6 @@ browserify({
     extensions: ['.js', '.json'],
     debug: true
 })
-.require('./dist/test/test-timezone-data.json', {expose: 'tzdata'})
+.require('tzdata/timezone-data.json', {expose: 'tzdata'})
 .bundle()
 .pipe(outfile);

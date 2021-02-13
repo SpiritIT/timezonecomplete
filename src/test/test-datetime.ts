@@ -1797,6 +1797,13 @@ describe("DateTime", (): void => {
 			expect(new DateTime("2016-03-31 Europe/Amsterdam without DST").standardOffsetDuration().hours()).to.equal(1);
 		});
 	});
+
+	describe("Issue #50", (): void => {
+		it("string constructor should keep the local time", (): void => {
+			const d = new DateTime("2021-03-14T01:00:00 America/Detroit");
+			expect(d.toString()).to.equal("2021-03-14T01:00:00.000 America/Detroit");
+		});
+	});
 });
 
 

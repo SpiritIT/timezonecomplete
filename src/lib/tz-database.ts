@@ -9,9 +9,9 @@
 "use strict";
 
 import assert from "./assert";
-import { TimeComponentOpts, TimeStruct, TimeUnit, WeekDay } from "./basics";
+import { TimeStruct, TimeUnit, WeekDay } from "./basics";
 import * as basics from "./basics";
-import { Duration } from "./duration";
+import { Duration, hours } from "./duration";
 import { error, errorIs, throwError } from "./error";
 import * as math from "./math";
 
@@ -94,7 +94,6 @@ export class RuleInfo {
 	constructor(
 		/**
 		 * FROM column year number.
-		 * Note, can be -10000 for NaN value (e.g. for "SystemV" rules)
 		 */
 		public from: number,
 		/**
@@ -214,90 +213,88 @@ export class RuleInfo {
 	}
 
 	/**
-	 * Returns the date that the rule takes effect. Note that the time
-	 * is NOT adjusted for wall clock time or standard time, i.e. this.atType is
-	 * not taken into account
-	 * @throws NotApplicable if this rule is not applicable in the given year
-	 * @throws timezonecomplete.InvalidTimeZoneData if this rule depends on a weekday and the weekday in question doesn't exist
+	 * Returns the year-relative date that the rule takes effect. Depending on the rule this can be a UTC time, a wall clock time, or a
+	 * time in standard offset (i.e. you still need to compensate for this.atType)
+	 * @throws timezonecomplete.NotApplicable if this rule is not applicable in the given year
 	 */
 	public effectiveDate(year: number): TimeStruct {
-		assert(this.applicable(year), "NotApplicable", "Rule is not applicable in %d", year);
-		try {
-			// year and month are given
-			const tm: TimeComponentOpts = {year, month: this.inMonth };
+		assert(this.applicable(year), "timezonecomplete.NotApplicable", "Rule is not applicable in %d", year);
+		// year and month are given
+		let y = year;
+		let m = this.inMonth;
+		let d: number = 0;
 
-			// calculate day
-			switch (this.onType) {
-				case OnType.DayNum: {
-					tm.day = this.onDay;
-				} break;
-				case OnType.GreqX: {
-					tm.day = basics.weekDayOnOrAfter(year, this.inMonth, this.onDay, this.onWeekDay);
-				} break;
-				case OnType.LeqX: {
-					tm.day = basics.weekDayOnOrBefore(year, this.inMonth, this.onDay, this.onWeekDay);
-				} break;
-				case OnType.LastX: {
-					tm.day = basics.lastWeekDayOfMonth(year, this.inMonth, this.onWeekDay);
-				} break;
-			}
-
-			// calculate time
-			tm.hour = this.atHour;
-			tm.minute = this.atMinute;
-			tm.second = this.atSecond;
-
-			return new TimeStruct(tm);
-		} catch (e) {
-			if (errorIs(e, "NotFound")) {
-				// weekDayXXX() function threw an error
-				e = error("InvalidTimeZoneData", e.message);
-			}
-			throw e;
+		// calculate day
+		switch (this.onType) {
+			case OnType.DayNum: {
+				d = this.onDay;
+			} break;
+			case OnType.GreqX: {
+				try {
+					d = basics.weekDayOnOrAfter(y, m, this.onDay, this.onWeekDay);
+				} catch (e) {
+					if (errorIs(e, "NotFound")) {
+						// Apr Sun>=27 actually means any sunday after April 27, i.e. it does not have to be in April. Try next month.
+						if (m + 1 <= 12) {
+							m = m + 1;
+						} else {
+							m = 1;
+							y = y + 1;
+						}
+						d = basics.firstWeekDayOfMonth(y, m, this.onWeekDay);
+					}
+				}
+			} break;
+			case OnType.LeqX: {
+				try {
+					d = basics.weekDayOnOrBefore(y, m, this.onDay, this.onWeekDay);
+				} catch (e) {
+					if (errorIs(e, "NotFound")) {
+						if (m > 1) {
+							m = m - 1;
+						} else {
+							m = 12;
+							y = y - 1;
+						}
+						d = basics.lastWeekDayOfMonth(y, m, this.onWeekDay);
+					}
+				}
+			} break;
+			case OnType.LastX: {
+				d = basics.lastWeekDayOfMonth(y, m, this.onWeekDay);
+			} break;
 		}
+
+		return TimeStruct.fromComponents(y, m, d, this.atHour, this.atMinute, this.atSecond);
 	}
 
 	/**
-	 * Returns the transition moment in UTC in the given year
-	 *
-	 * @param year	The year for which to return the transition
-	 * @param standardOffset	The standard offset for the timezone without DST
-	 * @param prevRule	The previous rule
-	 * @throws NotApplicable if this rule is not applicable in the given year
-	 * @throws timezonecomplete.InvalidTimeZoneData for invalid internal structure of the database
+	 * Effective date in UTC in the given year, in a specific time zone
+	 * @param year
+	 * @param standardOffset the standard offset from UT of the time zone
+	 * @param dstOffset the DST offset before the rule
 	 */
-	public transitionTimeUtc(year: number, standardOffset: Duration, prevRule?: RuleInfo): number {
-		assert(this.applicable(year), "NotApplicable", "Rule not applicable in given year");
-		const unixMillis = this.effectiveDate(year).unixMillis;
-
-		// adjust for given offset
-		let offset: Duration;
+	public effectiveDateUtc(year: number, standardOffset: Duration, dstOffset: Duration | undefined): TimeStruct {
+		const d = this.effectiveDate(year);
 		switch (this.atType) {
-			case AtType.Utc:
-				offset = Duration.hours(0);
-				break;
-			case AtType.Standard:
-				offset = standardOffset;
-				break;
-			case AtType.Wall:
-				if (this.save.equals(Duration.hours(0)) && prevRule) {
-					offset = standardOffset.add(prevRule.save);
-				} else {
-					offset = standardOffset;
+			case AtType.Utc: return d;
+			case AtType.Standard: {
+				// transition time is in zone local time without DST
+				let millis = d.unixMillis;
+				millis -= standardOffset.milliseconds();
+				return new TimeStruct(millis);
+			}
+			case AtType.Wall: {
+				// transition time is in zone local time with DST
+				let millis = d.unixMillis;
+				millis -= standardOffset.milliseconds();
+				if (dstOffset) {
+					millis -= dstOffset.milliseconds();
 				}
-				break;
-			/* istanbul ignore next */
-			default:
-				/* istanbul ignore if */
-				/* istanbul ignore next */
-				if (true) {
-					throw new Error("unknown AtType");
-				}
+				return new TimeStruct(millis);
+			}
 		}
-
-		return unixMillis - offset.milliseconds();
 	}
-
 
 }
 
@@ -522,8 +519,8 @@ export class TzDatabase {
 	 * @throws timezonecomplete.InvalidTimeZoneData if `data` or the global time zone data is invalid
 	 */
 	public static init(data?: any | any[]): void {
+		TzDatabase._instance = undefined; // needed for assert in constructor
 		if (data) {
-			TzDatabase._instance = undefined; // needed for assert in constructor
 			TzDatabase._instance = new TzDatabase(Array.isArray(data) ? data : [data]);
 		} else {
 			const data: any[] = [];
@@ -786,50 +783,17 @@ export class TzDatabase {
 	public nextDstChange(zoneName: string, utcTime: TimeStruct): number | undefined;
 	public nextDstChange(zoneName: string, a: TimeStruct | number): number | undefined {
 		const utcTime: TimeStruct = (typeof a === "number" ? new TimeStruct(a) : a);
-
-		// get all zone infos for [date, date+1year)
-		const allZoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-		const relevantZoneInfos: ZoneInfo[] = [];
-		const rangeStart: number = utcTime.unixMillis;
-		const rangeEnd: number = rangeStart + 365 * 86400E3;
-		let prevEnd: number | undefined;
-		for (const zoneInfo of allZoneInfos) {
-			if ((prevEnd === undefined || prevEnd < rangeEnd) && (zoneInfo.until === undefined || zoneInfo.until > rangeStart)) {
-				relevantZoneInfos.push(zoneInfo);
-			}
-			prevEnd = zoneInfo.until;
+		const zone = this._getZoneTransitions(zoneName);
+		let iterator = zone.findFirst();
+		if (iterator && iterator.transition.atUtc > utcTime) {
+			return iterator.transition.atUtc.unixMillis;
 		}
-
-		// collect all transitions in the zones for the year
-		let transitions: Transition[] = [];
-		for (const zoneInfo of relevantZoneInfos) {
-			try {
-				// find applicable transition moments
-				transitions = transitions.concat(
-					this.getTransitionsDstOffsets(zoneInfo.ruleName, utcTime.components.year - 1, utcTime.components.year + 1, zoneInfo.gmtoff)
-				);
-			} catch (e) {
-				if (errorIs(e, "NotFound.Rule")) {
-					e = error("InvalidTimeZoneData", e.message);
-				}
-				throw e;
+		while (iterator) {
+			iterator = zone.findNext(iterator);
+			if (iterator && iterator.transition.atUtc > utcTime) {
+				return iterator.transition.atUtc.unixMillis;
 			}
 		}
-		transitions.sort((a: Transition, b: Transition): number => {
-			return a.at - b.at;
-		});
-
-		// find the first after the given date that has a different offset
-		let prevSave: Duration | undefined;
-		for (const transition of transitions) {
-			if (!prevSave || !prevSave.equals(transition.offset)) {
-				if (transition.at > utcTime.unixMillis) {
-					return transition.at;
-				}
-			}
-			prevSave = transition.offset;
-		}
-
 		return undefined;
 	}
 
@@ -902,6 +866,8 @@ export class TzDatabase {
 			// Instead, we should check the DST forward transitions within a window around the local time
 
 			// get all transitions (note this includes fake transition rules for zone offset changes)
+
+			// todo replace getTransitionsTotalOffsets() by direct use of this._getZoneTransitions()
 			const transitions: Transition[] = this.getTransitionsTotalOffsets(
 				zoneName, localTime.components.year - 1, localTime.components.year + 1
 			);
@@ -953,32 +919,10 @@ export class TzDatabase {
 	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public totalOffset(zoneName: string, utcTime: TimeStruct | number): Duration {
-		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
-		let dstOffset: Duration;
-
-		switch (zoneInfo.ruleType) {
-			case RuleType.None: {
-				dstOffset = Duration.minutes(0);
-			} break;
-			case RuleType.Offset: {
-				dstOffset = zoneInfo.ruleOffset;
-			} break;
-			case RuleType.RuleName: {
-				try {
-					dstOffset = this.dstOffsetForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
-				} catch (e) {
-					if (errorIs(e, "NotFound.Rule")) {
-						e = error("InvalidTimeZoneData", e.message);
-					}
-					throw e;
-				}
-			} break;
-			default: // cannot happen, but the compiler doesnt realize it
-				dstOffset = Duration.minutes(0);
-				break;
-		}
-
-		return dstOffset.add(zoneInfo.gmtoff);
+		const u: TimeStruct = typeof utcTime === "number" ? new TimeStruct(utcTime) : utcTime;
+		const zone = this._getZoneTransitions(zoneName);
+		const state: ZoneState = zone.stateAt(u);
+		return state.dstOffset.add(state.standardOffset);
 	}
 
 	/**
@@ -994,30 +938,25 @@ export class TzDatabase {
 	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
 	 */
 	public abbreviation(zoneName: string, utcTime: TimeStruct | number, dstDependent: boolean = true): string {
-		const zoneInfo: ZoneInfo = this.getZoneInfo(zoneName, utcTime);
-		const format: string = zoneInfo.format;
-
-		// is format dependent on DST?
-		if (format.indexOf("%s") !== -1
-			&& zoneInfo.ruleType === RuleType.RuleName) {
-			let letter: string;
-			// place in format string
-			if (dstDependent) {
-				try {
-					letter = this.letterForRule(zoneInfo.ruleName, utcTime, zoneInfo.gmtoff);
-				} catch (e) {
-					if (errorIs(e, "NotFound.Rule")) {
-						e = error("InvalidTimeZoneData", e.message);
-					}
-					throw e;
-				}
-			} else {
-				letter = "";
+		const u: TimeStruct = typeof utcTime === "number" ? new TimeStruct(utcTime) : utcTime;
+		const zone = this._getZoneTransitions(zoneName);
+		if (dstDependent) {
+			const state: ZoneState = zone.stateAt(u);
+			return state.abbreviation;
+		} else {
+			let lastNonDst: string = zone.initialState.dstOffset.milliseconds() === 0 ? zone.initialState.abbreviation : "";
+			let iterator = zone.findFirst();
+			if (iterator?.transition.newState.dstOffset.milliseconds() === 0) {
+				lastNonDst = iterator.transition.newState.abbreviation;
 			}
-			return format.replace("%s", letter);
+			while (iterator && iterator.transition.atUtc <= u) {
+				iterator = zone.findNext(iterator);
+				if (iterator?.transition.newState.dstOffset.milliseconds() === 0) {
+					lastNonDst = iterator.transition.newState.abbreviation;
+				}
+			}
+			return lastNonDst;
 		}
-
-		return format;
 	}
 
 	/**
@@ -1112,9 +1051,10 @@ export class TzDatabase {
 	}
 
 	/**
-	 * Returns the DST offset (WITHOUT the standard zone offset) for the given
-	 * ruleset and the given UTC timestamp
+	 * DEPRECATED because DST offset depends on the zone too, not just on the ruleset
+	 * Returns the DST offset (WITHOUT the standard zone offset) for the given ruleset and the given UTC timestamp
 	 *
+	 * @deprecated
 	 * @param ruleName	name of ruleset
 	 * @param utcTime	UTC timestamp
 	 * @param standardOffset	Standard offset without DST for the time zone
@@ -1152,6 +1092,7 @@ export class TzDatabase {
 	 * Returns the time zone letter for the given
 	 * ruleset and the given UTC timestamp
 	 *
+	 * @deprecated
 	 * @param ruleName	name of ruleset
 	 * @param utcTime	UTC timestamp as TimeStruct or unix millis
 	 * @param standardOffset	Standard offset without DST for the time zone
@@ -1185,8 +1126,10 @@ export class TzDatabase {
 	}
 
 	/**
+	 * DEPRECATED because DST offset depends on the zone too, not just on the ruleset
 	 * Return a list of all transitions in [fromYear..toYear] sorted by effective date
 	 *
+	 * @deprecated
 	 * @param ruleName	Name of the rule set
 	 * @param fromYear	first year to return transitions for
 	 * @param toYear	Last year to return transitions for
@@ -1199,23 +1142,21 @@ export class TzDatabase {
 	 */
 	public getTransitionsDstOffsets(ruleName: string, fromYear: number, toYear: number, standardOffset: Duration): Transition[] {
 		assert(fromYear <= toYear, "Argument.FromYear", "fromYear must be <= toYear");
-
-		const ruleInfos: RuleInfo[] = this.getRuleInfos(ruleName);
+		const rules = this._getRuleTransitions(ruleName);
 		const result: Transition[] = [];
-
-		for (let y = fromYear; y <= toYear; y++) {
-			let prevInfo: RuleInfo | undefined;
-			for (const ruleInfo of ruleInfos) {
-				if (ruleInfo.applicable(y)) {
-					result.push(new Transition(
-						ruleInfo.transitionTimeUtc(y, standardOffset, prevInfo),
-						ruleInfo.save,
-						ruleInfo.letter));
-				}
-				prevInfo = ruleInfo;
+		let prevDst = hours(0); // wrong, but that's why the function is deprecated
+		let iterator = rules.findFirst();
+		while (iterator && iterator.transition.at.year <= toYear) {
+			if (iterator.transition.at.year >= fromYear && iterator.transition.at.year <= toYear) {
+				result.push({
+					at: ruleTransitionUtc(iterator.transition, standardOffset, prevDst).unixMillis,
+					letter: iterator.transition.newState.letter || "",
+					offset: iterator.transition.newState.dstOffset
+				});
 			}
+			prevDst = iterator.transition.newState.dstOffset;
+			iterator = rules.findNext(iterator);
 		}
-
 		result.sort((a: Transition, b: Transition): number => {
 			return a.at - b.at;
 		});
@@ -1224,7 +1165,7 @@ export class TzDatabase {
 
 	/**
 	 * Return both zone and rule changes as total (std + dst) offsets.
-	 * Adds an initial transition if there is no zone change within the range.
+	 * Adds an initial transition if there is none within the range.
 	 *
 	 * @param zoneName	IANA zone name
 	 * @param fromYear	First year to include
@@ -1235,92 +1176,25 @@ export class TzDatabase {
 	 */
 	public getTransitionsTotalOffsets(zoneName: string, fromYear: number, toYear: number): Transition[] {
 		assert(fromYear <= toYear, "Argument.FromYear", "fromYear must be <= toYear");
-
-		const startMillis: number = basics.timeToUnixNoLeapSecs({ year: fromYear });
-		const endMillis: number = basics.timeToUnixNoLeapSecs({ year: toYear + 1 });
-
-
-		const zoneInfos: ZoneInfo[] = this.getZoneInfos(zoneName);
-		assert(zoneInfos.length > 0, "InvalidTimeZoneData", "Empty zoneInfos array returned from getZoneInfos()");
-
+		const zone = this._getZoneTransitions(zoneName);
 		const result: Transition[] = [];
-
-		let prevZone: ZoneInfo | undefined;
-		let prevUntilYear: number | undefined;
-		let prevStdOffset: Duration = Duration.hours(0);
-		let prevDstOffset: Duration = Duration.hours(0);
-		let prevLetter: string = "";
-		for (const zoneInfo of zoneInfos) {
-			const untilYear: number = zoneInfo.until !== undefined ? new TimeStruct(zoneInfo.until).components.year : toYear + 1;
-			let stdOffset: Duration = prevStdOffset;
-			let dstOffset: Duration = prevDstOffset;
-			let letter: string = prevLetter;
-
-			// zone applicable?
-			if ((!prevZone || prevZone.until! < endMillis - 1) && (zoneInfo.until === undefined || zoneInfo.until >= startMillis)) {
-
-				stdOffset = zoneInfo.gmtoff;
-
-				switch (zoneInfo.ruleType) {
-					case RuleType.None:
-						dstOffset = Duration.hours(0);
-						letter = "";
-						break;
-					case RuleType.Offset:
-						dstOffset = zoneInfo.ruleOffset;
-						letter = "";
-						break;
-					case RuleType.RuleName:
-						// check whether the first rule takes effect immediately on the zone transition
-						// (e.g. Lybia)
-						if (prevZone) {
-							try {
-								const ruleInfos: RuleInfo[] = this.getRuleInfos(zoneInfo.ruleName);
-								for (const ruleInfo of ruleInfos) {
-									if (typeof prevUntilYear === "number" && ruleInfo.applicable(prevUntilYear)) {
-										if (ruleInfo.transitionTimeUtc(prevUntilYear, stdOffset, undefined) === prevZone.until) {
-											dstOffset = ruleInfo.save;
-											letter = ruleInfo.letter;
-										}
-									}
-								}
-							} catch (e) {
-								if (errorIs(e, "NotFound.Rule")) {
-									e = error("InvalidTimeZoneData", e.message);
-								}
-								throw e;
-							}
-						}
-						break;
-				}
-
-				// add a transition for the zone transition
-				const at: number = (prevZone && prevZone.until !== undefined ? prevZone.until : startMillis);
-				result.push(new Transition(at, stdOffset.add(dstOffset), letter));
-
-				// add transitions for the zone rules in the range
-				if (zoneInfo.ruleType === RuleType.RuleName) {
-					const dstTransitions: Transition[] = this.getTransitionsDstOffsets(
-						zoneInfo.ruleName,
-						prevUntilYear !== undefined ? Math.max(prevUntilYear, fromYear) : fromYear,
-						Math.min(untilYear, toYear),
-						stdOffset
-					);
-					for (const transition of dstTransitions) {
-						letter = transition.letter;
-						dstOffset = transition.offset;
-						result.push(new Transition(transition.at, transition.offset.add(stdOffset), transition.letter));
-					}
-				}
+		const startState = zone.stateAt(new TimeStruct({ year: fromYear, month: 1, day: 1 }));
+		result.push({
+			at: new TimeStruct({ year: fromYear }).unixMillis,
+			letter: startState.letter,
+			offset: startState.dstOffset.add(startState.standardOffset)
+		});
+		let iterator = zone.findFirst();
+		while (iterator && iterator.transition.atUtc.year <= toYear) {
+			if (iterator.transition.atUtc.year >= fromYear) {
+				result.push({
+					at: iterator.transition.atUtc.unixMillis,
+					letter: iterator.transition.newState.letter || "",
+					offset: iterator.transition.newState.dstOffset.add(iterator.transition.newState.standardOffset)
+				});
 			}
-
-			prevZone = zoneInfo;
-			prevUntilYear = untilYear;
-			prevStdOffset = stdOffset;
-			prevDstOffset = dstOffset;
-			prevLetter = letter;
+			iterator = zone.findNext(iterator);
 		}
-
 		result.sort((a: Transition, b: Transition): number => {
 			return a.at - b.at;
 		});
@@ -1352,7 +1226,7 @@ export class TzDatabase {
 	private _zoneInfoCache: { [index: string]: ZoneInfo[] } = {};
 
 	/**
-	 * Return the zone records for a given zone name, after
+	 * Return the zone records for a given zone name sorted by UNTIL, after
 	 * following any links.
 	 *
 	 * @param zoneName	IANA zone name like "Pacific/Efate"
@@ -1606,6 +1480,65 @@ export class TzDatabase {
 		}
 	}
 
+
+	/**
+	 * pre-calculated transitions per zone
+	 */
+	private _zoneTransitionsCache = new Map<string, CachedZoneTransitions>();
+	/**
+	 * pre-calculated transitions per ruleset
+	 */
+	private _ruleTransitionsCache = new Map<string, CachedRuleTransitions>();
+
+	/**
+	 * Get pre-calculated zone transitions
+	 * @param zoneName
+	 * @throws timezonecomplete.NotFound.Zone if zone does not exist or a linked zone does not exit
+	 * @throws timezonecomplete.InvalidTimeZoneData for invalid values in the time zone database
+	 */
+	private _getZoneTransitions(zoneName: string): CachedZoneTransitions {
+		let result = this._zoneTransitionsCache.get(zoneName);
+		if (!result) {
+			result = new CachedZoneTransitions(zoneName, this.getZoneInfos(zoneName), this._getRuleTransitionsForZone(zoneName));
+			this._zoneTransitionsCache.set(zoneName, result);
+		}
+		return result;
+	}
+
+	/**
+	 * Get pre-calculated rule transitions
+	 * @param ruleName
+	 * @throws timezonecomplete.NotFound.Rule if rule not found
+	 * @throws timezonecomplete.InvalidTimeZoneData for invalid values in the time zone database
+	 */
+	private _getRuleTransitions(ruleName: string): CachedRuleTransitions {
+		let result = this._ruleTransitionsCache.get(ruleName);
+		if (!result) {
+			result = new CachedRuleTransitions(this.getRuleInfos(ruleName));
+			this._ruleTransitionsCache.set(ruleName, result);
+		}
+		return result;
+	}
+
+	/**
+	 * Returns a map of ruleName->CachedRuleTransitions for all rule sets that are referenced by a zone
+	 * @param zoneName
+	 * @throws timezonecomplete.NotFound.Zone if zone does not exist or a linked zone does not exit
+	 * @throws timezonecomplete.NotFound.Rule if rule not found
+	 * @throws timezonecomplete.InvalidTimeZoneData for invalid values in the time zone database
+	 */
+	private _getRuleTransitionsForZone(zoneName: string): Map<string, CachedRuleTransitions> {
+		const result = new Map<string, CachedRuleTransitions>();
+		const zoneInfos = this.getZoneInfos(zoneName);
+		for (const zoneInfo of zoneInfos) {
+			if (zoneInfo.ruleType === RuleType.RuleName) {
+				if (!result.has(zoneInfo.ruleName)) {
+					result.set(zoneInfo.ruleName, this._getRuleTransitions(zoneInfo.ruleName));
+				}
+			}
+		}
+		return result;
+	}
 }
 
 interface MinMaxInfo {
@@ -1776,6 +1709,658 @@ function validateData(data: any): MinMaxInfo {
 			}
 		}
 	}
-
 	return result as MinMaxInfo;
+}
+
+/**
+ * Steady-state of a rule at a given point in time
+ */
+interface RuleState {
+	/**
+	 * Offset from stdoffset
+	 */
+	dstOffset: Duration;
+	/**
+	 *
+	 */
+	letter?: string;
+}
+
+/**
+ * DST transition as given by a rule
+ */
+interface RuleTransition {
+	/**
+	 * Time of transitioning (type of time determined by atType)
+	 */
+	at: TimeStruct;
+	/**
+	 * Type of at time (standard, wall, UTC)
+	 */
+	atType: AtType;
+	/**
+	 * State after transition
+	 */
+	newState: RuleState;
+}
+
+/**
+ * Used for iterating over transitions
+ */
+interface RuleTransitionIterator {
+	/**
+	 * The current transition
+	 */
+	transition: RuleTransition;
+	/**
+	 * The index of the transition in the pre-calculated transitions, if pre-calculated
+	 */
+	index?: number;
+	/**
+	 * Final === not pre-calculated
+	 */
+	final?: boolean;
+}
+
+/**
+ * Ready-made sorted rule transitions (uncompensated for stdoffset, as rules are used by multiple zones with different offsets)
+ */
+class CachedRuleTransitions {
+
+	/**
+	 * All known transitions until the time that only 'max' type rules are left
+	 */
+	private _transitions: RuleTransition[];
+	/**
+	 * The 'max' rules at the end of the set. These are sorted by FROM and then year-relative effective date
+	 */
+	private _finalRulesByFromEffective: RuleInfo[];
+	/**
+	 * The 'max' rules at the end of the set. These are sorted by year-relative effective date
+	 */
+	private _finalRulesByEffective: RuleInfo[];
+
+	/**
+	 * The 'max' type rules at the end, sorted by year-relative effective date
+	 */
+	public get final(): RuleInfo[] {
+		return this._finalRulesByEffective;
+	}
+
+	/**
+	 * Constructor
+	 * @param ruleInfos
+	 */
+	constructor(ruleInfos: RuleInfo[]) {
+		// determine maximum year to calculate transitions for
+		let maxYear: number|undefined;
+		for (const ruleInfo of ruleInfos) {
+			if (ruleInfo.toType === ToType.Year) {
+				if (maxYear === undefined || ruleInfo.toYear > maxYear) {
+					maxYear = ruleInfo.toYear;
+				}
+				if (maxYear === undefined || ruleInfo.from > maxYear) {
+					maxYear = ruleInfo.from;
+				}
+			}
+		}
+
+		// calculate all transitions until 'max' rules take effect
+		this._transitions = [];
+		for (const ruleInfo of ruleInfos) {
+			const min = ruleInfo.from;
+			const max = ruleInfo.toType === ToType.Year ? ruleInfo.toYear : maxYear;
+			if (max !== undefined) {
+				for (let year = min; year <= max; ++year) {
+					this._transitions.push({
+						at: ruleInfo.effectiveDate(year),
+						atType: ruleInfo.atType,
+						newState: {
+							dstOffset: ruleInfo.save,
+							letter: ruleInfo.letter
+						}
+					});
+				}
+			}
+		}
+
+		// sort transitions
+		this._transitions = this._transitions.sort((a: RuleTransition, b: RuleTransition): number => {
+			return (
+				a.at < b.at ? -1 :
+				a.at > b.at ? 1 :
+				0
+			);
+		});
+
+		// save the 'max' rules for transitions after that
+		this._finalRulesByFromEffective = ruleInfos.filter((info: RuleInfo) => info.toType === ToType.Max);
+		this._finalRulesByEffective = [...this._finalRulesByFromEffective];
+
+		// sort final rules by FROM and then by year-relative date
+		this._finalRulesByFromEffective = this._finalRulesByFromEffective.sort((a: RuleInfo, b: RuleInfo): number => {
+			if (a.from < b.from) {
+				return -1;
+			}
+			if (a.from > b.from) {
+				return 1;
+			}
+			const ae = a.effectiveDate(a.from);
+			const be = b.effectiveDate(b.from);
+			return (
+				ae < be ? -1 :
+				ae > be ? 1 :
+				0
+			);
+		});
+
+		// sort final rules by year-relative date
+		this._finalRulesByEffective = this._finalRulesByFromEffective.sort((a: RuleInfo, b: RuleInfo): number => {
+			const ae = a.effectiveDate(a.from);
+			const be = b.effectiveDate(b.from);
+			return (
+				ae < be ? -1 :
+				ae > be ? 1 :
+				0
+			);
+		});
+	}
+
+	/**
+	 * Returns the first ever transition as defined by the rule set
+	 */
+	public findFirst(): RuleTransitionIterator | undefined {
+		if (this._transitions.length > 0) {
+			const transition = this._transitions[0];
+			const iterator: RuleTransitionIterator = {
+				transition,
+				index: 0
+			};
+			return iterator;
+		}
+		if (this._finalRulesByFromEffective.length > 0) {
+			const rule = this._finalRulesByFromEffective[0];
+			const transition: RuleTransition = {
+				at: rule.effectiveDate(rule.from),
+				atType: rule.atType,
+				newState: {
+					dstOffset: rule.save,
+					letter: rule.letter
+				}
+			};
+			const iterator: RuleTransitionIterator = {
+				transition,
+				final: true
+			};
+			return iterator;
+		}
+		return undefined;
+	}
+
+	/**
+	 * Returns the next transition, given an iterator
+	 * @param prev the iterator
+	 */
+	public findNext(prev: RuleTransitionIterator): RuleTransitionIterator | undefined {
+		if (!prev.final && prev.index !== undefined) {
+			if (prev.index < this._transitions.length - 1) {
+				const transition = this._transitions[prev.index + 1];
+				const iterator: RuleTransitionIterator = {
+					transition,
+					index: prev.index + 1
+				};
+				return iterator;
+			}
+		}
+		// find minimum applicable final rule after the prev transition
+		let found: RuleInfo | undefined;
+		let foundEffective: TimeStruct | undefined;
+		for (let year = prev.transition.at.year; year < prev.transition.at.year + 2; ++year) {
+			for (const rule of this._finalRulesByEffective) {
+				if (rule.applicable(year)) {
+					const effective = rule.effectiveDate(year);
+					if (effective > prev.transition.at && (!foundEffective || effective < foundEffective)) {
+						found = rule;
+						foundEffective = effective;
+					}
+				}
+			}
+		}
+		if (found && foundEffective) {
+			const transition: RuleTransition = {
+				at: foundEffective,
+				atType: found.atType,
+				newState: {
+					dstOffset: found.save,
+					letter: found.letter
+				}
+			};
+			const iterator: RuleTransitionIterator = {
+				transition,
+				final: true
+			};
+			return iterator;
+		}
+		return undefined;
+	}
+
+	/**
+	 * Dirty find function that only takes a standard offset from UTC into account
+	 * @param beforeUtc timestamp to search for
+	 * @param standardOffset zone standard offset to apply
+	 */
+	public findLastLessEqual(beforeUtc: TimeStruct, standardOffset: Duration): RuleTransition | undefined {
+		let prevTransition: RuleTransition | undefined;
+		let iterator = this.findFirst();
+		let effectiveUtc: TimeStruct | undefined = iterator?.transition ? ruleTransitionUtc(iterator.transition, standardOffset, undefined) : undefined;
+		while (iterator && effectiveUtc && effectiveUtc <= beforeUtc) {
+			prevTransition = iterator.transition;
+			iterator = this.findNext(iterator);
+			effectiveUtc = iterator?.transition ? ruleTransitionUtc(iterator.transition, standardOffset, undefined) : undefined;
+		}
+		return prevTransition;
+	}
+
+	/**
+	 *
+	 * @param afterUtc
+	 * @param standardOffset
+	 * @param dstOffset
+	 */
+	public firstTransitionWithoutDstAfter(
+		afterUtc: TimeStruct, standardOffset: Duration, dstOffset: Duration | undefined
+	): RuleTransition | undefined {
+		// todo inefficient - optimize
+		let iterator = this.findFirst();
+		let effectiveUtc: TimeStruct | undefined = iterator?.transition ? ruleTransitionUtc(iterator?.transition, standardOffset, dstOffset) : undefined;
+		while (iterator && effectiveUtc && (!iterator?.transition?.newState.dstOffset.zero() || effectiveUtc <= afterUtc)) {
+			iterator = this.findNext(iterator);
+			effectiveUtc = iterator?.transition ? ruleTransitionUtc(iterator?.transition, standardOffset, dstOffset) : undefined;
+		}
+		return iterator?.transition;
+	}
+}
+
+
+/**
+ * Steady-state zone information
+ */
+interface ZoneState {
+	/**
+	 * Zone standard offset from UTC from now on
+	 */
+	standardOffset: Duration;
+	/**
+	 * DST offset from the standard offset
+	 */
+	dstOffset: Duration;
+	/**
+	 * Zone name abbreviation from this time on
+	 */
+	abbreviation: string;
+	/**
+	 * Zone abbreviation rule letter
+	 */
+	letter: string;
+}
+
+/**
+ * Transition moment for a time zone
+ */
+interface ZoneTransition {
+	/**
+	 * Transition time in UTC millis
+	 */
+	atUtc: TimeStruct;
+	/**
+	 * New state of time zone
+	 */
+	newState: ZoneState;
+}
+
+/**
+ * Iterator object
+ */
+interface ZoneTransitionIterator {
+	/**
+	 * The current transition
+	 */
+	transition: ZoneTransition;
+	/**
+	 * The index of the current transition in the array of pre-calculated transitions (or 0)
+	 */
+	index: number;
+	/**
+	 * Indicates that the transition is not pre-calculated
+	 */
+	final?: boolean;
+}
+
+/**
+ * Rules depend on previous rules, hence you cannot calculate DST transitions witout starting at the start.
+ * Next to that, zones sometimes transition into the middle of a rule set.
+ * Due to this, we maintain a cache of transitions for zones
+ */
+class CachedZoneTransitions {
+	/**
+	 * Initial offsets
+	 */
+	private _initialState: ZoneState;
+	public get initialState(): ZoneState {
+		return this._initialState;
+	}
+	/**
+	 * Pre-calculated transitions until we run into 'max' type rules
+	 */
+	private _transitions: ZoneTransition[];
+	/**
+	 * The final zone info
+	 */
+	private _finalZoneInfo: ZoneInfo;
+	/**
+	 * The 'max' rules for modulo calculation
+	 */
+	private _finalRules: RuleInfo[];
+
+	/**
+	 * Constructor
+	 * @param zoneName
+	 * @param zoneInfos
+	 * @param rules
+	 * @throws timezonecomplete.InvalidTimeZoneData
+	 * @throws timezonecomplete.Argument.ZoneInfos if zoneInfos is empty
+	 */
+	constructor(zoneName: string, zoneInfos: ZoneInfo[], rules: Map<string, CachedRuleTransitions>) {
+		assert(zoneInfos.length > 0, "timezonecomplete.Argument.ZoneInfos", "zone '%s' without information", zoneName);
+		this._finalZoneInfo = zoneInfos[zoneInfos.length - 1];
+		this._initialState = this._calcInitialState(zoneName, zoneInfos);
+		[this._transitions, this._finalRules] = this._calcTransitions(zoneName, this._initialState, zoneInfos, rules);
+	}
+
+	/**
+	 * Find the first transition, if it exists
+	 */
+	public findFirst(): ZoneTransitionIterator | undefined {
+		if (this._transitions.length > 0) {
+			return {
+				transition: this._transitions[0],
+				index: 0
+			};
+		}
+		return undefined;
+	}
+
+	/**
+	 * Find next transition, if it exists
+	 * @param iterator previous iterator
+	 * @returns the next iterator
+	 */
+	public findNext(iterator: ZoneTransitionIterator): ZoneTransitionIterator | undefined {
+		if (!iterator.final) {
+			if (iterator.index < this._transitions.length - 1) {
+				return {
+					transition: this._transitions[iterator.index + 1],
+					index: iterator.index + 1
+				};
+			}
+		}
+		let found: ZoneTransition | undefined;
+		for (let y = iterator.transition.atUtc.year; y < iterator.transition.atUtc.year + 2; ++y) {
+			for (const ruleInfo of this._finalRules) {
+				if (ruleInfo.applicable(y)) {
+					const transition: ZoneTransition = {
+						atUtc: ruleInfo.effectiveDateUtc(y, iterator.transition.newState.standardOffset, iterator.transition.newState.dstOffset),
+						newState: {
+							abbreviation: zoneAbbreviation(this._finalZoneInfo.format, ruleInfo.save.nonZero(), ruleInfo.letter),
+							letter: ruleInfo.letter,
+							dstOffset: ruleInfo.save,
+							standardOffset: iterator.transition.newState.standardOffset
+						}
+					};
+					if (transition.atUtc > iterator.transition.atUtc) {
+						if (!found || found.atUtc > transition.atUtc) {
+							found = transition;
+						}
+					}
+				}
+			}
+		}
+		if (found) {
+			return {
+				transition: found,
+				index: 0,
+				final: true
+			};
+		}
+		return undefined;
+	}
+
+	/**
+	 * Returns the zone state at the given UTC time
+	 * @param utc
+	 */
+	public stateAt(utc: TimeStruct): ZoneState {
+		let prevState = this._initialState;
+		let iterator = this.findFirst();
+		while (iterator && iterator.transition.atUtc <= utc) {
+			prevState = iterator.transition.newState;
+			iterator = this.findNext(iterator);
+		}
+		return prevState;
+	}
+
+	/**
+	 * Calculate the initial state for the zone
+	 * @param zoneName
+	 * @param infos
+	 * @throws timezonecomplete.InvalidTimeZoneData
+	 */
+	private _calcInitialState(zoneName: string, infos: ZoneInfo[]): ZoneState {
+		// initial state
+		if (infos.length === 0) {
+			return {
+				abbreviation: "",
+				letter: "",
+				dstOffset: hours(0),
+				standardOffset: hours(0)
+			};
+		}
+		const info = infos[0];
+		switch (info.ruleType) {
+			case RuleType.None:
+				return {
+					abbreviation: zoneAbbreviation(info.format, false, undefined),
+					letter: "",
+					dstOffset: hours(0),
+					standardOffset: info.gmtoff
+				};
+			case RuleType.Offset:
+				return {
+					abbreviation: zoneAbbreviation(info.format, info.ruleOffset.nonZero(), undefined),
+					letter: "",
+					dstOffset: info.ruleOffset,
+					standardOffset: info.gmtoff
+				};
+			case RuleType.RuleName:
+				return throwError("InvalidTimeZoneData", "Zone '%s' has an initial named rule, which is not expected", zoneName);
+			default:
+				assert(false, "timezonecomplete.Assertion", "Unknown RuleType");
+		}
+	}
+
+	/**
+	 * Pre-calculate all transitions until there are only 'max' rules in effect
+	 * @param zoneName
+	 * @param initialState
+	 * @param zoneInfos
+	 * @param rules
+	 */
+	private _calcTransitions(
+		zoneName: string, initialState: ZoneState, zoneInfos: ZoneInfo[], rules: Map<string, CachedRuleTransitions>
+	): [ZoneTransition[], RuleInfo[]] {
+		if (zoneInfos.length === 0) {
+			return [[], []];
+		}
+		// walk through the zone records and add a transition for each
+		let transitions: ZoneTransition[] = [];
+		let prevState = initialState;
+		let prevUntil: TimeStruct | undefined = zoneInfos[0].until !== undefined ? new TimeStruct(zoneInfos[0].until) : undefined;
+		let prevRules: CachedRuleTransitions | undefined;
+		for (let i = 1; i < zoneInfos.length; ++i) {
+			// only the last zoneInfo can have a missing UNTIL
+			if (prevUntil === undefined) {
+				return throwError("InvalidTimeZoneData", "TZ database contains invalid zone information for zone '%s'", zoneName);
+			}
+			const zoneInfo = zoneInfos[i];
+			// zones can have a DST offset or they can refer to a rule set
+			switch (zoneInfo.ruleType) {
+				case RuleType.None:
+				case RuleType.Offset: {
+					transitions.push({
+						atUtc: prevUntil,
+						newState: {
+							abbreviation: zoneAbbreviation(zoneInfo.format, false, undefined),
+							letter: "",
+							dstOffset: zoneInfo.ruleType === RuleType.None ? hours(0) : zoneInfo.ruleOffset,
+							standardOffset: zoneInfo.gmtoff
+						}
+					});
+					prevRules = undefined;
+				} break;
+				case RuleType.RuleName: {
+					prevRules = rules.get(zoneInfo.ruleName);
+					if (!prevRules) {
+						return throwError("InvalidTimeZoneData", "Zone '%s' refers to non-existing rule '%s'", zoneName, zoneInfo.ruleName);
+					}
+					const t = this._zoneTransitions(prevUntil, zoneInfo, prevRules);
+					transitions = transitions.concat(t);
+				} break;
+				default:
+					assert(false, "timezonecomplete.Assertion", "Unknown RuleType");
+			}
+			prevUntil = zoneInfo.until !== undefined ? new TimeStruct(zoneInfo.until) : undefined;
+			prevState = transitions.length > 0 ? transitions[transitions.length - 1].newState : prevState;
+		}
+		return [transitions, prevRules?.final ?? []];
+	}
+
+	/**
+	 * Creates all the transitions for a time zone from fromUtc (inclusive) to zoneInfo.until (exclusive).
+	 * The result always contains an initial transition at fromUtc that signals the switch to this rule set
+	 *
+	 * @param fromUtc previous zone sub-record UNTIL time
+	 * @param zoneInfo the current zone sub-record
+	 * @param rule the corresponding rule transitions
+	 */
+	private _zoneTransitions(fromUtc: TimeStruct, zoneInfo: ZoneInfo, rule: CachedRuleTransitions): ZoneTransition[] {
+		// from tz-how-to.html:
+		// One wrinkle, not fully explained in zic.8.txt, is what happens when switching to a named rule. To what values should the SAVE and
+		// LETTER data be initialized?
+		// - If at least one transition has happened, use the SAVE and LETTER data from the most recent.
+		// - If switching to a named rule before any transition has happened, assume standard time (SAVE zero), and use the LETTER data from
+		// the earliest transition with a SAVE of zero.
+
+		const result: ZoneTransition[] = [];
+
+		// extra initial transition for switch to this rule set
+		let initial: ZoneTransition;
+		let initialRuleTransition = rule.findLastLessEqual(fromUtc, zoneInfo.gmtoff);
+		if (initialRuleTransition) {
+			initial = {
+				atUtc: fromUtc,
+				newState: {
+					abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition.newState.letter),
+					letter: initialRuleTransition.newState.letter ?? "",
+					dstOffset: hours(0),
+					standardOffset: zoneInfo.gmtoff
+				}
+			};
+		} else {
+			initialRuleTransition = rule.firstTransitionWithoutDstAfter(fromUtc, zoneInfo.gmtoff, undefined);
+			initial = {
+				atUtc: fromUtc,
+				newState: {
+					abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition?.newState.letter),
+					letter: initialRuleTransition?.newState.letter ?? "",
+					dstOffset: hours(0),
+					standardOffset: zoneInfo.gmtoff
+				}
+			};
+		}
+		result.push(initial);
+
+		// actual rule transitions
+		let prevDst = initial.newState.dstOffset;
+		let iterator = rule.findFirst();
+		let effective: TimeStruct | undefined = iterator?.transition && ruleTransitionUtc(iterator.transition, zoneInfo.gmtoff, prevDst);
+		while (
+			iterator && effective &&
+			((zoneInfo.until && effective.unixMillis < zoneInfo.until) || (!zoneInfo.until && !iterator.final))
+		) {
+			prevDst = iterator.transition.newState.dstOffset;
+			result.push({
+				atUtc: effective,
+				newState: {
+					abbreviation: zoneAbbreviation(zoneInfo.format, prevDst.nonZero(), iterator.transition.newState.letter),
+					letter: iterator.transition.newState.letter ?? "",
+					dstOffset: prevDst,
+					standardOffset: zoneInfo.gmtoff
+				}
+			});
+			iterator = rule.findNext(iterator);
+			effective = iterator && ruleTransitionUtc(iterator.transition, zoneInfo.gmtoff, prevDst);
+		}
+
+		return result;
+	}
+}
+
+
+/**
+ * Calculate the formatted abbreviation for a zone
+ * @param format the abbreviation format string. Either 'zzz,' for NULL;  'A/B' for std/dst, or 'A%sB' for a format string where %s is
+ * replaced by a letter
+ * @param dst whether DST is observed
+ * @param letter current rule letter, empty if no rule
+ * @returns fully formatted abbreviation
+ */
+function zoneAbbreviation(format: string, dst: boolean, letter: string|undefined): string {
+	if (format === "zzz,") {
+		return "";
+	}
+	if (format.includes("/")) {
+		return (dst ? format.split("/")[1] : format.split("/")[0]);
+	}
+	if (letter) {
+		return format.replace("%s", letter);
+	}
+	return format.replace("%s", "");
+}
+
+/**
+ * Calculate the UTC time of a rule transition, given a particular time zone
+ * @param transition
+ * @param standardOffset zone offset from UT
+ * @param dstOffset previous DST offset from UT+standardOffset
+ * @returns UTC time
+ */
+function ruleTransitionUtc(transition: RuleTransition, standardOffset: Duration, dstOffset: Duration | undefined): TimeStruct {
+	switch (transition.atType) {
+		case AtType.Utc: return transition.at;
+		case AtType.Standard: {
+			// transition time is in zone local time without DST
+			let millis = transition.at.unixMillis;
+			millis -= standardOffset.milliseconds();
+			return new TimeStruct(millis);
+		}
+		case AtType.Wall: {
+			// transition time is in zone local time with DST
+			let millis = transition.at.unixMillis;
+			millis -= standardOffset.milliseconds();
+			if (dstOffset) {
+				millis -= dstOffset.milliseconds();
+			}
+			return new TimeStruct(millis);
+		}
+	}
 }

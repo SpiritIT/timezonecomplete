@@ -18,4 +18,6 @@ export * from "./period";
 export * from "./basics";
 export * from "./timesource";
 export * from "./timezone";
-export * from "./tz-database";
+export {
+	AtType, isValidOffsetString, NormalizeOption, RuleInfo, RuleType, OnType, ToType, Transition, TzDatabase, ZoneInfo
+} from "./tz-database";
