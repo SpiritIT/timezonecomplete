@@ -1,45 +1,44 @@
 {
-	"compilerOptions": {
-		"alwaysStrict": true,
-		"declaration": true,
-		"forceConsistentCasingInFileNames": false,
-		"inlineSourceMap": true,
-		"inlineSources": true,
-		"lib": [
-			"es2016",
-			"dom"
-		],
-		"module": "commonjs",
-		"noFallthroughCasesInSwitch": true,
-		"noImplicitAny": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		"noLib": false,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"outDir": "./dist",
-		"preserveConstEnums": true,
-		"pretty": true,
-		"removeComments": false,
-		"strictNullChecks": true,
-		"suppressImplicitAnyIndexErrors": true,
-		"target": "es5"
-	},
-	"formatCodeOptions": {
-		"convertTabsToSpaces": false,
-		"indentSize": 4,
-		"insertSpaceAfterCommaDelimiter": true,
-		"insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
-		"insertSpaceAfterKeywordsInControlFlowStatements": true,
-		"insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
-		"insertSpaceAfterSemicolonInForStatements": true,
-		"insertSpaceBeforeAndAfterBinaryOperators": true,
-		"newLineCharacter": "\n",
-		"placeOpenBraceOnNewLineForControlBlocks": false,
-		"placeOpenBraceOnNewLineForFunctions": false,
-		"tabSize": 4
-	},
-	"include": [
-		"src/**/*.ts"
-	]
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": false,
+        "lib": [
+            "es2016",
+            "dom"
+        ],
+        "module": "commonjs",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noLib": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": "./dist",
+        "preserveConstEnums": true,
+        "pretty": true,
+        "removeComments": false,
+		"sourceMap": true,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "es5"
+    },
+    "formatCodeOptions": {
+        "convertTabsToSpaces": false,
+        "indentSize": 4,
+        "insertSpaceAfterCommaDelimiter": true,
+        "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+        "insertSpaceAfterKeywordsInControlFlowStatements": true,
+        "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+        "insertSpaceAfterSemicolonInForStatements": true,
+        "insertSpaceBeforeAndAfterBinaryOperators": true,
+        "newLineCharacter": "\n",
+        "placeOpenBraceOnNewLineForControlBlocks": false,
+        "placeOpenBraceOnNewLineForFunctions": false,
+        "tabSize": 4
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
 }
