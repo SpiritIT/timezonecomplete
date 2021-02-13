@@ -389,6 +389,11 @@ var amsterdamDateFromString = new tc.DateTime("2014-01-01T13:59:59.000 Europe/Am
 // date from other string format
 var unitedStatesDate = new tc.DateTime("12/31/2015 23:44:55.123 America/Chicago", "MM/dd/yyyy HH:mm:ss.SSS vv");
 
+// Date from unix millisecond timestamp. Note that you need to explicitly set the time zone that the milliseconds are in; UTC is NOT assumed
+var unix = new tc.DateTime(0, tc.zone("UTC")); // 1970-01-01T00:00:00.000 UTC
+var unix2 = new tc.DateTime(0, tc.zone("Europe/Amsterdam")); // 1970-01-01T00:00:00.000 Europe/Amsterdam
+var unix3 = new tc.DateTime(0); // 1970-01-01T00:00:00.000 without zone, naive
+
 // date from an Excel datetime number
 var dt = tc.DateTime.fromExcel(42005.5430555556); // 2015-01-01T13:02:00
 
