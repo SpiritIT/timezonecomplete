@@ -778,4 +778,17 @@ describe("TzDatabase", (): void => {
 			expect(utcTime).to.equal(TimeStruct.fromComponents(2021, 10, 31, 1, 0, 0).unixMillis, TimeStruct.fromUnix(utcTime ?? 0).toString());
 		});
 	});
+
+	describe("issue with CET", (): void => {
+		it("should calculate initial state", (): void => {
+			const ts = TimeStruct.fromComponents(1800, 1, 1);
+			expect(TzDatabase.instance().totalOffset("CET", ts.unixMillis).hours()).to.equal(1);
+			expect(TzDatabase.instance().abbreviation("CET", ts.unixMillis)).to.equal("CET");
+		});
+		it("should apply DST changes from the C-Eur ruleset", (): void => {
+			const ts = TimeStruct.fromComponents(1916, 5, 1);
+			expect(TzDatabase.instance().totalOffset("CET", ts.unixMillis).hours()).to.equal(2);
+			expect(TzDatabase.instance().abbreviation("CET", ts.unixMillis)).to.equal("CEST");
+		});
+	});
 });

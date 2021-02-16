@@ -1969,7 +1969,9 @@ class CachedRuleTransitions {
 	 * @param dstOffset
 	 */
 	public firstTransitionWithoutDstAfter(
-		afterUtc: TimeStruct, standardOffset: Duration, dstOffset: Duration | undefined
+		afterUtc: TimeStruct,
+		standardOffset: Duration,
+		dstOffset: Duration | undefined
 	): RuleTransition | undefined {
 		// todo inefficient - optimize
 		let iterator = this.findFirst();
@@ -2075,7 +2077,7 @@ class CachedZoneTransitions {
 	constructor(zoneName: string, zoneInfos: ZoneInfo[], rules: Map<string, CachedRuleTransitions>) {
 		assert(zoneInfos.length > 0, "timezonecomplete.Argument.ZoneInfos", "zone '%s' without information", zoneName);
 		this._finalZoneInfo = zoneInfos[zoneInfos.length - 1];
-		this._initialState = this._calcInitialState(zoneName, zoneInfos);
+		this._initialState = this._calcInitialState(zoneName, zoneInfos, rules);
 		[this._transitions, this._finalRules] = this._calcTransitions(zoneName, this._initialState, zoneInfos, rules);
 	}
 
@@ -2155,9 +2157,14 @@ class CachedZoneTransitions {
 	 * Calculate the initial state for the zone
 	 * @param zoneName
 	 * @param infos
+	 * @param rules
 	 * @throws timezonecomplete.InvalidTimeZoneData
 	 */
-	private _calcInitialState(zoneName: string, infos: ZoneInfo[]): ZoneState {
+	private _calcInitialState(
+		zoneName: string,
+		infos: ZoneInfo[],
+		rules: Map<string, CachedRuleTransitions>
+	): ZoneState {
 		// initial state
 		if (infos.length === 0) {
 			return {
@@ -2183,8 +2190,24 @@ class CachedZoneTransitions {
 					dstOffset: info.ruleOffset,
 					standardOffset: info.gmtoff
 				};
-			case RuleType.RuleName:
-				return throwError("InvalidTimeZoneData", "Zone '%s' has an initial named rule, which is not expected", zoneName);
+			case RuleType.RuleName: {
+				const rule = rules.get(info.ruleName);
+				if (!rule) {
+					throwError("InvalidTimeZoneData", "zone '%s' refers to non-existing rule '%s'", zoneName, info.ruleName);
+				}
+				// find first rule transition without DST so that we have a letter
+				let iterator = rule.findFirst();
+				while (iterator && iterator.transition.newState.dstOffset.nonZero()) {
+					iterator = rule.findNext(iterator);
+				}
+				const letter = iterator?.transition.newState.letter ?? "";
+				return {
+					abbreviation: zoneAbbreviation(info.format, false, letter),
+					dstOffset: hours(0),
+					letter,
+					standardOffset: info.gmtoff
+				};
+			}
 			default:
 				assert(false, "timezonecomplete.Assertion", "Unknown RuleType");
 		}
@@ -2198,7 +2221,10 @@ class CachedZoneTransitions {
 	 * @param rules
 	 */
 	private _calcTransitions(
-		zoneName: string, initialState: ZoneState, zoneInfos: ZoneInfo[], rules: Map<string, CachedRuleTransitions>
+		zoneName: string,
+		initialState: ZoneState,
+		zoneInfos: ZoneInfo[],
+		rules: Map<string, CachedRuleTransitions>
 	): [ZoneTransition[], RuleInfo[]] {
 		if (zoneInfos.length === 0) {
 			return [[], []];
@@ -2206,36 +2232,34 @@ class CachedZoneTransitions {
 		// walk through the zone records and add a transition for each
 		let transitions: ZoneTransition[] = [];
 		let prevState = initialState;
-		let prevUntil: TimeStruct | undefined = zoneInfos[0].until !== undefined ? new TimeStruct(zoneInfos[0].until) : undefined;
+		let prevUntil: TimeStruct | undefined;
 		let prevRules: CachedRuleTransitions | undefined;
-		for (let i = 1; i < zoneInfos.length; ++i) {
-			// only the last zoneInfo can have a missing UNTIL
-			if (prevUntil === undefined) {
-				return throwError("InvalidTimeZoneData", "TZ database contains invalid zone information for zone '%s'", zoneName);
-			}
-			const zoneInfo = zoneInfos[i];
+		for (const zoneInfo of zoneInfos) {
 			// zones can have a DST offset or they can refer to a rule set
 			switch (zoneInfo.ruleType) {
 				case RuleType.None:
 				case RuleType.Offset: {
-					transitions.push({
-						atUtc: prevUntil,
-						newState: {
-							abbreviation: zoneAbbreviation(zoneInfo.format, false, undefined),
-							letter: "",
-							dstOffset: zoneInfo.ruleType === RuleType.None ? hours(0) : zoneInfo.ruleOffset,
-							standardOffset: zoneInfo.gmtoff
-						}
-					});
-					prevRules = undefined;
+					if (prevUntil) {
+						transitions.push({
+							atUtc: prevUntil,
+							newState: {
+								abbreviation: zoneAbbreviation(zoneInfo.format, false, undefined),
+								letter: "",
+								dstOffset: zoneInfo.ruleType === RuleType.None ? hours(0) : zoneInfo.ruleOffset,
+								standardOffset: zoneInfo.gmtoff
+							}
+						});
+						prevRules = undefined;
+					}
 				} break;
 				case RuleType.RuleName: {
-					prevRules = rules.get(zoneInfo.ruleName);
-					if (!prevRules) {
+					const rule = rules.get(zoneInfo.ruleName);
+					if (!rule) {
 						return throwError("InvalidTimeZoneData", "Zone '%s' refers to non-existing rule '%s'", zoneName, zoneInfo.ruleName);
 					}
-					const t = this._zoneTransitions(prevUntil, zoneInfo, prevRules);
+					const t = this._zoneTransitions(prevUntil, zoneInfo, rule);
 					transitions = transitions.concat(t);
+					prevRules = rule;
 				} break;
 				default:
 					assert(false, "timezonecomplete.Assertion", "Unknown RuleType");
@@ -2250,11 +2274,11 @@ class CachedZoneTransitions {
 	 * Creates all the transitions for a time zone from fromUtc (inclusive) to zoneInfo.until (exclusive).
 	 * The result always contains an initial transition at fromUtc that signals the switch to this rule set
 	 *
-	 * @param fromUtc previous zone sub-record UNTIL time
+	 * @param fromUtc previous zone sub-record UNTIL time; undefined for first zone record
 	 * @param zoneInfo the current zone sub-record
 	 * @param rule the corresponding rule transitions
 	 */
-	private _zoneTransitions(fromUtc: TimeStruct, zoneInfo: ZoneInfo, rule: CachedRuleTransitions): ZoneTransition[] {
+	private _zoneTransitions(fromUtc: TimeStruct | undefined, zoneInfo: ZoneInfo, rule: CachedRuleTransitions): ZoneTransition[] {
 		// from tz-how-to.html:
 		// One wrinkle, not fully explained in zic.8.txt, is what happens when switching to a named rule. To what values should the SAVE and
 		// LETTER data be initialized?
@@ -2264,35 +2288,37 @@ class CachedZoneTransitions {
 
 		const result: ZoneTransition[] = [];
 
-		// extra initial transition for switch to this rule set
-		let initial: ZoneTransition;
-		let initialRuleTransition = rule.findLastLessEqual(fromUtc, zoneInfo.gmtoff);
-		if (initialRuleTransition) {
-			initial = {
-				atUtc: fromUtc,
-				newState: {
-					abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition.newState.letter),
-					letter: initialRuleTransition.newState.letter ?? "",
-					dstOffset: hours(0),
-					standardOffset: zoneInfo.gmtoff
-				}
-			};
-		} else {
-			initialRuleTransition = rule.firstTransitionWithoutDstAfter(fromUtc, zoneInfo.gmtoff, undefined);
-			initial = {
-				atUtc: fromUtc,
-				newState: {
-					abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition?.newState.letter),
-					letter: initialRuleTransition?.newState.letter ?? "",
-					dstOffset: hours(0),
-					standardOffset: zoneInfo.gmtoff
-				}
-			};
+		// extra initial transition for switch to this rule set (but not for first zone info)
+		let initial: ZoneTransition | undefined;
+		if (fromUtc !== undefined) {
+			let initialRuleTransition = rule.findLastLessEqual(fromUtc, zoneInfo.gmtoff);
+			if (initialRuleTransition) {
+				initial = {
+					atUtc: fromUtc,
+					newState: {
+						abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition.newState.letter),
+						letter: initialRuleTransition.newState.letter ?? "",
+						dstOffset: hours(0),
+						standardOffset: zoneInfo.gmtoff
+					}
+				};
+			} else {
+				initialRuleTransition = rule.firstTransitionWithoutDstAfter(fromUtc, zoneInfo.gmtoff, undefined);
+				initial = {
+					atUtc: fromUtc,
+					newState: {
+						abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition?.newState.letter),
+						letter: initialRuleTransition?.newState.letter ?? "",
+						dstOffset: hours(0),
+						standardOffset: zoneInfo.gmtoff
+					}
+				};
+			}
+			result.push(initial);
 		}
-		result.push(initial);
 
-		// actual rule transitions
-		let prevDst = initial.newState.dstOffset;
+		// actual rule transitions; keep adding until the end of this zone info, or until only 'max' rules remain
+		let prevDst = initial?.newState.dstOffset ?? hours(0);
 		let iterator = rule.findFirst();
 		let effective: TimeStruct | undefined = iterator?.transition && ruleTransitionUtc(iterator.transition, zoneInfo.gmtoff, prevDst);
 		while (

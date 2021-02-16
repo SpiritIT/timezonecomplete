@@ -1804,6 +1804,13 @@ describe("DateTime", (): void => {
 			expect(d.toString()).to.equal("2021-03-14T01:00:00.000 America/Detroit");
 		});
 	});
+
+	describe("issue with CET", (): void => {
+		it("should not error on using backward compatibility zone CET", (): void => {
+			const d = new DateTime("2021-01-01");
+			d.withZone(TimeZone.zone("CET"));
+		});
+	});
 });
 
 
