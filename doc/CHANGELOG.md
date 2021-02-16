@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.12.1 (2021-02-16)
+
+* Fix `Zone 'XXX' has an initial named rule, which is not expected` error.
+
 ## 5.12.0 (2021-02-13)
 
 * Fix #50 America/Detroit daylight saving time transition not calculated correctly
