@@ -744,7 +744,7 @@ export class Duration {
 	 * The valueOf() method returns the primitive value of the specified object.
 	 * @throws nothing
 	 */
-	public valueOf(): any {
+	public valueOf(): number {
 		return this.milliseconds();
 	}
 
