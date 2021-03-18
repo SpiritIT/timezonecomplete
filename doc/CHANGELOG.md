@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.12.2 (2021-03-18)
+
+* Fix #55 `valueOf(): any` should be `valueOf(): number` for DateTime and Duration (thanks @blackwindforce).
+
 ## 5.12.1 (2021-02-16)
 
 * Fix `Zone 'XXX' has an initial named rule, which is not expected` error.
