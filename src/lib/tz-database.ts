@@ -867,27 +867,26 @@ export class TzDatabase {
 
 			// get all transitions (note this includes fake transition rules for zone offset changes)
 
-			// todo replace getTransitionsTotalOffsets() by direct use of this._getZoneTransitions()
-			const transitions: Transition[] = this.getTransitionsTotalOffsets(
-				zoneName, localTime.components.year - 1, localTime.components.year + 1
-			);
+			const zone = this._getZoneTransitions(zoneName);
+			const transitions: ZoneTransition[] = zone.transitionsInYears(localTime.components.year - 1, localTime.components.year + 1);
 
 			// find the DST forward transitions
 			let prev: Duration = Duration.hours(0);
 			for (const transition of transitions) {
+				const offset = transition.newState.dstOffset.add(transition.newState.standardOffset);
 				// forward transition?
-				if (transition.offset.greaterThan(prev)) {
-					const localBefore: number = transition.at + prev.milliseconds();
-					const localAfter: number = transition.at + transition.offset.milliseconds();
+				if (offset.greaterThan(prev)) {
+					const localBefore: number = transition.atUtc.unixMillis + prev.milliseconds();
+					const localAfter: number = transition.atUtc.unixMillis + offset.milliseconds();
 					if (localTime.unixMillis >= localBefore && localTime.unixMillis < localAfter) {
-						const forwardChange = transition.offset.sub(prev);
+						const forwardChange = offset.sub(prev);
 						// non-existing time
 						const factor: number = (opt === NormalizeOption.Up ? 1 : -1);
 						const resultMillis = localTime.unixMillis + factor * forwardChange.milliseconds();
 						return (typeof a === "number" ? resultMillis : new TimeStruct(resultMillis));
 					}
 				}
-				prev = transition.offset;
+				prev = offset;
 			}
 
 			// no non-existing time
@@ -1013,13 +1012,13 @@ export class TzDatabase {
 		// Therefore binary search does not apply. Linear search through transitions
 		// and return the first offset that matches
 
-		const transitions: Transition[] = this.getTransitionsTotalOffsets(
-			zoneName, normalizedTm.components.year - 1, normalizedTm.components.year + 1
-		);
-		let prev: Transition | undefined;
-		let prevPrev: Transition | undefined;
+		const zone = this._getZoneTransitions(zoneName);
+		const transitions = zone.transitionsInYears(normalizedTm.components.year - 1, normalizedTm.components.year + 2);
+		let prev: ZoneTransition | undefined;
+		let prevPrev: ZoneTransition | undefined;
 		for (const transition of transitions) {
-			if (transition.at + transition.offset.milliseconds() > normalizedTm.unixMillis) {
+			const offset = transition.newState.dstOffset.add(transition.newState.standardOffset);
+			if (transition.atUtc.unixMillis + offset.milliseconds() > normalizedTm.unixMillis) {
 				// found offset: prev.offset applies
 				break;
 			}
@@ -1030,23 +1029,24 @@ export class TzDatabase {
 		/* istanbul ignore else */
 		if (prev) {
 			// special care during backward change: take first occurrence of local time
-			if (prevPrev && prevPrev.offset.greaterThan(prev.offset)) {
+			const prevOffset = prev.newState.dstOffset.add(prev.newState.standardOffset);
+			const prevPrevOffset = prevPrev ? prevPrev.newState.dstOffset.add(prevPrev.newState.standardOffset) : undefined;
+			if (prevPrev && prevPrevOffset !== undefined && prevPrevOffset.greaterThan(prevOffset)) {
 				// backward change
-				const diff = prevPrev.offset.sub(prev.offset);
-				if (normalizedTm.unixMillis >= prev.at + prev.offset.milliseconds()
-					&& normalizedTm.unixMillis < prev.at + prev.offset.milliseconds() + diff.milliseconds()) {
+				const diff = prevPrevOffset.sub(prevOffset);
+				if (normalizedTm.unixMillis >= prev.atUtc.unixMillis + prevOffset.milliseconds()
+					&& normalizedTm.unixMillis < prev.atUtc.unixMillis + prevOffset.milliseconds() + diff.milliseconds()) {
 					// within duplicate range
-					return prevPrev.offset.clone();
+					return prevPrevOffset.clone();
 				} else {
-					return prev.offset.clone();
+					return prevOffset.clone();
 				}
 			} else {
-				return prev.offset.clone();
+				return prevOffset.clone();
 			}
 		} else {
-			// this cannot happen as the transitions array is guaranteed to contain a transition at the
-			// beginning of the requested fromYear
-			return Duration.hours(0);
+			const state = zone.stateAt(normalizedTm);
+			return state.dstOffset.add(state.standardOffset);
 		}
 	}
 
@@ -2151,6 +2151,60 @@ class CachedZoneTransitions {
 			iterator = this.findNext(iterator);
 		}
 		return prevState;
+	}
+
+	/**
+	 * The transitions in year [start, end)
+	 * @param start start year (inclusive)
+	 * @param end end year (exclusive)
+	 */
+	public transitionsInYears(start: number, end: number): ZoneTransition[] {
+		// check if start-1 is within the initial transitions or not. We use start-1 because we take an extra year in the else clause below
+		const final = (this._transitions.length === 0 || this._transitions[this._transitions.length - 1].atUtc.year < start - 1);
+		const result: ZoneTransition[] = [];
+		if (!final) {
+			// simply do linear search
+			let iterator = this.findFirst();
+			while (iterator && iterator.transition.atUtc.year < end) {
+				if (iterator.transition.atUtc.year >= start) {
+					result.push(iterator.transition);
+				}
+				iterator = this.findNext(iterator);
+			}
+		} else {
+			const transitionsWithRules: { transition: ZoneTransition, ruleInfo: RuleInfo }[] = [];
+			// Do something smart: first get all transitions with atUtc NOT compensated for standard offset
+			// Take an extra year before start
+			for (let year = start - 1; year < end; ++year) {
+				for (const ruleInfo of this._finalRules) {
+					if (ruleInfo.applicable(year)) {
+						const transition: ZoneTransition = {
+							atUtc: ruleInfo.effectiveDateUtc(year, this._finalZoneInfo.gmtoff, hours(0)),
+							newState: {
+								abbreviation: zoneAbbreviation(this._finalZoneInfo.format, ruleInfo.save.nonZero(), ruleInfo.letter),
+								letter: ruleInfo.letter,
+								dstOffset: ruleInfo.save,
+								standardOffset: this._finalZoneInfo.gmtoff
+							}
+						};
+						transitionsWithRules.push({ transition, ruleInfo });
+					}
+				}
+			}
+			transitionsWithRules.sort((a, b): number => a.transition.atUtc.unixMillis - b.transition.atUtc.unixMillis);
+			// now apply DST offset retroactively
+			let prevDst = hours(0);
+			for (const tr of transitionsWithRules) {
+				if (tr.ruleInfo.atType === AtType.Wall) {
+					tr.transition.atUtc = new TimeStruct(tr.transition.atUtc.unixMillis - prevDst.milliseconds());
+				}
+				prevDst = tr.transition.newState.dstOffset;
+				if (tr.transition.atUtc.year >= start) {
+					result.push(tr.transition);
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
