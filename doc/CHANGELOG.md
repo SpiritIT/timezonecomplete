@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.12.3 (2021-04-16)
+
+* Fix #53 performance regressions
+
 ## 5.12.2 (2021-03-18)
 
 * Fix #55 `valueOf(): any` should be `valueOf(): number` for DateTime and Duration (thanks @blackwindforce).

@@ -101,6 +101,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="cachedzonetransitions.html#findfirst" class="tsd-kind-icon">find<wbr>First</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="cachedzonetransitions.html#findnext" class="tsd-kind-icon">find<wbr>Next</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="cachedzonetransitions.html#stateat" class="tsd-kind-icon">state<wbr>At</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="cachedzonetransitions.html#transitionsinyears" class="tsd-kind-icon">transitions<wbr>InYears</a></li>
 							</ul>
 						</section>
 					</div>
@@ -118,7 +119,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/72c83e4/src/lib/tz-database.ts#L2067">tz-database.ts:2067</a></li>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/c464c38/src/lib/tz-database.ts#L2067">tz-database.ts:2067</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -163,7 +164,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/72c83e4/src/lib/tz-database.ts#L2053">tz-database.ts:2053</a></li>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/c464c38/src/lib/tz-database.ts#L2053">tz-database.ts:2053</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/zonestate.html" class="tsd-signature-type">ZoneState</a></h4>
@@ -183,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/72c83e4/src/lib/tz-database.ts#L2087">tz-database.ts:2087</a></li>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/c464c38/src/lib/tz-database.ts#L2087">tz-database.ts:2087</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -205,7 +206,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/72c83e4/src/lib/tz-database.ts#L2102">tz-database.ts:2102</a></li>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/c464c38/src/lib/tz-database.ts#L2102">tz-database.ts:2102</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -237,7 +238,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/72c83e4/src/lib/tz-database.ts#L2146">tz-database.ts:2146</a></li>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/c464c38/src/lib/tz-database.ts#L2146">tz-database.ts:2146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -254,6 +255,43 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/zonestate.html" class="tsd-signature-type">ZoneState</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="transitionsinyears" class="tsd-anchor"></a>
+					<h3>transitions<wbr>InYears</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">transitions<wbr>InYears<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, end<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/zonetransition.html" class="tsd-signature-type">ZoneTransition</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/c464c38/src/lib/tz-database.ts#L2161">tz-database.ts:2161</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The transitions in year [start, end)</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>start: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>start year (inclusive)</p>
+									</div>
+								</li>
+								<li>
+									<h5>end: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>end year (exclusive)</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/zonetransition.html" class="tsd-signature-type">ZoneTransition</a><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -288,6 +326,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="cachedzonetransitions.html#stateat" class="tsd-kind-icon">state<wbr>At</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="cachedzonetransitions.html#transitionsinyears" class="tsd-kind-icon">transitions<wbr>InYears</a>
 							</li>
 						</ul>
 					</li>
