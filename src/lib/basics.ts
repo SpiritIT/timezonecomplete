@@ -373,7 +373,7 @@ export function weekOfMonth(year: number, month: number, day: number): number {
 			// Last week of previous month
 			if (month > 1) {
 				// Default case
-				return weekOfMonth(year, month - 1, 31);
+				return weekOfMonth(year, month - 1, daysInMonth(year, month - 1));
 			} else {
 				// January
 				return weekOfMonth(year - 1, 12, 31);

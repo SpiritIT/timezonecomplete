@@ -449,6 +449,10 @@ describe("weekOfMonth()", (): void => {
 		expect(basics.weekOfMonth(2016, 1, 3)).to.equal(5);
 		expect(basics.weekOfMonth(2016, 1, 4)).to.equal(1);
 	});
+
+	it("should not have issue #56", (): void => {
+		expect(basics.weekOfMonth(2021, 5, 1)).to.equal(5);
+	});
 });
 
 describe("secondsInDay()", (): void => {
