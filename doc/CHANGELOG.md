@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.12.4 (2021-05-06)
+
+* Fix #56 `weekOfMonth()` crash
+
 ## 5.12.3 (2021-04-16)
 
 * Fix #53 performance regressions
