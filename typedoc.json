@@ -1,8 +1,6 @@
 {
 	"excludePrivate": true,
 	"excludeProtected": true,
-	"excludeNotExported": true,
 	"excludeExternals": true,
-	"mode": "file",
 	"out": "./doc/typedoc"
 }
