@@ -1,736 +1,116 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>timezonecomplete</title>
-	<meta name="description" content="Documentation for timezonecomplete">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">timezonecomplete</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
-			<h1>timezonecomplete</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#timezonecomplete" id="timezonecomplete" style="color: inherit; text-decoration: none;">
-					<h1>TimezoneComplete</h1>
-				</a>
-				<a href="#synopsis" id="synopsis" style="color: inherit; text-decoration: none;">
-					<h2>Synopsis</h2>
-				</a>
-				<p>TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone&#39;s time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.</p>
-				<a href="#difference-with-timezone-js-momentjs-and-other-date-libraries" id="difference-with-timezone-js-momentjs-and-other-date-libraries" style="color: inherit; text-decoration: none;">
-					<h2>Difference with timezone-js, Moment.js and other Date libraries</h2>
-				</a>
-				<p>Other libraries are great, we had different requirements. The main thing for us was that calculations should be stable and predictable, especially around DST change moments.
-				Above all, it should give the same answers across platforms. At the time we started this, none of the other libraries showed this level of predictability.</p>
-				<p>Try for example to convert some edge case timestamps back and forth between local and UTC or keep adding one hour to a timestamp through daylight saving time changes.</p>
-				<ul>
-					<li>Consistent behaviour across platforms and with different TZ environment variable settings</li>
-					<li>Correct time zone conversions back and forth</li>
-					<li>Correct Daylight Saving Time handling with predictable behavior for non-existing hours during DST changes</li>
-					<li>Feature-rich:<ul>
-							<li><strong>DateTime</strong> class with or without time zone</li>
-							<li><strong>Durations</strong> with units</li>
-							<li><strong>Calculating</strong> with dates and durations across time zones</li>
-							<li><strong>Periods</strong> with regular UTC or regular local time repetition</li>
-							<li><strong>Utility functions</strong> for determining leap years, determining the last Monday of the month etc.</li>
-							<li><strong>Formatting and parsing</strong> of dates using <a href="./doc/LDML.md">LDML format strings</a></li>
-							<li>Ability to use with Node.JS as well as in a browser (CommonJS, AMD)</li>
-						</ul>
-					</li>
-					<li>Good test coverage</li>
-					<li>Under active development by a company who have an interest in keeping it up to date</li>
-					<li>Timezonecomplete is written in TypeScript and typings are included</li>
-				</ul>
-				<a href="#new-in-version-5" id="new-in-version-5" style="color: inherit; text-decoration: none;">
-					<h2>New in Version 5</h2>
-				</a>
-				<p>The TZ data is now installed as a separate NPM module <a href="https://npmjs.com/package/tzdata">tzdata</a>. For browser use, the data is NOT automatically included anymore, to allow you to choose a subset of the data to optimize your bundle.</p>
-				<p>Separating the TZ data from timezonecomplete has three advantages:</p>
-				<ol>
-					<li>The data becomes useful to other modules than just timezonecomplete</li>
-					<li>By choosing for e.g. &#39;tzdata-northamerica&#39;, you can install just the time zones you need, which is handy for browser use (smaller footprint).</li>
-					<li>The upgrades to the TZ data become independent of changes to timezonecomplete. That means you do not have to upgrade to the latest timezonecomplete version to get the latest TZ data.</li>
-				</ol>
-				<p>See the <a href="./doc/UPGRADING.md">Upgrade Instructions</a>.</p>
-				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
-					<h2>Documentation</h2>
-				</a>
-				<ul>
-					<li><a href="./doc/OVERVIEW.md">Overview of features</a></li>
-					<li><a href="https://rawcdn.githack.com/SpiritIT/timezonecomplete/master/doc/typedoc/globals.html">API Reference</a></li>
-					<li><a href="./doc/LDML.md">Formatting and Parsing</a></li>
-					<li><a href="./doc/CHANGELOG.md">Changelog</a></li>
-					<li><a href="./doc/UPGRADING.md">Upgrade Instructions</a></li>
-					<li><a href="./doc/FAQ.md">FAQ</a></li>
-				</ul>
-				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-					<h2>Usage</h2>
-				</a>
-				<a href="#nodejs" id="nodejs" style="color: inherit; text-decoration: none;">
-					<h3>Node.JS</h3>
-				</a>
-				<p>In Node.JS, timezonecomplete automatically has all time zone data.</p>
-				<p>Install using:</p>
-				<pre><code>npm <span class="hljs-keyword">install</span> timezonecomplete</code></pre><p>Then require the timezonecomplete module in your code. Timezonecomplete will automatically find any installed tzdata modules:</p>
-				<pre><code class="language-javascript"><span class="hljs-keyword">var</span> tc = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;timezonecomplete&quot;</span>);</code></pre>
-				<a href="#browserify" id="browserify" style="color: inherit; text-decoration: none;">
-					<h3>Browserify</h3>
-				</a>
-				<p>If you use browserify, There are two options:</p>
-				<ol>
-					<li>Require the .json files in your code and pass them to TzDatabase.init() before using any timezonecomplete functionality.</li>
-					<li>Include the tzdata .json files manually using browserify.require()</li>
-				</ol>
-				<p>Option 1:</p>
-				<pre><code><span class="hljs-comment">// browserify will pick these up. You may need to set the &#x27;extensions&#x27; option of browserify to include .json files</span>
-<span class="hljs-comment">// NOTE in TypeScript, also use &#x27;const&#x27; NOT &#x27;import&#x27;!</span>
-<span class="hljs-keyword">const</span> northamerica = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;tzdata-northamerica&#x27;</span>);
-<span class="hljs-keyword">const</span> etcetera = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;tzdata-etcetera&#x27;</span>);
-<span class="hljs-keyword">const</span> tc = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;timezonecomplete&#x27;</span>);
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>timezonecomplete</title><meta name="description" content="Documentation for timezonecomplete"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">timezonecomplete</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>timezonecomplete </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#timezonecomplete" id="timezonecomplete" style="color: inherit; text-decoration: none;">
+  <h1>TimezoneComplete</h1>
+</a>
 
-<span class="hljs-comment">// Do this before creating e.g. tc.DateTime objects.</span>
-<span class="hljs-comment">// In this example we use only part of the timezone database to reduce bundle size.</span>
-<span class="hljs-comment">// Note you could whittle down the zones and rules further if you like by e.g. excluding rules pre-1990.</span>
-<span class="hljs-comment">// That&#x27;s at your own risk though</span>
-tc.TzDatabase.init([northamerica, etcetera]);</code></pre><p>Option 2:</p>
-				<pre><code><span class="hljs-comment">// Manual browserifying ambient JSON data</span>
-<span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
-<span class="hljs-keyword">var</span> glob = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;glob&#x27;</span>);
-<span class="hljs-keyword">var</span> browserify  = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;browserify&#x27;</span>);
-browserify({
-    entries: glob.sync(<span class="hljs-string">&#x27;./src/*.js&#x27;</span>),
-    extensions: [<span class="hljs-string">&#x27;.js&#x27;</span>, <span class="hljs-string">&#x27;.json&#x27;</span>], <span class="hljs-comment">// needed to include the tzdata modules</span>
-    debug: <span class="hljs-literal">true</span>
-})
-.<span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;./node_modules/tzdata/timezone-data.json&#x27;</span>, {expose: <span class="hljs-string">&#x27;tzdata&#x27;</span>}) <span class="hljs-comment">// add &#x27;tzdata&#x27; and make it available globally under its own name</span>
-.bundle()
-.pipe(fs.createWriteStream(<span class="hljs-string">&#x27;./dist/bundle.js&#x27;</span>));</code></pre>
-				<a href="#webpack" id="webpack" style="color: inherit; text-decoration: none;">
-					<h3>Webpack</h3>
-				</a>
-				<p>Use a &gt;=2.x (beta) version of webpack, to avoid warnings. Then, use a plugin in your webpack configuration to load the time zone data you need.</p>
-				<pre><code class="language-javascript">  plugins: [
-    <span class="hljs-keyword">new</span> webpack.ContextReplacementPlugin(
-      <span class="hljs-regexp">/[\/\\]node_modules[\/\\]timezonecomplete[\/\\]/</span>,
-      path.resolve(<span class="hljs-string">&quot;tz-database-context&quot;</span>),
-      {
-        <span class="hljs-string">&quot;tzdata-backward-utc&quot;</span>: <span class="hljs-string">&quot;tzdata-backward-utc&quot;</span>,
-        <span class="hljs-string">&quot;tzdata-etcetera&quot;</span>: <span class="hljs-string">&quot;tzdata-etcetera&quot;</span>,
-        <span class="hljs-string">&quot;tzdata-europe&quot;</span>: <span class="hljs-string">&quot;tzdata-europe&quot;</span>
-      }
-    )
-  ]</code></pre>
-				<p>To install a beta version of webpack, first, look up the latest unstable version using:</p>
-				<pre><code>npm <span class="hljs-keyword">show</span> webpack versions <span class="hljs-comment">--json</span></code></pre><p>Then, install the specific version by specifying it behind an @-sign (in this example 2.2.0-rc3) like this:</p>
-				<pre><code><span class="hljs-attribute">npm</span> install --save-dev webpack@<span class="hljs-number">2</span>.<span class="hljs-number">2</span>.<span class="hljs-number">0</span>-rc.<span class="hljs-number">3</span></code></pre>
-				<a href="#browser-stand-alone" id="browser-stand-alone" style="color: inherit; text-decoration: none;">
-					<h3>Browser, stand-alone</h3>
-				</a>
-				<p>Timezonecomplete comes with a <a href="./dist/timezonecomplete.js">bundle</a> and a <a href="./dist/timezonecomplete.min.js">minified bundle</a>. Both are UMD (isomorphic) modules.
-				Next to these bundles, you also need one or more of the bundles from the tzdata modules listed above.</p>
-				<p>You can find examples of using timezonecomplete in a browser in the <a href="examples/">examples</a> directory, both using Require.JS and ambient.</p>
-				<pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Timezonecomplete Browser Example<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./tzdata.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./timezonecomplete.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doIt</span>(<span class="hljs-params"></span>) </span>{
-      <span class="hljs-keyword">var</span> utc = tc.nowUtc();
-      <span class="hljs-keyword">var</span> local = utc.toZone(tc.zone(<span class="hljs-string">&#x27;localtime&#x27;</span>));
-      <span class="hljs-keyword">var</span> diff = local.toZone(<span class="hljs-literal">null</span>).diff(utc.toZone(<span class="hljs-literal">null</span>));
-      <span class="hljs-keyword">var</span> hourDiff = tc.hours(diff.hours());
-      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;diff&#x27;</span>).textContent = hourDiff.toString();
-    }
-  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">onLoad</span>=<span class="hljs-string">&quot;doIt()&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
-    The difference between local time and UTC is:<span class="hljs-symbol">&amp;nbsp;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;diff&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
-				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
-					<h2>License</h2>
-				</a>
-				<p>MIT</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-					<li class=" tsd-kind-enum">
-						<a href="enums/attype.html" class="tsd-kind-icon">At<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/datefunctions.html" class="tsd-kind-icon">Date<wbr>Functions</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/normalizeoption.html" class="tsd-kind-icon">Normalize<wbr>Option</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/ontype.html" class="tsd-kind-icon">On<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/perioddst.html" class="tsd-kind-icon">Period<wbr>Dst</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/ruletype.html" class="tsd-kind-icon">Rule<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/timeunit.html" class="tsd-kind-icon">Time<wbr>Unit</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/timezonekind.html" class="tsd-kind-icon">Time<wbr>Zone<wbr>Kind</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/totype.html" class="tsd-kind-icon">To<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/tokentype.html" class="tsd-kind-icon">Token<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/tzdaynames.html" class="tsd-kind-icon">Tz<wbr>Day<wbr>Names</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/tzmonthnames.html" class="tsd-kind-icon">Tz<wbr>Month<wbr>Names</a>
-					</li>
-					<li class=" tsd-kind-enum">
-						<a href="enums/weekday.html" class="tsd-kind-icon">Week<wbr>Day</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/cachedruletransitions.html" class="tsd-kind-icon">Cached<wbr>Rule<wbr>Transitions</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/cachedzonetransitions.html" class="tsd-kind-icon">Cached<wbr>Zone<wbr>Transitions</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/datetime.html" class="tsd-kind-icon">Date<wbr>Time</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/duration.html" class="tsd-kind-icon">Duration</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/period.html" class="tsd-kind-icon">Period</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/realtimesource.html" class="tsd-kind-icon">Real<wbr>Time<wbr>Source</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/ruleinfo.html" class="tsd-kind-icon">Rule<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/timestruct.html" class="tsd-kind-icon">Time<wbr>Struct</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/timezone.html" class="tsd-kind-icon">Time<wbr>Zone</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/transition.html" class="tsd-kind-icon">Transition</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/tzdatabase.html" class="tsd-kind-icon">Tz<wbr>Database</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/zoneinfo.html" class="tsd-kind-icon">Zone<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/awaretimestruct.html" class="tsd-kind-icon">Aware<wbr>Time<wbr>Struct</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/dayperiod.html" class="tsd-kind-icon">Day<wbr>Period</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/locale.html" class="tsd-kind-icon">Locale</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/minmaxinfo.html" class="tsd-kind-icon">Min<wbr>Max<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/parsedayperiodresult.html" class="tsd-kind-icon">Parse<wbr>Day<wbr>Period<wbr>Result</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/parsenumberresult.html" class="tsd-kind-icon">Parse<wbr>Number<wbr>Result</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/parsezoneresult.html" class="tsd-kind-icon">Parse<wbr>Zone<wbr>Result</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/partiallocale.html" class="tsd-kind-icon">Partial<wbr>Locale</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/periodjson.html" class="tsd-kind-icon">Period<wbr>Json</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rulestate.html" class="tsd-kind-icon">Rule<wbr>State</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/ruletransition.html" class="tsd-kind-icon">Rule<wbr>Transition</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/ruletransitioniterator.html" class="tsd-kind-icon">Rule<wbr>Transition<wbr>Iterator</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/symbolinfo.html" class="tsd-kind-icon">Symbol<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/timecomponentopts.html" class="tsd-kind-icon">Time<wbr>Component<wbr>Opts</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/timecomponents.html" class="tsd-kind-icon">Time<wbr>Components</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/timesource.html" class="tsd-kind-icon">Time<wbr>Source</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/token.html" class="tsd-kind-icon">Token</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/weektimeopts.html" class="tsd-kind-icon">Week<wbr>Time<wbr>Opts</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/zonestate.html" class="tsd-kind-icon">Zone<wbr>State</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/zonetransition.html" class="tsd-kind-icon">Zone<wbr>Transition</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/zonetransitioniterator.html" class="tsd-kind-icon">Zone<wbr>Transition<wbr>Iterator</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#perioddstjson" class="tsd-kind-icon">Period<wbr>Dst<wbr>Json</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#era_names_abbreviated" class="tsd-kind-icon">ERA_<wbr>NAMES_<wbr>ABBREVIATED</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#era_names_narrow" class="tsd-kind-icon">ERA_<wbr>NAMES_<wbr>NARROW</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#era_names_wide" class="tsd-kind-icon">ERA_<wbr>NAMES_<wbr>WIDE</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#long_month_names" class="tsd-kind-icon">LONG_<wbr>MONTH_<wbr>NAMES</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#long_weekday_names" class="tsd-kind-icon">LONG_<wbr>WEEKDAY_<wbr>NAMES</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#month_letters" class="tsd-kind-icon">MONTH_<wbr>LETTERS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#quarter_abbreviations" class="tsd-kind-icon">QUARTER_<wbr>ABBREVIATIONS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#quarter_letter" class="tsd-kind-icon">QUARTER_<wbr>LETTER</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#quarter_word" class="tsd-kind-icon">QUARTER_<wbr>WORD</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#short_month_names" class="tsd-kind-icon">SHORT_<wbr>MONTH_<wbr>NAMES</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#short_weekday_names" class="tsd-kind-icon">SHORT_<wbr>WEEKDAY_<wbr>NAMES</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#stand_alone_long_month_names" class="tsd-kind-icon">STAND_<wbr>ALONE_<wbr>LONG_<wbr>MONTH_<wbr>NAMES</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#stand_alone_month_letters" class="tsd-kind-icon">STAND_<wbr>ALONE_<wbr>MONTH_<wbr>LETTERS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#stand_alone_quarter_abbreviations" class="tsd-kind-icon">STAND_<wbr>ALONE_<wbr>QUARTER_<wbr>ABBREVIATIONS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#stand_alone_quarter_letter" class="tsd-kind-icon">STAND_<wbr>ALONE_<wbr>QUARTER_<wbr>LETTER</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#stand_alone_quarter_word" class="tsd-kind-icon">STAND_<wbr>ALONE_<wbr>QUARTER_<wbr>WORD</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#stand_alone_short_month_names" class="tsd-kind-icon">STAND_<wbr>ALONE_<wbr>SHORT_<wbr>MONTH_<wbr>NAMES</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#weekday_letters" class="tsd-kind-icon">WEEKDAY_<wbr>LETTERS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#weekday_two_letters" class="tsd-kind-icon">WEEKDAY_<wbr>TWO_<wbr>LETTERS</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#whitespace" class="tsd-kind-icon">WHITESPACE</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatday" class="tsd-kind-icon">_format<wbr>Day</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatdayperiod" class="tsd-kind-icon">_format<wbr>Day<wbr>Period</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatera" class="tsd-kind-icon">_format<wbr>Era</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formathour" class="tsd-kind-icon">_format<wbr>Hour</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatminute" class="tsd-kind-icon">_format<wbr>Minute</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatmonth" class="tsd-kind-icon">_format<wbr>Month</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatquarter" class="tsd-kind-icon">_format<wbr>Quarter</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatsecond" class="tsd-kind-icon">_format<wbr>Second</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatweek" class="tsd-kind-icon">_format<wbr>Week</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatweekday" class="tsd-kind-icon">_format<wbr>Weekday</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatyear" class="tsd-kind-icon">_format<wbr>Year</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#_formatzone" class="tsd-kind-icon">_format<wbr>Zone</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#abs" class="tsd-kind-icon">abs</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#assert" class="tsd-kind-icon">assert</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="globals.html#binaryinsertionindex" class="tsd-kind-icon">binary<wbr>Insertion<wbr>Index</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="globals.html#converterror" class="tsd-kind-icon">convert<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#convertfromutc" class="tsd-kind-icon">convert<wbr>From<wbr>Utc</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#converttoutc" class="tsd-kind-icon">convert<wbr>ToUtc</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#dayofyear" class="tsd-kind-icon">day<wbr>OfYear</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#days" class="tsd-kind-icon">days</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#daysinyear" class="tsd-kind-icon">days<wbr>InYear</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#error" class="tsd-kind-icon">error</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#erroris" class="tsd-kind-icon">error<wbr>Is</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#filterfloat" class="tsd-kind-icon">filter<wbr>Float</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#firstweekdayofmonth" class="tsd-kind-icon">first<wbr>Week<wbr>Day<wbr>OfMonth</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#format" class="tsd-kind-icon">format</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#getweekonedayofyear" class="tsd-kind-icon">get<wbr>Week<wbr>One<wbr>Day<wbr>OfYear</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#hours" class="tsd-kind-icon">hours</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#isdatetime" class="tsd-kind-icon">is<wbr>Date<wbr>Time</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#isduration" class="tsd-kind-icon">is<wbr>Duration</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#isint" class="tsd-kind-icon">is<wbr>Int</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#isleapyear" class="tsd-kind-icon">is<wbr>Leap<wbr>Year</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#isperiod" class="tsd-kind-icon">is<wbr>Period</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#istimezone" class="tsd-kind-icon">is<wbr>Time<wbr>Zone</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#isvalidoffsetstring" class="tsd-kind-icon">is<wbr>Valid<wbr>Offset<wbr>String</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#isvalidperiodjson" class="tsd-kind-icon">is<wbr>Valid<wbr>Period<wbr>Json</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#lastweekdayofmonth" class="tsd-kind-icon">last<wbr>Week<wbr>Day<wbr>OfMonth</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#local" class="tsd-kind-icon">local</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#max" class="tsd-kind-icon">max</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#milliseconds" class="tsd-kind-icon">milliseconds</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#min" class="tsd-kind-icon">min</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#minutes" class="tsd-kind-icon">minutes</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#monthnametonumber" class="tsd-kind-icon">month<wbr>Name<wbr>ToNumber</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#months" class="tsd-kind-icon">months</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#normalizetimecomponents" class="tsd-kind-icon">normalize<wbr>Time<wbr>Components</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#now" class="tsd-kind-icon">now</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#nowlocal" class="tsd-kind-icon">now<wbr>Local</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#nowutc" class="tsd-kind-icon">now<wbr>Utc</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#padleft" class="tsd-kind-icon">pad<wbr>Left</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#padright" class="tsd-kind-icon">pad<wbr>Right</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#parse" class="tsd-kind-icon">parse</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#parseable" class="tsd-kind-icon">parseable</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#perioddsttostring" class="tsd-kind-icon">period<wbr>Dst<wbr>ToString</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#positivemodulo" class="tsd-kind-icon">positive<wbr>Modulo</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#roundsym" class="tsd-kind-icon">round<wbr>Sym</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#ruletransitionutc" class="tsd-kind-icon">rule<wbr>Transition<wbr>Utc</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#secondofday" class="tsd-kind-icon">second<wbr>OfDay</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#seconds" class="tsd-kind-icon">seconds</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stringtotimeunit" class="tsd-kind-icon">string<wbr>ToTime<wbr>Unit</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripdayperiod" class="tsd-kind-icon">strip<wbr>Day<wbr>Period</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripera" class="tsd-kind-icon">strip<wbr>Era</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#striphour" class="tsd-kind-icon">strip<wbr>Hour</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripmonth" class="tsd-kind-icon">strip<wbr>Month</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripnumber" class="tsd-kind-icon">strip<wbr>Number</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripquarter" class="tsd-kind-icon">strip<wbr>Quarter</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripraw" class="tsd-kind-icon">strip<wbr>Raw</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripsecond" class="tsd-kind-icon">strip<wbr>Second</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripstrings" class="tsd-kind-icon">strip<wbr>Strings</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripweekday" class="tsd-kind-icon">strip<wbr>Week<wbr>Day</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#stripzone" class="tsd-kind-icon">strip<wbr>Zone</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#throwerror" class="tsd-kind-icon">throw<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#timetounixnoleapsecs" class="tsd-kind-icon">time<wbr>ToUnix<wbr>NoLeap<wbr>Secs</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#timeunittomilliseconds" class="tsd-kind-icon">time<wbr>Unit<wbr>ToMilliseconds</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#timeunittostring" class="tsd-kind-icon">time<wbr>Unit<wbr>ToString</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#timestamponweektimegreaterthanorequalto" class="tsd-kind-icon">timestamp<wbr>OnWeek<wbr>Time<wbr>Greater<wbr>Than<wbr>OrEqual<wbr>To</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#timestamponweektimelessthan" class="tsd-kind-icon">timestamp<wbr>OnWeek<wbr>Time<wbr>Less<wbr>Than</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#tokenize" class="tsd-kind-icon">tokenize</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#unixtotimenoleapsecs" class="tsd-kind-icon">unix<wbr>ToTime<wbr>NoLeap<wbr>Secs</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#utc" class="tsd-kind-icon">utc</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#validatedata" class="tsd-kind-icon">validate<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#weekdaynoleapsecs" class="tsd-kind-icon">week<wbr>Day<wbr>NoLeap<wbr>Secs</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#weekdayonorafter" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>After</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#weekdayonorbefore" class="tsd-kind-icon">week<wbr>Day<wbr>OnOr<wbr>Before</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#weeknumber" class="tsd-kind-icon">week<wbr>Number</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#weekofmonth" class="tsd-kind-icon">week<wbr>OfMonth</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#years" class="tsd-kind-icon">years</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#zone" class="tsd-kind-icon">zone</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#zoneabbreviation" class="tsd-kind-icon">zone<wbr>Abbreviation</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#day_periods_abbreviated" class="tsd-kind-icon">DAY_<wbr>PERIODS_<wbr>ABBREVIATED</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#day_periods_narrow" class="tsd-kind-icon">DAY_<wbr>PERIODS_<wbr>NARROW</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#day_periods_wide" class="tsd-kind-icon">DAY_<wbr>PERIODS_<wbr>WIDE</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#default_locale" class="tsd-kind-icon">DEFAULT_<wbr>LOCALE</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#symbol_mapping" class="tsd-kind-icon">SYMBOL_<wbr>MAPPING</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+<a href="#synopsis" id="synopsis" style="color: inherit; text-decoration: none;">
+  <h2>Synopsis</h2>
+</a>
+<p>TimezoneComplete is a library of date/time utilities, all of which are aware of time zones and daylight saving time. It provides for calculating with Durations (amount of UTC milliseconds) and with Periods (regular intervals in some timezone&#39;s time, which might be irregular in UTC). It has aware DateTimes (with timezone) and unaware DateTimes (without timezone) and you are prevented from mixing the two in calculations.</p>
+
+<a href="#difference-with-timezone-js-momentjs-and-other-date-libraries" id="difference-with-timezone-js-momentjs-and-other-date-libraries" style="color: inherit; text-decoration: none;">
+  <h2>Difference with timezone-js, Moment.js and other Date libraries</h2>
+</a>
+<p>Other libraries are great, we had different requirements. The main thing for us was that calculations should be stable and predictable, especially around DST change moments.
+Above all, it should give the same answers across platforms. At the time we started this, none of the other libraries showed this level of predictability.</p>
+<p>Try for example to convert some edge case timestamps back and forth between local and UTC or keep adding one hour to a timestamp through daylight saving time changes.</p>
+<ul>
+<li>Consistent behaviour across platforms and with different TZ environment variable settings</li>
+<li>Correct time zone conversions back and forth</li>
+<li>Correct Daylight Saving Time handling with predictable behavior for non-existing hours during DST changes</li>
+<li>Feature-rich:<ul>
+<li><strong>DateTime</strong> class with or without time zone</li>
+<li><strong>Durations</strong> with units</li>
+<li><strong>Calculating</strong> with dates and durations across time zones</li>
+<li><strong>Periods</strong> with regular UTC or regular local time repetition</li>
+<li><strong>Utility functions</strong> for determining leap years, determining the last Monday of the month etc.</li>
+<li><strong>Formatting and parsing</strong> of dates using <a href="./doc/LDML.md">LDML format strings</a></li>
+<li>Ability to use with Node.JS as well as in a browser (CommonJS, AMD)</li>
+</ul>
+</li>
+<li>Good test coverage</li>
+<li>Under active development by a company who have an interest in keeping it up to date</li>
+<li>Timezonecomplete is written in TypeScript and typings are included</li>
+</ul>
+
+<a href="#new-in-version-5" id="new-in-version-5" style="color: inherit; text-decoration: none;">
+  <h2>New in Version 5</h2>
+</a>
+<p>The TZ data is now installed as a separate NPM module <a href="https://npmjs.com/package/tzdata">tzdata</a>. For browser use, the data is NOT automatically included anymore, to allow you to choose a subset of the data to optimize your bundle.</p>
+<p>Separating the TZ data from timezonecomplete has three advantages:</p>
+<ol>
+<li>The data becomes useful to other modules than just timezonecomplete</li>
+<li>By choosing for e.g. &#39;tzdata-northamerica&#39;, you can install just the time zones you need, which is handy for browser use (smaller footprint).</li>
+<li>The upgrades to the TZ data become independent of changes to timezonecomplete. That means you do not have to upgrade to the latest timezonecomplete version to get the latest TZ data.</li>
+</ol>
+<p>See the <a href="./doc/UPGRADING.md">Upgrade Instructions</a>.</p>
+
+<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+  <h2>Documentation</h2>
+</a>
+<ul>
+<li><a href="./doc/OVERVIEW.md">Overview of features</a></li>
+<li><a href="https://rawcdn.githack.com/SpiritIT/timezonecomplete/master/doc/typedoc/globals.html">API Reference</a></li>
+<li><a href="./doc/LDML.md">Formatting and Parsing</a></li>
+<li><a href="./doc/CHANGELOG.md">Changelog</a></li>
+<li><a href="./doc/UPGRADING.md">Upgrade Instructions</a></li>
+<li><a href="./doc/FAQ.md">FAQ</a></li>
+</ul>
+
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h2>Usage</h2>
+</a>
+
+<a href="#nodejs" id="nodejs" style="color: inherit; text-decoration: none;">
+  <h3>Node.JS</h3>
+</a>
+<p>In Node.JS, timezonecomplete automatically has all time zone data.</p>
+<p>Install using:</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">install</span><span class="hl-1"> </span><span class="hl-0">timezonecomplete</span>
+</code></pre>
+<p>Then require the timezonecomplete module in your code. Timezonecomplete will automatically find any installed tzdata modules:</p>
+<pre><code class="language-javascript"><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">tc</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&quot;timezonecomplete&quot;</span><span class="hl-1">);</span>
+</code></pre>
+
+<a href="#browserify" id="browserify" style="color: inherit; text-decoration: none;">
+  <h3>Browserify</h3>
+</a>
+<p>If you use browserify, There are two options:</p>
+<ol>
+<li>Require the .json files in your code and pass them to TzDatabase.init() before using any timezonecomplete functionality.</li>
+<li>Include the tzdata .json files manually using browserify.require()</li>
+</ol>
+<p>Option 1:</p>
+<pre><code><span class="hl-5">// browserify will pick these up. You may need to set the &#39;extensions&#39; option of browserify to include .json files</span><br/><span class="hl-5">// NOTE in TypeScript, also use &#39;const&#39; NOT &#39;import&#39;!</span><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-6">northamerica</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;tzdata-northamerica&#39;</span><span class="hl-1">);</span><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-6">etcetera</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;tzdata-etcetera&#39;</span><span class="hl-1">);</span><br/><span class="hl-2">const</span><span class="hl-1"> </span><span class="hl-6">tc</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;timezonecomplete&#39;</span><span class="hl-1">);</span><br/><br/><span class="hl-5">// Do this before creating e.g. tc.DateTime objects.</span><br/><span class="hl-5">// In this example we use only part of the timezone database to reduce bundle size.</span><br/><span class="hl-5">// Note you could whittle down the zones and rules further if you like by e.g. excluding rules pre-1990.</span><br/><span class="hl-5">// That&#39;s at your own risk though</span><br/><span class="hl-0">tc</span><span class="hl-1">.</span><span class="hl-0">TzDatabase</span><span class="hl-1">.</span><span class="hl-3">init</span><span class="hl-1">([</span><span class="hl-0">northamerica</span><span class="hl-1">, </span><span class="hl-0">etcetera</span><span class="hl-1">]);</span>
+</code></pre>
+<p>Option 2:</p>
+<pre><code><span class="hl-5">// Manual browserifying ambient JSON data</span><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">fs</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;fs&#39;</span><span class="hl-1">);</span><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">glob</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;glob&#39;</span><span class="hl-1">);</span><br/><span class="hl-2">var</span><span class="hl-1"> </span><span class="hl-0">browserify</span><span class="hl-1">  = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;browserify&#39;</span><span class="hl-1">);</span><br/><span class="hl-3">browserify</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-0">entries:</span><span class="hl-1"> </span><span class="hl-0">glob</span><span class="hl-1">.</span><span class="hl-3">sync</span><span class="hl-1">(</span><span class="hl-4">&#39;./src/*.js&#39;</span><span class="hl-1">),</span><br/><span class="hl-1">    </span><span class="hl-0">extensions:</span><span class="hl-1"> [</span><span class="hl-4">&#39;.js&#39;</span><span class="hl-1">, </span><span class="hl-4">&#39;.json&#39;</span><span class="hl-1">], </span><span class="hl-5">// needed to include the tzdata modules</span><br/><span class="hl-1">    </span><span class="hl-0">debug:</span><span class="hl-1"> </span><span class="hl-2">true</span><br/><span class="hl-1">})</span><br/><span class="hl-1">.</span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;./node_modules/tzdata/timezone-data.json&#39;</span><span class="hl-1">, {</span><span class="hl-0">expose:</span><span class="hl-1"> </span><span class="hl-4">&#39;tzdata&#39;</span><span class="hl-1">}) </span><span class="hl-5">// add &#39;tzdata&#39; and make it available globally under its own name</span><br/><span class="hl-1">.</span><span class="hl-3">bundle</span><span class="hl-1">()</span><br/><span class="hl-1">.</span><span class="hl-3">pipe</span><span class="hl-1">(</span><span class="hl-0">fs</span><span class="hl-1">.</span><span class="hl-3">createWriteStream</span><span class="hl-1">(</span><span class="hl-4">&#39;./dist/bundle.js&#39;</span><span class="hl-1">));</span>
+</code></pre>
+
+<a href="#webpack" id="webpack" style="color: inherit; text-decoration: none;">
+  <h3>Webpack</h3>
+</a>
+<p>Use a &gt;=2.x (beta) version of webpack, to avoid warnings. Then, use a plugin in your webpack configuration to load the time zone data you need.</p>
+<pre><code class="language-javascript"><span class="hl-1">  </span><span class="hl-7">plugins</span><span class="hl-1">: [</span><br/><span class="hl-1">    </span><span class="hl-2">new</span><span class="hl-1"> </span><span class="hl-0">webpack</span><span class="hl-1">.</span><span class="hl-3">ContextReplacementPlugin</span><span class="hl-1">(</span><br/><span class="hl-1">      </span><span class="hl-8">/</span><span class="hl-9">[</span><span class="hl-10">\/\\</span><span class="hl-9">]</span><span class="hl-8">node_modules</span><span class="hl-9">[</span><span class="hl-10">\/\\</span><span class="hl-9">]</span><span class="hl-8">timezonecomplete</span><span class="hl-9">[</span><span class="hl-10">\/\\</span><span class="hl-9">]</span><span class="hl-8">/</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-0">path</span><span class="hl-1">.</span><span class="hl-3">resolve</span><span class="hl-1">(</span><span class="hl-4">&quot;tz-database-context&quot;</span><span class="hl-1">),</span><br/><span class="hl-1">      {</span><br/><span class="hl-1">        </span><span class="hl-4">&quot;tzdata-backward-utc&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-4">&quot;tzdata-backward-utc&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">&quot;tzdata-etcetera&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-4">&quot;tzdata-etcetera&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">&quot;tzdata-europe&quot;</span><span class="hl-0">:</span><span class="hl-1"> </span><span class="hl-4">&quot;tzdata-europe&quot;</span><br/><span class="hl-1">      }</span><br/><span class="hl-1">    )</span><br/><span class="hl-1">  ]</span>
+</code></pre>
+<p>To install a beta version of webpack, first, look up the latest unstable version using:</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">show</span><span class="hl-1"> </span><span class="hl-0">webpack</span><span class="hl-1"> </span><span class="hl-0">versions</span><span class="hl-1"> --</span><span class="hl-0">json</span>
+</code></pre>
+<p>Then, install the specific version by specifying it behind an @-sign (in this example 2.2.0-rc3) like this:</p>
+<pre><code><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">install</span><span class="hl-1"> --</span><span class="hl-0">save</span><span class="hl-1">-</span><span class="hl-0">dev</span><span class="hl-1"> </span><span class="hl-0">webpack</span><span class="hl-1">@</span><span class="hl-11">2.2</span><span class="hl-1">.</span><span class="hl-11">0</span><span class="hl-1">-</span><span class="hl-0">rc</span><span class="hl-1">.</span><span class="hl-11">3</span>
+</code></pre>
+
+<a href="#browser-stand-alone" id="browser-stand-alone" style="color: inherit; text-decoration: none;">
+  <h3>Browser, stand-alone</h3>
+</a>
+<p>Timezonecomplete comes with a <a href="./dist/timezonecomplete.js">bundle</a> and a <a href="./dist/timezonecomplete.min.js">minified bundle</a>. Both are UMD (isomorphic) modules.
+Next to these bundles, you also need one or more of the bundles from the tzdata modules listed above.</p>
+<p>You can find examples of using timezonecomplete in a browser in the <a href="examples/">examples</a> directory, both using Require.JS and ambient.</p>
+<pre><code class="language-html"><span class="hl-12">&lt;!</span><span class="hl-13">DOCTYPE</span><span class="hl-1"> </span><span class="hl-14">html</span><span class="hl-12">&gt;</span><br/><span class="hl-12">&lt;</span><span class="hl-13">html</span><span class="hl-12">&gt;</span><br/><span class="hl-12">&lt;</span><span class="hl-13">head</span><span class="hl-12">&gt;</span><br/><span class="hl-1">  </span><span class="hl-12">&lt;</span><span class="hl-13">meta</span><span class="hl-1"> </span><span class="hl-14">charset</span><span class="hl-1">=</span><span class="hl-15">&quot;utf-8&quot;</span><span class="hl-12">&gt;</span><br/><span class="hl-1">  </span><span class="hl-12">&lt;</span><span class="hl-13">title</span><span class="hl-12">&gt;</span><span class="hl-1">Timezonecomplete Browser Example</span><span class="hl-12">&lt;/</span><span class="hl-13">title</span><span class="hl-12">&gt;</span><br/><span class="hl-1">  </span><span class="hl-12">&lt;</span><span class="hl-13">script</span><span class="hl-16"> </span><span class="hl-14">src</span><span class="hl-16">=</span><span class="hl-15">&quot;./tzdata.js&quot;</span><span class="hl-12">&gt;&lt;/</span><span class="hl-13">script</span><span class="hl-12">&gt;</span><br/><span class="hl-1">  </span><span class="hl-12">&lt;</span><span class="hl-13">script</span><span class="hl-16"> </span><span class="hl-14">src</span><span class="hl-16">=</span><span class="hl-15">&quot;./timezonecomplete.min.js&quot;</span><span class="hl-12">&gt;&lt;/</span><span class="hl-13">script</span><span class="hl-12">&gt;</span><br/><span class="hl-1">  </span><span class="hl-12">&lt;</span><span class="hl-13">script</span><span class="hl-12">&gt;</span><br/><span class="hl-16">    </span><span class="hl-2">function</span><span class="hl-16"> </span><span class="hl-3">doIt</span><span class="hl-16">() {</span><br/><span class="hl-16">      </span><span class="hl-2">var</span><span class="hl-16"> </span><span class="hl-0">utc</span><span class="hl-16"> </span><span class="hl-1">=</span><span class="hl-16"> </span><span class="hl-0">tc</span><span class="hl-16">.</span><span class="hl-3">nowUtc</span><span class="hl-16">();</span><br/><span class="hl-16">      </span><span class="hl-2">var</span><span class="hl-16"> </span><span class="hl-0">local</span><span class="hl-16"> </span><span class="hl-1">=</span><span class="hl-16"> </span><span class="hl-0">utc</span><span class="hl-16">.</span><span class="hl-3">toZone</span><span class="hl-16">(</span><span class="hl-0">tc</span><span class="hl-16">.</span><span class="hl-3">zone</span><span class="hl-16">(</span><span class="hl-4">&#39;localtime&#39;</span><span class="hl-16">));</span><br/><span class="hl-16">      </span><span class="hl-2">var</span><span class="hl-16"> </span><span class="hl-0">diff</span><span class="hl-16"> </span><span class="hl-1">=</span><span class="hl-16"> </span><span class="hl-0">local</span><span class="hl-16">.</span><span class="hl-3">toZone</span><span class="hl-16">(</span><span class="hl-2">null</span><span class="hl-16">).</span><span class="hl-3">diff</span><span class="hl-16">(</span><span class="hl-0">utc</span><span class="hl-16">.</span><span class="hl-3">toZone</span><span class="hl-16">(</span><span class="hl-2">null</span><span class="hl-16">));</span><br/><span class="hl-16">      </span><span class="hl-2">var</span><span class="hl-16"> </span><span class="hl-0">hourDiff</span><span class="hl-16"> </span><span class="hl-1">=</span><span class="hl-16"> </span><span class="hl-0">tc</span><span class="hl-16">.</span><span class="hl-3">hours</span><span class="hl-16">(</span><span class="hl-0">diff</span><span class="hl-16">.</span><span class="hl-3">hours</span><span class="hl-16">());</span><br/><span class="hl-16">      </span><span class="hl-0">document</span><span class="hl-16">.</span><span class="hl-3">getElementById</span><span class="hl-16">(</span><span class="hl-4">&#39;diff&#39;</span><span class="hl-16">).</span><span class="hl-0">textContent</span><span class="hl-16"> </span><span class="hl-1">=</span><span class="hl-16"> </span><span class="hl-0">hourDiff</span><span class="hl-16">.</span><span class="hl-3">toString</span><span class="hl-16">();</span><br/><span class="hl-16">    }</span><br/><span class="hl-16">  </span><span class="hl-12">&lt;/</span><span class="hl-13">script</span><span class="hl-12">&gt;</span><br/><span class="hl-12">&lt;/</span><span class="hl-13">head</span><span class="hl-12">&gt;</span><br/><span class="hl-12">&lt;</span><span class="hl-13">body</span><span class="hl-1"> </span><span class="hl-14">onLoad</span><span class="hl-1">=</span><span class="hl-15">&quot;doIt()&quot;</span><span class="hl-12">&gt;</span><br/><span class="hl-1">  </span><span class="hl-12">&lt;</span><span class="hl-13">p</span><span class="hl-12">&gt;</span><br/><span class="hl-1">    The difference between local time and UTC is:</span><span class="hl-2">&amp;nbsp;</span><br/><span class="hl-1">    </span><span class="hl-12">&lt;</span><span class="hl-13">span</span><span class="hl-1"> </span><span class="hl-14">id</span><span class="hl-1">=</span><span class="hl-15">&quot;diff&quot;</span><span class="hl-12">&gt;&lt;/</span><span class="hl-13">div</span><span class="hl-12">&gt;</span><br/><span class="hl-1">  </span><span class="hl-12">&lt;/</span><span class="hl-13">p</span><span class="hl-12">&gt;</span><br/><span class="hl-12">&lt;/</span><span class="hl-13">body</span><span class="hl-12">&gt;</span><br/><span class="hl-12">&lt;/</span><span class="hl-13">html</span><span class="hl-12">&gt;</span>
+</code></pre>
+
+<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+  <h2>License</h2>
+</a>
+<p>MIT</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-enum"><a href="enums/AtType.html" class="tsd-kind-icon">At<wbr/>Type</a></li><li class="tsd-kind-enum"><a href="enums/DateFunctions.html" class="tsd-kind-icon">Date<wbr/>Functions</a></li><li class="tsd-kind-enum"><a href="enums/NormalizeOption.html" class="tsd-kind-icon">Normalize<wbr/>Option</a></li><li class="tsd-kind-enum"><a href="enums/OnType.html" class="tsd-kind-icon">On<wbr/>Type</a></li><li class="tsd-kind-enum"><a href="enums/PeriodDst.html" class="tsd-kind-icon">Period<wbr/>Dst</a></li><li class="tsd-kind-enum"><a href="enums/RuleType.html" class="tsd-kind-icon">Rule<wbr/>Type</a></li><li class="tsd-kind-enum"><a href="enums/TimeUnit.html" class="tsd-kind-icon">Time<wbr/>Unit</a></li><li class="tsd-kind-enum"><a href="enums/TimeZoneKind.html" class="tsd-kind-icon">Time<wbr/>Zone<wbr/>Kind</a></li><li class="tsd-kind-enum"><a href="enums/ToType.html" class="tsd-kind-icon">To<wbr/>Type</a></li><li class="tsd-kind-enum"><a href="enums/WeekDay.html" class="tsd-kind-icon">Week<wbr/>Day</a></li><li class="tsd-kind-class"><a href="classes/DateTime.html" class="tsd-kind-icon">Date<wbr/>Time</a></li><li class="tsd-kind-class"><a href="classes/Duration.html" class="tsd-kind-icon">Duration</a></li><li class="tsd-kind-class"><a href="classes/Period.html" class="tsd-kind-icon">Period</a></li><li class="tsd-kind-class"><a href="classes/RealTimeSource.html" class="tsd-kind-icon">Real<wbr/>Time<wbr/>Source</a></li><li class="tsd-kind-class"><a href="classes/RuleInfo.html" class="tsd-kind-icon">Rule<wbr/>Info</a></li><li class="tsd-kind-class"><a href="classes/TimeStruct.html" class="tsd-kind-icon">Time<wbr/>Struct</a></li><li class="tsd-kind-class"><a href="classes/TimeZone.html" class="tsd-kind-icon">Time<wbr/>Zone</a></li><li class="tsd-kind-class"><a href="classes/Transition.html" class="tsd-kind-icon">Transition</a></li><li class="tsd-kind-class"><a href="classes/TzDatabase.html" class="tsd-kind-icon">Tz<wbr/>Database</a></li><li class="tsd-kind-class"><a href="classes/ZoneInfo.html" class="tsd-kind-icon">Zone<wbr/>Info</a></li><li class="tsd-kind-interface"><a href="interfaces/AwareTimeStruct.html" class="tsd-kind-icon">Aware<wbr/>Time<wbr/>Struct</a></li><li class="tsd-kind-interface"><a href="interfaces/DayPeriod.html" class="tsd-kind-icon">Day<wbr/>Period</a></li><li class="tsd-kind-interface"><a href="interfaces/Locale.html" class="tsd-kind-icon">Locale</a></li><li class="tsd-kind-interface"><a href="interfaces/PartialLocale.html" class="tsd-kind-icon">Partial<wbr/>Locale</a></li><li class="tsd-kind-interface"><a href="interfaces/PeriodJson.html" class="tsd-kind-icon">Period<wbr/>Json</a></li><li class="tsd-kind-interface"><a href="interfaces/TimeComponentOpts.html" class="tsd-kind-icon">Time<wbr/>Component<wbr/>Opts</a></li><li class="tsd-kind-interface"><a href="interfaces/TimeComponents.html" class="tsd-kind-icon">Time<wbr/>Components</a></li><li class="tsd-kind-interface"><a href="interfaces/TimeSource.html" class="tsd-kind-icon">Time<wbr/>Source</a></li><li class="tsd-kind-interface"><a href="interfaces/WeekTimeOpts.html" class="tsd-kind-icon">Week<wbr/>Time<wbr/>Opts</a></li><li class="tsd-kind-type-alias"><a href="modules.html#PeriodDstJson" class="tsd-kind-icon">Period<wbr/>Dst<wbr/>Json</a></li><li class="tsd-kind-variable"><a href="modules.html#DAY_PERIODS_ABBREVIATED" class="tsd-kind-icon">DAY_<wbr/>PERIODS_<wbr/>ABBREVIATED</a></li><li class="tsd-kind-variable"><a href="modules.html#DAY_PERIODS_NARROW" class="tsd-kind-icon">DAY_<wbr/>PERIODS_<wbr/>NARROW</a></li><li class="tsd-kind-variable"><a href="modules.html#DAY_PERIODS_WIDE" class="tsd-kind-icon">DAY_<wbr/>PERIODS_<wbr/>WIDE</a></li><li class="tsd-kind-variable"><a href="modules.html#DEFAULT_LOCALE" class="tsd-kind-icon">DEFAULT_<wbr/>LOCALE</a></li><li class="tsd-kind-variable"><a href="modules.html#ERA_NAMES_ABBREVIATED" class="tsd-kind-icon">ERA_<wbr/>NAMES_<wbr/>ABBREVIATED</a></li><li class="tsd-kind-variable"><a href="modules.html#ERA_NAMES_NARROW" class="tsd-kind-icon">ERA_<wbr/>NAMES_<wbr/>NARROW</a></li><li class="tsd-kind-variable"><a href="modules.html#ERA_NAMES_WIDE" class="tsd-kind-icon">ERA_<wbr/>NAMES_<wbr/>WIDE</a></li><li class="tsd-kind-variable"><a href="modules.html#LONG_MONTH_NAMES" class="tsd-kind-icon">LONG_<wbr/>MONTH_<wbr/>NAMES</a></li><li class="tsd-kind-variable"><a href="modules.html#LONG_WEEKDAY_NAMES" class="tsd-kind-icon">LONG_<wbr/>WEEKDAY_<wbr/>NAMES</a></li><li class="tsd-kind-variable"><a href="modules.html#MONTH_LETTERS" class="tsd-kind-icon">MONTH_<wbr/>LETTERS</a></li><li class="tsd-kind-variable"><a href="modules.html#QUARTER_ABBREVIATIONS" class="tsd-kind-icon">QUARTER_<wbr/>ABBREVIATIONS</a></li><li class="tsd-kind-variable"><a href="modules.html#QUARTER_LETTER" class="tsd-kind-icon">QUARTER_<wbr/>LETTER</a></li><li class="tsd-kind-variable"><a href="modules.html#QUARTER_WORD" class="tsd-kind-icon">QUARTER_<wbr/>WORD</a></li><li class="tsd-kind-variable"><a href="modules.html#SHORT_MONTH_NAMES" class="tsd-kind-icon">SHORT_<wbr/>MONTH_<wbr/>NAMES</a></li><li class="tsd-kind-variable"><a href="modules.html#SHORT_WEEKDAY_NAMES" class="tsd-kind-icon">SHORT_<wbr/>WEEKDAY_<wbr/>NAMES</a></li><li class="tsd-kind-variable"><a href="modules.html#STAND_ALONE_LONG_MONTH_NAMES" class="tsd-kind-icon">STAND_<wbr/>ALONE_<wbr/>LONG_<wbr/>MONTH_<wbr/>NAMES</a></li><li class="tsd-kind-variable"><a href="modules.html#STAND_ALONE_MONTH_LETTERS" class="tsd-kind-icon">STAND_<wbr/>ALONE_<wbr/>MONTH_<wbr/>LETTERS</a></li><li class="tsd-kind-variable"><a href="modules.html#STAND_ALONE_QUARTER_ABBREVIATIONS" class="tsd-kind-icon">STAND_<wbr/>ALONE_<wbr/>QUARTER_<wbr/>ABBREVIATIONS</a></li><li class="tsd-kind-variable"><a href="modules.html#STAND_ALONE_QUARTER_LETTER" class="tsd-kind-icon">STAND_<wbr/>ALONE_<wbr/>QUARTER_<wbr/>LETTER</a></li><li class="tsd-kind-variable"><a href="modules.html#STAND_ALONE_QUARTER_WORD" class="tsd-kind-icon">STAND_<wbr/>ALONE_<wbr/>QUARTER_<wbr/>WORD</a></li><li class="tsd-kind-variable"><a href="modules.html#STAND_ALONE_SHORT_MONTH_NAMES" class="tsd-kind-icon">STAND_<wbr/>ALONE_<wbr/>SHORT_<wbr/>MONTH_<wbr/>NAMES</a></li><li class="tsd-kind-variable"><a href="modules.html#WEEKDAY_LETTERS" class="tsd-kind-icon">WEEKDAY_<wbr/>LETTERS</a></li><li class="tsd-kind-variable"><a href="modules.html#WEEKDAY_TWO_LETTERS" class="tsd-kind-icon">WEEKDAY_<wbr/>TWO_<wbr/>LETTERS</a></li><li class="tsd-kind-function"><a href="modules.html#abs" class="tsd-kind-icon">abs</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#binaryInsertionIndex" class="tsd-kind-icon">binary<wbr/>Insertion<wbr/>Index</a></li><li class="tsd-kind-function"><a href="modules.html#dayOfYear" class="tsd-kind-icon">day<wbr/>Of<wbr/>Year</a></li><li class="tsd-kind-function"><a href="modules.html#days" class="tsd-kind-icon">days</a></li><li class="tsd-kind-function"><a href="modules.html#daysInMonth" class="tsd-kind-icon">days<wbr/>In<wbr/>Month</a></li><li class="tsd-kind-function"><a href="modules.html#daysInYear" class="tsd-kind-icon">days<wbr/>In<wbr/>Year</a></li><li class="tsd-kind-function"><a href="modules.html#firstWeekDayOfMonth" class="tsd-kind-icon">first<wbr/>Week<wbr/>Day<wbr/>Of<wbr/>Month</a></li><li class="tsd-kind-function"><a href="modules.html#format" class="tsd-kind-icon">format</a></li><li class="tsd-kind-function"><a href="modules.html#hours" class="tsd-kind-icon">hours</a></li><li class="tsd-kind-function"><a href="modules.html#isDateTime" class="tsd-kind-icon">is<wbr/>Date<wbr/>Time</a></li><li class="tsd-kind-function"><a href="modules.html#isDuration" class="tsd-kind-icon">is<wbr/>Duration</a></li><li class="tsd-kind-function"><a href="modules.html#isLeapYear" class="tsd-kind-icon">is<wbr/>Leap<wbr/>Year</a></li><li class="tsd-kind-function"><a href="modules.html#isPeriod" class="tsd-kind-icon">is<wbr/>Period</a></li><li class="tsd-kind-function"><a href="modules.html#isTimeZone" class="tsd-kind-icon">is<wbr/>Time<wbr/>Zone</a></li><li class="tsd-kind-function"><a href="modules.html#isValidOffsetString" class="tsd-kind-icon">is<wbr/>Valid<wbr/>Offset<wbr/>String</a></li><li class="tsd-kind-function"><a href="modules.html#isValidPeriodJson" class="tsd-kind-icon">is<wbr/>Valid<wbr/>Period<wbr/>Json</a></li><li class="tsd-kind-function"><a href="modules.html#lastWeekDayOfMonth" class="tsd-kind-icon">last<wbr/>Week<wbr/>Day<wbr/>Of<wbr/>Month</a></li><li class="tsd-kind-function"><a href="modules.html#local" class="tsd-kind-icon">local</a></li><li class="tsd-kind-function"><a href="modules.html#max" class="tsd-kind-icon">max</a></li><li class="tsd-kind-function"><a href="modules.html#milliseconds" class="tsd-kind-icon">milliseconds</a></li><li class="tsd-kind-function"><a href="modules.html#min" class="tsd-kind-icon">min</a></li><li class="tsd-kind-function"><a href="modules.html#minutes" class="tsd-kind-icon">minutes</a></li><li class="tsd-kind-function"><a href="modules.html#months" class="tsd-kind-icon">months</a></li><li class="tsd-kind-function"><a href="modules.html#now" class="tsd-kind-icon">now</a></li><li class="tsd-kind-function"><a href="modules.html#nowLocal" class="tsd-kind-icon">now<wbr/>Local</a></li><li class="tsd-kind-function"><a href="modules.html#nowUtc" class="tsd-kind-icon">now<wbr/>Utc</a></li><li class="tsd-kind-function"><a href="modules.html#parse" class="tsd-kind-icon">parse</a></li><li class="tsd-kind-function"><a href="modules.html#parseable" class="tsd-kind-icon">parseable</a></li><li class="tsd-kind-function"><a href="modules.html#periodDstToString" class="tsd-kind-icon">period<wbr/>Dst<wbr/>To<wbr/>String</a></li><li class="tsd-kind-function"><a href="modules.html#secondOfDay" class="tsd-kind-icon">second<wbr/>Of<wbr/>Day</a></li><li class="tsd-kind-function"><a href="modules.html#seconds" class="tsd-kind-icon">seconds</a></li><li class="tsd-kind-function"><a href="modules.html#stringToTimeUnit" class="tsd-kind-icon">string<wbr/>To<wbr/>Time<wbr/>Unit</a></li><li class="tsd-kind-function"><a href="modules.html#timeToUnixNoLeapSecs" class="tsd-kind-icon">time<wbr/>To<wbr/>Unix<wbr/>No<wbr/>Leap<wbr/>Secs</a></li><li class="tsd-kind-function"><a href="modules.html#timeUnitToMilliseconds" class="tsd-kind-icon">time<wbr/>Unit<wbr/>To<wbr/>Milliseconds</a></li><li class="tsd-kind-function"><a href="modules.html#timeUnitToString" class="tsd-kind-icon">time<wbr/>Unit<wbr/>To<wbr/>String</a></li><li class="tsd-kind-function"><a href="modules.html#timestampOnWeekTimeGreaterThanOrEqualTo" class="tsd-kind-icon">timestamp<wbr/>On<wbr/>Week<wbr/>Time<wbr/>Greater<wbr/>Than<wbr/>Or<wbr/>Equal<wbr/>To</a></li><li class="tsd-kind-function"><a href="modules.html#timestampOnWeekTimeLessThan" class="tsd-kind-icon">timestamp<wbr/>On<wbr/>Week<wbr/>Time<wbr/>Less<wbr/>Than</a></li><li class="tsd-kind-function"><a href="modules.html#unixToTimeNoLeapSecs" class="tsd-kind-icon">unix<wbr/>To<wbr/>Time<wbr/>No<wbr/>Leap<wbr/>Secs</a></li><li class="tsd-kind-function"><a href="modules.html#utc" class="tsd-kind-icon">utc</a></li><li class="tsd-kind-function"><a href="modules.html#weekDayNoLeapSecs" class="tsd-kind-icon">week<wbr/>Day<wbr/>No<wbr/>Leap<wbr/>Secs</a></li><li class="tsd-kind-function"><a href="modules.html#weekDayOnOrAfter" class="tsd-kind-icon">week<wbr/>Day<wbr/>On<wbr/>Or<wbr/>After</a></li><li class="tsd-kind-function"><a href="modules.html#weekDayOnOrBefore" class="tsd-kind-icon">week<wbr/>Day<wbr/>On<wbr/>Or<wbr/>Before</a></li><li class="tsd-kind-function"><a href="modules.html#weekNumber" class="tsd-kind-icon">week<wbr/>Number</a></li><li class="tsd-kind-function"><a href="modules.html#weekOfMonth" class="tsd-kind-icon">week<wbr/>Of<wbr/>Month</a></li><li class="tsd-kind-function"><a href="modules.html#years" class="tsd-kind-icon">years</a></li><li class="tsd-kind-function"><a href="modules.html#zone" class="tsd-kind-icon">zone</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li><li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
