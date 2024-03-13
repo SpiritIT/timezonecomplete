@@ -1,1327 +1,171 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TimeZone | timezonecomplete</title>
-	<meta name="description" content="Documentation for timezonecomplete">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="../assets/css/main.css">
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="../index.html" class="title">timezonecomplete</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="../globals.html">Globals</a>
-				</li>
-				<li>
-					<a href="timezone.html">TimeZone</a>
-				</li>
-			</ul>
-			<h1>Class TimeZone</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Time zone. The object is immutable because it is cached:
-							requesting a time zone twice yields the very same object.
-							Note that we use time zone offsets inverted w.r.t. JavaScript Date.getTimezoneOffset(),
-						i.e. offset 90 means +01:30.</p>
-					</div>
-					<p>Time zones come in three flavors: the local time zone, as calculated by JavaScript Date,
-						a fixed offset (&quot;+01:30&quot;) without DST, or a IANA timezone (&quot;Europe/Amsterdam&quot;) with DST
-					applied depending on the time zone rules.</p>
-				</div>
-			</section>
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">TimeZone</span>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel-group tsd-index-group">
-				<h2>Index</h2>
-				<section class="tsd-panel tsd-index-panel">
-					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="timezone.html#classkind" class="tsd-kind-icon">class<wbr>Kind</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#abbreviationforutc" class="tsd-kind-icon">abbreviation<wbr>For<wbr>Utc</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#clone" class="tsd-kind-icon">clone</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#dst" class="tsd-kind-icon">dst</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#equals" class="tsd-kind-icon">equals</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#hasdst" class="tsd-kind-icon">has<wbr>Dst</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#identical" class="tsd-kind-icon">identical</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#isutc" class="tsd-kind-icon">is<wbr>Utc</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#kind" class="tsd-kind-icon">kind</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#normalizezonetime" class="tsd-kind-icon">normalize<wbr>Zone<wbr>Time</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#offsetforutc" class="tsd-kind-icon">offset<wbr>For<wbr>Utc</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#offsetforutcdate" class="tsd-kind-icon">offset<wbr>For<wbr>Utc<wbr>Date</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#offsetforzone" class="tsd-kind-icon">offset<wbr>For<wbr>Zone</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#offsetforzonedate" class="tsd-kind-icon">offset<wbr>For<wbr>Zone<wbr>Date</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#standardoffsetforutc" class="tsd-kind-icon">standard<wbr>Offset<wbr>For<wbr>Utc</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="timezone.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="timezone.html#local" class="tsd-kind-icon">local</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="timezone.html#offsettostring" class="tsd-kind-icon">offset<wbr>ToString</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="timezone.html#stringtooffset" class="tsd-kind-icon">string<wbr>ToOffset</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="timezone.html#utc" class="tsd-kind-icon">utc</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="timezone.html#zone" class="tsd-kind-icon">zone</a></li>
-							</ul>
-						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="classkind" class="tsd-anchor"></a>
-					<h3>class<wbr>Kind</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Kind<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;TimeZone&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L97">timezone.ts:97</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Allow not using instanceof</p>
-						</div>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="abbreviationforutc" class="tsd-anchor"></a>
-					<h3>abbreviation<wbr>For<wbr>Utc</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">abbreviation<wbr>For<wbr>Utc<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, milli<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, dstDependent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-						<li class="tsd-signature tsd-kind-icon">abbreviation<wbr>For<wbr>Utc<span class="tsd-signature-symbol">(</span>utcTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a>, dstDependent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L537">timezone.ts:537</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> year: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Full year</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> month: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Month 1-12 (note this deviates from JavaScript date)</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> day: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Day of month 1-31</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> hour: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Hour 0-23</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> minute: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Minute 0-59</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> second: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Second 0-59</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> milli: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> dstDependent: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>(default true) set to false for a DST-agnostic abbreviation</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>&quot;local&quot; for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.</p>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L548">timezone.ts:548</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>utcTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> dstDependent: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="clone" class="tsd-anchor"></a>
-					<h3>clone</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clone<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="timezone.html" class="tsd-signature-type">TimeZone</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L217">timezone.ts:217</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Makes this class appear clonable. NOTE as time zone objects are immutable you will NOT
-									actually get a clone but the same object.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>nothing</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="timezone.html" class="tsd-signature-type">TimeZone</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="dst" class="tsd-anchor"></a>
-					<h3>dst</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">dst<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L235">timezone.ts:235</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Whether DST is enabled</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>nothing</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="equals" class="tsd-anchor"></a>
-					<h3>equals</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">equals<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="timezone.html" class="tsd-signature-type">TimeZone</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L252">timezone.ts:252</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Equality operator. Maps zero offsets and different names for UTC onto
-									each other. Other time zones are not mapped onto each other.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>other: <a href="timezone.html" class="tsd-signature-type">TimeZone</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="hasdst" class="tsd-anchor"></a>
-					<h3>has<wbr>Dst</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">has<wbr>Dst<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L306">timezone.ts:306</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Does this zone have Daylight Saving Time at all?</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="identical" class="tsd-anchor"></a>
-					<h3>identical</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">identical<span class="tsd-signature-symbol">(</span>other<span class="tsd-signature-symbol">: </span><a href="timezone.html" class="tsd-signature-type">TimeZone</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L273">timezone.ts:273</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns true iff the constructor arguments were identical, so UTC !== GMT</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>nothing</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>other: <a href="timezone.html" class="tsd-signature-type">TimeZone</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="isutc" class="tsd-anchor"></a>
-					<h3>is<wbr>Utc</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Utc<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L289">timezone.ts:289</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Is this zone equivalent to UTC?</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="kind" class="tsd-anchor"></a>
-					<h3>kind</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">kind<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/timezonekind.html" class="tsd-signature-type">TimeZoneKind</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L243">timezone.ts:243</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The kind of time zone (Local/Offset/Proper)</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>nothing</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../enums/timezonekind.html" class="tsd-signature-type">TimeZoneKind</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L227">timezone.ts:227</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The time zone identifier. Can be an offset &quot;-01:30&quot; or an
-										IANA time zone name &quot;Europe/Amsterdam&quot;, or &quot;localtime&quot; for
-									the local time zone.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>nothing</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="normalizezonetime" class="tsd-anchor"></a>
-					<h3>normalize<wbr>Zone<wbr>Time</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">normalize<wbr>Zone<wbr>Time<span class="tsd-signature-symbol">(</span>localUnixMillis<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opt<span class="tsd-signature-symbol">?: </span><a href="../enums/normalizeoption.html" class="tsd-signature-type">NormalizeOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-						<li class="tsd-signature tsd-kind-icon">normalize<wbr>Zone<wbr>Time<span class="tsd-signature-symbol">(</span>localTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a>, opt<span class="tsd-signature-symbol">?: </span><a href="../enums/normalizeoption.html" class="tsd-signature-type">NormalizeOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L591">timezone.ts:591</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Normalizes non-existing local times by adding a forward offset change.
-										During a forward standard offset change or DST offset change, some amount of
-										local time is skipped. Therefore, this amount of local time does not exist.
-										This function adds the amount of forward change to any non-existing time. After all,
-									this is probably what the user meant.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>localUnixMillis: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opt: <a href="../enums/normalizeoption.html" class="tsd-signature-type">NormalizeOption</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>(optional) Round up or down? Default: up</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>unix milliseconds in zone time, normalized.</p>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L605">timezone.ts:605</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Normalizes non-existing local times by adding a forward offset change.
-										During a forward standard offset change or DST offset change, some amount of
-										local time is skipped. Therefore, this amount of local time does not exist.
-										This function adds the amount of forward change to any non-existing time. After all,
-									this is probably what the user meant.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>localTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>zone time timestamp</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opt: <a href="../enums/normalizeoption.html" class="tsd-signature-type">NormalizeOption</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>(optional) Round up or down? Default: up</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h4>
-							<p>time struct in zone time, normalized.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="offsetforutc" class="tsd-anchor"></a>
-					<h3>offset<wbr>For<wbr>Utc</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">offset<wbr>For<wbr>Utc<span class="tsd-signature-symbol">(</span>offsetForUtc<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-						<li class="tsd-signature tsd-kind-icon">offset<wbr>For<wbr>Utc<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, milli<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L324">timezone.ts:324</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Calculate timezone offset including DST from a UTC time.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>offsetForUtc: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>the offset of this time zone with respect to UTC at the given time, in minutes.</p>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L344">timezone.ts:344</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Calculate timezone offset including DST from a UTC time.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Year for invalid year</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Month for invalid month</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Day for invalid day</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Hour for invalid hour</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Minute for invalid minute</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Second for invalid second</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Milli for invalid milliseconds</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> year: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> month: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>1-12</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> day: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> hour: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> minute: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> second: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> milli: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>the offset of this time zone with respect to UTC at the given time, in minutes.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="offsetforutcdate" class="tsd-anchor"></a>
-					<h3>offset<wbr>For<wbr>Utc<wbr>Date</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">offset<wbr>For<wbr>Utc<wbr>Date<span class="tsd-signature-symbol">(</span>date<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span>, funcs<span class="tsd-signature-symbol">: </span><a href="../enums/datefunctions.html" class="tsd-signature-type">DateFunctions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L503">timezone.ts:503</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Note: will be removed in version 2.0.0</p>
-								</div>
-								<p>Convenience function, takes values from a Javascript Date
-								Calls offsetForUtc() with the contents of the date</p>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>date: <span class="tsd-signature-type">Date</span></h5>
-								</li>
-								<li>
-									<h5>funcs: <a href="../enums/datefunctions.html" class="tsd-signature-type">DateFunctions</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="offsetforzone" class="tsd-anchor"></a>
-					<h3>offset<wbr>For<wbr>Zone</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">offset<wbr>For<wbr>Zone<span class="tsd-signature-symbol">(</span>localTime<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-						<li class="tsd-signature tsd-kind-icon">offset<wbr>For<wbr>Zone<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, milli<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L438">timezone.ts:438</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Calculate timezone offset from a zone-local time (NOT a UTC time).</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>localTime: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>the local time</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>the offset of this time zone with respect to UTC at the given time, in minutes.</p>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L458">timezone.ts:458</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Calculate timezone offset from a zone-local time (NOT a UTC time).</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Year for invalid year</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Month for invalid month</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Day for invalid day</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Hour for invalid hour</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Minute for invalid minute</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Second for invalid second</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Milli for invalid milliseconds</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> year: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>local full year</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> month: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>local month 1-12 (note this deviates from JavaScript date)</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> day: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>local day of month 1-31</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> hour: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>local hour 0-23</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> minute: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>local minute 0-59</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> second: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>local second 0-59</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> milli: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>the offset of this time zone with respect to UTC at the given time, in minutes.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="offsetforzonedate" class="tsd-anchor"></a>
-					<h3>offset<wbr>For<wbr>Zone<wbr>Date</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">offset<wbr>For<wbr>Zone<wbr>Date<span class="tsd-signature-symbol">(</span>date<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span>, funcs<span class="tsd-signature-symbol">: </span><a href="../enums/datefunctions.html" class="tsd-signature-type">DateFunctions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L517">timezone.ts:517</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Note: will be removed in version 2.0.0</p>
-								</div>
-								<p>Convenience function, takes values from a Javascript Date
-								Calls offsetForUtc() with the contents of the date</p>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>date: <span class="tsd-signature-type">Date</span></h5>
-								</li>
-								<li>
-									<h5>funcs: <a href="../enums/datefunctions.html" class="tsd-signature-type">DateFunctions</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="standardoffsetforutc" class="tsd-anchor"></a>
-					<h3>standard<wbr>Offset<wbr>For<wbr>Utc</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">standard<wbr>Offset<wbr>For<wbr>Utc<span class="tsd-signature-symbol">(</span>offsetForUtc<span class="tsd-signature-symbol">: </span><a href="timestruct.html" class="tsd-signature-type">TimeStruct</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-						<li class="tsd-signature tsd-kind-icon">standard<wbr>Offset<wbr>For<wbr>Utc<span class="tsd-signature-symbol">(</span>year<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, month<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, day<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, hour<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, minute<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, second<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, milli<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L383">timezone.ts:383</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Calculate timezone standard offset excluding DST from a UTC time.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>offsetForUtc: <a href="timestruct.html" class="tsd-signature-type">TimeStruct</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>the standard offset of this time zone with respect to UTC at the given time, in minutes.</p>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L403">timezone.ts:403</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Calculate timezone standard offset excluding DST from a UTC time.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Year for invalid year</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Month for invalid month</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Day for invalid day</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Hour for invalid hour</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Minute for invalid minute</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Second for invalid second</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Milli for invalid milliseconds</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> year: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> month: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>1-12</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> day: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> hour: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> minute: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> second: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> milli: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>the standard offset of this time zone with respect to UTC at the given time, in minutes.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="tostring" class="tsd-anchor"></a>
-					<h3>to<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L624">timezone.ts:624</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The time zone identifier (normalized).
-									Either &quot;localtime&quot;, IANA name, or &quot;+hh:mm&quot; offset.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>nothing</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="local" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> local</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="timezone.html" class="tsd-signature-type">TimeZone</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L128">timezone.ts:128</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The local time zone for a given date. Note that
-										the time zone varies with the date: amsterdam time for
-									2014-01-01 is +01:00 and amsterdam time for 2014-07-01 is +02:00</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>nothing</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="timezone.html" class="tsd-signature-type">TimeZone</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="offsettostring" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> offset<wbr>ToString</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">offset<wbr>ToString<span class="tsd-signature-symbol">(</span>offset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L640">timezone.ts:640</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Convert an offset number into an offset string</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>Argument.Offset if offset is not a finite number or not within -24 * 60 ... +24 * 60 minutes</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>offset: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The offset in minutes from UTC e.g. 90 minutes</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>the offset in ISO notation &quot;+01:30&quot; for +90 minutes</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="stringtooffset" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> string<wbr>ToOffset</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">string<wbr>ToOffset<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L654">timezone.ts:654</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>String to offset conversion.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.S if s cannot be parsed</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>s: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Formats: &quot;-01:00&quot;, &quot;-0100&quot;, &quot;-01&quot;, &quot;Z&quot;</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>offset w.r.t. UTC in minutes</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="utc" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> utc</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">utc<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="timezone.html" class="tsd-signature-type">TimeZone</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L136">timezone.ts:136</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The UTC time zone.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.NotFound.Zone if the UTC time zone doesn&#39;t exist in the time zone database</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="timezone.html" class="tsd-signature-type">TimeZone</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="zone" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> zone</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">zone<span class="tsd-signature-symbol">(</span>offset<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="timezone.html" class="tsd-signature-type">TimeZone</a></li>
-						<li class="tsd-signature tsd-kind-icon">zone<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="timezone.html" class="tsd-signature-type">TimeZone</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L145">timezone.ts:145</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Time zone with a fixed offset</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.Offset if the offset is not within -24h...+24h (in minutes)</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>offset: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>offset w.r.t. UTC in minutes, e.g. 90 for +01:30</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="timezone.html" class="tsd-signature-type">TimeZone</a></h4>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/0fe27bc/src/lib/timezone.ts#L162">timezone.ts:162</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Time zone for an offset string or an IANA time zone string. Note that time zones are cached
-									so you don&#39;t necessarily get a new object each time.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.Argument.S if s cannot be parsed</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>timezonecomplete.NotFound.Zone if the zone name doesn&#39;t exist in the time zone database</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>s: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>&quot;localtime&quot; for local time,
-											a TZ database time zone name (e.g. Europe/Amsterdam),
-											or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
-											<a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a>
-											TZ database zone name may be suffixed with &quot; without DST&quot; to indicate no DST should be applied.
-										In that case, the dst parameter is ignored.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> dst: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Optional, default true: adhere to Daylight Saving Time if applicable. Note for
-											&quot;localtime&quot;, timezonecomplete will adhere to the computer settings, the DST flag
-										does not have any effect.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="timezone.html" class="tsd-signature-type">TimeZone</a></h4>
-						</li>
-					</ul>
-				</section>
-			</section>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="timezone.html" class="tsd-kind-icon">Time<wbr>Zone</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="timezone.html#classkind" class="tsd-kind-icon">class<wbr>Kind</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#abbreviationforutc" class="tsd-kind-icon">abbreviation<wbr>For<wbr>Utc</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#clone" class="tsd-kind-icon">clone</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#dst" class="tsd-kind-icon">dst</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#equals" class="tsd-kind-icon">equals</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#hasdst" class="tsd-kind-icon">has<wbr>Dst</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#identical" class="tsd-kind-icon">identical</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#isutc" class="tsd-kind-icon">is<wbr>Utc</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#kind" class="tsd-kind-icon">kind</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#normalizezonetime" class="tsd-kind-icon">normalize<wbr>Zone<wbr>Time</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#offsetforutc" class="tsd-kind-icon">offset<wbr>For<wbr>Utc</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#offsetforutcdate" class="tsd-kind-icon">offset<wbr>For<wbr>Utc<wbr>Date</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#offsetforzone" class="tsd-kind-icon">offset<wbr>For<wbr>Zone</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#offsetforzonedate" class="tsd-kind-icon">offset<wbr>For<wbr>Zone<wbr>Date</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#standardoffsetforutc" class="tsd-kind-icon">standard<wbr>Offset<wbr>For<wbr>Utc</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="timezone.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="timezone.html#local" class="tsd-kind-icon">local</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="timezone.html#offsettostring" class="tsd-kind-icon">offset<wbr>ToString</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="timezone.html#stringtooffset" class="tsd-kind-icon">string<wbr>ToOffset</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="timezone.html#utc" class="tsd-kind-icon">utc</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="timezone.html#zone" class="tsd-kind-icon">zone</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="../assets/js/main.js"></script>
-</body>
-</html>
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>TimeZone | timezonecomplete</title><meta name="description" content="Documentation for timezonecomplete"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search" data-base=".."><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">timezonecomplete</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">timezonecomplete</a></li><li><a href="TimeZone.html">TimeZone</a></li></ul><h1>Class TimeZone</h1></div><section class="tsd-panel tsd-comment"><div class="tsd-comment tsd-typography"><p>Time zone. The object is immutable because it is cached:
+requesting a time zone twice yields the very same object.
+Note that we use time zone offsets inverted w.r.t. JavaScript Date.getTimezoneOffset(),
+i.e. offset 90 means +01:30.</p>
+<p>Time zones come in three flavors: the local time zone, as calculated by JavaScript Date,
+a fixed offset (&quot;+01:30&quot;) without DST, or a IANA timezone (&quot;Europe/Amsterdam&quot;) with DST
+applied depending on the time zone rules.</p>
+</div><div class="tsd-comment tsd-typography"></div></section><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L93">timezone.ts:93</a></li></ul></aside><section class="tsd-panel-group tsd-index-group"><section class="tsd-panel tsd-index-panel"><details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><h5 class="tsd-index-heading uppercase" role="button" aria-expanded="false" tabIndex="0"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="../assets/icons.svg#icon-chevronSmall"></use></svg> Index</h5></summary><div class="tsd-accordion-details"><section class="tsd-index-section"><h3 class="tsd-index-heading">Properties</h3><div class="tsd-index-list"><a href="TimeZone.html#classKind" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-1024"></use></svg><span>class<wbr/>Kind</span></a>
+</div></section><section class="tsd-index-section"><h3 class="tsd-index-heading">Methods</h3><div class="tsd-index-list"><a href="TimeZone.html#abbreviationForUtc" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>abbreviation<wbr/>For<wbr/>Utc</span></a>
+<a href="TimeZone.html#clone" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>clone</span></a>
+<a href="TimeZone.html#dst" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>dst</span></a>
+<a href="TimeZone.html#equals" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>equals</span></a>
+<a href="TimeZone.html#hasDst" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>has<wbr/>Dst</span></a>
+<a href="TimeZone.html#identical" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>identical</span></a>
+<a href="TimeZone.html#isUtc" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Utc</span></a>
+<a href="TimeZone.html#kind" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>kind</span></a>
+<a href="TimeZone.html#name" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>name</span></a>
+<a href="TimeZone.html#normalizeZoneTime" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>normalize<wbr/>Zone<wbr/>Time</span></a>
+<a href="TimeZone.html#offsetForUtc" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>For<wbr/>Utc</span></a>
+<a href="TimeZone.html#offsetForUtcDate" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>For<wbr/>Utc<wbr/>Date</span></a>
+<a href="TimeZone.html#offsetForZone" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>For<wbr/>Zone</span></a>
+<a href="TimeZone.html#offsetForZoneDate" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>For<wbr/>Zone<wbr/>Date</span></a>
+<a href="TimeZone.html#standardOffsetForUtc" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>standard<wbr/>Offset<wbr/>For<wbr/>Utc</span></a>
+<a href="TimeZone.html#toString" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>to<wbr/>String</span></a>
+<a href="TimeZone.html#local" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>local</span></a>
+<a href="TimeZone.html#offsetToString" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>To<wbr/>String</span></a>
+<a href="TimeZone.html#stringToOffset" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>string<wbr/>To<wbr/>Offset</span></a>
+<a href="TimeZone.html#utc" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>utc</span></a>
+<a href="TimeZone.html#zone" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>zone</span></a>
+</div></section></div></details></section></section><section class="tsd-panel-group tsd-member-group"><h2>Properties</h2><section class="tsd-panel tsd-member"><a id="classKind" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>class<wbr/>Kind</span><a href="#classKind" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><div class="tsd-signature"><span class="tsd-kind-property">class<wbr/>Kind</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;TimeZone&quot;</span></div><div class="tsd-comment tsd-typography"><p>Allow not using instanceof</p>
+</div><div class="tsd-comment tsd-typography"></div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L97">timezone.ts:97</a></li></ul></aside></section></section><section class="tsd-panel-group tsd-member-group"><h2>Methods</h2><section class="tsd-panel tsd-member"><a id="abbreviationForUtc" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>abbreviation<wbr/>For<wbr/>Utc</span><a href="#abbreviationForUtc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="abbreviationForUtc.abbreviationForUtc-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">abbreviation<wbr/>For<wbr/>Utc</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">year</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">month</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">day</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">hour</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">minute</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">second</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">milli</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">dstDependent</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#abbreviationForUtc.abbreviationForUtc-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">year</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>Full year</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">month</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>Month 1-12 (note this deviates from JavaScript date)</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">day</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>Day of month 1-31</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">hour</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>Hour 0-23</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">minute</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>Minute 0-59</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">second</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>Second 0-59</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">milli</span>: <span class="tsd-signature-type">number</span></span></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">dstDependent</span>: <span class="tsd-signature-type">boolean</span></span><div class="tsd-comment tsd-typography"><p>(default true) set to false for a DST-agnostic abbreviation</p>
+</div><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>&quot;local&quot; for local timezone, the offset for an offset zone, or the abbreviation for a proper zone.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+<h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L537">timezone.ts:537</a></li></ul></aside></li><li class="tsd-signature tsd-anchor-link"><a id="abbreviationForUtc.abbreviationForUtc-2" class="tsd-anchor"></a><span class="tsd-kind-call-signature">abbreviation<wbr/>For<wbr/>Utc</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">utcTime</span>, <span class="tsd-kind-parameter">dstDependent</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#abbreviationForUtc.abbreviationForUtc-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Zone abbreviation at given UTC timestamp e.g. CEST for Central European Summer Time.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">utcTime</span>: <a href="TimeStruct.html" class="tsd-signature-type tsd-kind-class">TimeStruct</a></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">dstDependent</span>: <span class="tsd-signature-type">boolean</span></span><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found</p>
+<h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L548">timezone.ts:548</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="clone" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>clone</span><a href="#clone" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="clone.clone-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">clone</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a><a href="#clone.clone-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Makes this class appear clonable. NOTE as time zone objects are immutable you will NOT
+actually get a clone but the same object.</p>
+</div><h4 class="tsd-returns-title">Returns <a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>nothing</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L217">timezone.ts:217</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="dst" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>dst</span><a href="#dst" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="dst.dst-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">dst</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#dst.dst-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Whether DST is enabled</p>
+</div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>nothing</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L235">timezone.ts:235</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="equals" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>equals</span><a href="#equals" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="equals.equals-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">equals</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">other</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#equals.equals-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Equality operator. Maps zero offsets and different names for UTC onto
+each other. Other time zones are not mapped onto each other.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">other</span>: <a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a></span></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L252">timezone.ts:252</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="hasDst" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>has<wbr/>Dst</span><a href="#hasDst" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="hasDst.hasDst-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">has<wbr/>Dst</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#hasDst.hasDst-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Does this zone have Daylight Saving Time at all?</p>
+</div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L306">timezone.ts:306</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="identical" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>identical</span><a href="#identical" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="identical.identical-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">identical</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">other</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#identical.identical-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Returns true iff the constructor arguments were identical, so UTC !== GMT</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">other</span>: <a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a></span></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>nothing</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L273">timezone.ts:273</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="isUtc" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>is<wbr/>Utc</span><a href="#isUtc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="isUtc.isUtc-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">is<wbr/>Utc</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#isUtc.isUtc-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Is this zone equivalent to UTC?</p>
+</div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if the global time zone data is invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L289">timezone.ts:289</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="kind" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>kind</span><a href="#kind" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="kind.kind-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">kind</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/TimeZoneKind.html" class="tsd-signature-type tsd-kind-enum">TimeZoneKind</a><a href="#kind.kind-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>The kind of time zone (Local/Offset/Proper)</p>
+</div><h4 class="tsd-returns-title">Returns <a href="../enums/TimeZoneKind.html" class="tsd-signature-type tsd-kind-enum">TimeZoneKind</a></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>nothing</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L243">timezone.ts:243</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="name" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>name</span><a href="#name" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="name.name-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">name</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#name.name-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>The time zone identifier. Can be an offset &quot;-01:30&quot; or an
+IANA time zone name &quot;Europe/Amsterdam&quot;, or &quot;localtime&quot; for
+the local time zone.</p>
+</div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>nothing</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L227">timezone.ts:227</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="normalizeZoneTime" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>normalize<wbr/>Zone<wbr/>Time</span><a href="#normalizeZoneTime" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="normalizeZoneTime.normalizeZoneTime-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">normalize<wbr/>Zone<wbr/>Time</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">localUnixMillis</span>, <span class="tsd-kind-parameter">opt</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#normalizeZoneTime.normalizeZoneTime-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Normalizes non-existing local times by adding a forward offset change.
+During a forward standard offset change or DST offset change, some amount of
+local time is skipped. Therefore, this amount of local time does not exist.
+This function adds the amount of forward change to any non-existing time. After all,
+this is probably what the user meant.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">localUnixMillis</span>: <span class="tsd-signature-type">number</span></span></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">opt</span>: <a href="../enums/NormalizeOption.html" class="tsd-signature-type tsd-kind-enum">NormalizeOption</a></span><div class="tsd-comment tsd-typography"><p>(optional) Round up or down? Default: up</p>
+</div><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>unix milliseconds in zone time, normalized.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L591">timezone.ts:591</a></li></ul></aside></li><li class="tsd-signature tsd-anchor-link"><a id="normalizeZoneTime.normalizeZoneTime-2" class="tsd-anchor"></a><span class="tsd-kind-call-signature">normalize<wbr/>Zone<wbr/>Time</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">localTime</span>, <span class="tsd-kind-parameter">opt</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="TimeStruct.html" class="tsd-signature-type tsd-kind-class">TimeStruct</a><a href="#normalizeZoneTime.normalizeZoneTime-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Normalizes non-existing local times by adding a forward offset change.
+During a forward standard offset change or DST offset change, some amount of
+local time is skipped. Therefore, this amount of local time does not exist.
+This function adds the amount of forward change to any non-existing time. After all,
+this is probably what the user meant.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">localTime</span>: <a href="TimeStruct.html" class="tsd-signature-type tsd-kind-class">TimeStruct</a></span><div class="tsd-comment tsd-typography"><p>zone time timestamp</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">opt</span>: <a href="../enums/NormalizeOption.html" class="tsd-signature-type tsd-kind-enum">NormalizeOption</a></span><div class="tsd-comment tsd-typography"><p>(optional) Round up or down? Default: up</p>
+</div><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <a href="TimeStruct.html" class="tsd-signature-type tsd-kind-class">TimeStruct</a></h4><p>time struct in zone time, normalized.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L605">timezone.ts:605</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="offsetForUtc" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>offset<wbr/>For<wbr/>Utc</span><a href="#offsetForUtc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="offsetForUtc.offsetForUtc-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">offset<wbr/>For<wbr/>Utc</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">offsetForUtc</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#offsetForUtc.offsetForUtc-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Calculate timezone offset including DST from a UTC time.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">offsetForUtc</span>: <a href="TimeStruct.html" class="tsd-signature-type tsd-kind-class">TimeStruct</a></span></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>the offset of this time zone with respect to UTC at the given time, in minutes.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L324">timezone.ts:324</a></li></ul></aside></li><li class="tsd-signature tsd-anchor-link"><a id="offsetForUtc.offsetForUtc-2" class="tsd-anchor"></a><span class="tsd-kind-call-signature">offset<wbr/>For<wbr/>Utc</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">year</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">month</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">day</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">hour</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">minute</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">second</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">milli</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#offsetForUtc.offsetForUtc-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Calculate timezone offset including DST from a UTC time.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">year</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">month</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>1-12</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">day</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">hour</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">minute</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">second</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">milli</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>the offset of this time zone with respect to UTC at the given time, in minutes.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.Argument.Year for invalid year</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Month for invalid month</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Day for invalid day</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Hour for invalid hour</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Minute for invalid minute</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Second for invalid second</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Milli for invalid milliseconds</p>
+<h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L344">timezone.ts:344</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="offsetForUtcDate" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>offset<wbr/>For<wbr/>Utc<wbr/>Date</span><a href="#offsetForUtcDate" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="offsetForUtcDate.offsetForUtcDate-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">offset<wbr/>For<wbr/>Utc<wbr/>Date</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">date</span>, <span class="tsd-kind-parameter">funcs</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#offsetForUtcDate.offsetForUtcDate-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Note: will be removed in version 2.0.0</p>
+<p>Convenience function, takes values from a Javascript Date
+Calls offsetForUtc() with the contents of the date</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">date</span>: <span class="tsd-signature-type">Date</span></span></li><li><span><span class="tsd-kind-parameter">funcs</span>: <a href="../enums/DateFunctions.html" class="tsd-signature-type tsd-kind-enum">DateFunctions</a></span></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L503">timezone.ts:503</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="offsetForZone" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>offset<wbr/>For<wbr/>Zone</span><a href="#offsetForZone" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="offsetForZone.offsetForZone-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">offset<wbr/>For<wbr/>Zone</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">localTime</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#offsetForZone.offsetForZone-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Calculate timezone offset from a zone-local time (NOT a UTC time).</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">localTime</span>: <a href="TimeStruct.html" class="tsd-signature-type tsd-kind-class">TimeStruct</a></span><div class="tsd-comment tsd-typography"><p>the local time</p>
+</div><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>the offset of this time zone with respect to UTC at the given time, in minutes.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L438">timezone.ts:438</a></li></ul></aside></li><li class="tsd-signature tsd-anchor-link"><a id="offsetForZone.offsetForZone-2" class="tsd-anchor"></a><span class="tsd-kind-call-signature">offset<wbr/>For<wbr/>Zone</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">year</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">month</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">day</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">hour</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">minute</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">second</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">milli</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#offsetForZone.offsetForZone-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Calculate timezone offset from a zone-local time (NOT a UTC time).</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">year</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>local full year</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">month</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>local month 1-12 (note this deviates from JavaScript date)</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">day</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>local day of month 1-31</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">hour</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>local hour 0-23</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">minute</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>local minute 0-59</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">second</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>local second 0-59</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">milli</span>: <span class="tsd-signature-type">number</span></span></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>the offset of this time zone with respect to UTC at the given time, in minutes.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.Argument.Year for invalid year</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Month for invalid month</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Day for invalid day</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Hour for invalid hour</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Minute for invalid minute</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Second for invalid second</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Milli for invalid milliseconds</p>
+<h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L458">timezone.ts:458</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="offsetForZoneDate" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>offset<wbr/>For<wbr/>Zone<wbr/>Date</span><a href="#offsetForZoneDate" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="offsetForZoneDate.offsetForZoneDate-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">offset<wbr/>For<wbr/>Zone<wbr/>Date</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">date</span>, <span class="tsd-kind-parameter">funcs</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#offsetForZoneDate.offsetForZoneDate-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Note: will be removed in version 2.0.0</p>
+<p>Convenience function, takes values from a Javascript Date
+Calls offsetForUtc() with the contents of the date</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">date</span>: <span class="tsd-signature-type">Date</span></span></li><li><span><span class="tsd-kind-parameter">funcs</span>: <a href="../enums/DateFunctions.html" class="tsd-signature-type tsd-kind-enum">DateFunctions</a></span></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L517">timezone.ts:517</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="standardOffsetForUtc" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>standard<wbr/>Offset<wbr/>For<wbr/>Utc</span><a href="#standardOffsetForUtc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="standardOffsetForUtc.standardOffsetForUtc-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">standard<wbr/>Offset<wbr/>For<wbr/>Utc</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">offsetForUtc</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#standardOffsetForUtc.standardOffsetForUtc-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Calculate timezone standard offset excluding DST from a UTC time.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">offsetForUtc</span>: <a href="TimeStruct.html" class="tsd-signature-type tsd-kind-class">TimeStruct</a></span></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>the standard offset of this time zone with respect to UTC at the given time, in minutes.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L383">timezone.ts:383</a></li></ul></aside></li><li class="tsd-signature tsd-anchor-link"><a id="standardOffsetForUtc.standardOffsetForUtc-2" class="tsd-anchor"></a><span class="tsd-kind-call-signature">standard<wbr/>Offset<wbr/>For<wbr/>Utc</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">year</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">month</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">day</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">hour</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">minute</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">second</span><span class="tsd-signature-symbol">?</span>, <span class="tsd-kind-parameter">milli</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#standardOffsetForUtc.standardOffsetForUtc-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Calculate timezone standard offset excluding DST from a UTC time.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">year</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">month</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>1-12</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">day</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">hour</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">minute</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">second</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">milli</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>the standard offset of this time zone with respect to UTC at the given time, in minutes.</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.Argument.Year for invalid year</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Month for invalid month</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Day for invalid day</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Hour for invalid hour</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Minute for invalid minute</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Second for invalid second</p>
+<h4>Throws</h4><p>timezonecomplete.Argument.Milli for invalid milliseconds</p>
+<h4>Throws</h4><p>timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L403">timezone.ts:403</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="toString" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><span>to<wbr/>String</span><a href="#toString" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="toString.toString-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">to<wbr/>String</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#toString.toString-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>The time zone identifier (normalized).
+Either &quot;localtime&quot;, IANA name, or &quot;+hh:mm&quot; offset.</p>
+</div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>nothing</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L624">timezone.ts:624</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="local" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>local</span><a href="#local" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="local.local-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">local</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a><a href="#local.local-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>The local time zone for a given date. Note that
+the time zone varies with the date: amsterdam time for
+2014-01-01 is +01:00 and amsterdam time for 2014-07-01 is +02:00</p>
+</div><h4 class="tsd-returns-title">Returns <a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>nothing</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L128">timezone.ts:128</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="offsetToString" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>offset<wbr/>To<wbr/>String</span><a href="#offsetToString" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="offsetToString.offsetToString-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">offset<wbr/>To<wbr/>String</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">offset</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><a href="#offsetToString.offsetToString-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Convert an offset number into an offset string</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>The offset in minutes from UTC e.g. 90 minutes</p>
+</div><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><p>the offset in ISO notation &quot;+01:30&quot; for +90 minutes</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>Argument.Offset if offset is not a finite number or not within -24 * 60 ... +24 * 60 minutes</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L640">timezone.ts:640</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="stringToOffset" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>string<wbr/>To<wbr/>Offset</span><a href="#stringToOffset" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="stringToOffset.stringToOffset-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">string<wbr/>To<wbr/>Offset</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">s</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><a href="#stringToOffset.stringToOffset-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>String to offset conversion.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">s</span>: <span class="tsd-signature-type">string</span></span><div class="tsd-comment tsd-typography"><p>Formats: &quot;-01:00&quot;, &quot;-0100&quot;, &quot;-01&quot;, &quot;Z&quot;</p>
+</div><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4><p>offset w.r.t. UTC in minutes</p>
+<div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.Argument.S if s cannot be parsed</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L654">timezone.ts:654</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="utc" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>utc</span><a href="#utc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="utc.utc-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">utc</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a><a href="#utc.utc-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>The UTC time zone.</p>
+</div><h4 class="tsd-returns-title">Returns <a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.NotFound.Zone if the UTC time zone doesn&#39;t exist in the time zone database</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L136">timezone.ts:136</a></li></ul></aside></li></ul></section><section class="tsd-panel tsd-member"><a id="zone" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <span>zone</span><a href="#zone" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul class="tsd-signatures"><li class="tsd-signature tsd-anchor-link"><a id="zone.zone-1" class="tsd-anchor"></a><span class="tsd-kind-call-signature">zone</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">offset</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a><a href="#zone.zone-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Time zone with a fixed offset</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type">number</span></span><div class="tsd-comment tsd-typography"><p>offset w.r.t. UTC in minutes, e.g. 90 for +01:30</p>
+</div><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.Argument.Offset if the offset is not within -24h...+24h (in minutes)</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L145">timezone.ts:145</a></li></ul></aside></li><li class="tsd-signature tsd-anchor-link"><a id="zone.zone-2" class="tsd-anchor"></a><span class="tsd-kind-call-signature">zone</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">s</span>, <span class="tsd-kind-parameter">dst</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a><a href="#zone.zone-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></li><li class="tsd-description"><div class="tsd-comment tsd-typography"><p>Time zone for an offset string or an IANA time zone string. Note that time zones are cached
+so you don&#39;t necessarily get a new object each time.</p>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">s</span>: <span class="tsd-signature-type">string</span></span><div class="tsd-comment tsd-typography"><p>&quot;localtime&quot; for local time,
+         a TZ database time zone name (e.g. Europe/Amsterdam),
+         or an offset string (either +01:30, +0130, +01, Z). For a full list of names, see:
+         <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a>
+         TZ database zone name may be suffixed with &quot; without DST&quot; to indicate no DST should be applied.
+         In that case, the dst parameter is ignored.</p>
+</div><div class="tsd-comment tsd-typography"></div></li><li><span><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">dst</span>: <span class="tsd-signature-type">boolean</span></span><div class="tsd-comment tsd-typography"><p>Optional, default true: adhere to Daylight Saving Time if applicable. Note for
+             &quot;localtime&quot;, timezonecomplete will adhere to the computer settings, the DST flag
+             does not have any effect.</p>
+</div><div class="tsd-comment tsd-typography"></div></li></ul></div><h4 class="tsd-returns-title">Returns <a href="TimeZone.html" class="tsd-signature-type tsd-kind-class">TimeZone</a></h4><div class="tsd-comment tsd-typography"><h4>Throws</h4><p>timezonecomplete.Argument.S if s cannot be parsed</p>
+<h4>Throws</h4><p>timezonecomplete.NotFound.Zone if the zone name doesn&#39;t exist in the time zone database</p>
+</div><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/SpiritIT/timezonecomplete/blob/4bd6b43/src/lib/timezone.ts#L162">timezone.ts:162</a></li></ul></aside></li></ul></section></section></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-index-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><h4 class="uppercase">Member Visibility</h4><form><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li></ul></form></div><div class="tsd-theme-toggle"><h4 class="uppercase">Theme</h4><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-index-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#classKind" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-1024"></use></svg><span>class<wbr/>Kind</span></a><a href="#abbreviationForUtc" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>abbreviation<wbr/>For<wbr/>Utc</span></a><a href="#clone" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>clone</span></a><a href="#dst" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>dst</span></a><a href="#equals" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>equals</span></a><a href="#hasDst" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>has<wbr/>Dst</span></a><a href="#identical" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>identical</span></a><a href="#isUtc" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Utc</span></a><a href="#kind" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>kind</span></a><a href="#name" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>name</span></a><a href="#normalizeZoneTime" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>normalize<wbr/>Zone<wbr/>Time</span></a><a href="#offsetForUtc" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>For<wbr/>Utc</span></a><a href="#offsetForUtcDate" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>For<wbr/>Utc<wbr/>Date</span></a><a href="#offsetForZone" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>For<wbr/>Zone</span></a><a href="#offsetForZoneDate" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>For<wbr/>Zone<wbr/>Date</span></a><a href="#standardOffsetForUtc" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>standard<wbr/>Offset<wbr/>For<wbr/>Utc</span></a><a href="#toString" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>to<wbr/>String</span></a><a href="#local" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>local</span></a><a href="#offsetToString" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>offset<wbr/>To<wbr/>String</span></a><a href="#stringToOffset" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>string<wbr/>To<wbr/>Offset</span></a><a href="#utc" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>utc</span></a><a href="#zone" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-2048"></use></svg><span>zone</span></a></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-1"></use></svg><span>timezonecomplete</span></a><ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base=".."><li>Loading...</li></ul></nav></div></div></div><div class="tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div></body></html>
