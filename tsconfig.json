@@ -21,7 +21,6 @@
         "removeComments": false,
 		"sourceMap": true,
         "strictNullChecks": true,
-        "suppressImplicitAnyIndexErrors": true,
         "target": "es5"
     },
     "formatCodeOptions": {
