@@ -172,7 +172,7 @@ export function stringToTimeUnit(s: string): TimeUnit {
 }
 
 /**
- * @return True iff the given year is a leap year.
+ * @return True if the given year is a leap year.
  * @throws timezonecomplete.Argument.Year if year is not integer
  */
 export function isLeapYear(year: number): boolean {
@@ -292,12 +292,45 @@ export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDa
 	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
 	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
 	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
-	const beginOfMonth: TimeStruct = new TimeStruct({ year, month, day: 1});
+	const beginOfMonth: TimeStruct = new TimeStruct({ year, month, day: 1 });
 	const beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonth.unixMillis);
 	let diff: number = weekDay - beginOfMonthWeekDay;
 	if (diff < 0) {
 		diff += 7;
 	}
+	return beginOfMonth.components.day + diff;
+}
+
+/**
+ * Returns the nth instance of the given weekday in the given month; throws if not found
+ *
+ * @param year	The year
+ * @param month	the month 1-12
+ * @param weekDay	the desired week day
+ * @param dayInstance	the desired week day instance
+ * @return the first occurrence of the week day in the month
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.WeekDay for invalid week day
+ * @throws timezonecomplete.Arugment.DayInstance for invalid day instance (not 1-5)
+ * @throws timezonecomplete.NotFound if the month has no such instance (i.e. 5th instance, where only 4 exist)
+ */
+export function nthWeekDayOfMonth(year: number, month: number, weekDay: WeekDay, dayInstance: number): number {
+	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
+	assert(Number.isInteger(dayInstance) && dayInstance >= 1 && dayInstance <= 5, "Argument.DayInstance", "dayInstance out of range: %d",
+		dayInstance);
+
+	const beginOfMonth: TimeStruct = new TimeStruct({ year, month, day: 1 });
+	const beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonth.unixMillis);
+	let diff: number = weekDay - beginOfMonthWeekDay;
+	if (diff < 0) {
+		diff += 7;
+	}
+	diff += (dayInstance - 1) * 7;
+
+	assert(beginOfMonth.components.day + diff <= daysInMonth(year, month), "NotFound", "The given month has no such day");
 	return beginOfMonth.components.day + diff;
 }
 
@@ -337,7 +370,7 @@ export function weekDayOnOrBefore(year: number, month: number, day: number, week
 	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
 	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
 	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
-	const start: TimeStruct = new TimeStruct({year, month, day});
+	const start: TimeStruct = new TimeStruct({ year, month, day });
 	const startWeekDay: WeekDay = weekDayNoLeapSecs(start.unixMillis);
 	let diff: number = weekDay - startWeekDay;
 	if (diff > 0) {
@@ -397,6 +430,25 @@ export function weekOfMonth(year: number, month: number, day: number): number {
 		result += 1;
 	}
 
+	return result;
+}
+
+/**
+ * Returns the weekday instance number in the month for the given date
+ *
+ * @param year The year
+ * @param month The month [1-12]
+ * @param day The day [1-31]
+ * @return Instance number [1-5]
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
+ */
+export function weekDayInstanceInMonth(year: number, month: number, day: number): number {
+	// rely on year/month validation in firstWeekDayOfMonth
+	const weekDay = weekDayNoLeapSecs(new TimeStruct({ year, month, day }).unixMillis);
+	const firstInstanceOfDay = firstWeekDayOfMonth(year, month, weekDay);
+	const result = ((day - firstInstanceOfDay) / 7) + 1;
 	return result;
 }
 
@@ -474,7 +526,7 @@ export function unixToTimeNoLeapSecs(unixMillis: number): TimeComponents {
 	assert(Number.isInteger(unixMillis), "Argument.UnixMillis", "unixMillis should be an integer number");
 
 	let temp: number = unixMillis;
-	const result: TimeComponents = { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0, milli: 0};
+	const result: TimeComponents = { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0, milli: 0 };
 	let year: number;
 	let month: number;
 
