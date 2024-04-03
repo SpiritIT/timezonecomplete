@@ -434,6 +434,31 @@ export function weekOfMonth(year: number, month: number, day: number): number {
 }
 
 /**
+ * The week of this month, based on counting calendar weeks. Unlike weekOfMonth() the first day of the month is
+ * always week 1, no days count as the last week of the previous month, so the week number returned can be from 1-6.
+ * The first day of the week, i.e. when the week number increases, is customizable, and defaults to Monday.
+ *
+ * @param year The year
+ * @param month The month [1-12]
+ * @param day The day [1-31]
+ * @param weekStartDay The week day to use as the start of the week
+ * @return Week number [1-6]
+ * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
+ * @throws timezonecomplete.Argument.Month for invalid month
+ * @throws timezonecomplete.Argument.Day for invalid day of month
+ */
+export function calendarWeekInMonth(year: number, month: number, day: number, weekStartDay: WeekDay = WeekDay.Monday): number {
+	// rely on year/month validation in weekDayOnOrAfter
+	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
+	const firstFullWeekStartDay: number = weekDayOnOrAfter(year, month, 1, weekStartDay);
+	let result = Math.floor((day - firstFullWeekStartDay + 7) / 7 );
+	if (firstFullWeekStartDay > 1) {
+		result++;
+	}
+	return result;
+}
+
+/**
  * Returns the weekday instance number in the month for the given date
  *
  * @param year The year
