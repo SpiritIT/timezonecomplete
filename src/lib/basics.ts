@@ -172,7 +172,7 @@ export function stringToTimeUnit(s: string): TimeUnit {
 }
 
 /**
- * @return True if the given year is a leap year.
+ * @return True iff the given year is a leap year.
  * @throws timezonecomplete.Argument.Year if year is not integer
  */
 export function isLeapYear(year: number): boolean {
@@ -307,7 +307,7 @@ export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDa
  * @param year	The year
  * @param month	the month 1-12
  * @param weekDay	the desired week day
- * @param dayInstance	the desired week day instance
+ * @param dayInstance	the desired week day instance, n
  * @return the first occurrence of the week day in the month
  * @throws timezonecomplete.Argument.Year for invalid year (non-integer)
  * @throws timezonecomplete.Argument.Month for invalid month
@@ -435,8 +435,9 @@ export function weekOfMonth(year: number, month: number, day: number): number {
 
 /**
  * The week of this month, based on counting calendar weeks. Unlike weekOfMonth() the first day of the month is
- * always week 1, no days count as the last week of the previous month, so the week number returned can be from 1-6.
- * The first day of the week, i.e. when the week number increases, is customizable, and defaults to Monday.
+ * always week 1, and no days count as the last week of the previous month. The week number returned can be from 1-6,
+ * as a month can span up to 6 different weeks on the calendar. The first day of the week, i.e. when the week number
+ * increases, is customizable, and defaults to Monday.
  *
  * @param year The year
  * @param month The month [1-12]
