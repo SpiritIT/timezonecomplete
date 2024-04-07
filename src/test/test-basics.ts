@@ -125,6 +125,124 @@ describe("firstWeekDayOfMonth()", (): void => {
 	});
 });
 
+describe("nthWeekDayOfMonth()", (): void => {
+	it("should work for month ending on Tuesday", (): void => {
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Monday, 1)).to.equal(1);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Tuesday, 1)).to.equal(2);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Wednesday, 1)).to.equal(3);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Thursday, 1)).to.equal(4);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Friday, 1)).to.equal(5);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Saturday, 1)).to.equal(6);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Sunday, 1)).to.equal(7);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Monday, 2)).to.equal(8);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Tuesday, 2)).to.equal(9);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Wednesday, 2)).to.equal(10);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Thursday, 2)).to.equal(11);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Friday, 2)).to.equal(12);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Saturday, 2)).to.equal(13);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Sunday, 2)).to.equal(14);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Monday, 3)).to.equal(15);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Tuesday, 3)).to.equal(16);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Wednesday, 3)).to.equal(17);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Thursday, 3)).to.equal(18);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Friday, 3)).to.equal(19);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Saturday, 3)).to.equal(20);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Sunday, 3)).to.equal(21);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Monday, 4)).to.equal(22);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Tuesday, 4)).to.equal(23);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Wednesday, 4)).to.equal(24);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Thursday, 4)).to.equal(25);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Friday, 4)).to.equal(26);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Saturday, 4)).to.equal(27);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Sunday, 4)).to.equal(28);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Monday, 5)).to.equal(29);
+		expect(basics.nthWeekDayOfMonth(2024, 4, WeekDay.Tuesday, 5)).to.equal(30);
+	});
+	it("should work for month ending on Friday", (): void => {
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Wednesday, 1)).to.equal(1);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Thursday, 1)).to.equal(2);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Friday, 1)).to.equal(3);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Saturday, 1)).to.equal(4);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Sunday, 1)).to.equal(5);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Monday, 1)).to.equal(6);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Tuesday, 1)).to.equal(7);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Wednesday, 2)).to.equal(8);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Thursday, 2)).to.equal(9);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Friday, 2)).to.equal(10);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Saturday, 2)).to.equal(11);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Sunday, 2)).to.equal(12);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Monday, 2)).to.equal(13);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Tuesday, 2)).to.equal(14);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Wednesday, 3)).to.equal(15);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Thursday, 3)).to.equal(16);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Friday, 3)).to.equal(17);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Saturday, 3)).to.equal(18);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Sunday, 3)).to.equal(19);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Monday, 3)).to.equal(20);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Tuesday, 3)).to.equal(21);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Wednesday, 4)).to.equal(22);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Thursday, 4)).to.equal(23);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Friday, 4)).to.equal(24);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Saturday, 4)).to.equal(25);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Sunday, 4)).to.equal(26);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Monday, 4)).to.equal(27);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Tuesday, 4)).to.equal(28);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Wednesday, 5)).to.equal(29);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Thursday, 5)).to.equal(30);
+		expect(basics.nthWeekDayOfMonth(2024, 5, WeekDay.Friday, 5)).to.equal(31);
+
+	});
+	it("should work for leap day", (): void => {
+		expect(basics.nthWeekDayOfMonth(2024, 2, WeekDay.Friday, 4)).to.equal(23);
+		expect(basics.nthWeekDayOfMonth(2024, 2, WeekDay.Saturday, 4)).to.equal(24);
+		expect(basics.nthWeekDayOfMonth(2024, 2, WeekDay.Sunday, 4)).to.equal(25);
+		expect(basics.nthWeekDayOfMonth(2024, 2, WeekDay.Monday, 4)).to.equal(26);
+		expect(basics.nthWeekDayOfMonth(2024, 2, WeekDay.Tuesday, 4)).to.equal(27);
+		expect(basics.nthWeekDayOfMonth(2024, 2, WeekDay.Wednesday, 4)).to.equal(28);
+		expect(basics.nthWeekDayOfMonth(2024, 2, WeekDay.Thursday, 5)).to.equal(29);
+	});
+	it("should work for month with 5 instances of the weekday", (): void => {
+		expect(basics.nthWeekDayOfMonth(2024, 6, WeekDay.Sunday, 5)).to.equal(30);
+		expect(basics.nthWeekDayOfMonth(2024, 7, WeekDay.Monday, 5)).to.equal(29);
+		expect(basics.nthWeekDayOfMonth(2024, 7, WeekDay.Tuesday, 5)).to.equal(30);
+		expect(basics.nthWeekDayOfMonth(2024, 7, WeekDay.Wednesday, 5)).to.equal(31);
+		expect(basics.nthWeekDayOfMonth(2024, 8, WeekDay.Thursday, 5)).to.equal(29);
+		expect(basics.nthWeekDayOfMonth(2024, 8, WeekDay.Friday, 5)).to.equal(30);
+		expect(basics.nthWeekDayOfMonth(2024, 8, WeekDay.Saturday, 5)).to.equal(31);
+	});
+	it("should throw for invalid weekday instance", (): void => {
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 4, WeekDay.Sunday, 0);
+		});
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 4, WeekDay.Sunday, 6);
+		});
+	});
+	it("should throw for month with only 4 instances of the weekday", (): void => {
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 4, WeekDay.Sunday, 5);
+		});
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 5, WeekDay.Monday, 5);
+		});
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 5, WeekDay.Tuesday, 5);
+		});
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 4, WeekDay.Wednesday, 5);
+		});
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 4, WeekDay.Thursday, 5);
+		});
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 4, WeekDay.Friday, 5);
+		});
+		assert.throws((): void => {
+			basics.nthWeekDayOfMonth(2024, 4, WeekDay.Saturday, 5);
+		});
+	});
+});
+
 describe("weekDayOnOrAfter()", (): void => {
 	it("should work", (): void => {
 		expect(basics.weekDayOnOrAfter(2014, 8, 11, WeekDay.Monday)).to.equal(11);
@@ -452,6 +570,144 @@ describe("weekOfMonth()", (): void => {
 
 	it("should not have issue #56", (): void => {
 		expect(basics.weekOfMonth(2021, 5, 1)).to.equal(5);
+	});
+});
+
+describe("weekDayInstanceInMonth()", (): void => {
+	it("should work for first weekday instance in month", (): void => {
+		expect(basics.weekDayInstanceInMonth(2024, 4, 1)).to.equal(1);
+		expect(basics.weekDayInstanceInMonth(2024, 4, 2)).to.equal(1);
+		expect(basics.weekDayInstanceInMonth(2024, 4, 3)).to.equal(1);
+		expect(basics.weekDayInstanceInMonth(2024, 4, 4)).to.equal(1);
+		expect(basics.weekDayInstanceInMonth(2024, 4, 5)).to.equal(1);
+		expect(basics.weekDayInstanceInMonth(2024, 4, 6)).to.equal(1);
+		expect(basics.weekDayInstanceInMonth(2024, 4, 7)).to.equal(1);
+	});
+	it("should work for second weekday instance in month", (): void => {
+		expect(basics.weekDayInstanceInMonth(2024, 5, 8)).to.equal(2);
+		expect(basics.weekDayInstanceInMonth(2024, 5, 9)).to.equal(2);
+		expect(basics.weekDayInstanceInMonth(2024, 5, 10)).to.equal(2);
+		expect(basics.weekDayInstanceInMonth(2024, 5, 11)).to.equal(2);
+		expect(basics.weekDayInstanceInMonth(2024, 5, 12)).to.equal(2);
+		expect(basics.weekDayInstanceInMonth(2024, 5, 13)).to.equal(2);
+		expect(basics.weekDayInstanceInMonth(2024, 5, 14)).to.equal(2);
+	});
+	it("should work for third weekday instance in month", (): void => {
+		expect(basics.weekDayInstanceInMonth(2024, 6, 15)).to.equal(3);
+		expect(basics.weekDayInstanceInMonth(2024, 6, 16)).to.equal(3);
+		expect(basics.weekDayInstanceInMonth(2024, 6, 17)).to.equal(3);
+		expect(basics.weekDayInstanceInMonth(2024, 6, 18)).to.equal(3);
+		expect(basics.weekDayInstanceInMonth(2024, 6, 19)).to.equal(3);
+		expect(basics.weekDayInstanceInMonth(2024, 6, 20)).to.equal(3);
+		expect(basics.weekDayInstanceInMonth(2024, 6, 21)).to.equal(3);
+	});
+	it("should work for fouth weekday instance in month", (): void => {
+		expect(basics.weekDayInstanceInMonth(2024, 7, 22)).to.equal(4);
+		expect(basics.weekDayInstanceInMonth(2024, 7, 23)).to.equal(4);
+		expect(basics.weekDayInstanceInMonth(2024, 7, 24)).to.equal(4);
+		expect(basics.weekDayInstanceInMonth(2024, 7, 25)).to.equal(4);
+		expect(basics.weekDayInstanceInMonth(2024, 7, 26)).to.equal(4);
+		expect(basics.weekDayInstanceInMonth(2024, 7, 27)).to.equal(4);
+		expect(basics.weekDayInstanceInMonth(2024, 7, 28)).to.equal(4);
+	});
+	it("should work for fifth weekday instance in month", (): void => {
+		expect(basics.weekDayInstanceInMonth(2024, 8, 29)).to.equal(5);
+		expect(basics.weekDayInstanceInMonth(2024, 8, 30)).to.equal(5);
+		expect(basics.weekDayInstanceInMonth(2024, 8, 31)).to.equal(5);
+	});
+});
+
+describe("calendarWeekInMonth()", (): void => {
+	it("should work for month starting on Monday and week starting on Monday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 7)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 8)).to.equal(2);
+		expect(basics.calendarWeekInMonth(2024, 4, 14)).to.equal(2);
+		expect(basics.calendarWeekInMonth(2024, 4, 15)).to.equal(3);
+		expect(basics.calendarWeekInMonth(2024, 4, 21)).to.equal(3);
+		expect(basics.calendarWeekInMonth(2024, 4, 22)).to.equal(4);
+		expect(basics.calendarWeekInMonth(2024, 4, 28)).to.equal(4);
+		expect(basics.calendarWeekInMonth(2024, 4, 29)).to.equal(5);
+	});
+	it("should work for month starting on Monday and week defined as starting on Sunday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 6, WeekDay.Sunday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 7, WeekDay.Sunday)).to.equal(2);
+		expect(basics.calendarWeekInMonth(2024, 4, 13, WeekDay.Sunday)).to.equal(2);
+		expect(basics.calendarWeekInMonth(2024, 4, 14, WeekDay.Sunday)).to.equal(3);
+		expect(basics.calendarWeekInMonth(2024, 4, 20, WeekDay.Sunday)).to.equal(3);
+		expect(basics.calendarWeekInMonth(2024, 4, 21, WeekDay.Sunday)).to.equal(4);
+		expect(basics.calendarWeekInMonth(2024, 4, 27, WeekDay.Sunday)).to.equal(4);
+		expect(basics.calendarWeekInMonth(2024, 4, 28, WeekDay.Sunday)).to.equal(5);
+	});
+	it("should work for month starting on Sunday and week starting on Monday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 9, 1)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 9, 2)).to.equal(2);
+		expect(basics.calendarWeekInMonth(2024, 9, 8)).to.equal(2);
+		expect(basics.calendarWeekInMonth(2024, 9, 9)).to.equal(3);
+		expect(basics.calendarWeekInMonth(2024, 9, 15)).to.equal(3);
+		expect(basics.calendarWeekInMonth(2024, 9, 16)).to.equal(4);
+		expect(basics.calendarWeekInMonth(2024, 9, 22)).to.equal(4);
+		expect(basics.calendarWeekInMonth(2024, 9, 23)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 9, 29)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 9, 30)).to.equal(6);
+	});
+	it("should work for month starting on Sunday and week defined as starting on Sunday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 9, 7, WeekDay.Sunday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 9, 8, WeekDay.Sunday)).to.equal(2);
+		expect(basics.calendarWeekInMonth(2024, 9, 14, WeekDay.Sunday)).to.equal(2);
+		expect(basics.calendarWeekInMonth(2024, 9, 15, WeekDay.Sunday)).to.equal(3);
+		expect(basics.calendarWeekInMonth(2024, 9, 21, WeekDay.Sunday)).to.equal(3);
+		expect(basics.calendarWeekInMonth(2024, 9, 22, WeekDay.Sunday)).to.equal(4);
+		expect(basics.calendarWeekInMonth(2024, 9, 28, WeekDay.Sunday)).to.equal(4);
+		expect(basics.calendarWeekInMonth(2024, 9, 29, WeekDay.Sunday)).to.equal(5);
+	});
+	it("should work when start of week is explicitly defined as Monday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 7, WeekDay.Monday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 8, WeekDay.Monday)).to.equal(2);
+	});
+	it("should work when start of week is defined as Tuesday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 1, WeekDay.Tuesday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 2, WeekDay.Tuesday)).to.equal(2);
+	});
+	it("should work when start of week is defined as Wednesday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 2, WeekDay.Wednesday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 3, WeekDay.Wednesday)).to.equal(2);
+	});
+	it("should work when start of week is defined as Thursday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 3, WeekDay.Thursday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 4, WeekDay.Thursday)).to.equal(2);
+	});
+	it("should work when start of week is defined as Friday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 4, WeekDay.Friday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 5, WeekDay.Friday)).to.equal(2);
+	});
+	it("should work when start of week is defined as Saturday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 5, WeekDay.Saturday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 6, WeekDay.Saturday)).to.equal(2);
+	});
+	it("should work when start of week is defined as Sunday", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 4, 6, WeekDay.Sunday)).to.equal(1);
+		expect(basics.calendarWeekInMonth(2024, 4, 7, WeekDay.Sunday)).to.equal(2);
+	});
+	it("should work for months spanning six calendar weeks", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 9, 29)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 9, 30)).to.equal(6);
+		expect(basics.calendarWeekInMonth(2024, 12, 29)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 12, 30)).to.equal(6);
+		expect(basics.calendarWeekInMonth(2024, 12, 31)).to.equal(6);
+	});
+	it("should work for dates in calendar week 6 when start of week is defined", (): void => {
+		expect(basics.calendarWeekInMonth(2024, 1, 29, WeekDay.Tuesday)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 1, 30, WeekDay.Tuesday)).to.equal(6);
+		expect(basics.calendarWeekInMonth(2024, 1, 30, WeekDay.Wednesday)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 1, 31, WeekDay.Wednesday)).to.equal(6);
+		expect(basics.calendarWeekInMonth(2024, 5, 29, WeekDay.Thursday)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 5, 30, WeekDay.Thursday)).to.equal(6);
+		expect(basics.calendarWeekInMonth(2024, 5, 30, WeekDay.Friday)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 5, 31, WeekDay.Friday)).to.equal(6);
+		expect(basics.calendarWeekInMonth(2024, 3, 29, WeekDay.Saturday)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 3, 30, WeekDay.Saturday)).to.equal(6);
+		expect(basics.calendarWeekInMonth(2024, 3, 30, WeekDay.Sunday)).to.equal(5);
+		expect(basics.calendarWeekInMonth(2024, 3, 31, WeekDay.Sunday)).to.equal(6);
 	});
 });
 
