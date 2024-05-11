@@ -601,7 +601,7 @@ describe("weekDayInstanceInMonth()", (): void => {
 		expect(basics.weekDayInstanceInMonth(2024, 6, 20)).to.equal(3);
 		expect(basics.weekDayInstanceInMonth(2024, 6, 21)).to.equal(3);
 	});
-	it("should work for fouth weekday instance in month", (): void => {
+	it("should work for fourth weekday instance in month", (): void => {
 		expect(basics.weekDayInstanceInMonth(2024, 7, 22)).to.equal(4);
 		expect(basics.weekDayInstanceInMonth(2024, 7, 23)).to.equal(4);
 		expect(basics.weekDayInstanceInMonth(2024, 7, 24)).to.equal(4);
