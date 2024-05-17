@@ -131,6 +131,18 @@ tc.stringToTimeUnit("days"); // tc.TimeUnit.Day
 tc.stringToTimeUnit("day"); // tc.TimeUnit.Day
 tc.stringToTimeUnit("DAY"); // tc.TimeUnit.Day
 
+// nth week day of the month
+tc.nthWeekDayOfMonth(2024, 4, WeekDay.Monday, 1) // returns 1 - first Monday of April 2024 is on the 1st
+tc.nthWeekDayOfMonth(2024, 4, WeekDay.Tuesday, 1) // returns 2 - first Tuesday of April 2024 is on the 2nd
+
+// week day instance in month
+tc.weekDayInstanceInMonth(2024, 5, 8) // returns 2 - 08.05.2024 is the 2nd Monday of the month
+tc.weekDayInstanceInMonth(2024, 6, 15) // returns 3 - 15.05.2024 is the 3rd Monday of the month
+
+// calendar week in month
+tc.calendarWeekInMonth(2024, 4, 7) // returns 1 - 07.04.2024 falls on the first calendar week of the month
+tc.calendarWeekInMonth(2024, 4, 8) // returns 2 - 08.04.2024 falls on the second calendar week of the month
+
 ```
 
 ## Duration

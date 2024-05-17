@@ -4,10 +4,11 @@ MODULE PUBLISH
 * Adjust doc/OVERVIEW.md
 * Adjust README.md
 * Adjust package.json and adjust version number
+* Ensure .npmrc points to the world NPM repository, not the spirit repository
+* Remove package-lock.json and reinstall dependencies
 * Run:
 npm run all
 * Commit changes and Sync with GitHub
 * In GitHub, create a release tag
-* Ensure .npmrc points to the world NPM repository, not the spirit repository
 * Run:
 npm publish
