@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.13.0 (2024-05-17)
+
+* Issue #77: Weekday instance in month
+
 ## 5.12.4 (2021-05-06)
 
 * Fix #56 `weekOfMonth()` crash
