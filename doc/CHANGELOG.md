@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.13.1 (2024-06-17)
+
+* Issue #78: Links to API are broken
+
 ## 5.13.0 (2024-05-17)
 
 * Issue #77: Weekday instance in month
