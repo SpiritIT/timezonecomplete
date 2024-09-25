@@ -148,12 +148,6 @@ describe("Period", function(): void {
 				.findFirst(new DateTime("2014-10-26T00:10:00.000 UTC").toZone(TimeZone.zone("Europe/Amsterdam"))).toString())
 				.to.equal("2014-10-26T02:05:06.007 Europe/Amsterdam");
 		});
-		it.skip("should handle 1 Hour in zone with DST !== 1h", (): void => {
-			// Ghana had DST of 20 minutes
-			expect((new Period(new DateTime("1930-06-01T12:05:06.007 Africa/Accra"), 1, TimeUnit.Hour, PeriodDst.RegularIntervals))
-				.findFirst(new DateTime("1937-10-26T00:10:00.000 Africa/Accra")).toString())
-				.to.equal("1937-10-26T00:25:06.007 Africa/Accra");
-		});
 		it("should handle 1 Day", (): void => {
 			// check it shifts local time from 12h to 13h
 			expect((new Period(new DateTime("1970-01-01T12:05:06.007 Europe/Amsterdam"), 1, TimeUnit.Day, PeriodDst.RegularIntervals))
@@ -291,12 +285,6 @@ describe("Period", function(): void {
 			expect((new Period(new DateTime("1970-01-01T01:00:00.000 Europe/Amsterdam"), 2, TimeUnit.Hour, PeriodDst.RegularIntervals))
 				.findFirst(new DateTime("2014-10-25T23:10:00.000 UTC").toZone(TimeZone.zone("Europe/Amsterdam"))).toString())
 				.to.equal("2014-10-26T02:00:00.000 Europe/Amsterdam");
-		});
-		it.skip("should handle 2 Hour in zone with DST !== 1h", (): void => {
-			// Ghana had DST of 20 minutes
-			expect((new Period(new DateTime("1930-01-01T12:05:06.007 Africa/Accra"), 2, TimeUnit.Hour, PeriodDst.RegularIntervals))
-				.findFirst(new DateTime("1937-10-26T00:10:00.000 Africa/Accra")).toString())
-				.to.equal("1937-10-26T00:25:06.007 Africa/Accra");
 		});
 		it("should handle 2 Day", (): void => {
 			// check it shifts local time from 12h to 13h
