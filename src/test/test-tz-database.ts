@@ -226,28 +226,36 @@ describe("TzDatabase", (): void => {
 			expect(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam"))).to.equal(
 				util.inspect([
 				new ZoneInfo(
-					Duration.minutes(19.53333333333333),
+					Duration.minutes(17.5),
 					RuleType.None,
 					Duration.hours(0),
 					"",
 					"LMT",
-					-4228761600000
+					-2808604800000
 				),
 				new ZoneInfo(
-					Duration.minutes(19.53333333333333),
-					RuleType.RuleName,
+					Duration.minutes(17.5),
+					RuleType.None,
 					Duration.hours(0),
-					"Neth",
-					"%s",
-					-1025740800000
+					"",
+					"BMT",
+					-2450994150000
 				),
 				new ZoneInfo(
-					Duration.minutes(20),
-					RuleType.RuleName,
+					Duration.minutes(-0),
+					RuleType.None,
 					Duration.hours(0),
-					"Neth",
-					"+0020/+0120",
-					-935020800000
+					"",
+					"WET",
+					-1740355200000
+				),
+				new ZoneInfo(
+					Duration.minutes(60),
+					RuleType.None,
+					Duration.hours(0),
+					"",
+					"CET",
+					-1693699200000
 				),
 				new ZoneInfo(
 					Duration.minutes(60),
@@ -255,13 +263,29 @@ describe("TzDatabase", (): void => {
 					Duration.hours(0),
 					"C-Eur",
 					"CE%sT",
-					-781048800000
+					-1613826000000
+				),
+				new ZoneInfo(
+					Duration.minutes(-0),
+					RuleType.RuleName,
+					Duration.hours(0),
+					"Belgium",
+					"WE%sT",
+					-934668000000
 				),
 				new ZoneInfo(
 					Duration.minutes(60),
 					RuleType.RuleName,
 					Duration.hours(0),
-					"Neth",
+					"C-Eur",
+					"CE%sT",
+					-799286400000
+				),
+				new ZoneInfo(
+					Duration.minutes(60),
+					RuleType.RuleName,
+					Duration.hours(0),
+					"Belgium",
 					"CE%sT",
 					252374400000
 				),
@@ -374,15 +398,15 @@ describe("TzDatabase", (): void => {
 
 	describe("getZoneInfo()", (): void => {
 		it("should work", (): void => {
-			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(-4228761600001))))
+			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(-2808604800001))))
 				.to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[0]));
-			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(-4228761600000))))
+			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(-2808604800000))))
 				.to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[1]));
-			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(252374399999))))
+			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(-1613826000001))))
 				.to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[4]));
-			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(252374400000))))
+			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(-1613826000000))))
 				.to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[5]));
-			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(252374400001))))
+			expect(util.inspect(TzDatabase.instance().getZoneInfo("Europe/Amsterdam", new TimeStruct(-934668000001))))
 				.to.equal(util.inspect(TzDatabase.instance().getZoneInfos("Europe/Amsterdam")[5]));
 		});
 		it("should throw for invalid zone name", (): void => {
@@ -494,10 +518,10 @@ describe("TzDatabase", (): void => {
 
 	describe("abbreviation()", (): void => {
 		it("should work for zones with a slash format", (): void => {
-			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (TimeStruct.fromComponents(1938, 1, 1, 0, 59, 59, 999)))).
-				to.equal("+0020");
-			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (TimeStruct.fromComponents(1938, 7, 1, 1, 0, 0, 0)))).
-				to.equal("+0120");
+			expect(TzDatabase.instance().abbreviation("Africa/Casablanca", (TimeStruct.fromComponents(1984, 1, 1, 1, 0, 0, 0)))).
+				to.equal("+00");
+			expect(TzDatabase.instance().abbreviation("Africa/Casablanca", (TimeStruct.fromComponents(1984, 7, 1, 1, 0, 0, 0)))).
+				to.equal("+01");
 		});
 		it("should work for zones with a %s format", (): void => {
 			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (TimeStruct.fromComponents(2014, 3, 30, 0, 59, 59, 999)))).
@@ -597,16 +621,16 @@ describe("TzDatabase", (): void => {
 		it("should work", (): void => {
 			// before first zone info
 			expect(TzDatabase.instance().standardOffset(
-				"Europe/Amsterdam", new TimeStruct(-4228761600001)).minutes()).to.be.within(19.5, 19.6);
+				"Europe/Amsterdam", new TimeStruct(-4228761600001)).minutes()).to.be.within(17.5, 17.6);
 			// at until of first zone info (return next)
 			expect(TzDatabase.instance().standardOffset(
-				"Europe/Amsterdam", new TimeStruct(-4228761600000)).minutes()).to.be.within(19.5, 19.6);
+				"Europe/Amsterdam", new TimeStruct(-4228761600000)).minutes()).to.be.within(17.5, 17.6);
 			// before until of third zone info
 			expect(TzDatabase.instance().standardOffset(
-				"Europe/Amsterdam", new TimeStruct(-935020800001)).minutes()).to.equal(20);
+				"Europe/Amsterdam", new TimeStruct(-1613826000001)).minutes()).to.equal(60);
 			// at until of third zone info (return fourth)
 			expect(TzDatabase.instance().standardOffset(
-				"Europe/Amsterdam", new TimeStruct(-935020800000)).hours()).to.equal(1);
+				"Europe/Amsterdam", new TimeStruct(-1613826000000)).hours()).to.equal(0);
 			// after last zone info
 			expect(TzDatabase.instance().standardOffset(
 				"Europe/Amsterdam", (TimeStruct.fromComponents(2014, 3, 30, 0, 59, 59, 999))).hours()).to.equal(1);
@@ -617,16 +641,16 @@ describe("TzDatabase", (): void => {
 		it("should work", (): void => {
 			// before first zone info (note that timestamps are LOCAL now)
 			expect(TzDatabase.instance().standardOffsetLocal(
-				"Europe/Amsterdam", new TimeStruct(-4228762772401)).minutes()).to.be.within(19.5, 19.6);
+				"Europe/Amsterdam", new TimeStruct(-4228762772401)).minutes()).to.be.within(17.5, 17.6);
 			// at until of first zone info (return next)
 			expect(TzDatabase.instance().standardOffsetLocal(
-				"Europe/Amsterdam", new TimeStruct(-4228762772400)).minutes()).to.be.within(19.5, 19.6);
+				"Europe/Amsterdam", new TimeStruct(-4228762772400)).minutes()).to.be.within(17.5, 17.6);
 			// before until of third zone info
 			expect(TzDatabase.instance().standardOffsetLocal(
-				"Europe/Amsterdam", new TimeStruct(-935019600001)).minutes()).to.equal(20);
+				"Europe/Amsterdam", new TimeStruct(-1613826000001)).minutes()).to.equal(60);
 			// at until of third zone info (return fourth)
 			expect(TzDatabase.instance().standardOffsetLocal(
-				"Europe/Amsterdam", new TimeStruct(-935019600000)).hours()).to.equal(1);
+				"Europe/Amsterdam", new TimeStruct(-1613826000000)).hours()).to.equal(1);
 			// after last zone info
 			expect(TzDatabase.instance().standardOffsetLocal(
 				"Europe/Amsterdam", (TimeStruct.fromComponents(2014, 3, 30, 0, 59, 59, 999))).hours()).to.equal(1);
