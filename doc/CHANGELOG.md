@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.14.0 (2025-05-08)
+
+* Issue #95: Upgrade tzdata
+
 ## 5.13.1 (2024-06-17)
 
 * Issue #78: Links to API are broken
