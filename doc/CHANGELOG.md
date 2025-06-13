@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.14.1 (2025-06-13)
+
+* Issue #98: Bump elliptic from 6.6.0 to 6.6.1 to solve vulnerability
+
 ## 5.14.0 (2025-05-08)
 
 * Issue #95: Upgrade tzdata
