@@ -723,6 +723,18 @@ describe("TzDatabase", (): void => {
 		});
 	});
 
+	describe("lastDstChange()", (): void => {
+		it("should return the last winter to summer time change", (): void => {
+			expect(TzDatabase.instance().lastDstChange("Europe/Amsterdam", new TimeStruct(1427590800001))).to.equal(1427590800000);
+		});
+		it("should return the last summer to winter time change", (): void => {
+			expect(TzDatabase.instance().lastDstChange("Europe/Amsterdam", new TimeStruct(1445734800001))).to.equal(1445734800000);
+		});
+		it("should work with AtType=Wall", (): void => {
+			expect(TzDatabase.instance().lastDstChange("America/Detroit", 1615701600000 + 3600000 + 1)).to.equal(1615701600000 + 3600000);
+		});
+	});
+
 	describe("normalizeLocal()", (): void => {
 		it("should not change dates outside DST changes", (): void => {
 			expect(TzDatabase.instance().normalizeLocal(
