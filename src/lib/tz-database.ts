@@ -798,6 +798,30 @@ export class TzDatabase {
 	}
 
 	/**
+	 * Last DST change (moment AFTER) of the given UTC date in UTC milliseconds, within one year,
+	 * returns undefined if no such change
+	 * @throws timezonecomplete.NotFound.Zone if zone name not found or a linked zone not found
+	 * @throws timezonecomplete.InvalidTimeZoneData if values in the time zone database are invalid
+	 */
+	public lastDstChange(zoneName: string, utcTime: number): number | undefined;
+	public lastDstChange(zoneName: string, utcTime: TimeStruct): number | undefined;
+	public lastDstChange(zoneName: string, a: TimeStruct | number): number | undefined {
+		const utcTime: TimeStruct = (typeof a === "number" ? new TimeStruct(a) : a);
+		const zone = this._getZoneTransitions(zoneName);
+		let iterator = zone.findFirst();
+		let lastChange: number | undefined;
+		while (iterator) {
+			if (iterator.transition.atUtc > utcTime) {
+				break;
+			}
+			lastChange = iterator.transition.atUtc.unixMillis;
+			iterator = zone.findNext(iterator);
+		}
+
+		return lastChange;
+	}
+
+	/**
 	 * Returns true iff the given zone name eventually links to
 	 * "Etc/UTC", "Etc/GMT" or "Etc/UCT" in the TZ database. This is true e.g. for
 	 * "UTC", "GMT", "Etc/GMT" etc.
