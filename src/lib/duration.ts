@@ -208,12 +208,12 @@ export class Duration {
 		if (typeof i1 === "number") {
 			// amount+unit constructor
 			const amount = i1 as number;
-			assert(Number.isFinite(amount), "Argument.Amount", "amount should be finite: %d", amount);
+			assert(Number.isFinite(amount), "Argument.Amount", `amount should be finite: ${amount}`);
 			this._amount = amount;
 			this._unit = (typeof unit === "number" ? unit : TimeUnit.Millisecond);
 			assert(
 				Number.isInteger(this._unit) && this._unit >= 0 && this._unit < TimeUnit.MAX,
-				"Argument.Unit", "Invalid time unit %d", this._unit
+				"Argument.Unit", `Invalid time unit ${this._unit}`
 			);
 		} else if (typeof i1 === "string") {
 			// string constructor
@@ -260,9 +260,9 @@ export class Duration {
 				this._amount = amountMsec / basics.timeUnitToMilliseconds(this._unit);
 			} else {
 				const split = trimmed.toLowerCase().split(" ");
-				assert(split.length === 2, "Argument.S", "Invalid time string '%s'", s);
+				assert(split.length === 2, "Argument.S", `Invalid time string '${s}'`);
 				const amount = parseFloat(split[0]);
-				assert(Number.isFinite(amount), "Argument.S", "Invalid time string '%s', cannot parse amount", s);
+				assert(Number.isFinite(amount), "Argument.S", `Invalid time string '${s}', cannot parse amount`);
 				this._amount = amount;
 				this._unit = basics.stringToTimeUnit(split[1]);
 			}
@@ -626,7 +626,7 @@ export class Duration {
 	public divide(value: Duration): number;
 	public divide(value: number | Duration): Duration | number {
 		if (typeof value === "number") {
-			assert(Number.isFinite(value) && value !== 0, "Argument.Value", "cannot divide by %d", value);
+			assert(Number.isFinite(value) && value !== 0, "Argument.Value", `cannot divide by ${value}`);
 			return new Duration(this._amount / value, this._unit);
 		} else {
 			assert(value.amount() !== 0, "Argument.Value", "cannot divide by 0");

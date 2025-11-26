@@ -132,7 +132,7 @@ export function timeUnitToMilliseconds(unit: TimeUnit): number {
 		case TimeUnit.Month: return 30 * 86400000;
 		case TimeUnit.Year: return 12 * 30 * 86400000;
 		default:
-			return throwError("Argument.Unit", "unknown time unit %d", unit);
+			return throwError("Argument.Unit", `unknown time unit ${unit}`);
 	}
 }
 
@@ -145,7 +145,7 @@ export function timeUnitToMilliseconds(unit: TimeUnit): number {
  */
 export function timeUnitToString(unit: TimeUnit, amount: number = 1): string {
 	if (!Number.isInteger(unit) || unit < 0 || unit >= TimeUnit.MAX) {
-		return throwError("Argument.Unit", "invalid time unit %d", unit);
+		return throwError("Argument.Unit", `invalid time unit ${unit}`);
 	}
 	const result = TimeUnit[unit].toLowerCase();
 	if (amount === 1 || amount === -1) {
@@ -168,7 +168,7 @@ export function stringToTimeUnit(s: string): TimeUnit {
 			return i;
 		}
 	}
-	return throwError("Argument.S", "Unknown time unit string '%s'", s);
+	return throwError("Argument.S", `Unknown time unit string '${s}'`);
 }
 
 /**
@@ -176,7 +176,7 @@ export function stringToTimeUnit(s: string): TimeUnit {
  * @throws timezonecomplete.Argument.Year if year is not integer
  */
 export function isLeapYear(year: number): boolean {
-	assert(Number.isInteger(year), "Argument.Year", "Invalid year %d", year);
+	assert(Number.isInteger(year), "Argument.Year", `Invalid year ${year}`);
 	// from Wikipedia:
 	// if year is not divisible by 4 then common year
 	// else if year is not divisible by 100 then leap year
@@ -227,7 +227,7 @@ export function daysInMonth(year: number, month: number): number {
 		case 11:
 			return 30;
 		default:
-			return throwError("Argument.Month", "Invalid month: %d", month);
+			return throwError("Argument.Month", `Invalid month: ${month}`);
 	}
 }
 
@@ -242,8 +242,8 @@ export function daysInMonth(year: number, month: number): number {
  * @throws timezonecomplete.Argument.Day for invalid day of month
  */
 export function dayOfYear(year: number, month: number, day: number): number {
-	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
-	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(year), "Argument.Year", `Year out of range: ${year}`);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", `Month out of range: ${month}`);
 	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
 	let yearDay: number = 0;
 	for (let i: number = 1; i < month; i++) {
@@ -265,9 +265,9 @@ export function dayOfYear(year: number, month: number, day: number): number {
  * @throws timezonecomplete.Argument.WeekDay for invalid week day
  */
 export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
-	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
-	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
-	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
+	assert(Number.isInteger(year), "Argument.Year", `Year out of range: ${year}`);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", `Month out of range: ${month}`);
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", `weekDay out of range: ${weekDay}`);
 	const endOfMonth: TimeStruct = new TimeStruct({ year, month, day: daysInMonth(year, month) });
 	const endOfMonthWeekDay = weekDayNoLeapSecs(endOfMonth.unixMillis);
 	let diff: number = weekDay - endOfMonthWeekDay;
@@ -289,9 +289,9 @@ export function lastWeekDayOfMonth(year: number, month: number, weekDay: WeekDay
  * @throws timezonecomplete.Argument.WeekDay for invalid week day
  */
 export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDay): number {
-	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
-	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
-	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
+	assert(Number.isInteger(year), "Argument.Year", `Year out of range: ${year}`);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", `Month out of range: ${month}`);
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", `weekDay out of range: ${weekDay}`);
 	const beginOfMonth: TimeStruct = new TimeStruct({ year, month, day: 1 });
 	const beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonth.unixMillis);
 	let diff: number = weekDay - beginOfMonthWeekDay;
@@ -316,11 +316,10 @@ export function firstWeekDayOfMonth(year: number, month: number, weekDay: WeekDa
  * @throws timezonecomplete.NotFound if the month has no such instance (i.e. 5th instance, where only 4 exist)
  */
 export function nthWeekDayOfMonth(year: number, month: number, weekDay: WeekDay, dayInstance: number): number {
-	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
-	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
-	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
-	assert(Number.isInteger(dayInstance) && dayInstance >= 1 && dayInstance <= 5, "Argument.DayInstance", "dayInstance out of range: %d",
-		dayInstance);
+	assert(Number.isInteger(year), "Argument.Year", `Year out of range: ${year}`);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", `Month out of range: ${month}`);
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", `weekDay out of range: ${weekDay}`);
+	assert(Number.isInteger(dayInstance) && dayInstance >= 1 && dayInstance <= 5, "Argument.DayInstance", `dayInstance out of range: ${dayInstance}`);
 
 	const beginOfMonth: TimeStruct = new TimeStruct({ year, month, day: 1 });
 	const beginOfMonthWeekDay = weekDayNoLeapSecs(beginOfMonth.unixMillis);
@@ -343,10 +342,10 @@ export function nthWeekDayOfMonth(year: number, month: number, weekDay: WeekDay,
  * @throws timezonecomplete.NotFound if the month has no such day
  */
 export function weekDayOnOrAfter(year: number, month: number, day: number, weekDay: WeekDay): number {
-	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
-	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(year), "Argument.Year", `Year out of range: ${year}`);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", `Month out of range: ${month}`);
 	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
-	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", `weekDay out of range: ${weekDay}`);
 	const start: TimeStruct = new TimeStruct({ year, month, day });
 	const startWeekDay: WeekDay = weekDayNoLeapSecs(start.unixMillis);
 	let diff: number = weekDay - startWeekDay;
@@ -366,10 +365,10 @@ export function weekDayOnOrAfter(year: number, month: number, day: number, weekD
  * @throws timezonecomplete.NotFound if the month has no such day
  */
 export function weekDayOnOrBefore(year: number, month: number, day: number, weekDay: WeekDay): number {
-	assert(Number.isInteger(year), "Argument.Year", "Year out of range: %d", year);
-	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", "Month out of range: %d", month);
+	assert(Number.isInteger(year), "Argument.Year", `Year out of range: ${year}`);
+	assert(Number.isInteger(month) && month >= 1 && month <= 12, "Argument.Month", `Month out of range: ${month}`);
 	assert(Number.isInteger(day) && day >= 1 && day <= daysInMonth(year, month), "Argument.Day", "day out of range");
-	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", "weekDay out of range: %d", weekDay);
+	assert(Number.isInteger(weekDay) && weekDay >= 0 && weekDay <= 6, "Argument.WeekDay", `weekDay out of range: ${weekDay}`);
 	const start: TimeStruct = new TimeStruct({ year, month, day });
 	const startWeekDay: WeekDay = weekDayNoLeapSecs(start.unixMillis);
 	let diff: number = weekDay - startWeekDay;
@@ -631,16 +630,16 @@ function normalizeTimeComponents(components: TimeComponentOpts): TimeComponents 
 		second: typeof components.second === "number" ? components.second : 0,
 		milli: typeof components.milli === "number" ? components.milli : 0,
 	};
-	assert(Number.isInteger(input.year), "Argument.Year", "invalid year %d", input.year);
-	assert(Number.isInteger(input.month) && input.month >= 1 && input.month <= 12, "Argument.Month", "invalid month %d", input.month);
+	assert(Number.isInteger(input.year), "Argument.Year", `invalid year ${input.year}`);
+	assert(Number.isInteger(input.month) && input.month >= 1 && input.month <= 12, "Argument.Month", `invalid month ${input.month}`);
 	assert(
 		Number.isInteger(input.day) && input.day >= 1 && input.day <= daysInMonth(input.year, input.month), "Argument.Day",
-		"invalid day %d", input.day
+		`invalid day ${input.day}`
 	);
-	assert(Number.isInteger(input.hour) && input.hour >= 0 && input.hour <= 23, "Argument.Hour", "invalid hour %d", input.hour);
-	assert(Number.isInteger(input.minute) && input.minute >= 0 && input.minute <= 59, "Argument.Minute", "invalid minute %d", input.minute);
-	assert(Number.isInteger(input.second) && input.second >= 0 && input.second <= 59, "Argument.Second", "invalid second %d", input.second);
-	assert(Number.isInteger(input.milli) && input.milli >= 0 && input.milli <= 999, "Argument.Milli", "invalid milli %d", input.milli);
+	assert(Number.isInteger(input.hour) && input.hour >= 0 && input.hour <= 23, "Argument.Hour", `invalid hour ${input.hour}`);
+	assert(Number.isInteger(input.minute) && input.minute >= 0 && input.minute <= 59, "Argument.Minute", `invalid minute ${input.minute}`);
+	assert(Number.isInteger(input.second) && input.second >= 0 && input.second <= 59, "Argument.Second", `invalid second ${input.second}`);
+	assert(Number.isInteger(input.milli) && input.milli >= 0 && input.milli <= 999, "Argument.Milli", `invalid milli ${input.milli}`);
 	return input;
 }
 
@@ -698,9 +697,9 @@ export function weekDayNoLeapSecs(unixMillis: number): WeekDay {
  * @throws timezonecomplete.Argument.Second for invalid second
  */
 export function secondOfDay(hour: number, minute: number, second: number): number {
-	assert(Number.isInteger(hour) && hour >= 0 && hour <= 23, "Argument.Hour", "invalid hour %d", hour);
-	assert(Number.isInteger(minute) && minute >= 0 && minute <= 59, "Argument.Minute", "invalid minute %d", minute);
-	assert(Number.isInteger(second) && second >= 0 && second <= 61, "Argument.Second", "invalid second %d", second);
+	assert(Number.isInteger(hour) && hour >= 0 && hour <= 23, "Argument.Hour", `invalid hour ${hour}`);
+	assert(Number.isInteger(minute) && minute >= 0 && minute <= 59, "Argument.Minute", `invalid minute ${minute}`);
+	assert(Number.isInteger(second) && second >= 0 && second <= 61, "Argument.Second", `invalid second ${second}`);
 	return (((hour * 60) + minute) * 60) + second;
 }
 
@@ -889,7 +888,7 @@ export class TimeStruct {
 				"Argument.S", "Argument.Year", "Argument.Month", "Argument.Day", "Argument.Hour",
 				"Argument.Minute", "Argument.Second", "Argument.Milli"
 			])) {
-				return throwError("Argument.S", "Invalid ISO 8601 string: \"%s\": %s", s, e.message);
+				return throwError("Argument.S", `Invalid ISO 8601 string: "${s}": ${e.message}`);
 			} else {
 				throw e; // programming error
 			}
@@ -938,7 +937,7 @@ export class TimeStruct {
 	 */
 	constructor(a: number | TimeComponentOpts) {
 		if (typeof a === "number") {
-			assert(Number.isInteger(a), "Argument.UnixMillis", "invalid unix millis %d", a);
+			assert(Number.isInteger(a), "Argument.UnixMillis", `invalid unix millis ${a}`);
 			this._unixMillis = a;
 		} else {
 			assert(typeof a === "object" && a !== null, "Argument.Components", "invalid components object");

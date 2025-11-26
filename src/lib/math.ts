@@ -25,7 +25,7 @@ export function isInt(n: number): boolean {
  * @throws timezonecomplete.Argument.N if n is not a finite number
  */
 export function roundSym(n: number): number {
-	assert(Number.isFinite(n), "Argument.N", "n must be a finite number but is: %d", n);
+	assert(Number.isFinite(n), "Argument.N", `n must be a finite number but is: ${n}`);
 	if (n < 0) {
 		return -1 * Math.round(-1 * n);
 	} else {
