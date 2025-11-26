@@ -218,7 +218,7 @@ export class RuleInfo {
 	 * @throws timezonecomplete.NotApplicable if this rule is not applicable in the given year
 	 */
 	public effectiveDate(year: number): TimeStruct {
-		assert(this.applicable(year), "timezonecomplete.NotApplicable", "Rule is not applicable in %d", year);
+		assert(this.applicable(year), "timezonecomplete.NotApplicable", `Rule is not applicable in ${year}`);
 		// year and month are given
 		let y = year;
 		let m = this.inMonth;
@@ -431,7 +431,7 @@ function monthNameToNumber(name: string): number {
 			return i;
 		}
 	}
-	return throwError("InvalidTimeZoneData", "Invalid month name '%s'", name);
+	return throwError("InvalidTimeZoneData", `Invalid month name '${name}'`);
 }
 
 enum TzDayNames {
@@ -1217,7 +1217,7 @@ export class TzDatabase {
 				return zoneInfo;
 			}
 		}
-		return throwError("NotFound.Zone", "no zone info found for zone '%s'", zoneName);
+		return throwError("NotFound.Zone", `"no zone info found for zone '${zoneName}'`);
 	}
 
 	/**
@@ -1236,7 +1236,7 @@ export class TzDatabase {
 	public getZoneInfos(zoneName: string): ZoneInfo[] {
 		// FIRST validate zone name before searching cache
 		/* istanbul ignore if */
-		assert(this._data.zones.hasOwnProperty(zoneName), "NotFound.Zone", "zone not found: '%s'", zoneName);
+		assert(this._data.zones.hasOwnProperty(zoneName), "NotFound.Zone", `zone not found: '${zoneName}'`);
 
 		// Take from cache
 		if (this._zoneInfoCache.hasOwnProperty(zoneName)) {
@@ -1399,7 +1399,7 @@ export class TzDatabase {
 		} else if (!isNaN(parseInt(to, 10))) {
 			return ToType.Year;
 		} else {
-			return throwError("Argument.To", "TO column incorrect: %s", to);
+			return throwError("Argument.To", `TO column incorrect: ${to}`);
 		}
 	}
 
@@ -1567,12 +1567,12 @@ function validateData(data: any): MinMaxInfo {
 				// ok, is link to other zone, check link
 				assert(
 					data.zones.hasOwnProperty(zoneArr as string), "InvalidTimeZoneData",
-					"Entry for zone \"%s\" links to \"%s\" but that doesn\'t exist", zoneName, zoneArr
+					`Entry for zone "${zoneName}" links to "${zoneArr}" but that doesn't exist`
 				);
 			} else {
 				/* istanbul ignore if */
 				if (!Array.isArray(zoneArr)) {
-					return throwError("InvalidTimeZoneData", "Entry for zone \"%s\" is neither a string nor an array", zoneName);
+					return throwError("InvalidTimeZoneData", `Entry for zone "${zoneName}" is neither a string nor an array`);
 				}
 				for (let i = 0; i < zoneArr.length; i++) {
 					const entry: any = zoneArr[i];
@@ -2075,7 +2075,7 @@ class CachedZoneTransitions {
 	 * @throws timezonecomplete.Argument.ZoneInfos if zoneInfos is empty
 	 */
 	constructor(zoneName: string, zoneInfos: ZoneInfo[], rules: Map<string, CachedRuleTransitions>) {
-		assert(zoneInfos.length > 0, "timezonecomplete.Argument.ZoneInfos", "zone '%s' without information", zoneName);
+		assert(zoneInfos.length > 0, "timezonecomplete.Argument.ZoneInfos", `zone '${zoneName}' without information`);
 		this._finalZoneInfo = zoneInfos[zoneInfos.length - 1];
 		this._initialState = this._calcInitialState(zoneName, zoneInfos, rules);
 		[this._transitions, this._finalRules] = this._calcTransitions(zoneName, this._initialState, zoneInfos, rules);
@@ -2247,7 +2247,7 @@ class CachedZoneTransitions {
 			case RuleType.RuleName: {
 				const rule = rules.get(info.ruleName);
 				if (!rule) {
-					throwError("InvalidTimeZoneData", "zone '%s' refers to non-existing rule '%s'", zoneName, info.ruleName);
+					throwError("InvalidTimeZoneData", `zone '${zoneName}' refers to non-existing rule '${info.ruleName}'`);
 				}
 				// find first rule transition without DST so that we have a letter
 				let iterator = rule.findFirst();
@@ -2309,7 +2309,7 @@ class CachedZoneTransitions {
 				case RuleType.RuleName: {
 					const rule = rules.get(zoneInfo.ruleName);
 					if (!rule) {
-						return throwError("InvalidTimeZoneData", "Zone '%s' refers to non-existing rule '%s'", zoneName, zoneInfo.ruleName);
+						return throwError("InvalidTimeZoneData", `Zone '${zoneName}' refers to non-existing rule '${zoneInfo.ruleName}'`);
 					}
 					const t = this._zoneTransitions(prevUntil, zoneInfo, rule);
 					transitions = transitions.concat(t);

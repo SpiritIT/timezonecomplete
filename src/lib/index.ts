@@ -15,7 +15,6 @@ export * from "./javascript";
 export * from "./locale";
 export * from "./parse";
 export * from "./period";
-export * from "./basics";
 export * from "./timesource";
 export * from "./timezone";
 export {

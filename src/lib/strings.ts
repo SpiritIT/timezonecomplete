@@ -17,7 +17,7 @@ import assert from "./assert";
  * @throws timezonecomplete.Argument.Width if width is not an integer number >= 0
  */
 export function padLeft(s: string, width: number, char: string): string {
-	assert(Number.isInteger(width) && width >= 0, "Argument.Width", "width should be an integer number >= 0 but is: %d", width);
+	assert(Number.isInteger(width) && width >= 0, "Argument.Width", `width should be an integer number >= 0 but is: ${width}`);
 	let padding: string = "";
 	for (let i = 0; i < (width - s.length); i++) {
 		padding += char;
@@ -34,7 +34,7 @@ export function padLeft(s: string, width: number, char: string): string {
  * @throws timezonecomplete.Argument.Width if width is not an integer number >= 0
  */
 export function padRight(s: string, width: number, char: string): string {
-	assert(Number.isInteger(width) && width >= 0, "Argument.Width", "width should be an integer number >= 0 but is: %d", width);
+	assert(Number.isInteger(width) && width >= 0, "Argument.Width", `width should be an integer number >= 0 but is: ${width}`);
 	let padding: string = "";
 	for (let i = 0; i < (width - s.length); i++) {
 		padding += char;

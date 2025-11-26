@@ -182,7 +182,7 @@ export class TimeZone {
 			} break;
 			/* istanbul ignore next */
 			default:
-				throwError("Argument.A", "unexpected type for first argument: %s", typeof a);
+				throwError("Argument.A", `unexpected type for first argument: ${typeof a}`);
 		}
 		return TimeZone._findOrCreate(name, dst);
 	}
@@ -205,7 +205,7 @@ export class TimeZone {
 			this._offset = TimeZone.stringToOffset(name);
 		} else {
 			this._kind = TimeZoneKind.Proper;
-			assert(TzDatabase.instance().exists(name), "NotFound.Zone", "non-existing time zone name '%s'", name);
+			assert(TzDatabase.instance().exists(name), "NotFound.Zone", `non-existing time zone name '${name}'`);
 		}
 	}
 
@@ -638,7 +638,7 @@ export class TimeZone {
 	 * @throws Argument.Offset if offset is not a finite number or not within -24 * 60 ... +24 * 60 minutes
 	 */
 	public static offsetToString(offset: number): string {
-		assert(Number.isFinite(offset) && offset >= -24 * 60 && offset <= 24 * 60, "Argument.Offset", "invalid offset %d", offset);
+		assert(Number.isFinite(offset) && offset >= -24 * 60 && offset <= 24 * 60, "Argument.Offset", `invalid offset ${offset}`);
 		const sign = (offset < 0 ? "-" : "+");
 		const hours = Math.floor(Math.abs(offset) / 60);
 		const minutes = Math.floor(Math.abs(offset) % 60);
