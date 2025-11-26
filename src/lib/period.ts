@@ -58,7 +58,7 @@ export function periodDstToString(p: PeriodDst): string {
 		/* istanbul ignore next */
 		default:
 			/* istanbul ignore next */
-			return throwError("Argument.P", "invalid PerioDst value %d", p);
+			return throwError("Argument.P", `invalid PerioDst value ${p}`);
 	}
 }
 

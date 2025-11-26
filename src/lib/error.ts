@@ -2,17 +2,15 @@
  * Copyright (c) 2019 ABB Switzerland Ltd.
  */
 
-import * as util from "util";
-
 /**
  * Throws an error with the given name and message
  * @param name error name, without timezonecomplete prefix
- * @param format message with percent-style placeholders
+ * @param message message with percent-style placeholders
  * @param args arguments for the placeholders
  * @throws the given error
  */
-export function throwError(name: string, format: string, ...args: any[]): never {
-	const error = new Error(util.format(format, args));
+export function throwError(name: string, message: string): never {
+	const error = new Error(message);
 	error.name = "timezonecomplete." + name;
 	throw error;
 }
@@ -24,8 +22,8 @@ export function throwError(name: string, format: string, ...args: any[]): never 
  * @param args
  * @throws nothing
  */
-export function error(name: string, format: string, ...args: any[]): Error {
-	const error = new Error(util.format(format, args));
+export function error(name: string, message: string): Error {
+	const error = new Error(message);
 	error.name = "timezonecomplete." + name;
 	return error;
 }
