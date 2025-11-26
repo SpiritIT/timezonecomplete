@@ -5,7 +5,7 @@
 /**
  * Throws an error with the given name and message
  * @param name error name, without timezonecomplete prefix
- * @param message message with percent-style placeholders
+ * @param message complete message
  * @param args arguments for the placeholders
  * @throws the given error
  */
@@ -18,8 +18,7 @@ export function throwError(name: string, message: string): never {
 /**
  * Returns an error with the given name and message
  * @param name
- * @param format
- * @param args
+ * @param message
  * @throws nothing
  */
 export function error(name: string, message: string): Error {
