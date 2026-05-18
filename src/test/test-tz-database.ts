@@ -550,6 +550,15 @@ describe("TzDatabase", (): void => {
 			expect(TzDatabase.instance().abbreviation("Europe/Amsterdam", (TimeStruct.fromComponents(2014, 3, 30, 1, 0, 0, 0)), false)).
 				to.equal("CET");
 		});
+		it("should format %z to standard UTC offset string", (): void => {
+			TzDatabase.init(testData);
+			try {
+				expect(TzDatabase.instance().abbreviation("TEST/PercentZ", new TimeStruct(1400000000000))).
+					to.equal("UTC+0100");
+			} finally {
+				TzDatabase.init();
+			}
+		});
 	});
 
 	describe("totalOffsetLocal()", (): void => {

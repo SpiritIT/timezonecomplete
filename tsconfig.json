@@ -19,9 +19,12 @@
         "preserveConstEnums": true,
         "pretty": true,
         "removeComments": false,
+        "rootDir": "./src",
 		"sourceMap": true,
         "strictNullChecks": true,
-        "target": "es5"
+        "strictPropertyInitialization": false,
+        "target": "es5",
+        "types": ["node", "mocha"]
     },
     "formatCodeOptions": {
         "convertTabsToSpaces": false,

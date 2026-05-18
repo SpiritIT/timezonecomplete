@@ -725,7 +725,7 @@ export class TimeZone {
 			// normalize by converting back and forth
 			try {
 				return TimeZone.offsetToString(TimeZone.stringToOffset(t));
-			} catch (e) {
+			} catch (e: any) {
 				if (errorIs(e, "Argument.Offset")) {
 					e = error("Argument.S", e.message);
 				}

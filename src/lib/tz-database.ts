@@ -232,7 +232,7 @@ export class RuleInfo {
 			case OnType.GreqX: {
 				try {
 					d = basics.weekDayOnOrAfter(y, m, this.onDay, this.onWeekDay);
-				} catch (e) {
+				} catch (e: any) {
 					if (errorIs(e, "NotFound")) {
 						// Apr Sun>=27 actually means any sunday after April 27, i.e. it does not have to be in April. Try next month.
 						if (m + 1 <= 12) {
@@ -248,7 +248,7 @@ export class RuleInfo {
 			case OnType.LeqX: {
 				try {
 					d = basics.weekDayOnOrBefore(y, m, this.onDay, this.onWeekDay);
-				} catch (e) {
+				} catch (e: any) {
 					if (errorIs(e, "NotFound")) {
 						if (m > 1) {
 							m = m - 1;
@@ -708,7 +708,7 @@ export class TzDatabase {
 			} else {
 				return Duration.minutes(this._minmax.minDstSave);
 			}
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, ["NotFound.Rule", "Argument.N"])) {
 				e = error("InvalidTimeZoneData", e.message);
 			}
@@ -756,7 +756,7 @@ export class TzDatabase {
 			} else {
 				return Duration.minutes(this._minmax.maxDstSave);
 			}
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, ["NotFound.Rule", "Argument.N"])) {
 				e = error("InvalidTimeZoneData", e.message);
 			}
@@ -1362,7 +1362,7 @@ export class TzDatabase {
 
 			this._ruleInfoCache[ruleName] = result;
 			return result;
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, ["Argument.To", "Argument.N", "Argument.Value", "Argument.Amount"])) {
 				e = error("InvalidTimeZoneData", e.message);
 			}
@@ -2115,7 +2115,12 @@ class CachedZoneTransitions {
 					const transition: ZoneTransition = {
 						atUtc: ruleInfo.effectiveDateUtc(y, iterator.transition.newState.standardOffset, iterator.transition.newState.dstOffset),
 						newState: {
-							abbreviation: zoneAbbreviation(this._finalZoneInfo.format, ruleInfo.save.nonZero(), ruleInfo.letter),
+							abbreviation: zoneAbbreviation(
+								this._finalZoneInfo.format,
+								ruleInfo.save.nonZero(),
+								ruleInfo.letter,
+								this._finalZoneInfo.gmtoff.add(ruleInfo.save)
+							),
 							letter: ruleInfo.letter,
 							dstOffset: ruleInfo.save,
 							standardOffset: iterator.transition.newState.standardOffset
@@ -2181,7 +2186,12 @@ class CachedZoneTransitions {
 						const transition: ZoneTransition = {
 							atUtc: ruleInfo.effectiveDateUtc(year, this._finalZoneInfo.gmtoff, hours(0)),
 							newState: {
-								abbreviation: zoneAbbreviation(this._finalZoneInfo.format, ruleInfo.save.nonZero(), ruleInfo.letter),
+								abbreviation: zoneAbbreviation(
+									this._finalZoneInfo.format,
+									ruleInfo.save.nonZero(),
+									ruleInfo.letter,
+									this._finalZoneInfo.gmtoff.add(ruleInfo.save)
+								),
 								letter: ruleInfo.letter,
 								dstOffset: ruleInfo.save,
 								standardOffset: this._finalZoneInfo.gmtoff
@@ -2232,14 +2242,14 @@ class CachedZoneTransitions {
 		switch (info.ruleType) {
 			case RuleType.None:
 				return {
-					abbreviation: zoneAbbreviation(info.format, false, undefined),
+					abbreviation: zoneAbbreviation(info.format, false, undefined, info.gmtoff),
 					letter: "",
 					dstOffset: hours(0),
 					standardOffset: info.gmtoff
 				};
 			case RuleType.Offset:
 				return {
-					abbreviation: zoneAbbreviation(info.format, info.ruleOffset.nonZero(), undefined),
+					abbreviation: zoneAbbreviation(info.format, info.ruleOffset.nonZero(), undefined, info.gmtoff.add(info.ruleOffset)),
 					letter: "",
 					dstOffset: info.ruleOffset,
 					standardOffset: info.gmtoff
@@ -2256,7 +2266,7 @@ class CachedZoneTransitions {
 				}
 				const letter = iterator?.transition.newState.letter ?? "";
 				return {
-					abbreviation: zoneAbbreviation(info.format, false, letter),
+					abbreviation: zoneAbbreviation(info.format, false, letter, info.gmtoff),
 					dstOffset: hours(0),
 					letter,
 					standardOffset: info.gmtoff
@@ -2294,12 +2304,13 @@ class CachedZoneTransitions {
 				case RuleType.None:
 				case RuleType.Offset: {
 					if (prevUntil) {
+						const newDstOffset = zoneInfo.ruleType === RuleType.None ? hours(0) : zoneInfo.ruleOffset;
 						transitions.push({
 							atUtc: prevUntil,
 							newState: {
-								abbreviation: zoneAbbreviation(zoneInfo.format, false, undefined),
+								abbreviation: zoneAbbreviation(zoneInfo.format, false, undefined, zoneInfo.gmtoff.add(newDstOffset)),
 								letter: "",
-								dstOffset: zoneInfo.ruleType === RuleType.None ? hours(0) : zoneInfo.ruleOffset,
+								dstOffset: newDstOffset,
 								standardOffset: zoneInfo.gmtoff
 							}
 						});
@@ -2350,7 +2361,7 @@ class CachedZoneTransitions {
 				initial = {
 					atUtc: fromUtc,
 					newState: {
-						abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition.newState.letter),
+						abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition.newState.letter, zoneInfo.gmtoff),
 						letter: initialRuleTransition.newState.letter ?? "",
 						dstOffset: hours(0),
 						standardOffset: zoneInfo.gmtoff
@@ -2361,7 +2372,7 @@ class CachedZoneTransitions {
 				initial = {
 					atUtc: fromUtc,
 					newState: {
-						abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition?.newState.letter),
+						abbreviation: zoneAbbreviation(zoneInfo.format, false, initialRuleTransition?.newState.letter, zoneInfo.gmtoff),
 						letter: initialRuleTransition?.newState.letter ?? "",
 						dstOffset: hours(0),
 						standardOffset: zoneInfo.gmtoff
@@ -2383,7 +2394,7 @@ class CachedZoneTransitions {
 			result.push({
 				atUtc: effective,
 				newState: {
-					abbreviation: zoneAbbreviation(zoneInfo.format, prevDst.nonZero(), iterator.transition.newState.letter),
+					abbreviation: zoneAbbreviation(zoneInfo.format, prevDst.nonZero(), iterator.transition.newState.letter, zoneInfo.gmtoff.add(prevDst)),
 					letter: iterator.transition.newState.letter ?? "",
 					dstOffset: prevDst,
 					standardOffset: zoneInfo.gmtoff
@@ -2404,19 +2415,31 @@ class CachedZoneTransitions {
  * replaced by a letter
  * @param dst whether DST is observed
  * @param letter current rule letter, empty if no rule
+ * @param offset total offset (standard + dst) to be used if format string contains %z
  * @returns fully formatted abbreviation
  */
-function zoneAbbreviation(format: string, dst: boolean, letter: string|undefined): string {
+function zoneAbbreviation(format: string, dst: boolean, letter: string|undefined, offset: Duration): string {
 	if (format === "zzz,") {
 		return "";
 	}
-	if (format.includes("/")) {
-		return (dst ? format.split("/")[1] : format.split("/")[0]);
+	let abbr = format;
+	if (abbr.includes("/")) {
+		abbr = (dst ? abbr.split("/")[1] : abbr.split("/")[0]);
 	}
 	if (letter) {
-		return format.replace("%s", letter);
+		abbr = abbr.replace("%s", letter);
+	} else {
+		abbr = abbr.replace("%s", "");
 	}
-	return format.replace("%s", "");
+	if (abbr.includes("%z")) {
+		const offsetMins = offset.minutes();
+		const sign = offsetMins < 0 ? "-" : "+";
+		const absMins = Math.abs(offsetMins);
+		const hoursStr = ("0" + Math.floor(absMins / 60)).slice(-2);
+		const minsStr = ("0" + (absMins % 60)).slice(-2);
+		abbr = abbr.replace("%z", "UTC" + sign + hoursStr + minsStr);
+	}
+	return abbr;
 }
 
 /**
