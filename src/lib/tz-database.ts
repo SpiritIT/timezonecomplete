@@ -232,7 +232,7 @@ export class RuleInfo {
 			case OnType.GreqX: {
 				try {
 					d = basics.weekDayOnOrAfter(y, m, this.onDay, this.onWeekDay);
-				} catch (e) {
+				} catch (e: any) {
 					if (errorIs(e, "NotFound")) {
 						// Apr Sun>=27 actually means any sunday after April 27, i.e. it does not have to be in April. Try next month.
 						if (m + 1 <= 12) {
@@ -248,7 +248,7 @@ export class RuleInfo {
 			case OnType.LeqX: {
 				try {
 					d = basics.weekDayOnOrBefore(y, m, this.onDay, this.onWeekDay);
-				} catch (e) {
+				} catch (e: any) {
 					if (errorIs(e, "NotFound")) {
 						if (m > 1) {
 							m = m - 1;
@@ -708,7 +708,7 @@ export class TzDatabase {
 			} else {
 				return Duration.minutes(this._minmax.minDstSave);
 			}
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, ["NotFound.Rule", "Argument.N"])) {
 				e = error("InvalidTimeZoneData", e.message);
 			}
@@ -756,7 +756,7 @@ export class TzDatabase {
 			} else {
 				return Duration.minutes(this._minmax.maxDstSave);
 			}
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, ["NotFound.Rule", "Argument.N"])) {
 				e = error("InvalidTimeZoneData", e.message);
 			}
@@ -1362,7 +1362,7 @@ export class TzDatabase {
 
 			this._ruleInfoCache[ruleName] = result;
 			return result;
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, ["Argument.To", "Argument.N", "Argument.Value", "Argument.Amount"])) {
 				e = error("InvalidTimeZoneData", e.message);
 			}

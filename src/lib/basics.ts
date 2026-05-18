@@ -883,7 +883,7 @@ export class TimeStruct {
 			let unixMillis: number = timeToUnixNoLeapSecs({ year, month, day, hour, minute, second });
 			unixMillis = math.roundSym(unixMillis + fractionMillis);
 			return new TimeStruct(unixMillis);
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, [
 				"Argument.S", "Argument.Year", "Argument.Month", "Argument.Day", "Argument.Hour",
 				"Argument.Minute", "Argument.Second", "Argument.Milli"

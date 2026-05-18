@@ -50,7 +50,7 @@ export function errorIs(error: Error, name: string | string[]): boolean {
 export function convertError<T>(errorName: string, cb: () => T): T {
 	try {
 		return cb();
-	} catch (e) {
+	} catch (e: any) {
 		return throwError(errorName, e.message);
 	}
 }
