@@ -280,7 +280,7 @@ export function parse(
 			);
 		}
 		return result;
-	} catch (e) {
+	} catch (e: any) {
 		return throwError("ParseError", `invalid date '${dateTimeString}' not according to format '${formatString}': ${e.message}`);
 	}
 }
@@ -331,7 +331,7 @@ function stripZone(token: Token, s: string): ParseZoneResult {
 		}
 		try {
 			result.zone = TimeZone.zone(zoneString);
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, ["Argument.S", "NotFound.Zone"])) {
 				e = error("ParseError", e.message);
 			}

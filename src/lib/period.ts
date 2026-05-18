@@ -197,7 +197,7 @@ export class Period {
 				reference = new DateTime(a.reference);
 				interval = new Duration(a.duration);
 				dst = a.periodDst === "regular" ? PeriodDst.RegularIntervals : PeriodDst.RegularLocalTime;
-			} catch (e) {
+			} catch (e: any) {
 				return throwError("Argument.Json", e);
 			}
 		}
@@ -782,7 +782,7 @@ export class Period {
 	public findPrev(next: DateTime, count: number = 1): DateTime {
 		try {
 			return this.findNext(next, -1 * count);
-		} catch (e) {
+		} catch (e: any) {
 			if (errorIs(e, "Argument.Prev")) {
 				e = error("Argument.Next", e.message);
 			}

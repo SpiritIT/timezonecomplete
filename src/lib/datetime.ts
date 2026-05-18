@@ -1258,7 +1258,7 @@ export class DateTime {
 		const parsed = parseFuncs.parse(s, format, zone, allowTrailing || false, locale);
 		try {
 			return new DateTime(parsed.time, parsed.zone);
-		} catch (e) {
+		} catch (e: any) {
 			if (!errorIs(e, "InvalidTimeZoneData")) {
 				e = error("ParseError", e.message);
 			}
